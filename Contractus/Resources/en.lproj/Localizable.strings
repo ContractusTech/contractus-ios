@@ -1,0 +1,89 @@
+/* 
+  Localizable.strings
+  Contractus
+
+  Created by Simon Hudishkin on 27.07.2022.
+  
+*/
+
+"common.encrypted" = "Encrypted";
+"common.edit" = "Edit";
+"common.add" = "Add";
+"common.empty" = "Empty";
+"common.save" = "Save";
+"common.cancel" = "Cancel";
+"common.close" = "Close";
+"common.create" = "Create";
+"common.error" = "Error";
+"common.change" = "Change";
+"common.update" = "Update";
+"common.public-key" = "Public key";
+"common.paste" = "Paste";
+"common.you" = "You";
+"common.warning" = "Warning";
+"common.attention" = "Attention";
+"common.import" = "Import";
+"common.app-name" = "Contractus";
+"common.set" = "Set";
+
+"enter.button.create-wallet" = "Create new wallet";
+"enter.button.import" = "Import exists";
+"enter.message" = "A new way to collaborate and make business with partners.\nCreate contract, sign, check result and pay. Securely.";
+
+"createWallet.button.next" = "Next";
+"createWallet.button.copied" = "Private key copied!";
+"createWallet.title" = "Your private key";
+"createWallet.subtitle" = "This key use for work with service. Please, backup private key to secure store.";
+
+"backupInformation.button.continue" = "Continue";
+"backupInformation.title" = "Very important!";
+"backupInformation.subtitle" = "Check private key is backuped. If lose private key you can't use service forever.";
+"backupInformation.tooltip" = "If you already backuped then press Continues";
+"backupInformation.button.copied" = "Private key already in clipboard!";
+
+"qrCode.button.share" = "Share Image";
+"qrCode.warning" = "Warning!";
+"qrCode.warning.message" = "Send it securely via Telegram Secret Chat or Signal to your partner or allow scan from your phone.";
+
+"uploadFile.button.choose-file" = "Choose for upload";
+"uploadFile.button.select-photo" = "Select photo";
+"uploadFile.button.camera" = "Camera";
+"uploadFile.button.import-file" = "Select file";
+"uploadFile.state.error" = "Upload error";
+"uploadFile.state.encrypting" = "Encrypting...";
+"uploadFile.state.uploading" = "Uploading...";
+"uploadFile.state.success" = "Success upload";
+
+"deal.changeAmount.placeholder" = "Enter amount";
+"deal.changeAmount.currency" = "Currency";
+"deal.details" = "Details";
+"deal.view.amount" = "Contract amount";
+"deal.view.documents" = "Documents";
+"deal.view.ecrypted" = "Encrypted";
+"deal.view.contract-text" = "Content";
+"deal.view.contract-files" = "Attached files";
+"deal.view.button.change-amount" = "Change amount";
+"deal.text.client" = "Client";
+"deal.text.executor" = "Executor";
+"deal.text.partner" = "Partner";
+"deal.text.owner" = "Owner";
+
+"newDeal.title" = "New deal";
+"newDeal.subtitle" = "Choose your role";
+"newDeal.title.client" = "Client";
+"newDeal.title.executor" = "Executor";
+"newDeal.subtitle.client" = "If you pay to some service or product";
+"newDeal.subtitle.executor" = "If you provide service or sell goods";
+
+"main.title.contracts" = "Contracts";
+"main.title.active-contracts" = "Active - %@";
+
+"changeAmount.title" = "Change amount";
+"changeAmount.amount" = "Amount";
+
+"addContractor.title.contractor" = "Add partner";
+"addContractor.title.checker" = "Add checker";
+"addContractor.subtitle.contractor" = "Account must be %@ blockchain";
+"addContractor.subtitle.checker" = "Account must be %@ blockchain";
+"addContractor.success-title.checker" = "Checker success added!";
+"addContractor.success-title.contractor" = "Partner success added!";
