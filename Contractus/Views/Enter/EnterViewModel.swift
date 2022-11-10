@@ -12,17 +12,18 @@ import UIKit
 
 enum EnterInput {
     case importPrivateKey(String),
+         setBlockchain(Blockchain),
          createIfNeeded,
-//         reqeustAccountInfo,
          copyPrivateKey,
          copyForBackup,
          saveAccount
 }
 
 struct EnterState {
-    var account: SolanaSwift.Account?
+    var account: CommonAccount?
     var privateKeyIsCopied: Bool = false
     var isBackupedPrivateKey: Bool = false
+    var blockchain: Blockchain?
 }
 
 final class EnterViewModel: ViewModel {
@@ -31,7 +32,6 @@ final class EnterViewModel: ViewModel {
 
     private let accountService: AccountService
     private var apiClient: ContractusAPI.APIClient?
-//    private var accountAPIService: ContractusAPI.AccountService?
 
     init(initialState: EnterState, accountService: AccountService) {
         self.state = initialState
@@ -41,12 +41,14 @@ final class EnterViewModel: ViewModel {
     func trigger(_ input: EnterInput, after: AfterTrigger? = nil) {
         switch input {
         case .importPrivateKey(let privateKey):
-            guard let account = try? accountService.restore(by: privateKey) else {
+            guard let blockchain = state.blockchain else { return }
+            guard let account = try? accountService.restore(by: privateKey, blockchain: blockchain) else {
                 return
             }
             self.state.account = account
         case .createIfNeeded:
-            guard self.state.account == nil, let account = try? accountService.create() else {
+            guard let blockchain = state.blockchain else { return }
+            guard self.state.account == nil, let account = try? accountService.create(blockchain: blockchain) else {
                 return
             }
             self.state.account = account
@@ -66,16 +68,18 @@ final class EnterViewModel: ViewModel {
 //
 //            }
         case .copyPrivateKey:
-            guard let privateKey = state.account?.secretKey else { return }
+            guard let privateKey = state.account?.privateKey else { return }
             UIPasteboard.general.string = privateKey.toHexString()
             self.state.privateKeyIsCopied = true
         case .copyForBackup:
-            guard let privateKey = state.account?.secretKey else { return }
+            guard let privateKey = state.account?.privateKey else { return }
             UIPasteboard.general.string = privateKey.toHexString()
             self.state.isBackupedPrivateKey = true
         case .saveAccount:
             guard let account = state.account else { return }
             accountService.save(account)
+        case .setBlockchain(let blockchain):
+            self.state.blockchain = blockchain
         }
     }
 }

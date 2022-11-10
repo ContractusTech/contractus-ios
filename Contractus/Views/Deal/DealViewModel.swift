@@ -31,7 +31,7 @@ struct DealState {
         case loading, error(String), success, none, decryptedContent(String?)
     }
     
-    let account: SolanaSwift.Account
+    let account: CommonAccount
     var deal: ContractusAPI.Deal
     var canEdit: Bool = true
     var canSign: Bool = true
@@ -39,7 +39,7 @@ struct DealState {
     var sharedSecretBase64: String = ""
 
     var isOwnerDeal: Bool {
-        deal.ownerPublicKey == account.publicKey.base58EncodedString
+        deal.ownerPublicKey == account.publicKey
     }
 
     var partnerIsEmpty: Bool {
@@ -59,11 +59,11 @@ struct DealState {
     }
 
     var isYouExecutor: Bool {
-        deal.ownerRole == .client && deal.contractorPublicKey == account.publicKey.base58EncodedString
+        deal.ownerRole == .client && deal.contractorPublicKey == account.publicKey
     }
 
     var isYouVerifier: Bool {
-        deal.checkerPublicKey == account.publicKey.base58EncodedString
+        deal.checkerPublicKey == account.publicKey
     }
 
     var clientPublicKey: String {
@@ -144,7 +144,7 @@ final class DealViewModel: ViewModel {
                 self.state.state = .decryptedContent(nil)
                 return
             }
-            Crypto.decrypt(base64Encrypted: text, with: self.state.account.secretKey)
+            Crypto.decrypt(base64Encrypted: text, with: self.state.account.privateKey)
                 .receive(on: RunLoop.main)
                 .sink { result in
                     switch result {
@@ -159,7 +159,7 @@ final class DealViewModel: ViewModel {
 
         case .updateContent(let text):
             self.state.state = .loading
-            Crypto.encrypt(message: text, with: state.account.secretKey)
+            Crypto.encrypt(message: text, with: state.account.privateKey)
                 .flatMap({ encryptedData in
                     Future<(String, String), Error> { promise in
                         let base64 = encryptedData.base64EncodedString()
@@ -219,7 +219,7 @@ final class DealViewModel: ViewModel {
 
     private func decryptKey() {
         guard let key = state.deal.encryptedSecretKey else { return }
-        Crypto.decrypt(base64Encrypted: key, with: state.account.secretKey)
+        Crypto.decrypt(base64Encrypted: key, with: state.account.privateKey)
             .flatMap({ secretKey -> Future<(Data, String), Error> in
                 Future { promise in
                     do {
@@ -323,7 +323,7 @@ final class DealViewModel: ViewModel {
                     do {
                         let signedTx = try transactionSignService.sign(
                             txBase64: tx.transaction,
-                            by: self.state.account.secretKey)
+                            by: self.state.account.privateKey)
                         promise(.success((signedTx, tx.type)))
                     } catch (let error) {
                         promise(.failure(error))

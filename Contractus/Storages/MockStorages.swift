@@ -9,15 +9,15 @@ import Foundation
 
 
 class MockAccountStorage: AccountStorage {
-    func getPrivateKey() -> Data? {
-        return nil
+    func getCurrentAccount() -> CommonAccount? {
+        Mock.account
     }
 
-    func savePrivateKey(_ privateKey: Data) {
+    func setCurrentAccount(account: CommonAccount) { }
 
-    }
+    func clearCurrentAccount() { }
 
-    func deletePrivateKey() {
-        
+    func getListAccounts() -> [CommonAccount] {
+        []
     }
 }

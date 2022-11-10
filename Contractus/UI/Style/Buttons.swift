@@ -43,12 +43,13 @@ struct SecondaryLargeButton: ButtonStyle {
             configuration.label
                 .font(.body.weight(.bold))
                 .padding()
-                // .background(isEnabled ? R.color.buttonBackgroundSecondary.color : R.color.buttonBackgroundSecondary.color.opacity(DISABLE_OPACITY))
+                .background(isEnabled ? R.color.buttonBackgroundSecondary.color : R.color.buttonBackgroundSecondary.color.opacity(DISABLE_OPACITY))
                 .foregroundColor(isEnabled ? R.color.buttonTextSecondary.color : R.color.buttonTextSecondary.color.opacity(DISABLE_OPACITY))
-                .overlay(RoundedRectangle(cornerRadius: 24)
-                    .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1.2))
+//                .overlay(RoundedRectangle(cornerRadius: 24)
+//                    .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1.2))
                 .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
                 .animation(.easeInOut(duration: 0.03))
+                .cornerRadius(24)
                 // .opacity(isEnabled ? 1 : DISABLE_OPACITY)
         }
     }

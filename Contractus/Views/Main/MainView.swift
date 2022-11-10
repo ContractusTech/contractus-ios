@@ -115,7 +115,7 @@ struct MainView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 12)
 
-                        Text(KeyFormatter.format(from: viewModel.state.account.publicKey.base58EncodedString))
+                        Text(KeyFormatter.format(from: viewModel.state.account.publicKey))
                             .font(.footnote)
                             .foregroundColor(R.color.secondaryText.color)
                     }

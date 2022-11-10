@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-import SolanaSwift
+import enum ContractusAPI.Blockchain
+
 
 struct EnterView: View {
 
@@ -17,7 +18,9 @@ struct EnterView: View {
     @StateObject var viewModel = AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(), accountService: AccountServiceImpl(storage: KeychainAccountStorage())))
 
     @State private var selectedView: NavigateViewType? = .none
-    var completion: (SolanaSwift.Account) -> Void
+    @State private var blockchain: Blockchain = .solana
+
+    var completion: (CommonAccount) -> Void
 
     var body: some View {
         NavigationView {
@@ -33,6 +36,24 @@ struct EnterView: View {
                 .padding(EdgeInsets(top: 44, leading: 20, bottom: 20, trailing: 20))
                 Spacer()
                 VStack {
+                    VStack {
+                        Text("Blockchain")
+                            .font(.callout)
+                            .foregroundColor(R.color.secondaryText.color)
+                        Picker("", selection: $blockchain) {
+                            ForEach(Blockchain.allCases, id: \.self) { item in
+                                HStack {
+                                    Text(item.rawValue.capitalized)
+                                        .font(.body.weight(.medium))
+                                }
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .background(R.color.buttonBackgroundSecondary.color.opacity(0.4))
+                        .cornerRadius(12)
+
+                    }
+                    .padding(.bottom, 24)
                     NavigationLink(tag: NavigateViewType.createWallet, selection: $selectedView) {
                         CreateWalletView { account in
                             completion(account)
@@ -68,6 +89,12 @@ struct EnterView: View {
                 }
                 .padding(EdgeInsets(top: 10, leading: 16, bottom: 42, trailing: 16))
 
+            }
+            .onChange(of: blockchain, perform: { newValue in
+                viewModel.trigger(.setBlockchain(newValue))
+            })
+            .onAppear{
+                viewModel.trigger(.setBlockchain(blockchain))
             }
             .baseBackground()
             .navigationBarTitleDisplayMode(.inline)

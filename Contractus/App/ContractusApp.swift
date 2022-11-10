@@ -23,28 +23,28 @@ struct RootState: Equatable {
     }
 
     enum State {
-        case hasAccount(Account), noAccount
+        case hasAccount(CommonAccount), noAccount
     }
     var state: State = .noAccount
 }
 
 enum RootInput {
-    case savedAccount(Account), logout
+    case savedAccount(CommonAccount), logout
 }
 
 final class RootViewModel: ViewModel {
 
     @Published var state: RootState
     private let accountStorage: AccountStorage
+    private let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? ""
 
     init(accountStorage: AccountStorage) {
         self.accountStorage = accountStorage
         if
-            let pk = accountStorage.getPrivateKey(),
-            let account = try? Account(secretKey: pk)
+            let account = accountStorage.getCurrentAccount()
         {
-            // TODO: - Не очень правильное решение
-            APIServiceFactory.shared.setAccount(for: account)
+            // TODO: - Не очень правильное решение + вынести deviceId
+            APIServiceFactory.shared.setAccount(for: account, deviceId: deviceId)
             self.state = RootState(state: .hasAccount(account))
         } else {
             self.state = RootState(state: .noAccount)
@@ -55,12 +55,12 @@ final class RootViewModel: ViewModel {
     func trigger(_ input: RootInput, after: AfterTrigger? = nil) {
         switch input {
         case .savedAccount(let account):
-            APIServiceFactory.shared.setAccount(for: account)
+            APIServiceFactory.shared.setAccount(for: account, deviceId: deviceId)
             state.state = .hasAccount(account)
         case .logout:
             state.state = .noAccount
             APIServiceFactory.shared.clearAccount()
-            accountStorage.deletePrivateKey()
+            accountStorage.clearCurrentAccount()
         }
     }
 }

@@ -25,40 +25,31 @@ struct BackupInformationView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 16) {
             VStack(alignment: .center, spacing: 24) {
-                Constants.backupImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 140, height: 140, alignment: .center)
-                    .padding()
+                VStack(spacing: 8) {
+                    Text("New wallet")
+                        .font(.footnote.weight(.semibold))
+                        .textCase(.uppercase)
+                        .foregroundColor(R.color.secondaryText.color)
 
-                Text(R.string.localizable.backupInformationTitle())
-                    .font(.largeTitle)
-                Text(R.string.localizable.backupInformationSubtitle()).font(.body)
-                    .font(.body)
-                    .multilineTextAlignment(.center)
-                HStack {
-                    Text(KeyFormatter.format(from: privateKey.toHexString()))
-                        .font(.title3)
-                    Spacer()
-                    Button {
-                        viewModel.trigger(.copyPrivateKey)
-                        withAnimation(.easeInOut) {
-                            copiedNotification = true
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                                withAnimation(.easeInOut) {
-                                    copiedNotification = false
-                                }
+                    Text(R.string.localizable.backupInformationTitle())
+                        .font(.largeTitle.weight(.heavy))
+                    Text(R.string.localizable.backupInformationSubtitle())
+                        .font(.callout)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
+
+                CopyContentView(content: privateKey.toHexString(), contentType: .privateKey) { _ in
+                    viewModel.trigger(.copyPrivateKey)
+                    withAnimation(.easeInOut) {
+                        copiedNotification = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                            withAnimation(.easeInOut) {
+                                copiedNotification = false
                             }
                         }
-                    } label: {
-                        Constants.copyImage
-                            .foregroundColor(R.color.textBase.color)
                     }
                 }
-                .padding()
-                .background(R.color.thirdBackground.color)
-                .cornerRadius(10)
-
                 HStack {
                     Constants.successCopyImage
                     Text(R.string.localizable.createWalletButtonCopied())
@@ -68,7 +59,8 @@ struct BackupInformationView: View {
             }
 
             Spacer()
-            Text(R.string.localizable.backupInformationTooltip()).font(.caption)
+            Text(R.string.localizable.backupInformationTooltip())
+                .font(.body.weight(.medium))
                 .foregroundColor(R.color.yellow.color)
             HStack {
                 Button {

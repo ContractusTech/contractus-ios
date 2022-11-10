@@ -23,9 +23,9 @@ struct UploadFileResult {
 
 struct UploadFileState {
     enum State {
-        case none, selected(String), encrypting, uploading(Int), error, success(UploadFileResult)
+        case none, selected(RawFile), encrypting, uploading(Int), error, success(UploadFileResult)
     }
-    var account: SolanaSwift.Account
+    var account: CommonAccount
     var state: State = .none
 }
 
@@ -39,7 +39,7 @@ final class UploadFileViewModel: ViewModel {
     private var cancelable = Set<AnyCancellable>()
 
     init(
-        account: SolanaSwift.Account,
+        account: CommonAccount,
         filesAPIService: ContractusAPI.FilesService?)
     {
         self.state = UploadFileState(account: account)
@@ -51,7 +51,7 @@ final class UploadFileViewModel: ViewModel {
         switch input {
         case.selected(let file):
             self.selectedFile = file
-            self.state.state = .selected(file.name)
+            self.state.state = .selected(file)
         case .clear:
             self.selectedFile = nil
             self.state.state = .none
@@ -60,14 +60,14 @@ final class UploadFileViewModel: ViewModel {
 
             self.state.state = .encrypting
             Crypto
-                .encrypt(message: file.name, with: state.account.secretKey)
+                .encrypt(message: file.name, with: state.account.privateKey)
                 .flatMap({ data in
                     Future<String, Never> { promise in
                         promise(.success(data.base64EncodedString()))
                     }
                 })
                 .flatMap({ fileName -> AnyPublisher<(String, Data), Error> in
-                    Crypto.encrypt(data: file.data, with: self.state.account.secretKey)
+                    Crypto.encrypt(data: file.data, with: self.state.account.privateKey)
                         .flatMap { data in
                             Future<(String, Data), Error> { promise in
                                 promise(.success((fileName, data)))
@@ -110,11 +110,8 @@ final class UploadFileViewModel: ViewModel {
                 } receiveValue: { uploadedFile in
                     self.state.state = .success(uploadedFile)
                 }.store(in: &cancelable)
-// Нужно подумать как отменять шифрование
+// TODO: - Нужно подумать как отменять шифрование
 //        case .cancel:
-//            cancelable.forEach({ $0.cancel() })
-//            guard let selectedFile = selectedFile else { return }
-//            state.state = .selected(selectedFile.name)
         }
 
     }

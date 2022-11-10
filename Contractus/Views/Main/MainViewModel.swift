@@ -15,7 +15,7 @@ enum MainInput {
 }
 
 struct MainState {
-    var account: SolanaSwift.Account
+    var account: CommonAccount
     var balance: Balance?
     var deals: [ContractusAPI.Deal] = []
 }
@@ -30,7 +30,7 @@ final class MainViewModel: ViewModel {
     private var store = Set<AnyCancellable>()
 
     init(
-        account: SolanaSwift.Account,
+        account: CommonAccount,
         accountAPIService: ContractusAPI.AccountService?,
         dealsAPIService: ContractusAPI.DealsService?)
     {
@@ -91,7 +91,7 @@ final class MainViewModel: ViewModel {
             return
         }
 
-        Crypto.encrypt(message: key, with: state.account.secretKey)
+        Crypto.encrypt(message: key, with: state.account.privateKey)
             .receive(on: RunLoop.main)
             .sink { result in
                 switch result {

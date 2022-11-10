@@ -18,23 +18,37 @@ struct CreateWalletView: View {
     @EnvironmentObject var viewModel: AnyViewModel<EnterState, EnterInput>
     @State var copiedNotification: Bool = false
 
-    var completion: (SolanaSwift.Account) -> Void
+    var completion: (CommonAccount) -> Void
 
     var body: some View {
         VStack(alignment: .center) {
             if let account = viewModel.account {
                 VStack(alignment: .center, spacing: 24) {
-                    Constants.keyImage
-                        .resizable()
-                        .frame(width: 140, height: 140, alignment: .center)
-                        .padding()
-                    Text(R.string.localizable.createWalletTitle())
-                        .font(.largeTitle)
-                    Text(R.string.localizable.createWalletSubtitle())
-                        .font(.body)
-                        .multilineTextAlignment(.center)
+//                    Constants.keyImage
+//                        .resizable()
+//                        .frame(width: 140, height: 140, alignment: .center)
+//                        .padding()
+//                    Text(R.string.localizable.createWalletTitle())
+//                        .font(.largeTitle)
+//                    Text(R.string.localizable.createWalletSubtitle())
+//                        .font(.body)
+//                        .multilineTextAlignment(.center)
 
-                    CopyContentView(content: account.secretKey.toHexString(), contentType: .privateKey) { _ in
+                    VStack(spacing: 8) {
+                        Text("New wallet")
+                            .font(.footnote.weight(.semibold))
+                            .textCase(.uppercase)
+                            .foregroundColor(R.color.secondaryText.color)
+
+                        Text(R.string.localizable.createWalletTitle())
+                            .font(.largeTitle.weight(.heavy))
+                        Text(R.string.localizable.createWalletSubtitle())
+                            .font(.callout)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
+
+                    CopyContentView(content: account.privateKey.toHexString(), contentType: .privateKey) { _ in
                         viewModel.trigger(.copyPrivateKey)
                         withAnimation(.easeInOut) {
                             copiedNotification = true
@@ -63,7 +77,7 @@ struct CreateWalletView: View {
                 Spacer()
                 HStack {
                     NavigationLink {
-                        BackupInformationView(privateKey: account.secretKey, completion: {
+                        BackupInformationView(privateKey: account.privateKey, completion: {
                             completion(account)
                         }).environmentObject(viewModel)
 

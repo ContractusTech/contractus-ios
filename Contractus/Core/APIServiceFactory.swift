@@ -30,8 +30,8 @@ final class APIServiceFactory {
 
     // MARK: - Public Methods
 
-    func setAccount(for account: SolanaSwift.Account) {
-        guard let header = try? buildHeader(for: account) else {
+    func setAccount(for account: CommonAccount, deviceId: String) {
+        guard let header = try? buildHeader(for: account, deviceId: deviceId) else {
             client.updateHeader(authorizationHeader: nil)
             accountIsEmpty = true
             return
@@ -67,11 +67,11 @@ final class APIServiceFactory {
         }
     }
 
-    private func buildHeader(for account: SolanaSwift.Account) throws -> ContractusAPI.AuthorizationHeader {
+    private func buildHeader(for account: CommonAccount, deviceId: String) throws -> ContractusAPI.AuthorizationHeader {
         return try AuthorizationHeaderBuilder.build(
-            for: .solana,
-            with: (publicKey: account.publicKey.base58EncodedString, privateKey: account.secretKey),
-            deviceId: UIDevice.current.identifierForVendor?.uuidString ?? ""
+            for: account.blockchain,
+            with: (publicKey: account.publicKey, privateKey: account.privateKey),
+            deviceId: deviceId
         )
     }
 }

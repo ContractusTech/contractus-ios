@@ -35,8 +35,10 @@ struct CopyContentView: View {
             }
         }
         .padding()
-        .background(R.color.thirdBackground.color)
-        .cornerRadius(10)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+            .fill(R.color.thirdBackground.color)
+            .background(RoundedRectangle(cornerRadius: 10).stroke(R.color.baseSeparator.color, lineWidth: 1)))
     }
 }
 

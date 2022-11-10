@@ -24,7 +24,7 @@ struct AddContractorState {
     let participateType: ParticipateType
     var deal: Deal
     let shareableData: Shareable
-    let account: SolanaSwift.Account
+    let account: CommonAccount
     var publicKey: String = ""
     var state: State = .none
     var blockchain: Blockchain
@@ -40,7 +40,7 @@ struct AddContractorState {
     }
 
     var accountIsClient: Bool {
-        deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey.base58EncodedString
+        deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey
     }
 }
 
@@ -51,7 +51,7 @@ final class AddContractorViewModel: ViewModel {
     private var dealService: DealsService?
 
     init(
-        account: SolanaSwift.Account,
+        account: CommonAccount,
         participateType: ParticipateType,
         deal: Deal,
         sharedSecretBase64: String,

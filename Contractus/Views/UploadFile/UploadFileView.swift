@@ -110,13 +110,14 @@ struct UploadFileView: View {
 
 
                         }
+
                         Button {
                             sheetType = .importFile
                         } label: {
                             HStack {
                                 Spacer()
                                 VStack(spacing: 12) {
-                                    Image(systemName: "doc")
+                                    Image(systemName: "doc.viewfinder")
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 24, height: 32)
@@ -138,24 +139,44 @@ struct UploadFileView: View {
                     }
 
                 }
-            case .selected(let name):
+            case .selected(let file):
                 VStack {
-                    Button {
-                        viewModel.trigger(.clear)
-                    } label: {
-                        Text("Clear")
+                    if file.isImage, let image = UIImage(data: file.data) {
+                        HStack {
+                            Image(uiImage: image)
+                                .resizable()
+                                .frame(width: 150, height: 150)
+                                .aspectRatio(contentMode: .fill)
+                                .cornerRadius(14)
+                            Text(file.formattedSize)
+                        }
+
+
+
+                    } else {
+
                     }
-                    Text(name)
                     Button {
                         viewModel.trigger(.upload)
                     } label: {
                         Text("Upload")
                     }
+
+                    Button {
+                        viewModel.trigger(.clear)
+                    } label: {
+                        HStack {
+                            Spacer()
+                            Text(R.string.localizable.commonCancel())
+                                .font(.body.weight(.bold))
+                            Spacer()
+                        }
+                    }.padding(10)
                 }
             }
 
             switch viewModel.state.state {
-            case .encrypting, .uploading:
+            case .encrypting, .uploading, .selected:
                 EmptyView()
             default:
 
@@ -166,11 +187,10 @@ struct UploadFileView: View {
                     HStack {
                         Spacer()
                         Text(R.string.localizable.commonCancel())
+                            .font(.body.weight(.bold))
                         Spacer()
                     }
                 }
-                .background(R.color.secondaryBackground.color)
-                .buttonStyle(SecondaryLargeButton())
             }
 
 
@@ -184,11 +204,16 @@ struct UploadFileView: View {
             switch type {
                 case .camera:
                     ImagePickerView(sourceType: .camera) { image, path in
-                        viewModel.trigger(.selected(RawFile.asPNGImage(image, path: path)))
+                        if let rawFile = RawFile.fromImage(image, path: path) {
+                            viewModel.trigger(.selected(rawFile))
+                        }
+
                     }
                 case .selectImage:
                     ImagePickerView(sourceType: .photoLibrary) { image, path in
-                        viewModel.trigger(.selected(RawFile.asPNGImage(image, path: path)))
+                        if let rawFile = RawFile.fromImage(image, path: path) {
+                            viewModel.trigger(.selected(rawFile))
+                        }
                 }
             case .importFile:
                 DocumentPickerView(types: ALLOW_FILE_TYPES) { data, url in

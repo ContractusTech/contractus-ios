@@ -446,12 +446,11 @@ struct DealView: View {
             }
             .animation(.easeOut.speed(1.8))
             .background { context in
-                Color.black.opacity(
-                    context.state == .medium ? context.progress * 0.8:
-                        context.state == .large ? (1 + context.progress) * 0.8 :
-                        0.0
-                ).ignoresSafeArea()
+                Color.black
+                    .opacity(context.state == .medium ? 0.5 : 0)
+                    .ignoresSafeArea()
             }
+            .supportedState([.medium])
         })
         .sheet(item: $actionSheetType) { type in
             switch type {

@@ -1,7 +1,7 @@
 import Foundation
 
 
-public enum Blockchain: String {
+public enum Blockchain: String, CaseIterable, Hashable {
     case solana
 }
 

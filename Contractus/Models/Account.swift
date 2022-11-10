@@ -11,6 +11,23 @@ import Base58Swift
 import SolanaSwift
 import ContractusAPI
 
-extension SolanaSwift.Account {
-    var blockchain: Blockchain { .solana }
+struct CommonAccount: Codable {
+    let publicKeyData: Data
+    let publicKey: String
+    let privateKey: Data
+    let blockchain: Blockchain
+}
+
+protocol WrappedAccount {
+    var commonAccount: CommonAccount { get }
+}
+
+extension SolanaSwift.Account: WrappedAccount {
+    var commonAccount: CommonAccount {
+        .init(
+            publicKeyData: self.publicKey.data,
+            publicKey: self.publicKey.base58EncodedString,
+            privateKey: self.secretKey,
+            blockchain: .solana)
+    }
 }

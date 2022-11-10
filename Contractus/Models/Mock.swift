@@ -10,9 +10,9 @@ import TweetNacl
 import ContractusAPI
 
 enum Mock {
-    static var account: SolanaSwift.Account {
+    static var account: CommonAccount {
         let secret = try! TweetNacl.NaclSign.KeyPair.keyPair().secretKey
-        return try! Account(secretKey: secret)
+        return (try! Account(secretKey: secret)).commonAccount
     }
 
     static var deal: ContractusAPI.Deal {

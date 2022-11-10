@@ -22,7 +22,7 @@ struct CreateDealState {
     enum State {
         case none, creating, success, error
     }
-    var account: SolanaSwift.Account
+    var account: CommonAccount
     var state: State = .none
     var createdDeal: Deal?
     var errorMessage: String = ""
@@ -37,7 +37,7 @@ final class CreateDealViewModel: ViewModel {
     private var store = Set<AnyCancellable>()
 
     init(
-        account: SolanaSwift.Account,
+        account: CommonAccount,
         accountAPIService: ContractusAPI.AccountService?,
         dealsAPIService: ContractusAPI.DealsService?)
     {
@@ -71,7 +71,7 @@ final class CreateDealViewModel: ViewModel {
         self.state.state = .creating
         self.state.errorMessage = ""
 
-        Crypto.encrypt(message: key, with: state.account.secretKey)
+        Crypto.encrypt(message: key, with: state.account.privateKey)
             .flatMap({ encryptedSecretKey in
                 Future<NewDeal, Never> { promise in
                     let newDeal = NewDeal(
