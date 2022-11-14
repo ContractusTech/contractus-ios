@@ -22,6 +22,10 @@ enum UploadFileContentState {
 
 fileprivate let ALLOW_FILE_TYPES: [UTType] = [.image, .data, .text, .pdf, .data, .plainText, .utf8PlainText, .zip, .bz2]
 
+fileprivate enum Constants {
+    static let closeImage = Image(systemName: "xmark")
+}
+
 struct UploadFileView: View {
     enum SheetType: String, Identifiable {
         var id: String {
@@ -37,27 +41,39 @@ struct UploadFileView: View {
     @State private var sheetType: SheetType? = nil
     @State private var selectingImage = false
     @State private var showBackground: Bool = true
+    @State private var uploadFraction: Int?
 
     var body: some View {
         VStack(spacing: 24) {
-            switch viewModel.state.state {
-            case .encrypting:
-                Text("Ecrypting...")
-            case .uploading(let fraction):
-                Text("Uploading: \(fraction) %")
-            case .error:
-                Text("Error")
-            case .success(let file):
-                Text("Success").onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [file] in
-                        action(file)
+            if fileIsVisible {
+                ZStack (alignment: .topTrailing) {
+                    UploadFileItemView(file: viewModel.state.selectedFile) {
+                        viewModel.trigger(.clear)
                     }
-                }
+                    if clearButtonIsVisible {
+                        Button {
+                            viewModel.trigger(.clear)
+                        } label: {
+                            HStack {
+                                Constants.closeImage
+                                    .resizable()
+                                    .frame(width: 12, height: 12)
+                            }
+                            .padding(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 23)
+                                    .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1)
+                            )
 
-            case .none:
-                VStack(spacing: 24) {
+                        }
+                        .offset(x: 12, y: -12)
+                    }
+
+                }
+            } else {
+                VStack(spacing: 12) {
                     HStack {
-                        Text("Select")
+                        Text(R.string.localizable.uploadFileButtonSelect())
                             .font(.title2.weight(.heavy))
                     }
                     HStack(spacing: 12) {
@@ -75,7 +91,7 @@ struct UploadFileView: View {
                                         .frame(width: 32, height: 32)
 
                                         .foregroundColor(R.color.secondaryText.color)
-                                    Text("Gallery")
+                                    Text(R.string.localizable.uploadFileButtonSelectGallery())
                                         .font(.footnote)
                                 }
 
@@ -98,7 +114,7 @@ struct UploadFileView: View {
                                         .frame(width: 32, height: 32)
 
                                         .foregroundColor(R.color.secondaryText.color)
-                                    Text("Camera")
+                                    Text(R.string.localizable.uploadFileButtonCamera())
                                         .font(.footnote)
                                 }
 
@@ -107,8 +123,6 @@ struct UploadFileView: View {
                             .padding(16)
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
-
-
                         }
 
                         Button {
@@ -139,49 +153,17 @@ struct UploadFileView: View {
                     }
 
                 }
-            case .selected(let file):
-                VStack {
-                    if file.isImage, let image = UIImage(data: file.data) {
-                        HStack {
-                            Image(uiImage: image)
-                                .resizable()
-                                .frame(width: 150, height: 150)
-                                .aspectRatio(contentMode: .fill)
-                                .cornerRadius(14)
-                            Text(file.formattedSize)
-                        }
-
-
-
-                    } else {
-
-                    }
-                    Button {
-                        viewModel.trigger(.upload)
-                    } label: {
-                        Text("Upload")
-                    }
-
-                    Button {
-                        viewModel.trigger(.clear)
-                    } label: {
-                        HStack {
-                            Spacer()
-                            Text(R.string.localizable.commonCancel())
-                                .font(.body.weight(.bold))
-                            Spacer()
-                        }
-                    }.padding(10)
+            }
+            if uploadFileButtonIsVisible {
+                UploadingButtonView(state: viewModel.state.state) {
+                    viewModel.trigger(.upload)
                 }
             }
 
-            switch viewModel.state.state {
-            case .encrypting, .uploading, .selected:
-                EmptyView()
-            default:
-
+            if canCancel {
                 Button {
                     position = .hidden
+                    viewModel.trigger(.clear)
                     action(nil)
                 } label: {
                     HStack {
@@ -192,9 +174,6 @@ struct UploadFileView: View {
                     }
                 }
             }
-
-
-
         }
         .padding(.bottom, 16)
         .onDisappear {
@@ -202,18 +181,18 @@ struct UploadFileView: View {
         }
         .fullScreenCover(item: $sheetType, content: { type in
             switch type {
-                case .camera:
-                    ImagePickerView(sourceType: .camera) { image, path in
-                        if let rawFile = RawFile.fromImage(image, path: path) {
-                            viewModel.trigger(.selected(rawFile))
-                        }
-
+            case .camera:
+                ImagePickerView(sourceType: .camera) { image, path in
+                    if let rawFile = RawFile.fromImage(image, path: path) {
+                        viewModel.trigger(.selected(rawFile))
                     }
-                case .selectImage:
-                    ImagePickerView(sourceType: .photoLibrary) { image, path in
-                        if let rawFile = RawFile.fromImage(image, path: path) {
-                            viewModel.trigger(.selected(rawFile))
-                        }
+
+                }
+            case .selectImage:
+                ImagePickerView(sourceType: .photoLibrary) { image, path in
+                    if let rawFile = RawFile.fromImage(image, path: path) {
+                        viewModel.trigger(.selected(rawFile))
+                    }
                 }
             case .importFile:
                 DocumentPickerView(types: ALLOW_FILE_TYPES) { data, url in
@@ -224,14 +203,150 @@ struct UploadFileView: View {
             }
         })
 
+
     }
 
+    var canCancel: Bool {
+        switch viewModel.state.state {
+        case .uploading, .encrypting:
+            return false
+        case .success, .error, .none, .selected:
+            return true
+        }
+    }
+
+    var fileIsVisible: Bool {
+        switch viewModel.state.state {
+        case .none:
+            return false
+        case .selected, .error, .success, .encrypting, .uploading:
+            return true
+        }
+    }
+
+    var uploadFileButtonIsVisible: Bool {
+        switch viewModel.state.state {
+        case .none:
+            return false
+        case .selected, .error, .success, .encrypting, .uploading:
+            return true
+        }
+    }
+
+    var clearButtonIsVisible: Bool {
+        switch viewModel.state.state {
+        case .none, .success, .encrypting, .uploading:
+            return false
+        case .selected, .error:
+            return true
+        }
+    }
+
+}
+
+struct UploadFileItemView: View {
+
+    let file: RawFile?
+    var clearAction: () -> Void
+
+    var body: some View {
+        VStack(spacing: 6) {
+            if let file = file {
+                if file.isImage, let image = UIImage(data: file.data) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .frame(width: 120, height: 120)
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(R.color.secondaryBackground.color)
+                        .cornerRadius(6)
+                }
+                else {
+                    // TODO: -
+                }
+                VStack(alignment: .center) {
+                    Text(file.name)
+                        .font(.callout.weight(.medium))
+                        .foregroundColor(R.color.textBase.color)
+                    HStack(spacing: 12) {
+                        Text(file.formattedSize)
+                            .font(.callout.weight(.regular))
+                            .foregroundColor(R.color.secondaryText.color)
+                    }
+
+                }
+            } else {
+                EmptyView()
+            }
+        }
+        .padding(12)
+        .background(R.color.fourthBackground.color)
+        .cornerRadius(22)
+    }
+
+
+}
+
+struct UploadingButtonView: View {
+
+    let state: UploadFileState.State
+    var action: () -> Void
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            HStack {
+                Spacer()
+                Text(titleButton)
+                    .font(.body.weight(.bold))
+                    .foregroundColor(R.color.buttonTextPrimary.color)
+                Spacer()
+            }
+            .padding()
+        }
+        .background(R.color.buttonBackgroundPrimary.color)
+        .cornerRadius(12)
+        .disabled(isDisabled)
+    }
+
+    private var isDisabled: Bool {
+        switch state {
+        case .none, .selected:
+            return false
+        case .encrypting:
+            return true
+        case .uploading(_):
+            return true
+        case .error:
+            return false
+        case .success:
+            return true
+        }
+    }
+
+    private var titleButton: String {
+        switch state {
+        case .none, .selected:
+            return R.string.localizable.uploadFileStateUploadFile()
+        case .encrypting:
+            return R.string.localizable.uploadFileStateEncrypting()
+        case .uploading(let fraction):
+            return R.string.localizable.uploadFileStateUploading(String(format: "%@%", fraction))
+        case .error:
+            return "Retry"
+        case .success:
+            return R.string.localizable.uploadFileStateSuccess()
+        }
+    }
 }
 
 struct UploadFileView_Previews: PreviewProvider {
 
     static var previews: some View {
         UploadFileView(viewModel: AnyViewModel<UploadFileState, UploadFileInput>(UploadFileViewModel(account: Mock.account, filesAPIService: nil))) { _ in
+
+        }
+
+        UploadFileItemView(file: Mock.file) {
 
         }
     }

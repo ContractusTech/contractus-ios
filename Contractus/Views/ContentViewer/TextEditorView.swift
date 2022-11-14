@@ -25,7 +25,9 @@ struct TextEditorView: View {
     @State var mode: Mode = .view
 
     let allowEdit: Bool
-    var onUpdateContent: (String) -> Void
+    @Binding var isLoading: Bool
+    @Binding var needConfirm: Bool
+    var onUpdateContent: (_ content: String,_ force: Bool) -> Void
     var onDismiss: () -> Void
 
     var body: some View {
@@ -65,7 +67,7 @@ struct TextEditorView: View {
                     }
 
                     if content.isEmpty {
-                        Text("Enter contract details")
+                        Text(R.string.localizable.dealTextEditorEditorPlaceholder())
                             .padding(EdgeInsets(top: 8, leading: 5, bottom: 0, trailing: 5))
                             .foregroundColor(R.color.secondaryText.color)
                     }
@@ -86,7 +88,7 @@ struct TextEditorView: View {
                     }
 
                     if content.isEmpty {
-                        Text("Empty contract details")
+                        Text(R.string.localizable.dealTextEditorViewPlaceholder())
                             .padding(EdgeInsets(top: 8, leading: 5, bottom: 0, trailing: 5))
                             .foregroundColor(R.color.secondaryText.color)
                     }
@@ -101,29 +103,32 @@ struct TextEditorView: View {
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarColor()
             .baseBackground()
-
-
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    switch mode {
-                    case .edit:
-                        Button {
-                            onUpdateContent(content)
-                        } label: {
-                            Text(R.string.localizable.commonSave())
-                                .fontWeight(.bold)
+                    if isLoading {
+                        ProgressView()
+                    } else {
+                        switch mode {
+                        case .edit:
+                            Button {
+                                onUpdateContent(content, false)
+                            } label: {
+                                Text(R.string.localizable.commonSave())
+                                    .fontWeight(.bold)
+                            }
+                        case .view:
+                            EmptyView()
                         }
-                    case .view:
-                        EmptyView()
                     }
+
                 }
 
 
                 ToolbarItem(placement: .principal) {
                     if allowEdit {
-                        Picker("Mode", selection: $mode) {
-                            Text("View").tag(Mode.view)
-                            Text("Edit").tag(Mode.edit)
+                        Picker("", selection: $mode) {
+                            Text(R.string.localizable.dealTextEditorModeViewer()).tag(Mode.view)
+                            Text(R.string.localizable.dealTextEditorModeEditor()).tag(Mode.edit)
                         }
                         .frame(width: 200)
                         .pickerStyle(SegmentedPickerStyle())
@@ -135,7 +140,6 @@ struct TextEditorView: View {
 
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-
                         switch mode {
                         case .edit:
                             onDismiss() // TODO: - Добавить alert, "Вы уверены..."
@@ -149,7 +153,7 @@ struct TextEditorView: View {
                             .frame(width: 21, height: 21)
                             .foregroundColor(R.color.textBase.color)
 
-                    }
+                    }.disabled(isLoading)
                 }
             }
         }
@@ -157,12 +161,23 @@ struct TextEditorView: View {
         .onDisappear {
             onDismiss()
         }
+        .alert(isPresented: $needConfirm) {
+            Alert(
+                title: Text(R.string.localizable.commonError()),
+                message:  Text(R.string.localizable.dealTextEditorMessageForceUpdate()),
+                primaryButton: Alert.Button.destructive(Text(R.string.localizable.dealTextEditorForceUpdate())) {
+                    onUpdateContent(content, true)
+                },
+                secondaryButton: Alert.Button.cancel {
+
+                })
+        }
     }
 }
 
 struct TextViewerView_Previews: PreviewProvider {
     static var previews: some View {
-        TextEditorView(content: "", allowEdit: true) { _ in
+        TextEditorView(content: "", allowEdit: true, isLoading: .constant(false), needConfirm: .constant(false)) { _, _ in
             
         } onDismiss: {
             

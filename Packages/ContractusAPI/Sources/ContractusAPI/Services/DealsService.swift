@@ -40,7 +40,7 @@ public final class DealsService: BaseService {
         }
     }
 
-    public func updateMetadata(dealId: String, meta: DealMetadata, completion: @escaping (Swift.Result<DealMetadata, APIClientError>) -> Void) {
+    public func updateMetadata(dealId: String, meta: UpdateDealMetadata, completion: @escaping (Swift.Result<DealMetadata, APIClientError>) -> Void) {
         self.request(path: .dealMetadata(dealId), httpMethod: .post, data: meta) { (result: Swift.Result<DealMetadata, APIClientError>) in
             completion(result)
         }

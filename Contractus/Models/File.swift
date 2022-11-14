@@ -10,10 +10,17 @@ import UIKit
 
 
 struct RawFile {
-
     let data: Data
     let name: String
     let mimeType: String
+}
+
+protocol RawedFile {
+    func rawFile(with name: String?) -> RawFile
+}
+
+
+extension RawFile {
 
     static func fromImage(_ image: UIImage, path: URL) -> RawFile? {
         if let data = image.pngData() {
@@ -22,15 +29,6 @@ struct RawFile {
         return nil
     }
 
-}
-
-
-protocol RawedFile {
-    func rawFile(with name: String?) -> RawFile
-}
-
-
-extension RawFile {
     var isImage: Bool {
         mimeType.contains("image")
     }

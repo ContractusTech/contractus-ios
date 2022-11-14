@@ -18,7 +18,7 @@ enum DealViewModelError: Error {
 enum DealInput {
     case changeAmount(Amount)
     case update(Deal?)
-    case updateContent(String)
+    case updateContent(String, Bool)
     case decryptContent
     case sign
     case none
@@ -28,7 +28,7 @@ enum DealInput {
 struct DealState {
 
     enum State: Equatable {
-        case loading, error(String), success, none, decryptedContent(String?)
+        case loading, error(String), success, none, decryptedContent(String?), needConfirmForceUpdate
     }
     
     let account: CommonAccount
@@ -95,6 +95,8 @@ final class DealViewModel: ViewModel {
     private var transactionSignService: TransactionSignService?
     private var secretStorage: SharedSecretStorage?
     private var store = Set<AnyCancellable>()
+    private var startEditContent: Date?
+    private var forceUpdateMeta: Bool = false
 
     init(
         state: DealState,
@@ -144,6 +146,7 @@ final class DealViewModel: ViewModel {
                 self.state.state = .decryptedContent(nil)
                 return
             }
+            startEditContent = Date()
             Crypto.decrypt(base64Encrypted: text, with: self.state.account.privateKey)
                 .receive(on: RunLoop.main)
                 .sink { result in
@@ -157,7 +160,7 @@ final class DealViewModel: ViewModel {
                     self.state.state = .decryptedContent(String(data: data, encoding: .utf8))
                 }.store(in: &store)
 
-        case .updateContent(let text):
+        case .updateContent(let text, let force):
             self.state.state = .loading
             Crypto.encrypt(message: text, with: state.account.privateKey)
                 .flatMap({ encryptedData in
@@ -175,14 +178,20 @@ final class DealViewModel: ViewModel {
                     }
                 })
                 .flatMap({ dealMeta in
-                    self.updateMetadata(id: self.state.deal.id, meta: dealMeta)
+                    self.updateMetadata(id: self.state.deal.id, meta: dealMeta, force: force)
                 })
                 .receive(on: RunLoop.main)
                 .sink { result in
                     switch result {
                     case .failure(let error):
-                        debugPrint(error.localizedDescription)
-                        self.state.state = .error(error.localizedDescription)
+                        switch error as? ContractusAPI.APIClientError {
+                        case .serviceError(let serviceError):
+                            self.forceUpdateMeta = serviceError.statusCode == 409
+                            self.state.state = .needConfirmForceUpdate
+                        default:
+                            self.state.state = .error(error.localizedDescription)
+                        }
+
                     case .finished:
                         self.state.state = .none
                     }
@@ -272,14 +281,17 @@ final class DealViewModel: ViewModel {
         }
     }
 
-    private func updateMetadata(id: String, meta: DealMetadata) -> Future<DealMetadata, Error> {
+    private func updateMetadata(id: String, meta: DealMetadata, force: Bool) -> Future<DealMetadata, Error> {
         Future { promise in
-            self.dealService?.updateMetadata(dealId: id, meta: meta, completion: { result in
+            self.dealService?.updateMetadata(dealId: id, meta: UpdateDealMetadata(
+                meta: meta,
+                updatedAt: self.startEditContent ?? Date(),
+                force: force), completion: { result in
                 switch result {
                 case .success(let meta):
                     promise(.success(meta))
                 case .failure(let error):
-                    promise(.failure(error as Error))
+                    promise(.failure(error))
                 }
             })
         }

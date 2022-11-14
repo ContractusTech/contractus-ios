@@ -23,8 +23,10 @@ struct UploadFileResult {
 
 struct UploadFileState {
     enum State {
-        case none, selected(RawFile), encrypting, uploading(Int), error, success(UploadFileResult)
+        case none, selected, encrypting, uploading(Int), error, success
     }
+    var result: UploadFileResult?
+    var selectedFile: RawFile?
     var account: CommonAccount
     var state: State = .none
 }
@@ -33,8 +35,6 @@ final class UploadFileViewModel: ViewModel {
 
     @Published var state: UploadFileState
 
-    private var selectedFile: RawFile?
-    private var uploadedFile: UploadFileResult?
     private var filesAPIService: ContractusAPI.FilesService?
     private var cancelable = Set<AnyCancellable>()
 
@@ -50,13 +50,14 @@ final class UploadFileViewModel: ViewModel {
 
         switch input {
         case.selected(let file):
-            self.selectedFile = file
-            self.state.state = .selected(file)
+            self.state.selectedFile = file
+            self.state.state = .selected
         case .clear:
-            self.selectedFile = nil
+            self.state.selectedFile = nil
+            self.state.result = nil
             self.state.state = .none
         case .upload:
-            guard let file = self.selectedFile else { return }
+            guard let file = self.state.selectedFile else { return }
 
             self.state.state = .encrypting
             Crypto
@@ -89,7 +90,7 @@ final class UploadFileViewModel: ViewModel {
                             Future<UploadFileResult, Never> { promise in
                                 promise(.success(UploadFileResult(
                                     file: file,
-                                    sourceName: self.selectedFile?.name ?? "",
+                                    sourceName: self.state.selectedFile?.name ?? "",
                                     encryptedName: encryptedName)))
                             }.eraseToAnyPublisher()
                         }
@@ -108,7 +109,7 @@ final class UploadFileViewModel: ViewModel {
                     case .finished: break
                     }
                 } receiveValue: { uploadedFile in
-                    self.state.state = .success(uploadedFile)
+                    self.state.state = .success
                 }.store(in: &cancelable)
 // TODO: - Нужно подумать как отменять шифрование
 //        case .cancel:

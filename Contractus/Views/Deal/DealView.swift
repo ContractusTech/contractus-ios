@@ -36,10 +36,10 @@ struct DealView: View {
 
     @StateObject var viewModel: AnyViewModel<DealState, DealInput>
 
-    @State var actionSheetType: ActiveSheetType?
-    @State var alertType: AlertType?
-    @State var isActiveContractorOptions: Bool = false
-    @State var uploaderState: ResizableSheetState = .hidden
+    @State private var actionSheetType: ActiveSheetType?
+    @State private var alertType: AlertType?
+    @State private var isActiveContractorOptions: Bool = false
+    @State private var uploaderState: ResizableSheetState = .hidden
 
     var body: some View {
         ScrollView {
@@ -462,9 +462,11 @@ struct DealView: View {
             case .editContent(let content):
                 TextEditorView(
                     content: content ?? "",
-                    allowEdit: true)
-                { newContent in
-                    viewModel.trigger(.updateContent(newContent))
+                    allowEdit: true,
+                    isLoading: Binding<Bool>(get: { viewModel.state.state == .loading}, set: { _, _ in  }),
+                    needConfirm:  Binding<Bool>(get: { viewModel.state.state == .needConfirmForceUpdate}, set: { _, _ in  }))
+                { newContent, force in
+                    viewModel.trigger(.updateContent(newContent, force))
                 } onDismiss: {
                     viewModel.trigger(.none)
                 }.interactiveDismiss(canDismissSheet: false)
@@ -524,7 +526,7 @@ struct DealView: View {
                 self.alertType = .error(errorMessage)
             case .none:
                 actionSheetType = nil
-            case .loading, .success:
+            case .loading, .success, .needConfirmForceUpdate:
                 break
             }
         }

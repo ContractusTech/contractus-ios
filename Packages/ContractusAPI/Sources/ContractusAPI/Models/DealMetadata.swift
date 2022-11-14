@@ -30,3 +30,17 @@ public struct DealMetadata: Codable {
     }
 
 }
+
+public struct UpdateDealMetadata: Codable {
+
+    public let meta: DealMetadata
+    public let updatedAt: Date
+    public let force: Bool
+
+    public init(meta: DealMetadata, updatedAt: Date, force: Bool) {
+        self.meta = meta
+        self.updatedAt = updatedAt
+        self.force = force
+    }
+
+}

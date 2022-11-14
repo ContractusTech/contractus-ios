@@ -45,14 +45,15 @@
 "qrCode.warning" = "Warning!";
 "qrCode.warning.message" = "Send it securely via Telegram Secret Chat or Signal to your partner or allow scan from your phone.";
 
-"uploadFile.button.choose-file" = "Choose for upload";
-"uploadFile.button.select-photo" = "Select photo";
+"uploadFile.button.select" = "Select";
+"uploadFile.button.select-gallery" = "Gallery";
 "uploadFile.button.camera" = "Camera";
 "uploadFile.button.import-file" = "Select file";
 "uploadFile.state.error" = "Upload error";
 "uploadFile.state.encrypting" = "Encrypting...";
-"uploadFile.state.uploading" = "Uploading...";
+"uploadFile.state.uploading" = "Uploading - %@";
 "uploadFile.state.success" = "Success upload";
+"uploadFile.state.upload-file" = "Upload file";
 
 "deal.changeAmount.placeholder" = "Enter amount";
 "deal.changeAmount.currency" = "Currency";
@@ -67,6 +68,14 @@
 "deal.text.executor" = "Executor";
 "deal.text.partner" = "Partner";
 "deal.text.owner" = "Owner";
+"deal.textEditor.message-force-update" = "The contract description was updated while you were editing your version. Forced update to your version?";
+"deal.textEditor.force-update" = "Force update";
+"deal.textEditor.mode.viewer" = "View";
+"deal.textEditor.mode.editor" = "Edit";
+"deal.textEditor.view-placeholder" = "The description of the contract is empty";
+"deal.textEditor.editor-placeholder" = "Enter contract description";
+
+
 
 "newDeal.title" = "New deal";
 "newDeal.subtitle" = "Choose your role";
