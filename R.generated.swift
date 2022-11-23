@@ -88,7 +88,7 @@ struct R: Rswift.Validatable {
     try intern.validate()
   }
 
-  /// This `R.color` struct is generated, and contains static references to 22 colors.
+  /// This `R.color` struct is generated, and contains static references to 25 colors.
   struct color {
     /// Color `AccentColor`.
     static let accentColor = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentColor")
@@ -122,6 +122,8 @@ struct R: Rswift.Validatable {
     static let labelTextSuccess = Rswift.ColorResource(bundle: R.hostingBundle, name: "LabelText-Success")
     /// Color `MainBackground`.
     static let mainBackground = Rswift.ColorResource(bundle: R.hostingBundle, name: "MainBackground")
+    /// Color `Red`.
+    static let red = Rswift.ColorResource(bundle: R.hostingBundle, name: "Red")
     /// Color `SecondaryBackground`.
     static let secondaryBackground = Rswift.ColorResource(bundle: R.hostingBundle, name: "SecondaryBackground")
     /// Color `SecondaryText`.
@@ -130,8 +132,12 @@ struct R: Rswift.Validatable {
     static let shadowColor = Rswift.ColorResource(bundle: R.hostingBundle, name: "ShadowColor")
     /// Color `TextBase`.
     static let textBase = Rswift.ColorResource(bundle: R.hostingBundle, name: "TextBase")
+    /// Color `TextFieldBorder`.
+    static let textFieldBorder = Rswift.ColorResource(bundle: R.hostingBundle, name: "TextFieldBorder")
     /// Color `ThirdBackground`.
     static let thirdBackground = Rswift.ColorResource(bundle: R.hostingBundle, name: "ThirdBackground")
+    /// Color `White`.
+    static let white = Rswift.ColorResource(bundle: R.hostingBundle, name: "White")
     /// Color `Yellow`.
     static let yellow = Rswift.ColorResource(bundle: R.hostingBundle, name: "Yellow")
 
@@ -280,6 +286,15 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "Red", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func red(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.red, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIColor(named: "SecondaryBackground", bundle: ..., traitCollection: ...)`
     @available(tvOS 11.0, *)
     @available(iOS 11.0, *)
@@ -316,11 +331,29 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "TextFieldBorder", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func textFieldBorder(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.textFieldBorder, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIColor(named: "ThirdBackground", bundle: ..., traitCollection: ...)`
     @available(tvOS 11.0, *)
     @available(iOS 11.0, *)
     static func thirdBackground(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
       return UIKit.UIColor(resource: R.color.thirdBackground, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "White", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func white(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.white, compatibleWith: traitCollection)
     }
     #endif
 
@@ -462,6 +495,14 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(watchOS)
+    /// `UIColor(named: "Red", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func red(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.red.name)
+    }
+    #endif
+
+    #if os(watchOS)
     /// `UIColor(named: "SecondaryBackground", bundle: ..., traitCollection: ...)`
     @available(watchOSApplicationExtension 4.0, *)
     static func secondaryBackground(_: Void = ()) -> UIKit.UIColor? {
@@ -494,10 +535,26 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(watchOS)
+    /// `UIColor(named: "TextFieldBorder", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func textFieldBorder(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.textFieldBorder.name)
+    }
+    #endif
+
+    #if os(watchOS)
     /// `UIColor(named: "ThirdBackground", bundle: ..., traitCollection: ...)`
     @available(watchOSApplicationExtension 4.0, *)
     static func thirdBackground(_: Void = ()) -> UIKit.UIColor? {
       return UIKit.UIColor(named: R.color.thirdBackground.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "White", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func white(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.white.name)
     }
     #endif
 
@@ -508,6 +565,20 @@ struct R: Rswift.Validatable {
       return UIKit.UIColor(named: R.color.yellow.name)
     }
     #endif
+
+    fileprivate init() {}
+  }
+
+  /// This `R.file` struct is generated, and contains static references to 1 files.
+  struct file {
+    /// Resource file `Полис.pdf`.
+    static let полисPdf = Rswift.FileResource(bundle: R.hostingBundle, name: "Полис", pathExtension: "pdf")
+
+    /// `bundle.url(forResource: "Полис", withExtension: "pdf")`
+    static func полисPdf(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.полисPdf
+      return fileResource.bundle.url(forResource: fileResource)
+    }
 
     fileprivate init() {}
   }
@@ -721,6 +792,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonEmpty = Rswift.StringResource(key: "common.empty", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Encrypt and upload
+      ///
+      /// Locales: en
+      static let uploadFileStateUploadFile = Rswift.StringResource(key: "uploadFile.state.upload-file", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Encrypted
       ///
       /// Locales: en
@@ -865,10 +940,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let uploadFileStateError = Rswift.StringResource(key: "uploadFile.state.error", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Upload file
-      ///
-      /// Locales: en
-      static let uploadFileStateUploadFile = Rswift.StringResource(key: "uploadFile.state.upload-file", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Uploading - %@
       ///
       /// Locales: en
@@ -1414,6 +1485,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.empty", bundle: bundle, comment: "")
       }
 
+      /// en translation: Encrypt and upload
+      ///
+      /// Locales: en
+      static func uploadFileStateUploadFile(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("uploadFile.state.upload-file", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "uploadFile.state.upload-file"
+        }
+
+        return NSLocalizedString("uploadFile.state.upload-file", bundle: bundle, comment: "")
+      }
+
       /// en translation: Encrypted
       ///
       /// Locales: en
@@ -1952,21 +2038,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("uploadFile.state.error", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Upload file
-      ///
-      /// Locales: en
-      static func uploadFileStateUploadFile(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("uploadFile.state.upload-file", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "uploadFile.state.upload-file"
-        }
-
-        return NSLocalizedString("uploadFile.state.upload-file", bundle: bundle, comment: "")
       }
 
       /// en translation: Uploading - %@

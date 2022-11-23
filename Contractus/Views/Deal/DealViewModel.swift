@@ -11,6 +11,7 @@ import SolanaSwift
 import Combine
 import BigInt
 
+
 enum DealViewModelError: Error {
     case invalidSharedKey
 }
@@ -18,8 +19,8 @@ enum DealViewModelError: Error {
 enum DealInput {
     case changeAmount(Amount)
     case update(Deal?)
-    case updateContent(String, Bool)
-    case decryptContent
+    case openFile(MetadataFile)
+    case updateContent(DealMetadata, DealsService.ContentType)
     case sign
     case none
     case saveKey(String)
@@ -28,7 +29,7 @@ enum DealInput {
 struct DealState {
 
     enum State: Equatable {
-        case loading, error(String), success, none, decryptedContent(String?), needConfirmForceUpdate
+        case loading, error(String), success, none, filePreview(URL)
     }
     
     let account: CommonAccount
@@ -36,7 +37,10 @@ struct DealState {
     var canEdit: Bool = true
     var canSign: Bool = true
     var state: State = .none
-    var sharedSecretBase64: String = ""
+    var partnerSecretPartBase64: String = ""
+    var decryptedKey = Data()
+    var decryptedFilesMetadata: [MetadataFile] = []
+    var decryptedFilesResult: [MetadataFile] = []
 
     var isOwnerDeal: Bool {
         deal.ownerPublicKey == account.publicKey
@@ -63,7 +67,15 @@ struct DealState {
     }
 
     var isYouVerifier: Bool {
-        deal.checkerPublicKey == account.publicKey
+        deal.checkerPublicKey == account.publicKey || (deal.checkerPublicKey == nil && isOwnerDeal && ownerIsClient)
+    }
+
+    var canSendResult: Bool {
+        deal.status == .working && isYouExecutor
+    }
+
+    var showResult: Bool {
+        deal.status == .working
     }
 
     var clientPublicKey: String {
@@ -89,24 +101,28 @@ final class DealViewModel: ViewModel {
 
     @Published private(set) var state: DealState
 
-    private var decryptedKey: Data?
+
 
     private var dealService: ContractusAPI.DealsService?
     private var transactionSignService: TransactionSignService?
+    private var filesAPIService: ContractusAPI.FilesService?
     private var secretStorage: SharedSecretStorage?
-    private var store = Set<AnyCancellable>()
-    private var startEditContent: Date?
-    private var forceUpdateMeta: Bool = false
+    private var cancelable = Set<AnyCancellable>()
+    
+    private var metadata: DealMetadata?
+    private var encryptedFile: UploadFileResult?
 
     init(
         state: DealState,
         dealService: ContractusAPI.DealsService?,
         transactionSignService: TransactionSignService?,
+        filesAPIService: ContractusAPI.FilesService?,
         secretStorage: SharedSecretStorage?)
     {
         debugPrint(state.deal)
         self.state = state
         self.dealService = dealService
+        self.filesAPIService = filesAPIService
         self.transactionSignService = transactionSignService
         self.secretStorage = secretStorage
         self.checkAvailableDecrypt()
@@ -128,10 +144,10 @@ final class DealViewModel: ViewModel {
                         self.state.canEdit = true
                     }
                 } receiveValue: { key in
-                    self.decryptedKey = key
+                    self.state.decryptedKey = key
                     try? self.secretStorage?.saveSharedSecret(for: self.state.deal.id, sharedSecret: key)
                 }
-                .store(in: &store)
+                .store(in: &cancelable)
             
         case .sign:
             signTransaction()
@@ -139,70 +155,39 @@ final class DealViewModel: ViewModel {
             state.deal.amount = amount.value
             state.deal.currency = amount.currency
         case .update(let deal):
-            guard let deal = deal else { return }
-            self.state.deal = deal
-        case .decryptContent:
-            guard let text = self.state.deal.meta?.content?.text else {
-                self.state.state = .decryptedContent(nil)
+            if let deal = deal {
+                self.state.deal = deal
                 return
             }
-            startEditContent = Date()
-            Crypto.decrypt(base64Encrypted: text, with: self.state.account.privateKey)
-                .receive(on: RunLoop.main)
-                .sink { result in
-                    switch result {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        self.state.state = .error(error.localizedDescription)
-                    }
-                } receiveValue: { data in
-                    self.state.state = .decryptedContent(String(data: data, encoding: .utf8))
-                }.store(in: &store)
-
-        case .updateContent(let text, let force):
-            self.state.state = .loading
-            Crypto.encrypt(message: text, with: state.account.privateKey)
-                .flatMap({ encryptedData in
-                    Future<(String, String), Error> { promise in
-                        let base64 = encryptedData.base64EncodedString()
-                        promise(.success((base64, Crypto.md5(data: base64.data(using: .utf8)!))))
-                    }
-                })
-                .flatMap({ (text, md5) in
-                    Future<DealMetadata, Never> { promise in
-                        let meta = DealMetadata(
-                            content: TextContent(text: text, md5: md5),
-                            files: self.state.deal.meta?.files ?? [])
-                        promise(.success(meta))
-                    }
-                })
-                .flatMap({ dealMeta in
-                    self.updateMetadata(id: self.state.deal.id, meta: dealMeta, force: force)
-                })
-                .receive(on: RunLoop.main)
-                .sink { result in
-                    switch result {
-                    case .failure(let error):
-                        switch error as? ContractusAPI.APIClientError {
-                        case .serviceError(let serviceError):
-                            self.forceUpdateMeta = serviceError.statusCode == 409
-                            self.state.state = .needConfirmForceUpdate
-                        default:
-                            self.state.state = .error(error.localizedDescription)
-                        }
-
-                    case .finished:
-                        self.state.state = .none
-                    }
-
-                } receiveValue: { result in
-                    self.state.deal.meta = result
-                }.store(in: &store)
+            guard let dealService = dealService else { return }
+            dealService.getDeal(id: state.deal.id) { result in
+                switch result {
+                case .success(let deal):
+                    self.state.deal = deal
+                case .failure(let error):
+                    break
+                }
+            }
+        case .updateContent(let content, let contentType):
+            switch contentType {
+            case .metadata:
+                state.deal.meta = content
+            case .result:
+                state.deal.results = content
+            }
+        case .openFile(let file):
+            Task {
+                guard let url = await prepareFileForPreview(file) else { return }
+                await MainActor.run {
+                     state.state = .filePreview(url)
+                }
+            }
         }
     }
 
-    func checkAvailableDecrypt() {
+    // MARK: - Private Methods
+
+    private func checkAvailableDecrypt() {
         if state.isOwnerDeal {
             decryptKey()
         } else {
@@ -220,9 +205,9 @@ final class DealViewModel: ViewModel {
                         self.state.canEdit = true
                     }
                 } receiveValue: { key in
-                    self.decryptedKey = key
+                    self.state.decryptedKey = key
                 }
-                .store(in: &store)
+                .store(in: &cancelable)
         }
     }
 
@@ -233,8 +218,8 @@ final class DealViewModel: ViewModel {
                 Future { promise in
                     do {
                         let sharedSecrets = try SSS.createShares(data: [UInt8](secretKey), n: 2, k: 2)
-                        let base64 = Data(sharedSecrets.last ?? []).base64EncodedString()
-                        promise(.success((secretKey, base64)))
+                        let partnerSecretPartBase64 = Data(sharedSecrets.last ?? []).base64EncodedString()
+                        promise(.success((secretKey, partnerSecretPartBase64)))
                     } catch {
                         promise(.failure(error))
                     }
@@ -245,16 +230,16 @@ final class DealViewModel: ViewModel {
                 switch result {
                 case .failure:
                     self.state.canEdit = false
-                    self.decryptedKey = nil
+                    self.state.decryptedKey = Data()
                 case .finished:
                     break
                 }
 
-            } receiveValue: { (decryptedKey, sharedSecretBase64) in
-                self.decryptedKey = decryptedKey
-                self.state.sharedSecretBase64 = sharedSecretBase64
+            } receiveValue: { (decryptedKey, partnerSecretPartBase64) in
+                self.state.decryptedKey = decryptedKey
+                self.state.partnerSecretPartBase64 = partnerSecretPartBase64
                 self.state.canEdit = true
-            }.store(in: &store)
+            }.store(in: &cancelable)
 
     }
 
@@ -278,22 +263,6 @@ final class DealViewModel: ViewModel {
             } catch {
                 promise(.failure(error))
             }
-        }
-    }
-
-    private func updateMetadata(id: String, meta: DealMetadata, force: Bool) -> Future<DealMetadata, Error> {
-        Future { promise in
-            self.dealService?.updateMetadata(dealId: id, meta: UpdateDealMetadata(
-                meta: meta,
-                updatedAt: self.startEditContent ?? Date(),
-                force: force), completion: { result in
-                switch result {
-                case .success(let meta):
-                    promise(.success(meta))
-                case .failure(let error):
-                    promise(.failure(error))
-                }
-            })
         }
     }
 
@@ -322,6 +291,33 @@ final class DealViewModel: ViewModel {
                 }
             })
         }
+    }
+
+    private func downloadFile(url: URL) async throws -> URL {
+        return try await withCheckedThrowingContinuation({ (callback: CheckedContinuation<URL, Error>) in
+            self.filesAPIService?.download(url: url, progressCallback: { _ in
+            }, completion: { result in
+                switch result {
+                case .success(let path):
+                    callback.resume(returning: path)
+                case .failure(let error):
+                    callback.resume(throwing: error)
+                }
+            })
+        })
+    }
+
+    private func prepareFileForPreview(_ file: MetadataFile) async -> URL? {
+        let fileNameData = try? await Crypto.decrypt(base64Encrypted: file.name, with: state.account.privateKey)
+        guard let fileNameData = fileNameData else { return nil }
+        guard let fileName = String(data: fileNameData, encoding: .utf8) else { return nil }
+        guard let filePath = try? await downloadFile(url: file.url) else { return nil }
+        guard let fileEncryptedData = try? Data(contentsOf: filePath) else { return nil }
+        guard let fileData = try? await Crypto.decrypt(encryptedData: fileEncryptedData, with: state.account.privateKey) else { return nil }
+        let documentsURL = FileManager.default.urls(for: .applicationDirectory, in: .userDomainMask)[0]
+        let fileURL = documentsURL.appendingPathComponent(fileName)
+        try? fileData.write(to: fileURL)
+        return fileURL
     }
 
     private func signTransaction() {
@@ -355,7 +351,7 @@ final class DealViewModel: ViewModel {
                             case .success(let data):
                                 promise(.success(data))
                             }
-                    })
+                        })
                 }
             })
             .receive(on: RunLoop.main)
@@ -369,6 +365,19 @@ final class DealViewModel: ViewModel {
 
             } receiveValue: { value in
 
-            }.store(in: &store)
+            }.store(in: &cancelable)
+    }
+}
+
+extension MetadataFile: Identifiable {
+    public var id: String {
+        return self.url.lastPathComponent
+    }
+
+    var formattedSize: String {
+        let bcf = ByteCountFormatter()
+        bcf.allowedUnits = [.useMB]
+        bcf.countStyle = .file
+        return bcf.string(fromByteCount: Int64(self.size))
     }
 }

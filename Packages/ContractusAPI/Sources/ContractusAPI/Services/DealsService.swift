@@ -10,6 +10,10 @@ import Alamofire
 
 public final class DealsService: BaseService {
 
+    public enum ContentType {
+        case metadata, result
+    }
+
     public func getDeals(pagination: Pagination, completion: @escaping (Swift.Result<[Deal], APIClientError>) -> Void) {
         self.request(path: .deals, httpMethod: .get, data: pagination) { (result: Swift.Result<[Deal], APIClientError>) in
             completion(result)
@@ -40,8 +44,16 @@ public final class DealsService: BaseService {
         }
     }
 
-    public func updateMetadata(dealId: String, meta: UpdateDealMetadata, completion: @escaping (Swift.Result<DealMetadata, APIClientError>) -> Void) {
-        self.request(path: .dealMetadata(dealId), httpMethod: .post, data: meta) { (result: Swift.Result<DealMetadata, APIClientError>) in
+    public func update(dealId: String, typeContent: ContentType, meta: UpdateDealMetadata, completion: @escaping (Swift.Result<DealMetadata, APIClientError>) -> Void) {
+        let path: ServicePath
+
+        switch typeContent {
+        case .metadata:
+            path = .dealMetadata(dealId)
+        case .result:
+            path = .dealResult(dealId)
+        }
+        self.request(path: path, httpMethod: .post, data: meta) { (result: Swift.Result<DealMetadata, APIClientError>) in
             completion(result)
         }
     }

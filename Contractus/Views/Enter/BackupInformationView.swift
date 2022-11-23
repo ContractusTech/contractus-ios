@@ -18,28 +18,24 @@ struct BackupInformationView: View {
 
     @EnvironmentObject var rootViewModel: AnyViewModel<RootState, RootInput>
     @EnvironmentObject var viewModel: AnyViewModel<EnterState, EnterInput>
+
+    let titleText: String
+    let largeTitleText: String
+    let informationText: String
     let privateKey: Data
+
     var completion: () -> Void
     @State var copiedNotification: Bool = false
 
     var body: some View {
         VStack(alignment: .center, spacing: 16) {
             VStack(alignment: .center, spacing: 24) {
-                VStack(spacing: 8) {
-                    Text("New wallet")
-                        .font(.footnote.weight(.semibold))
-                        .textCase(.uppercase)
-                        .foregroundColor(R.color.secondaryText.color)
-
-                    Text(R.string.localizable.backupInformationTitle())
-                        .font(.largeTitle.weight(.heavy))
-                    Text(R.string.localizable.backupInformationSubtitle())
-                        .font(.callout)
-                        .multilineTextAlignment(.center)
-                }
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
-
-                CopyContentView(content: privateKey.toHexString(), contentType: .privateKey) { _ in
+                TopTextBlockView(
+                    headerText: titleText,
+                    titleText: largeTitleText,
+                    subTitleText: informationText)
+                
+                CopyContentView(content: privateKey.toBase58(), contentType: .privateKey) { _ in
                     viewModel.trigger(.copyPrivateKey)
                     withAnimation(.easeInOut) {
                         copiedNotification = true
@@ -60,8 +56,11 @@ struct BackupInformationView: View {
 
             Spacer()
             Text(R.string.localizable.backupInformationTooltip())
+                .multilineTextAlignment(.center)
                 .font(.body.weight(.medium))
                 .foregroundColor(R.color.yellow.color)
+                .padding(10)
+
             HStack {
                 Button {
                     viewModel.trigger(.saveAccount)
@@ -94,7 +93,7 @@ struct BackupInformationView: View {
 struct BackupInformationView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            BackupInformationView(privateKey: Data(), completion: {}).environmentObject(AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(), accountService: AccountServiceImpl(storage: MockAccountStorage()))))
+            BackupInformationView(titleText: "import success", largeTitleText: "Your safety", informationText: "", privateKey: Data(), completion: {}).environmentObject(AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(), accountService: AccountServiceImpl(storage: MockAccountStorage()))))
         }
         .preferredColorScheme(.dark)
 

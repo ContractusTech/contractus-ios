@@ -61,6 +61,10 @@ struct MultilineTextFieldView: View {
         .padding()
         .background(R.color.thirdBackground.color)
         .cornerRadius(12)
+        .overlay(
+               RoundedRectangle(cornerRadius: 12)
+                .stroke(R.color.textFieldBorder.color, lineWidth: 1)
+           )
     }
 }
 
@@ -68,5 +72,6 @@ struct MultilineTextFieldView_Previews: PreviewProvider {
     static var previews: some View {
 
         MultilineTextFieldView(placeholder: "Enter private key", value: Binding(get: { "" }, set: { _, _ in }))
+            .padding()
     }
 }

@@ -38,7 +38,7 @@ struct CopyContentView: View {
         .background(
             RoundedRectangle(cornerRadius: 10)
             .fill(R.color.thirdBackground.color)
-            .background(RoundedRectangle(cornerRadius: 10).stroke(R.color.baseSeparator.color, lineWidth: 1)))
+            .background(RoundedRectangle(cornerRadius: 10).stroke(R.color.textFieldBorder.color, lineWidth: 1)))
     }
 }
 

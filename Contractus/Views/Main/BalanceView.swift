@@ -84,10 +84,11 @@ struct BalanceView: View {
                 }
                 .frame(width: 46, height: 46, alignment: .center)
                 .buttonStyle(RoundedSecondaryMediumButton())
-                .overlay(
-                    RoundedRectangle(cornerRadius: 23)
-                        .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1)
-                )
+                .background(R.color.secondaryBackground.color)
+//                .overlay(
+//                    RoundedRectangle(cornerRadius: 23)
+//                        .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1)
+//                )
             }
             
             .padding(EdgeInsets(top: 4, leading: 8, bottom: 0, trailing: 8))
@@ -129,10 +130,11 @@ struct BalanceView: View {
                     }
                 }
                 .padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(R.color.baseSeparator.color, lineWidth: 1)
-                )
+                .background(R.color.secondaryBackground.color)
+//                .overlay(
+//                    RoundedRectangle(cornerRadius: 16)
+//                        .stroke(R.color.baseSeparator.color, lineWidth: 1)
+//                )
             case .loaded(let balance):
                 if !balance.coins.isEmpty {
                     VStack(alignment: .leading) {
@@ -154,10 +156,12 @@ struct BalanceView: View {
                         }
                     }
                     .padding()
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(R.color.baseSeparator.color, lineWidth: 1)
-                    )
+                    .background(R.color.secondaryBackground.color)
+                    .cornerRadius(16)
+//                    .overlay(
+//                        RoundedRectangle(cornerRadius: 16)
+//                            .stroke(R.color.baseSeparator.color, lineWidth: 1)
+//                    )
                 } else {
                     EmptyView()
                 }

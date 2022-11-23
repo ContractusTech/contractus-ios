@@ -22,7 +22,7 @@ struct CreateWalletView: View {
 
     var body: some View {
         VStack(alignment: .center) {
-            if let account = viewModel.account {
+            if let account = viewModel.state.account {
                 VStack(alignment: .center, spacing: 24) {
 //                    Constants.keyImage
 //                        .resizable()
@@ -77,7 +77,12 @@ struct CreateWalletView: View {
                 Spacer()
                 HStack {
                     NavigationLink {
-                        BackupInformationView(privateKey: account.privateKey, completion: {
+                        BackupInformationView(
+                            titleText: "New wallet",
+                            largeTitleText: R.string.localizable.backupInformationTitle(),
+                            informationText: R.string.localizable.backupInformationSubtitle(),
+                            privateKey: account.privateKey,
+                            completion: {
                             completion(account)
                         }).environmentObject(viewModel)
 

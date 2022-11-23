@@ -9,7 +9,7 @@ import Foundation
 import ContractusAPI
 
 
-class TFAmountFormatter: Formatter {
+final class TFAmountFormatter: Formatter {
 
     var currency: Currency = .usdc
 

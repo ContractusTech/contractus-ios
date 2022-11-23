@@ -16,6 +16,10 @@ extension Currency: Hashable {
     }
 }
 
+fileprivate enum Constants {
+    static let closeImage = Image(systemName: "xmark")
+}
+
 struct ChangeAmountView: View {
 
     @Environment(\.presentationMode) var presentationMode
@@ -95,19 +99,18 @@ struct ChangeAmountView: View {
                 }
                 Spacer()
 
-                LargePrimaryLoadingButton(
-                    action: {
-                        viewModel.trigger(.update)
-                    },
-                    isLoading: viewModel.state.state == .loading) {
-                        HStack {
-                            Spacer()
-                            Text(R.string.localizable.commonChange())
-                            Spacer()
-                        }
+                CButton(
+                    title: R.string.localizable.commonChange(),
+                    style: .primary,
+                    size: .large,
+                    isLoading: viewModel.state.state == .loading,
+                    isDisabled: !viewModel.state.isValid)
+                {
+                    viewModel.trigger(.update)
                 }
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 32, trailing: 0))
-                .disabled(!viewModel.state.isValid)
+
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
+
             }
             .onChange(of: viewModel.state.state, perform: { newValue in
                 if newValue == .success {
@@ -117,6 +120,19 @@ struct ChangeAmountView: View {
                     presentationMode.wrappedValue.dismiss()
                 }
             })
+            .toolbar{
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Constants.closeImage
+                            .resizable()
+                            .frame(width: 21, height: 21)
+                            .foregroundColor(R.color.textBase.color)
+
+                    }
+                }
+            }
             .padding()
             .navigationTitle(R.string.localizable.changeAmountTitle())
             .navigationBarTitleDisplayMode(.inline)

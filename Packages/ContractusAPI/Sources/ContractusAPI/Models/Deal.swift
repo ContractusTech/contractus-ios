@@ -12,6 +12,10 @@ public enum OwnerRole: String, Codable {
     case client = "CLIENT", executor = "EXECUTOR"
 }
 
+public enum DealStatus: String, Codable {
+    case new = "NEW", pending = "PENDING", working = "WORKING", finished = "FINISHED", canceled = "CANCELED", unknown
+}
+
 public struct Deal: Decodable {
 
     enum CodingKeys: CodingKey {
@@ -28,6 +32,7 @@ public struct Deal: Decodable {
              updatedAt,
              ownerRole,
              meta,
+             status,
              results,
              metaUpdatedAt
     }
@@ -40,7 +45,7 @@ public struct Deal: Decodable {
     public let sharedKey: String?
     public var createdAt: String
     public var amount: BigUInt
-//    public var status: String
+    public var status: DealStatus
     public var currency: Currency
     public var updatedAt: String?
     public let ownerRole: OwnerRole
@@ -58,6 +63,7 @@ public struct Deal: Decodable {
         sharedKey: String? = nil,
         createdAt: String,
         amount: BigUInt,
+        status: DealStatus,
         currency: Currency,
         updatedAt: String? = nil,
         metaUpdatedAt: String? = nil,
@@ -74,6 +80,7 @@ public struct Deal: Decodable {
         self.sharedKey = sharedKey
         self.createdAt = createdAt
         self.amount = amount
+        self.status = status
         self.currency = currency
         self.updatedAt = updatedAt
         self.ownerRole = ownerRole
@@ -105,6 +112,7 @@ public struct Deal: Decodable {
         self.meta = try? container.decodeIfPresent(DealMetadata.self, forKey: .meta)
         self.results = try? container.decodeIfPresent(DealMetadata.self, forKey: .results)
         self.metaUpdatedAt = try? container.decodeIfPresent(String.self, forKey: .metaUpdatedAt)
+        self.status = (try? container.decodeIfPresent(DealStatus.self, forKey: .status)) ?? .unknown
     }
 }
 

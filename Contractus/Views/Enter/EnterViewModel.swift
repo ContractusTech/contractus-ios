@@ -24,6 +24,7 @@ struct EnterState {
     var privateKeyIsCopied: Bool = false
     var isBackupedPrivateKey: Bool = false
     var blockchain: Blockchain?
+    var isValidImportedPrivateKey: Bool = false
 }
 
 final class EnterViewModel: ViewModel {
@@ -43,9 +44,12 @@ final class EnterViewModel: ViewModel {
         case .importPrivateKey(let privateKey):
             guard let blockchain = state.blockchain else { return }
             guard let account = try? accountService.restore(by: privateKey, blockchain: blockchain) else {
+                self.state.isValidImportedPrivateKey = false
+                self.state.account = nil
                 return
             }
             self.state.account = account
+            self.state.isValidImportedPrivateKey = true
         case .createIfNeeded:
             guard let blockchain = state.blockchain else { return }
             guard self.state.account == nil, let account = try? accountService.create(blockchain: blockchain) else {
@@ -69,11 +73,11 @@ final class EnterViewModel: ViewModel {
 //            }
         case .copyPrivateKey:
             guard let privateKey = state.account?.privateKey else { return }
-            UIPasteboard.general.string = privateKey.toHexString()
+            UIPasteboard.general.string = privateKey.toBase58()
             self.state.privateKeyIsCopied = true
         case .copyForBackup:
             guard let privateKey = state.account?.privateKey else { return }
-            UIPasteboard.general.string = privateKey.toHexString()
+            UIPasteboard.general.string = privateKey.toBase58()
             self.state.isBackupedPrivateKey = true
         case .saveAccount:
             guard let account = state.account else { return }

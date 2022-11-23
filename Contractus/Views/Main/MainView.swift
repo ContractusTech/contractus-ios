@@ -56,12 +56,11 @@ struct MainView: View {
                                 .foregroundColor(R.color.secondaryText.color)
                         }
                         Spacer()
-                        Button {
+
+                        CButton(title: R.string.localizable.commonCreate(), style: .primary, size: .default, isLoading: false) {
                             sheetType = .newDeal
-                        } label: {
-                            Text(R.string.localizable.commonCreate())
                         }
-                        .buttonStyle(PrimaryMediumButton())
+
                     }
                     .padding(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
                     LazyVGrid(columns: Constants.columns) {
@@ -70,7 +69,7 @@ struct MainView: View {
                                 DealView(viewModel: AnyViewModel<DealState, DealInput>(DealViewModel(
                                     state: DealState(account: viewModel.account, deal: item),
                                     dealService: try? APIServiceFactory.shared.makeDealsService(),
-                                    transactionSignService: ServiceFactory.shared.makeTransactionSign(),
+                                    transactionSignService: ServiceFactory.shared.makeTransactionSign(), filesAPIService: try? APIServiceFactory.shared.makeFileService(),
                                     secretStorage: SharedSecretStorageImpl()))
                                 )
                             } label: {

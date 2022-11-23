@@ -11,38 +11,69 @@ struct ImportPrivateKeyView: View {
 
     @EnvironmentObject var viewModel: AnyViewModel<EnterState, EnterInput>
 
-    @State var privateKey: String = ""
+    @State var privateKey: String = "5iKqkZeFQiLxTRdJVHHTcsefF65t2Q5vpnQuzTiETK4Hx7mBoBgnbeKPwAZCbFQGE3KcRSJxJhiXvygH7dH8U4Ay"
+    @State var isActiveBackup: Bool = false
+    var completion: (CommonAccount) -> Void
 
     var body: some View {
         VStack(alignment: .center, spacing: 16) {
             VStack {
-                VStack(alignment: .center, spacing: 24) {
+                TopTextBlockView(
+                    headerText: "Import",
+                    titleText: "Enter private key",
+                    subTitleText: "Of the client who will perform the work under the contract.")
 
-                    Text("Import private key")
-                        .font(.largeTitle)
-                    Text("If you already have an account, enter the private key").font(.body)
-                        .font(.body)
-                        .multilineTextAlignment(.center)
+                VStack(alignment: .center, spacing: 24) {
                     MultilineTextFieldView(placeholder: "Enter private key", value: $privateKey)
                     .background(R.color.thirdBackground.color)
                     .cornerRadius(10)
 
+                    if viewModel.state.isValidImportedPrivateKey {
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text("Your public key")
+                                    .font(.footnote.weight(.semibold))
+                                    .textCase(.uppercase)
+                                    .foregroundColor(R.color.secondaryText.color)
+                                Spacer()
+                            }
+                            HStack {
+                                Text(KeyFormatter.format(from: viewModel.state.account?.publicKey))
+                                    .font(.body)
+                                Spacer()
+                            }
+
+                        }
+                    }
+
+
                 }
                 Spacer()
 
-                HStack {
-                    Button {
+                NavigationLink(isActive: $isActiveBackup) {
+                    if let account = viewModel.state.account {
+                        BackupInformationView(
+                            titleText: "Import successful",
+                            largeTitleText: "You safety",
+                            informationText: "Save your private key to secure store so you don't lose access to your account ",
+                            privateKey: account.privateKey,
+                            completion: {
+                            completion(account)
+                        }).environmentObject(viewModel)
+                    } else {
+                        EmptyView()
+                    }
 
 
-                    } label: {
-                        HStack {
-                            Spacer()
-                            Text("Import")
-                            Spacer()
-                        }
-                    }.buttonStyle(PrimaryLargeButton())
-                }
+                } label: {
+                    CButton(title: "Import", style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.isValidImportedPrivateKey) {
+                        isActiveBackup.toggle()
+                    }
+                }.disabled(!viewModel.isValidImportedPrivateKey)
+
+
             }
+
 
             .padding()
             .padding(.bottom, 24)
@@ -50,6 +81,9 @@ struct ImportPrivateKeyView: View {
             .baseBackground()
             .tintIfCan(R.color.textBase.color)
         }
+        .onChange(of: privateKey, perform: { newValue in
+            viewModel.trigger(.importPrivateKey(newValue))
+        })
         .navigationBarTitleDisplayMode(.inline)
         .edgesIgnoringSafeArea(.bottom)
 
@@ -59,6 +93,10 @@ struct ImportPrivateKeyView: View {
 
 struct ImportPrivateKeyView_Previews: PreviewProvider {
     static var previews: some View {
-        ImportPrivateKeyView()
+        ImportPrivateKeyView { _ in
+
+        }.environmentObject(
+            AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: .init(account: Mock.account, isValidImportedPrivateKey: true), accountService: AccountServiceImpl(storage: MockAccountStorage())))
+        )
     }
 }

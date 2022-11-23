@@ -23,7 +23,8 @@ public struct UploadFile: Encodable {
 
 }
 
-public struct UploadedFile: Codable {
+public struct UploadedFile: Codable, Equatable {
     public let md5: String
     public let url: URL
+    public let size: Int64
 }

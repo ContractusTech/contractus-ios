@@ -72,8 +72,10 @@ struct EnterView: View {
                     }
 
                     NavigationLink(tag: NavigateViewType.importWallet, selection: $selectedView) {
-                        ImportPrivateKeyView()
-                            .environmentObject(viewModel)
+                        ImportPrivateKeyView { account in
+                            completion(account)
+                        }
+                        .environmentObject(viewModel)
                     } label: {
                         Button {
                             self.selectedView = .importWallet

@@ -53,7 +53,7 @@
 "uploadFile.state.encrypting" = "Encrypting...";
 "uploadFile.state.uploading" = "Uploading - %@";
 "uploadFile.state.success" = "Success upload";
-"uploadFile.state.upload-file" = "Upload file";
+"uploadFile.state.upload-file" = "Encrypt and upload";
 
 "deal.changeAmount.placeholder" = "Enter amount";
 "deal.changeAmount.currency" = "Currency";

@@ -16,17 +16,24 @@ enum UploadFilePosition: CGFloat, CaseIterable, Equatable, RawRepresentable {
          hidden = 0
 }
 
-enum UploadFileContentState {
-    case none, visible
-}
-
 fileprivate let ALLOW_FILE_TYPES: [UTType] = [.image, .data, .text, .pdf, .data, .plainText, .utf8PlainText, .zip, .bz2]
 
 fileprivate enum Constants {
     static let closeImage = Image(systemName: "xmark")
 }
 
+// MARK: - UploadFileView
+
 struct UploadFileView: View {
+
+    enum AlertType {
+        case error(String), needConfirmForceUpdate
+    }
+
+    enum ActionResult {
+        case close, success(DealMetadata, DealsService.ContentType)
+    }
+
     enum SheetType: String, Identifiable {
         var id: String {
             return self.rawValue
@@ -35,16 +42,14 @@ struct UploadFileView: View {
     }
 
     @StateObject var viewModel: AnyViewModel<UploadFileState, UploadFileInput>
-    var action: (UploadFileResult?) -> Void
+    var action: (ActionResult) -> Void
 
-    @State private var position: UploadFilePosition = .hidden
     @State private var sheetType: SheetType? = nil
-    @State private var selectingImage = false
-    @State private var showBackground: Bool = true
     @State private var uploadFraction: Int?
+    @State private var alertType: AlertType?
 
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 12) {
             if fileIsVisible {
                 ZStack (alignment: .topTrailing) {
                     UploadFileItemView(file: viewModel.state.selectedFile) {
@@ -56,19 +61,18 @@ struct UploadFileView: View {
                         } label: {
                             HStack {
                                 Constants.closeImage
+                                    .renderingMode(.template)
                                     .resizable()
                                     .frame(width: 12, height: 12)
+                                    .foregroundColor(R.color.white.color)
+
                             }
                             .padding(8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 23)
-                                    .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1)
-                            )
-
+                            .background(R.color.accentColor.color)
+                            .cornerRadius(24)
                         }
-                        .offset(x: 12, y: -12)
+                        .offset(x: -12, y: 12)
                     }
-
                 }
             } else {
                 VStack(spacing: 12) {
@@ -79,7 +83,6 @@ struct UploadFileView: View {
                     HStack(spacing: 12) {
                         Button {
                             sheetType = .selectImage
-                            selectingImage.toggle()
                         } label: {
                             HStack {
                                 Spacer()
@@ -146,25 +149,20 @@ struct UploadFileView: View {
                             .padding(16)
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
-
-
                         }
-
                     }
-
                 }
             }
             if uploadFileButtonIsVisible {
                 UploadingButtonView(state: viewModel.state.state) {
-                    viewModel.trigger(.upload)
+                    viewModel.trigger(.uploadAndUpdate)
                 }
             }
 
             if canCancel {
                 Button {
-                    position = .hidden
                     viewModel.trigger(.clear)
-                    action(nil)
+                    action(.close)
                 } label: {
                     HStack {
                         Spacer()
@@ -173,12 +171,25 @@ struct UploadFileView: View {
                         Spacer()
                     }
                 }
+                .padding()
             }
         }
         .padding(.bottom, 16)
+        .padding(.top, 4)
         .onDisappear {
             viewModel.trigger(.clear)
         }
+        .onChange(of: viewModel.state.state, perform: { newState in
+            switch newState {
+            case .success(let meta):
+                action(.success(meta, viewModel.state.contentType))
+            case .needConfirmForce:
+                alertType = .needConfirmForceUpdate
+            case .none, .error, .encrypting, .selected, .uploading, .saving:
+                break
+            }
+
+        })
         .fullScreenCover(item: $sheetType, content: { type in
             switch type {
             case .camera:
@@ -202,40 +213,59 @@ struct UploadFileView: View {
                 }
             }
         })
+        .alert(item: $alertType, content: { type in
+            switch type {
+            case .error(let message):
+                return Alert(
+                    title: Text(R.string.localizable.commonError()),
+                    message: Text(message))
+            case .needConfirmForceUpdate:
+                return Alert(
+                    title: Text(R.string.localizable.commonAttention()),
+                    message:  Text(R.string.localizable.dealTextEditorMessageForceUpdate()),
+                    primaryButton: Alert.Button.destructive(Text(R.string.localizable.dealTextEditorForceUpdate())) {
+                        viewModel.trigger(.updateForce)
+                    },
+                    secondaryButton: Alert.Button.cancel {
+                        viewModel.trigger(.clear)
+                    })
+            }
+
+        })
 
 
     }
 
-    var canCancel: Bool {
+    private var canCancel: Bool {
         switch viewModel.state.state {
-        case .uploading, .encrypting:
+        case .uploading, .encrypting, .success, .saving:
             return false
-        case .success, .error, .none, .selected:
+        case .error, .none, .selected, .needConfirmForce:
             return true
         }
     }
 
-    var fileIsVisible: Bool {
+    private var fileIsVisible: Bool {
         switch viewModel.state.state {
         case .none:
             return false
-        case .selected, .error, .success, .encrypting, .uploading:
+        case .selected, .error, .success, .encrypting, .uploading, .saving, .needConfirmForce:
             return true
         }
     }
 
-    var uploadFileButtonIsVisible: Bool {
+    private var uploadFileButtonIsVisible: Bool {
         switch viewModel.state.state {
         case .none:
             return false
-        case .selected, .error, .success, .encrypting, .uploading:
+        case .selected, .error, .success, .encrypting, .uploading, .saving, .needConfirmForce:
             return true
         }
     }
 
-    var clearButtonIsVisible: Bool {
+    private var clearButtonIsVisible: Bool {
         switch viewModel.state.state {
-        case .none, .success, .encrypting, .uploading:
+        case .none, .success, .encrypting, .uploading, .saving, .needConfirmForce:
             return false
         case .selected, .error:
             return true
@@ -243,6 +273,8 @@ struct UploadFileView: View {
     }
 
 }
+
+// MARK: - UploadFileItemView
 
 struct UploadFileItemView: View {
 
@@ -280,16 +312,19 @@ struct UploadFileItemView: View {
         }
         .padding(12)
         .background(R.color.fourthBackground.color)
-        .cornerRadius(22)
+        .cornerRadius(24)
     }
 
 
 }
 
+// MARK: - UploadingButtonView
+
 struct UploadingButtonView: View {
 
     let state: UploadFileState.State
     var action: () -> Void
+
     var body: some View {
         Button {
             action()
@@ -298,13 +333,13 @@ struct UploadingButtonView: View {
                 Spacer()
                 Text(titleButton)
                     .font(.body.weight(.bold))
-                    .foregroundColor(R.color.buttonTextPrimary.color)
+                    .foregroundColor(textColor)
                 Spacer()
             }
             .padding()
         }
-        .background(R.color.buttonBackgroundPrimary.color)
-        .cornerRadius(12)
+        .background(buttonBackground)
+        .cornerRadius(32)
         .disabled(isDisabled)
     }
 
@@ -320,7 +355,37 @@ struct UploadingButtonView: View {
             return false
         case .success:
             return true
+        case .saving:
+            return true
+        case .needConfirmForce:
+            return true
         }
+    }
+
+    private var textColor: Color {
+        switch state {
+        case .none, .selected:
+            return R.color.buttonTextPrimary.color
+        case .encrypting:
+            return R.color.secondaryText.color
+        case .uploading(_), .saving, .needConfirmForce:
+            return R.color.secondaryText.color
+        case .error:
+            return R.color.white.color
+        case .success:
+            return R.color.secondaryText.color
+        }
+    }
+
+    private var buttonBackground: Color {
+        if isDisabled {
+            return R.color.fourthBackground.color
+        }
+        if case .error = state {
+            return R.color.yellow.color
+        }
+
+        return R.color.buttonBackgroundPrimary.color
     }
 
     private var titleButton: String {
@@ -330,11 +395,24 @@ struct UploadingButtonView: View {
         case .encrypting:
             return R.string.localizable.uploadFileStateEncrypting()
         case .uploading(let fraction):
-            return R.string.localizable.uploadFileStateUploading(String(format: "%@%", fraction))
+            return R.string.localizable.uploadFileStateUploading("\(fraction)%")
         case .error:
             return "Retry"
+        case .saving, .needConfirmForce:
+            return "Saving..."
         case .success:
-            return R.string.localizable.uploadFileStateSuccess()
+            return "Saved"
+        }
+    }
+}
+
+extension UploadFileView.AlertType: Identifiable {
+    var id: String {
+        switch self {
+        case .error:
+            return "error"
+        case .needConfirmForceUpdate:
+            return "needConfirmForceUpdate"
         }
     }
 }
@@ -342,7 +420,7 @@ struct UploadingButtonView: View {
 struct UploadFileView_Previews: PreviewProvider {
 
     static var previews: some View {
-        UploadFileView(viewModel: AnyViewModel<UploadFileState, UploadFileInput>(UploadFileViewModel(account: Mock.account, filesAPIService: nil))) { _ in
+        UploadFileView(viewModel: AnyViewModel<UploadFileState, UploadFileInput>(UploadFileViewModel(dealId: Mock.deal.id, content: Mock.deal.meta ?? .init(files: []), contentType: .metadata, secretKey: Mock.account.privateKey, dealService: nil, filesAPIService: nil))) { _  in
 
         }
 

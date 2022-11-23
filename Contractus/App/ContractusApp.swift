@@ -42,7 +42,13 @@ final class RootViewModel: ViewModel {
         self.accountStorage = accountStorage
         if
             let account = accountStorage.getCurrentAccount()
+
         {
+            #if DEBUG
+            debugPrint("===== Import PK =====")
+            debugPrint(Base58.encode(account.privateKey))
+            debugPrint("===== End =====")
+            #endif
             // TODO: - Не очень правильное решение + вынести deviceId
             APIServiceFactory.shared.setAccount(for: account, deviceId: deviceId)
             self.state = RootState(state: .hasAccount(account))
@@ -71,11 +77,10 @@ struct ContractusApp: App {
 
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var rootViewModel = AnyViewModel<RootState, RootInput>(RootViewModel(accountStorage: KeychainAccountStorage()))
-
+    
     var body: some Scene {
         WindowGroup {
             Group {
-                EmptyView().DebugPrint("Render")
                 switch rootViewModel.state.state {
                 case .noAccount:
                     EnterView(completion: { account in
@@ -91,20 +96,22 @@ struct ContractusApp: App {
                         account: account,
                         accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
                         dealsAPIService: try? APIServiceFactory.shared.makeDealsService())), logoutCompletion: {
-                        rootViewModel.trigger(.logout)
-                    })
+                            rootViewModel.trigger(.logout)
+                        })
 
                     .navigationTitle("Contractus")
                     .transition(AnyTransition.asymmetric(
                         insertion: .move(edge: .trailing),
                         removal: .move(edge: .leading))
                     )
+
                 }
 
             }
 
             .animation(.default, value: rootViewModel.state)
         }
+        
     }
 }
 

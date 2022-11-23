@@ -17,18 +17,27 @@ fileprivate enum Constants {
 
 struct TextEditorView: View {
 
+    enum AlertType {
+        case error(String), needConfirmForceUpdate
+    }
+    
     enum Mode {
         case view, edit
     }
 
-    @State var content: String = ""
-    @State var mode: Mode = .view
+    enum ActionResult {
+        case close, success(DealMetadata)
+    }
+
+    @Environment(\.presentationMode) var presentationMode
 
     let allowEdit: Bool
-    @Binding var isLoading: Bool
-    @Binding var needConfirm: Bool
-    var onUpdateContent: (_ content: String,_ force: Bool) -> Void
-    var onDismiss: () -> Void
+    @StateObject var viewModel: AnyViewModel<TextEditorState, TextEditorInput>
+    var action: (ActionResult) -> Void
+
+    @State var content: String = ""
+    @State var mode: Mode = .view
+    @State private var alertType: AlertType?
 
     var body: some View {
         NavigationView {
@@ -105,13 +114,13 @@ struct TextEditorView: View {
             .baseBackground()
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    if isLoading {
+                    if viewModel.state.state == .updating {
                         ProgressView()
                     } else {
                         switch mode {
                         case .edit:
                             Button {
-                                onUpdateContent(content, false)
+                                viewModel.trigger(.update(content, false))
                             } label: {
                                 Text(R.string.localizable.commonSave())
                                     .fontWeight(.bold)
@@ -120,9 +129,7 @@ struct TextEditorView: View {
                             EmptyView()
                         }
                     }
-
                 }
-
 
                 ToolbarItem(placement: .principal) {
                     if allowEdit {
@@ -142,9 +149,9 @@ struct TextEditorView: View {
                     Button {
                         switch mode {
                         case .edit:
-                            onDismiss() // TODO: - Добавить alert, "Вы уверены..."
+                            action(.close) // TODO: - Добавить alert, "Вы уверены..."
                         case .view:
-                            onDismiss()
+                            action(.close)
                         }
 
                     } label: {
@@ -153,34 +160,71 @@ struct TextEditorView: View {
                             .frame(width: 21, height: 21)
                             .foregroundColor(R.color.textBase.color)
 
-                    }.disabled(isLoading)
+                    }.disabled(viewModel.state.state == .updating)
                 }
             }
         }
         .edgesIgnoringSafeArea(.bottom)
-        .onDisappear {
-            onDismiss()
-        }
-        .alert(isPresented: $needConfirm) {
-            Alert(
-                title: Text(R.string.localizable.commonError()),
-                message:  Text(R.string.localizable.dealTextEditorMessageForceUpdate()),
-                primaryButton: Alert.Button.destructive(Text(R.string.localizable.dealTextEditorForceUpdate())) {
-                    onUpdateContent(content, true)
-                },
-                secondaryButton: Alert.Button.cancel {
+        .alert(item: $alertType, content: { type in
+            switch type {
+            case .error(let message):
+                return Alert(
+                    title: Text(R.string.localizable.commonError()),
+                    message: Text(message))
+            case .needConfirmForceUpdate:
+                return Alert(
+                    title: Text(R.string.localizable.commonAttention()),
+                    message:  Text(R.string.localizable.dealTextEditorMessageForceUpdate()),
+                    primaryButton: Alert.Button.destructive(Text(R.string.localizable.dealTextEditorForceUpdate())) {
+                        viewModel.trigger(.update(content, true))
+                    },
+                    secondaryButton: Alert.Button.cancel {
 
-                })
+                    })
+            }
+
+        })
+
+        .onChange(of: viewModel.state.state, perform: { newState in
+            switch newState {
+            case .decrypted(let content):
+                self.content = content
+            case .decrypting:
+                break // TODO: - Добавить индикатор, что идет расшифровка
+            case .needConfirmForce:
+                alertType = .needConfirmForceUpdate
+            case .none:
+                break
+            case .updating:
+                break
+            case .error(_):
+                break
+            case .success:
+                presentationMode.wrappedValue.dismiss()
+            }
+        })
+        .onAppear {
+            viewModel.trigger(.decrypt)
+        }
+
+    }
+}
+
+extension TextEditorView.AlertType: Identifiable {
+    var id: String {
+        switch self {
+        case .error:
+            return "error"
+        case .needConfirmForceUpdate:
+            return "needConfirmForceUpdate"
         }
     }
 }
 
 struct TextViewerView_Previews: PreviewProvider {
     static var previews: some View {
-        TextEditorView(content: "", allowEdit: true, isLoading: .constant(false), needConfirm: .constant(false)) { _, _ in
-            
-        } onDismiss: {
-            
+        TextEditorView(allowEdit: true, viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(dealId: Mock.deal.id, content: Mock.deal.meta ?? .init(files: []), contentType: .metadata, secretKey: Mock.account.privateKey, dealService: nil))) { result in
+
         }
     }
 }

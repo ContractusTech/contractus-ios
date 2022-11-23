@@ -20,7 +20,7 @@ protocol RawedFile {
 }
 
 
-extension RawFile {
+extension RawFile: Equatable {
 
     static func fromImage(_ image: UIImage, path: URL) -> RawFile? {
         if let data = image.pngData() {

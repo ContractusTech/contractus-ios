@@ -13,6 +13,7 @@ public enum ServicePath {
     case deals
     case availableCurrencies
     case dealMetadata(String)
+    case dealResult(String)
     case dealTransactions(String)
     case dealTransaction(String, TransactionType)
     case dealSign(String, TransactionType)
@@ -45,6 +46,8 @@ public enum ServicePath {
             return "/deals/\(id)/participate"
         case .balance:
             return "/accounts/balance"
+        case .dealResult(let id):
+            return "/deals/\(id)/result"
         }
     }
 }
@@ -78,9 +81,7 @@ public class BaseService {
             .validate()
             .responseDecodable(of: T.self) {[weak self] response in
                 guard let self = self else { return }
-//                debugPrint(String(data: response.data ?? Data(), encoding: .utf8))
                 debugPrint(String(data: response.request?.httpBody ?? Data(), encoding: .utf8))
-
                 completion(self.process(response: response))
         }
     }
