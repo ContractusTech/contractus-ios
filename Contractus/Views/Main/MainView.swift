@@ -11,6 +11,9 @@ import ResizableSheet
 import SwiftUIPullToRefresh
 
 fileprivate enum Constants {
+    static let menuImage = Image(systemName: "gearshape")
+    static let qrCode = Image(systemName: "qrcode")
+    static let scanQRImage = Image(systemName: "qrcode.viewfinder")
     static let columns: [GridItem] = {
         return [
             GridItem(.flexible()),
@@ -22,7 +25,7 @@ fileprivate enum Constants {
 struct MainView: View {
 
     enum SheetType {
-        case newDeal
+        case newDeal, menu, qrScan, sharePublicKey
     }
 
     var resizableSheetCenter: ResizableSheetCenter? {
@@ -34,10 +37,12 @@ struct MainView: View {
 
     @StateObject var viewModel: AnyViewModel<MainState, MainInput>
     var logoutCompletion: () -> Void
-    @State var sheetType: SheetType?
+    @State var selectedDeal: Deal?
+    @State var sheetType: SheetType? = .none
 
     var body: some View {
         NavigationView {
+
             ScrollView {
                 VStack {
                     BalanceView(
@@ -46,9 +51,9 @@ struct MainView: View {
 
                         })
                     HStack {
-                        VStack(alignment: .leading) {
-                            Text(R.string.localizable.mainTitleContracts())
-                                .font(.title)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(R.string.localizable.mainTitleDeals())
+                                .font(.title2)
                                 .fontWeight(.semibold)
                             Text(R.string.localizable.mainTitleActiveContracts("\(viewModel.state.deals.count)"))
                                 .font(.footnote.weight(.semibold))
@@ -57,29 +62,29 @@ struct MainView: View {
                         }
                         Spacer()
 
-                        CButton(title: R.string.localizable.commonCreate(), style: .primary, size: .default, isLoading: false) {
-                            sheetType = .newDeal
+                        CButton(
+                            title: R.string.localizable.mainTitleNewDeal(),
+                            style: .primary,
+                            size: .default,
+                            isLoading: false) {
+                                sheetType = .newDeal
                         }
 
                     }
-                    .padding(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+                    .padding(EdgeInsets(top: 24, leading: 0, bottom: 8, trailing: 0))
                     LazyVGrid(columns: Constants.columns) {
                         ForEach(viewModel.deals, id: \.id) { item in
-                            NavigationLink {
-                                DealView(viewModel: AnyViewModel<DealState, DealInput>(DealViewModel(
-                                    state: DealState(account: viewModel.account, deal: item),
-                                    dealService: try? APIServiceFactory.shared.makeDealsService(),
-                                    transactionSignService: ServiceFactory.shared.makeTransactionSign(), filesAPIService: try? APIServiceFactory.shared.makeFileService(),
-                                    secretStorage: SharedSecretStorageImpl()))
-                                )
+                            Button {
+                                selectedDeal = item
                             } label: {
-                                DealItemView(deal: item) {
-                                }
+                                DealItemView(
+                                    deal: item,
+                                    needPayment: item.ownerPublicKey == viewModel.state.account.publicKey && item.ownerRole == .executor)
                             }
                         }
                     }
                 }
-                .padding(20)
+                .padding(15)
 
             }.refreshableCompat(loadingViewBackgroundColor: .clear, onRefresh: { done in
                 viewModel.trigger(.load) {
@@ -98,32 +103,74 @@ struct MainView: View {
                         viewModel: AnyViewModel<CreateDealState, CreateDealInput>(CreateDealViewModel(
                             account: viewModel.state.account,
                             accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
-                            dealsAPIService: try? APIServiceFactory.shared.makeDealsService()))) {
+                            dealsAPIService: try? APIServiceFactory.shared.makeDealsService()))) { deal in
+                                selectedDeal = deal
                                 viewModel.trigger(.load)
                             }
                             .interactiveDismiss(canDismissSheet: false)
+                case .menu:
+                    MenuView(viewModel: AnyViewModel<MenuState, MenuInput>(MenuViewModel(accountStorage: KeychainAccountStorage()))) { action in
+                        switch action {
+                        case .logout:
+                            logoutCompletion()
+                        }
+                    }
+                case .qrScan:
+                    QRCodeScannerView(configuration: .scannerAndInput, blockchain: viewModel.state.account.blockchain) { result in
+                        viewModel.trigger(.executeScanResult(result))
+                    }
+                case .sharePublicKey:
+                    if let shareData = try? SharablePublicKey(shareContent: viewModel.state.account.publicKey) {
+                        ShareContentView(content: shareData, topTitle: "Sharing", title: "Your public key", subTitle: "") { _ in
+
+                        } dismissAction: {
+                            sheetType = .none
+                        }
+                    } else {
+                        EmptyView()
+                    }
+
+
                 }
             })
-
+            .navigationDestination(for: $selectedDeal) { deal in
+                dealView(deal: deal)
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    VStack {
-                        R.image.contractusLogo.image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 12)
-
-                        Text(KeyFormatter.format(from: viewModel.state.account.publicKey))
-                            .font(.footnote)
-                            .foregroundColor(R.color.secondaryText.color)
+                    Button  {
+                        sheetType = .sharePublicKey
+                    } label: {
+                        VStack(alignment: .center, spacing: 3) {
+                            Text("Account")
+                                .font(.callout)
+                                .fontWeight(.medium)
+                            HStack {
+                                Constants.qrCode
+                                    .resizable()
+                                    .frame(width: 12, height: 12)
+                                    .foregroundColor(R.color.accentColor.color)
+                                Text(ContentMask.mask(from: viewModel.state.account.publicKey))
+                                    .font(.footnote)
+                                    .foregroundColor(R.color.secondaryText.color)
+                            }
+                        }
                     }
                 }
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    Button {
+                        sheetType = .menu
+                    } label: {
+                        Constants.menuImage
+                    }
+                }
+
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {
-                        logoutCompletion()
+                        sheetType = .qrScan
                     } label: {
-                        Text("Exit")
+                        Constants.scanQRImage
                     }
                 }
             }
@@ -138,6 +185,18 @@ struct MainView: View {
         }
         .tintIfCan(R.color.textBase.color)
 
+        
+    }
+
+    @ViewBuilder
+    func dealView(deal: Deal) -> some View {
+        DealView(viewModel: AnyViewModel<DealState, DealInput>(DealViewModel(
+            state: DealState(account: viewModel.account, deal: deal),
+            dealService: try? APIServiceFactory.shared.makeDealsService(),
+            transactionSignService: ServiceFactory.shared.makeTransactionSign(), filesAPIService: try? APIServiceFactory.shared.makeFileService(),
+            secretStorage: SharedSecretStorageImpl()))) {
+                viewModel.trigger(.load)
+            }
     }
 }
 
@@ -146,6 +205,12 @@ extension MainView.SheetType: Identifiable {
         switch self {
         case .newDeal:
             return "newDeal"
+        case .menu:
+            return "menu"
+        case .qrScan:
+            return "qrScan"
+        case .sharePublicKey:
+            return "sharePublicKey"
         }
     }
 }

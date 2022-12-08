@@ -29,14 +29,6 @@ extension View {
         UIApplication.shared.endEditing()
     }
 
-    func textEditorBackground<V>(@ViewBuilder _ content: () -> V) -> some View where V : View {
-        self
-            .onAppear {
-                UITextView.appearance().backgroundColor = .clear
-            }
-            .background(content())
-    }
-
     func tintIfCan(_ color: Color) -> some View {
         if #available(iOS 16.0, *) {
             return self.tint(color)

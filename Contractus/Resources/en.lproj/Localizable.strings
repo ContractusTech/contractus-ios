@@ -10,6 +10,7 @@
 "common.edit" = "Edit";
 "common.add" = "Add";
 "common.empty" = "Empty";
+"common.view" = "View";
 "common.save" = "Save";
 "common.cancel" = "Cancel";
 "common.close" = "Close";
@@ -25,6 +26,7 @@
 "common.import" = "Import";
 "common.app-name" = "Contractus";
 "common.set" = "Set";
+"common.done" = "Done";
 
 "enter.button.create-wallet" = "Create new wallet";
 "enter.button.import" = "Import exists";
@@ -58,24 +60,35 @@
 "deal.changeAmount.placeholder" = "Enter amount";
 "deal.changeAmount.currency" = "Currency";
 "deal.details" = "Details";
-"deal.view.amount" = "Contract amount";
+"deal.view.amount" = "Amount of deal";
 "deal.view.documents" = "Documents";
-"deal.view.ecrypted" = "Encrypted";
+"deal.view.encrypted" = "Encrypted";
 "deal.view.contract-text" = "Content";
 "deal.view.contract-files" = "Attached files";
 "deal.view.button.change-amount" = "Change amount";
 "deal.text.client" = "Client";
 "deal.text.executor" = "Executor";
 "deal.text.partner" = "Partner";
+"deal.text.verifier" = "Verifier";
 "deal.text.owner" = "Owner";
+"deal.text.text" = "Text";
+"deal.text.files" = "Files";
+"deal.text.details" = "Details";
 "deal.textEditor.message-force-update" = "The contract description was updated while you were editing your version. Forced update to your version?";
 "deal.textEditor.force-update" = "Force update";
 "deal.textEditor.mode.viewer" = "View";
 "deal.textEditor.mode.editor" = "Edit";
 "deal.textEditor.view-placeholder" = "The description of the contract is empty";
 "deal.textEditor.editor-placeholder" = "Enter contract description";
-
-
+"deal.hint.about-executor" = "Performs the work specified in the contract.";
+"deal.hint.you-verifier" = "After your verification of the result of the contract, the partner receives payment.";
+"deal.hint.empty-verifier" = "You need set account for verification result of work by contract.";
+"deal.hint.verifier" = "After verification by this Account of the result of the contract, the partner receives payment.";
+"deal.results.title" = "Results";
+"deal.results.waiting-approve" = "Waiting approve";
+"deal.results.hint" = "Executor can publish documents for approve";
+"deal.no-secret-key" = "No secret key";
+"deal.no-secret-key-information" = "The secret key is needed to view and decrypt/encrypt contract details.";
 
 "newDeal.title" = "New deal";
 "newDeal.subtitle" = "Choose your role";
@@ -84,11 +97,16 @@
 "newDeal.subtitle.client" = "If you pay to some service or product";
 "newDeal.subtitle.executor" = "If you provide service or sell goods";
 
-"main.title.contracts" = "Contracts";
+"main.title.deals" = "Deals";
+"main.title.new-deal" = "New deal";
 "main.title.active-contracts" = "Active - %@";
 
 "changeAmount.title" = "Change amount";
 "changeAmount.amount" = "Amount";
+"changeAmount.total-amount" = "Total amount";
+"changeAmount.fee-free" = "Free";
+"changeAmount.fee-title" = "Service fee";
+"changeAmount.fee-description" = "The fee is taken after the contract is signed by all parties and the start of the contract.";
 
 "addContractor.title.contractor" = "Add partner";
 "addContractor.title.checker" = "Add checker";

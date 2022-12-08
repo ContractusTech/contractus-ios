@@ -17,23 +17,33 @@ fileprivate enum Constants {
 
 struct MultilineTextFieldView: View {
 
+    private enum Field: Int, CaseIterable {
+        case privateKey
+    }
+
     let placeholder: String
     @Binding var value: String
 
+    @FocusState var isInputActive: Bool
+
     var body: some View {
+        
 
         ZStack(alignment: .bottomTrailing) {
+            TextEditor(text: $value)
+                .focused($isInputActive)
+                .setBackground(color: R.color.thirdBackground.color)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button(R.string.localizable.commonDone()) {
+                            isInputActive = false
+                        }.font(.body.weight(.medium))
+                    }
 
-            if #available(iOS 16.0, *) {
-                TextEditor(text: $value)
-                    .scrollContentBackground(.hidden)
-                    .background(R.color.thirdBackground.color)
-            } else {
-                TextEditor(text: $value).textEditorBackground {
-                    R.color.thirdBackground.color
+
                 }
-            }
-
+                .padding(.bottom, 24)
             HStack {
                 Button {
 
@@ -62,9 +72,9 @@ struct MultilineTextFieldView: View {
         .background(R.color.thirdBackground.color)
         .cornerRadius(12)
         .overlay(
-               RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 12)
                 .stroke(R.color.textFieldBorder.color, lineWidth: 1)
-           )
+        )
     }
 }
 

@@ -14,6 +14,7 @@ protocol AccountStorage {
     func setCurrentAccount(account: CommonAccount)
     func clearCurrentAccount()
     func getListAccounts() -> [CommonAccount]
+    func updateAccounts(accounts: [CommonAccount])
 }
 
 final class KeychainAccountStorage: AccountStorage {
@@ -63,10 +64,15 @@ final class KeychainAccountStorage: AccountStorage {
     private func saveToListAccount(account: CommonAccount) {
         var accounts = getListAccounts()
         accounts.append(account)
+        accounts = Array(Set(accounts))
         guard let json = try? encoder.encode(accounts) else { return }
         try? keychain.set(json, key: Keys.accountList.rawValue)
-
-
     }
+
+    func updateAccounts(accounts: [CommonAccount]) {
+        guard let json = try? encoder.encode(Array(Set(accounts))) else { return }
+        try? keychain.set(json, key: Keys.accountList.rawValue)
+    }
+
 
 }

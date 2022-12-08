@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ContractusAPI
 
 private enum Constants {
     static let importImage = Image(systemName: "key.fill")
@@ -14,6 +15,7 @@ private enum Constants {
 struct ImportSecretKeyView: View {
 
     @State var secretKey: String = ""
+    let blockchain: Blockchain
     var action: (String?) -> Void
 
     var body: some View {
@@ -35,9 +37,10 @@ struct ImportSecretKeyView: View {
                 }
 
                 TextFieldView(
-                    placeholder: "Enter key", value: secretKey) { newValue in
-
-                        self.secretKey = newValue
+                    placeholder: "Enter key",
+                    blockchain: blockchain,
+                    value: secretKey) { result in
+                        self.secretKey = result
                 }
 
                 Spacer()
@@ -68,7 +71,7 @@ struct ImportSecretKeyView: View {
 #if DEBUG
 struct ImportSecretKeyView_Previews: PreviewProvider {
     static var previews: some View {
-        ImportSecretKeyView { key in
+        ImportSecretKeyView(blockchain: .solana) { key in
             
         }
     }

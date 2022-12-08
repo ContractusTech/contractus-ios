@@ -62,7 +62,7 @@ struct BalanceView: View {
                             .textCase(.uppercase)
                             .foregroundColor(R.color.secondaryText.color)
                         Text(balance.estimateAmountFormatted)
-                            .font(.largeTitle)
+                            .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(R.color.textBase.color)
 
@@ -84,7 +84,6 @@ struct BalanceView: View {
                 }
                 .frame(width: 46, height: 46, alignment: .center)
                 .buttonStyle(RoundedSecondaryMediumButton())
-                .background(R.color.secondaryBackground.color)
 //                .overlay(
 //                    RoundedRectangle(cornerRadius: 23)
 //                        .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1)
@@ -131,15 +130,11 @@ struct BalanceView: View {
                 }
                 .padding()
                 .background(R.color.secondaryBackground.color)
-//                .overlay(
-//                    RoundedRectangle(cornerRadius: 16)
-//                        .stroke(R.color.baseSeparator.color, lineWidth: 1)
-//                )
+                .cornerRadius(16)
             case .loaded(let balance):
                 if !balance.coins.isEmpty {
                     VStack(alignment: .leading) {
                         ForEach(balance.coins) { coin in
-
                             HStack(alignment: .center, spacing: 12){
                                 coin.logo
                                     .resizable()
@@ -158,10 +153,6 @@ struct BalanceView: View {
                     .padding()
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(16)
-//                    .overlay(
-//                        RoundedRectangle(cornerRadius: 16)
-//                            .stroke(R.color.baseSeparator.color, lineWidth: 1)
-//                    )
                 } else {
                     EmptyView()
                 }

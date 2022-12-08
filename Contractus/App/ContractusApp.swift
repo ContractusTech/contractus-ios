@@ -34,7 +34,7 @@ enum RootInput {
 
 final class RootViewModel: ViewModel {
 
-    @Published var state: RootState
+    @Published private(set) var state: RootState
     private let accountStorage: AccountStorage
     private let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? ""
 

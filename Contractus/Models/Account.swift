@@ -11,7 +11,7 @@ import Base58Swift
 import SolanaSwift
 import ContractusAPI
 
-struct CommonAccount: Codable {
+struct CommonAccount: Codable, Hashable {
     let publicKeyData: Data
     let publicKey: String
     let privateKey: Data

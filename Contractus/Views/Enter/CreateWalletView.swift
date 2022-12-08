@@ -9,103 +9,59 @@ import SwiftUI
 import SolanaSwift
 
 fileprivate enum Constants {
-    static let successCopyImage = Image(systemName: "checkmark")
-    static let keyImage = Image(systemName: "key.viewfinder")
+    // TODO: - 
 }
 
 struct CreateWalletView: View {
 
     @EnvironmentObject var viewModel: AnyViewModel<EnterState, EnterInput>
-    @State var copiedNotification: Bool = false
 
+    @State private var isActive: Bool = false
     var completion: (CommonAccount) -> Void
 
     var body: some View {
-        VStack(alignment: .center) {
+        ZStack (alignment: .bottomLeading) {
             if let account = viewModel.state.account {
-                VStack(alignment: .center, spacing: 24) {
-//                    Constants.keyImage
-//                        .resizable()
-//                        .frame(width: 140, height: 140, alignment: .center)
-//                        .padding()
-//                    Text(R.string.localizable.createWalletTitle())
-//                        .font(.largeTitle)
-//                    Text(R.string.localizable.createWalletSubtitle())
-//                        .font(.body)
-//                        .multilineTextAlignment(.center)
+                ScrollView {
 
-                    VStack(spacing: 8) {
-                        Text("New wallet")
-                            .font(.footnote.weight(.semibold))
-                            .textCase(.uppercase)
-                            .foregroundColor(R.color.secondaryText.color)
+                    VStack(alignment: .center, spacing: 24) {
 
-                        Text(R.string.localizable.createWalletTitle())
-                            .font(.largeTitle.weight(.heavy))
-                        Text(R.string.localizable.createWalletSubtitle())
-                            .font(.callout)
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
-
-                    CopyContentView(content: account.privateKey.toHexString(), contentType: .privateKey) { _ in
-                        viewModel.trigger(.copyPrivateKey)
-                        withAnimation(.easeInOut) {
-                            copiedNotification = true
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                                withAnimation(.easeInOut) {
-                                    copiedNotification = false
-                                }
-                            }
+                        TopTextBlockView(
+                            informationType: .none,
+                            headerText: "New wallet",
+                            titleText: R.string.localizable.createWalletTitle(),
+                            subTitleText: R.string.localizable.createWalletSubtitle())
+                        CopyContentView(content: ContentMask.mask(from: account.privateKey.toBase58()), contentType: .privateKey) { _ in
+                            viewModel.trigger(.copyPrivateKey)
                         }
+                        Spacer()
                     }
-
-                    HStack {
-                        Constants.successCopyImage
-                        Text(R.string.localizable.createWalletButtonCopied())
-                    }
-                    .opacity(copiedNotification ? 1 : 0)
-                    Spacer()
+                    .padding(UIConstants.contentInset)
                 }
-                .frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    minHeight: 0,
-                    maxHeight: .infinity,
-                    alignment: .center
-                )
-                Spacer()
+
                 HStack {
-                    NavigationLink {
+                    NavigationLink(isActive: $isActive) {
                         BackupInformationView(
-                            titleText: "New wallet",
+                            informationType: .warning,
+                            titleText: "Your Safety",
                             largeTitleText: R.string.localizable.backupInformationTitle(),
                             informationText: R.string.localizable.backupInformationSubtitle(),
                             privateKey: account.privateKey,
                             completion: {
-                            completion(account)
-                        }).environmentObject(viewModel)
+                                completion(account)
+                            }).environmentObject(viewModel)
 
                     } label: {
-                        HStack {
-                            Spacer()
-                            Text(R.string.localizable.createWalletButtonNext())
-                            Spacer()
-                        }
-                    }.buttonStyle(PrimaryLargeButton())
-                }
-                .padding(.bottom, 24)
 
+                        CButton(title: R.string.localizable.createWalletButtonNext(), style: .secondary, size: .large, isLoading: false) {
+                            isActive = true
+                        }
+
+                    }
+                }
+                .padding(UIConstants.contentInset)
             }
         }
-        .frame(
-            minWidth: 0,
-            maxWidth: .infinity,
-            minHeight: 0,
-            maxHeight: .infinity,
-            alignment: .leading)
-        .padding()
-
         .onAppear {
             viewModel.trigger(.createIfNeeded)
         }

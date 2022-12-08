@@ -24,34 +24,36 @@ struct EnterView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                VStack(alignment: .leading, spacing: 24) {
-                    Text(R.string.localizable.commonAppName())
-                        .font(.title)
-                        .fontWeight(.heavy)
-                    Text(R.string.localizable.enterMessage())
-                        .font(.title2)
-                        .fontWeight(.semibold)
+            ZStack (alignment: .bottomLeading) {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        Text(R.string.localizable.commonAppName())
+                            .font(.title)
+                            .fontWeight(.heavy)
+                        Text(R.string.localizable.enterMessage())
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                    }
+                    .padding(EdgeInsets(top: 44, leading: 20, bottom: 20, trailing: 20))
                 }
-                .padding(EdgeInsets(top: 44, leading: 20, bottom: 20, trailing: 20))
-                Spacer()
+
+
                 VStack {
                     VStack {
                         Text("Blockchain")
                             .font(.callout)
                             .foregroundColor(R.color.secondaryText.color)
-                        Picker("", selection: $blockchain) {
+
+                        Menu(blockchain.rawValue.capitalized) {
                             ForEach(Blockchain.allCases, id: \.self) { item in
-                                HStack {
-                                    Text(item.rawValue.capitalized)
-                                        .font(.body.weight(.medium))
+                                Button(item.rawValue.capitalized) {
+                                    blockchain = item
                                 }
                             }
                         }
-                        .pickerStyle(.menu)
+                        .padding(10)
                         .background(R.color.buttonBackgroundSecondary.color.opacity(0.4))
                         .cornerRadius(12)
-
                     }
                     .padding(.bottom, 24)
                     NavigationLink(tag: NavigateViewType.createWallet, selection: $selectedView) {
@@ -60,15 +62,12 @@ struct EnterView: View {
                         }
                         .environmentObject(viewModel)
                     } label: {
-                        Button {
+
+                        CButton(title: R.string.localizable.enterButtonCreateWallet(), style: .primary, size: .large, isLoading: false)
+                        {
                             self.selectedView = .createWallet
-                        } label: {
-                            HStack {
-                                Spacer()
-                                Text(R.string.localizable.enterButtonCreateWallet())
-                                Spacer()
-                            }
-                        }.buttonStyle(PrimaryLargeButton())
+                        }
+
                     }
 
                     NavigationLink(tag: NavigateViewType.importWallet, selection: $selectedView) {
@@ -77,19 +76,15 @@ struct EnterView: View {
                         }
                         .environmentObject(viewModel)
                     } label: {
-                        Button {
+
+                        CButton(title: R.string.localizable.enterButtonImport(), style: .secondary, size: .large, isLoading: false)
+                        {
                             self.selectedView = .importWallet
-                        } label: {
-                            HStack {
-                                Spacer()
-                                Text(R.string.localizable.enterButtonImport())
-                                Spacer()
-                            }
                         }
-                        .buttonStyle(SecondaryLargeButton())
+
                     }
                 }
-                .padding(EdgeInsets(top: 10, leading: 16, bottom: 42, trailing: 16))
+                .padding(UIConstants.contentInset)
 
             }
             .onChange(of: blockchain, perform: { newValue in

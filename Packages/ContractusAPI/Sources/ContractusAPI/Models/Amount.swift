@@ -29,8 +29,8 @@ public struct Amount {
         self.currency = currency
     }
 
-    public func formatted() -> String {
-        currency.format(amount: value, withCode: false)
+    public func formatted(withCode: Bool = false) -> String {
+        currency.format(amount: value, withCode: withCode)
     }
 
     public static func isValid(_ value: String, currency: Currency) -> Bool {
@@ -49,5 +49,13 @@ extension Amount: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(value.description, forKey: .value)
         try container.encode(currency.code, forKey: .currency)
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let value = try container.decode(String.self, forKey: .value)
+        self.value = BigUInt(stringLiteral: value)
+        let currencyCode = try container.decode(String.self, forKey: .currency)
+        self.currency = Currency.from(code: currencyCode)
     }
 }

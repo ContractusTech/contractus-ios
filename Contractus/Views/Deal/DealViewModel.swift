@@ -21,9 +21,12 @@ enum DealInput {
     case update(Deal?)
     case openFile(MetadataFile)
     case updateContent(DealMetadata, DealsService.ContentType)
+    case deleteMetadataFile(MetadataFile)
+    case deleteResultFile(MetadataFile)
+    case cancel
     case sign
     case none
-    case saveKey(String)
+    case saveKey(ScanResult)
 }
 
 struct DealState {
@@ -34,13 +37,12 @@ struct DealState {
     
     let account: CommonAccount
     var deal: ContractusAPI.Deal
-    var canEdit: Bool = true
+    var shareDeal: ShareableDeal?
+    var canEdit: Bool = false
     var canSign: Bool = true
     var state: State = .none
     var partnerSecretPartBase64: String = ""
     var decryptedKey = Data()
-    var decryptedFilesMetadata: [MetadataFile] = []
-    var decryptedFilesResult: [MetadataFile] = []
 
     var isOwnerDeal: Bool {
         deal.ownerPublicKey == account.publicKey
@@ -95,20 +97,18 @@ struct DealState {
             return deal.ownerPublicKey
         }
     }
+
 }
 
 final class DealViewModel: ViewModel {
 
     @Published private(set) var state: DealState
 
-
-
     private var dealService: ContractusAPI.DealsService?
     private var transactionSignService: TransactionSignService?
     private var filesAPIService: ContractusAPI.FilesService?
     private var secretStorage: SharedSecretStorage?
     private var cancelable = Set<AnyCancellable>()
-    
     private var metadata: DealMetadata?
     private var encryptedFile: UploadFileResult?
 
@@ -119,7 +119,6 @@ final class DealViewModel: ViewModel {
         filesAPIService: ContractusAPI.FilesService?,
         secretStorage: SharedSecretStorage?)
     {
-        debugPrint(state.deal)
         self.state = state
         self.dealService = dealService
         self.filesAPIService = filesAPIService
@@ -130,24 +129,44 @@ final class DealViewModel: ViewModel {
 
     func trigger(_ input: DealInput, after: AfterTrigger? = nil) {
         switch input {
+        case .cancel:
+            state.state = .loading
+            dealService?.cancel(dealId: state.deal.id, force: false, completion: { [weak self] result in
+                self?.state.state = .none
+                switch result {
+                case .failure(let error):
+                    self?.state.state = .error(error.localizedDescription)
+                case .success(let deal):
+                    after?()
+                }
+            })
         case .none:
             state.state = .none
 
-        case .saveKey(let key):
-            recoverSharedKey(partnerKey: key)
-                .receive(on: RunLoop.main)
-                .sink { result in
-                    switch result {
-                    case .failure:
-                        self.state.canEdit = false
-                    case .finished:
-                        self.state.canEdit = true
-                    }
-                } receiveValue: { key in
-                    self.state.decryptedKey = key
-                    try? self.secretStorage?.saveSharedSecret(for: self.state.deal.id, sharedSecret: key)
+        case .saveKey(let importResult):
+            switch importResult {
+            case .publicKey:
+                break
+            case .deal(let shareData):
+                guard shareData.command == .shareDealSecret else {
+                    return
                 }
-                .store(in: &cancelable)
+                recoverSharedKey(partnerKey: shareData.secretBase64)
+                    .receive(on: RunLoop.main)
+                    .sink { result in
+                        switch result {
+                        case .failure:
+                            self.state.canEdit = false
+                        case .finished:
+                            self.state.canEdit = true
+                        }
+                    } receiveValue: { key in
+                        self.state.decryptedKey = key
+                        try? self.secretStorage?.saveSharedSecret(for: self.state.deal.id, sharedSecret: key)
+                    }
+                    .store(in: &cancelable)
+            }
+
             
         case .sign:
             signTransaction()
@@ -182,6 +201,22 @@ final class DealViewModel: ViewModel {
                      state.state = .filePreview(url)
                 }
             }
+        case .deleteMetadataFile(let file):
+            state.state = .loading
+            let meta = DealMetadata(
+                content: state.deal.meta?.content,
+                files: state.deal.meta?.files.filter({ $0 != file }) ?? [])
+            dealService?.update(
+                dealId: state.deal.id,
+                typeContent: .metadata,
+                meta: UpdateDealMetadata(meta: meta, updatedAt: Date(), force: true),
+                completion: {[weak self] result in
+                    self?.state.deal.meta = meta
+                    self?.state.state = .none
+                })
+
+        case .deleteResultFile(_):
+            break
         }
     }
 
@@ -238,6 +273,7 @@ final class DealViewModel: ViewModel {
             } receiveValue: { (decryptedKey, partnerSecretPartBase64) in
                 self.state.decryptedKey = decryptedKey
                 self.state.partnerSecretPartBase64 = partnerSecretPartBase64
+                self.state.shareDeal = ShareableDeal(dealId: self.state.deal.id, secretBase64: partnerSecretPartBase64)
                 self.state.canEdit = true
             }.store(in: &cancelable)
 

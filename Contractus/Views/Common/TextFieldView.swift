@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ContractusAPI
 
 fileprivate enum Constants {
     static let qrScanIcon = Image(systemName: "qrcode.viewfinder")
@@ -15,6 +16,10 @@ fileprivate enum Constants {
 struct TextFieldView: View {
 
     let placeholder: String
+    let blockchain: Blockchain
+
+    var allowQRScan: Bool = true
+    
     @State var value: String = ""
     @State private var isPresentedQRScan = false
     var changeValue: (String) -> Void
@@ -33,28 +38,43 @@ struct TextFieldView: View {
                     .foregroundColor(R.color.textBase.color)
                     .font(.body.weight(.medium))
             }
-
-            Button {
-                isPresentedQRScan.toggle()
-            } label: {
-                Constants.qrScanIcon
-                    .resizable()
-                    .frame(width: 28, height: 28, alignment: .center)
-                    .foregroundColor(R.color.textBase.color)
-                    .padding(12)
+            .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 16))
+            if allowQRScan {
+                Button {
+                    isPresentedQRScan.toggle()
+                } label: {
+                    Constants.qrScanIcon
+                        .resizable()
+                        .frame(width: 28, height: 28, alignment: .center)
+                        .foregroundColor(R.color.textBase.color)
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 16))
+                }
             }
         }
-        .background(R.color.baseSeparator.color)
+        .background(R.color.thirdBackground.color)
         .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(R.color.textFieldBorder.color, lineWidth: 1)
+        )
         .sheet(isPresented: $isPresentedQRScan) {
-            QRScannerView()
+            QRCodeScannerView(configuration: .onlyScanner, blockchain: blockchain) { result in
+                switch result {
+                case .deal(let deal):
+                    // TODO: -
+                    break
+                case .publicKey(let pk):
+                    value = pk
+                    changeValue(pk)
+                }
+            }
         }
     }
 }
 
 struct TextFieldView_Previews: PreviewProvider {
     static var previews: some View {
-        TextFieldView(placeholder: "Enter value", changeValue: { _ in
+        TextFieldView(placeholder: "Enter value", blockchain: .solana, changeValue: { _ in
 
         })
     }

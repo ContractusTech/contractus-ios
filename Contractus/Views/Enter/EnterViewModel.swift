@@ -71,14 +71,9 @@ final class EnterViewModel: ViewModel {
 //                }
 //
 //            }
-        case .copyPrivateKey:
-            guard let privateKey = state.account?.privateKey else { return }
-            UIPasteboard.general.string = privateKey.toBase58()
-            self.state.privateKeyIsCopied = true
-        case .copyForBackup:
-            guard let privateKey = state.account?.privateKey else { return }
-            UIPasteboard.general.string = privateKey.toBase58()
-            self.state.isBackupedPrivateKey = true
+        case .copyPrivateKey, .copyForBackup:
+            /// Maybe for logs will be useful
+            break
         case .saveAccount:
             guard let account = state.account else { return }
             accountService.save(account)

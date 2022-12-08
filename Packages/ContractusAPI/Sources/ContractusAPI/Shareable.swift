@@ -13,5 +13,5 @@ public enum ShareableError: Error {
 
 public protocol Shareable {
     init(shareContent: String) throws
-    func shareContent() -> String
+    var shareContent: String { get }
 }

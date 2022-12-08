@@ -9,9 +9,9 @@ import Foundation
 
 fileprivate let SEPARATOR = "^"
 
-public struct ShareableDeal: Shareable {
+public struct ShareableDeal: Shareable, Equatable {
 
-    public enum ShareableCommand: String {
+    public enum ShareableCommand: String, Equatable {
         case shareDealSecret = "sds"
     }
 
@@ -19,9 +19,9 @@ public struct ShareableDeal: Shareable {
         case invalidContent
     }
 
-    let id: String
-    let secretBase64: String
-    let command: ShareableCommand
+    public let id: String
+    public let secretBase64: String
+    public let command: ShareableCommand
 
     public init(dealId: String, secretBase64: String, command: Self.ShareableCommand = .shareDealSecret) {
         self.id = dealId
@@ -51,7 +51,7 @@ public struct ShareableDeal: Shareable {
         self.command = command
     }
 
-    public func shareContent() -> String {
+    public var shareContent: String {
         let string = "\(command.rawValue)\(SEPARATOR)\(id)\(SEPARATOR)\(secretBase64)"
         return string.data(using: .utf8)!.base64EncodedString()
     }

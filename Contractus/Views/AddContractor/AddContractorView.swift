@@ -45,44 +45,15 @@ struct AddContractorView: View {
                 VStack(spacing: 12) {
                     switch viewModel.state.participateType {
                     case .contractor:
-                        VStack(spacing: 8) {
-                            Text("Add partner")
-                                .font(.footnote.weight(.semibold))
-                                .textCase(.uppercase)
-                                .foregroundColor(R.color.secondaryText.color)
-
-                            Text("Enter public key")
-                                .font(.largeTitle.weight(.heavy))
-                            if viewModel.state.accountIsClient {
-                                Text("Of the client who will pay for the work under the contract.")
-                                    .font(.callout)
-                                    .multilineTextAlignment(.center)
-                            } else {
-                                Text("Of the client who will perform the work under the contract.")
-                                    .font(.callout)
-                                    .multilineTextAlignment(.center)
-                            }
-
-
-                        }
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
-
+                        TopTextBlockView(
+                            headerText: "Add partner",
+                            titleText: "Enter public key",
+                            subTitleText: viewModel.state.accountIsClient ? "Of the client who will pay for the work under the contract." : "Of the client who will perform the work under the contract.")
                     case .checker:
-
-                        VStack(spacing: 8) {
-                            Text("Add checker")
-                                .font(.footnote.weight(.semibold))
-                                .textCase(.uppercase)
-                                .foregroundColor(R.color.secondaryText.color)
-
-                            Text("Enter public key")
-                                .font(.largeTitle.weight(.heavy))
-
-                            Text("Of partner who will verify the result of the contract. After checking, the contractor will receive payment.")
-                                .font(.callout)
-                                .multilineTextAlignment(.center)
-                        }
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
+                        TopTextBlockView(
+                            headerText: "Add checker",
+                            titleText: "Enter public key",
+                            subTitleText: "Of partner who will verify the result of the contract. After checking, the contractor will receive payment.")
                     }
 
                 }
@@ -90,7 +61,7 @@ struct AddContractorView: View {
                 VStack(alignment: .center, spacing: 22) {
 
                     TextFieldView(
-                        placeholder: R.string.localizable.commonPublicKey(),
+                        placeholder: R.string.localizable.commonPublicKey(), blockchain: viewModel.blockchain,
                         value: viewModel.state.publicKey
                     ) { newValue in
                             viewModel.trigger(.validate(newValue))
@@ -106,9 +77,11 @@ struct AddContractorView: View {
                     destination: {
                         ShareContentView(
                             content: viewModel.state.shareableData,
-                            title: "Share key", subTitle: "For edit and sign contract partner must have this data.") { _ in
+                            topTitle: nil,
+                            title: "Share key",
+                            subTitle: "For edit and sign contract partner must have this data.") { _ in
                                 // TODO: - Copy
-                            } closeAction: {
+                            } dismissAction: {
 
                             }
                     },
@@ -226,9 +199,11 @@ struct AddContractorView_Previews: PreviewProvider {
 
         ShareContentView(
             content: ShareableDeal(dealId: "", secretBase64: "", command: .shareDealSecret),
-            title: "Share key", subTitle: "For edit and sign contract partner must have this data.") { _ in
+            topTitle: nil,
+            title: "Share key",
+            subTitle: "For edit and sign contract partner must have this data.") { _ in
                 // TODO: - Copy
-            } closeAction: {
+            } dismissAction: {
 
             }
             .previewDisplayName("Share View")

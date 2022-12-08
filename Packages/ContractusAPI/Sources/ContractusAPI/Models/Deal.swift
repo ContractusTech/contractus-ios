@@ -28,6 +28,7 @@ public struct Deal: Decodable {
              secretKeyHash,
              createdAt,
              amount,
+             amountFee,
              currency,
              updatedAt,
              ownerRole,
@@ -45,6 +46,7 @@ public struct Deal: Decodable {
     public let sharedKey: String?
     public var createdAt: String
     public var amount: BigUInt
+    public var amountFee: BigUInt
     public var status: DealStatus
     public var currency: Currency
     public var updatedAt: String?
@@ -63,6 +65,7 @@ public struct Deal: Decodable {
         sharedKey: String? = nil,
         createdAt: String,
         amount: BigUInt,
+        amountFee: BigUInt,
         status: DealStatus,
         currency: Currency,
         updatedAt: String? = nil,
@@ -87,10 +90,19 @@ public struct Deal: Decodable {
         self.meta = meta
         self.results = results
         self.metaUpdatedAt = metaUpdatedAt
+        self.amountFee = amountFee
     }
 
     public var amountFormatted: String {
         currency.format(amount: self.amount, withCode: false)
+    }
+
+    public var metadataIsEmpty: Bool {
+        meta?.content?.text.isEmpty ?? true && meta?.files.isEmpty ?? true
+    }
+
+    public var resultsIsEmpty: Bool {
+        results?.content?.text.isEmpty ?? true && results?.files.isEmpty ?? true
     }
 
     public init(from decoder: Decoder) throws {
@@ -113,6 +125,8 @@ public struct Deal: Decodable {
         self.results = try? container.decodeIfPresent(DealMetadata.self, forKey: .results)
         self.metaUpdatedAt = try? container.decodeIfPresent(String.self, forKey: .metaUpdatedAt)
         self.status = (try? container.decodeIfPresent(DealStatus.self, forKey: .status)) ?? .unknown
+        let amountFee = (try? container.decode(String.self, forKey: .amountFee)) ?? "0"
+        self.amountFee = BigUInt(stringLiteral: amountFee)
     }
 }
 
@@ -147,16 +161,36 @@ public struct SignedDealTransaction: Codable {
 
 }
 
-public struct UpdateDeal: Codable {
+public struct UpdateAmountDeal: Codable {
 
-    let amount: Amount?
+    let amount: Amount
+    let feeAmount: Amount
 
-    public init(amount: Amount? = nil) {
+    public init(amount: Amount, feeAmount: Amount) {
         self.amount = amount
+        self.feeAmount = feeAmount
     }
 
 }
 
+public struct CancelDeal: Codable {
+    let force: Bool
+}
+
+
 public enum TransactionType: String, Codable {
     case `init` = "INIT", finish = "FINISH", cancel = "CANCEL"
+}
+
+public struct CalculateDealFee: Codable {
+    public let amount: Amount
+    
+    public init(amount: Amount) {
+        self.amount = amount
+    }
+}
+
+public struct DealFee: Codable {
+    public let feeAmount: Amount
+    public let fee: Double
 }

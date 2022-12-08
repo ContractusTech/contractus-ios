@@ -9,6 +9,7 @@ import SwiftUI
 import struct ContractusAPI.Currency
 import struct ContractusAPI.Amount
 import Introspect
+import Combine
 
 extension Currency: Hashable {
     public func hash(into hasher: inout Hasher) {
@@ -29,18 +30,9 @@ struct ChangeAmountView: View {
     @State private var currency: Currency
     @State private var amountWithFee: Bool = false
 
+    let amountPublisher = PassthroughSubject<String, Never>()
     private let availableCurrencies: [ContractusAPI.Currency]
     private var didChange: (Amount) -> Void
-
-    var amountFormatted: Binding<String> {
-            Binding<String>(
-                get: { amountString },
-                set: {
-                    viewModel.trigger(.changeAmount($0, currency))
-                    amountString = $0
-                }
-            )
-    }
 
     init(
         viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>,
@@ -48,77 +40,119 @@ struct ChangeAmountView: View {
         availableCurrencies: [ContractusAPI.Currency] = Currency.availableCurrencies,
         didChange: @escaping (Amount) -> Void) {
 
-            if let amount = viewModel.state.amount {
-                self._amountString = State(initialValue: amount.formatted())
-                self._currency = State(initialValue: amount.currency)
-            } else {
-                self._currency = State(initialValue: defaultCurrency)
-            }
-
+            self._amountString = State(initialValue: viewModel.state.amount.formatted())
+            self._currency = State(initialValue: viewModel.state.amount.currency)
             self._viewModel = StateObject(wrappedValue: viewModel)
             self.availableCurrencies = availableCurrencies
             self.didChange = didChange
-    }
+
+        }
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 32) {
-                VStack(spacing: 16) {
-                    HStack {
-                        Picker("Select currency", selection: $currency) {
-                            ForEach(availableCurrencies, id: \.self) {
-                                Text($0.code)
-                                    .font(.body.weight(.semibold))
+            ZStack(alignment: .bottomLeading) {
+                ScrollView {
+                    VStack(spacing: 16) {
+                        HStack {
+                            Picker("", selection: $currency) {
+                                ForEach(availableCurrencies, id: \.self) {
+                                    Text($0.code)
+                                        .font(.body.weight(.semibold))
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            Divider().frame(height: 30)
+                            TextField(R.string.localizable.changeAmountAmount(), text: $amountString)
+                                .introspectTextField { tf in
+                                    tf.becomeFirstResponder()
+                                }
+                                .textFieldStyle(LargeTextFieldStyle())
+                        }
+                        .background(R.color.thirdBackground.color)
+                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(R.color.textFieldBorder.color, lineWidth: 1)
+                        )
+                        Divider()
+
+                        HStack(alignment: .top) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(R.string.localizable.changeAmountFeeTitle())
+                                    .font(.body)
+                                    .foregroundColor(R.color.textBase.color)
+                                    .multilineTextAlignment(.leading)
+                                Text(R.string.localizable.changeAmountFeeDescription())
+                                    .font(.footnote)
+                                    .foregroundColor(R.color.secondaryText.color)
+                                    .multilineTextAlignment(.leading)
+                            }
+
+                            Spacer()
+                            if viewModel.state.fee == 0 && viewModel.state.state != .loading {
+                                Label(text: R.string.localizable.changeAmountFeeFree(), type: .primary)
+                            } else {
+                                if !viewModel.state.feeFormatted.isEmpty  {
+                                    Text("\(viewModel.state.feeFormatted) %")
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                        .foregroundColor(R.color.textBase.color)
+                                        .multilineTextAlignment(.leading)
+                                } else {
+                                    RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
+                                        .frame(width: 42, height: 24)
+                                }
                             }
                         }
-                        .pickerStyle(.menu)
-                        Divider().frame(height: 30)
-                        TextField(R.string.localizable.changeAmountAmount(), text: amountFormatted)
-                            .introspectTextField { tf in
-                                tf.becomeFirstResponder()
-                            }
-                    }
+                        Divider()
 
-                    .padding(10)
-                    .background(R.color.baseSeparator.color)
-                    .cornerRadius(12)
-                    Divider()
-                    HStack {
 
-                        Toggle(isOn: $amountWithFee) {
-                            Text("Include fee to amount")
-                            Text("Fee 1.5% from amount contract")
-                                .font(.footnote)
-                                .foregroundColor(R.color.secondaryText.color)
+                        HStack {
+                            Text(R.string.localizable.changeAmountTotalAmount())
+                                .font(.body)
+                                .foregroundColor(R.color.textBase.color)
                                 .multilineTextAlignment(.leading)
+                            Spacer()
+                            if viewModel.state.state != .loading  {
+                                Text(viewModel.state.totalAmount.formatted(withCode: true))
+                                    .font(.body)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(R.color.textBase.color)
+                                    .multilineTextAlignment(.leading)
+                            } else {
+                                RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
+                                    .frame(width: 42, height: 24)
+                            }
                         }
-                        .toggleStyle(SwitchToggleStyle(tint: R.color.textBase.color))
-                    }
-                    Divider()
 
+
+                    }
                 }
-                Spacer()
+
 
                 CButton(
                     title: R.string.localizable.commonChange(),
                     style: .primary,
                     size: .large,
-                    isLoading: viewModel.state.state == .loading,
-                    isDisabled: !viewModel.state.isValid)
+                    isLoading: viewModel.state.state == .changingAmount,
+                    isDisabled: (!viewModel.state.isValid || viewModel.state.state == .loading))
                 {
                     viewModel.trigger(.update)
                 }
 
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
-
             }
+            .onChange(of: amountString, perform: { newAmount in
+                amountPublisher.send(newAmount)
+            })
             .onChange(of: viewModel.state.state, perform: { newValue in
                 if newValue == .success {
-                    if let amount = viewModel.amount {
-                        didChange(amount)
-                    }
+                    didChange(viewModel.amount)
                     presentationMode.wrappedValue.dismiss()
                 }
+            })
+            .onReceive(amountPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main), perform: { amountText in
+                viewModel.trigger(.changeAmount(amountText, currency))
             })
             .toolbar{
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -140,6 +174,9 @@ struct ChangeAmountView: View {
             .baseBackground()
             .edgesIgnoringSafeArea(.bottom)
         }
+        .onAppear {
+            viewModel.trigger(.changeAmount(amountString, currency))
+        }
     }
 }
 
@@ -147,10 +184,9 @@ struct ChangeAmountView_Previews: PreviewProvider {
     static var previews: some View {
         ChangeAmountView(
             viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>(ChangeAmountViewModel(
-                state: .init(dealId: "", amount: Amount("10000", currency: .usdc)),
-                dealService: nil))) { amount in
+                dealId: "", amount: Amount("10000", currency: .usdc), feeAmount: Amount("10000", currency: .usdc), dealService: nil))) { amount in
 
-        }
-
+                }
     }
 }
+

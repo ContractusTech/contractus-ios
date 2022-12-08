@@ -12,6 +12,7 @@ import Combine
 
 enum MainInput {
     case load
+    case executeScanResult(ScanResult)
 }
 
 struct MainState {
@@ -52,6 +53,8 @@ final class MainViewModel: ViewModel {
                     after?()
                 }
             }
+        case .executeScanResult(let result):
+            debugPrint(result)
         }
     }
 

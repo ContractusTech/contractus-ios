@@ -15,12 +15,14 @@ public enum ServicePath {
     case dealMetadata(String)
     case dealResult(String)
     case dealTransactions(String)
+    case cancelDeal(String)
     case dealTransaction(String, TransactionType)
     case dealSign(String, TransactionType)
     case uploadFile
     case deal(String)
     case participant(String)
     case balance
+    case dealFee(dealId: String)
 
     var value: String {
         switch self {
@@ -48,6 +50,10 @@ public enum ServicePath {
             return "/accounts/balance"
         case .dealResult(let id):
             return "/deals/\(id)/result"
+        case .cancelDeal(let id):
+            return "/deals/\(id)/cancel"
+        case .dealFee(let dealId):
+            return "/deals/\(dealId)/fee"
         }
     }
 }

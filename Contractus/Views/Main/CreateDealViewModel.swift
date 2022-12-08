@@ -52,7 +52,7 @@ final class CreateDealViewModel: ViewModel {
         case .createDealAsExecutor:
             create(for: .executor)
         case .copy:
-            if let share = state.shareable?.shareContent() {
+            if let share = state.shareable?.shareContent {
                 UIPasteboard.general.string = share
             }
         }
@@ -89,7 +89,6 @@ final class CreateDealViewModel: ViewModel {
             .sink { result in
                 switch result {
                 case .failure(let error):
-                    break
                     self.state.state = .error
                     self.state.errorMessage = error.localizedDescription
                 case .finished:
@@ -99,6 +98,7 @@ final class CreateDealViewModel: ViewModel {
             } receiveValue: { deal in
                 self.state.shareable = ShareableDeal(dealId: deal.id, secretBase64: secretPartnerKey)
                 self.state.state = .success
+                self.state.createdDeal = deal
             }
             .store(in: &store)
     }

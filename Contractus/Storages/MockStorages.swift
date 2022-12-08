@@ -8,7 +8,8 @@
 import Foundation
 
 
-class MockAccountStorage: AccountStorage {
+final class MockAccountStorage: AccountStorage {
+
     func getCurrentAccount() -> CommonAccount? {
         Mock.account
     }
@@ -18,6 +19,24 @@ class MockAccountStorage: AccountStorage {
     func clearCurrentAccount() { }
 
     func getListAccounts() -> [CommonAccount] {
-        []
+        [Mock.account, Mock.account]
     }
+
+    func updateAccounts(accounts: [CommonAccount]) { }
+}
+
+
+final class SharedSecretStorageMock: SharedSecretStorage {
+    func getSharedSecret(for dealId: String) -> Data? {
+        return nil
+    }
+
+    func saveSharedSecret(for dealId: String, sharedSecret: Data) throws {
+
+    }
+
+    func deleteSharedSecret(for dealId: String) throws {
+
+    }
+
 }

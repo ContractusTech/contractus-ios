@@ -7,9 +7,12 @@
 
 import Foundation
 
-struct KeyFormatter {
+struct ContentMask {
 
-    static func format(from string: String?, visibleCount: Int = 4) -> String {
+    static func mask(from string: String?, visibleCount: Int = 4) -> String {
+        if visibleCount <= 0 {
+            return string ?? ""
+        }
         guard let string = string, string.count > visibleCount * 2 else {
             return ""
         }

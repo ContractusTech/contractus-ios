@@ -38,7 +38,7 @@ public final class DealsService: BaseService {
         }
     }
 
-    public func update(dealId: String, data: UpdateDeal, completion: @escaping (Swift.Result<Deal, APIClientError>) -> Void) {
+    public func update(dealId: String, data: UpdateAmountDeal, completion: @escaping (Swift.Result<Deal, APIClientError>) -> Void) {
         self.request(path: .deal(dealId), httpMethod: .post, data: data) { (result: Swift.Result<Deal, APIClientError>) in
             completion(result)
         }
@@ -54,6 +54,12 @@ public final class DealsService: BaseService {
             path = .dealResult(dealId)
         }
         self.request(path: path, httpMethod: .post, data: meta) { (result: Swift.Result<DealMetadata, APIClientError>) in
+            completion(result)
+        }
+    }
+
+    public func cancel(dealId: String, force: Bool, completion: @escaping (Swift.Result<Deal, APIClientError>) -> Void) {
+        self.request(path: .cancelDeal(dealId), httpMethod: .post, data: CancelDeal(force: force)) { (result: Swift.Result<Deal, APIClientError>) in
             completion(result)
         }
     }
@@ -100,6 +106,12 @@ public final class DealsService: BaseService {
             case .failure(let error):
                 completion(.failure(error))
             }
+        }
+    }
+
+    public func getFee(dealId: String, data: CalculateDealFee, completion: @escaping (Swift.Result<DealFee, APIClientError>) -> Void) {
+        self.request(path: .dealFee(dealId: dealId), httpMethod: .post, data: data) { (result: Swift.Result<DealFee, APIClientError>) in
+            completion(result)
         }
     }
 }

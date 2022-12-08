@@ -7,7 +7,6 @@
 
 import SwiftUI
 import ContractusAPI
-//import QRCode
 import Introspect
 
 fileprivate enum Constants {
@@ -62,9 +61,7 @@ struct TextEditorView: View {
                     } else {
                         TextEditor(text: $content)
                             .disabled(false)
-                            .textEditorBackground({
-                                R.color.mainBackground.color
-                            })
+                            .setBackground(color: R.color.mainBackground.color)
                             .introspectTextView { tv in
                                 tv.becomeFirstResponder()
                             }
@@ -91,9 +88,8 @@ struct TextEditorView: View {
                     } else {
                         TextEditor(text: $content)
                             .disabled(true)
-                            .textEditorBackground({
-                                R.color.mainBackground.color
-                            })
+                            .setBackground(color: R.color.mainBackground.color)
+
                     }
 
                     if content.isEmpty {

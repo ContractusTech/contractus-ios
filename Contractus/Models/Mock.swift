@@ -16,7 +16,7 @@ enum Mock {
     }
 
     static var deal: ContractusAPI.Deal {
-        return Deal(id: "", ownerPublicKey: "", createdAt: "", amount: "10000", status: .new, currency: .sol, ownerRole: .client, meta: DealMetadata(files: []), results: DealMetadata(files: []))
+        return Deal(id: "", ownerPublicKey: "", createdAt: "", amount: "10000000", amountFee: "0", status: .new, currency: .sol, ownerRole: .client, meta: DealMetadata(files: []), results: DealMetadata(files: []))
     }
 
 

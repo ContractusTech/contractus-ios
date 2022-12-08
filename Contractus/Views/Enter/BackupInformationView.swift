@@ -19,64 +19,49 @@ struct BackupInformationView: View {
     @EnvironmentObject var rootViewModel: AnyViewModel<RootState, RootInput>
     @EnvironmentObject var viewModel: AnyViewModel<EnterState, EnterInput>
 
+    let informationType: TopTextBlockView.InformationType
     let titleText: String
     let largeTitleText: String
     let informationText: String
     let privateKey: Data
 
     var completion: () -> Void
-    @State var copiedNotification: Bool = false
 
     var body: some View {
-        VStack(alignment: .center, spacing: 16) {
-            VStack(alignment: .center, spacing: 24) {
-                TopTextBlockView(
-                    headerText: titleText,
-                    titleText: largeTitleText,
-                    subTitleText: informationText)
-                
-                CopyContentView(content: privateKey.toBase58(), contentType: .privateKey) { _ in
-                    viewModel.trigger(.copyPrivateKey)
-                    withAnimation(.easeInOut) {
-                        copiedNotification = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                            withAnimation(.easeInOut) {
-                                copiedNotification = false
-                            }
-                        }
+        ZStack(alignment: .bottomLeading) {
+            ScrollView {
+                VStack(alignment: .center, spacing: 24) {
+                    TopTextBlockView(
+                        informationType: informationType,
+                        headerText: titleText,
+                        titleText: largeTitleText,
+                        subTitleText: informationText)
+
+                    CopyContentView(content: privateKey.toBase58(), contentType: .privateKey) { _ in
+                        viewModel.trigger(.copyForBackup)
                     }
+                    Spacer()
                 }
+                .padding(UIConstants.contentInset)
+            }
+            VStack {
+                Text(R.string.localizable.backupInformationTooltip())
+                    .multilineTextAlignment(.center)
+                    .font(.body.weight(.medium))
+                    .foregroundColor(R.color.yellow.color)
+                    .padding(10)
+
                 HStack {
-                    Constants.successCopyImage
-                    Text(R.string.localizable.createWalletButtonCopied())
-                }
-                .opacity(copiedNotification ? 1 : 0)
-                Spacer()
-            }
 
-            Spacer()
-            Text(R.string.localizable.backupInformationTooltip())
-                .multilineTextAlignment(.center)
-                .font(.body.weight(.medium))
-                .foregroundColor(R.color.yellow.color)
-                .padding(10)
-
-            HStack {
-                Button {
-                    viewModel.trigger(.saveAccount)
-                    completion()
-                } label: {
-                    HStack {
-                        Spacer()
-                        Text(R.string.localizable.backupInformationButtonContinue())
-                        Spacer()
+                    CButton(title: R.string.localizable.backupInformationButtonContinue(), style: .secondary, size: .large, isLoading: false)
+                    {
+                        viewModel.trigger(.saveAccount)
+                        completion()
                     }
-                }.buttonStyle(PrimaryLargeButton())
+                }
+                .padding(UIConstants.contentInset)
             }
-            .padding(.bottom, 24)
         }
-        .padding()
-
         .onAppear {
             viewModel.trigger(.createIfNeeded)
         }
@@ -93,7 +78,13 @@ struct BackupInformationView: View {
 struct BackupInformationView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            BackupInformationView(titleText: "import success", largeTitleText: "Your safety", informationText: "", privateKey: Data(), completion: {}).environmentObject(AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(), accountService: AccountServiceImpl(storage: MockAccountStorage()))))
+            BackupInformationView(
+                informationType: .warning,
+                titleText: "import success",
+                largeTitleText: "Your safety",
+                informationText: "",
+                privateKey: Data(),
+                completion: {}).environmentObject(AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(), accountService: AccountServiceImpl(storage: MockAccountStorage()))))
         }
         .preferredColorScheme(.dark)
 
