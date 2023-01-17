@@ -39,4 +39,9 @@ extension RawFile: Equatable {
         bcf.countStyle = .file
         return bcf.string(fromByteCount: Int64(data.count))
     }
+
+    var isLargeForEncrypting: Bool {
+        // TODO: - Value for test, may be need change
+        (Int64(data.count) / 1048576) > 2
+    }
 }

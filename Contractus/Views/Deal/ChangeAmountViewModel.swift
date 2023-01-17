@@ -14,24 +14,65 @@ enum ChangeAmountInput {
     case update
 }
 
+enum AmountValueType {
+    case deal, checker
+
+    var asAmountFeeType: AmountFeeType {
+        switch self {
+        case .checker: return .checkerAmount
+        case .deal: return .dealAmount
+        }
+    }
+}
+
 struct ChangeAmountState {
+
 
     enum State: Equatable {
         case loading, changingAmount, error(String), success, none
     }
     var state: State = .none
-    var dealId: String
+    var deal: Deal
+    let amountType: AmountValueType
     var amount: Amount
     var feeAmount: Amount
     var fee: Double = 0
     var feeFormatted: String = ""
+    let account: CommonAccount
 
     var totalAmount: Amount {
-        return Amount(amount.value + feeAmount.value, currency: amount.currency)
+        switch amountType {
+        case .deal:
+            return Amount(amount.value + (deal.checkerAmount ?? 0) + feeAmount.value, currency: amount.currency)
+        case .checker:
+            return Amount(amount.value + deal.amount + feeAmount.value, currency: amount.currency)
+        }
+    }
+
+    var dealAmount: Amount {
+        if amountType == .deal {
+            return amount
+        }
+        return Amount(deal.amount, currency: amount.currency)
+    }
+
+    var checkerAmount: Amount {
+        if amountType == .checker {
+            return amount
+        }
+        return Amount(deal.checkerAmount ?? 0, currency: amount.currency)
     }
 
     var isValid: Bool {
         amount.value != 0
+    }
+
+    var allowChangeCurrency: Bool {
+        amountType != .checker
+    }
+
+    var checkerIsYou: Bool {
+        account.publicKey == deal.checkerPublicKey || deal.checkerPublicKey == nil
     }
 }
 
@@ -42,12 +83,14 @@ final class ChangeAmountViewModel: ViewModel {
     private var dealService: ContractusAPI.DealsService?
     private var store = Set<AnyCancellable>()
 
-    init(dealId: String, amount: Amount, feeAmount: Amount, dealService: ContractusAPI.DealsService?)
+    init(deal: Deal, account: CommonAccount, amountType: AmountValueType, dealService: ContractusAPI.DealsService?)
     {
         self.state = .init(
-            dealId: dealId,
-            amount: amount,
-            feeAmount: feeAmount
+            deal: deal,
+            amountType: amountType,
+            amount: amountType == .deal ? Amount(deal.amount, currency: deal.currency) : Amount(deal.checkerAmount ?? 0, currency: deal.currency),
+            feeAmount: Amount(deal.amountFee, currency: deal.currency),
+            account: account
         )
         self.dealService = dealService
     }
@@ -70,7 +113,14 @@ final class ChangeAmountViewModel: ViewModel {
 
         case .update:
             self.state.state = .changingAmount
-            dealService?.update(dealId: state.dealId, data: UpdateAmountDeal(amount: state.amount, feeAmount: state.feeAmount), completion: { [weak self] result in
+            let data: UpdateAmountDeal
+            switch state.amountType {
+            case .deal:
+                data = UpdateAmountDeal(amount: state.amount, checkerAmount: nil)
+            case .checker:
+                data = UpdateAmountDeal(amount: nil, checkerAmount: state.amount)
+            }
+            dealService?.update(dealId: state.deal.id, data: data, completion: { [weak self] result in
                 switch result {
                 case .success:
                     self?.state.state = .success
@@ -83,7 +133,7 @@ final class ChangeAmountViewModel: ViewModel {
 
     private func updateFee(amount: Amount) {
         self.state.state = .loading
-        dealService?.getFee(dealId: state.dealId, data: CalculateDealFee(amount: amount), completion: {[weak self] result in
+        dealService?.getFee(dealId: state.deal.id, data: CalculateDealFee(amount: amount, type: state.amountType.asAmountFeeType), completion: {[weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let fee):

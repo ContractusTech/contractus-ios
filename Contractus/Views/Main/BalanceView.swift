@@ -47,12 +47,12 @@ struct BalanceView: View {
                     switch state {
                     case .empty:
                         Rectangle()
-                            .fill(R.color.baseSeparator.color)
+                            .fill(R.color.secondaryBackground.color)
                             .cornerRadius(4)
                             .frame(width: 100, height: 13, alignment: .leading)
                             .padding(SwiftUI.EdgeInsets(top: 0, leading: 0, bottom: 4, trailing: 0))
                         Rectangle()
-                            .fill(R.color.baseSeparator.color)
+                            .fill(R.color.secondaryBackground.color)
                             .cornerRadius(8)
                             .frame(width: 200, height: 24, alignment: .leading)
 
@@ -98,32 +98,32 @@ struct BalanceView: View {
                 VStack(alignment: .center) {
                     HStack(alignment: .center, spacing: 12){
                         Rectangle()
-                            .fill(R.color.baseSeparator.color)
+                            .fill(R.color.mainBackground.color)
                             .cornerRadius(8)
                             .frame(width: 24, height: 24, alignment: .leading)
                         Rectangle()
-                            .fill(R.color.baseSeparator.color)
+                            .fill(R.color.mainBackground.color)
                             .cornerRadius(8)
                             .frame(width: 124, height: 19, alignment: .leading)
                         Spacer()
                         Rectangle()
-                            .fill(R.color.baseSeparator.color)
+                            .fill(R.color.mainBackground.color)
                             .cornerRadius(8)
                             .frame(width: 80, height: 19, alignment: .leading)
                     }
                     Divider()
                     HStack(alignment: .center, spacing: 12){
                         Rectangle()
-                            .fill(R.color.baseSeparator.color)
+                            .fill(R.color.mainBackground.color)
                             .cornerRadius(8)
                             .frame(width: 24, height: 24, alignment: .leading)
                         Rectangle()
-                            .fill(R.color.baseSeparator.color)
+                            .fill(R.color.mainBackground.color)
                             .cornerRadius(8)
                             .frame(width: 124, height: 19, alignment: .leading)
                         Spacer()
                         Rectangle()
-                            .fill(R.color.baseSeparator.color)
+                            .fill(R.color.mainBackground.color)
                             .cornerRadius(8)
                             .frame(width: 80, height: 19, alignment: .leading)
                     }

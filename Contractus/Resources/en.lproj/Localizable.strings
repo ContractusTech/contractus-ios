@@ -9,6 +9,7 @@
 "common.encrypted" = "Encrypted";
 "common.edit" = "Edit";
 "common.add" = "Add";
+"common.ok" = "Ok";
 "common.empty" = "Empty";
 "common.view" = "View";
 "common.save" = "Save";
@@ -27,6 +28,12 @@
 "common.app-name" = "Contractus";
 "common.set" = "Set";
 "common.done" = "Done";
+"common.select-action" = "Select action";
+"common.deal" = "Deal";
+"common.file" = "File";
+"common.open" = "Open";
+"common.owner" = "Owner";
+"common.copy" = "Copy";
 
 "enter.button.create-wallet" = "Create new wallet";
 "enter.button.import" = "Import exists";
@@ -50,12 +57,17 @@
 "uploadFile.button.select" = "Select";
 "uploadFile.button.select-gallery" = "Gallery";
 "uploadFile.button.camera" = "Camera";
+"uploadFile.button.file" = "File";
+"uploadFile.button.retry" = "Retry";
 "uploadFile.button.import-file" = "Select file";
 "uploadFile.state.error" = "Upload error";
 "uploadFile.state.encrypting" = "Encrypting...";
 "uploadFile.state.uploading" = "Uploading - %@";
 "uploadFile.state.success" = "Success upload";
 "uploadFile.state.upload-file" = "Encrypt and upload";
+"uploadFile.state.saving" = "Saving...";
+"uploadFile.state.saved" = "Saved";
+"uploadFile.large-file" = "The file is large. Encryption may take a few minutes";
 
 "deal.changeAmount.placeholder" = "Enter amount";
 "deal.changeAmount.currency" = "Currency";
@@ -106,7 +118,10 @@
 "changeAmount.total-amount" = "Total amount";
 "changeAmount.fee-free" = "Free";
 "changeAmount.fee-title" = "Service fee";
+"changeAmount.deal-amount" = "Amount of deal";
+"changeAmount.verification-amount" = "Cost of verification";
 "changeAmount.fee-description" = "The fee is taken after the contract is signed by all parties and the start of the contract.";
+"changeAmount.fee-calculate-description" = "The fee is calculated from the amount of the transaction and the cost of the verification service of result";
 
 "addContractor.title.contractor" = "Add partner";
 "addContractor.title.checker" = "Add checker";

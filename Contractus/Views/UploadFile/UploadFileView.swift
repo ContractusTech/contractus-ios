@@ -64,7 +64,7 @@ struct UploadFileView: View {
                                     .renderingMode(.template)
                                     .resizable()
                                     .frame(width: 12, height: 12)
-                                    .foregroundColor(R.color.white.color)
+                                    .foregroundColor(R.color.buttonIconBase.color)
 
                             }
                             .padding(8)
@@ -91,7 +91,7 @@ struct UploadFileView: View {
 
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
-                                        .frame(width: 32, height: 32)
+                                        .frame(width: 30, height: 30)
 
                                         .foregroundColor(R.color.secondaryText.color)
                                     Text(R.string.localizable.uploadFileButtonSelectGallery())
@@ -101,7 +101,7 @@ struct UploadFileView: View {
                                 Spacer()
                             }
                             .padding(16)
-                            .background(R.color.secondaryBackground.color)
+                            .background(R.color.fourthBackground.color)
                             .cornerRadius(20)
                         }
 
@@ -114,7 +114,7 @@ struct UploadFileView: View {
                                     Image(systemName: "camera")
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
-                                        .frame(width: 32, height: 32)
+                                        .frame(width: 30, height: 30)
 
                                         .foregroundColor(R.color.secondaryText.color)
                                     Text(R.string.localizable.uploadFileButtonCamera())
@@ -124,7 +124,7 @@ struct UploadFileView: View {
                                 Spacer()
                             }
                             .padding(16)
-                            .background(R.color.secondaryBackground.color)
+                            .background(R.color.fourthBackground.color)
                             .cornerRadius(20)
                         }
 
@@ -140,14 +140,14 @@ struct UploadFileView: View {
                                         .frame(width: 24, height: 32)
 
                                         .foregroundColor(R.color.secondaryText.color)
-                                    Text("File")
+                                    Text(R.string.localizable.uploadFileButtonFile())
                                         .font(.footnote)
                                 }
 
                                 Spacer()
                             }
                             .padding(16)
-                            .background(R.color.secondaryBackground.color)
+                            .background(R.color.fourthBackground.color)
                             .cornerRadius(20)
                         }
                     }
@@ -295,7 +295,7 @@ struct UploadFileItemView: View {
                 else {
                     // TODO: -
                 }
-                VStack(alignment: .center) {
+                VStack(alignment: .center, spacing: 4) {
                     Text(file.name)
                         .font(.callout.weight(.medium))
                         .foregroundColor(R.color.textBase.color)
@@ -304,15 +304,27 @@ struct UploadFileItemView: View {
                             .font(.callout.weight(.regular))
                             .foregroundColor(R.color.secondaryText.color)
                     }
-
                 }
             } else {
                 EmptyView()
             }
+            if file?.isLargeForEncrypting ?? false {
+                VStack {
+                    Text(R.string.localizable.uploadFileLargeFile())
+                        .font(.footnote.weight(.semibold))
+                        .foregroundColor(R.color.yellow.color)
+                        .lineLimit(0)
+                }
+
+            }
+
         }
-        .padding(12)
-        .background(R.color.fourthBackground.color)
+        .padding(16)
+        .background(R.color.mainBackground.color)
         .cornerRadius(24)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(R.color.textFieldBorder.color, lineWidth: 1))
     }
 
 
@@ -326,21 +338,9 @@ struct UploadingButtonView: View {
     var action: () -> Void
 
     var body: some View {
-        Button {
+        CButton(title: titleButton, style: .primary, size: .large, isLoading: false, isDisabled: isDisabled) {
             action()
-        } label: {
-            HStack {
-                Spacer()
-                Text(titleButton)
-                    .font(.body.weight(.bold))
-                    .foregroundColor(textColor)
-                Spacer()
-            }
-            .padding()
         }
-        .background(buttonBackground)
-        .cornerRadius(32)
-        .disabled(isDisabled)
     }
 
     private var isDisabled: Bool {

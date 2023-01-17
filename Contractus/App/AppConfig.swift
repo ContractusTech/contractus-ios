@@ -10,7 +10,7 @@ import ContractusAPI
 
 enum AppConfig {
 
-    static let serverType: ServerType = .custom("http://localhost:3000/v1")
+    static let serverType: ServerType = .custom("http://localhost:3000/")
 
     // Length secret key for encrypt content of deal.
     // IMPORTANT: only 64

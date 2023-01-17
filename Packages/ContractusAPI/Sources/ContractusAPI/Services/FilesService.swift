@@ -43,12 +43,33 @@ public final class FilesService: BaseService {
         self.downloadingRequests.removeAll { $0.id == id }
     }
 
-    public func download(url: URL, progressCallback: @escaping (Double) -> Void, completion: @escaping (Swift.Result<URL, APIClientError>) -> Void) {
+    public func getLocalDocumentURL(_ serverURL: URL) -> URL? {
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURL = documentsURL.appendingPathComponent(serverURL.lastPathComponent)
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            return fileURL
+        }
+        return nil
+    }
+
+    public func download(url: URL, progressCallback: @escaping (Double) -> Void, completion: @escaping (Swift.Result<URL, APIClientError>) -> Void) -> UUID {
+
+        // - TODO: Delete this
+        var url = url
+        var urlString = url.absoluteString
+        urlString = urlString.replacingOccurrences(of: "http://localhost:3000/", with: self.client.server.server.absoluteString)
+        url = URL(string: urlString)!
+        // -
+
+//        if let documentURL = getLocalDocumentURL(url) {
+//            completion(.success(documentURL))
+//            return
+//        }
 
         let destination: DownloadRequest.Destination = { _, _ in
-            let documentsURL = FileManager.default.urls(for: .applicationDirectory, in: .userDomainMask)[0]
-            let fileURL = documentsURL.appendingPathComponent(url.lastPathComponent)
-
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let fileURL = documentsURL.appendingPathComponent(url.lastPathComponent).appendingPathComponent(url.lastPathComponent)
+            debugPrint(fileURL.absoluteString)
             return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
         }
         let downloadRequest = self.client.session.download(url, to: destination)
@@ -56,6 +77,7 @@ public final class FilesService: BaseService {
         downloadingRequests.append(downloadRequest)
 
         downloadRequest.downloadProgress(closure: { progress in
+            debugPrint(progress.fractionCompleted)
             progressCallback(progress.fractionCompleted)
         })
         .response(completionHandler: {[weak self, downloadRequest] response in
@@ -64,6 +86,7 @@ public final class FilesService: BaseService {
 
             switch response.result {
             case .failure(let error):
+                debugPrint(error.localizedDescription)
                 completion(.failure(APIClientError.commonError(error)))
             case .success(let url):
                 if let url = url {
@@ -74,6 +97,8 @@ public final class FilesService: BaseService {
 
             }
         })
+
+        return downloadRequest.id
     }
 }
 

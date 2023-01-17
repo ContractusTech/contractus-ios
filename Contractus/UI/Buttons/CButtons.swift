@@ -10,7 +10,7 @@ import SwiftUI
 struct CButton: View {
 
     enum Style {
-        case primary, secondary, warn
+        case primary, secondary, warn, cancel
         var background: Color {
             switch self {
             case .secondary:
@@ -19,6 +19,8 @@ struct CButton: View {
                 return R.color.buttonBackgroundPrimary.color
             case .warn:
                 return R.color.yellow.color
+            case .cancel:
+                return R.color.buttonBackgroundCancel.color
             }
         }
 
@@ -30,6 +32,8 @@ struct CButton: View {
                 return R.color.buttonTextPrimary.color
             case .warn:
                 return R.color.buttonTextSecondary.color
+            case .cancel:
+                return R.color.buttonTextCancel.color
             }
         }
     }
@@ -48,6 +52,7 @@ struct CButton: View {
     }
 
     let title: String
+    var icon: Image? = nil
     let style: Self.Style
     let size: Self.Size
     let isLoading: Bool
@@ -86,10 +91,24 @@ struct CButton: View {
                             .padding(.top, title.isEmpty ? 4.7 : 0)
                             .padding(.bottom, title.isEmpty ? 4.7 : 0)
                     }
-                    Text(title)
-                        .foregroundColor(style.textColor)
-                        .font(.body.weight(.medium))
-                        .padding(.leading, (isLoading && !title.isEmpty) ? 20 : 0)
+                    HStack {
+                        if !isLoading, let icon = icon {
+                            icon
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 14, height: 14)
+                                .foregroundColor(style.textColor)
+                                .padding(.top, (title.isEmpty) ? 3 : 0)
+                                .padding(.bottom, (title.isEmpty) ? 3 : 0)
+                        }
+                        if !title.isEmpty {
+                            Text(title)
+                                .foregroundColor(style.textColor)
+                                .font(.body.weight(.medium))
+                                .padding(.leading, (isLoading && !title.isEmpty) ? 20 : 0)
+                        }
+                    }
+
                 }
                 .padding(size.edge)
                 .background(style.background)
@@ -113,10 +132,25 @@ struct CButton: View {
                             }
                             .frame(width: 18, height: 18)
                     }
+                    HStack {
+                        if !isLoading, let icon = icon {
+                            icon
 
-                    Text(title)
-                        .foregroundColor(style.textColor)
-                        .font(.body.weight(.semibold))
+                                .resizable()
+                                .frame(width: 19, height: 19)
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(style.textColor)
+                                //.padding(.top, (title.isEmpty) ? 4 : 0)
+                                //.padding(.bottom, (title.isEmpty) ? 4 : 0)
+                        }
+                        if !title.isEmpty {
+                            Text(title)
+                                .foregroundColor(style.textColor)
+                                .font(.body.weight(.semibold))
+                        }
+
+                    }
+
                     Spacer()
                 }
                 .padding(size.edge)
@@ -132,50 +166,68 @@ struct CButton: View {
 
 struct CButton_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
-            Group {
-                CButton(title: "Text", style: .primary, size: .default, isLoading: false) { }
+        ScrollView {
+            VStack {
+                Group {
+                    CButton(title: "Text", style: .primary, size: .default, isLoading: false) { }
 
-                CButton(title: "Text", style: .secondary, size: .default, isLoading: false) { }
+                    CButton(title: "Text", style: .secondary, size: .default, isLoading: false) { }
 
-                CButton(title: "Text", style: .primary, size: .large, isLoading: false) {}
+                    CButton(title: "Text", style: .primary, size: .large, isLoading: false) {}
 
-                CButton(title: "Text", style: .secondary, size: .large, isLoading: false) { }
+                    CButton(title: "Text", style: .secondary, size: .large, isLoading: false) { }
 
-                CButton(title: "Text", style: .warn, size: .large, isLoading: false) { }
-            }
-            Group {
+                    CButton(title: "Text", style: .warn, size: .large, isLoading: false) { }
+                }
+                Group {
 
-                HStack {
-                    CButton(title: "", style: .primary, size: .default, isLoading: true) { }
-                    CButton(title: "Text", style: .primary, size: .default, isLoading: true) { }
+                    HStack {
+                        CButton(title: "", style: .primary, size: .default, isLoading: true) { }
+                        CButton(title: "Text", style: .primary, size: .default, isLoading: true) { }
+                    }
+
+                    CButton(title: "Text", style: .secondary, size: .default, isLoading: true) { }
+
+                    CButton(title: "Text", style: .primary, size: .large, isLoading: true) {}
+
+                    CButton(title: "Text", style: .secondary, size: .large, isLoading: true) { }
+
+                    CButton(title: "Text", style: .warn, size: .large, isLoading: true) { }
+                }
+                Group {
+
+                    HStack {
+                        CButton(title: "", style: .primary, size: .default, isLoading: true, roundedCorner: true) { }
+                        CButton(title: "Text", style: .primary, size: .default, isLoading: true, roundedCorner: true) { }
+                    }
+
+                    CButton(title: "Text", style: .secondary, size: .default, isLoading: true, roundedCorner: true) { }
+
+                    CButton(title: "Text", style: .primary, size: .large, isLoading: true, roundedCorner: true) {}
+
+                    CButton(title: "Text", style: .secondary, size: .large, isLoading: true, roundedCorner: true) { }
+
+                    CButton(title: "Text", style: .warn, size: .large, isLoading: true, roundedCorner: true) { }
                 }
 
-                CButton(title: "Text", style: .secondary, size: .default, isLoading: true) { }
+                Group {
+                    CButton(title: "Text", icon: Image(systemName: "slider.vertical.3"), style: .warn, size: .large, isLoading: false, roundedCorner: false) { }
 
-                CButton(title: "Text", style: .primary, size: .large, isLoading: true) {}
+                    CButton(title: "Text", icon: Image(systemName: "slider.vertical.3"), style: .secondary, size: .default, isLoading: false) { }
 
-                CButton(title: "Text", style: .secondary, size: .large, isLoading: true) { }
+                    HStack {
+                        CButton(title: "Text", icon: Image(systemName: "slider.vertical.3"), style: .secondary, size: .default, isLoading: false) { }
+                        
+                        CButton(title: "", icon: Image(systemName: "arrow.down.to.line.compact"), style: .secondary, size: .default, isLoading: false) { }
+                        CButton(title: "Change", style: .secondary, size: .default, isLoading: false) { }
+                    }
 
-                CButton(title: "Text", style: .warn, size: .large, isLoading: true) { }
-            }
-            Group {
-
-                HStack {
-                    CButton(title: "", style: .primary, size: .default, isLoading: true, roundedCorner: true) { }
-                    CButton(title: "Text", style: .primary, size: .default, isLoading: true, roundedCorner: true) { }
+                    CButton(title: "", icon: Image(systemName: "slider.vertical.3"), style: .secondary, size: .large, isLoading: false) { }
                 }
 
-                CButton(title: "Text", style: .secondary, size: .default, isLoading: true, roundedCorner: true) { }
 
-                CButton(title: "Text", style: .primary, size: .large, isLoading: true, roundedCorner: true) {}
-
-                CButton(title: "Text", style: .secondary, size: .large, isLoading: true, roundedCorner: true) { }
-
-                CButton(title: "Text", style: .warn, size: .large, isLoading: true, roundedCorner: true) { }
             }
-
-
         }
+
     }
 }

@@ -108,11 +108,17 @@ struct AddContractorView: View {
             .edgesIgnoringSafeArea(.bottom)
             .onChange(of: viewModel.state.state) { value in
                 switch value {
-                case .error(let errorMessage):
-                    self.alertType = .error(errorMessage)
                 case .successAdded:
                     action(viewModel.state.deal)
                 default: break
+                }
+            }
+            .onChange(of: viewModel.state.errorState) { value in
+                switch value {
+                case .error(let errorMessage):
+                    self.alertType = .error(errorMessage)
+                case .none:
+                    self.alertType = .none
                 }
             }
             .toolbar {

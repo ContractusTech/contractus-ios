@@ -18,13 +18,14 @@ enum DealViewModelError: Error {
 
 enum DealInput {
     case changeAmount(Amount)
+    case changeCheckerAmount(Amount)
     case update(Deal?)
     case openFile(MetadataFile)
     case updateContent(DealMetadata, DealsService.ContentType)
     case deleteMetadataFile(MetadataFile)
     case deleteResultFile(MetadataFile)
     case cancel
-    case sign
+    case cancelDownload
     case none
     case saveKey(ScanResult)
 }
@@ -32,20 +33,46 @@ enum DealInput {
 struct DealState {
 
     enum State: Equatable {
-        case loading, error(String), success, none, filePreview(URL)
+        case loading, error(String), success, none
     }
-    
+    enum FileState: Equatable {
+        case filePreview(URL), none, downloading(Double), decrypting
+    }
+
+    enum MainActionType {
+        /// Can sign contract
+        case sign
+        /// Deal in work and user want cancel contract (return amount from smart contract)
+        case cancelDeal
+        /// Deal in work and user want finish contract, executor get payment
+        case finishDeal
+        /// Deal not working yet and user want cancel your sign
+        case cancelSign
+        /// Not action
+        case none
+    }
+
     let account: CommonAccount
     var deal: ContractusAPI.Deal
     var shareDeal: ShareableDeal?
     var canEdit: Bool = false
     var canSign: Bool = true
     var state: State = .none
+    var previewState: FileState = .none
     var partnerSecretPartBase64: String = ""
     var decryptedKey = Data()
+    var decryptedFiles: [String:URL] = [:]
+    var decryptingFiles: [String:Bool] = [:]
+    var isSigned: Bool? = nil
+
+
 
     var isOwnerDeal: Bool {
         deal.ownerPublicKey == account.publicKey
+    }
+
+    var youIsClient: Bool {
+        deal.ownerRole == .client ? deal.ownerPublicKey == account.publicKey : deal.contractorPublicKey == account.publicKey
     }
 
     var partnerIsEmpty: Bool {
@@ -68,7 +95,7 @@ struct DealState {
         deal.ownerRole == .client && deal.contractorPublicKey == account.publicKey
     }
 
-    var isYouVerifier: Bool {
+    var isYouChecker: Bool {
         deal.checkerPublicKey == account.publicKey || (deal.checkerPublicKey == nil && isOwnerDeal && ownerIsClient)
     }
 
@@ -98,6 +125,9 @@ struct DealState {
         }
     }
 
+    var currentMainAction: MainActionType {
+        .none
+    }
 }
 
 final class DealViewModel: ViewModel {
@@ -111,6 +141,7 @@ final class DealViewModel: ViewModel {
     private var cancelable = Set<AnyCancellable>()
     private var metadata: DealMetadata?
     private var encryptedFile: UploadFileResult?
+    private var downloadingUUID: UUID?
 
     init(
         state: DealState,
@@ -124,6 +155,7 @@ final class DealViewModel: ViewModel {
         self.filesAPIService = filesAPIService
         self.transactionSignService = transactionSignService
         self.secretStorage = secretStorage
+        self.loadActualTx()
         self.checkAvailableDecrypt()
     }
 
@@ -167,12 +199,11 @@ final class DealViewModel: ViewModel {
                     .store(in: &cancelable)
             }
 
-            
-        case .sign:
-            signTransaction()
         case .changeAmount(let amount):
             state.deal.amount = amount.value
             state.deal.currency = amount.currency
+        case .changeCheckerAmount(let amount):
+            state.deal.checkerAmount = amount.value
         case .update(let deal):
             if let deal = deal {
                 self.state.deal = deal
@@ -195,10 +226,24 @@ final class DealViewModel: ViewModel {
                 state.deal.results = content
             }
         case .openFile(let file):
+            state.previewState = .none
+            guard !state.decryptedKey.isEmpty, !(state.decryptingFiles[file.md5] ?? false) else { return }
+            state.decryptingFiles[file.md5] = true
             Task {
-                guard let url = await prepareFileForPreview(file) else { return }
+                guard let url = await prepareFileForPreview(file) else {
+                    debugPrint("Error open file")
+                    await MainActor.run {
+                        state.decryptingFiles[file.md5] = nil
+                        state.decryptedFiles[file.md5] = nil
+                    }
+                    return
+
+                }
                 await MainActor.run {
-                     state.state = .filePreview(url)
+                    state.decryptedFiles[file.md5] = url
+                    state.decryptingFiles[file.md5] = nil
+                    state.previewState = .filePreview(file.url)
+                    after?()
                 }
             }
         case .deleteMetadataFile(let file):
@@ -217,10 +262,38 @@ final class DealViewModel: ViewModel {
 
         case .deleteResultFile(_):
             break
+        case .cancelDownload:
+            guard let downloadingUUID = downloadingUUID else { return }
+            state.previewState = .none
+            filesAPIService?.cancelDownload(by: downloadingUUID)
         }
     }
 
     // MARK: - Private Methods
+
+    private func loadActualTx() {
+        Task {
+            guard let tx = try? await getActualTx() else { return }
+            var signature: String?
+            if state.isOwnerDeal {
+                signature = tx.ownerSignature
+            } else if state.deal.contractorPublicKey == self.state.account.publicKey {
+                signature = tx.contractorSignature
+            }
+
+            guard let signature = signature else {
+                await MainActor.run(body: {[weak self] in
+                    self?.state.isSigned = false
+                })
+                return
+            }
+            let isSigned = transactionSignService?.isSigned(txBase64: tx.transaction, signatureBase64: signature, publicKey: state.account.publicKeyData) ?? false
+            await MainActor.run(body: {[weak self, isSigned] in
+                self?.state.isSigned = isSigned
+            })
+
+        }
+    }
 
     private func checkAvailableDecrypt() {
         if state.isOwnerDeal {
@@ -302,36 +375,23 @@ final class DealViewModel: ViewModel {
         }
     }
 
-    private func getTransactions() -> Future<[DealTransaction], Error> {
-        Future { promise in
-            self.dealService?.transactions(dealId: self.state.deal.id, completion: { result in
-                switch result {
-                case .success(let tx):
-                    promise(.success(tx))
-                case .failure(let error):
-                    promise(.failure(error as Error))
-                }
+    private func getActualTx() async throws -> DealTransaction? {
+        try await withCheckedThrowingContinuation({ continuation in
+            dealService?.getActualTransaction(dealId: state.deal.id, completion: { result in
+                continuation.resume(with: result)
             })
-
-        }
-    }
-
-    private func getActualTransaction() -> Future<DealTransaction, Error> {
-        Future { promise in
-            self.dealService?.getActualTransaction(dealId: self.state.deal.id, completion: { result in
-                switch result {
-                case .success(let tx):
-                    promise(.success(tx))
-                case .failure(let error):
-                    promise(.failure(error as Error))
-                }
-            })
-        }
+        })
     }
 
     private func downloadFile(url: URL) async throws -> URL {
         return try await withCheckedThrowingContinuation({ (callback: CheckedContinuation<URL, Error>) in
-            self.filesAPIService?.download(url: url, progressCallback: { _ in
+            let uuid = self.filesAPIService?.download(url: url, progressCallback: { progress in
+                Task {
+                    await MainActor.run { [weak self] in
+                        self?.state.previewState = .downloading(progress)
+                    }
+                }
+
             }, completion: { result in
                 switch result {
                 case .success(let path):
@@ -340,68 +400,48 @@ final class DealViewModel: ViewModel {
                     callback.resume(throwing: error)
                 }
             })
+            DispatchQueue.main.async { [weak self] in
+                self?.downloadingUUID = uuid
+            }
         })
     }
 
     private func prepareFileForPreview(_ file: MetadataFile) async -> URL? {
-        let fileNameData = try? await Crypto.decrypt(base64Encrypted: file.name, with: state.account.privateKey)
-        guard let fileNameData = fileNameData else { return nil }
-        guard let fileName = String(data: fileNameData, encoding: .utf8) else { return nil }
-        guard let filePath = try? await downloadFile(url: file.url) else { return nil }
+        await MainActor.run {
+            state.previewState = .downloading(0)
+        }
+        let fileNameData = try? await Crypto.decrypt(base64Encrypted: file.name, with: state.decryptedKey)
+        guard let fileNameData = fileNameData else { debugPrint("fileNameData is empty"); return nil }
+        guard let fileName = String(data: fileNameData, encoding: .utf8) else { debugPrint("fileName is empty"); return nil }
+        guard let filePath = try? await downloadFile(url: file.url) else { debugPrint("downloadFile error"); return nil }
+
+        await MainActor.run {
+            state.previewState = .decrypting
+        }
+        guard let documentsURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else { return nil}
+        let folderURL = documentsURL.appendingPathComponent(filePath.lastPathComponent, isDirectory: true)
+        let fileURL = folderURL.appendingPathComponent(fileName)
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            return fileURL
+        }
         guard let fileEncryptedData = try? Data(contentsOf: filePath) else { return nil }
-        guard let fileData = try? await Crypto.decrypt(encryptedData: fileEncryptedData, with: state.account.privateKey) else { return nil }
-        let documentsURL = FileManager.default.urls(for: .applicationDirectory, in: .userDomainMask)[0]
-        let fileURL = documentsURL.appendingPathComponent(fileName)
-        try? fileData.write(to: fileURL)
-        return fileURL
-    }
+        guard let fileData = try? await Crypto.decrypt(encryptedData: fileEncryptedData, with: state.decryptedKey) else { debugPrint("Decrypt error"); return nil }
 
-    private func signTransaction() {
-        guard
-            let transactionSignService = transactionSignService,
-            let dealService = dealService else { return }
+//        do {
+//            try FileManager.default.createDirectory(atPath: folderURL.path, withIntermediateDirectories: true)
+//        } catch {
+//            debugPrint(error.localizedDescription)
+//        }
 
-        getActualTransaction()
-            .flatMap { tx in
-                Future<(String, TransactionType), Error> { promise in
-                    do {
-                        let signedTx = try transactionSignService.sign(
-                            txBase64: tx.transaction,
-                            by: self.state.account.privateKey)
-                        promise(.success((signedTx, tx.type)))
-                    } catch (let error) {
-                        promise(.failure(error))
-                    }
-                }.eraseToAnyPublisher()
-            }
-            .flatMap({ tx, type in
-                Future<DealTransaction, Error> { promise in
-                    dealService.signTransaction(
-                        dealId: self.state.deal.id,
-                        type: type,
-                        data: SignedDealTransaction(transaction: tx),
-                        completion: { result in
-                            switch result {
-                            case .failure(let error):
-                                promise(.failure(error as Error))
-                            case .success(let data):
-                                promise(.success(data))
-                            }
-                        })
-                }
-            })
-            .receive(on: RunLoop.main)
-            .sink { result in
-                switch result {
-                case .finished:
-                    break
-                case .failure(let error):
-                    debugPrint(error)
-                }
+        do {
+            try? FileManager.default.removeItem(at: fileURL)
+            try fileData.write(to: fileURL)
+            return fileURL
+        } catch(let error) {
+            debugPrint(error.localizedDescription)
+            return nil
+        }
 
-            } receiveValue: { value in
-
-            }.store(in: &cancelable)
     }
 }
 

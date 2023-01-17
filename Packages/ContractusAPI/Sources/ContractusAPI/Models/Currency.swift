@@ -57,6 +57,7 @@ public extension Currency {
     }
 
     func format(string: String, local: Locale = .current) -> BigUInt? {
+        var string = string
         let formatter = NumberFormatter()
         formatter.allowsFloats = true
         formatter.numberStyle = .currency
@@ -64,6 +65,9 @@ public extension Currency {
         formatter.currencyCode = ""
         formatter.currencySymbol = ""
         formatter.locale = local
+        if let groupingSeparator = local.groupingSeparator {
+            string = string.replacingOccurrences(of: groupingSeparator, with: "")
+        }
         guard let amount = formatter.number(from: string) else { return nil }
         return BigUInt(amount.doubleValue * pow(Double(10), Double(decimal)))
     }

@@ -31,6 +31,7 @@ struct QRCodeView: View {
                     .components(.everything)
                     .pixelShape(QRCode.PixelShape.Vertical(cornerRadiusFraction: 0.5))
                     .eyeShape(QRCode.EyeShape.Squircle())
+                    .foregroundColor(.black)
                     .background(.white)
                     .frame(width: size.rawValue, height:  size.rawValue, alignment: .center)
             } else {

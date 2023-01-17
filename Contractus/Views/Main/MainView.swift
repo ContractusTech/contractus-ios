@@ -41,149 +41,153 @@ struct MainView: View {
     @State var sheetType: SheetType? = .none
 
     var body: some View {
-        NavigationView {
 
-            ScrollView {
-                VStack {
-                    BalanceView(
-                        state: viewModel.state.balance != nil ? .loaded(viewModel.state.balance!) : .empty,
-                        topUpAction: {
+        JGProgressHUDPresenter(userInteractionOnHUD: true) {
+            NavigationView {
 
-                        })
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(R.string.localizable.mainTitleDeals())
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                            Text(R.string.localizable.mainTitleActiveContracts("\(viewModel.state.deals.count)"))
-                                .font(.footnote.weight(.semibold))
-                                .textCase(.uppercase)
-                                .foregroundColor(R.color.secondaryText.color)
-                        }
-                        Spacer()
+                ScrollView {
+                    VStack {
+                        BalanceView(
+                            state: viewModel.state.balance != nil ? .loaded(viewModel.state.balance!) : .empty,
+                            topUpAction: {
 
-                        CButton(
-                            title: R.string.localizable.mainTitleNewDeal(),
-                            style: .primary,
-                            size: .default,
-                            isLoading: false) {
-                                sheetType = .newDeal
-                        }
-
-                    }
-                    .padding(EdgeInsets(top: 24, leading: 0, bottom: 8, trailing: 0))
-                    LazyVGrid(columns: Constants.columns) {
-                        ForEach(viewModel.deals, id: \.id) { item in
-                            Button {
-                                selectedDeal = item
-                            } label: {
-                                DealItemView(
-                                    deal: item,
-                                    needPayment: item.ownerPublicKey == viewModel.state.account.publicKey && item.ownerRole == .executor)
-                            }
-                        }
-                    }
-                }
-                .padding(15)
-
-            }.refreshableCompat(loadingViewBackgroundColor: .clear, onRefresh: { done in
-                viewModel.trigger(.load) {
-                    done()
-                }
-            }, progress: { state in
-                RefreshActivityIndicator(isAnimating: state == .loading) {
-                    $0.hidesWhenStopped = false
-                }
-            })
-
-            .sheet(item: $sheetType, content: { type in
-                switch type {
-                case .newDeal:
-                    CreateDealView(
-                        viewModel: AnyViewModel<CreateDealState, CreateDealInput>(CreateDealViewModel(
-                            account: viewModel.state.account,
-                            accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
-                            dealsAPIService: try? APIServiceFactory.shared.makeDealsService()))) { deal in
-                                selectedDeal = deal
-                                viewModel.trigger(.load)
-                            }
-                            .interactiveDismiss(canDismissSheet: false)
-                case .menu:
-                    MenuView(viewModel: AnyViewModel<MenuState, MenuInput>(MenuViewModel(accountStorage: KeychainAccountStorage()))) { action in
-                        switch action {
-                        case .logout:
-                            logoutCompletion()
-                        }
-                    }
-                case .qrScan:
-                    QRCodeScannerView(configuration: .scannerAndInput, blockchain: viewModel.state.account.blockchain) { result in
-                        viewModel.trigger(.executeScanResult(result))
-                    }
-                case .sharePublicKey:
-                    if let shareData = try? SharablePublicKey(shareContent: viewModel.state.account.publicKey) {
-                        ShareContentView(content: shareData, topTitle: "Sharing", title: "Your public key", subTitle: "") { _ in
-
-                        } dismissAction: {
-                            sheetType = .none
-                        }
-                    } else {
-                        EmptyView()
-                    }
-
-
-                }
-            })
-            .navigationDestination(for: $selectedDeal) { deal in
-                dealView(deal: deal)
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Button  {
-                        sheetType = .sharePublicKey
-                    } label: {
-                        VStack(alignment: .center, spacing: 3) {
-                            Text("Account")
-                                .font(.callout)
-                                .fontWeight(.medium)
-                            HStack {
-                                Constants.qrCode
-                                    .resizable()
-                                    .frame(width: 12, height: 12)
-                                    .foregroundColor(R.color.accentColor.color)
-                                Text(ContentMask.mask(from: viewModel.state.account.publicKey))
-                                    .font(.footnote)
+                            })
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(R.string.localizable.mainTitleDeals())
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                Text(R.string.localizable.mainTitleActiveContracts("\(viewModel.state.deals.count)"))
+                                    .font(.footnote.weight(.semibold))
+                                    .textCase(.uppercase)
                                     .foregroundColor(R.color.secondaryText.color)
                             }
+                            Spacer()
+
+                            CButton(
+                                title: R.string.localizable.mainTitleNewDeal(),
+                                style: .primary,
+                                size: .default,
+                                isLoading: false) {
+                                    sheetType = .newDeal
+                            }
+
+                        }
+                        .padding(EdgeInsets(top: 24, leading: 0, bottom: 8, trailing: 0))
+                        LazyVGrid(columns: Constants.columns) {
+                            ForEach(viewModel.deals, id: \.id) { item in
+                                Button {
+                                    selectedDeal = item
+                                } label: {
+                                    DealItemView(
+                                        deal: item,
+                                        dealRoleType: dealRole(deal: item))
+                                }
+                            }
+                        }
+                    }
+                    .padding(15)
+
+                }.refreshableCompat(loadingViewBackgroundColor: .clear, onRefresh: { done in
+                    viewModel.trigger(.load) {
+                        done()
+                    }
+                }, progress: { state in
+                    RefreshActivityIndicator(isAnimating: state == .loading) {
+                        $0.hidesWhenStopped = false
+                    }
+                })
+
+                .sheet(item: $sheetType, content: { type in
+                    switch type {
+                    case .newDeal:
+                        CreateDealView(
+                            viewModel: AnyViewModel<CreateDealState, CreateDealInput>(CreateDealViewModel(
+                                account: viewModel.state.account,
+                                accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
+                                dealsAPIService: try? APIServiceFactory.shared.makeDealsService()))) { deal in
+                                    selectedDeal = deal
+                                    viewModel.trigger(.load)
+                                }
+                                .interactiveDismiss(canDismissSheet: false)
+                    case .menu:
+                        MenuView(viewModel: AnyViewModel<MenuState, MenuInput>(MenuViewModel(accountStorage: KeychainAccountStorage()))) { action in
+                            switch action {
+                            case .logout:
+                                logoutCompletion()
+                            }
+                        }
+                    case .qrScan:
+                        QRCodeScannerView(configuration: .scannerAndInput, blockchain: viewModel.state.account.blockchain) { result in
+                            viewModel.trigger(.executeScanResult(result))
+                        }
+                    case .sharePublicKey:
+                        if let shareData = try? SharablePublicKey(shareContent: viewModel.state.account.publicKey) {
+                            ShareContentView(content: shareData, topTitle: "Sharing", title: "Your public key", subTitle: "") { _ in
+
+                            } dismissAction: {
+                                sheetType = .none
+                            }
+                        } else {
+                            EmptyView()
+                        }
+
+
+                    }
+                })
+                .navigationDestination(for: $selectedDeal) { deal in
+                    dealView(deal: deal)
+                }
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Button  {
+                            sheetType = .sharePublicKey
+                        } label: {
+                            VStack(alignment: .center, spacing: 3) {
+                                Text("Account")
+                                    .font(.callout)
+                                    .fontWeight(.medium)
+                                HStack {
+                                    Constants.qrCode
+                                        .resizable()
+                                        .frame(width: 12, height: 12)
+                                        .foregroundColor(R.color.accentColor.color)
+                                    Text(ContentMask.mask(from: viewModel.state.account.publicKey))
+                                        .font(.footnote)
+                                        .foregroundColor(R.color.secondaryText.color)
+                                }
+                            }
+                        }
+                    }
+                    ToolbarItemGroup(placement: .navigationBarLeading) {
+                        Button {
+                            sheetType = .menu
+                        } label: {
+                            Constants.menuImage
+                        }
+                    }
+
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        Button {
+                            sheetType = .qrScan
+                        } label: {
+                            Constants.scanQRImage
                         }
                     }
                 }
-                ToolbarItemGroup(placement: .navigationBarLeading) {
-                    Button {
-                        sheetType = .menu
-                    } label: {
-                        Constants.menuImage
-                    }
-                }
-
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button {
-                        sheetType = .qrScan
-                    } label: {
-                        Constants.scanQRImage
-                    }
-                }
+                .baseBackground()
+                .edgesIgnoringSafeArea(.bottom)
             }
-            .baseBackground()
-            .edgesIgnoringSafeArea(.bottom)
+            .environment(\.resizableSheetCenter, resizableSheetCenter ?? PreviewResizableSheetCenter.shared)
+            .navigationViewStyle(StackNavigationViewStyle())
+            .navigationBarColor()
+            .onAppear{
+                viewModel.trigger(.load)
+            }
+            .tintIfCan(R.color.textBase.color)
+
         }
-        .environment(\.resizableSheetCenter, resizableSheetCenter ?? PreviewResizableSheetCenter.shared)
-        .navigationViewStyle(StackNavigationViewStyle())
-        .navigationBarColor()
-        .onAppear{
-            viewModel.trigger(.load)
-        }
-        .tintIfCan(R.color.textBase.color)
 
         
     }
@@ -193,10 +197,24 @@ struct MainView: View {
         DealView(viewModel: AnyViewModel<DealState, DealInput>(DealViewModel(
             state: DealState(account: viewModel.account, deal: deal),
             dealService: try? APIServiceFactory.shared.makeDealsService(),
-            transactionSignService: ServiceFactory.shared.makeTransactionSign(), filesAPIService: try? APIServiceFactory.shared.makeFileService(),
+            transactionSignService: ServiceFactory.shared.makeTransactionSign(),
+            filesAPIService: try? APIServiceFactory.shared.makeFileService(),
             secretStorage: SharedSecretStorageImpl()))) {
                 viewModel.trigger(.load)
             }
+    }
+
+    func dealRole(deal: Deal) -> DealItemView.DealRoleType {
+        if deal.ownerPublicKey == viewModel.state.account.publicKey
+            && deal.ownerRole == .executor {
+            return .pay
+        }
+
+        if deal.checkerPublicKey == viewModel.state.account.publicKey
+            && deal.ownerPublicKey != viewModel.state.account.publicKey {
+            return .checker
+        }
+        return .receive
     }
 }
 

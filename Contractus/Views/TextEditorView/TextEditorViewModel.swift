@@ -13,17 +13,24 @@ import Combine
 enum TextEditorInput {
     case decrypt
     case update(String, Bool)
+    case dismissError
 }
 
 struct TextEditorState {
+
+    enum ErrorState: Equatable {
+        case error(String)
+    }
+
     enum State: Equatable {
-        case decrypting, updating, none, decrypted(String), error(String), needConfirmForce, success
+        case decrypting, updating, none, decrypted(String), needConfirmForce, success
     }
     let dealId: String
     var content: DealMetadata
 
     var isDecrypted: Bool = false
     var state: State = .none
+    var errorState: ErrorState?
     let contentType: DealsService.ContentType
 }
 
@@ -45,6 +52,8 @@ final class TextEditorViewModel: ViewModel {
 
     func trigger(_ input: TextEditorInput, after: AfterTrigger? = nil) {
         switch input {
+        case .dismissError:
+            state.errorState = nil
         case .update(let value, let force):
             guard state.isDecrypted else { return }
             state.state = .updating
@@ -65,7 +74,7 @@ final class TextEditorViewModel: ViewModel {
                     case .finished:
                         break
                     case .failure(let error):
-                        self.state.state = .error(error.localizedDescription)
+                        self.state.errorState = .error(error.localizedDescription)
                     }
                 } receiveValue: { data in
                     self.state.isDecrypted = true
@@ -100,7 +109,7 @@ final class TextEditorViewModel: ViewModel {
                             fallthrough
                         }
                     default:
-                        self.state.state = .error(error.localizedDescription)
+                        self.state.errorState = .error(error.localizedDescription)
                     }
 
                 case .finished:

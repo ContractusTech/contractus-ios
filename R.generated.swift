@@ -88,7 +88,7 @@ struct R: Rswift.Validatable {
     try intern.validate()
   }
 
-  /// This `R.color` struct is generated, and contains static references to 27 colors.
+  /// This `R.color` struct is generated, and contains static references to 30 colors.
   struct color {
     /// Color `AccentColor`.
     static let accentColor = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentColor")
@@ -98,10 +98,16 @@ struct R: Rswift.Validatable {
     static let baseSeparator = Rswift.ColorResource(bundle: R.hostingBundle, name: "BaseSeparator")
     /// Color `Blue`.
     static let blue = Rswift.ColorResource(bundle: R.hostingBundle, name: "Blue")
+    /// Color `ButtonBackground-Cancel`.
+    static let buttonBackgroundCancel = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonBackground-Cancel")
     /// Color `ButtonBackground-Primary`.
     static let buttonBackgroundPrimary = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonBackground-Primary")
     /// Color `ButtonBackground-Secondary`.
     static let buttonBackgroundSecondary = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonBackground-Secondary")
+    /// Color `ButtonIconBase`.
+    static let buttonIconBase = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonIconBase")
+    /// Color `ButtonText-Cancel`.
+    static let buttonTextCancel = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonText-Cancel")
     /// Color `ButtonText-Primary`.
     static let buttonTextPrimary = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonText-Primary")
     /// Color `ButtonText-Secondary`.
@@ -182,6 +188,15 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "ButtonBackground-Cancel", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func buttonBackgroundCancel(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.buttonBackgroundCancel, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIColor(named: "ButtonBackground-Primary", bundle: ..., traitCollection: ...)`
     @available(tvOS 11.0, *)
     @available(iOS 11.0, *)
@@ -196,6 +211,24 @@ struct R: Rswift.Validatable {
     @available(iOS 11.0, *)
     static func buttonBackgroundSecondary(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
       return UIKit.UIColor(resource: R.color.buttonBackgroundSecondary, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "ButtonIconBase", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func buttonIconBase(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.buttonIconBase, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "ButtonText-Cancel", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func buttonTextCancel(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.buttonTextCancel, compatibleWith: traitCollection)
     }
     #endif
 
@@ -421,6 +454,14 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(watchOS)
+    /// `UIColor(named: "ButtonBackground-Cancel", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func buttonBackgroundCancel(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.buttonBackgroundCancel.name)
+    }
+    #endif
+
+    #if os(watchOS)
     /// `UIColor(named: "ButtonBackground-Primary", bundle: ..., traitCollection: ...)`
     @available(watchOSApplicationExtension 4.0, *)
     static func buttonBackgroundPrimary(_: Void = ()) -> UIKit.UIColor? {
@@ -433,6 +474,22 @@ struct R: Rswift.Validatable {
     @available(watchOSApplicationExtension 4.0, *)
     static func buttonBackgroundSecondary(_: Void = ()) -> UIKit.UIColor? {
       return UIKit.UIColor(named: R.color.buttonBackgroundSecondary.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "ButtonIconBase", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func buttonIconBase(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.buttonIconBase.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "ButtonText-Cancel", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func buttonTextCancel(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.buttonTextCancel.name)
     }
     #endif
 
@@ -678,7 +735,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 98 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 113 localization keys.
     struct localizable {
       /// en translation: A new way to collaborate and make business with partners. Create contract, sign, check result and pay. Securely.
       ///
@@ -720,6 +777,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let changeAmountAmount = Rswift.StringResource(key: "changeAmount.amount", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Amount of deal
+      ///
+      /// Locales: en
+      static let changeAmountDealAmount = Rswift.StringResource(key: "changeAmount.deal-amount", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Amount of deal
       ///
       /// Locales: en
@@ -788,6 +849,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonAppName = Rswift.StringResource(key: "common.app-name", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Copy
+      ///
+      /// Locales: en
+      static let commonCopy = Rswift.StringResource(key: "common.copy", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Cost of verification
+      ///
+      /// Locales: en
+      static let changeAmountVerificationAmount = Rswift.StringResource(key: "changeAmount.verification-amount", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Create
       ///
       /// Locales: en
@@ -800,6 +869,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealChangeAmountCurrency = Rswift.StringResource(key: "deal.changeAmount.currency", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Deal
+      ///
+      /// Locales: en
+      static let commonDeal = Rswift.StringResource(key: "common.deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Deals
       ///
       /// Locales: en
@@ -872,6 +945,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealResultsHint = Rswift.StringResource(key: "deal.results.hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: File
+      ///
+      /// Locales: en
+      static let commonFile = Rswift.StringResource(key: "common.file", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: File
+      ///
+      /// Locales: en
+      static let uploadFileButtonFile = Rswift.StringResource(key: "uploadFile.button.file", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Files
       ///
       /// Locales: en
@@ -924,6 +1005,18 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealNoSecretKey = Rswift.StringResource(key: "deal.no-secret-key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Ok
+      ///
+      /// Locales: en
+      static let commonOk = Rswift.StringResource(key: "common.ok", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Open
+      ///
+      /// Locales: en
+      static let commonOpen = Rswift.StringResource(key: "common.open", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Owner
+      ///
+      /// Locales: en
+      static let commonOwner = Rswift.StringResource(key: "common.owner", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Owner
       ///
       /// Locales: en
@@ -960,14 +1053,30 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealResultsTitle = Rswift.StringResource(key: "deal.results.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Retry
+      ///
+      /// Locales: en
+      static let uploadFileButtonRetry = Rswift.StringResource(key: "uploadFile.button.retry", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Save
       ///
       /// Locales: en
       static let commonSave = Rswift.StringResource(key: "common.save", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Saved
+      ///
+      /// Locales: en
+      static let uploadFileStateSaved = Rswift.StringResource(key: "uploadFile.state.saved", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Saving...
+      ///
+      /// Locales: en
+      static let uploadFileStateSaving = Rswift.StringResource(key: "uploadFile.state.saving", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Select
       ///
       /// Locales: en
       static let uploadFileButtonSelect = Rswift.StringResource(key: "uploadFile.button.select", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Select action
+      ///
+      /// Locales: en
+      static let commonSelectAction = Rswift.StringResource(key: "common.select-action", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Select file
       ///
       /// Locales: en
@@ -1004,10 +1113,18 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextEditorViewPlaceholder = Rswift.StringResource(key: "deal.textEditor.view-placeholder", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The fee is calculated from the amount of the transaction and the cost of the verification service of result
+      ///
+      /// Locales: en
+      static let changeAmountFeeCalculateDescription = Rswift.StringResource(key: "changeAmount.fee-calculate-description", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The fee is taken after the contract is signed by all parties and the start of the contract.
       ///
       /// Locales: en
       static let changeAmountFeeDescription = Rswift.StringResource(key: "changeAmount.fee-description", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The file is large. Encryption may take a few minutes
+      ///
+      /// Locales: en
+      static let uploadFileLargeFile = Rswift.StringResource(key: "uploadFile.large-file", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The secret key is needed to view and decrypt/encrypt contract details.
       ///
       /// Locales: en
@@ -1227,6 +1344,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("changeAmount.amount", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Amount of deal
+      ///
+      /// Locales: en
+      static func changeAmountDealAmount(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.deal-amount", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.deal-amount"
+        }
+
+        return NSLocalizedString("changeAmount.deal-amount", bundle: bundle, comment: "")
       }
 
       /// en translation: Amount of deal
@@ -1484,6 +1616,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.app-name", bundle: bundle, comment: "")
       }
 
+      /// en translation: Copy
+      ///
+      /// Locales: en
+      static func commonCopy(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.copy", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.copy"
+        }
+
+        return NSLocalizedString("common.copy", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Cost of verification
+      ///
+      /// Locales: en
+      static func changeAmountVerificationAmount(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.verification-amount", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.verification-amount"
+        }
+
+        return NSLocalizedString("changeAmount.verification-amount", bundle: bundle, comment: "")
+      }
+
       /// en translation: Create
       ///
       /// Locales: en
@@ -1527,6 +1689,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.changeAmount.currency", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Deal
+      ///
+      /// Locales: en
+      static func commonDeal(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.deal", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.deal"
+        }
+
+        return NSLocalizedString("common.deal", bundle: bundle, comment: "")
       }
 
       /// en translation: Deals
@@ -1799,6 +1976,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.results.hint", bundle: bundle, comment: "")
       }
 
+      /// en translation: File
+      ///
+      /// Locales: en
+      static func commonFile(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.file", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.file"
+        }
+
+        return NSLocalizedString("common.file", bundle: bundle, comment: "")
+      }
+
+      /// en translation: File
+      ///
+      /// Locales: en
+      static func uploadFileButtonFile(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("uploadFile.button.file", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "uploadFile.button.file"
+        }
+
+        return NSLocalizedString("uploadFile.button.file", bundle: bundle, comment: "")
+      }
+
       /// en translation: Files
       ///
       /// Locales: en
@@ -1994,6 +2201,51 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.no-secret-key", bundle: bundle, comment: "")
       }
 
+      /// en translation: Ok
+      ///
+      /// Locales: en
+      static func commonOk(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.ok", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.ok"
+        }
+
+        return NSLocalizedString("common.ok", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Open
+      ///
+      /// Locales: en
+      static func commonOpen(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.open", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.open"
+        }
+
+        return NSLocalizedString("common.open", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Owner
+      ///
+      /// Locales: en
+      static func commonOwner(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.owner", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.owner"
+        }
+
+        return NSLocalizedString("common.owner", bundle: bundle, comment: "")
+      }
+
       /// en translation: Owner
       ///
       /// Locales: en
@@ -2129,6 +2381,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.results.title", bundle: bundle, comment: "")
       }
 
+      /// en translation: Retry
+      ///
+      /// Locales: en
+      static func uploadFileButtonRetry(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("uploadFile.button.retry", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "uploadFile.button.retry"
+        }
+
+        return NSLocalizedString("uploadFile.button.retry", bundle: bundle, comment: "")
+      }
+
       /// en translation: Save
       ///
       /// Locales: en
@@ -2144,6 +2411,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.save", bundle: bundle, comment: "")
       }
 
+      /// en translation: Saved
+      ///
+      /// Locales: en
+      static func uploadFileStateSaved(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("uploadFile.state.saved", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "uploadFile.state.saved"
+        }
+
+        return NSLocalizedString("uploadFile.state.saved", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Saving...
+      ///
+      /// Locales: en
+      static func uploadFileStateSaving(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("uploadFile.state.saving", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "uploadFile.state.saving"
+        }
+
+        return NSLocalizedString("uploadFile.state.saving", bundle: bundle, comment: "")
+      }
+
       /// en translation: Select
       ///
       /// Locales: en
@@ -2157,6 +2454,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("uploadFile.button.select", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Select action
+      ///
+      /// Locales: en
+      static func commonSelectAction(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.select-action", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.select-action"
+        }
+
+        return NSLocalizedString("common.select-action", bundle: bundle, comment: "")
       }
 
       /// en translation: Select file
@@ -2294,6 +2606,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.textEditor.view-placeholder", bundle: bundle, comment: "")
       }
 
+      /// en translation: The fee is calculated from the amount of the transaction and the cost of the verification service of result
+      ///
+      /// Locales: en
+      static func changeAmountFeeCalculateDescription(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.fee-calculate-description", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.fee-calculate-description"
+        }
+
+        return NSLocalizedString("changeAmount.fee-calculate-description", bundle: bundle, comment: "")
+      }
+
       /// en translation: The fee is taken after the contract is signed by all parties and the start of the contract.
       ///
       /// Locales: en
@@ -2307,6 +2634,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("changeAmount.fee-description", bundle: bundle, comment: "")
+      }
+
+      /// en translation: The file is large. Encryption may take a few minutes
+      ///
+      /// Locales: en
+      static func uploadFileLargeFile(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("uploadFile.large-file", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "uploadFile.large-file"
+        }
+
+        return NSLocalizedString("uploadFile.large-file", bundle: bundle, comment: "")
       }
 
       /// en translation: The secret key is needed to view and decrypt/encrypt contract details.

@@ -16,7 +16,10 @@ fileprivate enum Constants {
 
 struct TextEditorView: View {
 
-    enum AlertType {
+    enum AlertType: Identifiable {
+        var id: String {
+            return "\(self)"
+        }
         case error(String), needConfirmForceUpdate
     }
     
@@ -40,16 +43,16 @@ struct TextEditorView: View {
 
     var body: some View {
         NavigationView {
-            ZStack(alignment: .topLeading) {
+            HStack {
+                ZStack(alignment: .topLeading) {
 
-                switch mode {
-                case .edit:
+                    switch mode {
+                    case .edit:
 
-                    if #available(iOS 16.0, *) {
                         TextEditor(text: $content)
-                            .scrollContentBackground(.hidden)
-                            .background(R.color.mainBackground.color)
                             .disabled(false)
+                            .setBackground(color: R.color.thirdBackground.color)
+                            .cornerRadius(12)
                             .introspectTextView { tv in
                                 tv.becomeFirstResponder()
                             }
@@ -58,50 +61,36 @@ struct TextEditorView: View {
                                 pressing: { isPressed in if isPressed { self.endEditing() } },
                                 perform: {}
                             )
-                    } else {
-                        TextEditor(text: $content)
-                            .disabled(false)
-                            .setBackground(color: R.color.mainBackground.color)
-                            .introspectTextView { tv in
-                                tv.becomeFirstResponder()
-                            }
-                            .onTapGesture {}
-                            .onLongPressGesture(
-                                pressing: { isPressed in if isPressed { self.endEditing() } },
-                                perform: {}
-                            )
-                    }
 
-                    if content.isEmpty {
-                        Text(R.string.localizable.dealTextEditorEditorPlaceholder())
-                            .padding(EdgeInsets(top: 8, leading: 5, bottom: 0, trailing: 5))
-                            .foregroundColor(R.color.secondaryText.color)
-                    }
+                        if content.isEmpty {
+                            Text(R.string.localizable.dealTextEditorEditorPlaceholder())
+                                .padding(EdgeInsets(top: 8, leading: 5, bottom: 0, trailing: 5))
+                                .foregroundColor(R.color.secondaryText.color)
 
-                    Spacer()
-                case .view:
-                    if #available(iOS 16.0, *) {
-                        TextEditor(text: $content)
-                            .scrollContentBackground(.hidden)
-                            .background(R.color.mainBackground.color)
-                            .disabled(true)
-                    } else {
+                        }
+
+                        Spacer()
+                    case .view:
                         TextEditor(text: $content)
                             .disabled(true)
                             .setBackground(color: R.color.mainBackground.color)
+                            .cornerRadius(12)
+                        if content.isEmpty {
+                            Text(R.string.localizable.dealTextEditorViewPlaceholder())
+                                .padding(EdgeInsets(top: 8, leading: 5, bottom: 0, trailing: 5))
+                                .foregroundColor(R.color.secondaryText.color)
+                        }
+
+                        Spacer()
 
                     }
+                }.overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(R.color.textFieldBorder.color, lineWidth: mode != .view ? 1 : 0))
 
-                    if content.isEmpty {
-                        Text(R.string.localizable.dealTextEditorViewPlaceholder())
-                            .padding(EdgeInsets(top: 8, leading: 5, bottom: 0, trailing: 5))
-                            .foregroundColor(R.color.secondaryText.color)
-                    }
-
-                    Spacer()
-
-                }
             }
+
+
             .padding()
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(R.string.localizable.dealViewContractText())
@@ -166,7 +155,9 @@ struct TextEditorView: View {
             case .error(let message):
                 return Alert(
                     title: Text(R.string.localizable.commonError()),
-                    message: Text(message))
+                    message: Text(message), dismissButton: Alert.Button.default(Text(R.string.localizable.commonOk()), action: {
+                        viewModel.trigger(.dismissError)
+                    }))
             case .needConfirmForceUpdate:
                 return Alert(
                     title: Text(R.string.localizable.commonAttention()),
@@ -193,8 +184,6 @@ struct TextEditorView: View {
                 break
             case .updating:
                 break
-            case .error(_):
-                break
             case .success:
                 presentationMode.wrappedValue.dismiss()
             }
@@ -203,17 +192,6 @@ struct TextEditorView: View {
             viewModel.trigger(.decrypt)
         }
 
-    }
-}
-
-extension TextEditorView.AlertType: Identifiable {
-    var id: String {
-        switch self {
-        case .error:
-            return "error"
-        case .needConfirmForceUpdate:
-            return "needConfirmForceUpdate"
-        }
     }
 }
 

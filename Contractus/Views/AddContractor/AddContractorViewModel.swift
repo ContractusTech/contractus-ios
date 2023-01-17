@@ -13,12 +13,17 @@ import SolanaSwift
 enum AddContractorInput {
     case validate(String)
     case addContractor
+    case dismissError
 }
 
 struct AddContractorState {
-    
+
+    enum ErrorState: Equatable {
+        case error(String)
+    }
+
     enum State: Equatable {
-        case none, validPublicKey, loading, invalidPublicKey, successAdded, error(String)
+        case none, validPublicKey, loading, invalidPublicKey, successAdded
     }
 
     let participateType: ParticipateType
@@ -27,6 +32,7 @@ struct AddContractorState {
     let account: CommonAccount
     var publicKey: String = ""
     var state: State = .none
+    var errorState: ErrorState?
     var blockchain: Blockchain
 
     var isLoading: Bool {
@@ -73,6 +79,8 @@ final class AddContractorViewModel: ViewModel {
     
     func trigger(_ input: AddContractorInput, after: AfterTrigger? = nil) {
         switch input {
+        case .dismissError:
+            state.errorState = nil
         case .validate(let publicKey):
             self.state.state = AccountValidator.isValidPublicKey(string: publicKey, blockchain: state.blockchain) ? .validPublicKey : .invalidPublicKey
             self.state.publicKey = publicKey
@@ -84,7 +92,7 @@ final class AddContractorViewModel: ViewModel {
                     switch result {
                     case .failure(let error):
                         debugPrint(error)
-                        self.state.state = .error(error.localizedDescription)
+                        self.state.errorState = .error(error.localizedDescription)
                     case .finished:
                         break
                     }

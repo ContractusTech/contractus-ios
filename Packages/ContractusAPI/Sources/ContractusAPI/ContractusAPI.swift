@@ -6,20 +6,36 @@ public enum Blockchain: String, CaseIterable, Hashable {
 }
 
 public enum ServerType {
-    case production, developer, custom(String)
 
-    var serverURL: URL {
+    public enum APIVersion: String {
+        case v1
+    }
+
+    case production(APIVersion = .v1), developer(APIVersion = .v1), custom(String, APIVersion = .v1)
+
+    var apiURL: URL {
         switch self {
         case .production:
-            fatalError("No server")
+            fatalError("No production server")
         case .developer:
-            fatalError("No server")
-        case .custom(let url):
+            fatalError("No developer server")
+        case .custom(_, let version):
+            return server.appendingPathComponent(version.rawValue)
+        }
+    }
+
+    var server: URL {
+        switch self {
+        case .production:
+            fatalError("No production server")
+        case .developer:
+            fatalError("No developer server")
+        case .custom(let url, _):
             return URL(string: url)!
         }
     }
 
     func path(_ path: String) -> URL {
-        return self.serverURL.appendingPathComponent(path)
+        return self.apiURL.appendingPathComponent(path)
     }
 }
