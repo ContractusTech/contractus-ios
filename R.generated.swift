@@ -735,7 +735,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 113 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 114 localization keys.
     struct localizable {
       /// en translation: A new way to collaborate and make business with partners. Create contract, sign, check result and pay. Securely.
       ///
@@ -1189,6 +1189,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let createWalletTitle = Rswift.StringResource(key: "createWallet.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: [No file name]
+      ///
+      /// Locales: en
+      static let dealFileNoName = Rswift.StringResource(key: "deal.file.no-name", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
 
       /// en translation: A new way to collaborate and make business with partners. Create contract, sign, check result and pay. Securely.
       ///
@@ -2891,6 +2895,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("createWallet.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: [No file name]
+      ///
+      /// Locales: en
+      static func dealFileNoName(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.file.no-name", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.file.no-name"
+        }
+
+        return NSLocalizedString("deal.file.no-name", bundle: bundle, comment: "")
       }
 
       fileprivate init() {}

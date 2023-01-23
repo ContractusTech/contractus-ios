@@ -39,7 +39,9 @@ struct DealState {
         case filePreview(URL), none, downloading(Double), decrypting
     }
 
-    enum MainActionType {
+    enum MainActionType: Int, Identifiable {
+        var id: Int { return self.rawValue }
+
         /// Can sign contract
         case sign
         /// Deal in work and user want cancel contract (return amount from smart contract)
@@ -48,8 +50,6 @@ struct DealState {
         case finishDeal
         /// Deal not working yet and user want cancel your sign
         case cancelSign
-        /// Not action
-        case none
     }
 
     let account: CommonAccount
@@ -63,7 +63,7 @@ struct DealState {
     var decryptedKey = Data()
     var decryptedFiles: [String:URL] = [:]
     var decryptingFiles: [String:Bool] = [:]
-    var isSigned: Bool? = nil
+    var isSignedByPartner: Bool = false
 
 
 
@@ -125,9 +125,7 @@ struct DealState {
         }
     }
 
-    var currentMainAction: MainActionType {
-        .none
-    }
+    var currentMainActions: [MainActionType] = []
 }
 
 final class DealViewModel: ViewModel {
@@ -273,24 +271,51 @@ final class DealViewModel: ViewModel {
 
     private func loadActualTx() {
         Task {
-            guard let tx = try? await getActualTx() else { return }
-            var signature: String?
-            if state.isOwnerDeal {
-                signature = tx.ownerSignature
-            } else if state.deal.contractorPublicKey == self.state.account.publicKey {
-                signature = tx.contractorSignature
-            }
+            do {
+                let tx = try await getActualTx()
+                var signature: String?
+                var isSignedByPartner: Bool = false
+                if state.isOwnerDeal {
+                    signature = tx.ownerSignature
+                    isSignedByPartner = tx.contractorSignature != nil
+                } else if state.deal.contractorPublicKey == self.state.account.publicKey {
+                    signature = tx.contractorSignature
+                    isSignedByPartner = tx.ownerSignature != nil
+                }
 
-            guard let signature = signature else {
-                await MainActor.run(body: {[weak self] in
-                    self?.state.isSigned = false
+                guard let signature = signature else {
+                    await MainActor.run(body: {[weak self, isSignedByPartner] in
+                        self?.state.isSignedByPartner = isSignedByPartner
+                        self?.state.currentMainActions = getDealActions(for: state.deal, isSigned: false)
+                    })
+                    return
+                }
+                let isSigned = transactionSignService?.isSigned(
+                    txBase64: tx.transaction,
+                    signatureBase64: signature,
+                    publicKey: state.account.publicKeyData) ?? false
+                let actions = getDealActions(for: state.deal, isSigned: isSigned)
+                await MainActor.run(body: {[weak self, actions, isSignedByPartner] in
+                    self?.state.isSignedByPartner = isSignedByPartner
+                    self?.state.currentMainActions = actions
                 })
+                
+            } catch let error as ContractusAPI.APIClientError {
+                switch error {
+                case .serviceError(let info):
+                    if info.statusCode == 404 {
+                        await MainActor.run(body: {[weak self] in
+                            self?.state.isSignedByPartner = false
+                            self?.state.currentMainActions = [.sign]
+                        })
+                        return
+                    }
+                case .commonError, .unknownError:
+                    break
+                }
+            } catch {
                 return
             }
-            let isSigned = transactionSignService?.isSigned(txBase64: tx.transaction, signatureBase64: signature, publicKey: state.account.publicKeyData) ?? false
-            await MainActor.run(body: {[weak self, isSigned] in
-                self?.state.isSigned = isSigned
-            })
 
         }
     }
@@ -375,9 +400,9 @@ final class DealViewModel: ViewModel {
         }
     }
 
-    private func getActualTx() async throws -> DealTransaction? {
+    private func getActualTx() async throws -> DealTransaction {
         try await withCheckedThrowingContinuation({ continuation in
-            dealService?.getActualTransaction(dealId: state.deal.id, completion: { result in
+            dealService?.getActualTransaction(dealId: state.deal.id, silent: true, completion: { result in
                 continuation.resume(with: result)
             })
         })
@@ -442,6 +467,24 @@ final class DealViewModel: ViewModel {
             return nil
         }
 
+    }
+
+    private func getDealActions(for deal: Deal, isSigned: Bool) -> [State.MainActionType] {
+        let actions: [State.MainActionType]
+        switch deal.status {
+        case .new:
+            if isSigned {
+                actions = [.cancelSign]
+            } else {
+                actions = [.sign]
+            }
+        case .canceled, .unknown, .finished, .pending:
+            actions = []
+        case .working:
+            actions = [.finishDeal, .cancelDeal]
+        }
+
+        return actions
     }
 }
 

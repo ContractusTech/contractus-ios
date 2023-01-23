@@ -70,8 +70,8 @@ public final class DealsService: BaseService {
         }
     }
 
-    public func getTransaction(dealId: String, type: TransactionType, completion: @escaping (Swift.Result<DealTransaction, APIClientError>) -> Void) {
-        self.request(path: .dealTransaction(dealId, type), httpMethod: .get, data: Empty()) { (result: Swift.Result<DealTransaction, APIClientError>) in
+    public func getTransaction(dealId: String, silent: Bool, type: TransactionType, completion: @escaping (Swift.Result<DealTransaction, APIClientError>) -> Void) {
+        self.request(path: .dealTransaction(dealId, type), httpMethod: .get, data: ["silent": silent ? 1 : 0]) { (result: Swift.Result<DealTransaction, APIClientError>) in
             completion(result)
         }
     }
@@ -82,7 +82,7 @@ public final class DealsService: BaseService {
         }
     }
 
-    public func getActualTransaction(dealId: String, completion: @escaping (Swift.Result<DealTransaction, APIClientError>) -> Void) {
+    public func getActualTransaction(dealId: String, silent: Bool, completion: @escaping (Swift.Result<DealTransaction, APIClientError>) -> Void) {
         transactions(dealId: dealId) { result in
             switch result {
             case .success(let txList):
@@ -95,7 +95,7 @@ public final class DealsService: BaseService {
 
                 // TODO: - Не доделано, надо добавить определение других типов транзакций (cancel, finish)
 
-                self.getTransaction(dealId: dealId, type: type) { result in
+                self.getTransaction(dealId: dealId, silent: silent, type: type) { result in
                     switch result {
                     case .success(let tx):
                         completion(.success(tx))

@@ -101,6 +101,7 @@
 "deal.results.hint" = "Executor can publish documents for approve";
 "deal.no-secret-key" = "No secret key";
 "deal.no-secret-key-information" = "The secret key is needed to view and decrypt/encrypt contract details.";
+"deal.file.no-name" = "[No file name]";
 
 "newDeal.title" = "New deal";
 "newDeal.subtitle" = "Choose your role";

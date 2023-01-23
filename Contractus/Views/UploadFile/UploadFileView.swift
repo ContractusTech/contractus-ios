@@ -424,7 +424,7 @@ struct UploadFileView_Previews: PreviewProvider {
 
         }
 
-        UploadFileItemView(file: Mock.file) {
+        UploadFileItemView(file: Mock.fileRaw) {
 
         }
     }

@@ -52,12 +52,22 @@ public struct MetadataFile: Codable, Equatable {
 
 public struct DealMetadata: Codable, Equatable {
 
+    enum CodingKeys: CodingKey {
+        case content, files
+    }
+
     public var content: TextContent?
     public let files: [MetadataFile]
 
     public init(content: TextContent? = nil, files: [MetadataFile]) {
         self.content = content
         self.files = files
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.content = try? container.decodeIfPresent(TextContent.self, forKey: .content)
+        self.files = try container.decode([MetadataFile].self, forKey: .files)
     }
 
 }

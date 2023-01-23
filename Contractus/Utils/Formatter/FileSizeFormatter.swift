@@ -14,7 +14,7 @@ final class FileSizeFormatter {
 
     private let formatter: ByteCountFormatter = {
         let formatter = ByteCountFormatter()
-        formatter.allowedUnits = [.useMB]
+        formatter.allowedUnits = [.useMB, .useKB]
         formatter.countStyle = .file
         return formatter
     }()

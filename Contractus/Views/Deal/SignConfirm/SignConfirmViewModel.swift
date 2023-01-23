@@ -117,7 +117,7 @@ final class SignConfirmViewModel: ViewModel {
 
     private func getActualTx() async throws -> DealTransaction? {
         try await withCheckedThrowingContinuation({ continuation in
-            dealService?.getActualTransaction(dealId: state.deal.id, completion: { result in
+            dealService?.getActualTransaction(dealId: state.deal.id, silent: false, completion: { result in
                 continuation.resume(with: result)
             })
         })

@@ -22,6 +22,8 @@ enum Mock {
 
     static let privateKeyUInt8 = Array<UInt8>(repeating: 0, count: 32)
     static let privateKeyData: Data = Data(privateKeyUInt8)
-    static let file = RawFile(data: Data(), name: "Mockfile", mimeType: "image")
+    static let fileRaw = RawFile(data: Data(), name: "Mockfile", mimeType: "image")
+    static let metadataFile = MetadataFile(md5: "123", url: URL(string: "http://ya.ru")!, name: "File Test", encrypted: false, size: 100000)
+    static let metadataFileLock = MetadataFile(md5: "123", url: URL(string: "http://ya.ru")!, name: "File Test", encrypted: true, size: 100000)
     static let encryptedTextBase64 = "YMKC9mwc5X1MpnB919rRZA=="
 }

@@ -13,13 +13,16 @@ import SafariServices
 import BigInt
 
 fileprivate enum Constants {
+    static let remove = Image(systemName: "xmark.circle.fill")
     static let dotsImage = Image(systemName: "ellipsis")
     static let dotsCircleImage = Image(systemName: "ellipsis.circle")
     static let arrowUpImage = Image(systemName: "arrow.up")
     static let arrowDownImage = Image(systemName: "arrow.down")
     static let rewardImage = Image(systemName: "purchased")
-    static let lockFile = Image(systemName: "lock.fill")
+    static let lock = Image(systemName: "lock.fill")
     static let unlockedFile = Image(systemName: "lock.open.fill")
+    static let file = Image(systemName: "doc.fill")
+    static let lockFile = Image(systemName: "lock.doc.fill")
 }
 
 struct DealView: View {
@@ -329,7 +332,7 @@ struct DealView: View {
                                 uploaderContentType = .metadata
                             }
                         }
-                        VStack(alignment: .leading) {
+                        VStack(alignment: .leading, spacing: 4) {
                             if viewModel.state.deal.meta?.files.isEmpty ?? true {
                                 HStack {
                                     Text("This files will be encrypted and available for viewing only to contract partners.")
@@ -342,11 +345,16 @@ struct DealView: View {
                                     FileItemView(
                                         file: file,
                                         decryptedName: viewModel.state.decryptedFiles[file.md5]?.lastPathComponent)
-                                    {
-                                        viewModel.trigger(.openFile(file))
+                                    { action in
+
+                                        switch action {
+                                        case .open:
+                                            viewModel.trigger(.openFile(file))
+                                        case .delete:
+                                            viewModel.trigger(.deleteMetadataFile(file))
+                                        }
                                     }
                                 }
-
                             }
                         }
                     }
@@ -443,8 +451,13 @@ struct DealView: View {
                                 } else {
                                     if let files = viewModel.state.deal.results?.files {
                                         ForEach(files) { file in
-                                            FileItemView(file: file) {
-                                                viewModel.trigger(.openFile(file))
+                                            FileItemView(file: file) { action in
+                                                switch action {
+                                                case .open:
+                                                    viewModel.trigger(.openFile(file))
+                                                case .delete:
+                                                    viewModel.trigger(.deleteResultFile(file))
+                                                }
                                             }
                                         }
                                     }
@@ -457,35 +470,56 @@ struct DealView: View {
                     .cornerRadius(20)
                 }
 
+                // MARK: - Actions
                 VStack {
-                    VStack {
-                        switch viewModel.state.deal.status {
-                        case .new:
 
-
-                        }
-                        if viewModel.state.deal.status == .new {
-
-                        }
-                        if let isSigned = viewModel.state.isSigned {
-                            CButton(title: "Sign", style: .primary, size: .large, isLoading: false, isDisabled: isSigned) {
-                                // TODO: -
-                                activeModalType = .confirm
-                            }
-
-                            if isSigned {
-                                CButton(title: "Cancel sign", style: .cancel, size: .large, isLoading: false) {
-                                    // TODO: -
-                                    activeModalType = .confirm
+                    VStack(alignment: .center, spacing: 12) {
+                        ForEach(viewModel.currentMainActions) { actionType in
+                            switch actionType {
+                            case .sign:
+                                if viewModel.state.isSignedByPartner {
+                                    CButton(title: "Sign and start", style: .primary, size: .large, isLoading: false) {
+                                        activeModalType = .confirm
+                                    }
+                                    Text("The partner has already signed the contract. The work of the contract will begin when you sign the contract.")
+                                        .font(.footnote)
+                                        .foregroundColor(R.color.yellow.color)
+                                } else {
+                                    CButton(title: "Sign", style: .primary, size: .large, isLoading: false) {
+                                        activeModalType = .confirm
+                                    }
+                                    Text("Sign the contract, the work of the contract starts automatically when your partner signs it")
+                                        .font(.footnote)
+                                        .foregroundColor(R.color.yellow.color)
                                 }
+                            case .cancelSign:
+                                CButton(title: "Cancel sign", style: .cancel, size: .large, isLoading: false) {
+                                    // TODO: - Add
+
+                                }
+                                Text("You can cancel your signature before your partner signs the contract. The work of the contract will begin when the partner signs.")
+                                    .font(.footnote)
+                                    .foregroundColor(R.color.yellow.color)
+                            case .cancelDeal:
+                                CButton(title: "Cancel deal", style: .cancel, size: .large, isLoading: false) {
+                                    // TODO: - Add
+                                }
+                                Text("You can cancel the contract all funds will be refunded.")
+                                    .font(.footnote)
+                                    .foregroundColor(R.color.yellow.color)
+                            case .finishDeal:
+                                CButton(title: "Finish deal", style: .primary, size: .large, isLoading: false) {
+                                    // TODO: - Add
+                                }
+                                Text("If all the work is done as specified in the contract you can complete the contract, the contractor will receive payment. The checker will receive a commission for services.")
+                                    .font(.footnote)
+                                    .foregroundColor(R.color.yellow.color)
                             }
                         }
                     }
-                    .padding(20)
-                    .background(R.color.secondaryBackground.color)
-                    .cornerRadius(15)
+
                 }
-                .padding(EdgeInsets(top: 20, leading: 0, bottom: 24, trailing: 0))
+                .padding(EdgeInsets(top: 20, leading: 20, bottom: 24, trailing: 20))
             }
         }
         .resizableSheet($uploaderState, builder: { builder in
@@ -789,53 +823,76 @@ struct DealView: View {
 
 struct FileItemView: View {
 
+    enum ActionType {
+        case open, delete
+    }
     var file: MetadataFile
     var decryptedName: String?
-    var action: () -> Void
+    var action: (Self.ActionType) -> Void
 
+    @State private var confirmPresented: Bool = false
+    
     var body: some View {
-        HStack(alignment: .top) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(decryptedName ?? file.name)
-                    .lineLimit(1)
-                    .font(.callout.weight(.medium))
-                    .foregroundColor(R.color.textBase.color)
-                    .truncationMode(.middle)
+        HStack(alignment: .center, spacing: 6) {
+            Button {
+                action(.open)
+            } label: {
 
-                HStack(spacing: 12) {
-                    Text(FileSizeFormatter.shared.format(file.size))
-                        .multilineTextAlignment(.leading)
-                        .font(.footnote.weight(.regular))
-                        .foregroundColor(R.color.secondaryText.color)
-                    if decryptedName != nil {
-                        Constants.unlockedFile
+                HStack(alignment: .center, spacing: 6) {
+                    if decryptedName != nil  {
+                        Constants.file
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(height: 12)
+                            .frame(width: 24, height: 24)
                             .foregroundColor(R.color.yellow.color)
                     } else {
                         Constants.lockFile
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(height: 12)
+                            .frame(width: 24, height: 24)
                             .foregroundColor(R.color.secondaryText.color)
+
+                    }
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(decryptedName ?? file.name)
+                            .lineLimit(1)
+                            .font(.callout.weight(.medium))
+                            .foregroundColor(R.color.textBase.color)
+                            .truncationMode(.middle)
+
+                        HStack(spacing: 12) {
+                            Text(FileSizeFormatter.shared.format(file.size))
+                                .multilineTextAlignment(.leading)
+                                .font(.footnote.weight(.regular))
+                                .foregroundColor(R.color.secondaryText.color)
+
+                        }
+                        .frame(height: 14)
                     }
                 }
-                .frame(height: 14)
+
             }
+
             Spacer()
             Button {
-                action()
+                confirmPresented = true
             } label: {
-                Constants.dotsImage
+                Constants.remove
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
                     .foregroundColor(R.color.secondaryText.color)
-                    .frame(height: 4)
+                    .frame(width: 16, height: 16)
                     .padding(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
             }
         }
         .padding(.bottom, 8)
+        .confirmationDialog("", isPresented: $confirmPresented) {
+            Button("Yes, delete", role: .destructive) {
+                action(.delete)
+            }
+        } message: {
+            Text("You want delete file?")
+        }
 
     }
 }
@@ -867,7 +924,7 @@ struct DealView_Previews: PreviewProvider {
         NavigationView {
             DealView(viewModel: AnyViewModel<DealState, DealInput>(
                 DealViewModel(
-                    state: DealState(account: Mock.account, deal: Mock.deal, isSigned: true),
+                    state: DealState(account: Mock.account, deal: Mock.deal, isSignedByPartner: true),
                     dealService: nil,
                     transactionSignService: nil,
                     filesAPIService: nil,
@@ -875,6 +932,22 @@ struct DealView_Previews: PreviewProvider {
                         
                     }
         }
+        .previewDisplayName("Form")
+        VStack {
+            FileItemView(file: Mock.metadataFile) {_ in
+
+            }
+            FileItemView(file: Mock.metadataFile) { _ in
+
+            }
+            FileItemView(file: Mock.metadataFileLock, decryptedName: "[No file name]") { _ in
+
+            }
+        }
+        .previewDisplayName("File items")
+
+
     }
 }
+
 #endif
