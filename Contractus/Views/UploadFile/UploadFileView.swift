@@ -101,7 +101,7 @@ struct UploadFileView: View {
                                 Spacer()
                             }
                             .padding(16)
-                            .background(R.color.fourthBackground.color)
+                            .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
                         }
 
@@ -124,7 +124,7 @@ struct UploadFileView: View {
                                 Spacer()
                             }
                             .padding(16)
-                            .background(R.color.fourthBackground.color)
+                            .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
                         }
 
@@ -147,7 +147,7 @@ struct UploadFileView: View {
                                 Spacer()
                             }
                             .padding(16)
-                            .background(R.color.fourthBackground.color)
+                            .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
                         }
                     }
@@ -312,7 +312,7 @@ struct UploadFileItemView: View {
                 VStack {
                     Text(R.string.localizable.uploadFileLargeFile())
                         .font(.footnote.weight(.semibold))
-                        .foregroundColor(R.color.yellow.color)
+                        .foregroundColor(R.color.labelTextAttention.color)
                         .lineLimit(0)
                 }
 
@@ -320,10 +320,10 @@ struct UploadFileItemView: View {
 
         }
         .padding(16)
-        .background(R.color.mainBackground.color)
+        .background(R.color.secondaryBackground.color)
         .cornerRadius(24)
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 24)
                 .stroke(R.color.textFieldBorder.color, lineWidth: 1))
     }
 

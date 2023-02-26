@@ -11,7 +11,7 @@ import Alamofire
 public enum ServicePath {
     case accounts
     case deals
-    case availableCurrencies
+    case tokens
     case dealMetadata(String)
     case dealResult(String)
     case dealTransactions(String)
@@ -23,6 +23,10 @@ public enum ServicePath {
     case participant(String)
     case balance
     case dealFee(dealId: String)
+    case wrap
+    case signWrap
+    case unwrap
+    case signUnwrap
 
     var value: String {
         switch self {
@@ -36,8 +40,8 @@ public enum ServicePath {
             return "/deals/\(id)"
         case .dealMetadata(let id):
             return "/deals/\(id)/meta"
-        case .availableCurrencies:
-            return "/resources/currencies"
+        case .tokens:
+            return "/resources/tokens"
         case .dealTransactions(let id):
             return "/deals/\(id)/tx"
         case .dealTransaction(let id, let type):
@@ -54,6 +58,14 @@ public enum ServicePath {
             return "/deals/\(id)/cancel"
         case .dealFee(let dealId):
             return "/deals/\(dealId)/fee"
+        case .wrap:
+            return "/accounts/wrap"
+        case .signWrap:
+            return "/accounts/wrap/sign"
+        case .unwrap:
+            return "/accounts/unwrap-all"
+        case .signUnwrap:
+            return "/accounts/unwrap-all/sign"
         }
     }
 }

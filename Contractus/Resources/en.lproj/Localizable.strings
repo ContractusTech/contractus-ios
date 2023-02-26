@@ -93,8 +93,9 @@
 "deal.textEditor.view-placeholder" = "The description of the contract is empty";
 "deal.textEditor.editor-placeholder" = "Enter contract description";
 "deal.hint.about-executor" = "Performs the work specified in the contract.";
-"deal.hint.you-verifier" = "After your verification of the result of the contract, the partner receives payment.";
-"deal.hint.empty-verifier" = "You need set account for verification result of work by contract.";
+"deal.hint.you-verifier" = "After you check the result of the contract, the contractor receives payment.";
+"deal.hint.you-executor" = "After this Account checks the result of the contract, you get paid.";
+"deal.hint.empty-verifier" = "You need to specify the Account that will check the result of the contract.";
 "deal.hint.verifier" = "After verification by this Account of the result of the contract, the partner receives payment.";
 "deal.results.title" = "Results";
 "deal.results.waiting-approve" = "Waiting approve";
@@ -110,7 +111,7 @@
 "newDeal.subtitle.client" = "If you pay to some service or product";
 "newDeal.subtitle.executor" = "If you provide service or sell goods";
 
-"main.title.deals" = "Deals";
+"main.title.deals" = "Active deals";
 "main.title.new-deal" = "New deal";
 "main.title.active-contracts" = "Active - %@";
 

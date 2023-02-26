@@ -10,7 +10,7 @@ import ContractusAPI
 import Combine
 
 enum ChangeAmountInput {
-    case changeAmount(String, Currency)
+    case changeAmount(String, Token)
     case update
 }
 
@@ -36,16 +36,17 @@ struct ChangeAmountState {
     let amountType: AmountValueType
     var amount: Amount
     var feeAmount: Amount
-    var fee: Double = 0
+    var feePercent: Double = 0
     var feeFormatted: String = ""
+    var fiatFeeFormatted: String = ""
     let account: CommonAccount
 
     var totalAmount: Amount {
         switch amountType {
         case .deal:
-            return Amount(amount.value + (deal.checkerAmount ?? 0) + feeAmount.value, currency: amount.currency)
+            return Amount(amount.value + (deal.checkerAmount ?? 0) + feeAmount.value, token: amount.token)
         case .checker:
-            return Amount(amount.value + deal.amount + feeAmount.value, currency: amount.currency)
+            return Amount(amount.value + deal.amount + feeAmount.value, token: amount.token)
         }
     }
 
@@ -53,14 +54,14 @@ struct ChangeAmountState {
         if amountType == .deal {
             return amount
         }
-        return Amount(deal.amount, currency: amount.currency)
+        return Amount(deal.amount, token: amount.token)
     }
 
     var checkerAmount: Amount {
         if amountType == .checker {
             return amount
         }
-        return Amount(deal.checkerAmount ?? 0, currency: amount.currency)
+        return Amount(deal.checkerAmount ?? 0, token: amount.token)
     }
 
     var isValid: Bool {
@@ -88,8 +89,8 @@ final class ChangeAmountViewModel: ViewModel {
         self.state = .init(
             deal: deal,
             amountType: amountType,
-            amount: amountType == .deal ? Amount(deal.amount, currency: deal.currency) : Amount(deal.checkerAmount ?? 0, currency: deal.currency),
-            feeAmount: Amount(deal.amountFee, currency: deal.currency),
+            amount: amountType == .deal ? Amount(deal.amount, token: deal.token) : Amount(deal.checkerAmount ?? 0, token: deal.token),
+            feeAmount: Amount(deal.amountFee, token: deal.token),
             account: account
         )
         self.dealService = dealService
@@ -98,17 +99,17 @@ final class ChangeAmountViewModel: ViewModel {
     func trigger(_ input: ChangeAmountInput, after: AfterTrigger? = nil) {
 
         switch input {
-        case .changeAmount(let amount, let currency):
+        case .changeAmount(let amount, let token):
             var amount = amount
             if amount.isEmpty {
                 amount = "0"
             }
-            if Amount.isValid(amount, currency: currency) {
-                let newAmount = Amount(amount, currency: currency)
+            if Amount.isValid(amount, token: token) {
+                let newAmount = Amount(amount, token: token)
                 self.state.amount = newAmount
                 updateFee(amount: newAmount)
             } else {
-                self.state.amount = Amount(self.state.amount.value, currency: self.state.amount.currency)
+                self.state.amount = Amount(self.state.amount.value, token: self.state.amount.token)
             }
 
         case .update:
@@ -132,15 +133,25 @@ final class ChangeAmountViewModel: ViewModel {
     }
 
     private func updateFee(amount: Amount) {
+        if amount.value.isZero {
+            var newState = self.state
+            newState.feePercent = 0
+            newState.feeAmount = Amount(UInt64(0), token: amount.token)
+            newState.feeFormatted = "(0%) \(Amount(UInt64(0), token: amount.token).formatted(withCode: true))"
+            newState.fiatFeeFormatted = "-" //fee.fiatCurrency.format(double: 0, withCode: true) ?? ""
+            newState.state = .none
+            return
+        }
         self.state.state = .loading
         dealService?.getFee(dealId: state.deal.id, data: CalculateDealFee(amount: amount, type: state.amountType.asAmountFeeType), completion: {[weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let fee):
                 var newState = self.state
-                newState.fee = fee.fee
+                newState.feePercent = fee.percent
                 newState.feeAmount = fee.feeAmount
-                newState.feeFormatted = fee.fee.format(for: self.state.amount.currency)
+                newState.feeFormatted = "(\(fee.percent.formatAsPercent())%) \(fee.feeAmount.formatted(withCode: true))"
+                newState.fiatFeeFormatted = fee.fiatCurrency.format(double: fee.fiatFee, withCode: true) ?? ""
                 newState.state = .none
                 self.state = newState
             case .failure(let error):

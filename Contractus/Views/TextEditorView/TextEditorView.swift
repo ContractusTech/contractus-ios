@@ -48,26 +48,35 @@ struct TextEditorView: View {
 
                     switch mode {
                     case .edit:
+                        ZStack(alignment: .topLeading) {
 
-                        TextEditor(text: $content)
-                            .disabled(false)
-                            .setBackground(color: R.color.thirdBackground.color)
-                            .cornerRadius(12)
-                            .introspectTextView { tv in
-                                tv.becomeFirstResponder()
+                            TextEditor(text: $content)
+                                .disabled(false)
+                                .setBackground(color: R.color.textFieldBackground.color)
+                                .cornerRadius(20)
+                                .padding(6)
+
+                                .introspectTextView { tv in
+                                    tv.becomeFirstResponder()
+                                }
+                                .onTapGesture {}
+                                .onLongPressGesture(
+                                    pressing: { isPressed in if isPressed { self.endEditing() } },
+                                    perform: {}
+                                )
+
+
+                            if content.isEmpty {
+                                Text(R.string.localizable.dealTextEditorEditorPlaceholder())
+                                    .padding(EdgeInsets(top: 14, leading: 12, bottom: 0, trailing: 5))
+                                    .foregroundColor(R.color.secondaryText.color)
+
                             }
-                            .onTapGesture {}
-                            .onLongPressGesture(
-                                pressing: { isPressed in if isPressed { self.endEditing() } },
-                                perform: {}
-                            )
-
-                        if content.isEmpty {
-                            Text(R.string.localizable.dealTextEditorEditorPlaceholder())
-                                .padding(EdgeInsets(top: 8, leading: 5, bottom: 0, trailing: 5))
-                                .foregroundColor(R.color.secondaryText.color)
-
                         }
+
+                        .background(R.color.textFieldBackground.color)
+                        .cornerRadius(20)
+
 
                         Spacer()
                     case .view:
@@ -75,22 +84,23 @@ struct TextEditorView: View {
                             .disabled(true)
                             .setBackground(color: R.color.mainBackground.color)
                             .cornerRadius(12)
+                            .padding(6)
                         if content.isEmpty {
                             Text(R.string.localizable.dealTextEditorViewPlaceholder())
-                                .padding(EdgeInsets(top: 8, leading: 5, bottom: 0, trailing: 5))
+                                .padding(EdgeInsets(top: 14, leading: 12, bottom: 0, trailing: 5))
                                 .foregroundColor(R.color.secondaryText.color)
                         }
 
                         Spacer()
 
                     }
-                }.overlay(
-                    RoundedRectangle(cornerRadius: 12)
+                }
+                .overlay(
+
+                    RoundedRectangle(cornerRadius: 20)
                         .stroke(R.color.textFieldBorder.color, lineWidth: mode != .view ? 1 : 0))
 
             }
-
-
             .padding()
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(R.string.localizable.dealViewContractText())

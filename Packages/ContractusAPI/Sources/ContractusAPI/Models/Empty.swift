@@ -7,4 +7,4 @@
 
 import Foundation
 
-struct Empty: Encodable { }
+struct Empty: Codable { }

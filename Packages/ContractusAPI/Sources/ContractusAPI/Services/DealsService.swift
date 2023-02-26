@@ -10,11 +10,33 @@ import Alamofire
 
 public final class DealsService: BaseService {
 
+    public struct Pagination: Encodable {
+        public let skip: Int
+        public let take: Int
+        public let types: Set<FilterByRole>
+        public let statuses: Set<FilterByStatus>
+
+        public init(skip: Int, take: Int, types: Set<DealsService.FilterByRole>, statuses: Set<DealsService.FilterByStatus>) {
+            self.skip = skip
+            self.take = take
+            self.types = types
+            self.statuses = statuses
+        }
+    }
+
+    public enum FilterByRole: String, Encodable {
+        case isClient = "CLIENT", isExecutor = "EXECUTOR", isChecker = "CHECKER"
+    }
+
+    public enum FilterByStatus: String, Encodable {
+        case new = "NEW", pending = "PENDING", working = "WORKING", finished = "FINISHED" , canceled = "CANCELED"
+    }
+
     public enum ContentType {
         case metadata, result
     }
 
-    public func getDeals(pagination: Pagination, completion: @escaping (Swift.Result<[Deal], APIClientError>) -> Void) {
+    public func getDeals(pagination: DealsService.Pagination, completion: @escaping (Swift.Result<[Deal], APIClientError>) -> Void) {
         self.request(path: .deals, httpMethod: .get, data: pagination) { (result: Swift.Result<[Deal], APIClientError>) in
             completion(result)
         }
@@ -64,31 +86,37 @@ public final class DealsService: BaseService {
         }
     }
 
-    public func transactions(dealId: String, completion: @escaping (Swift.Result<[DealTransaction], APIClientError>) -> Void) {
-        self.request(path: .dealTransactions(dealId), httpMethod: .get, data: Empty()) { (result: Swift.Result<[DealTransaction], APIClientError>) in
+    public func transactions(dealId: String, completion: @escaping (Swift.Result<[Transaction], APIClientError>) -> Void) {
+        self.request(path: .dealTransactions(dealId), httpMethod: .get, data: Empty()) { (result: Swift.Result<[Transaction], APIClientError>) in
             completion(result)
         }
     }
 
-    public func getTransaction(dealId: String, silent: Bool, type: TransactionType, completion: @escaping (Swift.Result<DealTransaction, APIClientError>) -> Void) {
-        self.request(path: .dealTransaction(dealId, type), httpMethod: .get, data: ["silent": silent ? 1 : 0]) { (result: Swift.Result<DealTransaction, APIClientError>) in
+    public func getTransaction(dealId: String, silent: Bool, type: TransactionType, completion: @escaping (Swift.Result<Transaction, APIClientError>) -> Void) {
+        self.request(path: .dealTransaction(dealId, type), httpMethod: .get, data: ["silent": silent ? 1 : 0]) { (result: Swift.Result<Transaction, APIClientError>) in
             completion(result)
         }
     }
 
-    public func signTransaction(dealId: String, type: TransactionType, data: SignedDealTransaction, completion: @escaping (Swift.Result<DealTransaction, APIClientError>) -> Void) {
-        self.request(path: .dealSign(dealId, type), httpMethod: .post, data: data) { (result: Swift.Result<DealTransaction, APIClientError>) in
+    public func signTransaction(dealId: String, type: TransactionType, data: SignedTransaction, completion: @escaping (Swift.Result<Transaction, APIClientError>) -> Void) {
+        self.request(path: .dealSign(dealId, type), httpMethod: .post, data: data) { (result: Swift.Result<Transaction, APIClientError>) in
             completion(result)
         }
     }
 
-    public func getActualTransaction(dealId: String, silent: Bool, completion: @escaping (Swift.Result<DealTransaction, APIClientError>) -> Void) {
+    public func cancelSignTransaction(dealId: String, completion: @escaping (Swift.Result<Success, APIClientError>) -> Void) {
+        self.request(path: .dealSign(dealId, .dealInit), httpMethod: .delete, data: Empty()) { (result: Swift.Result<Success, APIClientError>) in
+            completion(result)
+        }
+    }
+
+    public func getActualTransaction(dealId: String, silent: Bool, completion: @escaping (Swift.Result<Transaction, APIClientError>) -> Void) {
         transactions(dealId: dealId) { result in
             switch result {
             case .success(let txList):
-                var type: TransactionType = .`init`
+                var type: TransactionType = .dealInit
                 if txList.isEmpty {
-                    type = .`init`
+                    type = .dealInit
                 } else if txList.count == 1 && !txList[0].transaction.isEmpty {
                     return completion(.success(txList[0]))
                 }

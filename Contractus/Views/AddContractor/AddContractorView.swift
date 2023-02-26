@@ -48,7 +48,7 @@ struct AddContractorView: View {
                         TopTextBlockView(
                             headerText: "Add partner",
                             titleText: "Enter public key",
-                            subTitleText: viewModel.state.accountIsClient ? "Of the client who will pay for the work under the contract." : "Of the client who will perform the work under the contract.")
+                            subTitleText: viewModel.state.ownerIsClient ? "Of the client who will perform the work under the contract." : "Of the client who will pay for the work under the contract.")
                     case .checker:
                         TopTextBlockView(
                             headerText: "Add checker",
@@ -88,18 +88,9 @@ struct AddContractorView: View {
                     label: { EmptyView() }
                 )
                 Spacer()
-                LargePrimaryLoadingButton(
-                    action: {
-                        viewModel.trigger(.addContractor)
-                    },
-                    isLoading: viewModel.state.isLoading) {
-                        HStack {
-                            Spacer()
-                            Text(R.string.localizable.commonAdd())
-                            Spacer()
-                        }
-                    }
-                    .disabled(viewModel.state.state == .invalidPublicKey)
+                CButton(title: R.string.localizable.commonAdd(), style: .primary, size: .large, isLoading: viewModel.state.isLoading, isDisabled: viewModel.state.state == .invalidPublicKey) {
+                    viewModel.trigger(.addContractor)
+                }
             }
             .padding(EdgeInsets(top: 16, leading: 16, bottom: 24, trailing: 16))
             .navigationBarTitleDisplayMode(.inline)

@@ -10,13 +10,22 @@ import Foundation
 
 extension Double {
     
-    func format(for currency: Currency, local: Locale = .current) -> String {
+    func format(for token: Token, local: Locale = .current) -> String {
         let formatter = NumberFormatter()
-        formatter.allowsFloats = currency.decimal > 0
+        formatter.allowsFloats = token.decimal > 0
         formatter.numberStyle = .currency
-        formatter.maximumFractionDigits = Int(currency.decimal)
+        formatter.maximumFractionDigits = token.decimal
         formatter.currencyCode = ""
         formatter.currencySymbol = ""
+        formatter.locale = local
+        return formatter.string(from: NSNumber(value: self)) ?? ""
+    }
+
+    func formatAsPercent(local: Locale = .current) -> String {
+        let formatter = NumberFormatter()
+        formatter.allowsFloats = true
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
         formatter.locale = local
         return formatter.string(from: NSNumber(value: self)) ?? ""
     }

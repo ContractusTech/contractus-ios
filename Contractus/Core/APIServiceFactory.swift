@@ -54,6 +54,11 @@ final class APIServiceFactory {
         return ContractusAPI.FilesService(client: client)
     }
 
+    func makeResourcesService() throws -> ContractusAPI.ResourcesService {
+        try checkAccount()
+        return ContractusAPI.ResourcesService(client: client)
+    }
+
     func makeDealsService() throws -> ContractusAPI.DealsService {
         try checkAccount()
         return ContractusAPI.DealsService(client: client)

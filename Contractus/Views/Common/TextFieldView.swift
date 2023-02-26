@@ -51,7 +51,7 @@ struct TextFieldView: View {
                 }
             }
         }
-        .background(R.color.thirdBackground.color)
+        .background(R.color.textFieldBackground.color)
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
@@ -59,6 +59,7 @@ struct TextFieldView: View {
         )
         .sheet(isPresented: $isPresentedQRScan) {
             QRCodeScannerView(configuration: .onlyScanner, blockchain: blockchain) { result in
+                isPresentedQRScan.toggle()
                 switch result {
                 case .deal(let deal):
                     // TODO: -

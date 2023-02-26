@@ -18,7 +18,7 @@ extension View {
         } else {
             self
                 .textEditorBackground {
-                    R.color.thirdBackground.color
+                    R.color.textFieldBackground.color
                 }
         }
     }

@@ -58,6 +58,7 @@ struct QRCodeScannerView: View {
                         value: value
                     ) { newValue in
                         value = newValue
+
                     }
                     .ignoresSafeArea(.keyboard, edges: .bottom)
                 }
@@ -65,7 +66,6 @@ struct QRCodeScannerView: View {
             }
             .padding(UIConstants.contentInset)
             .navigationBarColor()
-
             .padding(.bottom, keyboard.currentHeight)
             .animation(.easeOut(duration: 0.16))
             .edgesIgnoringSafeArea(.bottom)

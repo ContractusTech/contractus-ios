@@ -10,26 +10,20 @@ import SolanaSwift
 import UIKit
 import ResizableSheet
 
-struct RootState: Equatable {
-    static func == (lhs: RootState, rhs: RootState) -> Bool {
-        if case .hasAccount(let account1) = lhs.state, case .hasAccount(let account2) = rhs.state {
-            return account1.publicKey == account2.publicKey
-        }
-
-        if case .noAccount = lhs.state, case .noAccount = rhs.state {
-            return true
-        }
-        return false
-    }
-
+struct RootState {
     enum State {
         case hasAccount(CommonAccount), noAccount
     }
+
+    enum TransactionState: Equatable {
+        case none, needSign(TransactionSignType)
+    }
     var state: State = .noAccount
+    var transactionState: TransactionState = .none
 }
 
 enum RootInput {
-    case savedAccount(CommonAccount), logout
+    case savedAccount(CommonAccount), logout, signTx(TransactionSignType), cancelTx
 }
 
 final class RootViewModel: ViewModel {
@@ -63,6 +57,10 @@ final class RootViewModel: ViewModel {
         case .savedAccount(let account):
             APIServiceFactory.shared.setAccount(for: account, deviceId: deviceId)
             state.state = .hasAccount(account)
+        case .signTx(let type):
+            state.transactionState = .needSign(type)
+        case .cancelTx:
+            state.transactionState = .none
         case .logout:
             state.state = .noAccount
             APIServiceFactory.shared.clearAccount()
@@ -71,13 +69,25 @@ final class RootViewModel: ViewModel {
     }
 }
 
+let appState = AnyViewModel<RootState, RootInput>(RootViewModel(accountStorage: KeychainAccountStorage()))
 
 @main
 struct ContractusApp: App {
 
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @StateObject var rootViewModel = AnyViewModel<RootState, RootInput>(RootViewModel(accountStorage: KeychainAccountStorage()))
-    
+    @StateObject var rootViewModel = appState
+    @State private var showTxSheet: Bool = false
+
+    private var transactionSignType: TransactionSignType? {
+        switch rootViewModel.transactionState {
+        case .needSign(let tx):
+            return tx
+        case .none:
+            return nil
+//            fatalError("Transaction is empty")
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             Group {
@@ -91,27 +101,49 @@ struct ContractusApp: App {
                         removal: .move(edge: .leading))
                     )
                 case .hasAccount(let account):
-                    
                     MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(
                         account: account,
                         accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
-                        dealsAPIService: try? APIServiceFactory.shared.makeDealsService())), logoutCompletion: {
+                        dealsAPIService: try? APIServiceFactory.shared.makeDealsService(),
+                        resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())), logoutCompletion: {
                             rootViewModel.trigger(.logout)
                         })
-
-                    .navigationTitle("Contractus")
                     .transition(AnyTransition.asymmetric(
                         insertion: .move(edge: .trailing),
                         removal: .move(edge: .leading))
                     )
+                    .onChange(of: rootViewModel.state.transactionState, perform: { txState in
+                        switch txState {
+                        case .needSign:
+                            showTxSheet = true
+                        case .none:
+                            showTxSheet = false
+                        }
+                    })
+                    .rootSheet(isPresented: $showTxSheet, onDismiss: nil, content: {
+                        signView(account: account)
+                    })
 
+                    
                 }
 
             }
-
             .animation(.default, value: rootViewModel.state)
         }
         
+    }
+
+    @ViewBuilder
+    func signView(account: CommonAccount) -> some View {
+        if let transactionSignType = transactionSignType {
+            TransactionSignView(account: account, type: transactionSignType) {
+
+            } cancelAction: {
+                showTxSheet = false
+            }
+        } else {
+            EmptyView()
+        }
     }
 }
 
@@ -128,5 +160,22 @@ fileprivate func appearanceSetup() {
         UINavigationBar.appearance().barTintColor = color
         UINavigationBar.appearance().tintColor = color
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: color]
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = color
     }
+}
+
+
+extension RootState: Equatable {
+
+    static func == (lhs: RootState, rhs: RootState) -> Bool {
+        if case .hasAccount(let account1) = lhs.state, case .hasAccount(let account2) = rhs.state {
+            return account1.publicKey == account2.publicKey
+        }
+
+        if case .noAccount = lhs.state, case .noAccount = rhs.state {
+            return true
+        }
+        return false
+    }
+
 }

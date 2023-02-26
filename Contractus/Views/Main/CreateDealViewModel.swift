@@ -61,58 +61,35 @@ final class CreateDealViewModel: ViewModel {
     // MARK: - Private Methods
 
     private func create(for role: OwnerRole) {
-        let key = String.random(length: AppConfig.sharedKeyLength)
-        guard let sharedParts = try? SSS.createShares(data: [UInt8](key.utf8)),
-              let secretServerKey = sharedParts.first?.toBase64(),
-              let secretPartnerKey = sharedParts.last?.toBase64() else {
-            return
-        }
 
-        self.state.state = .creating
-        self.state.errorMessage = ""
-
-        Crypto.encrypt(message: key, with: state.account.privateKey)
-            .flatMap({ encryptedSecretKey in
-                Future<NewDeal, Never> { promise in
-                    let newDeal = NewDeal(
-                        role: role,
-                        encryptedSecretKey: encryptedSecretKey.base64EncodedString(),
-                        secretKeyHash: Crypto.sha3(data: encryptedSecretKey),
-                        sharedKey: secretServerKey)
-                    promise(.success(newDeal))
-                }
-            })
-            .flatMap({ deal in
-                self.createDeal(deal: deal)
-            })
-            .receive(on: RunLoop.main)
-            .sink { result in
-                switch result {
-                case .failure(let error):
-                    self.state.state = .error
-                    self.state.errorMessage = error.localizedDescription
-                case .finished:
-                    break
-                }
-
-            } receiveValue: { deal in
-                self.state.shareable = ShareableDeal(dealId: deal.id, secretBase64: secretPartnerKey)
-                self.state.state = .success
-                self.state.createdDeal = deal
+        Task { @MainActor in
+            guard let secret = try? await SharedSecretService.createSharedSecret(privateKey:state.account.privateKey) else {
+                return
             }
-            .store(in: &store)
+
+            let newDeal = NewDeal(
+                role: role,
+                encryptedSecretKey: secret.base64EncodedSecret,
+                secretKeyHash: secret.hashOriginalKey,
+                sharedKey: secret.serverSecret.base64EncodedString())
+
+            guard let deal = try? await self.createDeal(deal: newDeal) else {
+                return
+            }
+            var newState = self.state
+            newState.shareable = ShareableDeal(dealId: deal.id, secretBase64: secret.clientSecret.base64EncodedString())
+            newState.state = .success
+            newState.createdDeal = deal
+            self.state = newState
+        }
+        
     }
 
-    private func createDeal(deal: NewDeal) -> Future<Deal, Error> {
-        Future { promise in
+    private func createDeal(deal: NewDeal) async throws -> Deal {
+        try await withCheckedThrowingContinuation { promise in
             self.dealsAPIService?.create(
                 data: deal, completion: { result in
-                switch result {
-                case .failure(let error):
-                    promise(.failure(error as Error))
-                case .success(let deal):
-                    promise(.success(deal))
-                }
+                    promise.resume(with: result)
             })
         }
     }

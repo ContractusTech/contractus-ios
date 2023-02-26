@@ -11,13 +11,15 @@ import ResizableSheet
 import SwiftUIPullToRefresh
 
 fileprivate enum Constants {
+    static let arrowDownImage = Image(systemName: "chevron.down")
+    static let plusImage = Image(systemName: "plus")
     static let menuImage = Image(systemName: "gearshape")
     static let qrCode = Image(systemName: "qrcode")
     static let scanQRImage = Image(systemName: "qrcode.viewfinder")
     static let columns: [GridItem] = {
         return [
-            GridItem(.flexible()),
-            GridItem(.flexible())
+            GridItem(.flexible(), spacing: 4),
+            GridItem(.flexible(), spacing: 4)
         ]
     }()
 }
@@ -25,7 +27,7 @@ fileprivate enum Constants {
 struct MainView: View {
 
     enum SheetType {
-        case newDeal, menu, qrScan, sharePublicKey
+        case newDeal, menu, qrScan, sharePublicKey, wrap(from: Amount, to: Amount)
     }
 
     var resizableSheetCenter: ResizableSheetCenter? {
@@ -39,7 +41,12 @@ struct MainView: View {
     var logoutCompletion: () -> Void
     @State var selectedDeal: Deal?
     @State var sheetType: SheetType? = .none
+    @State var dealsType: MainViewModel.State.DealType = .all
+    @State var transactionSignType: TransactionSignType?
 
+
+    @State private var showDealFilter: Bool = false
+    
     var body: some View {
 
         JGProgressHUDPresenter(userInteractionOnHUD: true) {
@@ -48,48 +55,94 @@ struct MainView: View {
                 ScrollView {
                     VStack {
                         BalanceView(
-                            state: viewModel.state.balance != nil ? .loaded(viewModel.state.balance!) : .empty,
+                            state: viewModel.state.balance != nil ? .loaded(.init(balance: viewModel.state.balance!)) : .empty,
                             topUpAction: {
 
-                            })
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(R.string.localizable.mainTitleDeals())
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                Text(R.string.localizable.mainTitleActiveContracts("\(viewModel.state.deals.count)"))
-                                    .font(.footnote.weight(.semibold))
-                                    .textCase(.uppercase)
-                                    .foregroundColor(R.color.secondaryText.color)
+                            }) { fromAmount, toAmount in
+                                sheetType = .wrap(from: fromAmount, to: toAmount)
+                            }
+                        HStack(alignment: .center) {
+                            VStack {
+                                Button {
+                                    showDealFilter.toggle()
+                                } label: {
+                                    HStack(spacing: 8) {
+                                        Text(dealTitle(type: dealsType))
+                                            .font(.title.weight(.regular))
+                                        HStack {
+                                            Constants.arrowDownImage
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 12, height: 12)
+                                                .foregroundColor(R.color.secondaryText.color)
+                                        }.padding(.top, 4)
+                                    }
+                                }
                             }
                             Spacer()
-
                             CButton(
                                 title: R.string.localizable.mainTitleNewDeal(),
+                                icon: Constants.plusImage,
                                 style: .primary,
                                 size: .default,
                                 isLoading: false) {
                                     sheetType = .newDeal
-                            }
+                                }
 
                         }
-                        .padding(EdgeInsets(top: 24, leading: 0, bottom: 8, trailing: 0))
-                        LazyVGrid(columns: Constants.columns) {
-                            ForEach(viewModel.deals, id: \.id) { item in
-                                Button {
-                                    selectedDeal = item
-                                } label: {
-                                    DealItemView(
-                                        deal: item,
-                                        dealRoleType: dealRole(deal: item))
+                        .padding(EdgeInsets(top: 16, leading: 8, bottom: 12, trailing: 8))
+
+                        switch viewModel.state.dealsState {
+                        case .loaded:
+                            if viewModel.deals.isEmpty {
+                                VStack(alignment: .center) {
+                                    Spacer()
+                                    VStack(spacing: 8) {
+                                        Image(systemName: "tray.fill")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 52, height: 52)
+                                            .foregroundColor(R.color.secondaryText.color.opacity(0.3))
+                                        Text("No active deals")
+                                            .font(.body.weight(.medium))
+                                            .foregroundColor(R.color.secondaryText.color)
+                                    }
+
+                                    Spacer()
                                 }
+                                .padding(50)
+                            } else {
+                                LazyVGrid(columns: Constants.columns, spacing: 4) {
+                                    ForEach(viewModel.deals, id: \.id) { item in
+                                        Button {
+                                            selectedDeal = item
+                                        } label: {
+
+                                            DealItemView(
+                                                amountFormatted: item.amountFormatted,
+                                                tokenSymbol: item.token.code,
+                                                withPublicKey: item.getPartnersBy(viewModel.state.account.publicKey),
+                                                status: item.status,
+                                                roleType: dealRole(deal: item))
+
+                                        }
+                                    }
+                                }
+                                .padding(.bottom, 42)
                             }
+
+                        case .loading:
+                            HStack(alignment: .center) {
+                                ProgressView()
+                            }
+                            .padding(50)
                         }
                     }
-                    .padding(15)
+                    .padding(4)
+                    
 
                 }.refreshableCompat(loadingViewBackgroundColor: .clear, onRefresh: { done in
-                    viewModel.trigger(.load) {
+                    viewModel.trigger(.load(dealsType)) {
                         done()
                     }
                 }, progress: { state in
@@ -97,9 +150,24 @@ struct MainView: View {
                         $0.hidesWhenStopped = false
                     }
                 })
+                .onChange(of: dealsType, perform: { newType in
+                    viewModel.trigger(.load(newType))
+                })
+                .confirmationDialog(Text("Filter"), isPresented: $showDealFilter, actions: {
+                    ForEach(MainViewModel.State.DealType.allCases, id: \.self) { type in
+                        Button(dealTitle(type: type), role: .none) {
+                            dealsType = type
+                        }
+                    }
+
+
+                })
 
                 .sheet(item: $sheetType, content: { type in
                     switch type {
+                    case .wrap(let from, let to):
+                        wrapView(amountNativeToken: from, amountWrapToken: to)
+                            // .interactiveDismiss(canDismissSheet: false)
                     case .newDeal:
                         CreateDealView(
                             viewModel: AnyViewModel<CreateDealState, CreateDealInput>(CreateDealViewModel(
@@ -107,7 +175,7 @@ struct MainView: View {
                                 accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
                                 dealsAPIService: try? APIServiceFactory.shared.makeDealsService()))) { deal in
                                     selectedDeal = deal
-                                    viewModel.trigger(.load)
+                                    viewModel.trigger(.load(dealsType))
                                 }
                                 .interactiveDismiss(canDismissSheet: false)
                     case .menu:
@@ -131,8 +199,6 @@ struct MainView: View {
                         } else {
                             EmptyView()
                         }
-
-
                     }
                 })
                 .navigationDestination(for: $selectedDeal) { deal in
@@ -146,7 +212,7 @@ struct MainView: View {
                         } label: {
                             VStack(alignment: .center, spacing: 3) {
                                 Text("Account")
-                                    .font(.callout)
+                                    .font(.callout.monospaced())
                                     .fontWeight(.medium)
                                 HStack {
                                     Constants.qrCode
@@ -154,7 +220,7 @@ struct MainView: View {
                                         .frame(width: 12, height: 12)
                                         .foregroundColor(R.color.accentColor.color)
                                     Text(ContentMask.mask(from: viewModel.state.account.publicKey))
-                                        .font(.footnote)
+                                        .font(.footnote.monospaced())
                                         .foregroundColor(R.color.secondaryText.color)
                                 }
                             }
@@ -183,53 +249,62 @@ struct MainView: View {
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarColor()
             .onAppear{
-                viewModel.trigger(.load)
+                viewModel.trigger(.preload)
+                viewModel.trigger(.load(dealsType))
             }
             .tintIfCan(R.color.textBase.color)
-
         }
-
-        
     }
 
     @ViewBuilder
     func dealView(deal: Deal) -> some View {
         DealView(viewModel: AnyViewModel<DealState, DealInput>(DealViewModel(
-            state: DealState(account: viewModel.account, deal: deal),
+            state: DealState(account: viewModel.account, availableTokens: viewModel.availableTokens, deal: deal),
             dealService: try? APIServiceFactory.shared.makeDealsService(),
             transactionSignService: ServiceFactory.shared.makeTransactionSign(),
             filesAPIService: try? APIServiceFactory.shared.makeFileService(),
-            secretStorage: SharedSecretStorageImpl()))) {
-                viewModel.trigger(.load)
+            secretStorage: SharedSecretStorageImpl())),
+                 availableTokens: viewModel.availableTokens) {
+                viewModel.trigger(.load(dealsType))
             }
     }
 
-    func dealRole(deal: Deal) -> DealItemView.DealRoleType {
+    @ViewBuilder
+    func wrapView(amountNativeToken: Amount, amountWrapToken: Amount) -> some View {
+
+        WrapTokenView(viewModel: AnyViewModel<WrapTokenState, WrapTokenInput>(WrapTokenViewModel(state: .init(account: viewModel.account, amountNativeToken: amountNativeToken, amountWrapToken: amountWrapToken), accountService: (try? APIServiceFactory.shared.makeAccountService()))))
+    }
+
+    private func dealRole(deal: Deal) -> DealItemView.DealRoleType {
         if deal.ownerPublicKey == viewModel.state.account.publicKey
             && deal.ownerRole == .executor {
-            return .pay
+            return .receive
         }
 
         if deal.checkerPublicKey == viewModel.state.account.publicKey
             && deal.ownerPublicKey != viewModel.state.account.publicKey {
             return .checker
         }
-        return .receive
+        return .pay
+    }
+
+    private func dealTitle(type: MainViewModel.State.DealType) -> String {
+        switch type {
+        case .all:
+            return "Latest"
+        case .isChecker:
+            return "For checking"
+        case .isClient:
+            return "As client"
+        case .isExecutor:
+            return "For execute"
+        }
     }
 }
 
 extension MainView.SheetType: Identifiable {
     var id: String {
-        switch self {
-        case .newDeal:
-            return "newDeal"
-        case .menu:
-            return "menu"
-        case .qrScan:
-            return "qrScan"
-        case .sharePublicKey:
-            return "sharePublicKey"
-        }
+        return "\(self)"
     }
 }
 
@@ -241,7 +316,7 @@ import ContractusAPI
 struct MainView_Previews: PreviewProvider {
 
     static var previews: some View {
-        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(account: Mock.account, accountAPIService: nil, dealsAPIService: nil))) {
+        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(account: Mock.account, accountAPIService: nil, dealsAPIService: nil, resourcesAPIService: nil))) {
 
         }
     }

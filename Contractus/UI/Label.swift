@@ -107,9 +107,42 @@ struct Label: View {
 
 struct Label_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
-            Label(text: "Signed", type: .default)
-            Label(text: "Test", type: .success)
+        Group {
+            VStack {
+                Label(text: "Signed", type: .default)
+                Label(text: "Test", type: .success)
+                Label(text: "Test", type: .primary)
+                Label(text: "Test", type: .attention)
+            }
         }
+        .preferredColorScheme(.light)
+        .previewDisplayName("Light theme")
+        Group {
+            VStack {
+                VStack {
+                    Label(text: "Signed", type: .default)
+                    Label(text: "Test", type: .success)
+                    Label(text: "Test", type: .primary)
+                    Label(text: "Test", type: .attention)
+                }
+                .padding(20)
+                .baseBackground()
+
+                VStack {
+                    Label(text: "Signed", type: .default)
+                    Label(text: "Test", type: .success)
+                    Label(text: "Test", type: .primary)
+                    Label(text: "Test", type: .attention)
+                }
+                .padding(20)
+                .background(R.color.secondaryBackground.color)
+
+            }
+
+        }
+        .preferredColorScheme(.dark)
+        .previewDisplayName("Dark theme")
+
+
     }
 }

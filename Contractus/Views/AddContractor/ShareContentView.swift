@@ -102,7 +102,7 @@ import struct ContractusAPI.ShareableDeal
 
 struct ShareSecretView_Previews: PreviewProvider {
     static var previews: some View {
-        ShareContentView( content: ShareableDeal(dealId: "", secretBase64: ""), topTitle: "", title: "Share some data") { _ in
+        ShareContentView( content: ShareableDeal(dealId: "", secretBase64: ""), topTitle: "New title", title: "Share some data", subTitle: "Some text describe sharable content") { _ in
 
         } dismissAction: {
 

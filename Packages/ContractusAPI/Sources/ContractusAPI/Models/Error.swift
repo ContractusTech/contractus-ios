@@ -32,9 +32,10 @@ public enum APIClientError: Error, LocalizedError {
         case .commonError(let error):
             return error.localizedDescription
         case .serviceError(let error):
-            return error.error
+            return error.message ?? error.error
         case .unknownError:
             return "Something wrong"
         }
     }
+    
 }

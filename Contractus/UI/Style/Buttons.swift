@@ -95,7 +95,7 @@ struct RoundedSecondaryMediumButton: ButtonStyle {
                 .clipShape(RoundedRectangle(cornerRadius: 50))
 
                 .overlay(RoundedRectangle(cornerRadius: 24)
-                    .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1.2))
+                    .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1.4))
                 .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
                 .animation(.easeInOut(duration: 0.03))
                 // .opacity(isEnabled ? 1 : DISABLE_OPACITY)

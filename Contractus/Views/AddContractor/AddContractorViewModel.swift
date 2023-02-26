@@ -45,7 +45,7 @@ struct AddContractorState {
 
     }
 
-    var accountIsClient: Bool {
+    var ownerIsClient: Bool {
         deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey
     }
 }
@@ -92,7 +92,8 @@ final class AddContractorViewModel: ViewModel {
                     switch result {
                     case .failure(let error):
                         debugPrint(error)
-                        self.state.errorState = .error(error.localizedDescription)
+                        self.state.errorState = .error(error.readableDescription)
+                        self.state.state = .none
                     case .finished:
                         break
                     }

@@ -10,8 +10,8 @@ import SolanaSwift
 import TweetNacl
 
 protocol TransactionSignService {
-    func signIfNeeded(txBase64: String, by secretKey: Data) throws -> (signature: String, signedMessage: String)
-    func isSigned(txBase64: String, signatureBase64: String, publicKey: Data) -> Bool
+    func sign(txBase64: String, by secretKey: Data) throws -> (signature: String, message: String)
+    func isSigned(txBase64: String, publicKey: Data) -> Bool
 }
 
 final class SolanaTransactionSignServiceImpl: TransactionSignService {
@@ -21,30 +21,27 @@ final class SolanaTransactionSignServiceImpl: TransactionSignService {
     }
 
     /// Return signed Transaction as Base64 string and Signature
-    func signIfNeeded(txBase64: String, by secretKey: Data) throws -> (signature: String, signedMessage: String) {
+    func sign(txBase64: String, by secretKey: Data) throws -> (signature: String, message: String) {
         guard let account = try? Account(secretKey: secretKey), let dataToSign = Data(base64Encoded: txBase64) else {
             throw TransactionSignServiceError.failed
         }
 
-        guard let signature = try? NaclSign.signDetached(message: dataToSign, secretKey: secretKey) else {
+        var tx = try Transaction.from(data: dataToSign)
+        try tx.partialSign(signers: [account])
+        guard let sign = tx.signatures.last(where: {$0.publicKey == account.publicKey}) else {
             throw TransactionSignServiceError.failed
         }
-        let signed = try NaclSign.signDetachedVerify(message: dataToSign, sig: signature, publicKey: account.publicKey.data)
-        if signed {
-            return (signature.base64EncodedString(), txBase64)
-        }
 
-        guard let signedMessage = try? NaclSign.sign(message: dataToSign, secretKey: secretKey)
-        else {
+        guard let signBase64 = sign.signature?.base64EncodedString() else {
             throw TransactionSignServiceError.failed
-
         }
-        return (signature.base64EncodedString(), signedMessage.base64EncodedString())
+        return (signBase64, try tx.serialize().base64EncodedString())
     }
 
-    func isSigned(txBase64: String, signatureBase64: String, publicKey: Data) -> Bool {
-        guard let dataToSign = Data(base64Encoded: txBase64), let signature = Data(base64Encoded: signatureBase64) else { return false }
-        let signed = try? NaclSign.signDetachedVerify(message: dataToSign, sig: signature, publicKey: publicKey)
-        return signed ?? false
+    func isSigned(txBase64: String, publicKey: Data) -> Bool {
+        
+        guard let dataToSign = Data(base64Encoded: txBase64), let publicKey = try? PublicKey(data: publicKey) else { return false }
+        var tx = try? Transaction.from(data: dataToSign)
+        return tx?.signatures.first(where: {$0.publicKey == publicKey && $0.signature != nil}) != nil
     }
 }

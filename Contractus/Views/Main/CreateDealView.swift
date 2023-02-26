@@ -61,7 +61,7 @@ struct DealRoleView: View {
             .background(
                 RoundedRectangle(cornerRadius: 16)
                 
-                    .stroke(isSelected ? R.color.textBase.color : R.color.baseSeparator.color, lineWidth: 1)
+                    .stroke(isSelected ? R.color.textBase.color : R.color.buttonBorderSecondary.color, lineWidth: 1)
                     .background(
                         RoundedRectangle(cornerRadius: 16)
                             .fill(R.color.secondaryBackground.color)
@@ -106,49 +106,52 @@ struct CreateDealView: View {
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottomLeading) {
-                NavigationLink(destination: LazyView(ShareContentView(
-                    informationType: .success,
-                    content:viewModel.state.shareable!,
-                    topTitle: "Created",
-                    title: "The secret key",
-                    subTitle: "The partner need scan the QR code to start working on the contract.",
-                    copyAction: { _ in
-                        
-                    },
-                    dismissAction: {
-                        presentationMode.wrappedValue.dismiss()
-                    })
-                ), isActive: $isShowShareSecretKey, label: { EmptyView() })
-                .isDetailLink(false)
-                VStack {
+                ScrollView {
+                    NavigationLink(destination: LazyView(ShareContentView(
+                        informationType: .success,
+                        content:viewModel.state.shareable!,
+                        topTitle: "Created",
+                        title: "The secret key",
+                        subTitle: "The partner need scan the QR code to start working on the contract.",
+                        copyAction: { _ in
 
-                    TopTextBlockView(
-                        informationType: .none,
-                        headerText: R.string.localizable.newDealTitle(),
-                        titleText: R.string.localizable.newDealSubtitle(),
-                        subTitleText: nil)
+                        },
+                        dismissAction: {
+                            presentationMode.wrappedValue.dismiss()
+                        })
+                    ), isActive: $isShowShareSecretKey, label: { EmptyView() })
+                    .isDetailLink(false)
+                    VStack {
 
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
-                    VStack(spacing: 12) {
-                        DealRoleView(type: .client, isSelected: selectedType == .client) { role in
-                            selectedType = role
+                        TopTextBlockView(
+                            informationType: .none,
+                            headerText: R.string.localizable.newDealTitle(),
+                            titleText: R.string.localizable.newDealSubtitle(),
+                            subTitleText: nil)
+
+//                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
+                        VStack(spacing: 12) {
+                            DealRoleView(type: .client, isSelected: selectedType == .client) { role in
+                                selectedType = role
+                            }
+                            DealRoleView(type: .executor, isSelected: selectedType == .executor) { role in
+                                selectedType = role
+                            }
+                            Spacer()
+                        }.padding()
+                    }
+                    .onChange(of: viewModel.state.state) { newValue in
+                        if newValue == .success {
+                            didCreated?(viewModel.state.createdDeal)
+                            isShowShareSecretKey.toggle()
                         }
-                        DealRoleView(type: .executor, isSelected: selectedType == .executor) { role in
-                            selectedType = role
-                        }
-                        Spacer()
-                    }.padding()
-                }
-                .onChange(of: viewModel.state.state) { newValue in
-                    if newValue == .success {
-                        didCreated?(viewModel.state.createdDeal)
-                        isShowShareSecretKey.toggle()
                     }
                 }
+
                 CButton(title: R.string.localizable.commonCreate(), style: .primary, size: .large, isLoading: viewModel.state.state == .creating, isDisabled: selectedType == nil) {
                     viewModel.trigger(selectedType == .client ? .createDealAsClient : .createDealAsExecutor)
                 }
-                .padding(EdgeInsets(top: 16, leading: 16, bottom: 24, trailing: 16))
+                .padding(EdgeInsets(top: 16, leading: 16, bottom: 28, trailing: 16))
             }
             .baseBackground()
             .edgesIgnoringSafeArea(.bottom)

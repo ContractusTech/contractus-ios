@@ -88,7 +88,7 @@ struct R: Rswift.Validatable {
     try intern.validate()
   }
 
-  /// This `R.color` struct is generated, and contains static references to 30 colors.
+  /// This `R.color` struct is generated, and contains static references to 37 colors.
   struct color {
     /// Color `AccentColor`.
     static let accentColor = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentColor")
@@ -104,6 +104,16 @@ struct R: Rswift.Validatable {
     static let buttonBackgroundPrimary = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonBackground-Primary")
     /// Color `ButtonBackground-Secondary`.
     static let buttonBackgroundSecondary = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonBackground-Secondary")
+    /// Color `ButtonBackground-Warn`.
+    static let buttonBackgroundWarn = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonBackground-Warn")
+    /// Color `ButtonBorder-Cancel`.
+    static let buttonBorderCancel = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonBorder-Cancel")
+    /// Color `ButtonBorder-Primary`.
+    static let buttonBorderPrimary = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonBorder-Primary")
+    /// Color `ButtonBorder-Secondary`.
+    static let buttonBorderSecondary = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonBorder-Secondary")
+    /// Color `ButtonBorder-Warn`.
+    static let buttonBorderWarn = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonBorder-Warn")
     /// Color `ButtonIconBase`.
     static let buttonIconBase = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonIconBase")
     /// Color `ButtonText-Cancel`.
@@ -140,8 +150,12 @@ struct R: Rswift.Validatable {
     static let secondaryText = Rswift.ColorResource(bundle: R.hostingBundle, name: "SecondaryText")
     /// Color `ShadowColor`.
     static let shadowColor = Rswift.ColorResource(bundle: R.hostingBundle, name: "ShadowColor")
+    /// Color `Text-Warn`.
+    static let textWarn = Rswift.ColorResource(bundle: R.hostingBundle, name: "Text-Warn")
     /// Color `TextBase`.
     static let textBase = Rswift.ColorResource(bundle: R.hostingBundle, name: "TextBase")
+    /// Color `TextFieldBackground`.
+    static let textFieldBackground = Rswift.ColorResource(bundle: R.hostingBundle, name: "TextFieldBackground")
     /// Color `TextFieldBorder`.
     static let textFieldBorder = Rswift.ColorResource(bundle: R.hostingBundle, name: "TextFieldBorder")
     /// Color `ThirdBackground`.
@@ -211,6 +225,51 @@ struct R: Rswift.Validatable {
     @available(iOS 11.0, *)
     static func buttonBackgroundSecondary(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
       return UIKit.UIColor(resource: R.color.buttonBackgroundSecondary, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "ButtonBackground-Warn", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func buttonBackgroundWarn(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.buttonBackgroundWarn, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "ButtonBorder-Cancel", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func buttonBorderCancel(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.buttonBorderCancel, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "ButtonBorder-Primary", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func buttonBorderPrimary(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.buttonBorderPrimary, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "ButtonBorder-Secondary", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func buttonBorderSecondary(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.buttonBorderSecondary, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "ButtonBorder-Warn", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func buttonBorderWarn(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.buttonBorderWarn, compatibleWith: traitCollection)
     }
     #endif
 
@@ -377,11 +436,29 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "Text-Warn", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func textWarn(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.textWarn, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIColor(named: "TextBase", bundle: ..., traitCollection: ...)`
     @available(tvOS 11.0, *)
     @available(iOS 11.0, *)
     static func textBase(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
       return UIKit.UIColor(resource: R.color.textBase, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "TextFieldBackground", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func textFieldBackground(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.textFieldBackground, compatibleWith: traitCollection)
     }
     #endif
 
@@ -474,6 +551,46 @@ struct R: Rswift.Validatable {
     @available(watchOSApplicationExtension 4.0, *)
     static func buttonBackgroundSecondary(_: Void = ()) -> UIKit.UIColor? {
       return UIKit.UIColor(named: R.color.buttonBackgroundSecondary.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "ButtonBackground-Warn", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func buttonBackgroundWarn(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.buttonBackgroundWarn.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "ButtonBorder-Cancel", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func buttonBorderCancel(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.buttonBorderCancel.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "ButtonBorder-Primary", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func buttonBorderPrimary(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.buttonBorderPrimary.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "ButtonBorder-Secondary", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func buttonBorderSecondary(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.buttonBorderSecondary.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "ButtonBorder-Warn", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func buttonBorderWarn(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.buttonBorderWarn.name)
     }
     #endif
 
@@ -622,10 +739,26 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(watchOS)
+    /// `UIColor(named: "Text-Warn", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func textWarn(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.textWarn.name)
+    }
+    #endif
+
+    #if os(watchOS)
     /// `UIColor(named: "TextBase", bundle: ..., traitCollection: ...)`
     @available(watchOSApplicationExtension 4.0, *)
     static func textBase(_: Void = ()) -> UIKit.UIColor? {
       return UIKit.UIColor(named: R.color.textBase.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "TextFieldBackground", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func textFieldBackground(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.textFieldBackground.name)
     }
     #endif
 
@@ -735,7 +868,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 114 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 115 localization keys.
     struct localizable {
       /// en translation: A new way to collaborate and make business with partners. Create contract, sign, check result and pay. Securely.
       ///
@@ -753,6 +886,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let mainTitleActiveContracts = Rswift.StringResource(key: "main.title.active-contracts", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Active deals
+      ///
+      /// Locales: en
+      static let mainTitleDeals = Rswift.StringResource(key: "main.title.deals", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Add
       ///
       /// Locales: en
@@ -765,11 +902,15 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorTitleContractor = Rswift.StringResource(key: "addContractor.title.contractor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: After this Account checks the result of the contract, you get paid.
+      ///
+      /// Locales: en
+      static let dealHintYouExecutor = Rswift.StringResource(key: "deal.hint.you-executor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: After verification by this Account of the result of the contract, the partner receives payment.
       ///
       /// Locales: en
       static let dealHintVerifier = Rswift.StringResource(key: "deal.hint.verifier", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: After your verification of the result of the contract, the partner receives payment.
+      /// en translation: After you check the result of the contract, the contractor receives payment.
       ///
       /// Locales: en
       static let dealHintYouVerifier = Rswift.StringResource(key: "deal.hint.you-verifier", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
@@ -873,10 +1014,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonDeal = Rswift.StringResource(key: "common.deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Deals
-      ///
-      /// Locales: en
-      static let mainTitleDeals = Rswift.StringResource(key: "main.title.deals", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Details
       ///
       /// Locales: en
@@ -1181,7 +1318,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonYou = Rswift.StringResource(key: "common.you", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: You need set account for verification result of work by contract.
+      /// en translation: You need to specify the Account that will check the result of the contract.
       ///
       /// Locales: en
       static let dealHintEmptyVerifier = Rswift.StringResource(key: "deal.hint.empty-verifier", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
@@ -1260,6 +1397,21 @@ struct R: Rswift.Validatable {
         return String(format: format, locale: locale, value1)
       }
 
+      /// en translation: Active deals
+      ///
+      /// Locales: en
+      static func mainTitleDeals(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("main.title.deals", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "main.title.deals"
+        }
+
+        return NSLocalizedString("main.title.deals", bundle: bundle, comment: "")
+      }
+
       /// en translation: Add
       ///
       /// Locales: en
@@ -1305,6 +1457,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("addContractor.title.contractor", bundle: bundle, comment: "")
       }
 
+      /// en translation: After this Account checks the result of the contract, you get paid.
+      ///
+      /// Locales: en
+      static func dealHintYouExecutor(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.hint.you-executor", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.hint.you-executor"
+        }
+
+        return NSLocalizedString("deal.hint.you-executor", bundle: bundle, comment: "")
+      }
+
       /// en translation: After verification by this Account of the result of the contract, the partner receives payment.
       ///
       /// Locales: en
@@ -1320,7 +1487,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.hint.verifier", bundle: bundle, comment: "")
       }
 
-      /// en translation: After your verification of the result of the contract, the partner receives payment.
+      /// en translation: After you check the result of the contract, the contractor receives payment.
       ///
       /// Locales: en
       static func dealHintYouVerifier(preferredLanguages: [String]? = nil) -> String {
@@ -1708,21 +1875,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.deal", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Deals
-      ///
-      /// Locales: en
-      static func mainTitleDeals(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("main.title.deals", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "main.title.deals"
-        }
-
-        return NSLocalizedString("main.title.deals", bundle: bundle, comment: "")
       }
 
       /// en translation: Details
@@ -2867,7 +3019,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.you", bundle: bundle, comment: "")
       }
 
-      /// en translation: You need set account for verification result of work by contract.
+      /// en translation: You need to specify the Account that will check the result of the contract.
       ///
       /// Locales: en
       static func dealHintEmptyVerifier(preferredLanguages: [String]? = nil) -> String {

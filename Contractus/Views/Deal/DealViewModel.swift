@@ -14,26 +14,34 @@ import BigInt
 
 enum DealViewModelError: Error {
     case invalidSharedKey
+    case errorDealUpdated
 }
 
 enum DealInput {
     case changeAmount(Amount)
     case changeCheckerAmount(Amount)
     case update(Deal?)
+    case updateTx
     case openFile(MetadataFile)
     case updateContent(DealMetadata, DealsService.ContentType)
     case deleteMetadataFile(MetadataFile)
     case deleteResultFile(MetadataFile)
     case cancel
     case cancelDownload
+    case cancelSign
     case none
     case saveKey(ScanResult)
+    case hideError
 }
 
 struct DealState {
 
     enum State: Equatable {
-        case loading, error(String), success, none
+        case loading, success, none
+    }
+
+    enum ErrorState: Equatable {
+        case error(String)
     }
     enum FileState: Equatable {
         case filePreview(URL), none, downloading(Double), decrypting
@@ -53,6 +61,7 @@ struct DealState {
     }
 
     let account: CommonAccount
+    let availableTokens: [ContractusAPI.Token]
     var deal: ContractusAPI.Deal
     var shareDeal: ShareableDeal?
     var canEdit: Bool = false
@@ -64,8 +73,7 @@ struct DealState {
     var decryptedFiles: [String:URL] = [:]
     var decryptingFiles: [String:Bool] = [:]
     var isSignedByPartner: Bool = false
-
-
+    var errorState: ErrorState?
 
     var isOwnerDeal: Bool {
         deal.ownerPublicKey == account.publicKey
@@ -84,7 +92,7 @@ struct DealState {
     }
 
     var clientIsChecker: Bool {
-        deal.checkerPublicKey == deal.ownerPublicKey && deal.ownerRole == .client
+        deal.checkerPublicKey == account.publicKey
     }
 
     var ownerIsClient: Bool {
@@ -92,7 +100,9 @@ struct DealState {
     }
 
     var isYouExecutor: Bool {
-        deal.ownerRole == .client && deal.contractorPublicKey == account.publicKey
+        (deal.ownerRole == .client && deal.contractorPublicKey == account.publicKey) ||
+        deal.ownerRole == .executor && deal.ownerPublicKey == account.publicKey
+
     }
 
     var isYouChecker: Bool {
@@ -149,6 +159,7 @@ final class DealViewModel: ViewModel {
         secretStorage: SharedSecretStorage?)
     {
         self.state = state
+        self.state.state = .loading
         self.dealService = dealService
         self.filesAPIService = filesAPIService
         self.transactionSignService = transactionSignService
@@ -159,13 +170,29 @@ final class DealViewModel: ViewModel {
 
     func trigger(_ input: DealInput, after: AfterTrigger? = nil) {
         switch input {
+        case .hideError:
+            state.errorState = nil
+        case .cancelSign:
+            Task { @MainActor in
+                do {
+                    state.state = .loading
+                    try await cancelSign()
+                    loadActualTx()
+
+                } catch(let error) {
+                    state.errorState = .error(error.readableDescription)
+                    state.state = .none
+                }
+
+
+            }
         case .cancel:
             state.state = .loading
             dealService?.cancel(dealId: state.deal.id, force: false, completion: { [weak self] result in
                 self?.state.state = .none
                 switch result {
                 case .failure(let error):
-                    self?.state.state = .error(error.localizedDescription)
+                    self?.state.errorState = .error(error.localizedDescription)
                 case .success(let deal):
                     after?()
                 }
@@ -178,43 +205,36 @@ final class DealViewModel: ViewModel {
             case .publicKey:
                 break
             case .deal(let shareData):
-                guard shareData.command == .shareDealSecret else {
-                    return
-                }
-                recoverSharedKey(partnerKey: shareData.secretBase64)
-                    .receive(on: RunLoop.main)
-                    .sink { result in
-                        switch result {
-                        case .failure:
-                            self.state.canEdit = false
-                        case .finished:
-                            self.state.canEdit = true
-                        }
-                    } receiveValue: { key in
-                        self.state.decryptedKey = key
-                        try? self.secretStorage?.saveSharedSecret(for: self.state.deal.id, sharedSecret: key)
+                guard shareData.command == .shareDealSecret else { return }
+                Task { @MainActor in
+                    guard
+                        let clientKeyData = Data(base64Encoded: shareData.secretBase64),
+                        let secretKey = await recoverSharedKey(clientKeyData: clientKeyData)
+                    else {
+                        self.state.canEdit = false
+                        return
                     }
-                    .store(in: &cancelable)
+                    self.state.canEdit = true
+                    self.state.decryptedKey = secretKey
+                    try? self.secretStorage?.saveSharedSecret(for: self.state.deal.id, sharedSecret: clientKeyData)
+                }
             }
 
         case .changeAmount(let amount):
             state.deal.amount = amount.value
-            state.deal.currency = amount.currency
+            state.deal.token = amount.token
         case .changeCheckerAmount(let amount):
             state.deal.checkerAmount = amount.value
+        case .updateTx:
+            loadActualTx()
         case .update(let deal):
             if let deal = deal {
                 self.state.deal = deal
                 return
             }
-            guard let dealService = dealService else { return }
-            dealService.getDeal(id: state.deal.id) { result in
-                switch result {
-                case .success(let deal):
-                    self.state.deal = deal
-                case .failure(let error):
-                    break
-                }
+            Task { @MainActor in
+                guard let deal = try? await getDeal() else { return }
+                self.state.deal = deal
             }
         case .updateContent(let content, let contentType):
             switch contentType {
@@ -270,7 +290,7 @@ final class DealViewModel: ViewModel {
     // MARK: - Private Methods
 
     private func loadActualTx() {
-        Task {
+        Task { @MainActor in
             do {
                 let tx = try await getActualTx()
                 var signature: String?
@@ -292,7 +312,6 @@ final class DealViewModel: ViewModel {
                 }
                 let isSigned = transactionSignService?.isSigned(
                     txBase64: tx.transaction,
-                    signatureBase64: signature,
                     publicKey: state.account.publicKeyData) ?? false
                 let actions = getDealActions(for: state.deal, isSigned: isSigned)
                 await MainActor.run(body: {[weak self, actions, isSignedByPartner] in
@@ -300,13 +319,23 @@ final class DealViewModel: ViewModel {
                     self?.state.currentMainActions = actions
                 })
                 
-            } catch let error as ContractusAPI.APIClientError {
+             } catch let error as ContractusAPI.APIClientError {
                 switch error {
                 case .serviceError(let info):
                     if info.statusCode == 404 {
                         await MainActor.run(body: {[weak self] in
                             self?.state.isSignedByPartner = false
                             self?.state.currentMainActions = [.sign]
+                            self?.state.canSign = true
+                        })
+                        return
+                    }
+                    if info.statusCode == 405 {
+                        await MainActor.run(body: {[weak self] in
+                            self?.state.isSignedByPartner = false
+                            self?.state.currentMainActions = [.sign]
+                            self?.state.canSign = false
+
                         })
                         return
                     }
@@ -325,82 +354,69 @@ final class DealViewModel: ViewModel {
             decryptKey()
         } else {
 
-            guard let partnerKeyData = secretStorage?.getSharedSecret(for: state.deal.id),
-                  let key = String(data: partnerKeyData, encoding: .utf8) else { return }
-
-            recoverSharedKey(partnerKey: key)
-                .receive(on: RunLoop.main)
-                .sink { result in
-                    switch result {
-                    case .failure:
-                        self.state.canEdit = false
-                    case .finished:
-                        self.state.canEdit = true
-                    }
-                } receiveValue: { key in
-                    self.state.decryptedKey = key
+            guard let clientSecret = secretStorage?.getSharedSecret(for: state.deal.id) else {
+                self.state.canEdit = false
+                return
+            }
+            Task { @MainActor in
+                guard let secretKey = await recoverSharedKey(clientKeyData: clientSecret) else {
+                    self.state.canEdit = false
+                    return
                 }
-                .store(in: &cancelable)
+                self.state.decryptedKey = secretKey
+                self.state.canEdit = true
+            }
+
         }
     }
 
     private func decryptKey() {
         guard let key = state.deal.encryptedSecretKey else { return }
-        Crypto.decrypt(base64Encrypted: key, with: state.account.privateKey)
-            .flatMap({ secretKey -> Future<(Data, String), Error> in
-                Future { promise in
-                    do {
-                        let sharedSecrets = try SSS.createShares(data: [UInt8](secretKey), n: 2, k: 2)
-                        let partnerSecretPartBase64 = Data(sharedSecrets.last ?? []).base64EncodedString()
-                        promise(.success((secretKey, partnerSecretPartBase64)))
-                    } catch {
-                        promise(.failure(error))
-                    }
-                }
-            })
-            .receive(on: RunLoop.main)
-            .sink { result in
-                switch result {
-                case .failure:
-                    self.state.canEdit = false
-                    self.state.decryptedKey = Data()
-                case .finished:
-                    break
-                }
+        Task { @MainActor in
 
-            } receiveValue: { (decryptedKey, partnerSecretPartBase64) in
-                self.state.decryptedKey = decryptedKey
-                self.state.partnerSecretPartBase64 = partnerSecretPartBase64
-                self.state.shareDeal = ShareableDeal(dealId: self.state.deal.id, secretBase64: partnerSecretPartBase64)
-                self.state.canEdit = true
-            }.store(in: &cancelable)
-
-    }
-
-    private func recoverSharedKey(partnerKey: String) -> Future<Data, Error> {
-        Future { promise in
-            guard
-                let keyPart1 = self.state.deal.sharedKey,
-                let part1Data = Data(base64Encoded: keyPart1),
-                let part2Data = Data(base64Encoded: partnerKey),
-                let hash = self.state.deal.secretKeyHash else { return promise(.failure(DealViewModelError.invalidSharedKey)) }
-
-            do {
-                let secretKey = try SSS.combineShares(data: [[UInt8](part1Data), [UInt8](part2Data)])
-                let decryptKeyData = Data(secretKey!)
-                if Crypto.checkSum(data: decryptKeyData, hashSHA3: hash) {
-                    return promise(.success(decryptKeyData))
-                } else {
-                    promise(.failure(DealViewModelError.invalidSharedKey))
-                    return
-                }
-            } catch {
-                promise(.failure(error))
+            guard let secret = try? await SharedSecretService.encryptSharedSecretKey(base64String:key, hashOriginalKey: state.deal.secretKeyHash,  privateKey:state.account.privateKey) else {
+                self.state.canEdit = false
+                self.state.decryptedKey = Data()
+                return
             }
+
+            let partnerSecretPartBase64 = secret.clientSecret.base64EncodedString()
+            self.state.decryptedKey = secret.secretKey
+            self.state.partnerSecretPartBase64 = partnerSecretPartBase64
+            self.state.shareDeal = ShareableDeal(dealId: self.state.deal.id, secretBase64: partnerSecretPartBase64)
+            self.state.canEdit = true
+
         }
     }
 
-    private func getActualTx() async throws -> DealTransaction {
+    private func recoverSharedKey(clientKeyData: Data) async -> Data? {
+
+        guard
+            let serverKey = self.state.deal.sharedKey,
+            let serverKeyData = Data(base64Encoded: serverKey)
+        else {
+            return nil
+        }
+        guard let secretData = try? await SharedSecretService.recover(serverSecret: serverKeyData, clientSecret: clientKeyData, hashOriginalKey: self.state.deal.secretKeyHash ?? "") else {
+            return nil
+        }
+
+        return secretData
+    }
+
+    private func getDeal() async throws -> Deal {
+        try await withCheckedThrowingContinuation({ continuation in
+            guard let dealService = dealService else {
+                continuation.resume(throwing: DealViewModelError.errorDealUpdated)
+                return
+            }
+            dealService.getDeal(id: state.deal.id) { result in
+                continuation.resume(with: result)
+            }
+        })
+    }
+
+    private func getActualTx() async throws -> ContractusAPI.Transaction {
         try await withCheckedThrowingContinuation({ continuation in
             dealService?.getActualTransaction(dealId: state.deal.id, silent: true, completion: { result in
                 continuation.resume(with: result)
@@ -485,6 +501,19 @@ final class DealViewModel: ViewModel {
         }
 
         return actions
+    }
+
+    private func cancelSign() async throws {
+        try await withCheckedThrowingContinuation({ (callback: CheckedContinuation<Void, Error>) in
+            dealService?.cancelSignTransaction(dealId: state.deal.id, completion: { result in
+                switch result {
+                case .success:
+                    callback.resume(returning: Void())
+                case .failure(let error):
+                    callback.resume(throwing: error)
+                }
+            })
+        })
     }
 }
 

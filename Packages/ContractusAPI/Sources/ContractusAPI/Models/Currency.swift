@@ -11,11 +11,13 @@ import BigInt
 public struct Currency: Codable {
 
     public let code: String
+    public let symbol: String
     public let name: String
     public let decimal: UInt8
 
-    public init(code: String, name: String, decimal: UInt8) {
+    public init(code: String, symbol: String, name: String, decimal: UInt8) {
         self.code = code
+        self.symbol = symbol
         self.name = name
         self.decimal = decimal
     }
@@ -23,20 +25,18 @@ public struct Currency: Codable {
 
 public extension Currency {
 
-    static let availableCurrencies: [Currency] = [ sol, usdc ]
+    static let availableCurrencies: [Currency] = [ .usd ]
 
-    static let sol = Currency(code: "SOL", name: "Solana", decimal: 9)
-    static let usdc = Currency(code: "USDC", name: "USD Coin", decimal: 9) // TODO: - поменять 9 -> 6, реальный USDC токен = 6
-    static let usd = Currency(code: "USD", name: "Dollar", decimal: 2)
+    static let usd = Currency(code: "USD", symbol: "$", name: "Dollar", decimal: 2)
 
     static func from(code: String) -> Currency {
         if let currecny = availableCurrencies.first(where: {$0.code == code }) {
             return currecny
         }
-        return Currency(code: code, name: "Unknown", decimal: 0)
+        return Currency(code: code, symbol: "", name: "Unknown", decimal: 0)
     }
     
-    func format(amount: UInt64, withCode: Bool = true, local: Locale = .current) -> String {
+    func format(amount: UInt64, withCode: Bool = true, local: Locale = Locale(identifier: "en")) -> String {
         return format(amount: BigUInt(amount), withCode: withCode, local: local)
     }
 
@@ -46,17 +46,14 @@ public extension Currency {
         formatter.numberStyle = .currency
         formatter.maximumFractionDigits = Int(decimal)
         formatter.currencyCode = ""
-        formatter.currencySymbol = ""
+        formatter.currencySymbol = withCode ? self.symbol : ""
         formatter.locale = local
         let amount = Double(amount) / pow(Double(10), Double(decimal))
         let formattedAmount = formatter.string(from: NSNumber(value: amount)) ?? ""
-        if withCode {
-            return String(format: "%@ %@", code, formattedAmount).trimmingCharacters(in: .whitespacesAndNewlines)
-        }
         return formattedAmount
     }
 
-    func format(string: String, local: Locale = .current) -> BigUInt? {
+    func format(string: String, local: Locale = Locale(identifier: "en")) -> BigUInt? {
         var string = string
         let formatter = NumberFormatter()
         formatter.allowsFloats = true
@@ -70,6 +67,17 @@ public extension Currency {
         }
         guard let amount = formatter.number(from: string) else { return nil }
         return BigUInt(amount.doubleValue * pow(Double(10), Double(decimal)))
+    }
+
+    func format(double: Double, withCode: Bool, local: Locale = Locale(identifier: "en")) -> String? {
+        let formatter = NumberFormatter()
+        formatter.allowsFloats = true
+        formatter.numberStyle = .currency
+        formatter.maximumFractionDigits = Int(decimal)
+        formatter.currencyCode = ""
+        formatter.currencySymbol = withCode ? self.symbol : ""
+        formatter.locale = local
+        return formatter.string(from: double as NSNumber)
     }
 }
 

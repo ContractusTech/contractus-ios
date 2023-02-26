@@ -7,30 +7,53 @@
 
 import SwiftUI
 
+private enum Constants {
+    static let successImage = Image(systemName: "checkmark.seal.fill")
+    static let warningImage = Image(systemName: "exclamationmark.octagon")
+    static let waitingImage = Image(systemName: "clock.fill")
+}
+
 struct TopTextBlockView: View {
 
     enum InformationType {
-        case none, success, warning
+        case none, success, warning, waiting
 
         var image: Image? {
             switch self {
             case .success:
-                return Image(systemName: "checkmark.seal.fill")
+                return Constants.successImage
             case .warning:
-                return Image(systemName: "exclamationmark.octagon")
+                return Constants.warningImage
+            case .waiting:
+                return Constants.waitingImage
             case .none:
                 return nil
             }
         }
 
-        var color: Color {
+        var textColor: Color {
+            switch self {
+            case .success:
+                return R.color.white.color
+            case .none:
+                return R.color.textBase.color
+            case .warning:
+                return R.color.labelTextAttention.color
+            case .waiting:
+                return R.color.white.color
+            }
+        }
+
+        var background: Color {
             switch self {
             case .success:
                 return R.color.baseGreen.color
             case .none:
-                return R.color.secondaryText.color
+                return R.color.secondaryBackground.color
             case .warning:
                 return R.color.yellow.color
+            case .waiting:
+                return R.color.secondaryText.color
             }
         }
     }
@@ -41,56 +64,84 @@ struct TopTextBlockView: View {
     let subTitleText: String?
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 0) {
             if let headerText = headerText, !headerText.isEmpty {
                 HStack {
-                    if let image = informationType.image {
-                        image.resizable()
-                            .frame(width: 16, height: 16)
-                            .foregroundColor(informationType.color)
+                    Spacer()
+                    HStack {
+                        if let image = informationType.image {
+                            image.resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 19, height: 19)
+                                .foregroundColor(informationType.textColor)
+                        }
+                        Text(headerText)
+                            .multilineTextAlignment(.center)
+                            .font(.subheadline.weight(.semibold))
+                            .textCase(.uppercase)
+                            .foregroundColor(informationType.textColor)
                     }
-                    Text(headerText)
-                        .multilineTextAlignment(.center)
-                        .font(.footnote.weight(.semibold))
-                        .textCase(.uppercase)
-                        .foregroundColor(informationType.color)
+                    .padding(EdgeInsets(top: 6, leading: 8, bottom: 6, trailing: 8))
+                    .background(informationType.background)
+                    .cornerRadius(6)
+                    // .shadow(radius: 3)
+                    Spacer()
                 }
-                .padding(EdgeInsets(top: 12, leading: 0, bottom: 0, trailing: 0))
-            }
 
-            Text(titleText)
-                .font(.largeTitle.weight(.heavy))
+                .padding(EdgeInsets(top: 12, leading: 0, bottom: 8, trailing: 0))
+            }
+            HStack {
+                Spacer()
+                Text(titleText)
+                    .font(.largeTitle.weight(.medium))
+                Spacer()
+            }
             if let subTitleText = subTitleText {
-                Text(subTitleText)
-                    .font(.callout)
-                    .multilineTextAlignment(.center)
-                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                HStack {
+                    Spacer()
+                    Text(subTitleText)
+                        .font(.callout)
+                        .multilineTextAlignment(.center)
+                        .padding(EdgeInsets(top: 12, leading: 20, bottom: 0, trailing: 20))
+                    Spacer()
+                }
             }
 
         }
-        .padding(EdgeInsets(top: 0, leading: 16, bottom: 24, trailing: 16))
+        .padding(EdgeInsets(top: 0, leading: 16, bottom: 21, trailing: 16))
     }
 }
 
 struct TopTextBlockView_Previews: PreviewProvider {
     static var previews: some View {
+        ScrollView {
+            VStack {
+                TopTextBlockView(
+                    informationType: .none,
+                    headerText: "Import",
+                    titleText: "Enter private key",
+                    subTitleText: "Of the client who will perform the work under the contract.")
 
-        TopTextBlockView(
-            informationType: .none,
-            headerText: "Import",
-            titleText: "Enter private key",
-            subTitleText: "Of the client who will perform the work under the contract.")
+                TopTextBlockView(
+                    informationType: .success,
+                    headerText: "Import",
+                    titleText: "Enter private key",
+                    subTitleText: "Of the client who will perform the work under the contract.")
 
-        TopTextBlockView(
-            informationType: .success,
-            headerText: "Import",
-            titleText: "Enter private key",
-            subTitleText: "Of the client who will perform the work under the contract.")
+                TopTextBlockView(
+                    informationType: .waiting,
+                    headerText: "In progress",
+                    titleText: "Enter private key",
+                    subTitleText: "Of the client who will perform the work under the contract.")
 
-        TopTextBlockView(
-            informationType: .warning,
-            headerText: "Import",
-            titleText: "Enter private key",
-            subTitleText: "Of the client who will perform the work under the contract.")
+                TopTextBlockView(
+                    informationType: .warning,
+                    headerText: "Import",
+                    titleText: "Enter private key",
+                    subTitleText: "Of the client who will perform the work under the contract.")
+            }
+        }
+
+
     }
 }

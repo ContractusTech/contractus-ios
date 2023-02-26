@@ -10,11 +10,9 @@ import Alamofire
 
 public final class ResourcesService: BaseService {
 
-    public func availableCurrency(completion: @escaping (Swift.Result<[Currency], APIClientError>) -> Void) {
-        self.request(path: .availableCurrencies, httpMethod: .get, data: Empty()) { (result: Swift.Result<[Currency], APIClientError>) in
+    public func tokens(completion: @escaping (Swift.Result<[Token], APIClientError>) -> Void) {
+        self.request(path: .tokens, httpMethod: .get, data: Empty()) { (result: Swift.Result<[Token], APIClientError>) in
             completion(result)
         }
     }
-
-
 }

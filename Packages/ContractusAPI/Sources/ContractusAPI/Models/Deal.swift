@@ -30,7 +30,8 @@ public struct Deal: Decodable {
              amount,
              amountFee,
              checkerAmount,
-             currency,
+             token,
+             tokenAddress,
              updatedAt,
              ownerRole,
              meta,
@@ -50,7 +51,7 @@ public struct Deal: Decodable {
     public var amountFee: BigUInt
     public var checkerAmount: BigUInt?
     public var status: DealStatus
-    public var currency: Currency
+    public var token: Token
     public var updatedAt: String?
     public let ownerRole: OwnerRole
     public var meta: DealMetadata?
@@ -70,7 +71,7 @@ public struct Deal: Decodable {
         amountFee: BigUInt,
         checkerAmount: BigUInt?,
         status: DealStatus,
-        currency: Currency,
+        token: Token,
         updatedAt: String? = nil,
         metaUpdatedAt: String? = nil,
         ownerRole: OwnerRole,
@@ -87,7 +88,7 @@ public struct Deal: Decodable {
         self.createdAt = createdAt
         self.amount = amount
         self.status = status
-        self.currency = currency
+        self.token = token
         self.updatedAt = updatedAt
         self.ownerRole = ownerRole
         self.meta = meta
@@ -98,7 +99,8 @@ public struct Deal: Decodable {
     }
 
     public var amountFormatted: String {
-        currency.format(amount: self.amount, withCode: false)
+        token.format(amount: self.amount, withCode: false)
+
     }
 
     public var metadataIsEmpty: Bool {
@@ -110,12 +112,12 @@ public struct Deal: Decodable {
     }
 
     public var amountFeeFormatted: String {
-        currency.format(amount: self.amountFee, withCode: false)
+        token.format(amount: self.amountFee, withCode: false)
     }
 
     public var amountFeeCheckerFormatted: String? {
         if let checkerAmount = checkerAmount {
-            return currency.format(amount: checkerAmount, withCode: false)
+            return token.format(amount: checkerAmount, withCode: false)
         }
         return nil
     }
@@ -132,8 +134,8 @@ public struct Deal: Decodable {
         self.createdAt = try container.decode(String.self, forKey: .createdAt)
         let amount = try container.decode(String.self, forKey: .amount)
         self.amount = BigUInt(stringLiteral: amount)
-        let currency = try container.decode(String.self, forKey: .currency)
-        self.currency = Currency.from(code: currency)
+        let tokenAddress = try container.decode(String.self, forKey: .tokenAddress)
+        self.token = Token.from(address: tokenAddress)
         self.updatedAt = try? container.decodeIfPresent(String.self, forKey: .updatedAt)
         self.ownerRole = try container.decode(OwnerRole.self, forKey: .ownerRole)
         self.meta = try? container.decodeIfPresent(DealMetadata.self, forKey: .meta)
@@ -146,9 +148,17 @@ public struct Deal: Decodable {
         if let checkerAmount = (try? container.decode(String.self, forKey: .checkerAmount)) {
             self.checkerAmount = BigUInt(stringLiteral: checkerAmount)
         }
+    }
 
+    public func getPartnersBy(_ publicKey: String) -> String? {
+        if self.ownerPublicKey == publicKey {
+            return self.contractorPublicKey
+        }
+        return ownerPublicKey
     }
 }
+
+extension Deal: Equatable {}
 
 public struct NewDeal: Encodable {
     public let role: OwnerRole
@@ -163,26 +173,6 @@ public struct NewDeal: Encodable {
         self.sharedKey = sharedKey
     }
 
-}
-
-
-public struct DealTransaction: Codable {
-    public let type: TransactionType
-    public let transaction: String
-    public let ownerSignature: String?
-    public let contractorSignature: String?
-    public let checkerSignature: String?
-}
-
-public struct SignedDealTransaction: Codable {
-
-    public let transaction: String
-    public let signature: String
-
-    public init(transaction: String, signature: String) {
-        self.transaction = transaction
-        self.signature = signature
-    }
 }
 
 public struct UpdateAmountDeal: Codable {
@@ -201,9 +191,8 @@ public struct CancelDeal: Codable {
     let force: Bool
 }
 
-
 public enum TransactionType: String, Codable {
-    case `init` = "INIT", finish = "FINISH", cancel = "CANCEL"
+    case dealInit = "DEAL_INIT", dealFinish = "DEAL_FINISH", dealCancel = "DEAL_CANCEL", wrapSOL = "WRAP_SOL", unwrapAllSOL = "UNWRAP_ALL_SOL"
 }
 
 public enum AmountFeeType: String, Codable {
@@ -220,8 +209,32 @@ public struct CalculateDealFee: Codable {
     }
 }
 
-public struct DealFee: Codable {
+public struct DealFee: Decodable {
     public let feeAmount: Amount
-    public let fee: Double
+    public let fiatFee: Double
+    public let fiatCurrency: Currency
+    public let isMinimum: Bool
+    public let percent: Double
     public let type: AmountFeeType
+
+    enum CodingKeys: CodingKey {
+        case feeAmount
+        case fiatFee
+        case fiatCurrency
+        case isMinimum
+        case percent
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container: KeyedDecodingContainer<DealFee.CodingKeys> = try decoder.container(keyedBy: DealFee.CodingKeys.self)
+
+        self.feeAmount = try container.decode(Amount.self, forKey: DealFee.CodingKeys.feeAmount)
+        self.fiatFee = try container.decode(Double.self, forKey: DealFee.CodingKeys.fiatFee)
+        let fiatCurrency = try container.decode(String.self, forKey: DealFee.CodingKeys.fiatCurrency)
+        self.fiatCurrency = Currency.from(code: fiatCurrency)
+        self.isMinimum = try container.decode(Bool.self, forKey: DealFee.CodingKeys.isMinimum)
+        self.percent = try container.decode(Double.self, forKey: DealFee.CodingKeys.percent)
+        self.type = try container.decode(AmountFeeType.self, forKey: DealFee.CodingKeys.type)
+    }
 }

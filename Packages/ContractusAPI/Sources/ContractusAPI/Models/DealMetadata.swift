@@ -59,6 +59,10 @@ public struct DealMetadata: Codable, Equatable {
     public var content: TextContent?
     public let files: [MetadataFile]
 
+    public var contentIsEmpty: Bool {
+        content?.text.isEmpty ?? true
+    }
+
     public init(content: TextContent? = nil, files: [MetadataFile]) {
         self.content = content
         self.files = files

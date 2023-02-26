@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-import struct ContractusAPI.Currency
-import struct ContractusAPI.Amount
+import ContractusAPI
 import Introspect
 import Combine
 
@@ -27,22 +26,21 @@ struct ChangeAmountView: View {
 
     @StateObject var viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>
     @State private var amountString: String = ""
-    @State private var currency: Currency
+    @State private var token: ContractusAPI.Token
 
     let amountPublisher = PassthroughSubject<String, Never>()
-    private let availableCurrencies: [ContractusAPI.Currency]
+    private let availableTokens: [ContractusAPI.Token]
     private var didChange: (Amount, AmountValueType) -> Void
 
     init(
         viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>,
-        defaultCurrency: Currency = .usdc,
-        availableCurrencies: [ContractusAPI.Currency] = Currency.availableCurrencies,
+        availableTokens: [ContractusAPI.Token],
         didChange: @escaping (Amount, AmountValueType) -> Void) {
 
             self._amountString = State(initialValue: viewModel.state.amount.formatted())
-            self._currency = State(initialValue: viewModel.state.amount.currency)
+            self._token = State(initialValue: viewModel.state.amount.token)
             self._viewModel = StateObject(wrappedValue: viewModel)
-            self.availableCurrencies = availableCurrencies
+            self.availableTokens = availableTokens
             self.didChange = didChange
 
         }
@@ -53,8 +51,8 @@ struct ChangeAmountView: View {
                 ScrollView {
                     VStack(spacing: 16) {
                         HStack {
-                            Picker("", selection: $currency) {
-                                ForEach(availableCurrencies, id: \.self) {
+                            Picker("", selection: $token) {
+                                ForEach(availableTokens, id: \.self) {
                                     Text($0.code)
                                         .font(.body.weight(.semibold))
                                 }
@@ -68,7 +66,7 @@ struct ChangeAmountView: View {
                                 }
                                 .textFieldStyle(LargeTextFieldStyle())
                         }
-                        .background(R.color.thirdBackground.color)
+                        .background(R.color.textFieldBackground.color)
                         .cornerRadius(12)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
@@ -133,11 +131,11 @@ struct ChangeAmountView: View {
                                 }
 
                                 Spacer()
-                                if viewModel.state.fee == 0 && viewModel.state.state != .loading {
+                                if viewModel.state.feePercent == 0 && viewModel.state.state != .loading {
                                     Label(text: R.string.localizable.changeAmountFeeFree(), type: .primary)
                                 } else {
                                     if !viewModel.state.feeFormatted.isEmpty  {
-                                        Text("\(viewModel.state.feeFormatted) %")
+                                        Text(viewModel.state.feeFormatted)
                                             .font(.body)
                                             .fontWeight(.medium)
                                             .foregroundColor(R.color.textBase.color)
@@ -149,9 +147,17 @@ struct ChangeAmountView: View {
                                 }
                             }
                             VStack(alignment: .leading, spacing: 4) {
+
+                                if !viewModel.state.fiatFeeFormatted.isEmpty {
+                                    Text("Estimate fiat amount \(viewModel.state.fiatFeeFormatted)")
+                                        .font(.footnote.weight(.semibold))
+                                        .foregroundColor(R.color.secondaryText.color)
+                                        .multilineTextAlignment(.leading)
+                                }
+
                                 Text(R.string.localizable.changeAmountFeeCalculateDescription())
                                     .font(.footnote)
-                                    .foregroundColor(R.color.yellow.color)
+                                    .foregroundColor(R.color.labelTextAttention.color)
                                     .multilineTextAlignment(.leading)
                                 Text(R.string.localizable.changeAmountFeeDescription())
                                     .font(.footnote)
@@ -210,7 +216,7 @@ struct ChangeAmountView: View {
                 }
             })
             .onReceive(amountPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main), perform: { amountText in
-                viewModel.trigger(.changeAmount(amountText, currency))
+                viewModel.trigger(.changeAmount(amountText, token))
             })
             .toolbar{
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -233,7 +239,7 @@ struct ChangeAmountView: View {
             .edgesIgnoringSafeArea(.bottom)
         }
         .onAppear {
-            viewModel.trigger(.changeAmount(amountString, currency))
+            viewModel.trigger(.changeAmount(amountString, token))
         }
     }
 
@@ -251,7 +257,7 @@ struct ChangeAmountView_Previews: PreviewProvider {
     static var previews: some View {
         ChangeAmountView(
             viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>(ChangeAmountViewModel(
-                deal: Mock.deal, account: Mock.account, amountType: .deal, dealService: nil))) { _, _  in
+                deal: Mock.deal, account: Mock.account, amountType: .deal, dealService: nil)), availableTokens: SolanaTokens.list) { _, _  in
 
                 }
     }

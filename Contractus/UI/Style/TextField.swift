@@ -11,7 +11,7 @@ struct LargeTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
             configuration
                 .padding(16)
-                .background(R.color.thirdBackground.color)
+                .background(R.color.textFieldBackground.color)
                 .cornerRadius(12)
         }
     

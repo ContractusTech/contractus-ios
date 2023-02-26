@@ -88,6 +88,10 @@ final class UploadFileViewModel: ViewModel {
 
         case .uploadAndUpdate:
             guard let file = self.state.selectedFile else { return }
+            guard !self.secretKey.isEmpty else {
+                debugPrint("Empty Secret Key")
+                return
+            }
             encryptAndUploadFile(file: file)
 
 

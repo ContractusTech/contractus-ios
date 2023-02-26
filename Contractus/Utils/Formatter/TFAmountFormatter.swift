@@ -11,15 +11,16 @@ import ContractusAPI
 
 final class TFAmountFormatter: Formatter {
 
-    var currency: Currency = .usdc
+    var token: Token
 
     override init() {
+        token = SolanaTokens.unknown
         super.init()
     }
 
-    convenience init(currency: Currency) {
+    convenience init(token: Token) {
         self.init()
-        self.currency = currency
+        self.token = token
     }
 
     required init?(coder: NSCoder) {
@@ -27,8 +28,8 @@ final class TFAmountFormatter: Formatter {
     }
 
     override func string(for obj: Any?) -> String? {
-        guard let string = obj as? String, let amount = currency.format(string: string) else { return nil }
-        return currency.format(amount: amount, withCode: false)
+        guard let string = obj as? String, let amount = token.format(string: string) else { return nil }
+        return AmountFormatter.format(amount: amount, token: token)
     }
 
     override func getObjectValue(_ obj: AutoreleasingUnsafeMutablePointer<AnyObject?>?, for string: String, errorDescription error: AutoreleasingUnsafeMutablePointer<NSString?>?) -> Bool {

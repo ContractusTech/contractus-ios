@@ -14,54 +14,62 @@ private enum Constants {
     static let iconChecker = Image(systemName: "person.fill.checkmark")
 }
 
+fileprivate let SIZE_BLOCK: CGFloat = 110
 struct DealItemView: View {
 
     enum DealRoleType {
         case receive, pay, checker
     }
 
-    let deal: Deal
-    let dealRoleType: DealRoleType
+    let amountFormatted: String
+    let tokenSymbol: String
+    let withPublicKey: String?
+    let status: DealStatus
+    let roleType: DealRoleType
 
     var body: some View {
 
-        VStack(alignment:.leading, spacing: 24) {
-            HStack {
-                Text(deal.amountFormatted)
-                    .font(.title3)
-                    .fontWeight(.medium)
-                    .foregroundColor(R.color.textBase.color)
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(deal.currency.code)
-                        .font(.footnote)
+        VStack(alignment:.leading, spacing: 12) {
+
+            ZStack(alignment: .leading) {
+                HStack {
+                    statusLabel()
+                    Spacer()
+                    roleLabel()
+
+                }
+                .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 6))
+                .offset(x: 0, y: -(SIZE_BLOCK / 2 - 16))
+
+                VStack(alignment: .center, spacing: 0) {
+                    HStack {
+                        Spacer()
+                        Text(amountFormatted)
+                            .font(.title)
+                            .fontWeight(.medium)
+                            .strikethrough(isStrikethrough, color: colorAmountText)
+                            .foregroundColor(colorAmountText)
+                        Spacer()
+                    }
+                    Text(tokenSymbol)
+                        .font(.body)
                         .fontWeight(.medium)
                         .foregroundColor(R.color.secondaryText.color)
-
-                    switch dealRoleType {
-                    case .pay:
-                        Constants.iconPayment.resizable()
-                            .frame(width: 8, height: 8)
-                            .foregroundColor(R.color.yellow.color)
-                    case .receive:
-                        Constants.iconReceive.resizable()
-                            .frame(width: 8, height: 8)
-                            .foregroundColor(R.color.baseGreen.color)
-                    case .checker:
-                        Constants.iconChecker.resizable()
-                            .frame(width: 12, height: 8)
-                            .foregroundColor(R.color.blue.color)
-                    }
                 }
-                Spacer()
-
+                .offset(CGSize(width: 0, height: 6))
             }
+            .frame(height: SIZE_BLOCK)
+            .baseBackground()
+            .cornerRadius(18)
 
-            VStack(alignment:.leading, spacing: 4) {
-                Text("With account")
+
+            VStack(alignment:.leading, spacing: 2) {
+                Text(partnerTypeTitle)
                     .font(.callout)
                     .fontWeight(.medium)
                     .foregroundColor(R.color.secondaryText.color)
-                if let pk = deal.contractorPublicKey {
+
+                if let pk = withPublicKey {
                     Text(ContentMask.mask(from: pk))
                         .font(.body)
                         .fontWeight(.medium)
@@ -72,29 +80,83 @@ struct DealItemView: View {
                         .fontWeight(.medium)
                 }
             }
-
-            HStack {
-                Text(deal.status.rawValue)
-                    .font(.body)
-                    .fontWeight(.medium)
-                    .foregroundColor(deal.statusColor)
-
-            }
+            .padding(EdgeInsets(top: 0, leading: 4, bottom: 8, trailing: 4))
         }
-        .padding()
+        .padding(6)
         .background(R.color.secondaryBackground.color)
-        .cornerRadius(16)
+        .cornerRadius(20)
+    }
+
+    @ViewBuilder
+    func statusLabel() -> some View {
+        Text(status.statusTitle)
+            .font(.caption)
+            .padding(EdgeInsets(top: 2, leading: 6, bottom: 2, trailing: 6))
+            .background(status.statusColor)
+            .foregroundColor(R.color.white.color)
+            .cornerRadius(10)
+            .shadow(color: .black.opacity(0.1), radius: 3)
+
+    }
+
+    @ViewBuilder
+    func roleLabel() -> some View {
+        Text(roleType.title)
+            .font(.caption)
+            .padding(EdgeInsets(top: 2, leading: 6, bottom: 2, trailing: 6))
+            .background(R.color.secondaryBackground.color)
+            .foregroundColor(R.color.textBase.color)
+            .cornerRadius(10)
+            .shadow(color: .black.opacity(0.1), radius: 3)
+
+    }
+
+    private var isStrikethrough: Bool {
+        return status == .canceled
+    }
+
+    private var colorAmountText: Color {
+        switch status {
+        case .canceled:
+            return R.color.secondaryText.color
+        case .finished:
+            return R.color.baseGreen.color
+        case .new, .pending, .working, .unknown:
+            return R.color.textBase.color
+        }
+    }
+
+    private var partnerTypeTitle: String {
+        switch roleType {
+        case .receive, .checker:
+            return "For client"
+        case .pay:
+            return "Executor"
+        }
     }
 
 }
 
-private extension Deal {
+private extension DealItemView.DealRoleType {
+    var title: String {
+        switch self {
+        case .checker:
+            return "Checker"
+        case .pay:
+            return "Client"
+        case .receive:
+            return "Executor"
+        }
+    }
+}
+
+private extension DealStatus {
     var statusColor: Color {
-        switch self.status {
+        switch self {
         case .finished:
             return R.color.baseGreen.color
         case .canceled:
-            return R.color.baseSeparator.color
+            return R.color.secondaryText.color
         case .new:
             return R.color.blue.color
         case .pending:
@@ -103,6 +165,23 @@ private extension Deal {
             return R.color.yellow.color
         case .unknown:
             return R.color.secondaryText.color
+        }
+    }
+
+    var statusTitle: String {
+        switch self {
+        case .finished:
+            return "Finished"
+        case .canceled:
+            return "Canceled"
+        case .new:
+            return "New"
+        case .pending:
+            return "Pending"
+        case .working:
+            return "In work"
+        case .unknown:
+            return "-"
         }
     }
 }
@@ -114,9 +193,35 @@ import ContractusAPI
 struct DealItemView_Previews: PreviewProvider {
 
     static var previews: some View {
-        DealItemView(deal: Mock.deal, dealRoleType: .checker)
-        DealItemView(deal: Mock.deal, dealRoleType: .pay)
-        DealItemView(deal: Mock.deal, dealRoleType: .receive)
+        ScrollView {
+            VStack {
+                DealItemView(
+                    amountFormatted: Mock.deal.amountFormatted,
+                    tokenSymbol: Mock.deal.token.code,
+                    withPublicKey: Mock.deal.contractorPublicKey,
+                    status: .canceled,
+                    roleType: .checker)
+
+                DealItemView(
+                    amountFormatted: Mock.deal.amountFormatted,
+                    tokenSymbol: Mock.deal.token.code,
+                    withPublicKey: Mock.deal.contractorPublicKey,
+                    status: .new,
+                    roleType: .receive)
+
+                DealItemView(
+                    amountFormatted: Mock.deal.amountFormatted,
+                    tokenSymbol: Mock.deal.token.code,
+                    withPublicKey: Mock.deal.contractorPublicKey,
+                    status: .working,
+                    roleType: .pay)
+            }
+
+        }.padding(120)
+            .baseBackground()
+
+
+
     }
 }
 
