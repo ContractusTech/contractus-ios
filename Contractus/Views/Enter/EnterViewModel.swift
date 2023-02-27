@@ -72,6 +72,7 @@ final class EnterViewModel: ViewModel {
 //
 //            }
         case .copyPrivateKey, .copyForBackup:
+            UIPasteboard.general.string = state.account?.privateKey.toBase58()
             /// Maybe for logs will be useful
             break
         case .saveAccount:
