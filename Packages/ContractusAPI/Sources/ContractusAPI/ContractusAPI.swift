@@ -40,7 +40,7 @@ public enum ServerType {
         case .production:
             fatalError("No production server")
         case .developer:
-            return URL(string: "https://dev.contractus.tech")!
+            return URL(string: "https://dev.contractus.tech/api")!
         case .custom(let url, _):
             return url
         }
