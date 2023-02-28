@@ -15,4 +15,10 @@ enum AppConfig {
     // Length secret key for encrypt content of deal.
     // IMPORTANT: only 64
     static let sharedKeyLength = 64
+    
+    static let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+
+    static let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+
+    static let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String ?? ""
 }

@@ -122,6 +122,8 @@
 		6DFED9332930F1EE00AF727A /* ImpactGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED9322930F1EE00AF727A /* ImpactGenerator.swift */; };
 		6DFED935293207D200AF727A /* QRCodeScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED934293207D200AF727A /* QRCodeScannerViewModel.swift */; };
 		6DFED939293262F300AF727A /* SharablePublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED938293262F300AF727A /* SharablePublicKey.swift */; };
+		FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */; };
+		FECE864B29ADCA1B003144CF /* Array+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECE864A29ADCA1B003144CF /* Array+Ex.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -264,6 +266,8 @@
 		6DFED9322930F1EE00AF727A /* ImpactGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpactGenerator.swift; sourceTree = "<group>"; };
 		6DFED934293207D200AF727A /* QRCodeScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerViewModel.swift; sourceTree = "<group>"; };
 		6DFED938293262F300AF727A /* SharablePublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharablePublicKey.swift; sourceTree = "<group>"; };
+		FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectView.swift; sourceTree = "<group>"; };
+		FECE864A29ADCA1B003144CF /* Array+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Ex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -413,6 +417,7 @@
 				6D0F7F41298B9FC900EC2C74 /* Wrap */,
 				6D0DA7632930A7040024EF30 /* QRCodeScanner */,
 				6D3AA489292EB55C00596061 /* Menu */,
+				FE52628729AD3360004E0BCD /* ServerSelect */,
 				6D8EFD8628D88F570064F5DA /* AddContractor */,
 				6D2E0AF728AF342D002BA683 /* TextEditorView */,
 				6D74735F29655E9000A5F6E7 /* TransactionSign */,
@@ -629,6 +634,7 @@
 		6DBCA4882890E6FF00F918B6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				FECE864A29ADCA1B003144CF /* Array+Ex.swift */,
 				6DBCA4892890E71000F918B6 /* View+DebugPrint.swift */,
 				6D755291289675C50069935B /* R+Ex.swift */,
 				6D6EE3AB28A0F05300635E60 /* View+Custom.swift */,
@@ -678,6 +684,14 @@
 				6D3AA47B292B150400596061 /* FileSizeFormatter.swift */,
 			);
 			path = Formatter;
+			sourceTree = "<group>";
+		};
+		FE52628729AD3360004E0BCD /* ServerSelect */ = {
+			isa = PBXGroup;
+			children = (
+				FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */,
+			);
+			path = ServerSelect;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -934,11 +948,13 @@
 				6DAA5E802898D33300BA1965 /* AppConfig.swift in Sources */,
 				6D75F2F0288EA9C70092D182 /* EnterView.swift in Sources */,
 				6D6EE38D289E25FF00635E60 /* UploadFileView.swift in Sources */,
+				FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */,
 				6DAA5E7B2898C25500BA1965 /* RandomStrings.swift in Sources */,
 				6DC2C02728C99C0A005C9EBE /* ServiceFactory.swift in Sources */,
 				6D6EE393289E770500635E60 /* MimeType.swift in Sources */,
 				6DBCA45E288F1EAF00F918B6 /* AccountStorage.swift in Sources */,
 				6DBCA45C288F076D00F918B6 /* AccountService.swift in Sources */,
+				FECE864B29ADCA1B003144CF /* Array+Ex.swift in Sources */,
 				6D1DF1A42922EC7400B112FC /* CButtons.swift in Sources */,
 				6D8EFDA328E0528A0064F5DA /* FiatCurrency.swift in Sources */,
 				6DBCA47E2890E36700F918B6 /* Buttons.swift in Sources */,
