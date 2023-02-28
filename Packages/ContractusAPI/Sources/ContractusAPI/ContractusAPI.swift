@@ -15,8 +15,8 @@ public enum ServerType {
 
     public var apiURL: URL {
         switch self {
-        case .production:
-            fatalError("No production server")
+        case .production(let version):
+            return server.appendingPathComponent(version.rawValue)
         case .developer(let version):
             return server.appendingPathComponent(version.rawValue)
         case .custom(_, let version):
@@ -26,8 +26,8 @@ public enum ServerType {
 
     public var version: APIVersion {
         switch self {
-        case .production:
-            fatalError("No production server")
+        case .production(let version):
+            return version
         case .developer(let version):
             return version
         case .custom(_, let version):
@@ -38,7 +38,7 @@ public enum ServerType {
     public var server: URL {
         switch self {
         case .production:
-            fatalError("No production server")
+            return URL(string: "https://s.contractus.tech/api")!
         case .developer:
             return URL(string: "https://dev.contractus.tech/api")!
         case .custom(let url, _):
@@ -48,5 +48,16 @@ public enum ServerType {
 
     public func path(_ path: String) -> URL {
         return self.apiURL.appendingPathComponent(path)
+    }
+
+    public var title: String {
+        switch self {
+        case .production:
+            return "Production"
+        case .developer(_):
+            return "Developer"
+        case .custom(_, _):
+            return "Custom"
+        }
     }
 }

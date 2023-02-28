@@ -13,20 +13,33 @@ final class ConfigStorage {
     enum Keys: String {
         case serverType
     }
+    
+    enum ServerTypeString: String {
+        case production, developer, custom
+    }
 
     static func getServer(defaultServer: ServerType = .developer()) -> ServerType {
         guard
             let server = UserDefaults.standard.stringArray(forKey: Keys.serverType.rawValue),
             let url = URL(string: server.first ?? ""),
-            let version = ServerType.APIVersion(rawValue: server.last ?? "")
+            let version = ServerType.APIVersion(rawValue: server.second ?? ""),
+            let type = ServerTypeString(rawValue: server.last ?? "")
         else { return defaultServer }
 
-        return .custom(url, version)
+        switch type {
+        case .production:
+            return .production()
+        case .developer:
+            return .developer()
+        case .custom:
+            return .custom(url, version)
+        }
     }
 
     static func setServer(server: ServerType) {
         let url = server.apiURL.absoluteString
         let version = server.version.rawValue
-        UserDefaults.standard.set([url, version], forKey: Keys.serverType.rawValue)
+        let type = server.title.lowercased()
+        UserDefaults.standard.set([url, version, type], forKey: Keys.serverType.rawValue)
     }
 }

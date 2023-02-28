@@ -41,7 +41,6 @@ struct SelectAccountView: View {
                             .foregroundColor(R.color.yellow.color)
                     }
                 }
-
             }
             Section {
                 HStack {
@@ -82,12 +81,11 @@ struct SelectAccountView: View {
                     } else {
                         accountDeleteHandler([])
                     }
-
                 }),
                 secondaryButton: Alert.Button.cancel {
                     editMode?.wrappedValue = .inactive
-                })
-
+                }
+            )
         }
     }
 
@@ -117,39 +115,54 @@ struct MenuView: View {
 
     @StateObject var viewModel: AnyViewModel<MenuState, MenuInput>
     @State private var selectedAccount: CommonAccount?
-
+    @State private var tapCount: Int = 0
+    
     var action: (ActionType) -> Void
 
     var body: some View {
         NavigationView {
-            Form {
-                Section {
-                    NavigationLink {
-                        SelectAccountView(items: viewModel.accounts, selectedItem: $selectedAccount) { accounts in
-                            viewModel.trigger(.saveAccounts(accounts))
-                        } logoutHandler: {
+            VStack {
+                Form {
+                    Section {
+                        NavigationLink {
+                            SelectAccountView(items: viewModel.accounts, selectedItem: $selectedAccount) { accounts in
+                                viewModel.trigger(.saveAccounts(accounts))
+                            } logoutHandler: {
+                                action(.logout)
+                            }
+                        } label: {
+                            HStack {
+                                Text("Account")
+                                Spacer()
+                                Text(selectedAccountFormatted)
+                                    .foregroundColor(R.color.secondaryText.color)
+                            }
+                        }
+                    }
+                    Section {
+                        Button("Exit") {
                             action(.logout)
                         }
-                    } label: {
-                        HStack {
-                            Text("Account")
-                            Spacer()
-                            Text(selectedAccountFormatted)
-                                .foregroundColor(R.color.secondaryText.color)
-                        }
+                        .foregroundColor(R.color.redText.color)
                     }
+                    
                 }
-                Section {
-                    Button("Exit") {
-                        action(.logout)
+                if tapCount > 3 {
+                    NavigationLink {
+                        ServerSelectView(items: [.developer(), .production()])
+                    } label: {
+                        Text(versionFormatted)
                     }
-                    .foregroundColor(R.color.redText.color)
+                } else {
+                    Text(versionFormatted)
+                        .onTapGesture {
+                            tapCount+=1
+                        }
                 }
             }
             .baseBackground()
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
-
         }.onAppear {
             selectedAccount = viewModel.currentAccount
         }
@@ -158,6 +171,10 @@ struct MenuView: View {
 
     var selectedAccountFormatted: String {
         return "\(selectedAccount?.blockchain.rawValue.capitalized ?? "") • \(ContentMask.mask(from: selectedAccount?.publicKey))"
+    }
+    
+    var versionFormatted: String {
+        return String(format: "v.%@ (%@)", AppConfig.version, AppConfig.buildNumber)
     }
 }
 
