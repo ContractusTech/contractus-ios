@@ -215,6 +215,9 @@ struct ChangeAmountView: View {
                     presentationMode.wrappedValue.dismiss()
                 }
             })
+            .onChange(of: token, perform: { newToken in
+                viewModel.trigger(.changeToken(newToken))
+            })
             .onReceive(amountPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main), perform: { amountText in
                 viewModel.trigger(.changeAmount(amountText, token))
             })
