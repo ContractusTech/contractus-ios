@@ -9,6 +9,7 @@ import SwiftUI
 import SolanaSwift
 import UIKit
 import ResizableSheet
+import netfox
 
 struct RootState {
     enum State {
@@ -150,6 +151,10 @@ struct ContractusApp: App {
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         appearanceSetup()
+        if case .developer = AppConfig.serverType {
+            NFX.sharedInstance().start()
+        }
+
         return true
     }
 }
