@@ -99,6 +99,10 @@ struct DealState {
         deal.ownerRole == .client
     }
 
+    var ownerIsExecutor: Bool {
+        deal.ownerRole == .executor
+    }
+
     var isYouExecutor: Bool {
         (deal.ownerRole == .client && deal.contractorPublicKey == account.publicKey) ||
         deal.ownerRole == .executor && deal.ownerPublicKey == account.publicKey

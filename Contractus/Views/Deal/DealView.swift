@@ -115,8 +115,6 @@ struct DealView: View {
                                             if viewModel.state.ownerIsClient {
                                                 Label(text: R.string.localizable.commonOwner(), type: .success)
                                             }
-
-
                                         }
                                         if viewModel.state.clientPublicKey.isEmpty {
                                             Text(R.string.localizable.commonEmpty())
@@ -184,7 +182,9 @@ struct DealView: View {
                                             if viewModel.state.isYouExecutor {
                                                 Label(text: R.string.localizable.commonYou(), type: .primary)
                                             }
-
+                                            if viewModel.state.ownerIsExecutor {
+                                                Label(text: R.string.localizable.commonOwner(), type: .success)
+                                            }
                                         }
                                         if viewModel.state.executorPublicKey.isEmpty {
                                             Text(R.string.localizable.commonEmpty())
@@ -237,22 +237,25 @@ struct DealView: View {
                                     if viewModel.state.isYouChecker {
                                         Text(R.string.localizable.commonYou())
                                     } else if viewModel.state.deal.checkerPublicKey?.isEmpty ?? true {
-                                        Text(ContentMask.mask(from: viewModel.state.clientPublicKey))
-                                        Label(text: R.string.localizable.commonOwner(), type: .primary)
+                                        if !viewModel.state.clientPublicKey.isEmpty {
+                                            Text(ContentMask.mask(from: viewModel.state.clientPublicKey))
+                                            Label(text: R.string.localizable.commonOwner(), type: .primary)
+                                        } else {
+                                            Text(R.string.localizable.commonEmpty())
+                                        }
                                     } else {
                                         Text(ContentMask.mask(from: viewModel.state.deal.checkerPublicKey))
                                     }
                                 }
-
                             }
                             Spacer()
-                            if viewModel.state.isOwnerDeal && !viewModel.state.isYouChecker {
-                                CButton(title: "", icon: Constants.rewardImage, style: .secondary, size: .default, isLoading: false) {
+//                            if viewModel.state.isOwnerDeal && !viewModel.state.isYouChecker {
+//                                CButton(title: "", icon: Constants.rewardImage, style: .secondary, size: .default, isLoading: false) {
+//                                    activeModalType = .changeCheckerAmount
+//                                }
+//                            }
 
-                                    activeModalType = .changeCheckerAmount
-                                }
-                            }
-                            // TODO: - Add feature: change verifier 
+                            // TODO: - Add feature: change verifier
 //                            if viewModel.state.isOwnerDeal && viewModel.state.canEdit {
 //                                CButton(title: R.string.localizable.commonChange(), style: .secondary, size: .default, isLoading: false) {
 //                                    activeModalType = .editChecker(viewModel.state.deal.checkerPublicKey)
@@ -269,7 +272,7 @@ struct DealView: View {
                         else if (viewModel.state.deal.checkerPublicKey?.isEmpty ?? true && viewModel.state.isOwnerDeal) {
                             Text(R.string.localizable.dealHintEmptyVerifier())
                                 .font(.footnote)
-                                .foregroundColor(R.color.yellow.color)
+                                .foregroundColor(R.color.textWarn.color)
                         }
                         else if viewModel.state.isYouExecutor {
                             Text(R.string.localizable.dealHintYouExecutor())
