@@ -11,6 +11,7 @@ import Combine
 
 enum ChangeAmountInput {
     case changeAmount(String, Token)
+    case changeToken(Token)
     case update
 }
 
@@ -111,7 +112,11 @@ final class ChangeAmountViewModel: ViewModel {
             } else {
                 self.state.amount = Amount(self.state.amount.value, token: self.state.amount.token)
             }
-
+        case .changeToken(let token):
+            let amount = self.state.amount.value
+            let newAmount = Amount(amount, token: token)
+            self.state.amount = newAmount
+            updateFee(amount: newAmount)
         case .update:
             self.state.state = .changingAmount
             let data: UpdateAmountDeal
@@ -140,6 +145,7 @@ final class ChangeAmountViewModel: ViewModel {
             newState.feeFormatted = "(0%) \(Amount(UInt64(0), token: amount.token).formatted(withCode: true))"
             newState.fiatFeeFormatted = "-" //fee.fiatCurrency.format(double: 0, withCode: true) ?? ""
             newState.state = .none
+            self.state = newState
             return
         }
         self.state.state = .loading
