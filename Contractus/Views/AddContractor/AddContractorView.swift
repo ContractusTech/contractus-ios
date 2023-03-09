@@ -101,6 +101,7 @@ struct AddContractorView: View {
                 switch value {
                 case .successAdded:
                     action(viewModel.state.deal)
+                    presentationMode.wrappedValue.dismiss()
                 default: break
                 }
             }

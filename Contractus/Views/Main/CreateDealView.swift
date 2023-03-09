@@ -95,6 +95,10 @@ struct DealRoleView: View {
 
 struct CreateDealView: View {
 
+    enum AlertType {
+        case error(String)
+    }
+    
     @Environment(\.presentationMode) var presentationMode
 
     @StateObject var viewModel: AnyViewModel<CreateDealState, CreateDealInput>
@@ -102,6 +106,7 @@ struct CreateDealView: View {
 
     @State private var selectedType: DealRoleView.RoleType?
     @State private var isShowShareSecretKey: Bool = false
+    @State private var alertType: AlertType?
 
     var body: some View {
         NavigationView {
@@ -145,6 +150,9 @@ struct CreateDealView: View {
                             didCreated?(viewModel.state.createdDeal)
                             isShowShareSecretKey.toggle()
                         }
+                        if newValue == .error {
+                            self.alertType = .error("Error creating deal")
+                        }
                     }
                 }
 
@@ -153,6 +161,17 @@ struct CreateDealView: View {
                 }
                 .padding(EdgeInsets(top: 16, leading: 16, bottom: 28, trailing: 16))
             }
+            .alert(item: $alertType, content: { type in
+                switch type {
+                case .error(let message):
+                    return Alert(
+                        title: Text(R.string.localizable.commonError()),
+                        message: Text(message),
+                        dismissButton: .default(Text("Ok"), action: {
+                            viewModel.trigger(.hideError)
+                        }))
+                }
+            })
             .baseBackground()
             .edgesIgnoringSafeArea(.bottom)
             .toolbar {
@@ -171,6 +190,15 @@ struct CreateDealView: View {
 
         }
         .navigationBarBackButtonHidden()
+    }
+}
+
+extension CreateDealView.AlertType: Identifiable {
+    var id: String {
+        switch self {
+        case .error:
+            return "error"
+        }
     }
 }
 
