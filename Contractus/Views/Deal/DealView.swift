@@ -11,6 +11,7 @@ import ContractusAPI
 import ResizableSheet
 import SafariServices
 import BigInt
+import SwiftUIPullToRefresh
 
 fileprivate enum Constants {
     static let remove = Image(systemName: "xmark.circle.fill")
@@ -557,6 +558,15 @@ struct DealView: View {
                 .padding(EdgeInsets(top: 20, leading: 20, bottom: 24, trailing: 20))
             }
         }
+        .refreshableCompat(loadingViewBackgroundColor: .clear, onRefresh: { done in
+            viewModel.trigger(.update(nil)) {
+                done()
+            }
+        }, progress: { state in
+            RefreshActivityIndicator(isAnimating: state == .loading) {
+                $0.hidesWhenStopped = false
+            }
+        })
         .resizableSheet($uploaderState, builder: { builder in
             builder.content { context in
                 uploaderView()
