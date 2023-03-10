@@ -303,7 +303,7 @@ struct DealView: View {
             VStack {
                 // MARK: - Content
                 VStack {
-                    VStack {
+                    VStack(spacing: 8) {
                         HStack {
                             HStack(spacing: 8) {
                                 Text(R.string.localizable.dealTextText())
