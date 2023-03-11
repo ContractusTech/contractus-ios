@@ -14,7 +14,8 @@ import UIKit
 enum CreateDealInput {
     case createDealAsClient,
          createDealAsExecutor,
-         copy
+         copy,
+         hideError
 }
 
 struct CreateDealState {
@@ -55,6 +56,8 @@ final class CreateDealViewModel: ViewModel {
             if let share = state.shareable?.shareContent {
                 UIPasteboard.general.string = share
             }
+        case .hideError:
+            self.state.state = .none
         }
     }
 
@@ -66,7 +69,7 @@ final class CreateDealViewModel: ViewModel {
             guard let secret = try? await SharedSecretService.createSharedSecret(privateKey:state.account.privateKey) else {
                 return
             }
-
+            self.state.state = .creating
             let newDeal = NewDeal(
                 role: role,
                 encryptedSecretKey: secret.base64EncodedSecret,
@@ -74,6 +77,7 @@ final class CreateDealViewModel: ViewModel {
                 sharedKey: secret.serverSecret.base64EncodedString())
 
             guard let deal = try? await self.createDeal(deal: newDeal) else {
+                self.state.state = .error
                 return
             }
             var newState = self.state
