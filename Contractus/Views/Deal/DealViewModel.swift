@@ -239,6 +239,7 @@ final class DealViewModel: ViewModel {
             Task { @MainActor in
                 guard let deal = try? await getDeal() else { return }
                 self.state.deal = deal
+                after?()
             }
         case .updateContent(let content, let contentType):
             switch contentType {
