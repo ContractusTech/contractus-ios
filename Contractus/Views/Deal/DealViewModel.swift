@@ -459,7 +459,14 @@ final class DealViewModel: ViewModel {
         let fileNameData = try? await Crypto.decrypt(base64Encrypted: file.name, with: state.decryptedKey)
         guard let fileNameData = fileNameData else { debugPrint("fileNameData is empty"); return nil }
         guard let fileName = String(data: fileNameData, encoding: .utf8) else { debugPrint("fileName is empty"); return nil }
-        guard let filePath = try? await downloadFile(url: file.url) else { debugPrint("downloadFile error"); return nil }
+        guard let filePath = try? await downloadFile(url: file.url) else {
+            debugPrint("downloadFile error");
+            await MainActor.run {
+                state.previewState = .none
+                state.errorState = .error("Download file error")
+            }
+            return nil
+        }
 
         await MainActor.run {
             state.previewState = .decrypting
@@ -471,7 +478,15 @@ final class DealViewModel: ViewModel {
             return fileURL
         }
         guard let fileEncryptedData = try? Data(contentsOf: filePath) else { return nil }
-        guard let fileData = try? await Crypto.decrypt(encryptedData: fileEncryptedData, with: state.decryptedKey) else { debugPrint("Decrypt error"); return nil }
+        debugPrint(fileEncryptedData    )
+        guard let fileData = try? await Crypto.decrypt(encryptedData: fileEncryptedData, with: state.decryptedKey) else {
+            debugPrint("Decrypt error");
+            await MainActor.run {
+                state.previewState = .none
+                state.errorState = .error("Decrypt file error")
+            }
+            return nil
+        }
 
 //        do {
 //            try FileManager.default.createDirectory(atPath: folderURL.path, withIntermediateDirectories: true)
@@ -485,6 +500,7 @@ final class DealViewModel: ViewModel {
             return fileURL
         } catch(let error) {
             debugPrint(error.localizedDescription)
+            self.state.errorState = .error(error.localizedDescription)
             return nil
         }
 
