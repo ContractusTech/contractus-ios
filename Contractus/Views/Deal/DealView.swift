@@ -730,6 +730,7 @@ struct DealView: View {
             switch value {
             case .none:
                 activeModalType = .none
+                dismissHUD()
             case .filePreview(let url):
                 activeModalType = .filePreview(url)
                 dismissHUD()
@@ -738,7 +739,6 @@ struct DealView: View {
                 updateProgressHUD(progress: progress)
             case .decrypting:
                 decryptingHUD()
-
             }
         }
         .alert(item: $alertType, content: { type in
