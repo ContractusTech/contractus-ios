@@ -580,7 +580,9 @@ struct DealView: View {
             .supportedState([.medium])
         })
 
-        .sheet(item: $activeModalType) { type in
+        .sheet(item: $activeModalType, onDismiss: {
+            viewModel.trigger(.sheetClose)
+        }) { type in
             switch type {
             case .confirmCancel:
                 // TODO: -
@@ -708,7 +710,6 @@ struct DealView: View {
                     }
                 }
             }
-
         }
         .onChange(of: viewModel.state.state) { value in
             switch value {
