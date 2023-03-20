@@ -183,6 +183,9 @@ struct UploadFileView: View {
             switch newState {
             case .success(let meta):
                 action(.success(meta, viewModel.state.contentType))
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2, execute: {
+                    viewModel.trigger(.clear)
+                })
             case .needConfirmForce:
                 alertType = .needConfirmForceUpdate
             case .none, .error, .encrypting, .selected, .uploading, .saving:
