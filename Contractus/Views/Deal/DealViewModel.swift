@@ -32,6 +32,7 @@ enum DealInput {
     case none
     case saveKey(ScanResult)
     case hideError
+    case sheetClose
 }
 
 struct DealState {
@@ -106,7 +107,6 @@ struct DealState {
     var isYouExecutor: Bool {
         (deal.ownerRole == .client && deal.contractorPublicKey == account.publicKey) ||
         deal.ownerRole == .executor && deal.ownerPublicKey == account.publicKey
-
     }
 
     var isYouChecker: Bool {
@@ -203,7 +203,8 @@ final class DealViewModel: ViewModel {
             })
         case .none:
             state.state = .none
-
+        case .sheetClose:
+            state.previewState = .none
         case .saveKey(let importResult):
             switch importResult {
             case .publicKey:
@@ -252,21 +253,26 @@ final class DealViewModel: ViewModel {
             state.previewState = .none
             guard !state.decryptedKey.isEmpty, !(state.decryptingFiles[file.md5] ?? false) else { return }
             state.decryptingFiles[file.md5] = true
-            Task {
-                guard let url = await prepareFileForPreview(file) else {
-                    debugPrint("Error open file")
-                    await MainActor.run {
-                        state.decryptingFiles[file.md5] = nil
-                        state.decryptedFiles[file.md5] = nil
+            if let url = state.decryptedFiles[file.md5] {
+                state.decryptingFiles[file.md5] = nil
+                state.previewState = .filePreview(url)
+                after?()
+            } else {
+                Task {
+                    guard let url = await prepareFileForPreview(file) else {
+                        debugPrint("Error open file")
+                        await MainActor.run {
+                            state.decryptingFiles[file.md5] = nil
+                            state.decryptedFiles[file.md5] = nil
+                        }
+                        return
                     }
-                    return
-
-                }
-                await MainActor.run {
-                    state.decryptedFiles[file.md5] = url
-                    state.decryptingFiles[file.md5] = nil
-                    state.previewState = .filePreview(file.url)
-                    after?()
+                    await MainActor.run {
+                        state.decryptedFiles[file.md5] = url
+                        state.decryptingFiles[file.md5] = nil
+                        state.previewState = .filePreview(url)
+                        after?()
+                    }
                 }
             }
         case .deleteMetadataFile(let file):
@@ -370,6 +376,8 @@ final class DealViewModel: ViewModel {
                 }
                 self.state.decryptedKey = secretKey
                 self.state.canEdit = true
+                
+                self.checkLocalFiles()
             }
 
         }
@@ -391,6 +399,7 @@ final class DealViewModel: ViewModel {
             self.state.shareDeal = ShareableDeal(dealId: self.state.deal.id, secretBase64: partnerSecretPartBase64)
             self.state.canEdit = true
 
+            self.checkLocalFiles()
         }
     }
 
@@ -478,7 +487,6 @@ final class DealViewModel: ViewModel {
             return fileURL
         }
         guard let fileEncryptedData = try? Data(contentsOf: filePath) else { return nil }
-        debugPrint(fileEncryptedData    )
         guard let fileData = try? await Crypto.decrypt(encryptedData: fileEncryptedData, with: state.decryptedKey) else {
             debugPrint("Decrypt error");
             await MainActor.run {
@@ -503,9 +511,25 @@ final class DealViewModel: ViewModel {
             self.state.errorState = .error(error.localizedDescription)
             return nil
         }
-
     }
 
+    private func checkLocalFiles() {
+        state.deal.meta?.files.forEach { file in
+            Task {
+                let fileNameData = try? await Crypto.decrypt(base64Encrypted: file.name, with: state.decryptedKey)
+                guard let fileNameData = fileNameData else { return }
+                guard let fileName = String(data: fileNameData, encoding: .utf8) else { return }
+                
+                guard let documentsURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else { return }
+                let folderURL = documentsURL.appendingPathComponent(file.url.lastPathComponent, isDirectory: true)
+                let fileURL = folderURL.appendingPathComponent(fileName)
+                if FileManager.default.fileExists(atPath: fileURL.path) {
+                    state.decryptedFiles[file.md5] = fileURL
+                }
+            }
+        }
+    }
+    
     private func getDealActions(for deal: Deal, isSigned: Bool) -> [State.MainActionType] {
         let actions: [State.MainActionType]
         switch deal.status {
