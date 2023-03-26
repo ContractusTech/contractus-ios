@@ -539,7 +539,7 @@ final class DealViewModel: ViewModel {
             } else {
                 actions = [.sign]
             }
-        case .canceled, .unknown, .finished, .pending:
+        case .canceled, .unknown, .finished, .pending, .inProcessing:
             actions = []
         case .working:
             actions = [.finishDeal, .cancelDeal]
