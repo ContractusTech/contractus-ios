@@ -121,7 +121,7 @@ struct DealItemView: View {
             return R.color.secondaryText.color
         case .finished:
             return R.color.baseGreen.color
-        case .new, .pending, .working, .unknown:
+        case .new, .pending, .working, .unknown, .inProcessing:
             return R.color.textBase.color
         }
     }
@@ -159,7 +159,7 @@ private extension DealStatus {
             return R.color.secondaryText.color
         case .new:
             return R.color.blue.color
-        case .pending:
+        case .pending, .inProcessing:
             return R.color.secondaryText.color
         case .working:
             return R.color.yellow.color
@@ -182,6 +182,8 @@ private extension DealStatus {
             return "In work"
         case .unknown:
             return "-"
+        case .inProcessing:
+            return "Processing"
         }
     }
 }
