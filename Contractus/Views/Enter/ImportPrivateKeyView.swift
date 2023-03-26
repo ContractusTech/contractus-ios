@@ -13,7 +13,7 @@ struct ImportPrivateKeyView: View {
     
     @EnvironmentObject var viewModel: AnyViewModel<EnterState, EnterInput>
 
-    @State var privateKey: String = "5iKqkZeFQiLxTRdJVHHTcsefF65t2Q5vpnQuzTiETK4Hx7mBoBgnbeKPwAZCbFQGE3KcRSJxJhiXvygH7dH8U4Ay"
+    @State var privateKey: String = ""
     @State var isActiveBackup: Bool = false
     var completion: (CommonAccount) -> Void
 
