@@ -106,7 +106,7 @@ final class MainViewModel: ViewModel {
         try await withCheckedThrowingContinuation { continues in
 
             var types: Set<ContractusAPI.DealsService.FilterByRole>
-            var statuses: Set<ContractusAPI.DealsService.FilterByStatus> = .init(arrayLiteral: .new, .working, .pending)
+            let statuses: Set<ContractusAPI.DealsService.FilterByStatus> = .init(arrayLiteral: .new, .working, .pending, .inProcessing)
             switch type {
             case .isChecker:
                 types = .init(arrayLiteral: .isChecker)
