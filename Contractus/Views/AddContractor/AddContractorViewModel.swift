@@ -71,7 +71,7 @@ final class AddContractorViewModel: ViewModel {
             deal: deal,
             shareableData: ShareableDeal(dealId: deal.id, secretBase64: sharedSecretBase64),
             account: account,
-            publicKey: publicKey ?? "EDBoxUE8srrMt7ZvzPwgysZz2UZPBYwjLFiKaV1TWGof",
+            publicKey: publicKey ?? "",
             state: AccountValidator.isValidPublicKey(string: publicKey ?? "", blockchain: blockchain) ? .validPublicKey : .none,
             blockchain: blockchain)
     }
