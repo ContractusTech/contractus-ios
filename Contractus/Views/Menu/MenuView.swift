@@ -7,104 +7,48 @@
 
 import SwiftUI
 
-fileprivate enum Constants {
-    static let checkmarkImage = Image(systemName: "checkmark")
-}
-extension CommonAccount: Identifiable {
-    var id: String {
-        self.publicKey
-    }
-}
-
-struct SelectAccountView: View {
-
-    @Environment(\.editMode) var editMode
-
-    @State var items: [CommonAccount]
-    @Binding var selectedItem: CommonAccount?
-    var accountDeleteHandler: (_ accounts: [CommonAccount]) -> Void
-    var logoutHandler: () -> Void
-
-    @State private var confirmAlert: Bool = false
-    @State private var deletedActiveAccount: Bool = false
-
+struct MenuItemView<Destination>: View where Destination: View {
+    var icon: String
+    var title: String
+    var linkTo: Destination
+    
     var body: some View {
-        Form {
-            if editMode?.wrappedValue == .active {
-                Section {
-                    VStack(alignment: .leading) {
-                        Text("Warning")
-                            .font(.body.weight(.medium))
-                            .foregroundColor(R.color.yellow.color)
-                        Text("Check backup private key before delete account!")
-                            .font(.callout)
-                            .foregroundColor(R.color.yellow.color)
-                    }
+        NavigationLink {
+            linkTo
+        } label: {
+            HStack(spacing: 12) {
+                ZStack {
+                    Image(systemName: icon)
+                        .foregroundColor(.white)
                 }
+                .frame(width: 28, height: 28)
+                .background(Color.black)
+                .cornerRadius(9)
+                Text(title)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundColor(R.color.whiteSeparator.color)
             }
-            Section {
-                HStack {
-                    Button("Add account") {
-                        
-                    }
-                }
-            }
-
-            List {
-                ForEach(items, id: \.self) { item in
-                    HStack(spacing: 12) {
-                        Text(ContentMask.mask(from: item.publicKey))
-                        Text(item.blockchain.rawValue.capitalized)
-                            .foregroundColor(R.color.secondaryText.color)
-                        Spacer()
-                        if self.selectedItem == item {
-                            Constants.checkmarkImage.foregroundColor(R.color.accentColor.color)
-                        }
-                    }
-                    .onTapGesture {
-                        self.selectedItem = item
-                    }
-                }.onDelete(perform: remove)
-            }
-        }
-        .toolbar {
-            EditButton()
-        }
-        .alert(isPresented: $confirmAlert) {
-            Alert(
-                title: Text("Warning"),
-                message: Text("Please select another account before deleting the active account. Or after deleting you log out. Delete account?"),
-                primaryButton: Alert.Button.destructive(Text("Yes, delete"), action: {
-                    if deletedActiveAccount {
-                        accountDeleteHandler(items)
-                        logoutHandler()
-                    } else {
-                        accountDeleteHandler([])
-                    }
-                }),
-                secondaryButton: Alert.Button.cancel {
-                    editMode?.wrappedValue = .inactive
-                }
+            .frame(height: 62)
+            .padding(.horizontal, 16)
+            .background(
+                Color(R.color.secondaryBackground()!)
+                    .clipped()
+                    .cornerRadius(20)
             )
         }
+        .listRowSeparator(.hidden)
     }
+}
 
-    func remove(at offsets: IndexSet) {
-        var _items = items
-        _items.remove(atOffsets: offsets)
-        if _items.isEmpty {
-            confirmAlert.toggle()
-            return
-        } else if let selectedItem = selectedItem, !_items.contains(selectedItem) {
-            confirmAlert.toggle()
-            deletedActiveAccount = true
-            return
-        }
-        deletedActiveAccount = false
-        items = _items
-        accountDeleteHandler(items)
+struct MenuSectionView: View {
+    var height: Float = 28
+
+    var body: some View {
+        Rectangle()
+            .fill(Color.clear)
+            .frame(height: CGFloat(height))
     }
-
 }
 
 struct MenuView: View {
@@ -122,31 +66,54 @@ struct MenuView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Form {
-                    Section {
-                        NavigationLink {
-                            SelectAccountView(items: viewModel.accounts, selectedItem: $selectedAccount) { accounts in
+                ScrollView {
+                    VStack(spacing: 2) {
+                        MenuItemView (
+                            icon: "person.2.circle.fill",
+                            title: "Accounts",
+                            linkTo: SelectAccountView(
+                                items: viewModel.accounts,
+                                selectedItem: $selectedAccount
+                            ) { accounts in
                                 viewModel.trigger(.saveAccounts(accounts))
                             } logoutHandler: {
                                 action(.logout)
-                            }
-                        } label: {
-                            HStack {
-                                Text("Account")
-                                Spacer()
-                                Text(selectedAccountFormatted)
-                                    .foregroundColor(R.color.secondaryText.color)
-                            }
-                        }
+                            })
+                        
+                        MenuSectionView()
+                        
+                        MenuItemView (
+                            icon: "slider.horizontal.3",
+                            title: "Common settings",
+                            linkTo: EmptyView()
+                        )
+                        MenuItemView (
+                            icon: "lock.fill",
+                            title: "Security",
+                            linkTo: EmptyView()
+                        )
+                        MenuItemView (
+                            icon: "bell.badge",
+                            title: "Push notifications",
+                            linkTo: EmptyView()
+                        )
+                        MenuItemView (
+                            icon: "person.crop.rectangle.stack.fill",
+                            title: "Common settings",
+                            linkTo: EmptyView()
+                        )
+                        
+                        MenuSectionView()
+                        
+                        MenuItemView (
+                            icon: "questionmark.circle",
+                            title: "F.A.Q.",
+                            linkTo: EmptyView()
+                        )
                     }
-                    Section {
-                        Button("Exit") {
-                            action(.logout)
-                        }
-                        .foregroundColor(R.color.redText.color)
-                    }
-                    
                 }
+                .padding(.horizontal, 5)
+
                 if tapCount > 3 {
                     NavigationLink {
                         ServerSelectView(items: [.developer(), .production()])
@@ -155,6 +122,8 @@ struct MenuView: View {
                     }
                 } else {
                     Text(versionFormatted)
+                        .foregroundColor(R.color.secondaryText.color)
+                        .font(.footnote.weight(.medium))
                         .onTapGesture {
                             tapCount+=1
                         }
@@ -163,9 +132,15 @@ struct MenuView: View {
             .baseBackground()
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
-        }.onAppear {
+        }
+        .onAppear {
             selectedAccount = viewModel.currentAccount
         }
+        .onChange(of: selectedAccount, perform: { selected in
+            if let selected = selected, selected != viewModel.currentAccount {
+                viewModel.trigger(.changeAccount(selected))
+            }
+        })
         .navigationBarColor()
     }
 
@@ -174,10 +149,11 @@ struct MenuView: View {
     }
     
     var versionFormatted: String {
-        return String(format: "v.%@ (%@)", AppConfig.version, AppConfig.buildNumber)
+        return String(format: "v.%@ build %@", AppConfig.version, AppConfig.buildNumber)
     }
 }
 
+    
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         MenuView(viewModel: AnyViewModel<MenuState, MenuInput>(MenuViewModel(accountStorage: MockAccountStorage()))) { _ in

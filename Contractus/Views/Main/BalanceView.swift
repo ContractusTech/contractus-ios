@@ -194,7 +194,7 @@ struct BalanceView: View {
                                     }
                                     .padding()
                                     .background(RoundedRectangle(cornerRadius: 15)
-                                            .fill(R.color.buttonBackgroundSecondary.color)
+                                            .fill(R.color.secondaryBackground.color)
 
                                         )
                                     .overlay(

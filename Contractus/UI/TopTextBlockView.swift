@@ -51,7 +51,7 @@ struct TopTextBlockView: View {
             case .none:
                 return R.color.secondaryBackground.color
             case .warning:
-                return R.color.yellow.color
+                return R.color.yellow200.color
             case .waiting:
                 return R.color.secondaryText.color
             }
