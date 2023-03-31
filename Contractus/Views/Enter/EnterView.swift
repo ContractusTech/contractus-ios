@@ -8,14 +8,19 @@
 import SwiftUI
 import enum ContractusAPI.Blockchain
 
-
 struct EnterView: View {
 
     enum NavigateViewType: Hashable {
         case createWallet, importWallet
     }
+    
+    enum EnterViewType {
+        case enterApp, addAccount
+    }
 
     @StateObject var viewModel = AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(), accountService: AccountServiceImpl(storage: KeychainAccountStorage())))
+
+    var viewType: EnterViewType = .enterApp
 
     @State private var selectedView: NavigateViewType? = .none
     @State private var blockchain: Blockchain = .solana
@@ -23,20 +28,29 @@ struct EnterView: View {
     var completion: (CommonAccount) -> Void
 
     var body: some View {
-        NavigationView {
+        wrapperBody {
             ZStack (alignment: .bottomLeading) {
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 24) {
-                        Text(R.string.localizable.commonAppName())
-                            .font(.title)
-                            .fontWeight(.heavy)
-                        Text(R.string.localizable.enterMessage())
-                            .font(.title2)
-                            .fontWeight(.semibold)
+                    switch viewType {
+                    case .enterApp:
+                        VStack(alignment: .leading, spacing: 24) {
+                            Text(R.string.localizable.commonAppName())
+                                .font(.title)
+                                .fontWeight(.heavy)
+                            Text(R.string.localizable.enterMessage())
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                        }
+                        .padding(EdgeInsets(top: 44, leading: 20, bottom: 20, trailing: 20))
+                    case .addAccount:
+                        VStack(alignment: .leading, spacing: 24) {
+                            Text("To add account select blockchain type and create or import your wallet")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                        }
+                        .padding(EdgeInsets(top: 44, leading: 20, bottom: 20, trailing: 20))
                     }
-                    .padding(EdgeInsets(top: 44, leading: 20, bottom: 20, trailing: 20))
                 }
-
 
                 VStack {
                     VStack {
@@ -62,12 +76,10 @@ struct EnterView: View {
                         }
                         .environmentObject(viewModel)
                     } label: {
-
                         CButton(title: R.string.localizable.enterButtonCreateWallet(), style: .primary, size: .large, isLoading: false)
                         {
                             self.selectedView = .createWallet
                         }
-
                     }
 
                     NavigationLink(tag: NavigateViewType.importWallet, selection: $selectedView) {
@@ -76,16 +88,13 @@ struct EnterView: View {
                         }
                         .environmentObject(viewModel)
                     } label: {
-
                         CButton(title: R.string.localizable.enterButtonImport(), style: .secondary, size: .large, isLoading: false)
                         {
                             self.selectedView = .importWallet
                         }
-
                     }
                 }
                 .padding(UIConstants.contentInset)
-
             }
             .onChange(of: blockchain, perform: { newValue in
                 viewModel.trigger(.setBlockchain(newValue))
@@ -98,8 +107,18 @@ struct EnterView: View {
             .navigationBarColor()
             .edgesIgnoringSafeArea(.bottom)
         }
-
-
+    }
+    
+    @ViewBuilder
+    func wrapperBody<Content: View>(_ content: () -> Content) -> some View {
+        switch viewType {
+        case .enterApp:
+            NavigationView {
+                content()
+            }
+        case .addAccount:
+            content()
+        }
     }
 }
 

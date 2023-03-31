@@ -88,7 +88,7 @@ struct R: Rswift.Validatable {
     try intern.validate()
   }
 
-  /// This `R.color` struct is generated, and contains static references to 37 colors.
+  /// This `R.color` struct is generated, and contains static references to 39 colors.
   struct color {
     /// Color `AccentColor`.
     static let accentColor = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentColor")
@@ -160,8 +160,12 @@ struct R: Rswift.Validatable {
     static let textFieldBorder = Rswift.ColorResource(bundle: R.hostingBundle, name: "TextFieldBorder")
     /// Color `ThirdBackground`.
     static let thirdBackground = Rswift.ColorResource(bundle: R.hostingBundle, name: "ThirdBackground")
+    /// Color `WhiteSeparator`.
+    static let whiteSeparator = Rswift.ColorResource(bundle: R.hostingBundle, name: "WhiteSeparator")
     /// Color `White`.
     static let white = Rswift.ColorResource(bundle: R.hostingBundle, name: "White")
+    /// Color `Yellow-200`.
+    static let yellow200 = Rswift.ColorResource(bundle: R.hostingBundle, name: "Yellow-200")
     /// Color `Yellow`.
     static let yellow = Rswift.ColorResource(bundle: R.hostingBundle, name: "Yellow")
 
@@ -490,11 +494,29 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "WhiteSeparator", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func whiteSeparator(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.whiteSeparator, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIColor(named: "Yellow", bundle: ..., traitCollection: ...)`
     @available(tvOS 11.0, *)
     @available(iOS 11.0, *)
     static func yellow(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
       return UIKit.UIColor(resource: R.color.yellow, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "Yellow-200", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func yellow200(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.yellow200, compatibleWith: traitCollection)
     }
     #endif
 
@@ -787,10 +809,26 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(watchOS)
+    /// `UIColor(named: "WhiteSeparator", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func whiteSeparator(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.whiteSeparator.name)
+    }
+    #endif
+
+    #if os(watchOS)
     /// `UIColor(named: "Yellow", bundle: ..., traitCollection: ...)`
     @available(watchOSApplicationExtension 4.0, *)
     static func yellow(_: Void = ()) -> UIKit.UIColor? {
       return UIKit.UIColor(named: R.color.yellow.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "Yellow-200", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func yellow200(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.yellow200.name)
     }
     #endif
 
