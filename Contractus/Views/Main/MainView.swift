@@ -212,7 +212,7 @@ struct MainView: View {
                         } label: {
                             VStack(alignment: .center, spacing: 3) {
                                 Text("Account")
-                                    .font(.callout.monospaced())
+                                    .font(.callout)
                                     .fontWeight(.medium)
                                 HStack {
                                     Constants.qrCode
@@ -220,7 +220,7 @@ struct MainView: View {
                                         .frame(width: 12, height: 12)
                                         .foregroundColor(R.color.accentColor.color)
                                     Text(ContentMask.mask(from: viewModel.state.account.publicKey))
-                                        .font(.footnote.monospaced())
+                                        .font(.footnote)
                                         .foregroundColor(R.color.secondaryText.color)
                                 }
                             }

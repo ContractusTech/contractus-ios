@@ -32,7 +32,7 @@ struct MultilineTextFieldView: View {
         ZStack(alignment: .bottomTrailing) {
             TextEditor(text: $value)
                 .focused($isInputActive)
-                .setBackground(color: R.color.thirdBackground.color)
+                .setBackground(color: R.color.textFieldBackground.color)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
                         Spacer()
@@ -69,7 +69,7 @@ struct MultilineTextFieldView: View {
         }
         .frame(height: 130)
         .padding()
-        .background(R.color.thirdBackground.color)
+        .background(R.color.textFieldBackground.color)
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)

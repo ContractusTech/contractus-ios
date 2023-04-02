@@ -36,7 +36,7 @@ struct TopTextBlockView: View {
             case .success:
                 return R.color.white.color
             case .none:
-                return R.color.textBase.color
+                return R.color.labelTextPrimary.color
             case .warning:
                 return R.color.labelTextAttention.color
             case .waiting:
@@ -49,7 +49,7 @@ struct TopTextBlockView: View {
             case .success:
                 return R.color.baseGreen.color
             case .none:
-                return R.color.secondaryBackground.color
+                return R.color.labelBackgroundPrimary.color
             case .warning:
                 return R.color.yellow200.color
             case .waiting:
@@ -72,12 +72,12 @@ struct TopTextBlockView: View {
                         if let image = informationType.image {
                             image.resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 19, height: 19)
+                                .frame(width: 16, height: 16)
                                 .foregroundColor(informationType.textColor)
                         }
                         Text(headerText)
                             .multilineTextAlignment(.center)
-                            .font(.subheadline.weight(.semibold))
+                            .font(.subheadline.weight(.bold))
                             .textCase(.uppercase)
                             .foregroundColor(informationType.textColor)
                     }
@@ -93,7 +93,7 @@ struct TopTextBlockView: View {
             HStack {
                 Spacer()
                 Text(titleText)
-                    .font(.largeTitle.weight(.medium))
+                    .font(.largeTitle.weight(.semibold))
                 Spacer()
             }
             if let subTitleText = subTitleText {
