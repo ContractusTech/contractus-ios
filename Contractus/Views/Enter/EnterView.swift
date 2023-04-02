@@ -43,12 +43,11 @@ struct EnterView: View {
                         }
                         .padding(EdgeInsets(top: 44, leading: 20, bottom: 20, trailing: 20))
                     case .addAccount:
-                        VStack(alignment: .leading, spacing: 24) {
-                            Text("To add account select blockchain type and create or import your wallet")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                        }
-                        .padding(EdgeInsets(top: 44, leading: 20, bottom: 20, trailing: 20))
+                        // TODO: - Move text in localization
+                        TopTextBlockView(
+                            headerText: "Add new",
+                            titleText: "Account",
+                            subTitleText: "To add account select blockchain type and create or import your wallet")
                     }
                 }
 
