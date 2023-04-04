@@ -103,6 +103,8 @@
 "deal.no-secret-key" = "No secret key";
 "deal.no-secret-key-information" = "The secret key is needed to view and decrypt/encrypt contract details.";
 "deal.file.no-name" = "[No file name]";
+"deal.cancel.sign.title" = "Are you sure you want to cancel sign?";
+"deal.cancel.sign" = "Cancel sign";
 
 "newDeal.title" = "New deal";
 "newDeal.subtitle" = "Choose your role";
