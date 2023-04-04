@@ -28,9 +28,7 @@ struct DealItemView: View {
     let roleType: DealRoleType
 
     var body: some View {
-
         VStack(alignment:.leading, spacing: 12) {
-
             ZStack(alignment: .leading) {
                 HStack {
                     statusLabel()
@@ -44,7 +42,7 @@ struct DealItemView: View {
                 VStack(alignment: .center, spacing: 0) {
                     HStack {
                         Spacer()
-                        Text(amountFormatted)
+                        Text(amountPrefix + amountFormatted)
                             .font(.title)
                             .fontWeight(.medium)
                             .strikethrough(isStrikethrough, color: colorAmountText)
@@ -61,7 +59,6 @@ struct DealItemView: View {
             .frame(height: SIZE_BLOCK)
             .baseBackground()
             .cornerRadius(18)
-
 
             VStack(alignment:.leading, spacing: 2) {
                 Text(partnerTypeTitle)
@@ -92,8 +89,8 @@ struct DealItemView: View {
         Text(status.statusTitle)
             .font(.caption)
             .padding(EdgeInsets(top: 2, leading: 6, bottom: 2, trailing: 6))
-            .background(status.statusColor)
-            .foregroundColor(R.color.white.color)
+            .foregroundColor(status.statusColor)
+            .background(R.color.white.color)
             .cornerRadius(10)
             .shadow(color: .black.opacity(0.1), radius: 3)
 
@@ -104,8 +101,8 @@ struct DealItemView: View {
         Text(roleType.title)
             .font(.caption)
             .padding(EdgeInsets(top: 2, leading: 6, bottom: 2, trailing: 6))
-            .background(R.color.secondaryBackground.color)
-            .foregroundColor(R.color.textBase.color)
+            .foregroundColor(roleType.color)
+            .background(R.color.white.color)
             .cornerRadius(10)
             .shadow(color: .black.opacity(0.1), radius: 3)
 
@@ -120,32 +117,50 @@ struct DealItemView: View {
         case .canceled:
             return R.color.secondaryText.color
         case .finished:
-            return R.color.baseGreen.color
+            return roleType == .receive ? R.color.baseGreen.color : R.color.textBase.color
         case .new, .pending, .working, .unknown, .inProcessing:
             return R.color.textBase.color
         }
     }
 
+    private var amountPrefix: String {
+        return status == .finished && roleType == .receive
+        ? "+ "
+        : ""
+    }
+
     private var partnerTypeTitle: String {
         switch roleType {
         case .receive, .checker:
-            return "For client"
+            return R.string.localizable.dealTextForClient()
         case .pay:
-            return "Executor"
+            return R.string.localizable.dealTextExecutor()
         }
     }
-
 }
 
 private extension DealItemView.DealRoleType {
     var title: String {
         switch self {
         case .checker:
-            return "Checker"
+            return R.string.localizable.dealTextChecker()
         case .pay:
-            return "Client"
+            return R.string.localizable.dealTextClient()
         case .receive:
-            return "Executor"
+            return R.string.localizable.dealTextExecutor()
+        }
+    }
+}
+
+private extension DealItemView.DealRoleType {
+    var color: Color {
+        switch self {
+        case .checker:
+            return R.color.secondaryText.color
+        case .pay:
+            return R.color.textBase.color
+        case .receive:
+            return R.color.textWarn.color
         }
     }
 }
@@ -156,13 +171,13 @@ private extension DealStatus {
         case .finished:
             return R.color.baseGreen.color
         case .canceled:
-            return R.color.secondaryText.color
+            return R.color.redText.color
         case .new:
             return R.color.blue.color
         case .pending, .inProcessing:
             return R.color.secondaryText.color
         case .working:
-            return R.color.yellow.color
+            return R.color.textBase.color
         case .unknown:
             return R.color.secondaryText.color
         }
@@ -171,19 +186,19 @@ private extension DealStatus {
     var statusTitle: String {
         switch self {
         case .finished:
-            return "Finished"
+            return R.string.localizable.dealStatusFinished()
         case .canceled:
-            return "Canceled"
+            return R.string.localizable.dealStatusCanceled()
         case .new:
-            return "New"
+            return R.string.localizable.dealStatusNew()
         case .pending:
-            return "Pending"
+            return R.string.localizable.dealStatusPending()
         case .working:
-            return "In work"
+            return R.string.localizable.dealStatusWorking()
         case .unknown:
-            return "-"
+            return R.string.localizable.dealStatusUnknown()
         case .inProcessing:
-            return "Processing"
+            return R.string.localizable.dealStatusProcessing()
         }
     }
 }
@@ -217,13 +232,38 @@ struct DealItemView_Previews: PreviewProvider {
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .working,
                     roleType: .pay)
+
+                DealItemView(
+                    amountFormatted: Mock.deal.amountFormatted,
+                    tokenSymbol: Mock.deal.token.code,
+                    withPublicKey: Mock.deal.contractorPublicKey,
+                    status: .finished,
+                    roleType: .receive)
+
+                DealItemView(
+                    amountFormatted: Mock.deal.amountFormatted,
+                    tokenSymbol: Mock.deal.token.code,
+                    withPublicKey: Mock.deal.contractorPublicKey,
+                    status: .finished,
+                    roleType: .pay)
+
+                DealItemView(
+                    amountFormatted: Mock.deal.amountFormatted,
+                    tokenSymbol: Mock.deal.token.code,
+                    withPublicKey: Mock.deal.contractorPublicKey,
+                    status: .inProcessing,
+                    roleType: .pay)
+
+                DealItemView(
+                    amountFormatted: Mock.deal.amountFormatted,
+                    tokenSymbol: Mock.deal.token.code,
+                    withPublicKey: Mock.deal.contractorPublicKey,
+                    status: .pending,
+                    roleType: .pay)
             }
-
-        }.padding(120)
-            .baseBackground()
-
-
-
+        }
+        .padding(.horizontal, 100)
+        .baseBackground()
     }
 }
 

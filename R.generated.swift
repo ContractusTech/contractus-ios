@@ -906,8 +906,12 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 115 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 124 localization keys.
     struct localizable {
+      /// en translation: -
+      ///
+      /// Locales: en
+      static let dealStatusUnknown = Rswift.StringResource(key: "deal.status.unknown", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: A new way to collaborate and make business with partners. Create contract, sign, check result and pay. Securely.
       ///
       /// Locales: en
@@ -980,6 +984,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonCancel = Rswift.StringResource(key: "common.cancel", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Cancel
+      ///
+      /// Locales: en
+      static let dealStatusCanceled = Rswift.StringResource(key: "deal.status.canceled", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Change
       ///
       /// Locales: en
@@ -996,6 +1004,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let backupInformationSubtitle = Rswift.StringResource(key: "backupInformation.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Checker
+      ///
+      /// Locales: en
+      static let dealTextChecker = Rswift.StringResource(key: "deal.text.checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Checker success added!
       ///
       /// Locales: en
@@ -1068,6 +1080,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonDone = Rswift.StringResource(key: "common.done", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Done
+      ///
+      /// Locales: en
+      static let dealStatusFinished = Rswift.StringResource(key: "deal.status.finished", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Edit
       ///
       /// Locales: en
@@ -1132,6 +1148,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextFiles = Rswift.StringResource(key: "deal.text.files", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: For client
+      ///
+      /// Locales: en
+      static let dealTextForClient = Rswift.StringResource(key: "deal.text.for.client", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Force update
       ///
       /// Locales: en
@@ -1164,6 +1184,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let enterButtonImport = Rswift.StringResource(key: "enter.button.import", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: In work
+      ///
+      /// Locales: en
+      static let dealStatusWorking = Rswift.StringResource(key: "deal.status.working", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: New
+      ///
+      /// Locales: en
+      static let dealStatusNew = Rswift.StringResource(key: "deal.status.new", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: New deal
       ///
       /// Locales: en
@@ -1208,6 +1236,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonPaste = Rswift.StringResource(key: "common.paste", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Pending
+      ///
+      /// Locales: en
+      static let dealStatusPending = Rswift.StringResource(key: "deal.status.pending", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Performs the work specified in the contract.
       ///
       /// Locales: en
@@ -1220,6 +1252,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let createWalletButtonCopied = Rswift.StringResource(key: "createWallet.button.copied", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Processing
+      ///
+      /// Locales: en
+      static let dealStatusProcessing = Rswift.StringResource(key: "deal.status.processing", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Public key
       ///
       /// Locales: en
@@ -1368,6 +1404,21 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealFileNoName = Rswift.StringResource(key: "deal.file.no-name", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+
+      /// en translation: -
+      ///
+      /// Locales: en
+      static func dealStatusUnknown(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.unknown", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.unknown"
+        }
+
+        return NSLocalizedString("deal.status.unknown", bundle: bundle, comment: "")
+      }
 
       /// en translation: A new way to collaborate and make business with partners. Create contract, sign, check result and pay. Securely.
       ///
@@ -1645,6 +1696,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.cancel", bundle: bundle, comment: "")
       }
 
+      /// en translation: Cancel
+      ///
+      /// Locales: en
+      static func dealStatusCanceled(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.canceled", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.canceled"
+        }
+
+        return NSLocalizedString("deal.status.canceled", bundle: bundle, comment: "")
+      }
+
       /// en translation: Change
       ///
       /// Locales: en
@@ -1703,6 +1769,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("backupInformation.subtitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Checker
+      ///
+      /// Locales: en
+      static func dealTextChecker(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.text.checker", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.text.checker"
+        }
+
+        return NSLocalizedString("deal.text.checker", bundle: bundle, comment: "")
       }
 
       /// en translation: Checker success added!
@@ -1975,6 +2056,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.done", bundle: bundle, comment: "")
       }
 
+      /// en translation: Done
+      ///
+      /// Locales: en
+      static func dealStatusFinished(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.finished", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.finished"
+        }
+
+        return NSLocalizedString("deal.status.finished", bundle: bundle, comment: "")
+      }
+
       /// en translation: Edit
       ///
       /// Locales: en
@@ -2215,6 +2311,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.text.files", bundle: bundle, comment: "")
       }
 
+      /// en translation: For client
+      ///
+      /// Locales: en
+      static func dealTextForClient(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.text.for.client", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.text.for.client"
+        }
+
+        return NSLocalizedString("deal.text.for.client", bundle: bundle, comment: "")
+      }
+
       /// en translation: Force update
       ///
       /// Locales: en
@@ -2333,6 +2444,36 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("enter.button.import", bundle: bundle, comment: "")
+      }
+
+      /// en translation: In work
+      ///
+      /// Locales: en
+      static func dealStatusWorking(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.working", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.working"
+        }
+
+        return NSLocalizedString("deal.status.working", bundle: bundle, comment: "")
+      }
+
+      /// en translation: New
+      ///
+      /// Locales: en
+      static func dealStatusNew(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.new", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.new"
+        }
+
+        return NSLocalizedString("deal.status.new", bundle: bundle, comment: "")
       }
 
       /// en translation: New deal
@@ -2500,6 +2641,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.paste", bundle: bundle, comment: "")
       }
 
+      /// en translation: Pending
+      ///
+      /// Locales: en
+      static func dealStatusPending(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.pending", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.pending"
+        }
+
+        return NSLocalizedString("deal.status.pending", bundle: bundle, comment: "")
+      }
+
       /// en translation: Performs the work specified in the contract.
       ///
       /// Locales: en
@@ -2543,6 +2699,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("createWallet.button.copied", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Processing
+      ///
+      /// Locales: en
+      static func dealStatusProcessing(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.processing", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.processing"
+        }
+
+        return NSLocalizedString("deal.status.processing", bundle: bundle, comment: "")
       }
 
       /// en translation: Public key
