@@ -906,7 +906,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 115 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 117 localization keys.
     struct localizable {
       /// en translation: A new way to collaborate and make business with partners. Create contract, sign, check result and pay. Securely.
       ///
@@ -964,6 +964,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealViewAmount = Rswift.StringResource(key: "deal.view.amount", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Are you sure you want to cancel sign?
+      ///
+      /// Locales: en
+      static let dealCancelSignTitle = Rswift.StringResource(key: "deal.cancel.sign.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Attached files
       ///
       /// Locales: en
@@ -980,6 +984,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonCancel = Rswift.StringResource(key: "common.cancel", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Cancel sign
+      ///
+      /// Locales: en
+      static let dealCancelSign = Rswift.StringResource(key: "deal.cancel.sign", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Change
       ///
       /// Locales: en
@@ -1585,6 +1593,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.view.amount", bundle: bundle, comment: "")
       }
 
+      /// en translation: Are you sure you want to cancel sign?
+      ///
+      /// Locales: en
+      static func dealCancelSignTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.cancel.sign.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.cancel.sign.title"
+        }
+
+        return NSLocalizedString("deal.cancel.sign.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Attached files
       ///
       /// Locales: en
@@ -1643,6 +1666,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.cancel", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Cancel sign
+      ///
+      /// Locales: en
+      static func dealCancelSign(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.cancel.sign", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.cancel.sign"
+        }
+
+        return NSLocalizedString("deal.cancel.sign", bundle: bundle, comment: "")
       }
 
       /// en translation: Change
