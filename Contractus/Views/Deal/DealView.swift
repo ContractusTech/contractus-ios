@@ -35,6 +35,7 @@ struct DealView: View {
     enum ActionsSheetType: Equatable {
         case confirmCancel
         case dealActions
+        case confirmCancelSign
     }
 
     enum ActiveModalType: Equatable {
@@ -528,8 +529,7 @@ struct DealView: View {
                                 }
                             case .cancelSign:
                                 CButton(title: "Cancel sign", style: .cancel, size: .large, isLoading: false) {
-                                    viewModel.trigger(.cancelSign)
-
+                                    actionsType = .confirmCancelSign
                                 }
                                 Text("You can cancel your signature before your partner signs the contract. The work of the contract will begin when the partner signs.")
                                     .font(.footnote)
@@ -764,6 +764,10 @@ struct DealView: View {
                 return ActionSheet(
                     title: Text(R.string.localizable.commonSelectAction()),
                     buttons: actionSheetMenuButtons())
+            case .confirmCancelSign:
+                return ActionSheet(
+                    title: Text(R.string.localizable.dealCancelSignTitle()),
+                    buttons: actionSheetCancelSignButtons())
             }
         })
         .toolbar {
@@ -835,6 +839,16 @@ struct DealView: View {
                 }
             },
         ]
+    }
+
+    private func actionSheetCancelSignButtons() -> [Alert.Button] {
+        return [
+            Alert.Button.destructive(Text(R.string.localizable.dealCancelSign())) {
+                viewModel.trigger(.cancelSign)
+            },
+            Alert.Button.cancel() {
+
+            }]
     }
 
     private func updateProgressHUD(progress: Double) {
