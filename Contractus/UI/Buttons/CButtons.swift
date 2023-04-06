@@ -58,12 +58,14 @@ struct CButton: View {
     }
 
     enum Size {
-        case `default`, large
+        case `default`, large, small
 
         var edge: EdgeInsets {
             switch self {
             case .large:
                 return EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26)
+            case .small:
+                return EdgeInsets(top: 8, leading: 10, bottom: 8, trailing: 10)
             case .default:
                 return EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
             }
@@ -73,6 +75,8 @@ struct CButton: View {
             switch self {
             case .large:
                 return .headline //Font.title3.weight(.regular)
+            case .small:
+                return .footnote
             case .default:
                 return .callout.weight(.medium) //Font.headline
             }
@@ -94,6 +98,8 @@ struct CButton: View {
         switch size {
         case .default:
             return roundedCorner ? 24 : 13
+        case .small:
+            return roundedCorner ? 12 : 7
         case .large:
             return roundedCorner ? 34 : 16
         }
@@ -109,7 +115,7 @@ struct CButton: View {
             action()
         } label: {
             switch size {
-            case .`default`:
+            case .`default`, .small:
                 ZStack(alignment: .leading) {
                     if isLoading {
                         Circle()
@@ -217,6 +223,8 @@ struct CButton_Previews: PreviewProvider {
         ScrollView {
             VStack {
                 Group {
+                    CButton(title: "Text", style: .secondary, size: .small, isLoading: false, roundedCorner: true) { }
+
                     CButton(title: "Text", style: .primary, size: .default, isLoading: false) { }
 
                     CButton(title: "Text", style: .secondary, size: .default, isLoading: false) { }

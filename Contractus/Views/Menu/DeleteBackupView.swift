@@ -25,8 +25,6 @@ struct DeleteBackupView: View {
         case delete, backup
     }
 
-//    @EnvironmentObject var viewModel: AnyViewModel<EnterState, EnterInput>
-
     var viewType: DeleteBackupViewType = .backup
 
     let informationType: TopTextBlockView.InformationType
@@ -52,15 +50,16 @@ struct DeleteBackupView: View {
                     }
                     Spacer()
                 }
-                .padding(EdgeInsets(top: 12, leading: 18, bottom: 16, trailing: 18))
+                .padding(EdgeInsets(top: 42, leading: 18, bottom: 16, trailing: 18))
             }
             VStack(spacing: 0) {
                 if viewType == .delete {
-                    Text("You cannot recover access to the account\nwithout the private key.")
+                    Text(R.string.localizable.accountsDeleteWarning())
                         .multilineTextAlignment(.center)
                         .font(.footnote)
+                        .foregroundColor(R.color.redText.color)
                     
-                    CButton(title: "Delete account", style: .cancel, size: .large, isLoading: false, roundedCorner: true)
+                    CButton(title: R.string.localizable.accountsDeleteAccount(), style: .cancel, size: .large, isLoading: false, roundedCorner: true)
                     {
                         completion(.delete)
                     }
@@ -68,7 +67,6 @@ struct DeleteBackupView: View {
                     Divider()
                 }
                 HStack {
-
                     CButton(title: R.string.localizable.commonCancel(), style: .secondary, size: .large, isLoading: false, roundedCorner: true)
                     {
                         completion(.cancel)
@@ -77,10 +75,6 @@ struct DeleteBackupView: View {
                 .padding(EdgeInsets(top: 16, leading: 18, bottom: 24, trailing: 18))
             }
         }
-//        .onAppear {
-//            viewModel.trigger(.createIfNeeded)
-//        }
-        .navigationBarTitleDisplayMode(.inline)
         .baseBackground()
         .navigationBarColor()
         .edgesIgnoringSafeArea(.bottom)
@@ -92,6 +86,7 @@ struct DeleteBackupView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             DeleteBackupView(
+                viewType: .delete,
                 informationType: .warning,
                 titleText: "Attention",
                 largeTitleText: "Remove Account",

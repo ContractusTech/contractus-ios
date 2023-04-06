@@ -24,6 +24,7 @@
 "common.you" = "You";
 "common.warning" = "Warning";
 "common.attention" = "Attention";
+"common.backup" = "Backup";
 "common.import" = "Import";
 "common.app-name" = "Contractus";
 "common.set" = "Set";
@@ -49,6 +50,22 @@
 "backupInformation.subtitle" = "Check private key is backuped. If lose private key you can't use service forever.";
 "backupInformation.tooltip" = "If you already backuped then press Continues";
 "backupInformation.button.copied" = "Private key already in clipboard!";
+
+"accounts.title" = "Accounts";
+"accounts.warning.title" = "Warning!";
+"accounts.warning.subtitle" = "Before delete account backup private key.";
+"accounts.edit.private.key" = "Private key";
+"accounts.add" = "Add account";
+"accounts.edit.remove" = "Remove";
+"accounts.backup.title" = "Private key";
+"accounts.backup.subtitle" = "Copy the private key and save it in the password manager or in another safe place";
+"accounts.delete.title" = "Remove Account";
+"accounts.delete.subtitle" = "Copy the private key and save it in the password manager or in another safe place";
+"accounts.delete.warning" = "You cannot recover access to the account\nwithout the private key.";
+"accounts.delete.account" = "Delete account";
+"accounts.delete.alert.title" = "Warning";
+"accounts.delete.alert.subtitle" = "Please select another account before deleting the active account. Or after deleting you log out. Delete account?";
+"accounts.delete.alert.button" = "Yes, delete";
 
 "qrCode.button.share" = "Share Image";
 "qrCode.warning" = "Warning!";
