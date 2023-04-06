@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 
 fileprivate enum Constants {
-    static let successCopyImage = Image(systemName: "checkmark")
-    static let copyImage = Image(systemName: "doc.on.doc")
+    static let successCopyImage = Image(systemName: "checkmark.square")
+    static let copyImage = Image(systemName: "square.on.square")
 }
 
 struct CopyContentView: View {
@@ -47,25 +47,28 @@ struct CopyContentView: View {
                         Constants.successCopyImage
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 16, height: 24)
+                            .frame(width: 20, height: 20)
                             .foregroundColor(R.color.baseGreen.color)
                     } else {
                         Constants.copyImage
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 24, height: 24)
+                            .frame(width: 20, height: 20)
                             .foregroundColor(R.color.textBase.color)
                     }
                 }
                 .frame(width: 24, height: 24)
-
             }
         }
-        .padding(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
+        .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
         .background(
-            RoundedRectangle(cornerRadius: 10)
-            .fill(R.color.thirdBackground.color)
-            .background(RoundedRectangle(cornerRadius: 10).stroke(R.color.textFieldBorder.color, lineWidth: 1)))
+            RoundedRectangle(cornerRadius: 12)
+            .fill(R.color.white.color)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(R.color.textFieldBorder.color, lineWidth: 1)
+            )
+        )
     }
 }
 

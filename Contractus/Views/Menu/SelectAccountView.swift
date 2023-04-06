@@ -19,8 +19,10 @@ extension CommonAccount: Identifiable {
 }
 
 struct SelectAccountView: View {
-//    @StateObject var viewModel = AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(), accountService: AccountServiceImpl(storage: KeychainAccountStorage())))
-    
+    enum SheetType {
+        case backup(CommonAccount), delete(CommonAccount)
+    }
+
     enum ActionsSheetType: Equatable {
         case addActions
     }
@@ -38,10 +40,9 @@ struct SelectAccountView: View {
 
     @State private var confirmAlert: Bool = false
     @State private var deletedActiveAccount: Bool = false
-    @State private var isActiveBackup: Bool = false
-    @State private var isActiveDelete: Bool = false
     @State private var actionsType: ActionsSheetType?
     @State private var selectedView: NavigateViewType? = .none
+    @State private var sheetType: SheetType? = .none
 
     var body: some View {
         ScrollView {
@@ -49,10 +50,10 @@ struct SelectAccountView: View {
                 if editMode?.wrappedValue == .active {
                     HStack {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("Warning!")
+                            Text(R.string.localizable.accountsWarningTitle())
                                 .font(.headline)
                                 .foregroundColor(R.color.textBase.color)
-                            Text("Before delete account backup private key.")
+                            Text(R.string.localizable.accountsWarningSubtitle())
                                 .font(.subheadline)
                                 .foregroundColor(R.color.textBase.color)
                         }
@@ -79,82 +80,41 @@ struct SelectAccountView: View {
                         }
                         Spacer()
                         if editMode?.wrappedValue == .active {
-                            ZStack {
-                                NavigationLink(isActive: $isActiveBackup) {
-                                    DeleteBackupView(
-                                        informationType: .none,
-                                        titleText: "Backup",
-                                        largeTitleText: R.string.localizable.backupInformationTitle(),
-                                        informationText: R.string.localizable.backupInformationSubtitle(),
-                                        privateKey: item.privateKey,
-                                        completion: { _ in
-                                            isActiveBackup = false
-                                        })
-                                } label: {
-                                    Text("Private key")
-                                        .font(.footnote)
-                                        .padding(.horizontal, 11)
-                                        .padding(.vertical, 8)
-                                }
-                                
+                            CButton(title: R.string.localizable.accountsEditPrivateKey(), style: .secondary, size: .small, isLoading: false, roundedCorner: true) {
+                                sheetType = .backup(item)
                             }
-                            .background(R.color.buttonBackgroundSecondary.color)
-                            .cornerRadius(12)
-                            ZStack {
-                                NavigationLink(isActive: $isActiveDelete) {
-                                    DeleteBackupView(
-                                        viewType: .delete,
-                                        informationType: .warning,
-                                        titleText: "Attention",
-                                        largeTitleText: R.string.localizable.backupInformationTitle(),
-                                        informationText: R.string.localizable.backupInformationSubtitle(),
-                                        privateKey: item.privateKey,
-                                        completion: { type in
-                                            switch type {
-                                            case .cancel:
-                                                isActiveDelete = false
-                                            case .delete:
-                                                isActiveDelete = false
-                                                remove(item)
-                                            case .copyPrivateKey:
-                                                UIPasteboard.general.string = item.privateKey.toBase58()
-                                            }
-                                        })
-                                } label: {
-                                    Text("Remove")
-                                        .font(.footnote)
-                                        .padding(.horizontal, 11)
-                                        .padding(.vertical, 8)
-                                }
+                            CButton(title: R.string.localizable.accountsEditRemove(), style: .cancel, size: .small, isLoading: false, roundedCorner: true) {
+                                sheetType = .delete(item)
                             }
-                            .background(R.color.buttonBackgroundCancel.color)
-                            .cornerRadius(12)
+                            .padding(.trailing, 13)
                         } else {
-                            if self.selectedItem == item {
-                                ZStack {
-                                    Constants.checkmarkImage
-                                        .imageScale(.small)
-                                        .foregroundColor(R.color.accentColor.color)
-                                }
-                                .frame(width: 24, height: 24)
-                                .background(R.color.fourthBackground.color)
-                                .cornerRadius(7)
-                            } else {
-                                ZStack {}
-                                    .frame(width: 24,  height: 24)
-                                    .overlay(
-                                        RoundedRectangle(
-                                            cornerRadius: 7,
-                                            style: .continuous
+                            Group {
+                                if self.selectedItem == item {
+                                    ZStack {
+                                        Constants.checkmarkImage
+                                            .imageScale(.small)
+                                            .foregroundColor(R.color.accentColor.color)
+                                    }
+                                    .frame(width: 24, height: 24)
+                                    .background(R.color.fourthBackground.color)
+                                    .cornerRadius(7)
+                                } else {
+                                    ZStack {}
+                                        .frame(width: 24,  height: 24)
+                                        .overlay(
+                                            RoundedRectangle(
+                                                cornerRadius: 7,
+                                                style: .continuous
+                                            )
+                                            .stroke(R.color.fourthBackground.color, lineWidth: 1)
                                         )
-                                        .stroke(R.color.fourthBackground.color, lineWidth: 1)
-                                    )
+                                }
                             }
+                            .padding(.trailing, 19)
                         }
                     }
                     .frame(height: 62)
                     .padding(.leading, 21)
-                    .padding(.trailing, 13)
                     .background(
                         Color(R.color.secondaryBackground()!)
                             .clipped()
@@ -171,7 +131,7 @@ struct SelectAccountView: View {
                     HStack {
                         Spacer()
                         Constants.plusImage
-                        Text("Add account")
+                        Text(R.string.localizable.accountsAdd())
                         Spacer()
                     }
                     .frame(height: 62)
@@ -184,7 +144,6 @@ struct SelectAccountView: View {
                     .contentShape(Rectangle())
                     .onTapGesture {
                         selectedView = .addWallet
-//                        actionsType = .addActions
                     }
                 }
                 
@@ -199,16 +158,16 @@ struct SelectAccountView: View {
             .padding(.horizontal, 5)
         }
         .baseBackground()
-        .navigationTitle("Accounts")
+        .navigationTitle(R.string.localizable.accountsTitle())
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             EditButton()
         }
         .alert(isPresented: $confirmAlert) {
             Alert(
-                title: Text("Warning"),
-                message: Text("Please select another account before deleting the active account. Or after deleting you log out. Delete account?"),
-                primaryButton: Alert.Button.destructive(Text("Yes, delete"), action: {
+                title: Text(R.string.localizable.accountsDeleteAlertTitle()),
+                message: Text(R.string.localizable.accountsDeleteAlertSubtitle()),
+                primaryButton: Alert.Button.destructive(Text(R.string.localizable.accountsDeleteAlertButton()), action: {
                     if deletedActiveAccount {
                         accountDeleteHandler(items)
                         logoutHandler()
@@ -227,6 +186,48 @@ struct SelectAccountView: View {
                 return ActionSheet(
                     title: Text(R.string.localizable.commonSelectAction()),
                     buttons: actionSheetMenuButtons()
+                )
+            }
+        })
+        .sheet(item: $sheetType, content: { type in
+            switch type {
+            case .backup(let item):
+                DeleteBackupView(
+                    informationType: .none,
+                    titleText: R.string.localizable.commonBackup(),
+                    largeTitleText: R.string.localizable.accountsBackupTitle(),
+                    informationText: R.string.localizable.accountsBackupSubtitle(),
+                    privateKey: item.privateKey,
+                    completion: { type in
+                        switch type {
+                        case .copyPrivateKey:
+                            return
+                        default:
+                            self.sheetType = .none
+                        }
+                    }
+                )
+            case .delete(let item):
+                DeleteBackupView(
+                    viewType: .delete,
+                    informationType: .warning,
+                    titleText: R.string.localizable.commonAttention(),
+                    largeTitleText: R.string.localizable.accountsDeleteTitle(),
+                    informationText: R.string.localizable.accountsDeleteSubtitle(),
+                    privateKey: item.privateKey,
+                    completion: { type in
+                        switch type {
+                        case .cancel:
+                            self.sheetType = .none
+                        case .delete:
+                            self.sheetType = .none
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                remove(item)
+                            }
+                        case .copyPrivateKey:
+                            return
+                        }
+                    }
                 )
             }
         })
@@ -269,8 +270,13 @@ struct SelectAccountView: View {
     }
 }
 
-
 extension SelectAccountView.ActionsSheetType: Identifiable {
+    var id: String {
+        return "\(self)"
+    }
+}
+
+extension SelectAccountView.SheetType: Identifiable {
     var id: String {
         return "\(self)"
     }
