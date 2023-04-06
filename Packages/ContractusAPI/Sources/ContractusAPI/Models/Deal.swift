@@ -100,7 +100,6 @@ public struct Deal: Decodable {
 
     public var amountFormatted: String {
         token.format(amount: self.amount, withCode: false)
-
     }
 
     public var metadataIsEmpty: Bool {
