@@ -114,7 +114,7 @@ struct CreateDealView: View {
                 ScrollView {
                     NavigationLink(destination: LazyView(ShareContentView(
                         informationType: .success,
-                        content:viewModel.state.shareable!,
+                        content: viewModel.state.shareable!,
                         topTitle: "Created",
                         title: "The secret key",
                         subTitle: "The partner need scan the QR code to start working on the contract.",
