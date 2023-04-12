@@ -17,25 +17,27 @@ protocol TransactionSignService {
 final class SolanaTransactionSignServiceImpl: TransactionSignService {
 
     enum TransactionSignServiceError: Error {
-        case failed
+        case failed, transactionIsEmpty
     }
 
     /// Return signed Transaction as Base64 string and Signature
     func sign(txBase64: String, by secretKey: Data) throws -> (signature: String, message: String) {
+        guard !txBase64.isEmpty else {
+            throw TransactionSignServiceError.transactionIsEmpty
+        }
         guard let account = try? Account(secretKey: secretKey), let dataToSign = Data(base64Encoded: txBase64) else {
             throw TransactionSignServiceError.failed
         }
 
         var tx = try Transaction.from(data: dataToSign)
-        try tx.partialSign(signers: [account])
+        try tx.sign(signers: [account])
         guard let sign = tx.signatures.last(where: {$0.publicKey == account.publicKey}) else {
             throw TransactionSignServiceError.failed
         }
-
         guard let signBase64 = sign.signature?.base64EncodedString() else {
             throw TransactionSignServiceError.failed
         }
-        return (signBase64, try tx.serialize().base64EncodedString())
+        return (signBase64, try tx.serialize(requiredAllSignatures: false).base64EncodedString())
     }
 
     func isSigned(txBase64: String, publicKey: Data) -> Bool {
