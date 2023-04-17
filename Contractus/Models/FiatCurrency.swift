@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 enum FiatCurrency {
     case USD, RUB, EUR
 }

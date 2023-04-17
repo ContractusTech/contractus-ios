@@ -9,7 +9,6 @@ import Foundation
 import ContractusAPI
 import Base58Swift
 
-
 enum AccountValidator {
     static func isValidPublicKey(string: String, blockchain: Blockchain) -> Bool {
         switch blockchain {

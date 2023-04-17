@@ -76,7 +76,6 @@
 		6D8EFD9728D958AA0064F5DA /* CopyContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFD9628D958AA0064F5DA /* CopyContentView.swift */; };
 		6D8EFD9928DD68660064F5DA /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFD9828DD68660064F5DA /* LoadingButton.swift */; };
 		6D8EFD9B28DED4EC0064F5DA /* BalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFD9A28DED4EC0064F5DA /* BalanceView.swift */; };
-		6D8EFD9D28E043050064F5DA /* Balance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFD9C28E043050064F5DA /* Balance.swift */; };
 		6D8EFDA128E044A80064F5DA /* SharedSecretStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFDA028E044A80064F5DA /* SharedSecretStorage.swift */; };
 		6D8EFDA328E0528A0064F5DA /* FiatCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFDA228E0528A0064F5DA /* FiatCurrency.swift */; };
 		6D97AEF1288D196200EB61D0 /* ContractusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D97AEF0288D196200EB61D0 /* ContractusApp.swift */; };
@@ -223,7 +222,6 @@
 		6D8EFD9628D958AA0064F5DA /* CopyContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyContentView.swift; sourceTree = "<group>"; };
 		6D8EFD9828DD68660064F5DA /* LoadingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingButton.swift; sourceTree = "<group>"; };
 		6D8EFD9A28DED4EC0064F5DA /* BalanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceView.swift; sourceTree = "<group>"; };
-		6D8EFD9C28E043050064F5DA /* Balance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Balance.swift; sourceTree = "<group>"; };
 		6D8EFDA028E044A80064F5DA /* SharedSecretStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedSecretStorage.swift; sourceTree = "<group>"; };
 		6D8EFDA228E0528A0064F5DA /* FiatCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatCurrency.swift; sourceTree = "<group>"; };
 		6D97AEED288D196200EB61D0 /* Contractus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Contractus.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -329,14 +327,6 @@
 				6D0F7F44298C20C800EC2C74 /* WrapTokenViewModel.swift */,
 			);
 			path = Wrap;
-			sourceTree = "<group>";
-		};
-		6D1DF1A22922EC5200B112FC /* Buttons */ = {
-			isa = PBXGroup;
-			children = (
-				6D1DF1A32922EC7400B112FC /* CButtons.swift */,
-			);
-			path = Buttons;
 			sourceTree = "<group>";
 		};
 		6D2E0AF728AF342D002BA683 /* TextEditorView */ = {
@@ -550,10 +540,10 @@
 		6DBCA452288EFBA800F918B6 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				6D1DF1A22922EC5200B112FC /* Buttons */,
 				6D6EE3A828A0ED9900635E60 /* ViewModifier */,
 				6DBCA47C2890E35C00F918B6 /* Style */,
 				6D6EE394289F9EFE00635E60 /* ImagePickerView.swift */,
+				6D1DF1A32922EC7400B112FC /* CButtons.swift */,
 				6D6EE3A628A0E20100635E60 /* Label.swift */,
 				6DC1C234291BE6660009FE96 /* DocumentPickerView.swift */,
 				6D3AA47F292CAFB800596061 /* QuickLookView.swift */,
@@ -663,7 +653,6 @@
 				6D7552992897848B0069935B /* Mock.swift */,
 				6D75529B28978C450069935B /* Account.swift */,
 				6D6EE390289E3AA000635E60 /* File.swift */,
-				6D8EFD9C28E043050064F5DA /* Balance.swift */,
 				6D8EFDA228E0528A0064F5DA /* FiatCurrency.swift */,
 				6DFED938293262F300AF727A /* SharablePublicKey.swift */,
 			);
@@ -975,7 +964,6 @@
 				6D6EE3AA28A0EDAF00635E60 /* Common.swift in Sources */,
 				6D3AA47C292B150400596061 /* FileSizeFormatter.swift in Sources */,
 				6D0F7F43298BEC7700EC2C74 /* WrapTokenView.swift in Sources */,
-				6D8EFD9D28E043050064F5DA /* Balance.swift in Sources */,
 				6DF6ADC32994EAA300A50598 /* SharedSecretService.swift in Sources */,
 				6D8EFD9B28DED4EC0064F5DA /* BalanceView.swift in Sources */,
 				6D5A65A728E3F5110081533C /* ChangeAmountViewModel.swift in Sources */,

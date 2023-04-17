@@ -96,10 +96,8 @@ struct TextEditorView: View {
                     }
                 }
                 .overlay(
-
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(R.color.textFieldBorder.color, lineWidth: mode != .view ? 1 : 0))
-
             }
             .padding()
             .navigationBarTitleDisplayMode(.inline)

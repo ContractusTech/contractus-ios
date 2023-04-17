@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 fileprivate enum Constants {
-    static let successCopyImage = Image(systemName: "checkmark.square")
+    static let successCopyImage = Image(systemName: "checkmark")
     static let copyImage = Image(systemName: "square.on.square")
 }
 
@@ -36,8 +36,7 @@ struct CopyContentView: View {
                 copiedNotification = true
                 ImpactGenerator.soft()
                 UIPasteboard.general.string = content
-                debugPrint(content)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
                     copiedNotification = false
                 })
                 action(content)
