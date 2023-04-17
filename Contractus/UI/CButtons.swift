@@ -48,7 +48,7 @@ struct CButton: View {
             case .primary:
                 return R.color.buttonTextPrimary.color
             case .warn:
-                return R.color.buttonTextSecondary.color
+                return R.color.black.color
             case .cancel:
                 return R.color.buttonTextSecondary.color
             case .success:
@@ -65,7 +65,7 @@ struct CButton: View {
             case .large:
                 return EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26)
             case .small:
-                return EdgeInsets(top: 8, leading: 10, bottom: 8, trailing: 10)
+                return EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
             case .default:
                 return EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
             }
@@ -74,11 +74,11 @@ struct CButton: View {
         var font: Font {
             switch self {
             case .large:
-                return .headline //Font.title3.weight(.regular)
+                return .body.weight(.semibold)
             case .small:
-                return .footnote
+                return .footnote.weight(.medium)
             case .default:
-                return .callout.weight(.medium) //Font.headline
+                return .body.weight(.semibold)
             }
 
         }
@@ -97,11 +97,11 @@ struct CButton: View {
     private var cornerRadius: CGFloat {
         switch size {
         case .default:
-            return roundedCorner ? 24 : 13
+            return roundedCorner ? 34 : 13
         case .small:
-            return roundedCorner ? 12 : 7
+            return roundedCorner ? 34 : 10
         case .large:
-            return roundedCorner ? 34 : 16
+            return roundedCorner ? 34 : 17
         }
     }
 
@@ -156,9 +156,8 @@ struct CButton: View {
                 .padding(size.edge)
                 .background(style.background.opacity(isLoading || isDisabled ? 0.4 : 1.0))
                 .cornerRadius(cornerRadius)
-                // .opacity(isLoading || isDisabled ? 0.6 : 1.0)
                 .overlay {
-                    RoundedRectangle(cornerRadius: roundedCorner ? 23 : 12)
+                    RoundedRectangle(cornerRadius: cornerRadius)
                         .stroke(style.borderColor.opacity(isLoading || isDisabled ? 0.3 : 1.0), lineWidth: 1)
                         .padding(0.4)
                 }
@@ -201,19 +200,15 @@ struct CButton: View {
 
                 .padding(size.edge)
                 .background(style.background.opacity(isLoading || isDisabled ? 0.4 : 1.0))
-                .cornerRadius(roundedCorner ? 34 : 16)
-//                .opacity(isLoading || isDisabled ? 0.6 : 1.0)
+                .cornerRadius(cornerRadius)
                 .overlay {
-                    RoundedRectangle(cornerRadius: roundedCorner ? 34 : 16)
+                    RoundedRectangle(cornerRadius: cornerRadius)
                         .stroke(style.borderColor.opacity(isLoading || isDisabled ? 0.3 : 1.0), lineWidth: 1)
                         .padding(0.3)
                 }
             }
         }
-
         .disabled(isLoading || isDisabled)
-//        .shadow(color: style == .primary ? .black.opacity(0.1) : .clear, radius: style == .primary ? 7 : 0, y: 2)
-
     }
 }
 
@@ -223,7 +218,6 @@ struct CButton_Previews: PreviewProvider {
         ScrollView {
             VStack {
                 Group {
-                    CButton(title: "Text", style: .secondary, size: .small, isLoading: false, roundedCorner: true) { }
 
                     CButton(title: "Text", style: .primary, size: .default, isLoading: false) { }
 
@@ -240,6 +234,9 @@ struct CButton_Previews: PreviewProvider {
                     CButton(title: "Text", style: .secondary, size: .large, isLoading: false) { }
 
                     CButton(title: "Text", style: .warn, size: .large, isLoading: false) { }
+                    CButton(title: "Text", style: .cancel, size: .small, isLoading: false) { }
+                    CButton(title: "Text", style: .secondary, size: .small, isLoading: false, roundedCorner: true) { }
+
                 }
                 Group {
 
@@ -314,6 +311,7 @@ struct CButton_Previews: PreviewProvider {
                     CButton(title: "Text", style: .warn, size: .large, isLoading: false) { }
 
                     CButton(title: "Text", style: .cancel, size: .large, isLoading: false) { }
+                    CButton(title: "Text", style: .cancel, size: .small, isLoading: false) { }
                 }
                 Group {
 

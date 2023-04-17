@@ -13,5 +13,3 @@ extension View {
         return EmptyView()
     }
 }
-
-
