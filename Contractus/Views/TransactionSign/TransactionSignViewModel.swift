@@ -22,6 +22,7 @@ enum TransactionSignError: Error {
 enum TransactionSignInput {
     case sign
     case hideError
+    case openSolscan
 }
 
 struct TransactionSignState {
@@ -71,25 +72,28 @@ final class TransactionSignViewModel: ViewModel {
 
     @Published private(set) var state: TransactionSignState
 
+    private var pollTxService: PollService<Transaction>?
     private var dealService: ContractusAPI.DealsService?
     private var accountService: ContractusAPI.AccountService?
     private var transactionSignService: TransactionSignService?
+    private var transactionsService: ContractusAPI.TransactionsService?
 
     init(
         account: CommonAccount,
         type: TransactionSignType,
         dealService: ContractusAPI.DealsService? = nil,
         accountService: ContractusAPI.AccountService? = nil,
-        transactionSignService: TransactionSignService? = nil
+        transactionSignService: TransactionSignService? = nil,
+        transactionsService: ContractusAPI.TransactionsService? = nil
     ) {
 
         self.dealService = dealService
         self.transactionSignService = transactionSignService
         self.accountService = accountService
+        self.transactionsService = transactionsService
 
         switch type {
         case .byDeal(let deal):
-
             self.state = .init(
                 account: account,
                 state: .loading,
@@ -103,9 +107,13 @@ final class TransactionSignViewModel: ViewModel {
                     newState.transaction = tx
                     newState.state = .loaded
                     newState.allowSign = true
-                    if let tx = tx, let fee = tx.fee {
-                        newState.informationFields.append(.init(title: "Service Fee", value: deal.token.format(amount: fee, withCode: true), titleDescription: nil, valueDescription: nil))
+                    if let tx = tx {
+                        initPollTxService(id: tx.id)
+                        if let fee = tx.fee {
+                            newState.informationFields.append(.init(title: R.string.localizable.transactionSignStatusesNeedSign(), value: deal.token.format(amount: fee, withCode: true), titleDescription: nil, valueDescription: nil))
+                        }
                     }
+
 
                     self.state = newState
                 } catch {
@@ -121,28 +129,61 @@ final class TransactionSignViewModel: ViewModel {
         case .byTransaction(let tx):
             self.state = .init(account: account, state: .loaded, type: type, transaction: tx, informationFields: Self.fieldsForTx(tx, account: account))
             self.state.allowSign = true
+            self.initPollTxService(id: tx.id)
         }
+    }
+
+    deinit {
+        pollTxService?.endPoll()
     }
 
     func trigger(_ input: TransactionSignInput, after: AfterTrigger?) {
         switch input {
         case .hideError:
             state.errorState = nil
+        case .openSolscan:
+            guard let signature = state.transaction?.signature else { return }
+            UIApplication.shared.open(URL.solscanURL(signature: signature, isDevnet: AppConfig.serverType.isDevelop))
         case .sign:
             self.state.state = .signing
             Task { @MainActor in
                 do {
-                    _ = try await sign()
+                    let transaction = try await sign()
                     var newState = self.state
                     newState.errorState = nil
                     newState.state = .signed
+                    if let transaction = transaction {
+                        newState.transaction = transaction
+                    }
                     self.state = newState
+                    pollTxService?.startPoll()
                 } catch {
                     var newState = self.state
                     newState.state = .loaded
                     newState.errorState = .error(error.localizedDescription)
                     self.state = newState
                 }
+            }
+        }
+    }
+
+    private func initPollTxService(id: String) -> Void {
+        guard let transactionsService = self.transactionsService else { return }
+        self.pollTxService = .init(request: { callback in
+            transactionsService.getTransaction(id: id) { [weak self] result in
+                switch result {
+                case .success(let tx):
+                    callback(tx)
+                case .failure(let error):
+                    debugPrint(error)
+                    self?.pollTxService?.endPoll()
+                }
+            }
+        })
+        self.pollTxService?.handler = {[weak self] tx in
+            self?.state.transaction = tx
+            if tx?.status == .finished {
+                self?.pollTxService?.endPoll()
             }
         }
     }
@@ -201,19 +242,19 @@ final class TransactionSignViewModel: ViewModel {
 
     static private func fieldsByDeal(_ deal: Deal, account: CommonAccount) -> [TransactionSignState.InformationItem] {
         var fields: [TransactionSignState.InformationItem] = [
-            .init(title: "Type", value: "Confirm Deal", titleDescription: nil, valueDescription: nil),
-            .init(title: "Amount", value: deal.token.format(amount: deal.amount, withCode: true), titleDescription: nil, valueDescription: nil),
+            .init(title: R.string.localizable.transactionSignFieldsType() , value: "Confirm Deal", titleDescription: nil, valueDescription: nil),
+            .init(title: R.string.localizable.transactionSignFieldsAmount(), value: deal.token.format(amount: deal.amount, withCode: true), titleDescription: nil, valueDescription: nil),
         ]
 
         if deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey {
-            fields.insert(.init(title: "Executor", value: ContentMask.mask(from: deal.ownerPublicKey), titleDescription: nil, valueDescription: nil), at: 0)
+            fields.insert(.init(title: R.string.localizable.transactionSignFieldsExecutor(), value: ContentMask.mask(from: deal.ownerPublicKey), titleDescription: nil, valueDescription: nil), at: 0)
         } else {
             if let contractorPublicKey = deal.contractorPublicKey {
-                fields.insert(.init(title: "Executor", value:  ContentMask.mask(from: contractorPublicKey), titleDescription: nil, valueDescription: nil), at: 0)
+                fields.insert(.init(title: R.string.localizable.transactionSignFieldsExecutor(), value:  ContentMask.mask(from: contractorPublicKey), titleDescription: nil, valueDescription: nil), at: 0)
             }
         }
         if let checkerAmount = deal.checkerAmount {
-            fields.append(.init(title: "Verifier Fee", value: deal.token.format(amount: checkerAmount, withCode: true), titleDescription: nil, valueDescription: nil))
+            fields.append(.init(title: R.string.localizable.transactionSignFieldsVerifierFee(), value: deal.token.format(amount: checkerAmount, withCode: true), titleDescription: nil, valueDescription: nil))
         }
 
         return fields
@@ -221,17 +262,29 @@ final class TransactionSignViewModel: ViewModel {
 
     static private func fieldsForTx(_ tx: Transaction, account: CommonAccount) -> [TransactionSignState.InformationItem] {
         var fields: [TransactionSignState.InformationItem] = [
-            .init(title: "Type", value: tx.type.title, titleDescription: nil, valueDescription: nil),
+            .init(title: R.string.localizable.transactionSignFieldsType(), value: tx.type.title, titleDescription: nil, valueDescription: nil),
         ]
 
         if tx.type == .wrapSOL {
-            fields.append(.init(title: "Amount", value: tx.amountFormatted ?? "", titleDescription: nil, valueDescription: nil))
+            fields.append(.init(
+                title: R.string.localizable.transactionSignFieldsAmount(),
+                value: tx.amountFormatted ?? "",
+                titleDescription: nil,
+                valueDescription: nil))
         }
 
         if let fee = tx.feeFormatted {
-            fields.append(.init(title: "Fee", value: fee, titleDescription: nil, valueDescription: nil))
+            fields.append(.init(
+                title: R.string.localizable.transactionSignFieldsFee(),
+                value: fee,
+                titleDescription: nil,
+                valueDescription: nil))
         } else {
-            fields.append(.init(title: "Fee", value: "Free", titleDescription: nil, valueDescription: nil))
+            fields.append(.init(
+                title: R.string.localizable.transactionSignFieldsFee(),
+                value: R.string.localizable.transactionSignFieldsFreeFee(),
+                titleDescription: nil,
+                valueDescription: nil))
         }
         
         return fields
@@ -241,11 +294,11 @@ final class TransactionSignViewModel: ViewModel {
 private extension ContractusAPI.TransactionType {
     var title: String {
         switch self {
-        case .wrapSOL: return "Wrap SOL"
-        case .dealInit: return "Confirm Deal"
-        case .dealCancel: return "Cancel Deal"
-        case .dealFinish: return "Finish Deal"
-        case .unwrapAllSOL: return "Unwrap Token"
+        case .wrapSOL: return R.string.localizable.transactionTypeWrapSol()
+        case .dealInit: return R.string.localizable.transactionTypeInitDeal()
+        case .dealCancel: return R.string.localizable.transactionTypeCancelDeal()
+        case .dealFinish: return R.string.localizable.transactionTypeFinishDeal()
+        case .unwrapAllSOL: return R.string.localizable.transactionTypeUnwrapWsol()
         }
     }
 }

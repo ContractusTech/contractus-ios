@@ -159,3 +159,34 @@
 "addContractor.subtitle.checker" = "Account must be %@ blockchain";
 "addContractor.success-title.checker" = "Checker success added!";
 "addContractor.success-title.contractor" = "Partner success added!";
+
+"transactionSign.fields.service-fee" = "Service Fee";
+"transactionSign.fields.executor" = "Executor";
+"transactionSign.fields.amount" = "Amount";
+"transactionSign.fields.verifier-fee" = "Verifier Fee";
+"transactionSign.fields.fee" = "Fee";
+"transactionSign.fields.status" = "Status";
+"transactionSign.fields.type" = "Type";
+"transactionSign.fields.tx" = "Transaction";
+"transactionSign.fields.base64" = "Base64";
+"transactionSign.fields.signature" = "Signature";
+"transactionSign.statuses.need-sign" = "Pending signature";
+"transactionSign.statuses.processing" = "Processing";
+"transactionSign.statuses.done" = "Done";
+"transactionSign.statuses.error" = "Error";
+"transactionSign.fields.free-fee" = "Free";
+"transactionSign.buttons.signed" = "Signed";
+"transactionSign.buttons.signing" = "Signing...";
+"transactionSign.buttons.loading" = "Loading...";
+"transactionSign.buttons.sign" = "Confirm and sign";
+"transactionSign.title.need-sign" = "Signing\n the transaction";
+"transactionSign.title.signed" = "Signed";
+"transactionSign.subtitle.unsigned-init-deal" = "Of transaction. Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.";
+"transactionSign.subtitle.common" = "After signing, the transaction will start executing";
+"transactionSign.subtitle.processing" = "The transaction will soon be completed";
+
+"transaction.type.init-deal" = "Start deal";
+"transaction.type.finish-deal" = "Finish deal";
+"transaction.type.cancel-deal" = "Cancel deal";
+"transaction.type.wrap-sol" = "Wrap SOL";
+"transaction.type.unwrap-wsol" = "Unwrap wSOL";

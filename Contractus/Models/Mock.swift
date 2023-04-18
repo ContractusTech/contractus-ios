@@ -20,7 +20,11 @@ enum Mock {
     }()
 
     static let wrapTransaction: ContractusAPI.Transaction = {
-        return ContractusAPI.Transaction(id: "123", type: .wrapSOL, transaction: "123123123", initializerPublicKey: account.publicKey, ownerSignature: nil, contractorSignature: nil, checkerSignature: nil)
+        return ContractusAPI.Transaction(id: "123", type: .wrapSOL, status: .new, transaction: "123123123", initializerPublicKey: account.publicKey, ownerSignature: nil, contractorSignature: nil, checkerSignature: nil)
+    }()
+
+    static let wrapTransactionProcessing: ContractusAPI.Transaction = {
+        return ContractusAPI.Transaction(id: "123", type: .wrapSOL, status: .processing, transaction: "123123123", initializerPublicKey: account.publicKey, ownerSignature: nil, contractorSignature: nil, signature: "123123123123123123", checkerSignature: nil)
     }()
 
 
