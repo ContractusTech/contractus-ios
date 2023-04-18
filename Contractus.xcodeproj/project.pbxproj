@@ -38,6 +38,8 @@
 		6D590106289383D600EC318E /* ContractusAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 6D590105289383D600EC318E /* ContractusAPI */; };
 		6D5A65A728E3F5110081533C /* ChangeAmountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5A65A628E3F5110081533C /* ChangeAmountViewModel.swift */; };
 		6D6777C42999F26B004FC207 /* Font+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6777C32999F26B004FC207 /* Font+Ex.swift */; };
+		6D6E60D429EE2F08008AB833 /* TransactionStatus+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6E60D329EE2F08008AB833 /* TransactionStatus+Ex.swift */; };
+		6D6E60D829EE57BB008AB833 /* PollService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6E60D729EE57BB008AB833 /* PollService.swift */; };
 		6D6EE385289C679D00635E60 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE384289C679D00635E60 /* QRCodeView.swift */; };
 		6D6EE388289DB40A00635E60 /* BlockchainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE387289DB40A00635E60 /* BlockchainService.swift */; };
 		6D6EE38A289DB43400635E60 /* SolanaBlochainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */; };
@@ -191,6 +193,8 @@
 		6D5901082893887E00EC318E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6D5A65A628E3F5110081533C /* ChangeAmountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeAmountViewModel.swift; sourceTree = "<group>"; };
 		6D6777C32999F26B004FC207 /* Font+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Ex.swift"; sourceTree = "<group>"; };
+		6D6E60D329EE2F08008AB833 /* TransactionStatus+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionStatus+Ex.swift"; sourceTree = "<group>"; };
+		6D6E60D729EE57BB008AB833 /* PollService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollService.swift; sourceTree = "<group>"; };
 		6D6EE384289C679D00635E60 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 		6D6EE387289DB40A00635E60 /* BlockchainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainService.swift; sourceTree = "<group>"; };
 		6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolanaBlochainService.swift; sourceTree = "<group>"; };
@@ -643,6 +647,7 @@
 				6DB5F8A2293EFA0800AE612A /* Double+Ex.swift */,
 				6DB5F8B7294D7B2D00AE612A /* JGProgressHUD+Ex.swift */,
 				6D6777C32999F26B004FC207 /* Font+Ex.swift */,
+				6D6E60D329EE2F08008AB833 /* TransactionStatus+Ex.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -669,6 +674,7 @@
 				6DBF39DE28D4734B00952D8A /* SharedSecret.swift */,
 				6D8EFD8C28D8D72D0064F5DA /* AccountValidator.swift */,
 				6DFED9322930F1EE00AF727A /* ImpactGenerator.swift */,
+				6D6E60D729EE57BB008AB833 /* PollService.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -881,6 +887,7 @@
 				6D3AA48D292EB78300596061 /* MenuViewModel.swift in Sources */,
 				6D3AF96028E83C4600660AEC /* ImportSecretKeyView.swift in Sources */,
 				6D3AF96428E83E1200660AEC /* QRScannerView.swift in Sources */,
+				6D6E60D829EE57BB008AB833 /* PollService.swift in Sources */,
 				6D6EE38A289DB43400635E60 /* SolanaBlochainService.swift in Sources */,
 				6DBCA461288F213500F918B6 /* MainView.swift in Sources */,
 				FE54313D29D36D8800EEF906 /* SelectAccountView.swift in Sources */,
@@ -902,6 +909,7 @@
 				6D530DBE28E2AD82006F52C6 /* CreateDealViewModel.swift in Sources */,
 				6D6EE38F289E260D00635E60 /* UploadFileViewModel.swift in Sources */,
 				6DBCA47B2890832800F918B6 /* EnterViewModel.swift in Sources */,
+				6D6E60D429EE2F08008AB833 /* TransactionStatus+Ex.swift in Sources */,
 				6D0DA7652930A7250024EF30 /* QRCodeScannerView.swift in Sources */,
 				6D7EE71728E9D3070016369C /* ImportPrivateKeyView.swift in Sources */,
 				6D8EFD9528D8F3B20064F5DA /* ShareContentView.swift in Sources */,
