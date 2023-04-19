@@ -125,7 +125,7 @@ struct ContractusApp: App {
         if let transactionSignType = transactionSignType {
             TransactionSignView(account: account, type: transactionSignType) {
 
-            } cancelAction: {
+            } closeAction: { _ in
                 showTxSheet = false
             }
         } else {

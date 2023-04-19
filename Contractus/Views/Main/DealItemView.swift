@@ -43,38 +43,36 @@ struct DealItemView: View {
                     HStack {
                         Spacer()
                         Text(amountPrefix + amountFormatted)
-                            .font(.title)
-                            .fontWeight(.medium)
+                            .font(.title.weight(.semibold))
                             .strikethrough(isStrikethrough, color: colorAmountText)
                             .foregroundColor(colorAmountText)
                         Spacer()
                     }
                     Text(tokenSymbol)
-                        .font(.body)
-                        .fontWeight(.medium)
+                        .font(.body.weight(.semibold))
                         .foregroundColor(R.color.secondaryText.color)
                 }
                 .offset(CGSize(width: 0, height: 6))
             }
             .frame(height: SIZE_BLOCK)
             .baseBackground()
-            .cornerRadius(18)
+            .cornerRadius(16)
 
             VStack(alignment:.leading, spacing: 2) {
                 Text(partnerTypeTitle)
                     .font(.callout)
                     .fontWeight(.medium)
-                    .foregroundColor(R.color.secondaryText.color)
+                    .foregroundColor(R.color.textBase.color)
 
                 if let pk = withPublicKey {
                     Text(ContentMask.mask(from: pk))
-                        .font(.body)
-                        .fontWeight(.medium)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundColor(R.color.secondaryText.color)
                         
                 } else {
                     Text(R.string.localizable.commonEmpty())
-                        .font(.body)
-                        .fontWeight(.medium)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundColor(R.color.secondaryText.color)
                 }
             }
             .padding(EdgeInsets(top: 0, leading: 4, bottom: 8, trailing: 4))
@@ -87,24 +85,26 @@ struct DealItemView: View {
     @ViewBuilder
     func statusLabel() -> some View {
         Text(status.statusTitle)
-            .font(.caption)
-            .padding(EdgeInsets(top: 2, leading: 6, bottom: 2, trailing: 6))
+            .font(.caption.weight(.medium))
+            .textCase(.uppercase)
             .foregroundColor(status.statusColor)
-            .background(R.color.white.color)
-            .cornerRadius(10)
-            .shadow(color: .black.opacity(0.1), radius: 3)
+            .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
+//            .background(R.color.white.color)
+//            .cornerRadius(10)
+//            .shadow(color: .black.opacity(0.1), radius: 3)
 
     }
 
     @ViewBuilder
     func roleLabel() -> some View {
         Text(roleType.title)
-            .font(.caption)
-            .padding(EdgeInsets(top: 2, leading: 6, bottom: 2, trailing: 6))
+            .font(.caption.weight(.medium))
+            .textCase(.uppercase)
+            .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
             .foregroundColor(roleType.color)
-            .background(R.color.white.color)
-            .cornerRadius(10)
-            .shadow(color: .black.opacity(0.1), radius: 3)
+//            .background(R.color.white.color)
+//            .cornerRadius(10)
+//            .shadow(color: .black.opacity(0.1), radius: 3)
 
     }
 
@@ -125,7 +125,7 @@ struct DealItemView: View {
 
     private var amountPrefix: String {
         return status == .finished && roleType == .receive
-        ? "+ "
+        ? "+"
         : ""
     }
 
@@ -154,14 +154,15 @@ private extension DealItemView.DealRoleType {
 
 private extension DealItemView.DealRoleType {
     var color: Color {
-        switch self {
-        case .checker:
-            return R.color.secondaryText.color
-        case .pay:
-            return R.color.textBase.color
-        case .receive:
-            return R.color.textWarn.color
-        }
+        return R.color.secondaryText.color
+//        switch self {
+//        case .checker:
+//            return R.color.secondaryText.color
+//        case .pay:
+//            return R.color.textBase.color
+//        case .receive:
+//            return R.color.textWarn.color
+//        }
     }
 }
 
