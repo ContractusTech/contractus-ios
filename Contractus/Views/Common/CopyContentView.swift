@@ -62,7 +62,7 @@ struct CopyContentView: View {
         .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
         .background(
             RoundedRectangle(cornerRadius: 12)
-            .fill(R.color.white.color)
+            .fill(R.color.textFieldBackground.color)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(R.color.textFieldBorder.color, lineWidth: 1)
