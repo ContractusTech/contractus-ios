@@ -29,9 +29,9 @@ struct CButton: View {
         var borderColor: Color {
             switch self {
             case .secondary:
-                return R.color.buttonBorderSecondary.color
+                return R.color.buttonBackgroundSecondary.color
             case .primary:
-                return .clear //R.color.buttonBorderSecondary.color
+                return R.color.buttonBorderPrimary.color
             case .warn:
                 return R.color.buttonBorderWarn.color
             case .cancel:
@@ -63,7 +63,7 @@ struct CButton: View {
         var edge: EdgeInsets {
             switch self {
             case .large:
-                return EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26)
+                return EdgeInsets(top: 14, leading: 26, bottom: 14, trailing: 26)
             case .small:
                 return EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
             case .default:
@@ -203,7 +203,7 @@ struct CButton: View {
                 .cornerRadius(cornerRadius)
                 .overlay {
                     RoundedRectangle(cornerRadius: cornerRadius)
-                        .stroke(style.borderColor.opacity(isLoading || isDisabled ? 0.3 : 1.0), lineWidth: 1)
+                        .stroke(style.borderColor.opacity(isLoading || isDisabled ? 0.3 : 1.0), lineWidth: 0.6)
                         .padding(0.3)
                 }
             }

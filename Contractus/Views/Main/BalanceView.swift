@@ -93,8 +93,9 @@ struct BalanceView: View {
                             .frame(width: 0, height: 10, alignment: .leading)
 
                     case .loaded(let balance):
-                        Text("Estimate balance")
-                            .font(.body.weight(.regular))
+                        Text(R.string.localizable.balanceEstimate())
+                            .font(.footnote.weight(.semibold))
+                            .textCase(.uppercase)
                             .foregroundColor(R.color.secondaryText.color)
                         Text(balance.estimateAmountFormatted)
                             .font(.largeTitle.weight(SwiftUI.Font.Weight.light))
@@ -138,7 +139,7 @@ struct BalanceView: View {
                                 .cornerRadius(8)
                                 .frame(width: 80, height: 16, alignment: .leading)
                         }
-                        .padding(EdgeInsets(top: 6, leading: 4, bottom: 6, trailing: 4))
+                        .padding(EdgeInsets(top: 10, leading: 4, bottom: 10, trailing: 4))
                         Divider().foregroundColor(R.color.buttonBorderSecondary.color)
                         HStack(alignment: .center, spacing: 12){
                             Rectangle()
@@ -151,7 +152,7 @@ struct BalanceView: View {
                                 .cornerRadius(8)
                                 .frame(width: 80, height: 16, alignment: .leading)
                         }
-                        .padding(EdgeInsets(top: 6, leading: 4, bottom: 5, trailing: 4))
+                        .padding(EdgeInsets(top: 10, leading: 4, bottom: 10, trailing: 4))
                     }
                     .padding(8)
                     .background(R.color.secondaryBackground.color)
@@ -166,11 +167,13 @@ struct BalanceView: View {
                                 ForEach(balance.wrap.tokens) { token in
                                     HStack(alignment: .center, spacing: 12) {
                                         Text(token.token.code)
-                                            .font(.subheadline)
+                                            .font(.footnote.weight(.semibold))
+                                            .textCase(.uppercase)
                                             .foregroundColor(R.color.textBase.color)
                                         Spacer()
                                         Text(token.formatted())
-                                            .font(.subheadline.weight(.semibold))
+                                            .font(.footnote.weight(.semibold))
+                                            .textCase(.uppercase)
                                             .foregroundColor(R.color.textBase.color)
                                     }
                                     .padding(.top, 6)
@@ -202,7 +205,6 @@ struct BalanceView: View {
                                             .stroke(R.color.buttonBorderSecondary.color, lineWidth: 1)
                                     )
                                 }
-
                             }
                         }
                     }
@@ -211,11 +213,11 @@ struct BalanceView: View {
                             ForEach(balance.tokens) { token in
                                 HStack(alignment: .center, spacing: 12){
                                     Text(token.token.code)
-                                        .font(.subheadline)
+                                        .font(.footnote.weight(.semibold))
                                         .foregroundColor(R.color.textBase.color)
                                     Spacer()
                                     Text(token.formatted())
-                                        .font(.subheadline.weight(.semibold))
+                                        .font(.footnote.weight(.semibold))
                                         .foregroundColor(R.color.textBase.color)
                                 }
                                 .padding(EdgeInsets(top: 16, leading: 12, bottom: 16, trailing: 12))

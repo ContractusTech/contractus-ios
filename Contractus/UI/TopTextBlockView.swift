@@ -36,9 +36,9 @@ struct TopTextBlockView: View {
             case .success:
                 return R.color.white.color
             case .none:
-                return R.color.labelTextPrimary.color
+                return R.color.labelTextAttention.color.opacity(0.7)
             case .warning:
-                return R.color.labelTextAttention.color
+                return R.color.labelTextAttention.color.opacity(0.8)
             case .waiting:
                 return R.color.white.color
             }
@@ -49,7 +49,7 @@ struct TopTextBlockView: View {
             case .success:
                 return R.color.baseGreen.color
             case .none:
-                return R.color.labelBackgroundPrimary.color
+                return R.color.labelBackgroundDefault.color
             case .warning:
                 return R.color.yellow200.color
             case .waiting:
@@ -100,6 +100,7 @@ struct TopTextBlockView: View {
                     Spacer()
                     Text(subTitleText)
                         .font(.callout)
+                        // .foregroundColor(R.color.secondaryText.color)
                         .multilineTextAlignment(.center)
                         .padding(EdgeInsets(top: 12, leading: 20, bottom: 0, trailing: 20))
                     Spacer()

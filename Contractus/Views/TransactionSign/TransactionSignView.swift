@@ -70,7 +70,7 @@ struct TransactionDetailFieldView: View {
     var isLoading: Bool = false
     var titleDescription: String? = nil
     var valueDescription: String? = nil
-    var valueTextColor: Color = R.color.textBase.color
+    var valueTextColor: Color = R.color.secondaryText.color
     var buttons: [FieldButton] = []
 
     var body: some View {
@@ -90,7 +90,7 @@ struct TransactionDetailFieldView: View {
             VStack {
                 HStack(spacing: 8) {
                     Text(value)
-                        .font(.body.weight(.medium))
+                        .font(.body)
                         .foregroundColor(valueTextColor)
                     if isLoading {
                         ProgressView()
@@ -134,12 +134,12 @@ struct TransactionSignView: View {
     @StateObject var viewModel: AnyViewModel<TransactionSignState, TransactionSignInput>
 
     var signedAction: () -> Void
-    var cancelAction: () -> Void
+    var closeAction: (Bool) -> Void
 
     @State private var alertType: AlertType?
     @State private var heightTransaction: CGFloat? = HEIGHT_TX_VIEW
 
-    init(account: CommonAccount, type: TransactionSignType, signedAction: @escaping () -> Void, cancelAction: @escaping () -> Void) {
+    init(account: CommonAccount, type: TransactionSignType, signedAction: @escaping () -> Void, closeAction: @escaping (Bool) -> Void) {
         self._viewModel = .init(
             wrappedValue: .init(TransactionSignViewModel(
                 account: account,
@@ -149,14 +149,14 @@ struct TransactionSignView: View {
             transactionsService: try? APIServiceFactory.shared.makeTransactionsService())
             ))
         self.signedAction = signedAction
-        self.cancelAction = cancelAction
+        self.closeAction = closeAction
     }
 
     var body: some View {
         ZStack (alignment: .bottomLeading) {
             ScrollView {
 
-                VStack(alignment: .center, spacing: 8) {
+                VStack(alignment: .center, spacing: 6) {
                     VStack {
                         imageStatusView
                         VStack(spacing: 12) {
@@ -180,21 +180,7 @@ struct TransactionSignView: View {
                     .padding(.bottom, 24)
                     .padding(.top, 24)
                     VStack(alignment: .leading, spacing: 0) {
-                        if let tx = viewModel.state.transaction, let signature = tx.signature, !signature.isEmpty {
-                            TransactionDetailFieldView(
-                                title: R.string.localizable.transactionSignFieldsSignature(),
-                                value: ContentMask.mask(from: signature),
-                                valueTextColor: R.color.secondaryText.color,
-                                buttons: [
-                                    .copy(value: signature),
-                                    .custom(
-                                        icon: Constants.arrowRightImage,
-                                        callback: {
-                                            viewModel.trigger(.openSolscan)
-                                        }),
-                                ]
-                            )
-                        }
+
 
                         ForEach(viewModel.state.informationFields) { item in
                             TransactionDetailFieldView(
@@ -254,6 +240,24 @@ struct TransactionSignView: View {
                         .background(R.color.secondaryBackground.color)
                         .cornerRadius(20)
                     }
+                    if let tx = viewModel.state.transaction, let signature = tx.signature, !signature.isEmpty {
+                        VStack(alignment: .leading, spacing: 0) {
+                            TransactionDetailFieldView(
+                                title: R.string.localizable.transactionSignFieldsSignature(),
+                                value: ContentMask.mask(from: signature),
+                                buttons: [
+                                    .copy(value: signature),
+                                    .custom(
+                                        icon: Constants.arrowRightImage,
+                                        callback: {
+                                            viewModel.trigger(.openSolscan)
+                                        }),
+                                ]
+                            )
+                        }
+                        .background(R.color.secondaryBackground.color)
+                        .cornerRadius(20)
+                    }
                 }
                 .padding(UIConstants.contentInset)
                 .padding(.bottom, 150)
@@ -273,7 +277,7 @@ struct TransactionSignView: View {
 
                 CButton(title: cancelButtonTitle, style: .secondary, size: .large, isLoading: false, isDisabled: viewModel.state.state == .loading || viewModel.state.state == .signing) {
                     presentationMode.wrappedValue.dismiss()
-                    cancelAction()
+                    closeAction(viewModel.state.transaction?.status != .new)
                 }
             }
             .padding(EdgeInsets(top: 20, leading: 8, bottom: 24, trailing: 8))
@@ -421,13 +425,13 @@ struct SignConfirmView_Previews: PreviewProvider {
     static var previews: some View {
         TransactionSignView(account: Mock.account, type: .byDeal(Mock.deal)) {
 
-        } cancelAction: {
+        } closeAction: { _ in
             
         }.previewDisplayName("By Deal")
 
         TransactionSignView(account: Mock.account, type: .byTransaction(Mock.wrapTransactionProcessing)) {
 
-        } cancelAction: {
+        } closeAction: { _ in
 
         }.previewDisplayName("By Transaction")
 

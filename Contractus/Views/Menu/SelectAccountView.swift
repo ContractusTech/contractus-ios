@@ -80,10 +80,10 @@ struct SelectAccountView: View {
                         }
                         Spacer()
                         if editMode?.wrappedValue == .active {
-                            CButton(title: R.string.localizable.accountsEditPrivateKey(), style: .secondary, size: .small, isLoading: false, roundedCorner: true) {
+                            CButton(title: R.string.localizable.accountsEditPrivateKey(), style: .secondary, size: .small, isLoading: false, roundedCorner: false) {
                                 sheetType = .backup(item)
                             }
-                            CButton(title: R.string.localizable.accountsEditRemove(), style: .cancel, size: .small, isLoading: false, roundedCorner: true) {
+                            CButton(title: R.string.localizable.accountsEditRemove(), style: .cancel, size: .small, isLoading: false, roundedCorner: false) {
                                 sheetType = .delete(item)
                             }
                             .padding(.trailing, 13)
