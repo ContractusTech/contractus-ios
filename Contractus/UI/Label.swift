@@ -10,6 +10,7 @@ import SwiftUI
 fileprivate enum Constants {
     static let checkmarkImage = Image(systemName: "checkmark")
 }
+
 struct Label: View {
 
     enum TypeLabel {
@@ -136,13 +137,9 @@ struct Label_Previews: PreviewProvider {
                 }
                 .padding(20)
                 .background(R.color.secondaryBackground.color)
-
             }
-
         }
         .preferredColorScheme(.dark)
         .previewDisplayName("Dark theme")
-
-
     }
 }

@@ -346,6 +346,7 @@ final class DealViewModel: ViewModel {
                             self?.state.isSignedByPartner = false
                             self?.state.currentMainActions = [.sign]
                             self?.state.canSign = false
+                            self?.state.state = .none
 
                         })
                         return

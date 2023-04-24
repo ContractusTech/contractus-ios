@@ -16,5 +16,4 @@ enum SSS {
     static func combineShares(data: [[UInt8]]) throws -> [UInt8]? {
         try CombineShares(shares: data)
     }
-
 }

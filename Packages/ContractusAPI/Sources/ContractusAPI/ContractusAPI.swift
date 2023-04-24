@@ -1,5 +1,7 @@
 import Foundation
 
+fileprivate let productionURL = URL(string: "https://s.contractus.tech/api")!
+fileprivate let developerURL = URL(string: "https://dev.contractus.tech/api")!
 
 public enum Blockchain: String, CaseIterable, Hashable {
     case solana
@@ -38,9 +40,9 @@ public enum ServerType {
     public var server: URL {
         switch self {
         case .production:
-            return URL(string: "https://s.contractus.tech/api")!
+            return productionURL
         case .developer:
-            return URL(string: "https://dev.contractus.tech/api")!
+            return developerURL
         case .custom(let url, _):
             return url
         }
@@ -58,6 +60,15 @@ public enum ServerType {
             return "Developer"
         case .custom(_, _):
             return "Custom"
+        }
+    }
+
+    public var isDevelop: Bool {
+        switch self {
+        case .developer:
+            return true
+        default:
+            return false
         }
     }
 }

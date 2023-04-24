@@ -211,7 +211,7 @@ struct MainView: View {
                             sheetType = .sharePublicKey
                         } label: {
                             VStack(alignment: .center, spacing: 3) {
-                                Text("Account")
+                                Text(R.string.localizable.commonAccount())
                                     .font(.callout)
                                     .fontWeight(.medium)
                                 HStack {

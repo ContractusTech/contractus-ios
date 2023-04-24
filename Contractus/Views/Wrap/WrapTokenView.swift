@@ -149,7 +149,10 @@ struct WrapTokenView: View {
                 if let type = viewModel.transactionSignType {
                     TransactionSignView(account: viewModel.state.account, type: type) {
 
-                    } cancelAction: {
+                    } closeAction: { afterSign in
+                        if afterSign {
+                            presentationMode.wrappedValue.dismiss()
+                        }
 
                     }.interactiveDismiss(canDismissSheet: false)
                 } else {
@@ -194,7 +197,7 @@ struct WrapTokenView: View {
                     }
                 }
             }
-
+            .edgesIgnoringSafeArea(.bottom)
             .navigationBarColor()
             .baseBackground()
         }

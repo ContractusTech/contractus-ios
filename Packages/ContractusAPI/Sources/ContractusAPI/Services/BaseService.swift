@@ -11,6 +11,8 @@ import Alamofire
 public enum ServicePath {
     case accounts
     case deals
+    case transactions
+    case transaction(String)
     case tokens
     case dealMetadata(String)
     case dealResult(String)
@@ -30,6 +32,10 @@ public enum ServicePath {
 
     var value: String {
         switch self {
+        case .transactions:
+            return "/tx"
+        case .transaction(let id):
+            return "/tx/\(id)"
         case .accounts:
             return "/accounts"
         case .uploadFile:

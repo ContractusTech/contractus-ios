@@ -8,6 +8,10 @@
 import Foundation
 import BigInt
 
+public enum TransactionStatus: String, Codable {
+    case new = "NEW", processing = "IN_PROCESSING", finished = "FINISHED", error = "ERROR"
+}
+
 public struct Transaction: Codable, Equatable {
 
     public let id: String
@@ -18,6 +22,7 @@ public struct Transaction: Codable, Equatable {
     public let token: String?
     public let tokenAddress: String?
     public let fee: BigUInt?
+    public let status: TransactionStatus
 
     public let ownerSignature: String?
     public let contractorSignature: String?
@@ -27,6 +32,7 @@ public struct Transaction: Codable, Equatable {
     public init(
         id: String,
         type: TransactionType,
+        status: TransactionStatus,
         transaction: String,
         initializerPublicKey: String,
         amount: BigUInt? = nil,
@@ -40,6 +46,7 @@ public struct Transaction: Codable, Equatable {
     {
         self.id = id
         self.type = type
+        self.status = status
         self.transaction = transaction
         self.amount = amount
         self.token = token
@@ -65,6 +72,7 @@ public struct Transaction: Codable, Equatable {
         case checkerSignature
         case fee
         case signature
+        case status
     }
 
     public init(from decoder: Decoder) throws {
@@ -86,6 +94,7 @@ public struct Transaction: Codable, Equatable {
         self.ownerSignature = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.ownerSignature)
         self.contractorSignature = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.contractorSignature)
         self.checkerSignature = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.checkerSignature)
+        self.status = try container.decode(TransactionStatus.self, forKey: Transaction.CodingKeys.status)
 
         let fee = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.fee)
         if let fee = fee {
@@ -102,6 +111,7 @@ public struct Transaction: Codable, Equatable {
         try container.encode(self.id, forKey: Transaction.CodingKeys.id)
         try container.encode(self.type, forKey: Transaction.CodingKeys.type)
         try container.encode(self.transaction, forKey: Transaction.CodingKeys.transaction)
+        try container.encode(self.status, forKey: Transaction.CodingKeys.status)
         try container.encode(self.initializerPublicKey, forKey: Transaction.CodingKeys.initializerPublicKey)
         try container.encodeIfPresent(self.amount, forKey: Transaction.CodingKeys.amount)
         try container.encodeIfPresent(self.fee, forKey: Transaction.CodingKeys.fee)

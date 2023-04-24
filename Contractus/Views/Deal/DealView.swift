@@ -130,10 +130,9 @@ struct DealView: View {
                                             activeModalType = .editContractor(viewModel.state.deal.contractorPublicKey)
                                         }
                                     }
-
                                 }.padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
                                 if viewModel.state.isYouExecutor && viewModel.state.canEdit {
-                                    Text("Account that pays the performer for the work done")
+                                    Text(R.string.localizable.dealHintPayAccount())
                                         .font(.footnote)
                                         .foregroundColor(R.color.secondaryText.color)
                                 }
@@ -336,7 +335,7 @@ struct DealView: View {
 
                             } else {
                                 HStack {
-                                    Text("This text will be encrypted and available for viewing only to contract partners.")
+                                    Text(R.string.localizable.dealHintEncryptContent())
                                         .font(.footnote)
                                         .foregroundColor(R.color.secondaryText.color)
                                     Spacer()
@@ -368,7 +367,7 @@ struct DealView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             if viewModel.state.deal.meta?.files.isEmpty ?? true {
                                 HStack {
-                                    Text("This files will be encrypted and available for viewing only to contract partners.")
+                                    Text(R.string.localizable.dealHintEncryptFiles())
                                         .font(.footnote)
                                         .foregroundColor(R.color.secondaryText.color)
                                     Spacer()
@@ -508,42 +507,42 @@ struct DealView: View {
                             switch actionType {
                             case .sign:
                                 if viewModel.state.isSignedByPartner {
-                                    CButton(title: "Sign and start", style: .primary, size: .large, isLoading: false) {
+                                    CButton(title: R.string.localizable.dealButtonsSignAndStart(), style: .primary, size: .large, isLoading: false) {
                                         activeModalType = .confirm
                                     }
-                                    Text("The partner has already signed the contract. The work of the contract will begin when you sign the contract.")
+                                    Text(R.string.localizable.dealDescriptionCommandPartnerAlreadySigned())
                                         .font(.footnote)
                                         .multilineTextAlignment(.center)
                                         .foregroundColor(R.color.labelBackgroundAttention.color)
                                 } else {
-                                    CButton(title: "Sign", style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.state.canSign) {
+                                    CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.state.canSign) {
                                         activeModalType = .confirm
                                     }
-                                    Text("Sign the contract, the work of the contract starts automatically when your partner signs it")
+                                    Text(R.string.localizable.dealDescriptionCommandFirstSign())
                                         .font(.footnote)
                                         .multilineTextAlignment(.center)
                                         .foregroundColor(R.color.labelBackgroundAttention.color)
                                 }
                             case .cancelSign:
-                                CButton(title: "Cancel sign", style: .cancel, size: .large, isLoading: false) {
+                                CButton(title: R.string.localizable.dealButtonsCancelSign(), style: .cancel, size: .large, isLoading: false) {
                                     actionsType = .confirmCancelSign
                                 }
-                                Text("You can cancel your signature before your partner signs the contract. The work of the contract will begin when the partner signs.")
+                                Text(R.string.localizable.dealDescriptionCommandCancelSign())
                                     .font(.footnote)
                                     .multilineTextAlignment(.center)
                                     .foregroundColor(R.color.labelBackgroundAttention.color)
                             case .cancelDeal:
-                                CButton(title: "Cancel deal", style: .cancel, size: .large, isLoading: false) {
+                                CButton(title: R.string.localizable.dealButtonsStopDeal(), style: .cancel, size: .large, isLoading: false) {
                                     // TODO: - Add
                                 }
-                                Text("You can cancel the contract all funds will be refunded.")
+                                Text(R.string.localizable.dealDescriptionCommandStopDeal())
                                     .font(.footnote)
                                     .foregroundColor(R.color.yellow.color)
                             case .finishDeal:
-                                CButton(title: "Finish deal", style: .primary, size: .large, isLoading: false) {
+                                CButton(title: R.string.localizable.dealButtonsFinishDeal(), style: .primary, size: .large, isLoading: false) {
                                     // TODO: - Add
                                 }
-                                Text("If all the work is done as specified in the contract you can complete the contract, the contractor will receive payment. The checker will receive a commission for services.")
+                                Text(R.string.localizable.dealDescriptionCommandFinishDeal())
                                     .font(.footnote)
                                     .multilineTextAlignment(.center)
                                     .foregroundColor(R.color.labelBackgroundAttention.color)
@@ -589,8 +588,8 @@ struct DealView: View {
                     viewModel.trigger(.updateTx)
                     callback()
                     
-                } cancelAction: {
-                    // TODO: - Cancel
+                } closeAction: { afterSign in
+                    // TODO: - Close
                 }
                 .interactiveDismiss(canDismissSheet: false)
             case .importSharedKey:
@@ -697,9 +696,9 @@ struct DealView: View {
                         contentType: .privateKey,
                         informationType: .none,
                         content: shareData,
-                        topTitle: "Share",
-                        title: "The secret key",
-                        subTitle: "The partner need scan the QR code to start working on the contract.")
+                        topTitle: R.string.localizable.commonShare(),
+                        title: R.string.localizable.shareContentTitleSecretKey(),
+                        subTitle: R.string.localizable.shareContentSubtitleSecretKey())
                     { _ in
                         // TODO: -
                     } dismissAction: {

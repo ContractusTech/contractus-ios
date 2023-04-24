@@ -36,9 +36,9 @@ struct TopTextBlockView: View {
             case .success:
                 return R.color.white.color
             case .none:
-                return R.color.labelTextPrimary.color
+                return R.color.labelTextAttention.color.opacity(0.7)
             case .warning:
-                return R.color.labelTextAttention.color
+                return R.color.labelTextAttention.color.opacity(0.8)
             case .waiting:
                 return R.color.white.color
             }
@@ -49,7 +49,7 @@ struct TopTextBlockView: View {
             case .success:
                 return R.color.baseGreen.color
             case .none:
-                return R.color.labelBackgroundPrimary.color
+                return R.color.labelBackgroundDefault.color
             case .warning:
                 return R.color.yellow200.color
             case .waiting:
@@ -77,23 +77,22 @@ struct TopTextBlockView: View {
                         }
                         Text(headerText)
                             .multilineTextAlignment(.center)
-                            .font(.subheadline.weight(.bold))
+                            .font(.footnote.weight(.medium))
                             .textCase(.uppercase)
                             .foregroundColor(informationType.textColor)
                     }
-                    .padding(EdgeInsets(top: 6, leading: 8, bottom: 6, trailing: 8))
+                    .padding(EdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 10))
                     .background(informationType.background)
-                    .cornerRadius(6)
-                    // .shadow(radius: 3)
+                    .cornerRadius(20)
                     Spacer()
                 }
-
                 .padding(EdgeInsets(top: 12, leading: 0, bottom: 8, trailing: 0))
             }
             HStack {
                 Spacer()
                 Text(titleText)
                     .font(.largeTitle.weight(.semibold))
+                    .tracking(-1.1)
                 Spacer()
             }
             if let subTitleText = subTitleText {
@@ -101,12 +100,12 @@ struct TopTextBlockView: View {
                     Spacer()
                     Text(subTitleText)
                         .font(.callout)
+                        // .foregroundColor(R.color.secondaryText.color)
                         .multilineTextAlignment(.center)
                         .padding(EdgeInsets(top: 12, leading: 20, bottom: 0, trailing: 20))
                     Spacer()
                 }
             }
-
         }
         .padding(EdgeInsets(top: 0, leading: 16, bottom: 21, trailing: 16))
     }
@@ -141,7 +140,5 @@ struct TopTextBlockView_Previews: PreviewProvider {
                     subTitleText: "Of the client who will perform the work under the contract.")
             }
         }
-
-
     }
 }

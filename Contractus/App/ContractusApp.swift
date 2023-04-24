@@ -35,22 +35,13 @@ final class RootViewModel: ViewModel {
 
     init(accountStorage: AccountStorage) {
         self.accountStorage = accountStorage
-        if
-            let account = accountStorage.getCurrentAccount()
-
-        {
-            #if DEBUG
-            debugPrint("===== Import PK =====")
-            debugPrint(Base58.encode(account.privateKey))
-            debugPrint("===== End =====")
-            #endif
+        if let account = accountStorage.getCurrentAccount() {
             // TODO: - Не очень правильное решение + вынести deviceId
             APIServiceFactory.shared.setAccount(for: account, deviceId: deviceId)
             self.state = RootState(state: .hasAccount(account))
         } else {
             self.state = RootState(state: .noAccount)
         }
-
     }
 
     func trigger(_ input: RootInput, after: AfterTrigger? = nil) {
@@ -85,7 +76,6 @@ struct ContractusApp: App {
             return tx
         case .none:
             return nil
-//            fatalError("Transaction is empty")
         }
     }
 
@@ -124,14 +114,10 @@ struct ContractusApp: App {
                     .rootSheet(isPresented: $showTxSheet, onDismiss: nil, content: {
                         signView(account: account)
                     })
-
-                    
                 }
-
             }
             .animation(.default, value: rootViewModel.state)
         }
-        
     }
 
     @ViewBuilder
@@ -139,7 +125,7 @@ struct ContractusApp: App {
         if let transactionSignType = transactionSignType {
             TransactionSignView(account: account, type: transactionSignType) {
 
-            } cancelAction: {
+            } closeAction: { _ in
                 showTxSheet = false
             }
         } else {
@@ -151,6 +137,7 @@ struct ContractusApp: App {
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         appearanceSetup()
+        
         if case .developer = AppConfig.serverType {
             NFX.sharedInstance().start()
         }

@@ -18,6 +18,4 @@ struct SharablePublicKey: Shareable {
     var shareContent: String {
         return publicKey
     }
-
-
 }

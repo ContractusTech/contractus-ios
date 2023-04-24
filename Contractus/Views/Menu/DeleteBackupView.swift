@@ -59,7 +59,7 @@ struct DeleteBackupView: View {
                         .font(.footnote)
                         .foregroundColor(R.color.redText.color)
                     
-                    CButton(title: R.string.localizable.accountsDeleteAccount(), style: .cancel, size: .large, isLoading: false, roundedCorner: true)
+                    CButton(title: R.string.localizable.accountsDeleteAccount(), style: .cancel, size: .large, isLoading: false, roundedCorner: false)
                     {
                         completion(.delete)
                     }
@@ -67,7 +67,7 @@ struct DeleteBackupView: View {
                     Divider()
                 }
                 HStack {
-                    CButton(title: R.string.localizable.commonCancel(), style: .secondary, size: .large, isLoading: false, roundedCorner: true)
+                    CButton(title: R.string.localizable.commonCancel(), style: .secondary, size: .large, isLoading: false, roundedCorner: false)
                     {
                         completion(.cancel)
                     }

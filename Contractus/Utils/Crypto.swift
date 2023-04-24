@@ -55,10 +55,6 @@ struct Crypto {
         let decryptedBytes = try aes.decrypt(encryptedData.bytes)
         return Data(decryptedBytes)
     }
-
-    func S() {
-        
-    }
 }
 
 extension Crypto {
@@ -140,7 +136,7 @@ extension Crypto {
         }
     }
 
-    // MARK: - Decrypt Methods
+    // MARK: - Decrypt Async Methods
 
     static func decrypt(encryptedData: Data, with privateKey: Data) async throws -> Data {
         let task = Task { () -> Data in
@@ -158,6 +154,8 @@ extension Crypto {
         }
         return try await decrypt(encryptedData: base64Data, with: privateKey)
     }
+
+    // MARK: - Decrypt Combine Methods
 
     static func decrypt(encryptedData: Data, with privateKey: Data) -> Future<Data, Error>  {
         return Future { promise in

@@ -35,6 +35,8 @@
 "common.open" = "Open";
 "common.owner" = "Owner";
 "common.copy" = "Copy";
+"common.account" = "Account";
+"common.share" = "Share";
 
 "enter.button.create-wallet" = "Create new wallet";
 "enter.button.import" = "Import exists";
@@ -50,6 +52,8 @@
 "backupInformation.subtitle" = "Check private key is backuped. If lose private key you can't use service forever.";
 "backupInformation.tooltip" = "If you already backuped then press Continues";
 "backupInformation.button.copied" = "Private key already in clipboard!";
+
+"balance.estimate" = "Estimate balance";
 
 "accounts.title" = "Accounts";
 "accounts.warning.title" = "Warning!";
@@ -70,6 +74,9 @@
 "qrCode.button.share" = "Share Image";
 "qrCode.warning" = "Warning!";
 "qrCode.warning.message" = "Send it securely via Telegram Secret Chat or Signal to your partner or allow scan from your phone.";
+
+"shareContent.title.secret-key" = "The secret key";
+"shareContent.subtitle.secret-key" = "The partner need scan the QR code to start working on the contract.";
 
 "uploadFile.button.select" = "Select";
 "uploadFile.button.select-gallery" = "Gallery";
@@ -123,6 +130,9 @@
 "deal.hint.you-executor" = "After this Account checks the result of the contract, you get paid.";
 "deal.hint.empty-verifier" = "You need to specify the Account that will check the result of the contract.";
 "deal.hint.verifier" = "After verification by this Account of the result of the contract, the partner receives payment.";
+"deal.hint.encrypt-content" = "This text will be encrypted and available for viewing only to contract partners.";
+"deal.hint.encrypt-files" = "This files will be encrypted and available for viewing only to contract partners.";
+"deal.hint.pay-account" = "The account that pays you for the work you do";
 "deal.results.title" = "Results";
 "deal.results.waiting-approve" = "Waiting approve";
 "deal.results.hint" = "Executor can publish documents for approve";
@@ -131,6 +141,17 @@
 "deal.file.no-name" = "[No file name]";
 "deal.cancel.sign.title" = "Are you sure you want to cancel sign?";
 "deal.cancel.sign" = "Cancel sign";
+"deal.buttons.sign" = "Sign";
+"deal.buttons.sign-and-start" = "Sign and start";
+"deal.buttons.cancel-sign" = "Cancel sign";
+"deal.buttons.stop-deal" = "Stop deal";
+"deal.buttons.finish-deal" = "Finish deal";
+
+"deal.description-command.partner-already-signed" = "The partner has already signed the contract. The work of the contract will begin when you sign the contract.";
+"deal.description-command.first-sign" = "Sign the contract, the work of the contract starts automatically when your partner signs it";
+"deal.description-command.cancel-sign" = "You can cancel your signature before your partner signs the contract. The work of the contract will begin when the partner signs.";
+"deal.description-command.stop-deal" = "You can stop the contract all funds will be refunded.";
+"deal.description-command.finish-deal" = "If all the work is done as specified in the contract you can complete the contract, the contractor will receive payment. The checker will receive a commission for services.";
 
 "newDeal.title" = "New deal";
 "newDeal.subtitle" = "Choose your role";
@@ -159,3 +180,34 @@
 "addContractor.subtitle.checker" = "Account must be %@ blockchain";
 "addContractor.success-title.checker" = "Checker success added!";
 "addContractor.success-title.contractor" = "Partner success added!";
+
+"transactionSign.fields.service-fee" = "Service Fee";
+"transactionSign.fields.executor" = "Executor";
+"transactionSign.fields.amount" = "Amount";
+"transactionSign.fields.verifier-fee" = "Verifier Fee";
+"transactionSign.fields.fee" = "Fee";
+"transactionSign.fields.status" = "Status";
+"transactionSign.fields.type" = "Type";
+"transactionSign.fields.tx" = "Transaction";
+"transactionSign.fields.base64" = "Base64";
+"transactionSign.fields.signature" = "Signature";
+"transactionSign.statuses.need-sign" = "Pending signature";
+"transactionSign.statuses.processing" = "Processing";
+"transactionSign.statuses.done" = "Done";
+"transactionSign.statuses.error" = "Error";
+"transactionSign.fields.free-fee" = "Free";
+"transactionSign.buttons.signed" = "Signed";
+"transactionSign.buttons.signing" = "Signing...";
+"transactionSign.buttons.loading" = "Loading...";
+"transactionSign.buttons.sign" = "Confirm and sign";
+"transactionSign.title.need-sign" = "Signing\n the transaction";
+"transactionSign.title.signed" = "Signed";
+"transactionSign.subtitle.unsigned-init-deal" = "Of transaction. Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.";
+"transactionSign.subtitle.common" = "After signing, the transaction will start executing";
+"transactionSign.subtitle.processing" = "The transaction will soon be completed";
+
+"transaction.type.init-deal" = "Start deal";
+"transaction.type.finish-deal" = "Finish deal";
+"transaction.type.cancel-deal" = "Cancel deal";
+"transaction.type.wrap-sol" = "SOL ➞ wSOL";
+"transaction.type.unwrap-wsol" = "wSOL ➞ SOL";
