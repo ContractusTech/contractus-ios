@@ -50,7 +50,7 @@ struct CButton: View {
             case .warn:
                 return R.color.black.color
             case .cancel:
-                return R.color.buttonTextSecondary.color
+                return R.color.white.color
             case .success:
                 return R.color.white.color
             }

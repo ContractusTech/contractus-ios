@@ -11,6 +11,12 @@ import BigInt
 
 public final class AccountService: BaseService {
 
+    public struct Pagination: Encodable {
+        public let skip: Int
+        public let take: Int
+        public let q: String?
+    }
+
     public struct Token: Codable {
 
         public let code: String
@@ -51,7 +57,13 @@ public final class AccountService: BaseService {
     }
     
     public func getAccount(completion: @escaping (Swift.Result<Account, APIClientError>) -> Void) {
-        self.request(path: .accounts, httpMethod: .get, data: Empty()) { (result: Result<Account, APIClientError>) in
+        self.request(path: .currentAccount, httpMethod: .get, data: Empty()) { (result: Result<Account, APIClientError>) in
+            completion(result)
+        }
+    }
+
+    public func getAccounts(params: Pagination, completion: @escaping (Swift.Result<[Account], APIClientError>) -> Void) {
+        self.request(path: .currentAccount, httpMethod: .get, data: params) { (result: Result<[Account], APIClientError>) in
             completion(result)
         }
     }

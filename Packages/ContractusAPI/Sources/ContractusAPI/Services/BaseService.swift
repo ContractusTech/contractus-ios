@@ -10,6 +10,7 @@ import Alamofire
 
 public enum ServicePath {
     case accounts
+    case currentAccount
     case deals
     case transactions
     case transaction(String)
@@ -38,6 +39,8 @@ public enum ServicePath {
             return "/tx/\(id)"
         case .accounts:
             return "/accounts"
+        case .currentAccount:
+            return "/accounts/my"
         case .uploadFile:
             return "/files/upload"
         case .deals:

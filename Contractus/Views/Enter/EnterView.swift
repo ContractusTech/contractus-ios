@@ -33,15 +33,17 @@ struct EnterView: View {
                 ScrollView {
                     switch viewType {
                     case .enterApp:
-                        VStack(alignment: .leading, spacing: 24) {
+                        HStack(alignment: .center, spacing: 16) {
+                            Spacer()
                             Text(R.string.localizable.commonAppName())
-                                .font(.title)
-                                .fontWeight(.heavy)
-                            Text(R.string.localizable.enterMessage())
-                                .font(.title2)
-                                .fontWeight(.semibold)
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .tracking(-1.1)
+                                .multilineTextAlignment(.center)
+                            Spacer()
                         }
-                        .padding(EdgeInsets(top: 44, leading: 20, bottom: 20, trailing: 20))
+
+                        .padding(EdgeInsets(top: 104, leading: 20, bottom: 20, trailing: 20))
                     case .addAccount:
                         // TODO: - Move text in localization
                         TopTextBlockView(
@@ -52,6 +54,7 @@ struct EnterView: View {
                 }
 
                 VStack {
+                    /* TODO: - Solana by default, yet!
                     VStack {
                         Text("Blockchain")
                             .font(.callout)
@@ -69,6 +72,17 @@ struct EnterView: View {
                         .cornerRadius(12)
                     }
                     .padding(.bottom, 24)
+                     */
+
+                    if viewType == .enterApp {
+                        Text(R.string.localizable.enterMessage(blockchain.rawValue.capitalized))
+                            .font(.headline)
+                            .foregroundColor(R.color.textBase.color)
+                            .fontWeight(.medium)
+                            .multilineTextAlignment(.center)
+                            .padding(.bottom, 12)
+
+                    }
                     NavigationLink(tag: NavigateViewType.createWallet, selection: $selectedView) {
                         CreateWalletView { account in
                             completion(account)
