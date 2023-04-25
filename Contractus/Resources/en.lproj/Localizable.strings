@@ -40,7 +40,7 @@
 
 "enter.button.create-wallet" = "Create new wallet";
 "enter.button.import" = "Import exists";
-"enter.message" = "A new way to collaborate and make business with partners.\nCreate contract, sign, check result and pay. Securely.";
+"enter.message" = "You need a %@ account to get started ";
 
 "createWallet.button.next" = "Next";
 "createWallet.button.copied" = "Private key copied!";
@@ -159,6 +159,19 @@
 "newDeal.title.executor" = "Executor";
 "newDeal.subtitle.client" = "If you pay to some service or product";
 "newDeal.subtitle.executor" = "If you provide service or sell goods";
+
+"addContractor.title.enter-key" = "Enter public key";
+"addContractor.title.partner" = "Add partner";
+"addContractor.title.checker" = "Add checker";
+"addContractor.description.checker" = "Of partner who will verify the result of the contract. After checking, the contractor will receive payment.";
+"addContractor.description.executor" = "Of the client who will perform the work under the contract.";
+"addContractor.description.client" = "Of the client who will pay for the work under the contract.";
+"addContractor.type-account-info" = "Account must be %@ blockchain";
+"addContractor.success-added.checker" = "Checker successfully added!";
+"addContractor.success-added.partner" = "Partner successfully added!";
+
+"share.title.default" = "Share key";
+"share.subtitle.default" = "For edit and sign contract partner must have this data.";
 
 "main.title.deals" = "Active deals";
 "main.title.new-deal" = "New deal";

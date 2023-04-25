@@ -46,14 +46,14 @@ struct AddContractorView: View {
                     switch viewModel.state.participateType {
                     case .contractor:
                         TopTextBlockView(
-                            headerText: "Add partner",
-                            titleText: "Enter public key",
-                            subTitleText: viewModel.state.ownerIsClient ? "Of the client who will perform the work under the contract." : "Of the client who will pay for the work under the contract.")
+                            headerText: R.string.localizable.addContractorTitlePartner(),
+                            titleText: R.string.localizable.addContractorTitleEnterKey(),
+                            subTitleText: viewModel.state.ownerIsClient ? R.string.localizable.addContractorDescriptionExecutor() : R.string.localizable.addContractorDescriptionClient())
                     case .checker:
                         TopTextBlockView(
-                            headerText: "Add checker",
-                            titleText: "Enter public key",
-                            subTitleText: "Of partner who will verify the result of the contract. After checking, the contractor will receive payment.")
+                            headerText: R.string.localizable.addContractorTitleChecker(),
+                            titleText: R.string.localizable.addContractorTitleEnterKey(),
+                            subTitleText: R.string.localizable.addContractorDescriptionChecker())
                     }
 
                 }
@@ -66,7 +66,7 @@ struct AddContractorView: View {
                     ) { newValue in
                             viewModel.trigger(.validate(newValue))
                         }
-                    Text("Account must be \(viewModel.state.blockchain.rawValue.capitalized) blockchain")
+                    Text(R.string.localizable.addContractorTypeAccountInfo(viewModel.state.blockchain.rawValue))
                         .font(.callout)
                         .foregroundColor(R.color.secondaryText.color)
                     Spacer()
@@ -78,8 +78,8 @@ struct AddContractorView: View {
                         ShareContentView(
                             content: viewModel.state.shareableData,
                             topTitle: nil,
-                            title: "Share key",
-                            subTitle: "For edit and sign contract partner must have this data.") { _ in
+                            title: R.string.localizable.shareTitleDefault(),
+                            subTitle: R.string.localizable.shareSubtitleDefault()) { _ in
                                 // TODO: - Copy
                             } dismissAction: {
 
@@ -150,9 +150,9 @@ struct AddContractorView: View {
     var successTitle: String {
         switch viewModel.state.participateType {
         case .contractor:
-            return  "Partner successfully added!"
+            return  R.string.localizable.addContractorSuccessAddedPartner()
         case .checker:
-            return "Reviewer successfully added!"
+            return R.string.localizable.addContractorSuccessAddedChecker()
         }
     }
 }

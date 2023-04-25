@@ -925,16 +925,12 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 189 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 199 localization keys.
     struct localizable {
       /// en translation: -
       ///
       /// Locales: en
       static let dealStatusUnknown = Rswift.StringResource(key: "deal.status.unknown", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: A new way to collaborate and make business with partners. Create contract, sign, check result and pay. Securely.
-      ///
-      /// Locales: en
-      static let enterMessage = Rswift.StringResource(key: "enter.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Account
       ///
       /// Locales: en
@@ -947,6 +943,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorSubtitleContractor = Rswift.StringResource(key: "addContractor.subtitle.contractor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Account must be %@ blockchain
+      ///
+      /// Locales: en
+      static let addContractorTypeAccountInfo = Rswift.StringResource(key: "addContractor.type-account-info", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Accounts
       ///
       /// Locales: en
@@ -975,6 +975,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorTitleContractor = Rswift.StringResource(key: "addContractor.title.contractor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Add partner
+      ///
+      /// Locales: en
+      static let addContractorTitlePartner = Rswift.StringResource(key: "addContractor.title.partner", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: After signing, the transaction will start executing
       ///
       /// Locales: en
@@ -1079,6 +1083,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorSuccessTitleChecker = Rswift.StringResource(key: "addContractor.success-title.checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Checker successfully added!
+      ///
+      /// Locales: en
+      static let addContractorSuccessAddedChecker = Rswift.StringResource(key: "addContractor.success-added.checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Choose your role
       ///
       /// Locales: en
@@ -1207,6 +1215,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextEditorEditorPlaceholder = Rswift.StringResource(key: "deal.textEditor.editor-placeholder", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Enter public key
+      ///
+      /// Locales: en
+      static let addContractorTitleEnterKey = Rswift.StringResource(key: "addContractor.title.enter-key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Error
       ///
       /// Locales: en
@@ -1263,6 +1275,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextForClient = Rswift.StringResource(key: "deal.text.for.client", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: For edit and sign contract partner must have this data.
+      ///
+      /// Locales: en
+      static let shareSubtitleDefault = Rswift.StringResource(key: "share.subtitle.default", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Force update
       ///
       /// Locales: en
@@ -1331,6 +1347,18 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealNoSecretKey = Rswift.StringResource(key: "deal.no-secret-key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Of partner who will verify the result of the contract. After checking, the contractor will receive payment.
+      ///
+      /// Locales: en
+      static let addContractorDescriptionChecker = Rswift.StringResource(key: "addContractor.description.checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Of the client who will pay for the work under the contract.
+      ///
+      /// Locales: en
+      static let addContractorDescriptionClient = Rswift.StringResource(key: "addContractor.description.client", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Of the client who will perform the work under the contract.
+      ///
+      /// Locales: en
+      static let addContractorDescriptionExecutor = Rswift.StringResource(key: "addContractor.description.executor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Of transaction. Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.
       ///
       /// Locales: en
@@ -1359,6 +1387,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorSuccessTitleContractor = Rswift.StringResource(key: "addContractor.success-title.contractor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Partner successfully added!
+      ///
+      /// Locales: en
+      static let addContractorSuccessAddedPartner = Rswift.StringResource(key: "addContractor.success-added.partner", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Paste
       ///
       /// Locales: en
@@ -1475,6 +1507,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let qrCodeButtonShare = Rswift.StringResource(key: "qrCode.button.share", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Share key
+      ///
+      /// Locales: en
+      static let shareTitleDefault = Rswift.StringResource(key: "share.title.default", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Sign
       ///
       /// Locales: en
@@ -1667,6 +1703,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsDeleteWarning = Rswift.StringResource(key: "accounts.delete.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: You need a %@ account to get started 
+      ///
+      /// Locales: en
+      static let enterMessage = Rswift.StringResource(key: "enter.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: You need to specify the Account that will check the result of the contract.
       ///
       /// Locales: en
@@ -1697,21 +1737,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.status.unknown", bundle: bundle, comment: "")
-      }
-
-      /// en translation: A new way to collaborate and make business with partners. Create contract, sign, check result and pay. Securely.
-      ///
-      /// Locales: en
-      static func enterMessage(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("enter.message", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "enter.message"
-        }
-
-        return NSLocalizedString("enter.message", bundle: bundle, comment: "")
       }
 
       /// en translation: Account
@@ -1760,6 +1785,23 @@ struct R: Rswift.Validatable {
         }
 
         let format = NSLocalizedString("addContractor.subtitle.contractor", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
+      }
+
+      /// en translation: Account must be %@ blockchain
+      ///
+      /// Locales: en
+      static func addContractorTypeAccountInfo(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("addContractor.type-account-info", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "addContractor.type-account-info"
+        }
+
+        let format = NSLocalizedString("addContractor.type-account-info", bundle: bundle, comment: "")
         return String(format: format, locale: locale, value1)
       }
 
@@ -1868,6 +1910,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("addContractor.title.contractor", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Add partner
+      ///
+      /// Locales: en
+      static func addContractorTitlePartner(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("addContractor.title.partner", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "addContractor.title.partner"
+        }
+
+        return NSLocalizedString("addContractor.title.partner", bundle: bundle, comment: "")
       }
 
       /// en translation: After signing, the transaction will start executing
@@ -2258,6 +2315,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("addContractor.success-title.checker", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Checker successfully added!
+      ///
+      /// Locales: en
+      static func addContractorSuccessAddedChecker(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("addContractor.success-added.checker", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "addContractor.success-added.checker"
+        }
+
+        return NSLocalizedString("addContractor.success-added.checker", bundle: bundle, comment: "")
       }
 
       /// en translation: Choose your role
@@ -2740,6 +2812,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.textEditor.editor-placeholder", bundle: bundle, comment: "")
       }
 
+      /// en translation: Enter public key
+      ///
+      /// Locales: en
+      static func addContractorTitleEnterKey(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("addContractor.title.enter-key", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "addContractor.title.enter-key"
+        }
+
+        return NSLocalizedString("addContractor.title.enter-key", bundle: bundle, comment: "")
+      }
+
       /// en translation: Error
       ///
       /// Locales: en
@@ -2948,6 +3035,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.text.for.client", bundle: bundle, comment: "")
+      }
+
+      /// en translation: For edit and sign contract partner must have this data.
+      ///
+      /// Locales: en
+      static func shareSubtitleDefault(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("share.subtitle.default", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "share.subtitle.default"
+        }
+
+        return NSLocalizedString("share.subtitle.default", bundle: bundle, comment: "")
       }
 
       /// en translation: Force update
@@ -3205,6 +3307,51 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.no-secret-key", bundle: bundle, comment: "")
       }
 
+      /// en translation: Of partner who will verify the result of the contract. After checking, the contractor will receive payment.
+      ///
+      /// Locales: en
+      static func addContractorDescriptionChecker(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("addContractor.description.checker", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "addContractor.description.checker"
+        }
+
+        return NSLocalizedString("addContractor.description.checker", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Of the client who will pay for the work under the contract.
+      ///
+      /// Locales: en
+      static func addContractorDescriptionClient(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("addContractor.description.client", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "addContractor.description.client"
+        }
+
+        return NSLocalizedString("addContractor.description.client", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Of the client who will perform the work under the contract.
+      ///
+      /// Locales: en
+      static func addContractorDescriptionExecutor(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("addContractor.description.executor", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "addContractor.description.executor"
+        }
+
+        return NSLocalizedString("addContractor.description.executor", bundle: bundle, comment: "")
+      }
+
       /// en translation: Of transaction. Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.
       ///
       /// Locales: en
@@ -3308,6 +3455,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("addContractor.success-title.contractor", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Partner successfully added!
+      ///
+      /// Locales: en
+      static func addContractorSuccessAddedPartner(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("addContractor.success-added.partner", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "addContractor.success-added.partner"
+        }
+
+        return NSLocalizedString("addContractor.success-added.partner", bundle: bundle, comment: "")
       }
 
       /// en translation: Paste
@@ -3743,6 +3905,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("qrCode.button.share", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Share key
+      ///
+      /// Locales: en
+      static func shareTitleDefault(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("share.title.default", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "share.title.default"
+        }
+
+        return NSLocalizedString("share.title.default", bundle: bundle, comment: "")
       }
 
       /// en translation: Sign
@@ -4465,6 +4642,23 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.delete.warning", bundle: bundle, comment: "")
+      }
+
+      /// en translation: You need a %@ account to get started 
+      ///
+      /// Locales: en
+      static func enterMessage(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("enter.message", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "enter.message"
+        }
+
+        let format = NSLocalizedString("enter.message", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
       }
 
       /// en translation: You need to specify the Account that will check the result of the contract.
