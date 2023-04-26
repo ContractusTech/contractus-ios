@@ -70,7 +70,7 @@ struct TextEditorView: View {
                                 Text(R.string.localizable.dealTextEditorEditorPlaceholder())
                                     .padding(EdgeInsets(top: 14, leading: 12, bottom: 0, trailing: 5))
                                     .foregroundColor(R.color.secondaryText.color)
-
+                                    .allowsHitTesting(false)
                             }
                         }
 
@@ -196,6 +196,14 @@ struct TextEditorView: View {
                 presentationMode.wrappedValue.dismiss()
             }
         })
+        .onChange(of: viewModel.state.errorState) { errorState in
+            switch errorState {
+            case .error(let message):
+                alertType = .error(message)
+            case .none:
+                alertType = nil
+            }
+        }
         .onAppear {
             viewModel.trigger(.decrypt)
         }

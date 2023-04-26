@@ -54,6 +54,7 @@ final class TextEditorViewModel: ViewModel {
         switch input {
         case .dismissError:
             state.errorState = nil
+            state.state = .none
         case .update(let value, let force):
             guard state.isDecrypted else { return }
             state.state = .updating
