@@ -163,7 +163,7 @@ final class DealViewModel: ViewModel {
         secretStorage: SharedSecretStorage?)
     {
         self.state = state
-        self.state.state = .loading
+        self.state.state = .none
         self.dealService = dealService
         self.filesAPIService = filesAPIService
         self.transactionSignService = transactionSignService
@@ -187,8 +187,6 @@ final class DealViewModel: ViewModel {
                     state.errorState = .error(error.readableDescription)
                     state.state = .none
                 }
-
-
             }
         case .cancel:
             state.state = .loading

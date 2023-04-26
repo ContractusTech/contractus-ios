@@ -394,12 +394,12 @@ struct DealView: View {
                 }
                 .background(R.color.secondaryBackground.color)
                 .cornerRadius(20)
+
                 if viewModel.state.showResult {
                     VStack(alignment: .leading) {
                         HStack {
                             Text(R.string.localizable.dealResultsTitle())
                                 .font(.title.weight(.regular))
-//                                .textCase(.uppercase)
                                 .foregroundColor(R.color.textBase.color)
 
                             Label(text: R.string.localizable.dealResultsWaitingApprove(), type: .primary)
@@ -410,7 +410,7 @@ struct DealView: View {
                             .foregroundColor(R.color.secondaryText.color)
 
                     }
-                    .padding(EdgeInsets(top: 32, leading: 26, bottom: 16, trailing: 26))
+                    .padding(EdgeInsets(top: 20, leading: 12, bottom: 12, trailing: 12))
 
                     // MARK: - Results
                     VStack {
@@ -418,8 +418,7 @@ struct DealView: View {
                             HStack {
                                 HStack {
                                     Text(R.string.localizable.dealTextText())
-                                        .font(.title2.weight(.regular))
-                                        .fontWeight(.semibold)
+                                        .font(.title3.weight(.regular))
 
                                     Label(text: R.string.localizable.commonEncrypted(), type: .default)
                                 }
@@ -462,8 +461,7 @@ struct DealView: View {
                             HStack {
                                 HStack {
                                     Text(R.string.localizable.dealTextFiles())
-                                        .font(.title2)
-                                        .fontWeight(.semibold)
+                                        .font(.title3.weight(.regular))
                                     Label(text: R.string.localizable.commonEncrypted(), type: .default)
                                 }
                                 Spacer()
@@ -504,7 +502,6 @@ struct DealView: View {
 
                 // MARK: - Actions
                 VStack {
-
                     VStack(alignment: .center, spacing: 12) {
                         ForEach(viewModel.currentMainActions) { actionType in
                             switch actionType {
