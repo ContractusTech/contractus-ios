@@ -925,7 +925,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 199 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 201 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1035,6 +1035,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsWarningSubtitle = Rswift.StringResource(key: "accounts.warning.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: By continue, you agree to [Terms](https://google.com) and [Privacy Policy](https://google.com)
+      ///
+      /// Locales: en
+      static let enterTerms = Rswift.StringResource(key: "enter.terms", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Camera
       ///
       /// Locales: en
@@ -1619,6 +1623,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealHintEncryptContent = Rswift.StringResource(key: "deal.hint.encrypt-content", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: To get started you need a %@ account
+      ///
+      /// Locales: en
+      static let enterMessage = Rswift.StringResource(key: "enter.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Total amount
       ///
       /// Locales: en
@@ -1683,6 +1691,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let qrCodeWarning = Rswift.StringResource(key: "qrCode.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Welcome to
+      ///
+      /// Locales: en
+      static let enterSubtitle = Rswift.StringResource(key: "enter.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Yes, delete
       ///
       /// Locales: en
@@ -1703,10 +1715,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsDeleteWarning = Rswift.StringResource(key: "accounts.delete.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: You need a %@ account to get started 
-      ///
-      /// Locales: en
-      static let enterMessage = Rswift.StringResource(key: "enter.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: You need to specify the Account that will check the result of the contract.
       ///
       /// Locales: en
@@ -2135,6 +2143,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.warning.subtitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: By continue, you agree to [Terms](https://google.com) and [Privacy Policy](https://google.com)
+      ///
+      /// Locales: en
+      static func enterTerms(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("enter.terms", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "enter.terms"
+        }
+
+        return NSLocalizedString("enter.terms", bundle: bundle, comment: "")
       }
 
       /// en translation: Camera
@@ -4327,6 +4350,23 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.hint.encrypt-content", bundle: bundle, comment: "")
       }
 
+      /// en translation: To get started you need a %@ account
+      ///
+      /// Locales: en
+      static func enterMessage(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("enter.message", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "enter.message"
+        }
+
+        let format = NSLocalizedString("enter.message", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
+      }
+
       /// en translation: Total amount
       ///
       /// Locales: en
@@ -4569,6 +4609,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("qrCode.warning", bundle: bundle, comment: "")
       }
 
+      /// en translation: Welcome to
+      ///
+      /// Locales: en
+      static func enterSubtitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("enter.subtitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "enter.subtitle"
+        }
+
+        return NSLocalizedString("enter.subtitle", bundle: bundle, comment: "")
+      }
+
       /// en translation: Yes, delete
       ///
       /// Locales: en
@@ -4642,23 +4697,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.delete.warning", bundle: bundle, comment: "")
-      }
-
-      /// en translation: You need a %@ account to get started 
-      ///
-      /// Locales: en
-      static func enterMessage(_ value1: String, preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          let format = NSLocalizedString("enter.message", bundle: hostingBundle, comment: "")
-          return String(format: format, locale: applicationLocale, value1)
-        }
-
-        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "enter.message"
-        }
-
-        let format = NSLocalizedString("enter.message", bundle: bundle, comment: "")
-        return String(format: format, locale: locale, value1)
       }
 
       /// en translation: You need to specify the Account that will check the result of the contract.

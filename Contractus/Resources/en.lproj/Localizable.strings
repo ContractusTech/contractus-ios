@@ -38,9 +38,11 @@
 "common.account" = "Account";
 "common.share" = "Share";
 
+"enter.subtitle" = "Welcome to";
 "enter.button.create-wallet" = "Create new wallet";
 "enter.button.import" = "Import exists";
-"enter.message" = "You need a %@ account to get started ";
+"enter.message" = "To get started you need a %@ account";
+"enter.terms" = "By continue, you agree to [Terms](https://google.com) and [Privacy Policy](https://google.com)";
 
 "createWallet.button.next" = "Next";
 "createWallet.button.copied" = "Private key copied!";

@@ -33,14 +33,19 @@ struct EnterView: View {
                 ScrollView {
                     switch viewType {
                     case .enterApp:
-                        HStack(alignment: .center, spacing: 16) {
-                            Spacer()
+
+                        VStack(alignment: .center, spacing: 8) {
+                            Text(R.string.localizable.enterSubtitle())
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity, alignment: .center)
                             Text(R.string.localizable.commonAppName())
                                 .font(.largeTitle)
-                                .fontWeight(.bold)
+                                .fontWeight(.heavy)
                                 .tracking(-1.1)
                                 .multilineTextAlignment(.center)
-                            Spacer()
+                                .frame(maxWidth: .infinity, alignment: .center)
                         }
 
                         .padding(EdgeInsets(top: 104, leading: 20, bottom: 20, trailing: 20))
@@ -106,6 +111,15 @@ struct EnterView: View {
                             self.selectedView = .importWallet
                         }
                     }
+
+                    if viewType == .enterApp {
+                        Text(.init(R.string.localizable.enterTerms()))
+                            .font(.footnote)
+                            .foregroundColor(R.color.secondaryText.color)
+                            .fontWeight(.medium)
+                            .multilineTextAlignment(.center)
+                            .padding(.top, 12)
+                    }
                 }
                 .padding(UIConstants.contentInset)
             }
@@ -119,6 +133,7 @@ struct EnterView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarColor()
             .edgesIgnoringSafeArea(.bottom)
+            .edgesIgnoringSafeArea(.top)
         }
     }
     
