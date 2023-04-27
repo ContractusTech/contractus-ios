@@ -78,7 +78,7 @@ struct CreateWalletView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             CreateWalletView(completion: {_ in })
-                .environmentObject(AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(account: Mock.account, blockchain: .solana), accountService: AccountServiceImpl(storage: MockAccountStorage())))
+                .environmentObject(AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(account: Mock.account, blockchain: .solana), accountService: AccountServiceImpl(storage: MockAccountStorage()), backupStorage: BackupStorageMock()))
                 )
                 .preferredColorScheme(.dark)
         }

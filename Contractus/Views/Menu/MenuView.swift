@@ -11,31 +11,39 @@ struct MenuItemView<Destination>: View where Destination: View {
     var icon: String
     var title: String
     var linkTo: Destination
-    
+
+    var tapHandler: (() -> Void)?
+    @State private var isActive: Bool = false
+
     var body: some View {
-        NavigationLink {
+        NavigationLink(isActive: $isActive){
             linkTo
         } label: {
-            HStack(spacing: 12) {
-                ZStack {
-                    Image(systemName: icon)
-                        .foregroundColor(.white)
+            Button {
+                tapHandler?()
+                isActive.toggle()
+            } label: {
+                HStack(spacing: 12) {
+                    ZStack {
+                        Image(systemName: icon)
+                            .foregroundColor(.white)
+                    }
+                    .frame(width: 28, height: 28)
+                    .background(Color.black)
+                    .cornerRadius(9)
+                    Text(title)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(R.color.whiteSeparator.color)
                 }
-                .frame(width: 28, height: 28)
-                .background(Color.black)
-                .cornerRadius(9)
-                Text(title)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .foregroundColor(R.color.whiteSeparator.color)
+                .frame(height: 62)
+                .padding(.horizontal, 16)
+                .background(
+                    Color(R.color.secondaryBackground()!)
+                        .clipped()
+                        .cornerRadius(20)
+                )
             }
-            .frame(height: 62)
-            .padding(.horizontal, 16)
-            .background(
-                Color(R.color.secondaryBackground()!)
-                    .clipped()
-                    .cornerRadius(20)
-            )
         }
         .listRowSeparator(.hidden)
     }
@@ -54,14 +62,14 @@ struct MenuSectionView: View {
 struct MenuView: View {
 
     enum ActionType {
-        case logout
+        case logout, changeAccount
     }
 
-    @StateObject var viewModel: AnyViewModel<MenuState, MenuInput>
-    @State private var selectedAccount: CommonAccount?
     @State private var tapCount: Int = 0
+    @State private var interactiveDismiss: Bool = true
+    @State private var showServerSelection: Bool = false
     
-    var action: (ActionType) -> Void
+    var handler: (ActionType) -> Void
 
     var body: some View {
         NavigationView {
@@ -71,14 +79,19 @@ struct MenuView: View {
                         MenuItemView (
                             icon: "person.2.circle.fill",
                             title: "Accounts",
-                            linkTo: SelectAccountView(
-                                items: viewModel.accounts,
-                                selectedItem: $selectedAccount
-                            ) { accounts in
-                                viewModel.trigger(.saveAccounts(accounts))
-                            } logoutHandler: {
-                                action(.logout)
-                            })
+                            linkTo: AccountsView(viewModel: .init(AccountsViewModel(
+                                accountStorage: ServiceFactory.shared.makeAccountStorage(),
+                                backupStorage: ServiceFactory.shared.makeBackupStorage()))) { actionType in
+                                    switch actionType {
+                                    case .changeAccount:
+                                        handler(.changeAccount)
+                                    case .logout:
+                                        break
+                                    }
+                                    // TODO: - Logout handler
+                                }) {
+                                    interactiveDismiss = false
+                                }
                         
                         MenuSectionView()
                         
@@ -114,38 +127,26 @@ struct MenuView: View {
                 }
                 .padding(.horizontal, 5)
 
-                if tapCount > 3 {
-                    NavigationLink {
-                        ServerSelectView(items: [.developer(), .production()])
-                    } label: {
-                        Text(versionFormatted)
-                    }
-                } else {
-                    Text(versionFormatted)
-                        .foregroundColor(R.color.secondaryText.color)
-                        .font(.footnote.weight(.medium))
-                        .onTapGesture {
-                            tapCount+=1
-                        }
-                }
+                Text(versionFormatted)
+                    .foregroundColor(R.color.secondaryText.color)
+                    .font(.footnote.weight(.medium))
+                    .onTapGesture(count: 3, perform: {
+                        showServerSelection.toggle()
+                    })
+
             }
+            .sheet(isPresented: $showServerSelection, content: {
+                ServerSelectView(items: [.developer(), .production()])
+            })
             .baseBackground()
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
-        }
-        .onAppear {
-            selectedAccount = viewModel.currentAccount
-        }
-        .onChange(of: selectedAccount, perform: { selected in
-            if let selected = selected, selected != viewModel.currentAccount {
-                viewModel.trigger(.changeAccount(selected))
+            .onAppear {
+                interactiveDismiss = true
             }
-        })
+        }
         .navigationBarColor()
-    }
-
-    var selectedAccountFormatted: String {
-        return "\(selectedAccount?.blockchain.rawValue.capitalized ?? "") • \(ContentMask.mask(from: selectedAccount?.publicKey))"
+        .interactiveDismissDisabled(!interactiveDismiss)
     }
     
     var versionFormatted: String {
@@ -156,7 +157,7 @@ struct MenuView: View {
     
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
-        MenuView(viewModel: AnyViewModel<MenuState, MenuInput>(MenuViewModel(accountStorage: MockAccountStorage()))) { _ in
+        MenuView { _ in
 
             
         }

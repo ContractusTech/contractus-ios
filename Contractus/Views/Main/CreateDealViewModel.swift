@@ -20,13 +20,12 @@ enum CreateDealInput {
 
 struct CreateDealState {
 
-    enum State {
-        case none, creating, success, error
+    enum State: Equatable {
+        case none, creating, success, error(String)
     }
     var account: CommonAccount
     var state: State = .none
     var createdDeal: Deal?
-    var errorMessage: String = ""
     var shareable: Shareable?
 }
 
@@ -76,15 +75,17 @@ final class CreateDealViewModel: ViewModel {
                 secretKeyHash: secret.hashOriginalKey,
                 sharedKey: secret.serverSecret.base64EncodedString())
 
-            guard let deal = try? await self.createDeal(deal: newDeal) else {
-                self.state.state = .error
-                return
+            do {
+                let deal = try await self.createDeal(deal: newDeal)
+                var newState = self.state
+                newState.shareable = ShareableDeal(dealId: deal.id, secretBase64: secret.clientSecret.base64EncodedString())
+                newState.state = .success
+                newState.createdDeal = deal
+                self.state = newState
+            } catch {
+                self.state.state = .error(error.readableDescription)
             }
-            var newState = self.state
-            newState.shareable = ShareableDeal(dealId: deal.id, secretBase64: secret.clientSecret.base64EncodedString())
-            newState.state = .success
-            newState.createdDeal = deal
-            self.state = newState
+
         }
         
     }

@@ -15,6 +15,7 @@ protocol AccountService {
     func restore(by privateKey: String, blockchain: Blockchain) throws -> CommonAccount
     func save(_ account: CommonAccount)
     func getCurrentAccount() -> CommonAccount?
+    func existAccount(_ pk: String) -> Bool
 }
 
 final class AccountServiceImpl: AccountService {
@@ -47,6 +48,10 @@ final class AccountServiceImpl: AccountService {
 
     func getCurrentAccount() -> CommonAccount? {
         return storage.getCurrentAccount()
+    }
+
+    func existAccount(_ pk: String) -> Bool {
+        return storage.getAccounts().contains {$0.privateKey.toBase58() == pk }
     }
 
     // MARK: - Private Methods

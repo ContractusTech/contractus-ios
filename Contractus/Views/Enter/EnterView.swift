@@ -18,7 +18,10 @@ struct EnterView: View {
         case enterApp, addAccount
     }
 
-    @StateObject var viewModel = AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(), accountService: AccountServiceImpl(storage: KeychainAccountStorage())))
+    @StateObject var viewModel = AnyViewModel<EnterState, EnterInput>(EnterViewModel(
+        initialState: EnterState(),
+        accountService: AccountServiceImpl(storage: ServiceFactory.shared.makeAccountStorage()),
+        backupStorage: ServiceFactory.shared.makeBackupStorage()))
 
     var viewType: EnterViewType = .enterApp
 
@@ -53,8 +56,8 @@ struct EnterView: View {
                         // TODO: - Move text in localization
                         TopTextBlockView(
                             headerText: "Add new",
-                            titleText: "Account",
-                            subTitleText: "To add account select blockchain type and create or import your wallet")
+                            titleText: R.string.localizable.commonAccount(),
+                            subTitleText: R.string.localizable.enterAddAccountSubtitle(blockchain.rawValue.capitalized))
                     }
                 }
 
@@ -133,7 +136,7 @@ struct EnterView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarColor()
             .edgesIgnoringSafeArea(.bottom)
-            .edgesIgnoringSafeArea(.top)
+//            .edgesIgnoringSafeArea(.top)
         }
     }
     
