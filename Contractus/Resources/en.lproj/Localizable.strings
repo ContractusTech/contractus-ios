@@ -186,6 +186,8 @@
 "main.title.deals" = "Active deals";
 "main.title.new-deal" = "New deal";
 "main.title.active-contracts" = "Active - %@";
+"main.empty.title" = "No deals yet";
+"main.empty.message" = "Your account must be specified in deal \nor create own deal by tap on «New Deal»";
 
 "changeAmount.title" = "Change amount";
 "changeAmount.amount" = "Amount";

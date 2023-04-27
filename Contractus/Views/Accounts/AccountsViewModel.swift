@@ -46,8 +46,10 @@ final class AccountsViewModel: ViewModel {
         case .reload:
             self.state.accounts = accountStorage.getAccounts().map {.init(account: $0, existInBackup: backupStorage.existInBackup(privateKey: $0.privateKey.toBase58()))}
         case .changeAccount(let commonAccount):
+            APIServiceFactory.shared.setAccount(for: commonAccount)
             accountStorage.setCurrentAccount(account: commonAccount)
             state.currentAccount = commonAccount
+
         case .backup(let account, let allow):
             if allow {
                 try? backupStorage.savePrivateKey(account.privateKey.toBase58())

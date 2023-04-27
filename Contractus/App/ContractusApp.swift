@@ -31,13 +31,12 @@ final class RootViewModel: ViewModel {
 
     @Published private(set) var state: RootState
     private let accountStorage: AccountStorage
-    private let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? ""
 
     init(accountStorage: AccountStorage) {
         self.accountStorage = accountStorage
         if let account = accountStorage.getCurrentAccount() {
             // TODO: - Не очень правильное решение + вынести deviceId
-            APIServiceFactory.shared.setAccount(for: account, deviceId: deviceId)
+            APIServiceFactory.shared.setAccount(for: account)
             self.state = RootState(state: .hasAccount(account))
         } else {
             self.state = RootState(state: .noAccount)
@@ -47,7 +46,7 @@ final class RootViewModel: ViewModel {
     func trigger(_ input: RootInput, after: AfterTrigger? = nil) {
         switch input {
         case .savedAccount(let account):
-            APIServiceFactory.shared.setAccount(for: account, deviceId: deviceId)
+            APIServiceFactory.shared.setAccount(for: account)
             state.state = .hasAccount(account)
         case .signTx(let type):
             state.transactionState = .needSign(type)

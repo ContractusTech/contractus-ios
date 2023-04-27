@@ -21,4 +21,6 @@ enum AppConfig {
     static let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
 
     static let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String ?? ""
+
+    static let deviceId: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
 }

@@ -65,7 +65,7 @@ final class CreateDealViewModel: ViewModel {
     private func create(for role: OwnerRole) {
 
         Task { @MainActor in
-            guard let secret = try? await SharedSecretService.createSharedSecret(privateKey:state.account.privateKey) else {
+            guard let secret = try? await SharedSecretService.createSharedSecret(privateKey: state.account.privateKey) else {
                 return
             }
             self.state.state = .creating

@@ -54,10 +54,19 @@ struct EnterView: View {
                         .padding(EdgeInsets(top: 104, leading: 20, bottom: 20, trailing: 20))
                     case .addAccount:
                         // TODO: - Move text in localization
-                        TopTextBlockView(
-                            headerText: "Add new",
-                            titleText: R.string.localizable.commonAccount(),
-                            subTitleText: R.string.localizable.enterAddAccountSubtitle(blockchain.rawValue.capitalized))
+                        VStack {
+                            TopTextBlockView(
+                                headerText: "Add new",
+                                titleText: R.string.localizable.commonAccount(),
+                                subTitleText: R.string.localizable.enterAddAccountSubtitle(blockchain.rawValue.capitalized))
+
+                            R.image.addAccount.image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 220, height: 220)
+
+                        }
+
                     }
                 }
 
@@ -156,6 +165,13 @@ struct EnterView: View {
 struct EnterView_Previews: PreviewProvider {
     static var previews: some View {
         EnterView(completion: {_ in })
+            .environmentObject(
+                AnyViewModel<RootState, RootInput>(RootViewModel(
+                    accountStorage: MockAccountStorage()
+                ))
+            )
+
+        EnterView(viewType: .addAccount, completion: {_ in })
             .environmentObject(
                 AnyViewModel<RootState, RootInput>(RootViewModel(
                     accountStorage: MockAccountStorage()
