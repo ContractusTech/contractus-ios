@@ -96,21 +96,31 @@ struct MainView: View {
                         case .loaded:
                             if viewModel.deals.isEmpty {
                                 VStack(alignment: .center) {
-                                    Spacer()
-                                    VStack(spacing: 8) {
-                                        Image(systemName: "tray.fill")
+
+                                    VStack(spacing: 4) {
+                                        R.image.emptyDeals.image
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
-                                            .frame(width: 52, height: 52)
-                                            .foregroundColor(R.color.secondaryText.color.opacity(0.3))
-                                        Text("No active deals")
-                                            .font(.body.weight(.medium))
-                                            .foregroundColor(R.color.secondaryText.color)
+                                            .frame(width: 150, height: 150)
+
+                                        VStack(spacing: 12) {
+                                            Text(R.string.localizable.mainEmptyTitle())
+                                                .font(.title3.weight(.semibold))
+                                                .multilineTextAlignment(.center)
+                                                .foregroundColor(R.color.secondaryText.color.opacity(0.5))
+                                            Text(R.string.localizable.mainEmptyMessage())
+                                                .font(.caption)
+                                                .multilineTextAlignment(.center)
+                                                .foregroundColor(R.color.secondaryText.color.opacity(0.5))
+                                        }
+                                        .padding(.leading, 40)
+                                        .padding(.trailing, 40)
+
                                     }
 
-                                    Spacer()
+
                                 }
-                                .padding(50)
+                                .padding(10)
                             } else {
                                 LazyVGrid(columns: Constants.columns, spacing: 4) {
                                     ForEach(viewModel.deals, id: \.id) { item in
@@ -182,8 +192,10 @@ struct MainView: View {
                         MenuView { action in
                             switch action {
                             case .changeAccount:
-                                viewModel.trigger(.updateAccount)
-                                load()
+                                viewModel.trigger(.updateAccount) {
+                                    load()
+                                }
+
                             case .logout:
                                 logoutCompletion()
                             }
@@ -293,7 +305,7 @@ struct MainView: View {
     private func dealTitle(type: MainViewModel.State.DealType) -> String {
         switch type {
         case .all:
-            return "Latest"
+            return "Recent"
         case .isChecker:
             return "For checking"
         case .isClient:

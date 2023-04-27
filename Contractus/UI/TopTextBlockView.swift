@@ -38,7 +38,7 @@ struct TopTextBlockView: View {
             case .none:
                 return R.color.labelTextAttention.color.opacity(0.7)
             case .warning:
-                return R.color.labelTextAttention.color.opacity(0.8)
+                return R.color.white.color.opacity(0.9)
             case .waiting:
                 return R.color.white.color
             }
@@ -51,7 +51,7 @@ struct TopTextBlockView: View {
             case .none:
                 return R.color.labelBackgroundDefault.color
             case .warning:
-                return R.color.yellow200.color
+                return R.color.labelBackgroundError.color
             case .waiting:
                 return R.color.secondaryText.color
             }
@@ -77,13 +77,19 @@ struct TopTextBlockView: View {
                         }
                         Text(headerText)
                             .multilineTextAlignment(.center)
-                            .font(.footnote.weight(.medium))
+                            .font(.footnote.weight(.bold))
                             .textCase(.uppercase)
                             .foregroundColor(informationType.textColor)
                     }
-                    .padding(EdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 10))
-                    .background(informationType.background)
-                    .cornerRadius(20)
+                    .padding(EdgeInsets(top: 4, leading: 7, bottom: 4, trailing: 7))
+                    .background {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20).fill(informationType.background)
+                            RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.textBase.color.opacity(0.07))
+                        }
+
+                    }
+//                    .cornerRadius(20)
                     Spacer()
                 }
                 .padding(EdgeInsets(top: 12, leading: 0, bottom: 8, trailing: 0))

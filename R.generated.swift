@@ -854,7 +854,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 7 images.
+  /// This `R.image` struct is generated, and contains static references to 9 images.
   struct image {
     /// Image `ContractusLogo`.
     static let contractusLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "ContractusLogo")
@@ -868,6 +868,10 @@ struct R: Rswift.Validatable {
     static let solCoinLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "SOL-CoinLogo")
     /// Image `USDC-CoinLogo`.
     static let usdcCoinLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "USDC-CoinLogo")
+    /// Image `addAccount`.
+    static let addAccount = Rswift.ImageResource(bundle: R.hostingBundle, name: "addAccount")
+    /// Image `emptyDeals`.
+    static let emptyDeals = Rswift.ImageResource(bundle: R.hostingBundle, name: "emptyDeals")
     /// Image `solana`.
     static let solana = Rswift.ImageResource(bundle: R.hostingBundle, name: "solana")
 
@@ -914,6 +918,20 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "addAccount", bundle: ..., traitCollection: ...)`
+    static func addAccount(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.addAccount, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "emptyDeals", bundle: ..., traitCollection: ...)`
+    static func emptyDeals(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.emptyDeals, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIImage(named: "solana", bundle: ..., traitCollection: ...)`
     static func solana(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.solana, compatibleWith: traitCollection)
@@ -925,7 +943,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 214 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 216 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1383,6 +1401,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let createWalletButtonNext = Rswift.StringResource(key: "createWallet.button.next", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: No deals yet
+      ///
+      /// Locales: en
+      static let mainEmptyTitle = Rswift.StringResource(key: "main.empty.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: No secret key
       ///
       /// Locales: en
@@ -1771,6 +1793,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealHintEmptyVerifier = Rswift.StringResource(key: "deal.hint.empty-verifier", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Your account must be specified in deal  or create own deal by tap on «New Deal»
+      ///
+      /// Locales: en
+      static let mainEmptyMessage = Rswift.StringResource(key: "main.empty.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Your private key
       ///
       /// Locales: en
@@ -3506,6 +3532,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("createWallet.button.next", bundle: bundle, comment: "")
       }
 
+      /// en translation: No deals yet
+      ///
+      /// Locales: en
+      static func mainEmptyTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("main.empty.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "main.empty.title"
+        }
+
+        return NSLocalizedString("main.empty.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: No secret key
       ///
       /// Locales: en
@@ -4963,6 +5004,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.hint.empty-verifier", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Your account must be specified in deal  or create own deal by tap on «New Deal»
+      ///
+      /// Locales: en
+      static func mainEmptyMessage(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("main.empty.message", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "main.empty.message"
+        }
+
+        return NSLocalizedString("main.empty.message", bundle: bundle, comment: "")
       }
 
       /// en translation: Your private key

@@ -81,6 +81,10 @@ final class MainViewModel: ViewModel {
             }
         case .load(let type):
             state.dealsState = .loading
+            guard dealsAPIService != nil else {
+                state.dealsState = .loaded
+                return
+            }
             Task { @MainActor in
                 self.tokens = (try? await loadTokens()) ?? []
                 let balance = try? await loadBalance()
@@ -104,8 +108,14 @@ final class MainViewModel: ViewModel {
             debugPrint(result)
         case .updateAccount:
             if let account = accountStorage.getCurrentAccount() {
-                state.account = account
+                var newState = state
+                newState.account = account
+                newState.deals = []
+                newState.balance = nil
+                newState.availableTokens = []
+                state = newState
             }
+            after?()
         }
     }
 

@@ -30,7 +30,7 @@ final class APIServiceFactory {
 
     // MARK: - Public Methods
 
-    func setAccount(for account: CommonAccount, deviceId: String) {
+    func setAccount(for account: CommonAccount, deviceId: String = AppConfig.deviceId) {
         guard let header = try? buildHeader(for: account, deviceId: deviceId) else {
             client.updateHeader(authorizationHeader: nil)
             accountIsEmpty = true
