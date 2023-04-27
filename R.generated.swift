@@ -925,7 +925,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 199 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 214 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1015,6 +1015,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealCancelSignTitle = Rswift.StringResource(key: "deal.cancel.sign.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Are you sure you want to delete your account from the app and backup? Be careful, you will not be able to restore the account.
+      ///
+      /// Locales: en
+      static let aboutAccountConfirmFullDeleteMessage = Rswift.StringResource(key: "aboutAccount.confirm.full-delete.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Are you sure you want to delete your account?
+      ///
+      /// Locales: en
+      static let aboutAccountConfirmDeleteMessage = Rswift.StringResource(key: "aboutAccount.confirm-delete.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Attached files
       ///
       /// Locales: en
@@ -1027,6 +1035,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonBackup = Rswift.StringResource(key: "common.backup", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Backup private key in iCloud
+      ///
+      /// Locales: en
+      static let backupInformationBackupICloudTitle = Rswift.StringResource(key: "backupInformation.backup.iCloudTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Base64
       ///
       /// Locales: en
@@ -1035,6 +1047,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsWarningSubtitle = Rswift.StringResource(key: "accounts.warning.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: By pressed «Continue» you confirm that you have saved your private key
+      ///
+      /// Locales: en
+      static let backupInformationTooltip = Rswift.StringResource(key: "backupInformation.tooltip", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: By pressed, you agree to [Terms](https://google.com) and [Privacy Policy](https://google.com)
+      ///
+      /// Locales: en
+      static let enterTerms = Rswift.StringResource(key: "enter.terms", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Camera
       ///
       /// Locales: en
@@ -1139,6 +1159,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonCreate = Rswift.StringResource(key: "common.create", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Create a new %@ account or import an existing one.
+      ///
+      /// Locales: en
+      static let enterAddAccountSubtitle = Rswift.StringResource(key: "enter.add-account.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Create new wallet
       ///
       /// Locales: en
@@ -1154,7 +1178,19 @@ struct R: Rswift.Validatable {
       /// en translation: Delete account
       ///
       /// Locales: en
+      static let aboutAccountConfirmDeleteTitle = Rswift.StringResource(key: "aboutAccount.confirm-delete.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Delete account
+      ///
+      /// Locales: en
+      static let aboutAccountConfirmFullDeleteTitle = Rswift.StringResource(key: "aboutAccount.confirm.full-delete.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Delete account
+      ///
+      /// Locales: en
       static let accountsDeleteAccount = Rswift.StringResource(key: "accounts.delete.account", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Delete from iCloud backup
+      ///
+      /// Locales: en
+      static let aboutAccountDeleteRemoveBackupTitle = Rswift.StringResource(key: "aboutAccount.delete.remove-backup-title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Details
       ///
       /// Locales: en
@@ -1283,6 +1319,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextEditorForceUpdate = Rswift.StringResource(key: "deal.textEditor.force-update", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Found %@ private key(s) in iCloud
+      ///
+      /// Locales: en
+      static let importWalletFoundKeysTitle = Rswift.StringResource(key: "importWallet.foundKeys.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Free
       ///
       /// Locales: en
@@ -1299,10 +1339,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealDescriptionCommandFinishDeal = Rswift.StringResource(key: "deal.description-command.finish-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: If you already backuped then press Continues
+      /// en translation: If you delete the app or lose your phone, you will be able to restore your private key.
       ///
       /// Locales: en
-      static let backupInformationTooltip = Rswift.StringResource(key: "backupInformation.tooltip", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      static let backupInformationBackupICloudSubtitle = Rswift.StringResource(key: "backupInformation.backup.iCloudSubtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: If you pay to some service or product
       ///
       /// Locales: en
@@ -1474,6 +1514,10 @@ struct R: Rswift.Validatable {
       /// en translation: Select
       ///
       /// Locales: en
+      static let commonSelect = Rswift.StringResource(key: "common.select", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Select
+      ///
+      /// Locales: en
       static let uploadFileButtonSelect = Rswift.StringResource(key: "uploadFile.button.select", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Select action
       ///
@@ -1483,6 +1527,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let uploadFileButtonImportFile = Rswift.StringResource(key: "uploadFile.button.import-file", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Select from backup
+      ///
+      /// Locales: en
+      static let importWalletSelectBackupKeyTitle = Rswift.StringResource(key: "importWallet.selectBackupKey.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Send it securely via Telegram Secret Chat or Signal to your partner or allow scan from your phone.
       ///
       /// Locales: en
@@ -1619,6 +1667,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealHintEncryptContent = Rswift.StringResource(key: "deal.hint.encrypt-content", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: To get started you need a %@ account
+      ///
+      /// Locales: en
+      static let enterMessage = Rswift.StringResource(key: "enter.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Total amount
       ///
       /// Locales: en
@@ -1683,10 +1735,18 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let qrCodeWarning = Rswift.StringResource(key: "qrCode.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Welcome to
+      ///
+      /// Locales: en
+      static let enterSubtitle = Rswift.StringResource(key: "enter.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Yes, delete
       ///
       /// Locales: en
       static let accountsDeleteAlertButton = Rswift.StringResource(key: "accounts.delete.alert.button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Yes, delete account
+      ///
+      /// Locales: en
+      static let aboutAccountConfirmYes = Rswift.StringResource(key: "aboutAccount.confirm.yes", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: You
       ///
       /// Locales: en
@@ -1699,14 +1759,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealDescriptionCommandStopDeal = Rswift.StringResource(key: "deal.description-command.stop-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: You can't restore from backup private key after delete account.
+      ///
+      /// Locales: en
+      static let aboutAccountDeleteRemoveBackupSubtitle = Rswift.StringResource(key: "aboutAccount.delete.remove-backup-subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: You cannot recover access to the account without the private key.
       ///
       /// Locales: en
       static let accountsDeleteWarning = Rswift.StringResource(key: "accounts.delete.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: You need a %@ account to get started 
-      ///
-      /// Locales: en
-      static let enterMessage = Rswift.StringResource(key: "enter.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: You need to specify the Account that will check the result of the contract.
       ///
       /// Locales: en
@@ -2062,6 +2122,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.cancel.sign.title", bundle: bundle, comment: "")
       }
 
+      /// en translation: Are you sure you want to delete your account from the app and backup? Be careful, you will not be able to restore the account.
+      ///
+      /// Locales: en
+      static func aboutAccountConfirmFullDeleteMessage(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aboutAccount.confirm.full-delete.message", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aboutAccount.confirm.full-delete.message"
+        }
+
+        return NSLocalizedString("aboutAccount.confirm.full-delete.message", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Are you sure you want to delete your account?
+      ///
+      /// Locales: en
+      static func aboutAccountConfirmDeleteMessage(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aboutAccount.confirm-delete.message", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aboutAccount.confirm-delete.message"
+        }
+
+        return NSLocalizedString("aboutAccount.confirm-delete.message", bundle: bundle, comment: "")
+      }
+
       /// en translation: Attached files
       ///
       /// Locales: en
@@ -2107,6 +2197,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.backup", bundle: bundle, comment: "")
       }
 
+      /// en translation: Backup private key in iCloud
+      ///
+      /// Locales: en
+      static func backupInformationBackupICloudTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("backupInformation.backup.iCloudTitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "backupInformation.backup.iCloudTitle"
+        }
+
+        return NSLocalizedString("backupInformation.backup.iCloudTitle", bundle: bundle, comment: "")
+      }
+
       /// en translation: Base64
       ///
       /// Locales: en
@@ -2135,6 +2240,36 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.warning.subtitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: By pressed «Continue» you confirm that you have saved your private key
+      ///
+      /// Locales: en
+      static func backupInformationTooltip(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("backupInformation.tooltip", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "backupInformation.tooltip"
+        }
+
+        return NSLocalizedString("backupInformation.tooltip", bundle: bundle, comment: "")
+      }
+
+      /// en translation: By pressed, you agree to [Terms](https://google.com) and [Privacy Policy](https://google.com)
+      ///
+      /// Locales: en
+      static func enterTerms(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("enter.terms", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "enter.terms"
+        }
+
+        return NSLocalizedString("enter.terms", bundle: bundle, comment: "")
       }
 
       /// en translation: Camera
@@ -2527,6 +2662,23 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.create", bundle: bundle, comment: "")
       }
 
+      /// en translation: Create a new %@ account or import an existing one.
+      ///
+      /// Locales: en
+      static func enterAddAccountSubtitle(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("enter.add-account.subtitle", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "enter.add-account.subtitle"
+        }
+
+        let format = NSLocalizedString("enter.add-account.subtitle", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
+      }
+
       /// en translation: Create new wallet
       ///
       /// Locales: en
@@ -2575,6 +2727,36 @@ struct R: Rswift.Validatable {
       /// en translation: Delete account
       ///
       /// Locales: en
+      static func aboutAccountConfirmDeleteTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aboutAccount.confirm-delete.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aboutAccount.confirm-delete.title"
+        }
+
+        return NSLocalizedString("aboutAccount.confirm-delete.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Delete account
+      ///
+      /// Locales: en
+      static func aboutAccountConfirmFullDeleteTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aboutAccount.confirm.full-delete.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aboutAccount.confirm.full-delete.title"
+        }
+
+        return NSLocalizedString("aboutAccount.confirm.full-delete.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Delete account
+      ///
+      /// Locales: en
       static func accountsDeleteAccount(preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
           return NSLocalizedString("accounts.delete.account", bundle: hostingBundle, comment: "")
@@ -2585,6 +2767,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.delete.account", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Delete from iCloud backup
+      ///
+      /// Locales: en
+      static func aboutAccountDeleteRemoveBackupTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aboutAccount.delete.remove-backup-title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aboutAccount.delete.remove-backup-title"
+        }
+
+        return NSLocalizedString("aboutAccount.delete.remove-backup-title", bundle: bundle, comment: "")
       }
 
       /// en translation: Details
@@ -3067,6 +3264,23 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.textEditor.force-update", bundle: bundle, comment: "")
       }
 
+      /// en translation: Found %@ private key(s) in iCloud
+      ///
+      /// Locales: en
+      static func importWalletFoundKeysTitle(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("importWallet.foundKeys.title", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "importWallet.foundKeys.title"
+        }
+
+        let format = NSLocalizedString("importWallet.foundKeys.title", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
+      }
+
       /// en translation: Free
       ///
       /// Locales: en
@@ -3127,19 +3341,19 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.description-command.finish-deal", bundle: bundle, comment: "")
       }
 
-      /// en translation: If you already backuped then press Continues
+      /// en translation: If you delete the app or lose your phone, you will be able to restore your private key.
       ///
       /// Locales: en
-      static func backupInformationTooltip(preferredLanguages: [String]? = nil) -> String {
+      static func backupInformationBackupICloudSubtitle(preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("backupInformation.tooltip", bundle: hostingBundle, comment: "")
+          return NSLocalizedString("backupInformation.backup.iCloudSubtitle", bundle: hostingBundle, comment: "")
         }
 
         guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "backupInformation.tooltip"
+          return "backupInformation.backup.iCloudSubtitle"
         }
 
-        return NSLocalizedString("backupInformation.tooltip", bundle: bundle, comment: "")
+        return NSLocalizedString("backupInformation.backup.iCloudSubtitle", bundle: bundle, comment: "")
       }
 
       /// en translation: If you pay to some service or product
@@ -3775,6 +3989,21 @@ struct R: Rswift.Validatable {
       /// en translation: Select
       ///
       /// Locales: en
+      static func commonSelect(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.select", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.select"
+        }
+
+        return NSLocalizedString("common.select", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Select
+      ///
+      /// Locales: en
       static func uploadFileButtonSelect(preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
           return NSLocalizedString("uploadFile.button.select", bundle: hostingBundle, comment: "")
@@ -3815,6 +4044,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("uploadFile.button.import-file", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Select from backup
+      ///
+      /// Locales: en
+      static func importWalletSelectBackupKeyTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("importWallet.selectBackupKey.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "importWallet.selectBackupKey.title"
+        }
+
+        return NSLocalizedString("importWallet.selectBackupKey.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Send it securely via Telegram Secret Chat or Signal to your partner or allow scan from your phone.
@@ -4327,6 +4571,23 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.hint.encrypt-content", bundle: bundle, comment: "")
       }
 
+      /// en translation: To get started you need a %@ account
+      ///
+      /// Locales: en
+      static func enterMessage(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("enter.message", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "enter.message"
+        }
+
+        let format = NSLocalizedString("enter.message", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
+      }
+
       /// en translation: Total amount
       ///
       /// Locales: en
@@ -4569,6 +4830,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("qrCode.warning", bundle: bundle, comment: "")
       }
 
+      /// en translation: Welcome to
+      ///
+      /// Locales: en
+      static func enterSubtitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("enter.subtitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "enter.subtitle"
+        }
+
+        return NSLocalizedString("enter.subtitle", bundle: bundle, comment: "")
+      }
+
       /// en translation: Yes, delete
       ///
       /// Locales: en
@@ -4582,6 +4858,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.delete.alert.button", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Yes, delete account
+      ///
+      /// Locales: en
+      static func aboutAccountConfirmYes(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aboutAccount.confirm.yes", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aboutAccount.confirm.yes"
+        }
+
+        return NSLocalizedString("aboutAccount.confirm.yes", bundle: bundle, comment: "")
       }
 
       /// en translation: You
@@ -4629,6 +4920,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.description-command.stop-deal", bundle: bundle, comment: "")
       }
 
+      /// en translation: You can't restore from backup private key after delete account.
+      ///
+      /// Locales: en
+      static func aboutAccountDeleteRemoveBackupSubtitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aboutAccount.delete.remove-backup-subtitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aboutAccount.delete.remove-backup-subtitle"
+        }
+
+        return NSLocalizedString("aboutAccount.delete.remove-backup-subtitle", bundle: bundle, comment: "")
+      }
+
       /// en translation: You cannot recover access to the account without the private key.
       ///
       /// Locales: en
@@ -4642,23 +4948,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.delete.warning", bundle: bundle, comment: "")
-      }
-
-      /// en translation: You need a %@ account to get started 
-      ///
-      /// Locales: en
-      static func enterMessage(_ value1: String, preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          let format = NSLocalizedString("enter.message", bundle: hostingBundle, comment: "")
-          return String(format: format, locale: applicationLocale, value1)
-        }
-
-        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "enter.message"
-        }
-
-        let format = NSLocalizedString("enter.message", bundle: bundle, comment: "")
-        return String(format: format, locale: locale, value1)
       }
 
       /// en translation: You need to specify the Account that will check the result of the contract.

@@ -11,25 +11,27 @@ import enum ContractusAPI.Blockchain
 
 protocol AccountStorage {
     func getCurrentAccount() -> CommonAccount?
+
     func setCurrentAccount(account: CommonAccount)
     func clearCurrentAccount()
-    func getListAccounts() -> [CommonAccount]
-    func updateAccounts(accounts: [CommonAccount])
+
+    func getAccounts() -> [CommonAccount]
+    func updateAllAccounts(accounts: [CommonAccount])
+    func addAccount(account: CommonAccount)
+    func removeAccount(by publicKey: String)
 }
 
 final class KeychainAccountStorage: AccountStorage {
 
     enum Keys: String {
-        static let serviceKey = "app.me.Contractus.Account"
+        static let serviceKey = "app.tech.Contractus.Account"
         case currentAccountKey
         case accountList
-
     }
 
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
-
-    private let keychain = Keychain(service: Keys.serviceKey)
+    private let keychain = Keychain(service: Keys.serviceKey).accessibility(.whenUnlocked)
 
     func getCurrentAccount() -> CommonAccount? {
         if
@@ -51,7 +53,7 @@ final class KeychainAccountStorage: AccountStorage {
         try? keychain.remove(Keys.currentAccountKey.rawValue)
     }
 
-    func getListAccounts() -> [CommonAccount] {
+    func getAccounts() -> [CommonAccount] {
         if
             let data = try? keychain.getData(Keys.accountList.rawValue),
             let accounts = try? decoder.decode([CommonAccount].self, from: data)
@@ -61,18 +63,27 @@ final class KeychainAccountStorage: AccountStorage {
         return []
     }
 
-    private func saveToListAccount(account: CommonAccount) {
-        var accounts = getListAccounts()
-        accounts.append(account)
-        accounts = Array(Set(accounts))
+    func updateAllAccounts(accounts: [CommonAccount]) {
+        guard let json = try? encoder.encode(accounts.removingDuplicates()) else { return }
+        try? keychain.set(json, key: Keys.accountList.rawValue)
+    }
+
+    func addAccount(account: CommonAccount) {
+        saveToListAccount(account: account)
+    }
+
+    func removeAccount(by publicKey: String) {
+        var accounts = getAccounts().filter { $0.publicKey != publicKey }
         guard let json = try? encoder.encode(accounts) else { return }
         try? keychain.set(json, key: Keys.accountList.rawValue)
     }
 
-    func updateAccounts(accounts: [CommonAccount]) {
-        guard let json = try? encoder.encode(Array(Set(accounts))) else { return }
+    private func saveToListAccount(account: CommonAccount) {
+        var accounts = getAccounts()
+        accounts.append(account)
+        accounts = accounts.removingDuplicates()
+        guard let json = try? encoder.encode(accounts) else { return }
         try? keychain.set(json, key: Keys.accountList.rawValue)
     }
-
 
 }

@@ -179,8 +179,11 @@ struct MainView: View {
                                 }
                                 .interactiveDismiss(canDismissSheet: false)
                     case .menu:
-                        MenuView(viewModel: AnyViewModel<MenuState, MenuInput>(MenuViewModel(accountStorage: KeychainAccountStorage()))) { action in
+                        MenuView { action in
                             switch action {
+                            case .changeAccount:
+                                viewModel.trigger(.updateAccount)
+                                load()
                             case .logout:
                                 logoutCompletion()
                             }
@@ -249,8 +252,7 @@ struct MainView: View {
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarColor()
             .onAppear{
-                viewModel.trigger(.preload)
-                viewModel.trigger(.load(dealsType))
+                load()
             }
             .tintIfCan(R.color.textBase.color)
         }
@@ -300,6 +302,11 @@ struct MainView: View {
             return "For execute"
         }
     }
+
+    private func load() {
+        viewModel.trigger(.preload)
+        viewModel.trigger(.load(dealsType))
+    }
 }
 
 extension MainView.SheetType: Identifiable {
@@ -316,7 +323,7 @@ import ContractusAPI
 struct MainView_Previews: PreviewProvider {
 
     static var previews: some View {
-        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(account: Mock.account, accountAPIService: nil, dealsAPIService: nil, resourcesAPIService: nil))) {
+        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(account: Mock.account, accountStorage: MockAccountStorage(), accountAPIService: nil, dealsAPIService: nil, resourcesAPIService: nil))) {
 
         }
     }

@@ -14,6 +14,14 @@ final class ServiceFactory {
     static let shared = ServiceFactory()
 
     func makeTransactionSign() -> TransactionSignService {
-        return SolanaTransactionSignServiceImpl()
+        SolanaTransactionSignServiceImpl()
+    }
+
+    func makeBackupStorage() -> BackupStorage {
+        iCloudBackupStorage()
+    }
+
+    func makeAccountStorage() -> AccountStorage {
+        KeychainAccountStorage()
     }
 }

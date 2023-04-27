@@ -145,13 +145,15 @@ struct CreateDealView: View {
                             Spacer()
                         }.padding()
                     }
-                    .onChange(of: viewModel.state.state) { newValue in
-                        if newValue == .success {
+                    .onChange(of: viewModel.state.state) { state in
+                        switch state {
+                        case .none, .creating:
+                            break
+                        case .success:
                             didCreated?(viewModel.state.createdDeal)
                             isShowShareSecretKey.toggle()
-                        }
-                        if newValue == .error {
-                            self.alertType = .error("Error creating deal")
+                        case .error(let message):
+                            self.alertType = .error(message)
                         }
                     }
                 }

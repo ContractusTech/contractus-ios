@@ -11,6 +11,7 @@ import SolanaSwift
 import Combine
 
 enum MainInput {
+    case updateAccount
     case preload
     case loadBalance
     case load(MainState.DealType)
@@ -43,19 +44,23 @@ final class MainViewModel: ViewModel {
     private var resourcesAPIService: ContractusAPI.ResourcesService?
     private var accountAPIService: ContractusAPI.AccountService?
     private var dealsAPIService: ContractusAPI.DealsService?
+    private var accountStorage: AccountStorage
     private var store = Set<AnyCancellable>()
     private var tokens: [ContractusAPI.Token] = []
 
     init(
         account: CommonAccount,
+        accountStorage: AccountStorage,
         accountAPIService: ContractusAPI.AccountService?,
         dealsAPIService: ContractusAPI.DealsService?,
         resourcesAPIService: ContractusAPI.ResourcesService?)
     {
         self.state = MainState(account: account)
+
         self.accountAPIService = accountAPIService
         self.dealsAPIService = dealsAPIService
         self.resourcesAPIService = resourcesAPIService
+        self.accountStorage = accountStorage
     }
 
     func trigger(_ input: MainInput, after: AfterTrigger? = nil) {
@@ -97,6 +102,10 @@ final class MainViewModel: ViewModel {
 
         case .executeScanResult(let result):
             debugPrint(result)
+        case .updateAccount:
+            if let account = accountStorage.getCurrentAccount() {
+                state.account = account
+            }
         }
     }
 

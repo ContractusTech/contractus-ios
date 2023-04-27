@@ -61,7 +61,7 @@ final class RootViewModel: ViewModel {
     }
 }
 
-let appState = AnyViewModel<RootState, RootInput>(RootViewModel(accountStorage: KeychainAccountStorage()))
+let appState = AnyViewModel<RootState, RootInput>(RootViewModel(accountStorage: ServiceFactory.shared.makeAccountStorage()))
 
 @main
 struct ContractusApp: App {
@@ -94,6 +94,7 @@ struct ContractusApp: App {
                 case .hasAccount(let account):
                     MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(
                         account: account,
+                        accountStorage: ServiceFactory.shared.makeAccountStorage(),
                         accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
                         dealsAPIService: try? APIServiceFactory.shared.makeDealsService(),
                         resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())), logoutCompletion: {
