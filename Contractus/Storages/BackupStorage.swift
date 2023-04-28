@@ -7,12 +7,19 @@
 
 import Foundation
 import KeychainAccess
+import ContractusAPI
+
+struct BackupKeyItem: Decodable, Encodable, Hashable {
+    let publicKey: String
+    let privateKey: String
+    let blockchain: Blockchain
+}
 
 protocol BackupStorage {
-    func savePrivateKey(_ value: String) throws
-    func getBackupKeys() -> [String]
-    func removePrivateKey(_ value: String) throws
-    func existInBackup(privateKey: String) -> Bool
+    func savePrivateKey(_ value: BackupKeyItem) throws
+    func getBackupKeys() -> [BackupKeyItem]
+    func removePrivateKey(_ value: String, blockchain: Blockchain) throws
+    func existInBackup(privateKey: String, blockchain: Blockchain) -> Bool
 }
 
 final class iCloudBackupStorage: BackupStorage {
@@ -29,7 +36,7 @@ final class iCloudBackupStorage: BackupStorage {
         .accessibility(.whenUnlocked)
         .synchronizable(true)
 
-    func savePrivateKey(_ value: String) throws {
+    func savePrivateKey(_ value: BackupKeyItem) throws {
         var keys = getKeyList()
         keys.append(value)
         let uniqueKeys = keys.removingDuplicates()
@@ -37,24 +44,24 @@ final class iCloudBackupStorage: BackupStorage {
         try keychain.set(data, key: Keys.privateKeys.rawValue)
     }
 
-    func getBackupKeys() -> [String] {
+    func getBackupKeys() -> [BackupKeyItem] {
         getKeyList()
     }
 
-    func removePrivateKey(_ value: String) throws {
-        let keys = getKeyList().filter { $0 != value }
+    func removePrivateKey(_ value: String, blockchain: Blockchain) throws {
+        let keys = getKeyList().filter { $0.privateKey != value && $0.blockchain == blockchain }
 
         let data = try encoder.encode(keys)
         try keychain.set(data, key: Keys.privateKeys.rawValue)
     }
 
-    func existInBackup(privateKey: String) -> Bool {
-        getKeyList().contains {$0 == privateKey }
+    func existInBackup(privateKey: String, blockchain: Blockchain) -> Bool {
+        getKeyList().contains {$0.privateKey == privateKey && $0.blockchain == blockchain }
     }
 
-    private func getKeyList() -> [String] {
+    private func getKeyList() -> [BackupKeyItem] {
         let keys = (try? keychain.get(Keys.privateKeys.rawValue)) ?? "[]"
-        guard let data = keys.data(using: .utf8), let keyList = try? decoder.decode([String].self, from: data) else {
+        guard let data = keys.data(using: .utf8), let keyList = try? decoder.decode([BackupKeyItem].self, from: data) else {
             return []
         }
         return keyList

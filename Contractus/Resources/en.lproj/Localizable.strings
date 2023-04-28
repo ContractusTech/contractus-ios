@@ -243,4 +243,4 @@
 "aboutAccount.confirm-delete.message" = "Are you sure you want to delete your account?";
 "aboutAccount.confirm.full-delete.message" = "Are you sure you want to delete your account from the app and backup? Be careful, you will not be able to restore the account.";
 "aboutAccount.confirm.full-delete.title" = "Delete account";
-"aboutAccount.confirm.yes" = "Yes, delete account";
+"aboutAccount.confirm.yes" = "Delete account";

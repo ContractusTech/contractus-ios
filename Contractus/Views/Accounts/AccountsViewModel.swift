@@ -36,7 +36,7 @@ final class AccountsViewModel: ViewModel {
         self.backupStorage = backupStorage
         self.state = .init(
             accounts: accountStorage.getAccounts().map {
-                .init(account: $0, existInBackup: backupStorage.existInBackup(privateKey: $0.privateKey.toBase58()))
+                .init(account: $0, existInBackup: backupStorage.existInBackup(privateKey: $0.privateKey.toBase58(), blockchain: $0.blockchain))
             },
             currentAccount: accountStorage.getCurrentAccount())
     }
@@ -44,7 +44,7 @@ final class AccountsViewModel: ViewModel {
     func trigger(_ input: Input, after: AfterTrigger? = nil) {
         switch input {
         case .reload:
-            self.state.accounts = accountStorage.getAccounts().map {.init(account: $0, existInBackup: backupStorage.existInBackup(privateKey: $0.privateKey.toBase58()))}
+            self.state.accounts = accountStorage.getAccounts().map {.init(account: $0, existInBackup: backupStorage.existInBackup(privateKey: $0.privateKey.toBase58(), blockchain: $0.blockchain))}
         case .changeAccount(let commonAccount):
             APIServiceFactory.shared.setAccount(for: commonAccount)
             accountStorage.setCurrentAccount(account: commonAccount)
@@ -52,15 +52,15 @@ final class AccountsViewModel: ViewModel {
 
         case .backup(let account, let allow):
             if allow {
-                try? backupStorage.savePrivateKey(account.privateKey.toBase58())
+                try? backupStorage.savePrivateKey(.init(publicKey: account.publicKey, privateKey: account.privateKey.toBase58(), blockchain: account.blockchain))
             } else {
-                try? backupStorage.removePrivateKey(account.privateKey.toBase58())
+                try? backupStorage.removePrivateKey(account.privateKey.toBase58(), blockchain: account.blockchain)
             }
-            self.state.accounts = accountStorage.getAccounts().map {.init(account: $0, existInBackup: backupStorage.existInBackup(privateKey: $0.privateKey.toBase58()))}
+            self.state.accounts = accountStorage.getAccounts().map {.init(account: $0, existInBackup: backupStorage.existInBackup(privateKey: $0.privateKey.toBase58(), blockchain: $0.blockchain))}
 
         case .deleteAccount(let account, let fromBackup):
             if fromBackup {
-                try? backupStorage.removePrivateKey(account.privateKey.toBase58())
+                try? backupStorage.removePrivateKey(account.privateKey.toBase58(), blockchain: account.blockchain)
             }
             accountStorage.removeAccount(by: account.publicKey)
             state.accounts = state.accounts.filter {$0.account.publicKey != account.publicKey }

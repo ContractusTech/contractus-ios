@@ -32,7 +32,7 @@ struct EnterState {
     var isBackupedPrivateKey: Bool = false
     var blockchain: Blockchain?
     var isValidImportedPrivateKey: Bool = false
-    var backupKeys: [String] = []
+    var backupKeys: [BackupKeyItem] = []
 
     var hasBackupKeys: Bool {
         backupKeys.count > 0
@@ -102,7 +102,8 @@ final class EnterViewModel: ViewModel {
 
                 do {
                     if allowBackup {
-                        try backupStorage.savePrivateKey(account.privateKey.toBase58())
+
+                        try backupStorage.savePrivateKey(.init(publicKey: account.publicKey, privateKey: account.privateKey.toBase58(), blockchain: account.blockchain))
                     }
                     accountService.save(account)
                 }catch {

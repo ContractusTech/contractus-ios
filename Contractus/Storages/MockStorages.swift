@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ContractusAPI
 
 final class MockAccountStorage: AccountStorage {
 
@@ -41,16 +42,17 @@ final class SharedSecretStorageMock: SharedSecretStorage {
 }
 
 final class BackupStorageMock: BackupStorage {
-    func removePrivateKey(_ value: String) throws {}
 
-    func existInBackup(privateKey: String) -> Bool {
+    func removePrivateKey(_ value: String,  blockchain: Blockchain) throws {}
+
+    func existInBackup(privateKey: String,  blockchain: Blockchain) -> Bool {
         true
     }
 
-    func savePrivateKey(_ value: String) throws {}
+    func savePrivateKey(_ value: BackupKeyItem) throws {}
 
-    func getBackupKeys() -> [String] {
-        ["1234"]
+    func getBackupKeys() -> [BackupKeyItem] {
+        [.init(publicKey: "123", privateKey: "123", blockchain: .solana)]
     }
 
 
