@@ -22,24 +22,26 @@ final class ConfigStorage {
         guard
             let server = UserDefaults.standard.stringArray(forKey: Keys.serverType.rawValue),
             let url = URL(string: server.first ?? ""),
-            let version = ServerType.APIVersion(rawValue: server.second ?? ""),
+            let wsUrl = URL(string: server.second ?? ""),
+            let version = ServerType.APIVersion(rawValue: server.third ?? ""),
             let type = ServerTypeString(rawValue: server.last ?? "")
         else { return defaultServer }
 
         switch type {
         case .production:
-            return .production()
+            return .production(version)
         case .developer:
-            return .developer()
+            return .developer(version)
         case .custom:
-            return .custom(url, version)
+            return .custom(api: url, ws: wsUrl)
         }
     }
 
     static func setServer(server: ServerType) {
         let url = server.apiURL.absoluteString
+        let wsUrl = server.wsServer.absoluteString
         let version = server.version.rawValue
         let type = server.title.lowercased()
-        UserDefaults.standard.set([url, version, type], forKey: Keys.serverType.rawValue)
+        UserDefaults.standard.set([url, wsUrl, version, type], forKey: Keys.serverType.rawValue)
     }
 }

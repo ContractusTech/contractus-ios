@@ -1204,6 +1204,10 @@ struct R: Rswift.Validatable {
       /// en translation: Delete account
       ///
       /// Locales: en
+      static let aboutAccountConfirmYes = Rswift.StringResource(key: "aboutAccount.confirm.yes", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Delete account
+      ///
+      /// Locales: en
       static let accountsDeleteAccount = Rswift.StringResource(key: "accounts.delete.account", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Delete from iCloud backup
       ///
@@ -1765,10 +1769,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsDeleteAlertButton = Rswift.StringResource(key: "accounts.delete.alert.button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Yes, delete account
-      ///
-      /// Locales: en
-      static let aboutAccountConfirmYes = Rswift.StringResource(key: "aboutAccount.confirm.yes", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: You
       ///
       /// Locales: en
@@ -2778,6 +2778,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("aboutAccount.confirm.full-delete.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Delete account
+      ///
+      /// Locales: en
+      static func aboutAccountConfirmYes(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aboutAccount.confirm.yes", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aboutAccount.confirm.yes"
+        }
+
+        return NSLocalizedString("aboutAccount.confirm.yes", bundle: bundle, comment: "")
       }
 
       /// en translation: Delete account
@@ -4899,21 +4914,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.delete.alert.button", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Yes, delete account
-      ///
-      /// Locales: en
-      static func aboutAccountConfirmYes(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("aboutAccount.confirm.yes", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "aboutAccount.confirm.yes"
-        }
-
-        return NSLocalizedString("aboutAccount.confirm.yes", bundle: bundle, comment: "")
       }
 
       /// en translation: You

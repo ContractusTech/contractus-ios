@@ -11,6 +11,10 @@ extension Array {
     public var second: Element? {
         return self[1]
     }
+
+    public var third: Element? {
+        return self[2]
+    }
 }
 
 extension Array where Element: Hashable {

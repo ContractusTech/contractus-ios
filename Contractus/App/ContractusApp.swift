@@ -10,6 +10,7 @@ import SolanaSwift
 import UIKit
 import ResizableSheet
 import netfox
+import ContractusAPI
 
 struct RootState {
     enum State {
@@ -37,9 +38,20 @@ final class RootViewModel: ViewModel {
         if let account = accountStorage.getCurrentAccount() {
             // TODO: - Не очень правильное решение + вынести deviceId
             APIServiceFactory.shared.setAccount(for: account)
+            remoteEventService = try? APIServiceFactory.shared.makeWebSocket()
+            remoteEventService?.connect()
+            remoteEventService?.disconnectHandler = {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    remoteEventService?.connect()
+                }
+            }
+
             self.state = RootState(state: .hasAccount(account))
         } else {
             self.state = RootState(state: .noAccount)
+
+            remoteEventService?.disconnect()
+            remoteEventService = nil
         }
     }
 
@@ -61,6 +73,7 @@ final class RootViewModel: ViewModel {
 }
 
 let appState = AnyViewModel<RootState, RootInput>(RootViewModel(accountStorage: ServiceFactory.shared.makeAccountStorage()))
+var remoteEventService: WebSocket?
 
 @main
 struct ContractusApp: App {

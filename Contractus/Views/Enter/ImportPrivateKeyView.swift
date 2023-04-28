@@ -150,8 +150,8 @@ struct ImportPrivateKeyView: View {
 
     private func privateKeysButtons() -> [ActionSheet.Button] {
         var buttons: [ActionSheet.Button] = viewModel.state.backupKeys.map { pk in
-            .default(Text(ContentMask.mask(from: pk)), action: {
-                privateKey = pk
+                .default(Text(ContentMask.mask(from: pk.publicKey)), action: {
+                    privateKey = pk.privateKey
             })
         }
 
