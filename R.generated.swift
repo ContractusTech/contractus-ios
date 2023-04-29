@@ -925,7 +925,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 199 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 201 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1047,6 +1047,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealStatusCanceled = Rswift.StringResource(key: "deal.status.canceled", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Cancel deal
+      ///
+      /// Locales: en
+      static let dealButtonsCancelDeal = Rswift.StringResource(key: "deal.buttons.cancel-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Cancel deal
+      ///
+      /// Locales: en
+      static let dealCancel = Rswift.StringResource(key: "deal.cancel", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Cancel deal
       ///
       /// Locales: en
@@ -1267,6 +1275,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealButtonsFinishDeal = Rswift.StringResource(key: "deal.buttons.finish-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Finish deal
+      ///
+      /// Locales: en
+      static let dealFinish = Rswift.StringResource(key: "deal.finish", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Finish deal
       ///
       /// Locales: en
@@ -1551,10 +1563,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignFieldsStatus = Rswift.StringResource(key: "transactionSign.fields.status", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Stop deal
-      ///
-      /// Locales: en
-      static let dealButtonsStopDeal = Rswift.StringResource(key: "deal.buttons.stop-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Success upload
       ///
       /// Locales: en
@@ -2180,6 +2188,36 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.status.canceled", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Cancel deal
+      ///
+      /// Locales: en
+      static func dealButtonsCancelDeal(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.buttons.cancel-deal", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.buttons.cancel-deal"
+        }
+
+        return NSLocalizedString("deal.buttons.cancel-deal", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Cancel deal
+      ///
+      /// Locales: en
+      static func dealCancel(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.cancel", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.cancel"
+        }
+
+        return NSLocalizedString("deal.cancel", bundle: bundle, comment: "")
       }
 
       /// en translation: Cancel deal
@@ -3005,6 +3043,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.buttons.finish-deal", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Finish deal
+      ///
+      /// Locales: en
+      static func dealFinish(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.finish", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.finish"
+        }
+
+        return NSLocalizedString("deal.finish", bundle: bundle, comment: "")
       }
 
       /// en translation: Finish deal
@@ -4070,21 +4123,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.fields.status", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Stop deal
-      ///
-      /// Locales: en
-      static func dealButtonsStopDeal(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("deal.buttons.stop-deal", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "deal.buttons.stop-deal"
-        }
-
-        return NSLocalizedString("deal.buttons.stop-deal", bundle: bundle, comment: "")
       }
 
       /// en translation: Success upload

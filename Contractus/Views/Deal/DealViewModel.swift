@@ -33,6 +33,7 @@ enum DealInput {
     case saveKey(ScanResult)
     case hideError
     case sheetClose
+    case finishDeal
 }
 
 struct DealState {
@@ -199,6 +200,8 @@ final class DealViewModel: ViewModel {
                     after?()
                 }
             })
+        case .finishDeal:
+            state.state = .loading
         case .none:
             state.state = .none
         case .sheetClose:

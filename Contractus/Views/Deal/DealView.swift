@@ -36,6 +36,7 @@ struct DealView: View {
         case confirmCancel
         case dealActions
         case confirmCancelSign
+        case confirmFinish
     }
 
     enum ActiveModalType: Equatable {
@@ -50,7 +51,6 @@ struct DealView: View {
         case filePreview(URL)
         case shareSecret
         case confirm
-        case confirmCancel
     }
 
     @Environment(\.presentationMode) var presentationMode
@@ -532,15 +532,15 @@ struct DealView: View {
                                     .multilineTextAlignment(.center)
                                     .foregroundColor(R.color.labelBackgroundAttention.color)
                             case .cancelDeal:
-                                CButton(title: R.string.localizable.dealButtonsStopDeal(), style: .cancel, size: .large, isLoading: false) {
-                                    // TODO: - Add
+                                CButton(title: R.string.localizable.dealButtonsCancelDeal(), style: .cancel, size: .large, isLoading: false) {
+                                    actionsType = .confirmCancel
                                 }
                                 Text(R.string.localizable.dealDescriptionCommandStopDeal())
                                     .font(.footnote)
                                     .foregroundColor(R.color.yellow.color)
                             case .finishDeal:
                                 CButton(title: R.string.localizable.dealButtonsFinishDeal(), style: .primary, size: .large, isLoading: false) {
-                                    // TODO: - Add
+                                    actionsType = .confirmFinish
                                 }
                                 Text(R.string.localizable.dealDescriptionCommandFinishDeal())
                                     .font(.footnote)
@@ -580,9 +580,6 @@ struct DealView: View {
             viewModel.trigger(.sheetClose)
         }) { type in
             switch type {
-            case .confirmCancel:
-                // TODO: -
-                EmptyView()
             case .confirm:
                 TransactionSignView(account: viewModel.state.account, type: .byDeal(viewModel.state.deal)) {
                     viewModel.trigger(.updateTx)
@@ -755,7 +752,7 @@ struct DealView: View {
             case .confirmCancel:
                 return ActionSheet(
                     title: Text(R.string.localizable.commonSelectAction()),
-                    buttons: actionSheetMenuButtons())
+                    buttons: actionSheetCancelButtons())
             case .dealActions:
                 return ActionSheet(
                     title: Text(R.string.localizable.commonSelectAction()),
@@ -764,6 +761,10 @@ struct DealView: View {
                 return ActionSheet(
                     title: Text(R.string.localizable.dealCancelSignTitle()),
                     buttons: actionSheetCancelSignButtons())
+            case .confirmFinish:
+                return ActionSheet(
+                    title: Text(R.string.localizable.commonSelectAction()),
+                    buttons: actionSheetFinishButtons())
             }
         })
         .toolbar {
@@ -843,8 +844,28 @@ struct DealView: View {
                 viewModel.trigger(.cancelSign)
             },
             Alert.Button.cancel() {
+            }
+        ]
+    }
 
-            }]
+    private func actionSheetCancelButtons() -> [Alert.Button] {
+        return [
+            Alert.Button.destructive(Text(R.string.localizable.dealCancel())) {
+                viewModel.trigger(.finishDeal)
+            },
+            Alert.Button.cancel() {
+            }
+        ]
+    }
+
+    private func actionSheetFinishButtons() -> [Alert.Button] {
+        return [
+            Alert.Button.destructive(Text(R.string.localizable.dealFinish())) {
+                viewModel.trigger(.finishDeal)
+            },
+            Alert.Button.cancel() {
+            }
+        ]
     }
 
     private func updateProgressHUD(progress: Double) {

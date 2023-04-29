@@ -275,9 +275,9 @@ struct MainView: View {
         WrapTokenView(viewModel: AnyViewModel<WrapTokenState, WrapTokenInput>(WrapTokenViewModel(state: .init(account: viewModel.account, amountNativeToken: amountNativeToken, amountWrapToken: amountWrapToken), accountService: (try? APIServiceFactory.shared.makeAccountService()))))
     }
 
-    private func dealRole(deal: Deal) -> DealItemView.DealRoleType {
-        if deal.ownerPublicKey == viewModel.state.account.publicKey
-            && deal.ownerRole == .executor {
+    private func dealRole(deal: Deal) -> DealItemView.DealRoleType {        
+        if (deal.ownerRole == .client && deal.contractorPublicKey == viewModel.state.account.publicKey) ||
+            (deal.ownerPublicKey == viewModel.state.account.publicKey && deal.ownerRole == .executor) {
             return .receive
         }
 
