@@ -61,7 +61,6 @@ struct ImportSecretKeyView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
         .padding()
-        .navigationBarColor()
         .baseBackground()
         .edgesIgnoringSafeArea(.bottom)
 

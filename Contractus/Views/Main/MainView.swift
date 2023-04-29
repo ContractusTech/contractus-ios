@@ -262,7 +262,7 @@ struct MainView: View {
             }
             .environment(\.resizableSheetCenter, resizableSheetCenter ?? PreviewResizableSheetCenter.shared)
             .navigationViewStyle(StackNavigationViewStyle())
-            .navigationBarColor()
+//            .navigationBarColor()
             .onAppear{
                 load()
             }

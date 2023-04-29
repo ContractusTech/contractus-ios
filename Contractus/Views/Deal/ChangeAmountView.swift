@@ -237,7 +237,6 @@ struct ChangeAmountView: View {
             .padding()
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarColor()
             .baseBackground()
             .edgesIgnoringSafeArea(.bottom)
         }
@@ -260,7 +259,7 @@ struct ChangeAmountView_Previews: PreviewProvider {
     static var previews: some View {
         ChangeAmountView(
             viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>(ChangeAmountViewModel(
-                deal: Mock.deal, account: Mock.account, amountType: .deal, dealService: nil)), availableTokens: SolanaTokens.list) { _, _  in
+                deal: Mock.deal, account: Mock.account, amountType: .deal, dealService: nil)), availableTokens: Mock.tokenList) { _, _  in
 
                 }
     }

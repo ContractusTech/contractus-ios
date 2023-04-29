@@ -103,7 +103,6 @@ struct TextEditorView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(R.string.localizable.dealViewContractText())
             .navigationViewStyle(StackNavigationViewStyle())
-            .navigationBarColor()
             .baseBackground()
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {

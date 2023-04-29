@@ -65,7 +65,6 @@ struct QRCodeScannerView: View {
                 Spacer()
             }
             .padding(UIConstants.contentInset)
-            .navigationBarColor()
             .padding(.bottom, keyboard.currentHeight)
             .animation(.easeOut(duration: 0.16))
             .edgesIgnoringSafeArea(.bottom)

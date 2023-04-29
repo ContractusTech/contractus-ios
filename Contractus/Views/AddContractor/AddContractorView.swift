@@ -94,7 +94,6 @@ struct AddContractorView: View {
             }
             .padding(EdgeInsets(top: 16, leading: 16, bottom: 24, trailing: 16))
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarColor()
             .baseBackground()
             .edgesIgnoringSafeArea(.bottom)
             .onChange(of: viewModel.state.state) { value in

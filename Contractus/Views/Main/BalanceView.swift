@@ -17,21 +17,22 @@ fileprivate enum Constants {
 struct BalanceViewModel {
 
     struct WrapTokens {
-        let tokens: [Amount]
+        let tokens: [Balance.TokenInfo]
     }
+
     let estimateAmountFormatted: String
     let wrap: WrapTokens
-    let tokens: [Amount]
+    let tokens: [Balance.TokenInfo]
     var canWrap: Bool {
         wrap.tokens.count == 2
     }
 
-    init(balance: Balance, currency: Currency = .usd) {
+    init(balance: Balance, currency: Currency = .defaultCurrency) {
         estimateAmountFormatted = currency.format(double: balance.estimateAmount, withCode: true) ?? ""
-        var tokens: [Amount] = []
-        var wrap: [Amount] = []
+        var tokens: [Balance.TokenInfo] = []
+        var wrap: [Balance.TokenInfo] = []
         balance.tokens.forEach { item in
-            if balance.wrap.contains(item.token.code) {
+            if balance.wrap.contains(item.amount.token.code) {
                 wrap.append(item)
             } else {
                 tokens.append(item)
@@ -163,30 +164,37 @@ struct BalanceView: View {
                 VStack(spacing: 4) {
                     if !balance.wrap.tokens.isEmpty {
                         ZStack(alignment: .center) {
-                            VStack(alignment: .leading) {
+                            VStack(alignment: .leading, spacing: 0) {
                                 ForEach(balance.wrap.tokens) { token in
-                                    HStack(alignment: .center, spacing: 12) {
-                                        Text(token.token.code)
+                                    HStack(alignment: .center, spacing: 4) {
+                                        Text(token.amount.token.code)
                                             .font(.footnote.weight(.semibold))
                                             .textCase(.uppercase)
                                             .foregroundColor(R.color.textBase.color)
+                                        if token.price > 0,
+                                           let price = token.currency.format(double: token.price, withCode: false)
+                                        {
+                                            Text(price)
+                                                .font(.footnote.weight(.semibold))
+                                                .textCase(.uppercase)
+                                                .foregroundColor(R.color.secondaryText.color)
+                                        }
+
                                         Spacer()
-                                        Text(token.formatted())
+                                        Text(token.amount.formatted())
                                             .font(.footnote.weight(.semibold))
                                             .textCase(.uppercase)
                                             .foregroundColor(R.color.textBase.color)
                                     }
-                                    .padding(.top, 6)
-                                    .padding(.bottom, 6)
-                                    if token.token.code != balance.wrap.tokens.last?.token.code { Divider().foregroundColor(R.color.buttonBorderSecondary.color) }
+                                    .padding(EdgeInsets(top: 16, leading: 10, bottom: 16, trailing: 10))
+                                    if token.amount.token.code != balance.wrap.tokens.last?.amount.token.code { Divider().foregroundColor(R.color.buttonBorderSecondary.color) }
                                 }
                             }
-                            .padding(12)
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(16)
                             if balance.canWrap {
                                 Button {
-                                    swapAction(balance.wrap.tokens.first!, balance.wrap.tokens.last!)
+                                    swapAction(balance.wrap.tokens.first!.amount, balance.wrap.tokens.last!.amount)
                                 } label: {
                                     HStack {
                                         Constants.swapImage
@@ -209,24 +217,30 @@ struct BalanceView: View {
                         }
                     }
                     if !balance.tokens.isEmpty {
-                        VStack(alignment: .leading) {
+                        VStack(alignment: .leading, spacing: 0) {
                             ForEach(balance.tokens) { token in
-                                HStack(alignment: .center, spacing: 12){
-                                    Text(token.token.code)
+                                HStack(alignment: .center, spacing: 4){
+                                    Text(token.amount.token.code)
                                         .font(.footnote.weight(.semibold))
                                         .foregroundColor(R.color.textBase.color)
+                                    if token.price > 0, let price = token.currency.format(double: token.price, withCode: false) {
+                                        Text(price)
+                                            .font(.footnote.weight(.semibold))
+                                            .textCase(.uppercase)
+                                            .foregroundColor(R.color.secondaryText.color)
+                                    }
                                     Spacer()
-                                    Text(token.formatted())
+                                    Text(token.amount.formatted())
                                         .font(.footnote.weight(.semibold))
                                         .foregroundColor(R.color.textBase.color)
                                 }
-                                .padding(EdgeInsets(top: 16, leading: 12, bottom: 16, trailing: 12))
-                                if token.token.code != balance.tokens.last?.token.code { Divider().foregroundColor(R.color.buttonBorderSecondary.color) }
+                                .padding(EdgeInsets(top: 16, leading: 10, bottom: 16, trailing: 10))
+                                if token.amount.token.code != balance.tokens.last?.amount.token.code { Divider().foregroundColor(R.color.buttonBorderSecondary.color) }
                             }
                         }
                         .background(R.color.secondaryBackground.color)
                         .cornerRadius(16)
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+                        .padding(0)
 
                     } else {
                         EmptyView()
@@ -242,7 +256,7 @@ struct BalanceView_Previews: PreviewProvider {
 
     static var previews: some View {
         VStack {
-            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(BigUInt(0), token: .from(code: "SOL")), .init(BigUInt(0), token: .from(code: "WSOL")), .init(BigUInt(0), token: .from(code: "USDC"))], blockchain: "solana", wrap: ["SOL", "WSOL"])))) {
+            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"])))) {
 
             } swapAction: { _, _ in
 
@@ -258,7 +272,7 @@ struct BalanceView_Previews: PreviewProvider {
         .preferredColorScheme(.light)
 
         VStack {
-            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(BigUInt(0), token: .from(code: "SOL")), .init(BigUInt(0), token: .from(code: "WSOL")), .init(BigUInt(0), token: .from(code: "USDC"))], blockchain: "solana", wrap: ["SOL", "WSOL"])))) {
+            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"])))) {
 
             } swapAction: { _, _ in
 
@@ -281,5 +295,11 @@ struct BalanceView_Previews: PreviewProvider {
 extension Amount: Identifiable {
     public var id: String {
         self.token.code
+    }
+}
+
+extension Balance.TokenInfo: Identifiable {
+    public var id: String {
+        self.amount.id
     }
 }
