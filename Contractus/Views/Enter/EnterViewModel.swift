@@ -16,15 +16,27 @@ enum EnterInput {
          createIfNeeded,
          copyPrivateKey,
          copyForBackup,
-         saveAccount
+         saveAccount(backupToiCloud: Bool),
+         hideError
 }
 
 struct EnterState {
+
+    enum ErrorState: Equatable {
+        case error(String)
+    }
+
+    var errorState: ErrorState?
     var account: CommonAccount?
     var privateKeyIsCopied: Bool = false
     var isBackupedPrivateKey: Bool = false
     var blockchain: Blockchain?
     var isValidImportedPrivateKey: Bool = false
+    var backupKeys: [BackupKeyItem] = []
+
+    var hasBackupKeys: Bool {
+        backupKeys.count > 0
+    }
 }
 
 final class EnterViewModel: ViewModel {
@@ -32,17 +44,27 @@ final class EnterViewModel: ViewModel {
     @Published var state: EnterState
 
     private let accountService: AccountService
+    private let backupStorage: BackupStorage
     private var apiClient: ContractusAPI.APIClient?
 
-    init(initialState: EnterState, accountService: AccountService) {
-        self.state = initialState
+    init(initialState: EnterState, accountService: AccountService, backupStorage: BackupStorage) {
+        var state = initialState
         self.accountService = accountService
+        self.backupStorage = backupStorage
+        state.backupKeys = backupStorage.getBackupKeys()
+        self.state = state
     }
 
     func trigger(_ input: EnterInput, after: AfterTrigger? = nil) {
         switch input {
+        case .hideError:
+            state.errorState = nil
         case .importPrivateKey(let privateKey):
             guard let blockchain = state.blockchain else { return }
+            if accountService.existAccount(privateKey) {
+                state.errorState = .error("This account already added.")
+                return
+            }
             guard let account = try? accountService.restore(by: privateKey, blockchain: blockchain) else {
                 self.state.isValidImportedPrivateKey = false
                 self.state.account = nil
@@ -75,9 +97,19 @@ final class EnterViewModel: ViewModel {
             UIPasteboard.general.string = state.account?.privateKey.toBase58()
             /// Maybe for logs will be useful
             break
-        case .saveAccount:
+        case .saveAccount(let allowBackup):
             guard let account = state.account else { return }
-            accountService.save(account)
+
+                do {
+                    if allowBackup {
+
+                        try backupStorage.savePrivateKey(.init(publicKey: account.publicKey, privateKey: account.privateKey.toBase58(), blockchain: account.blockchain))
+                    }
+                    accountService.save(account)
+                }catch {
+                    state.errorState = .error(error.readableDescription)
+                }
+
         case .setBlockchain(let blockchain):
             self.state.blockchain = blockchain
         }

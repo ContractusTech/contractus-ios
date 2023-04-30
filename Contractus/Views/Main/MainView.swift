@@ -96,21 +96,31 @@ struct MainView: View {
                         case .loaded:
                             if viewModel.deals.isEmpty {
                                 VStack(alignment: .center) {
-                                    Spacer()
-                                    VStack(spacing: 8) {
-                                        Image(systemName: "tray.fill")
+
+                                    VStack(spacing: 4) {
+                                        R.image.emptyDeals.image
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
-                                            .frame(width: 52, height: 52)
-                                            .foregroundColor(R.color.secondaryText.color.opacity(0.3))
-                                        Text("No active deals")
-                                            .font(.body.weight(.medium))
-                                            .foregroundColor(R.color.secondaryText.color)
+                                            .frame(width: 150, height: 150)
+
+                                        VStack(spacing: 12) {
+                                            Text(R.string.localizable.mainEmptyTitle())
+                                                .font(.title3.weight(.semibold))
+                                                .multilineTextAlignment(.center)
+                                                .foregroundColor(R.color.secondaryText.color.opacity(0.5))
+                                            Text(R.string.localizable.mainEmptyMessage())
+                                                .font(.caption)
+                                                .multilineTextAlignment(.center)
+                                                .foregroundColor(R.color.secondaryText.color.opacity(0.5))
+                                        }
+                                        .padding(.leading, 40)
+                                        .padding(.trailing, 40)
+
                                     }
 
-                                    Spacer()
+
                                 }
-                                .padding(50)
+                                .padding(10)
                             } else {
                                 LazyVGrid(columns: Constants.columns, spacing: 4) {
                                     ForEach(viewModel.deals, id: \.id) { item in
@@ -179,8 +189,13 @@ struct MainView: View {
                                 }
                                 .interactiveDismiss(canDismissSheet: false)
                     case .menu:
-                        MenuView(viewModel: AnyViewModel<MenuState, MenuInput>(MenuViewModel(accountStorage: KeychainAccountStorage()))) { action in
+                        MenuView { action in
                             switch action {
+                            case .changeAccount:
+                                viewModel.trigger(.updateAccount) {
+                                    load()
+                                }
+
                             case .logout:
                                 logoutCompletion()
                             }
@@ -249,8 +264,7 @@ struct MainView: View {
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarColor()
             .onAppear{
-                viewModel.trigger(.preload)
-                viewModel.trigger(.load(dealsType))
+                load()
             }
             .tintIfCan(R.color.textBase.color)
         }
@@ -291,7 +305,7 @@ struct MainView: View {
     private func dealTitle(type: MainViewModel.State.DealType) -> String {
         switch type {
         case .all:
-            return "Latest"
+            return "Recent"
         case .isChecker:
             return "For checking"
         case .isClient:
@@ -299,6 +313,11 @@ struct MainView: View {
         case .isExecutor:
             return "For execute"
         }
+    }
+
+    private func load() {
+        viewModel.trigger(.preload)
+        viewModel.trigger(.load(dealsType))
     }
 }
 
@@ -316,7 +335,7 @@ import ContractusAPI
 struct MainView_Previews: PreviewProvider {
 
     static var previews: some View {
-        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(account: Mock.account, accountAPIService: nil, dealsAPIService: nil, resourcesAPIService: nil))) {
+        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(account: Mock.account, accountStorage: MockAccountStorage(), accountAPIService: nil, dealsAPIService: nil, resourcesAPIService: nil))) {
 
         }
     }

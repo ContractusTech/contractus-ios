@@ -10,6 +10,7 @@ import SolanaSwift
 import UIKit
 import ResizableSheet
 import netfox
+import ContractusAPI
 
 struct RootState {
     enum State {
@@ -31,23 +32,33 @@ final class RootViewModel: ViewModel {
 
     @Published private(set) var state: RootState
     private let accountStorage: AccountStorage
-    private let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? ""
 
     init(accountStorage: AccountStorage) {
         self.accountStorage = accountStorage
         if let account = accountStorage.getCurrentAccount() {
             // TODO: - Не очень правильное решение + вынести deviceId
-            APIServiceFactory.shared.setAccount(for: account, deviceId: deviceId)
+            APIServiceFactory.shared.setAccount(for: account)
+            remoteEventService = try? APIServiceFactory.shared.makeWebSocket()
+            remoteEventService?.connect()
+            remoteEventService?.disconnectHandler = {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    remoteEventService?.connect()
+                }
+            }
+
             self.state = RootState(state: .hasAccount(account))
         } else {
             self.state = RootState(state: .noAccount)
+
+            remoteEventService?.disconnect()
+            remoteEventService = nil
         }
     }
 
     func trigger(_ input: RootInput, after: AfterTrigger? = nil) {
         switch input {
         case .savedAccount(let account):
-            APIServiceFactory.shared.setAccount(for: account, deviceId: deviceId)
+            APIServiceFactory.shared.setAccount(for: account)
             state.state = .hasAccount(account)
         case .signTx(let type):
             state.transactionState = .needSign(type)
@@ -61,7 +72,8 @@ final class RootViewModel: ViewModel {
     }
 }
 
-let appState = AnyViewModel<RootState, RootInput>(RootViewModel(accountStorage: KeychainAccountStorage()))
+let appState = AnyViewModel<RootState, RootInput>(RootViewModel(accountStorage: ServiceFactory.shared.makeAccountStorage()))
+var remoteEventService: WebSocket?
 
 @main
 struct ContractusApp: App {
@@ -94,6 +106,7 @@ struct ContractusApp: App {
                 case .hasAccount(let account):
                     MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(
                         account: account,
+                        accountStorage: ServiceFactory.shared.makeAccountStorage(),
                         accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
                         dealsAPIService: try? APIServiceFactory.shared.makeDealsService(),
                         resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())), logoutCompletion: {

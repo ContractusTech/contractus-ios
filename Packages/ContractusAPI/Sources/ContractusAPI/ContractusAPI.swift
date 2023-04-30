@@ -1,7 +1,7 @@
 import Foundation
 
-fileprivate let productionURL = URL(string: "https://s.contractus.tech/api")!
-fileprivate let developerURL = URL(string: "https://dev.contractus.tech/api")!
+fileprivate let productionAddress = "s.contractus.tech"
+fileprivate let developerAddress = "dev.contractus.tech"
 
 public enum Blockchain: String, CaseIterable, Hashable {
     case solana
@@ -10,19 +10,30 @@ public enum Blockchain: String, CaseIterable, Hashable {
 public enum ServerType {
 
     public enum APIVersion: String {
-        case v1
+        case v1, none
     }
 
-    case production(APIVersion = .v1), developer(APIVersion = .v1), custom(URL, APIVersion = .v1)
+    case production(APIVersion = .v1), developer(APIVersion = .v1), custom(api: URL, ws: URL)
 
     public var apiURL: URL {
         switch self {
         case .production(let version):
-            return server.appendingPathComponent(version.rawValue)
+            return server.appendingPathComponent("api").appendingPathComponent(version.rawValue)
         case .developer(let version):
-            return server.appendingPathComponent(version.rawValue)
-        case .custom(_, let version):
-            return server.appendingPathComponent(version.rawValue)
+            return server.appendingPathComponent("api").appendingPathComponent(version.rawValue)
+        case .custom(let url, _):
+            return url
+        }
+    }
+
+    public var wsURL: URL {
+        switch self {
+        case .production:
+            return wsServer.appendingPathComponent("ws")
+        case .developer:
+            return wsServer.appendingPathComponent("ws")
+        case .custom:
+            return wsServer
         }
     }
 
@@ -32,19 +43,30 @@ public enum ServerType {
             return version
         case .developer(let version):
             return version
-        case .custom(_, let version):
-            return version
+        case .custom(_, _):
+            return .none
         }
     }
 
     public var server: URL {
         switch self {
         case .production:
-            return productionURL
+            return URL(string: "https://\(productionAddress)")!
         case .developer:
-            return developerURL
-        case .custom(let url, _):
-            return url
+            return URL(string: "https://\(developerAddress)")!
+        case .custom(let apiUrl, _):
+            return apiUrl
+        }
+    }
+
+    public var wsServer: URL {
+        switch self {
+        case .production:
+            return URL(string: "wss://\(productionAddress)")!
+        case .developer:
+            return URL(string: "wss://\(developerAddress)")!
+        case .custom(_, let wsUrl):
+            return wsUrl
         }
     }
 
@@ -58,7 +80,7 @@ public enum ServerType {
             return "Production"
         case .developer(_):
             return "Developer"
-        case .custom(_, _):
+        case .custom:
             return "Custom"
         }
     }

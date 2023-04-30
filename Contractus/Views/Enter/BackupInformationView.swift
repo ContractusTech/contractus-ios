@@ -18,6 +18,7 @@ struct BackupInformationView: View {
 
     @EnvironmentObject var rootViewModel: AnyViewModel<RootState, RootInput>
     @EnvironmentObject var viewModel: AnyViewModel<EnterState, EnterInput>
+    @State private var allowBackupToiCloud: Bool = false
 
     let informationType: TopTextBlockView.InformationType
     let titleText: String
@@ -40,27 +41,53 @@ struct BackupInformationView: View {
                     CopyContentView(content: privateKey.toBase58(), contentType: .privateKey) { _ in
                         viewModel.trigger(.copyForBackup)
                     }
+
+                    HStack {
+
+
+                        Toggle(isOn: $allowBackupToiCloud) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(R.string.localizable.backupInformationBackupICloudTitle())
+                                    .font(.body.weight(.medium))
+                                    .foregroundColor(R.color.textBase.color)
+                                Text(R.string.localizable.backupInformationBackupICloudSubtitle())
+                                    .font(.caption)
+                                    .foregroundColor(R.color.secondaryText.color)
+                            }
+                        }
+                    }
+                    .padding(16)
+                    .background(content: {
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(R.color.baseSeparator.color)
+                    })
                     Spacer()
                 }
                 .padding(UIConstants.contentInset)
             }
             VStack {
-                Text(R.string.localizable.backupInformationTooltip())
-                    .multilineTextAlignment(.center)
-                    .font(.body.weight(.medium))
-                    .foregroundColor(R.color.yellow.color)
-                    .padding(10)
+//                Text(R.string.localizable.backupInformationTooltip())
+//                    .multilineTextAlignment(.center)
+//                    .font(.body.weight(.medium))
+//                    .foregroundColor(R.color.textWarn.color)
+//                    .padding(10)
 
                 HStack {
 
                     CButton(title: R.string.localizable.backupInformationButtonContinue(), style: .secondary, size: .large, isLoading: false)
                     {
-                        viewModel.trigger(.saveAccount)
+                        viewModel.trigger(.saveAccount(backupToiCloud: self.allowBackupToiCloud))
                         completion()
                     }
                 }
-                .padding(UIConstants.contentInset)
-            }
+                Text(R.string.localizable.backupInformationTooltip())
+                    .font(.footnote)
+                    .foregroundColor(R.color.secondaryText.color)
+                    .fontWeight(.medium)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 12)
+
+            }.padding(UIConstants.contentInset)
         }
         .onAppear {
             viewModel.trigger(.createIfNeeded)
@@ -84,7 +111,7 @@ struct BackupInformationView_Previews: PreviewProvider {
                 largeTitleText: "Your safety",
                 informationText: "",
                 privateKey: Data(),
-                completion: {}).environmentObject(AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(), accountService: AccountServiceImpl(storage: MockAccountStorage()))))
+                completion: {}).environmentObject(AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(), accountService: AccountServiceImpl(storage: MockAccountStorage()), backupStorage: BackupStorageMock())))
         }
         .preferredColorScheme(.dark)
 

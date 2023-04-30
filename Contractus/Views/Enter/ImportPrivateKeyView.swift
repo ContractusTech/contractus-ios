@@ -9,12 +9,19 @@ import SwiftUI
 
 struct ImportPrivateKeyView: View {
 
+    enum AlertType: Identifiable {
+        var id: String { "\(self)" }
+        case error(String)
+    }
+    
     @ObservedObject private var keyboard = KeyboardResponder(defaultHeight: UIConstants.contentInset.bottom)
     
     @EnvironmentObject var viewModel: AnyViewModel<EnterState, EnterInput>
+    @State private var alertType: AlertType?
+    @State private var privateKey: String = ""
+    @State private var isActiveBackup: Bool = false
+    @State private var showBackupKeys: Bool = false
 
-    @State var privateKey: String = ""
-    @State var isActiveBackup: Bool = false
     var completion: (CommonAccount) -> Void
 
     var body: some View {
@@ -46,6 +53,33 @@ struct ImportPrivateKeyView: View {
                                 }
 
                             }
+                        }
+                        if viewModel.state.hasBackupKeys {
+                            HStack() {
+                                VStack {
+                                    Text(R.string.localizable.importWalletFoundKeysTitle(String(viewModel.state.backupKeys.count)))
+                                        .font(.body.weight(.regular))
+                                        .foregroundColor(R.color.secondaryText.color)
+
+                                }
+                                Spacer()
+                                Divider()
+                                    .background(R.color.baseSeparator.color)
+                                    .rotationEffect(.degrees(0.5))
+                                    .padding(.trailing, 6)
+
+                                Button {
+                                    showBackupKeys.toggle()
+                                } label: {
+                                    Text(R.string.localizable.commonSelect())
+                                        .font(.body.weight(.medium))
+                                }
+                            }
+                            .padding(16)
+                            .background(content: {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(R.color.baseSeparator.color)
+                            })
                         }
                     }
                 }
@@ -84,10 +118,45 @@ struct ImportPrivateKeyView: View {
         .onChange(of: privateKey, perform: { newValue in
             viewModel.trigger(.importPrivateKey(newValue))
         })
+        .onChange(of: viewModel.state.errorState) { value in
+            switch value {
+            case .error(let errorMessage):
+                self.alertType = .error(errorMessage)
+            case .none:
+                self.alertType = .none
+            }
+        }
+        .alert(item: $alertType, content: { type in
+            switch type {
+            case .error(let message):
+                return Alert(
+                    title: Text(R.string.localizable.commonError()),
+                    message: Text(message),
+                    dismissButton: .default(Text(R.string.localizable.commonOk()), action: {
+                        viewModel.trigger(.hideError)
+                    }))
+            }
+        })
+        .actionSheet(isPresented: $showBackupKeys, content: {
+            ActionSheet(
+                title: Text(R.string.localizable.importWalletSelectBackupKeyTitle()),
+                buttons: privateKeysButtons())
+        })
         .navigationBarTitleDisplayMode(.inline)
         .edgesIgnoringSafeArea(.bottom)
 
 
+    }
+
+    private func privateKeysButtons() -> [ActionSheet.Button] {
+        var buttons: [ActionSheet.Button] = viewModel.state.backupKeys.map { pk in
+                .default(Text(ContentMask.mask(from: pk.publicKey)), action: {
+                    privateKey = pk.privateKey
+            })
+        }
+
+        buttons.append(.cancel())
+        return buttons
     }
 }
 
@@ -96,7 +165,10 @@ struct ImportPrivateKeyView_Previews: PreviewProvider {
         ImportPrivateKeyView { _ in
 
         }.environmentObject(
-            AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: .init(account: Mock.account, isValidImportedPrivateKey: true), accountService: AccountServiceImpl(storage: MockAccountStorage())))
+            AnyViewModel<EnterState, EnterInput>(EnterViewModel(
+                initialState: .init(account: Mock.account, isValidImportedPrivateKey: true),
+                accountService: AccountServiceImpl(storage: MockAccountStorage()),
+                backupStorage: BackupStorageMock()))
         )
     }
 }

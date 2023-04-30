@@ -27,20 +27,20 @@ final class MenuViewModel: ViewModel {
 
         self.accountStorage = accountStorage
 
-        self.state = .init(accounts: accountStorage.getListAccounts(), currentAccount: accountStorage.getCurrentAccount())
+        self.state = .init(accounts: accountStorage.getAccounts(), currentAccount: accountStorage.getCurrentAccount())
 
     }
 
     func trigger(_ input: MenuInput, after: AfterTrigger? = nil) {
-        switch input {
-        case .changeAccount(let commonAccount):
-            accountStorage.setCurrentAccount(account: commonAccount)
-        case .saveAccounts(let accounts):
-            if accounts.isEmpty {
-                accountStorage.clearCurrentAccount()
-            }
-            accountStorage.updateAccounts(accounts: accounts)
-        }
+//        switch input {
+//        case .changeAccount(let commonAccount):
+//            accountStorage.setCurrentAccount(account: commonAccount)
+//        case .saveAccounts(let accounts):
+//            if accounts.isEmpty {
+//                accountStorage.clearCurrentAccount()
+//            }
+//            accountStorage.updateAccounts(accounts: accounts)
+//        }
 
     }
 }

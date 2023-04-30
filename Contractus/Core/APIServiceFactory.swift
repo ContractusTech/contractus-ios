@@ -21,27 +21,43 @@ final class APIServiceFactory {
     // MARK: - Private Properties
 
     private let client: ContractusAPI.APIClient
-    private var accountIsEmpty = true
+    private let server: ServerType
 
+    private var accountIsEmpty = true
+    private var webSocket: WebSocket!
 
     init(for server: ContractusAPI.ServerType) {
+        self.server = server
         client = ContractusAPI.APIClient(server: server)
+
     }
 
     // MARK: - Public Methods
 
-    func setAccount(for account: CommonAccount, deviceId: String) {
+    func setAccount(for account: CommonAccount, deviceId: String = AppConfig.deviceId) {
         guard let header = try? buildHeader(for: account, deviceId: deviceId) else {
             client.updateHeader(authorizationHeader: nil)
             accountIsEmpty = true
+            if webSocket != nil {
+                webSocket.disconnect()
+                webSocket = nil
+            }
             return
         }
+
         client.updateHeader(authorizationHeader: header)
+
+        if webSocket == nil {
+            webSocket = ContractusAPI.WebSocket(server: server, header: header)
+        } else {
+            webSocket.update(header: header)
+        }
         accountIsEmpty = false
     }
 
     func clearAccount() {
         client.updateHeader(authorizationHeader: nil)
+        accountIsEmpty = true
     }
 
     func makeAccountService() throws -> ContractusAPI.AccountService {
@@ -69,12 +85,15 @@ final class APIServiceFactory {
         return ContractusAPI.DealsService(client: client)
     }
 
+    func makeWebSocket() throws -> ContractusAPI.WebSocket {
+        try checkAccount()
+        return webSocket
+    }
+
     // MARK: - Private Methods
 
     private func checkAccount() throws {
-        if accountIsEmpty {
-            throw APIServiceFactoryError.accountNotSet
-        }
+        guard !accountIsEmpty else { throw APIServiceFactoryError.accountNotSet }
     }
 
     private func buildHeader(for account: CommonAccount, deviceId: String) throws -> ContractusAPI.AuthorizationHeader {

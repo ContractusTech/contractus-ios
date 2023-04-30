@@ -741,7 +741,7 @@ struct DealView: View {
                 return Alert(
                     title: Text(R.string.localizable.commonError()),
                     message: Text(message),
-                    dismissButton: .default(Text("Ok"), action: {
+                    dismissButton: .default(Text(R.string.localizable.commonOk()), action: {
                         viewModel.trigger(.hideError)
                     }))
             }
