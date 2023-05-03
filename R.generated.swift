@@ -943,12 +943,16 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 216 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 218 localization keys.
     struct localizable {
       /// en translation: -
       ///
       /// Locales: en
       static let dealStatusUnknown = Rswift.StringResource(key: "deal.status.unknown", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: About tiers
+      ///
+      /// Locales: en
+      static let mainAboutTiers = Rswift.StringResource(key: "main.about.tiers", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Account
       ///
       /// Locales: en
@@ -1288,7 +1292,7 @@ struct R: Rswift.Validatable {
       /// en translation: Estimate balance
       ///
       /// Locales: en
-      static let balanceEstimate = Rswift.StringResource(key: "balance.estimate", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      static let balanceTitle = Rswift.StringResource(key: "balance.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Executor
       ///
       /// Locales: en
@@ -1693,6 +1697,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealHintEncryptContent = Rswift.StringResource(key: "deal.hint.encrypt-content", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Tier
+      ///
+      /// Locales: en
+      static let balanceTier = Rswift.StringResource(key: "balance.tier", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: To get started you need a %@ account
       ///
       /// Locales: en
@@ -1823,6 +1831,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.status.unknown", bundle: bundle, comment: "")
+      }
+
+      /// en translation: About tiers
+      ///
+      /// Locales: en
+      static func mainAboutTiers(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("main.about.tiers", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "main.about.tiers"
+        }
+
+        return NSLocalizedString("main.about.tiers", bundle: bundle, comment: "")
       }
 
       /// en translation: Account
@@ -3098,16 +3121,16 @@ struct R: Rswift.Validatable {
       /// en translation: Estimate balance
       ///
       /// Locales: en
-      static func balanceEstimate(preferredLanguages: [String]? = nil) -> String {
+      static func balanceTitle(preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("balance.estimate", bundle: hostingBundle, comment: "")
+          return NSLocalizedString("balance.title", bundle: hostingBundle, comment: "")
         }
 
         guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "balance.estimate"
+          return "balance.title"
         }
 
-        return NSLocalizedString("balance.estimate", bundle: bundle, comment: "")
+        return NSLocalizedString("balance.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Executor
@@ -4625,6 +4648,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.hint.encrypt-content", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Tier
+      ///
+      /// Locales: en
+      static func balanceTier(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("balance.tier", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "balance.tier"
+        }
+
+        return NSLocalizedString("balance.tier", bundle: bundle, comment: "")
       }
 
       /// en translation: To get started you need a %@ account

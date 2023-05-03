@@ -15,6 +15,7 @@ public struct Token: Codable {
     public let address: String?
     public let native: Bool
     public let decimals: Int
+    public let serviced: Bool
 
     enum CodingKeys: CodingKey {
         case code
@@ -22,14 +23,16 @@ public struct Token: Codable {
         case address
         case native
         case decimals
+        case serviced
     }
 
-    public init(code: String, name: String? = nil, address: String? = nil, native: Bool, decimals: Int) {
+    public init(code: String, name: String? = nil, address: String? = nil, native: Bool, decimals: Int, serviced: Bool) {
         self.code = code
         self.name = name
         self.address = address
         self.native = native
         self.decimals = decimals
+        self.serviced = serviced
     }
 
     public init(from decoder: Decoder) throws {
@@ -40,6 +43,7 @@ public struct Token: Codable {
         self.address = try container.decodeIfPresent(String.self, forKey: Token.CodingKeys.address)
         self.native = try container.decode(Bool.self, forKey: Token.CodingKeys.native)
         self.decimals = try container.decode(Int.self, forKey: Token.CodingKeys.decimals)
+        self.serviced = (try? container.decode(Bool.self, forKey: Token.CodingKeys.serviced)) ?? false
 
     }
 
@@ -51,6 +55,7 @@ public struct Token: Codable {
         try container.encodeIfPresent(self.address, forKey: Token.CodingKeys.address)
         try container.encode(self.native, forKey: Token.CodingKeys.native)
         try container.encode(self.decimals, forKey: Token.CodingKeys.decimals)
+        try container.encode(self.serviced, forKey: Token.CodingKeys.serviced)
     }
 }
 

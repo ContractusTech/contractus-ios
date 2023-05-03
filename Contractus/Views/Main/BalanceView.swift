@@ -12,6 +12,7 @@ import BigInt
 fileprivate enum Constants {
     static let noneCoinImage = Image("NONE-CoinLogo")
     static let swapImage = Image(systemName: "arrow.triangle.swap")
+    static let infoImage = Image(systemName: "info.circle.fill")
 }
 
 struct BalanceViewModel {
@@ -22,7 +23,9 @@ struct BalanceViewModel {
 
     let estimateAmountFormatted: String
     let wrap: WrapTokens
+    let servicedToken: Balance.TokenInfo?
     let tokens: [Balance.TokenInfo]
+    let tier: Balance.Tier
     var canWrap: Bool {
         wrap.tokens.count == 2
     }
@@ -31,16 +34,22 @@ struct BalanceViewModel {
         estimateAmountFormatted = currency.format(double: balance.estimateAmount, withCode: true) ?? ""
         var tokens: [Balance.TokenInfo] = []
         var wrap: [Balance.TokenInfo] = []
+        var servicedToken: Balance.TokenInfo?
         balance.tokens.forEach { item in
+            if servicedToken == nil && item.amount.token.serviced {
+                servicedToken = item
+                return
+            }
             if balance.wrap.contains(item.amount.token.code) {
                 wrap.append(item)
             } else {
                 tokens.append(item)
             }
         }
-
+        self.servicedToken = servicedToken
         self.wrap = .init(tokens: wrap)
         self.tokens = tokens
+        self.tier = balance.tier
     }
 }
 
@@ -70,6 +79,7 @@ struct BalanceView: View {
 
     var state: BalanceState = .empty
     var topUpAction: () -> Void
+    var infoAction: () -> Void
     var swapAction: (Amount, Amount) -> Void
 
     var body: some View {
@@ -94,10 +104,12 @@ struct BalanceView: View {
                             .frame(width: 0, height: 10, alignment: .leading)
 
                     case .loaded(let balance):
-                        Text(R.string.localizable.balanceEstimate())
-                            .font(.footnote.weight(.semibold))
-                            .textCase(.uppercase)
-                            .foregroundColor(R.color.secondaryText.color)
+                        HStack {
+                            Text(R.string.localizable.balanceTitle())
+                                .font(.footnote.weight(.semibold))
+                                .textCase(.uppercase)
+                                .foregroundColor(R.color.secondaryText.color)
+                        }
                         Text(balance.estimateAmountFormatted)
                             .font(.largeTitle.weight(SwiftUI.Font.Weight.light))
                             .foregroundColor(R.color.textBase.color)
@@ -162,6 +174,43 @@ struct BalanceView: View {
                 }
             case .loaded(let balance):
                 VStack(spacing: 4) {
+                    if let token = balance.servicedToken {
+                        VStack(alignment: .leading, spacing: 0) {
+                            HStack(alignment: .center, spacing: 4){
+                                Text(token.amount.token.code)
+                                    .font(.footnote.weight(.semibold))
+                                    .foregroundColor(R.color.textBase.color)
+
+
+                                if token.price > 0, let price = token.currency.format(double: token.price, withCode: false) {
+                                    Text(price)
+                                        .font(.footnote.weight(.semibold))
+                                        .textCase(.uppercase)
+                                        .foregroundColor(R.color.secondaryText.color)
+                                }
+                                Spacer()
+                                HStack(spacing: 6) {
+                                    Button {
+                                        infoAction()
+                                    } label: {
+                                        Constants.infoImage
+                                            .resizable()
+                                            .frame(width: 16, height: 16)
+                                            .aspectRatio(contentMode: .fit)
+                                            .foregroundColor(R.color.secondaryText.color)
+                                    }
+                                    Text(token.amount.formatted())
+                                        .font(.footnote.weight(.semibold))
+                                        .foregroundColor(R.color.textBase.color)
+                                }
+
+                            }
+                            .padding(EdgeInsets(top: 16, leading: 10, bottom: 16, trailing: 10))
+                        }
+                        .background(R.color.secondaryBackground.color)
+                        .cornerRadius(16)
+                        .padding(0)
+                    }
                     if !balance.wrap.tokens.isEmpty {
                         ZStack(alignment: .center) {
                             VStack(alignment: .leading, spacing: 0) {
@@ -252,46 +301,6 @@ struct BalanceView: View {
     }
 }
 
-struct BalanceView_Previews: PreviewProvider {
-
-    static var previews: some View {
-        VStack {
-            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"])))) {
-
-            } swapAction: { _, _ in
-
-            }
-
-            BalanceView(state: .empty) {
-
-            } swapAction: { _, _ in
-
-            }
-        }
-        .baseBackground()
-        .preferredColorScheme(.light)
-
-        VStack {
-            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"])))) {
-
-            } swapAction: { _, _ in
-
-            }
-
-            BalanceView(state: .empty) {
-
-            } swapAction: { _, _ in
-
-            }
-        }
-        .baseBackground()
-        .preferredColorScheme(.dark)
-
-
-    }
-}
-
-
 extension Amount: Identifiable {
     public var id: String {
         self.token.code
@@ -301,5 +310,44 @@ extension Amount: Identifiable {
 extension Balance.TokenInfo: Identifiable {
     public var id: String {
         self.amount.id
+    }
+}
+
+struct BalanceView_Previews: PreviewProvider {
+
+    static var previews: some View {
+        VStack {
+            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"], tier: .basic)))) {
+
+            } infoAction: { } swapAction: { _, _ in
+
+            }
+
+            BalanceView(state: .empty) {
+
+            } infoAction: { } swapAction: { _, _ in
+
+            }
+        }
+        .baseBackground()
+        .preferredColorScheme(.light)
+
+        VStack {
+            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"], tier: .basic)))) {
+
+            } infoAction: { } swapAction: { _, _ in
+
+            }
+
+            BalanceView(state: .empty) {
+
+            } infoAction: { } swapAction: { _, _ in
+
+            }
+        }
+        .baseBackground()
+        .preferredColorScheme(.dark)
+
+
     }
 }

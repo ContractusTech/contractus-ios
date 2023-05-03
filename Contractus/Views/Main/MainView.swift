@@ -15,6 +15,8 @@ fileprivate enum Constants {
     static let plusImage = Image(systemName: "plus")
     static let menuImage = Image(systemName: "gearshape")
     static let qrCode = Image(systemName: "qrcode")
+    static let infoImage = Image(systemName: "info.circle.fill")
+    static let crowImage = Image(systemName: "crown.fill")
     static let scanQRImage = Image(systemName: "qrcode.viewfinder")
     static let columns: [GridItem] = {
         return [
@@ -27,7 +29,7 @@ fileprivate enum Constants {
 struct MainView: View {
 
     enum SheetType {
-        case newDeal, menu, qrScan, sharePublicKey, wrap(from: Amount, to: Amount)
+        case newDeal, menu, qrScan, sharePublicKey, wrap(from: Amount, to: Amount), webView(URL)
     }
 
     var resizableSheetCenter: ResizableSheetCenter? {
@@ -57,11 +59,13 @@ struct MainView: View {
                         BalanceView(
                             state: viewModel.state.balance != nil ? .loaded(.init(balance: viewModel.state.balance!)) : .empty,
                             topUpAction: {
-
-                            }) { fromAmount, toAmount in
+                                // TODO: - TopUp Tapped
+                            }, infoAction: {
+                                sheetType = .webView(AppConfig.tiersInformationURL)
+                            }, swapAction: { fromAmount, toAmount in
                                 sheetType = .wrap(from: fromAmount, to: toAmount)
-                            }
-                        HStack(alignment: .center) {
+                            })
+                        HStack(alignment: .center, spacing: 0) {
                             VStack {
                                 Button {
                                     showDealFilter.toggle()
@@ -80,6 +84,19 @@ struct MainView: View {
                                 }
                             }
                             Spacer()
+
+                            CButton(
+                                title: "",
+                                icon: Constants.qrCode,
+                                style: .clear,
+                                size: .default,
+                                isLoading: false) {
+                                    sheetType = .sharePublicKey
+                                }
+                            Rectangle()
+                                .frame(width: 8)
+                                .foregroundColor(Color.clear)
+
                             CButton(
                                 title: R.string.localizable.mainTitleNewDeal(),
                                 icon: Constants.plusImage,
@@ -88,6 +105,7 @@ struct MainView: View {
                                 isLoading: false) {
                                     sheetType = .newDeal
                                 }
+
 
                         }
                         .padding(EdgeInsets(top: 16, leading: 8, bottom: 12, trailing: 8))
@@ -175,9 +193,20 @@ struct MainView: View {
 
                 .sheet(item: $sheetType, content: { type in
                     switch type {
+                    case .webView(let url):
+                        NavigationView {
+                            WebView(url: url)
+                                .edgesIgnoringSafeArea(.bottom)
+                                .navigationBarItems(
+                                    trailing: Button(R.string.localizable.commonClose(), action: {
+                                    sheetType = nil
+                                }))
+                                .navigationTitle(R.string.localizable.mainAboutTiers())
+                                .navigationBarTitleDisplayMode(.inline)
+                        }.baseBackground()
+
                     case .wrap(let from, let to):
                         wrapView(amountNativeToken: from, amountWrapToken: to)
-                            // .interactiveDismiss(canDismissSheet: false)
                     case .newDeal:
                         CreateDealView(
                             viewModel: AnyViewModel<CreateDealState, CreateDealInput>(CreateDealViewModel(
@@ -223,21 +252,17 @@ struct MainView: View {
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         Button  {
-                            sheetType = .sharePublicKey
+                            sheetType = .webView(AppConfig.tiersInformationURL)
                         } label: {
                             VStack(alignment: .center, spacing: 3) {
-                                Text(R.string.localizable.commonAccount())
-                                    .font(.callout)
-                                    .fontWeight(.medium)
+                                tierLabel(viewModel.state.balance?.tier)
+
                                 HStack {
-                                    Constants.qrCode
-                                        .resizable()
-                                        .frame(width: 12, height: 12)
-                                        .foregroundColor(R.color.accentColor.color)
                                     Text(ContentMask.mask(from: viewModel.state.account.publicKey))
-                                        .font(.footnote)
+                                        .font(.caption2)
                                         .foregroundColor(R.color.secondaryText.color)
                                 }
+
                             }
                         }
                     }
@@ -262,7 +287,6 @@ struct MainView: View {
             }
             .environment(\.resizableSheetCenter, resizableSheetCenter ?? PreviewResizableSheetCenter.shared)
             .navigationViewStyle(StackNavigationViewStyle())
-//            .navigationBarColor()
             .onAppear{
                 load()
             }
@@ -319,7 +343,71 @@ struct MainView: View {
         viewModel.trigger(.preload)
         viewModel.trigger(.load(dealsType))
     }
+
+    @ViewBuilder
+    func tierLabel(_ tier: Balance.Tier?) -> some View {
+        if let tier = tier {
+            HStack(spacing: 5) {
+                if tier == .holder {
+                    Constants.crowImage
+                        .resizable()
+                        .frame(width: 9, height: 9)
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(tier.textColor)
+                }
+                Text("\(tier.title)")
+                    .font(.caption2.bold())
+                    .foregroundColor(tier.textColor)
+
+            }
+            .padding(EdgeInsets(top: 3, leading: 6, bottom: 3, trailing: 6))
+            .background(tier.backgroundColor)
+            .cornerRadius(10)
+            .shadow(radius: 0.3)
+        } else {
+            HStack(spacing: 5) {
+                Text(" ")
+                    .font(.footnote.bold())
+                    .foregroundColor(R.color.white.color)
+                    .frame(width: 62, height: 14)
+
+            }
+            .padding(EdgeInsets(top: 3, leading: 6, bottom: 3, trailing: 6))
+            .background(R.color.secondaryBackground.color)
+            .cornerRadius(10)
+        }
+
+    }
 }
+
+fileprivate extension Balance.Tier {
+    var backgroundColor: Color {
+        switch self {
+        case .basic:
+            return R.color.white.color
+        case .holder:
+            return R.color.blue.color
+        }
+    }
+    var textColor: Color {
+        switch self {
+        case .basic:
+            return R.color.black.color
+        case .holder:
+            return R.color.white.color
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .holder:
+            return "Holder mode"
+        case .basic:
+            return "Basic mode"
+        }
+    }
+}
+
 
 extension MainView.SheetType: Identifiable {
     var id: String {

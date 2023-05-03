@@ -10,6 +10,10 @@ import BigInt
 
 public struct Balance: Decodable {
 
+    public enum Tier: String, Decodable {
+        case basic, holder
+    }
+
     public struct TokenInfo: Decodable {
 
         public let price: Double
@@ -43,12 +47,14 @@ public struct Balance: Decodable {
     public let blockchain: String
     public let tokens: [TokenInfo]
     public let wrap: [String]
+    public let tier: Tier
 
-    public init(estimateAmount: Double, tokens: [TokenInfo], blockchain: String, wrap: [String]) {
+    public init(estimateAmount: Double, tokens: [TokenInfo], blockchain: String, wrap: [String], tier: Tier) {
         self.estimateAmount = estimateAmount
         self.tokens = tokens
         self.blockchain = blockchain
         self.wrap = wrap
+        self.tier = tier
     }
 
     enum CodingKeys: CodingKey {
@@ -56,6 +62,7 @@ public struct Balance: Decodable {
         case blockchain
         case tokens
         case wrap
+        case tier
     }
 
     public init(from decoder: Decoder) throws {
@@ -65,19 +72,7 @@ public struct Balance: Decodable {
         self.blockchain = try container.decode(String.self, forKey: Balance.CodingKeys.blockchain)
         self.tokens = try container.decode([Balance.TokenInfo].self, forKey: Balance.CodingKeys.tokens)
         self.wrap = try container.decode([String].self, forKey: Balance.CodingKeys.wrap)
+        self.tier = try container.decode(Tier.self, forKey: Balance.CodingKeys.tier)
 
     }
 }
-
-
-//extension Balance {
-//    public func updateTokens(_ tokensList: [Token]) -> Balance {
-//        var _tokens = tokens
-//        for i in 0..<_tokens.count {
-//            if let token = tokensList.first(where: { $0.code == _tokens[i].token.code }) {
-//                _tokens[i] = .init(_tokens[i].value, token: token)
-//            }
-//        }
-//        return .init(estimateAmount: self.estimateAmount, tokens: _tokens, blockchain: self.blockchain, wrap: self.wrap)
-//    }
-//}
