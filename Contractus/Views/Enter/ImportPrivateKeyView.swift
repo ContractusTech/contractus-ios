@@ -112,7 +112,6 @@ struct ImportPrivateKeyView: View {
             .disabled(!viewModel.isValidImportedPrivateKey)
             .padding(UIConstants.contentInset)
         }
-        .navigationBarColor()
         .baseBackground()
         .tintIfCan(R.color.textBase.color)
         .onChange(of: privateKey, perform: { newValue in

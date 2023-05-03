@@ -19,6 +19,7 @@ private enum Constants {
     static let arrowUpImage = Image(systemName: "chevron.up")
     static let arrowRightImage = Image(systemName: "arrow.up.right")
     static let successCopyImage = Image(systemName: "checkmark")
+    static let errorImage = Image(systemName: "xmark.circle.fill")
     static let copyImage = Image(systemName: "square.on.square")
 }
 
@@ -327,11 +328,11 @@ struct TransactionSignView: View {
                     .foregroundColor(R.color.secondaryBackground.color)
             case .processing:
                 RoundedRectangle(cornerRadius: 17)
-                    .fill(R.color.thirdBackground.color)
+                    .fill(R.color.secondaryBackground.color)
                 ProgressView()
             case .new, .none:
                 RoundedRectangle(cornerRadius: 17)
-                    .fill(R.color.buttonBackgroundWarn.color)
+                    .fill(R.color.textBase.color)
                 Constants.shieldImage
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -340,6 +341,11 @@ struct TransactionSignView: View {
             case .error:
                 RoundedRectangle(cornerRadius: 17)
                     .fill(R.color.labelBackgroundError.color)
+                Constants.errorImage
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 21, height: 21)
+                    .foregroundColor(R.color.white.color)
             }
         }
         .frame(width: 48, height: 48)

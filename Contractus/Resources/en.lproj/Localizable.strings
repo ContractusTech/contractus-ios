@@ -63,7 +63,8 @@
 "backupInformation.backup.iCloudTitle" = "Backup private key in iCloud";
 "backupInformation.backup.iCloudSubtitle" = "If you delete the app or lose your phone, you will be able to restore your private key.";
 
-"balance.estimate" = "Estimate balance";
+"balance.title" = "Estimate balance";
+"balance.tier" = "Tier";
 
 "accounts.title" = "Accounts";
 "accounts.warning.title" = "Warning!";
@@ -188,6 +189,7 @@
 "main.title.active-contracts" = "Active - %@";
 "main.empty.title" = "No deals yet";
 "main.empty.message" = "Your account must be specified in deal \nor create own deal by tap on «New Deal»";
+"main.about.tiers" = "About tiers";
 
 "changeAmount.title" = "Change amount";
 "changeAmount.amount" = "Amount";

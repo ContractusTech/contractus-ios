@@ -67,7 +67,6 @@ struct CreateWalletView: View {
         }
         .baseBackground()
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarColor()
         .edgesIgnoringSafeArea(.bottom)
 
     }

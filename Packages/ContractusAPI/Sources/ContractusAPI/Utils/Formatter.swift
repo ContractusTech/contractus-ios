@@ -48,15 +48,15 @@ public enum AmountFormatter {
 
 
     public static func format(amount: UInt64, token: Token, withCode: Bool = true, local: Locale = .current) -> String {
-        return format(amount: BigUInt(amount), decimal: token.decimal, code: withCode ? token.code : nil, local: local)
+        return format(amount: BigUInt(amount), decimal: token.decimals, code: withCode ? token.code : nil, local: local)
     }
 
     public static func format(string: String, token: Token, withCode: Bool = true, local: Locale = .current) -> BigUInt? {
-        return format(string: string, decimal: token.decimal, code: withCode ? token.code : nil, local: local)
+        return format(string: string, decimal: token.decimals, code: withCode ? token.code : nil, local: local)
     }
 
     public static func format(amount: BigUInt, token: Token, withCode: Bool = true, local: Locale = .current) -> String {
-        return format(amount: amount, decimal: token.decimal, code: withCode ? token.code : nil, local: local)
+        return format(amount: amount, decimal: token.decimals, code: withCode ? token.code : nil, local: local)
     }
     
 }

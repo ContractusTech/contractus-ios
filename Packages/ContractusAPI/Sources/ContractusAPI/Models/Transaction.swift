@@ -12,15 +12,14 @@ public enum TransactionStatus: String, Codable {
     case new = "NEW", processing = "IN_PROCESSING", finished = "FINISHED", error = "ERROR"
 }
 
-public struct Transaction: Codable, Equatable {
+public struct Transaction: Decodable, Equatable {
 
     public let id: String
     public let type: TransactionType
     public let transaction: String
     public let initializerPublicKey: String
     public let amount: BigUInt?
-    public let token: String?
-    public let tokenAddress: String?
+    public let token: Token?
     public let fee: BigUInt?
     public let status: TransactionStatus
 
@@ -36,8 +35,8 @@ public struct Transaction: Codable, Equatable {
         transaction: String,
         initializerPublicKey: String,
         amount: BigUInt? = nil,
-        token: String? = nil,
-        tokenAddress: String? = nil,
+        token: Token? = nil,
+//        tokenAddress: String? = nil,
         ownerSignature: String? = nil,
         contractorSignature: String? = nil,
         signature: String? = nil,
@@ -50,7 +49,7 @@ public struct Transaction: Codable, Equatable {
         self.transaction = transaction
         self.amount = amount
         self.token = token
-        self.tokenAddress = tokenAddress
+//        self.tokenAddress = tokenAddress
         self.initializerPublicKey = initializerPublicKey
         self.ownerSignature = ownerSignature
         self.contractorSignature = contractorSignature
@@ -66,7 +65,7 @@ public struct Transaction: Codable, Equatable {
         case initializerPublicKey
         case amount
         case token
-        case tokenAddress
+//        case tokenAddress
         case ownerSignature
         case contractorSignature
         case checkerSignature
@@ -88,8 +87,8 @@ public struct Transaction: Codable, Equatable {
         } else {
             self.amount = nil
         }
-        self.token = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.token)
-        self.tokenAddress = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.tokenAddress)
+        self.token = try container.decodeIfPresent(Token.self, forKey: Transaction.CodingKeys.token)
+//        self.tokenAddress = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.tokenAddress)
         self.signature = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.signature)
         self.ownerSignature = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.ownerSignature)
         self.contractorSignature = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.contractorSignature)
@@ -105,37 +104,37 @@ public struct Transaction: Codable, Equatable {
 
     }
 
-    public func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer<Transaction.CodingKeys> = encoder.container(keyedBy: Transaction.CodingKeys.self)
-
-        try container.encode(self.id, forKey: Transaction.CodingKeys.id)
-        try container.encode(self.type, forKey: Transaction.CodingKeys.type)
-        try container.encode(self.transaction, forKey: Transaction.CodingKeys.transaction)
-        try container.encode(self.status, forKey: Transaction.CodingKeys.status)
-        try container.encode(self.initializerPublicKey, forKey: Transaction.CodingKeys.initializerPublicKey)
-        try container.encodeIfPresent(self.amount, forKey: Transaction.CodingKeys.amount)
-        try container.encodeIfPresent(self.fee, forKey: Transaction.CodingKeys.fee)
-        try container.encodeIfPresent(self.ownerSignature, forKey: Transaction.CodingKeys.ownerSignature)
-        try container.encodeIfPresent(self.contractorSignature, forKey: Transaction.CodingKeys.contractorSignature)
-        try container.encodeIfPresent(self.checkerSignature, forKey: Transaction.CodingKeys.checkerSignature)
-    }
+//    public func encode(to encoder: Encoder) throws {
+//        var container: KeyedEncodingContainer<Transaction.CodingKeys> = encoder.container(keyedBy: Transaction.CodingKeys.self)
+//
+//        try container.encode(self.id, forKey: Transaction.CodingKeys.id)
+//        try container.encode(self.type, forKey: Transaction.CodingKeys.type)
+//        try container.encode(self.transaction, forKey: Transaction.CodingKeys.transaction)
+//        try container.encode(self.status, forKey: Transaction.CodingKeys.status)
+//        try container.encode(self.initializerPublicKey, forKey: Transaction.CodingKeys.initializerPublicKey)
+//        try container.encodeIfPresent(self.amount, forKey: Transaction.CodingKeys.amount)
+//        try container.encodeIfPresent(self.fee, forKey: Transaction.CodingKeys.fee)
+//        try container.encodeIfPresent(self.ownerSignature, forKey: Transaction.CodingKeys.ownerSignature)
+//        try container.encodeIfPresent(self.contractorSignature, forKey: Transaction.CodingKeys.contractorSignature)
+//        try container.encodeIfPresent(self.checkerSignature, forKey: Transaction.CodingKeys.checkerSignature)
+//    }
 
     public var amountFormatted: String? {
-        guard let amount = amount, let tokenCode = token else {
+        guard let amount = amount, let token = token else {
             return nil
         }
 
-        return AmountFormatter.format(amount: amount, token: Token.from(code: tokenCode))
+        return AmountFormatter.format(amount: amount, token: token)
     }
 
     public var feeFormatted: String? {
-        guard let fee = fee, !fee.isZero else {
+        guard let fee = fee, !fee.isZero, let token = token else {
             return nil
         }
 
         switch type {
         case .wrapSOL, .unwrapAllSOL:
-            return AmountFormatter.format(amount: fee, token: SolanaTokens.sol)
+            return AmountFormatter.format(amount: fee, token: token)
         case .dealCancel, .dealInit, .dealFinish:
             return nil
         }

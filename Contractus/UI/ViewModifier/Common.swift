@@ -37,17 +37,23 @@ struct NavigationBarModifier: ViewModifier {
     var titleColor: UIColor?
 
     init(backgroundColor: UIColor?, titleColor: UIColor?) {
-        self.backgroundColor = backgroundColor
-        let coloredAppearance = UINavigationBarAppearance()
-        coloredAppearance.configureWithTransparentBackground()
-        coloredAppearance.backgroundColor = backgroundColor
-        coloredAppearance.titleTextAttributes = [.foregroundColor: titleColor ?? .white]
-        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: titleColor ?? .white]
-        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: titleColor ?? .white]
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = UIColor.clear
 
-        UINavigationBar.appearance().standardAppearance = coloredAppearance
-        UINavigationBar.appearance().compactAppearance = coloredAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
+        // TODO: - Need Fix. After changing the mode the navigation bar is not updated
+        appearance.backgroundEffect = UIBlurEffect(style: UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .light)
+        appearance.titleTextAttributes = [.foregroundColor: titleColor ?? .white]
+        appearance.largeTitleTextAttributes = [.foregroundColor: titleColor ?? .white]
+        appearance.largeTitleTextAttributes = [.foregroundColor: titleColor ?? .white]
+
+        let scrollingAppearance = UINavigationBarAppearance()
+        scrollingAppearance.configureWithTransparentBackground()
+        scrollingAppearance.backgroundColor = backgroundColor
+
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = scrollingAppearance
+        UINavigationBar.appearance().compactAppearance = scrollingAppearance
     }
 
     func body(content: Content) -> some View {

@@ -198,7 +198,6 @@ struct WrapTokenView: View {
                 }
             }
             .edgesIgnoringSafeArea(.bottom)
-            .navigationBarColor()
             .baseBackground()
         }
 
@@ -229,7 +228,7 @@ struct WrapTokenView_Previews: PreviewProvider {
     static var previews: some View {
         WrapTokenView(viewModel: AnyViewModel<WrapTokenState, WrapTokenInput>(WrapTokenViewModel(
             state: .init(
-                account: Mock.account, amountNativeToken: Amount("100000", token:  SolanaTokens.sol),
-                amountWrapToken: Amount("0", token: SolanaTokens.wsol)), accountService: nil)))
+                account: Mock.account, amountNativeToken: Amount("100000", token:  Mock.tokenSOL),
+                amountWrapToken: Amount("0", token: Mock.tokenWSOL)), accountService: nil)))
     }
 }

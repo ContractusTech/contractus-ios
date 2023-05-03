@@ -69,14 +69,12 @@ final class MainViewModel: ViewModel {
             Task { @MainActor in
                 self.tokens = (try? await loadTokens()) ?? []
                 self.state.availableTokens = self.tokens.filter({ $0.address != nil })
-                let balance = try? await loadBalance()
-                self.state.balance = balance
+                self.state.balance = try? await loadBalance()
                 after?()
             }
         case .loadBalance:
             Task { @MainActor in
-                let balance = try? await loadBalance()
-                self.state.balance = balance
+                self.state.balance = try? await loadBalance()
                 after?()
             }
         case .load(let type):
@@ -87,8 +85,7 @@ final class MainViewModel: ViewModel {
             }
             Task { @MainActor in
                 self.tokens = (try? await loadTokens()) ?? []
-                let balance = try? await loadBalance()
-                self.state.balance = balance
+                self.state.balance = try? await loadBalance()
             }
             Task { @MainActor in
                 let deals = try? await self.loadDeals(type: type)
@@ -175,5 +172,4 @@ final class MainViewModel: ViewModel {
             })
         }
     }
-
 }

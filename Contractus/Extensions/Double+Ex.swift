@@ -12,9 +12,9 @@ extension Double {
     
     func format(for token: Token, local: Locale = .current) -> String {
         let formatter = NumberFormatter()
-        formatter.allowsFloats = token.decimal > 0
+        formatter.allowsFloats = token.decimals > 0
         formatter.numberStyle = .currency
-        formatter.maximumFractionDigits = token.decimal
+        formatter.maximumFractionDigits = token.decimals
         formatter.currencyCode = ""
         formatter.currencySymbol = ""
         formatter.locale = local
