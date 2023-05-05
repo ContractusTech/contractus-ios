@@ -51,6 +51,7 @@ struct DealView: View {
         case filePreview(URL)
         case shareSecret
         case confirm
+        case finish
     }
 
     @Environment(\.presentationMode) var presentationMode
@@ -589,6 +590,15 @@ struct DealView: View {
                     // TODO: - Close
                 }
                 .interactiveDismiss(canDismissSheet: false)
+            case .finish:
+                TransactionSignView(account: viewModel.state.account, type: .byDeal(viewModel.state.deal)) {
+                    viewModel.trigger(.updateTx)
+                    callback()
+                    
+                } closeAction: { afterSign in
+                    // TODO: - Close
+                }
+                .interactiveDismiss(canDismissSheet: false)
             case .importSharedKey:
                 QRCodeScannerView(configuration: .scannerAndInput, blockchain: viewModel.state.account.blockchain) { result in
 
@@ -861,7 +871,8 @@ struct DealView: View {
     private func actionSheetFinishButtons() -> [Alert.Button] {
         return [
             Alert.Button.destructive(Text(R.string.localizable.dealFinish())) {
-                viewModel.trigger(.finishDeal)
+//                viewModel.trigger(.finishDeal)
+                activeModalType = .finish
             },
             Alert.Button.cancel() {
             }
