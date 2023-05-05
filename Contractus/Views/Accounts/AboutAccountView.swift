@@ -151,7 +151,6 @@ struct AboutAccountView: View {
             Button(R.string.localizable.commonCancel(), role: .cancel) { }
         })
         .baseBackground()
-        .navigationBarColor()
         .edgesIgnoringSafeArea(.bottom)
         .interactiveDismissDisabled()
     }

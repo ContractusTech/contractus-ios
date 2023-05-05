@@ -30,7 +30,7 @@ final class SolanaTransactionSignServiceImpl: TransactionSignService {
         }
 
         var tx = try Transaction.from(data: dataToSign)
-        try tx.sign(signers: [account])
+        try tx.partialSign(signers: [account])
         guard let sign = tx.signatures.last(where: {$0.publicKey == account.publicKey}) else {
             throw TransactionSignServiceError.failed
         }

@@ -143,7 +143,6 @@ struct EnterView: View {
             }
             .baseBackground()
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarColor()
             .edgesIgnoringSafeArea(.bottom)
 //            .edgesIgnoringSafeArea(.top)
         }

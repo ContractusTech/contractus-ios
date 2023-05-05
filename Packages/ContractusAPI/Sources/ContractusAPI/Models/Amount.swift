@@ -30,7 +30,7 @@ public struct Amount: Equatable {
     }
 
     public func formatted(withCode: Bool = false) -> String {
-        AmountFormatter.format(amount: value, decimal: token.decimal, code: withCode ? token.code : nil)
+        AmountFormatter.format(amount: value, decimal: token.decimals, code: withCode ? token.code : nil)
     }
 
     public static func isValid(_ value: String, token: Token) -> Bool {
@@ -42,21 +42,19 @@ public struct Amount: Equatable {
 extension Amount: Codable {
 
     enum CodingKeys: CodingKey {
-        case value, token, tokenAddress
+        case value, token
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(value.description, forKey: .value)
-        try container.encode(token.code, forKey: .token)
-        try container.encode(token.address, forKey: .tokenAddress)
+        try container.encode(token, forKey: .token)
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let value = try container.decode(String.self, forKey: .value)
         self.value = BigUInt(stringLiteral: value)
-        let tokenCode = try container.decode(String.self, forKey: .token)
-        self.token = Token.from(code: tokenCode)
+        self.token = try container.decode(Token.self, forKey: .token)
     }
 }

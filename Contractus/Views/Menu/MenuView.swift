@@ -145,7 +145,6 @@ struct MenuView: View {
                 interactiveDismiss = true
             }
         }
-        .navigationBarColor()
         .interactiveDismissDisabled(!interactiveDismiss)
     }
     

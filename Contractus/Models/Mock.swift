@@ -16,7 +16,7 @@ enum Mock {
     }()
 
     static let deal: ContractusAPI.Deal = {
-        return Deal(id: "", ownerPublicKey: "", createdAt: "", amount: "10000000", amountFee: "100", checkerAmount: nil, status: .new, token: SolanaTokens.sol, ownerRole: .client, meta: DealMetadata(files: []), results: DealMetadata(files: []))
+        return Deal(id: "", ownerPublicKey: "", createdAt: "", amount: "10000000", amountFee: "100", checkerAmount: nil, status: .new, token: Self.tokenSOL, ownerRole: .client, meta: DealMetadata(files: []), results: DealMetadata(files: []))
     }()
 
     static let wrapTransaction: ContractusAPI.Transaction = {
@@ -27,6 +27,11 @@ enum Mock {
         return ContractusAPI.Transaction(id: "123", type: .wrapSOL, status: .processing, transaction: "123123123", initializerPublicKey: account.publicKey, ownerSignature: nil, contractorSignature: nil, signature: "123123123123123123", checkerSignature: nil)
     }()
 
+    static let tokenList: [ContractusAPI.Token] = [Self.tokenSOL, Self.tokenWSOL]
+
+    static let tokenSOL = Token(code: "SOL", native: true, decimals: 9, serviced: false)
+    static let tokenWSOL = Token(code: "WSOL", native: false, decimals: 9, serviced: false)
+    static let tokenCTUS = Token(code: "CTUS", native: false, decimals: 9, serviced: true)
 
     static let privateKeyUInt8 = Array<UInt8>(repeating: 0, count: 32)
     static let privateKeyData: Data = Data(privateKeyUInt8)

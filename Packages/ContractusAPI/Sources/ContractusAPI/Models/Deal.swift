@@ -133,8 +133,7 @@ public struct Deal: Decodable {
         self.createdAt = try container.decode(String.self, forKey: .createdAt)
         let amount = try container.decode(String.self, forKey: .amount)
         self.amount = BigUInt(stringLiteral: amount)
-        let tokenAddress = try container.decode(String.self, forKey: .tokenAddress)
-        self.token = Token.from(address: tokenAddress)
+        self.token = try container.decode(Token.self, forKey: .token)
         self.updatedAt = try? container.decodeIfPresent(String.self, forKey: .updatedAt)
         self.ownerRole = try container.decode(OwnerRole.self, forKey: .ownerRole)
         self.meta = try? container.decodeIfPresent(DealMetadata.self, forKey: .meta)
@@ -209,6 +208,7 @@ public struct CalculateDealFee: Codable {
 }
 
 public struct DealFee: Decodable {
+    public let allow: Bool
     public let feeAmount: Amount
     public let fiatFee: Double
     public let fiatCurrency: Currency
@@ -223,11 +223,13 @@ public struct DealFee: Decodable {
         case isMinimum
         case percent
         case type
+        case allow
     }
 
     public init(from decoder: Decoder) throws {
         let container: KeyedDecodingContainer<DealFee.CodingKeys> = try decoder.container(keyedBy: DealFee.CodingKeys.self)
 
+        self.allow = try container.decode(Bool.self, forKey: DealFee.CodingKeys.allow)
         self.feeAmount = try container.decode(Amount.self, forKey: DealFee.CodingKeys.feeAmount)
         self.fiatFee = try container.decode(Double.self, forKey: DealFee.CodingKeys.fiatFee)
         let fiatCurrency = try container.decode(String.self, forKey: DealFee.CodingKeys.fiatCurrency)

@@ -94,7 +94,6 @@ struct BackupInformationView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .baseBackground()
-        .navigationBarColor()
         .edgesIgnoringSafeArea(.bottom)
 
 

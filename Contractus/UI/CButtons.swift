@@ -10,7 +10,7 @@ import SwiftUI
 struct CButton: View {
 
     enum Style {
-        case primary, secondary, warn, cancel, success
+        case primary, secondary, warn, cancel, success, clear
         var background: Color {
             switch self {
             case .secondary:
@@ -23,12 +23,14 @@ struct CButton: View {
                 return R.color.buttonBackgroundCancel.color
             case .success:
                 return R.color.baseGreen.color
+            case .clear:
+                return .clear
             }
         }
 
         var borderColor: Color {
             switch self {
-            case .secondary:
+            case .secondary, .clear:
                 return R.color.buttonBackgroundSecondary.color
             case .primary:
                 return R.color.buttonBorderPrimary.color
@@ -43,7 +45,7 @@ struct CButton: View {
 
         var textColor: Color {
             switch self {
-            case .secondary:
+            case .secondary, .clear:
                 return R.color.buttonTextSecondary.color
             case .primary:
                 return R.color.buttonTextPrimary.color

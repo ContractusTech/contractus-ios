@@ -790,7 +790,6 @@ struct DealView: View {
         }
         .navigationBarTitle(R.string.localizable.commonDeal())
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarColor()
         .baseBackground()
         .edgesIgnoringSafeArea(.bottom)
 
@@ -1025,12 +1024,12 @@ struct DealView_Previews: PreviewProvider {
         NavigationView {
             DealView(viewModel: AnyViewModel<DealState, DealInput>(
                 DealViewModel(
-                    state: DealState(account: Mock.account, availableTokens: SolanaTokens.list, deal: Mock.deal, isSignedByPartner: true),
+                    state: DealState(account: Mock.account, availableTokens: Mock.tokenList, deal: Mock.deal, isSignedByPartner: true),
                     dealService: nil,
                     transactionSignService: nil,
                     filesAPIService: nil,
                     secretStorage: nil)),
-                     availableTokens: SolanaTokens.list) {
+                     availableTokens: [Mock.tokenSOL, Mock.tokenWSOL]) {
                         
                     }
         }

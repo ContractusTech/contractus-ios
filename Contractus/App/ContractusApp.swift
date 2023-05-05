@@ -129,6 +129,7 @@ struct ContractusApp: App {
                     })
                 }
             }
+            .navigationBarColor()
             .animation(.default, value: rootViewModel.state)
         }
     }
