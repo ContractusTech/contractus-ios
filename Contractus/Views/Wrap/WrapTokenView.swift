@@ -229,6 +229,6 @@ struct WrapTokenView_Previews: PreviewProvider {
         WrapTokenView(viewModel: AnyViewModel<WrapTokenState, WrapTokenInput>(WrapTokenViewModel(
             state: .init(
                 account: Mock.account, amountNativeToken: Amount("100000", token:  Mock.tokenSOL),
-                amountWrapToken: Amount("0", token: Mock.tokenWSOL)), accountService: nil)))
+                amountWrapToken: Amount("0", token: Mock.tokenWSOL)), transactionsService: nil)))
     }
 }

@@ -33,6 +33,14 @@ public enum ServicePath {
 
     var value: String {
         switch self {
+        case .wrap:
+            return "/tx/wrap"
+        case .signWrap:
+            return "/tx/wrap/sign"
+        case .unwrap:
+            return "/tx/unwrap-all"
+        case .signUnwrap:
+            return "/tx/unwrap-all/sign"
         case .transactions:
             return "/tx"
         case .transaction(let id):
@@ -67,14 +75,7 @@ public enum ServicePath {
             return "/deals/\(id)/cancel"
         case .dealFee(let dealId):
             return "/deals/\(dealId)/fee"
-        case .wrap:
-            return "/accounts/wrap"
-        case .signWrap:
-            return "/accounts/wrap/sign"
-        case .unwrap:
-            return "/accounts/unwrap-all"
-        case .signUnwrap:
-            return "/accounts/unwrap-all/sign"
+
         }
     }
 }

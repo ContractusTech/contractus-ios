@@ -10,7 +10,7 @@ import ContractusAPI
 
 enum TransactionSignType: Equatable, Identifiable {
     var id: String { "\(self)" }
-    case byDeal(Deal)
+    case byDeal(Deal, TransactionType)
     case byTransactionId(String)
     case byTransaction(Transaction)
 }
@@ -22,7 +22,7 @@ enum TransactionSignError: Error {
 enum TransactionSignInput {
     case sign
     case hideError
-    case openSolscan
+    case openExplorer
 }
 
 struct TransactionSignState {
@@ -57,7 +57,7 @@ struct TransactionSignState {
     var isOwnerDeal: Bool {
 
         switch type {
-        case .byDeal(let deal):
+        case .byDeal(let deal, _):
             return deal.ownerPublicKey == account.publicKey
         case .byTransactionId:
             return transaction?.initializerPublicKey == account.publicKey
@@ -93,7 +93,7 @@ final class TransactionSignViewModel: ViewModel {
         self.transactionsService = transactionsService
 
         switch type {
-        case .byDeal(let deal):
+        case .byDeal(let deal, let txType):
             self.state = .init(
                 account: account,
                 state: .loading,
@@ -102,7 +102,7 @@ final class TransactionSignViewModel: ViewModel {
 
             Task { @MainActor in
                 do {
-                    let tx = try await getActualTx()
+                    let tx = try await getTx()
                     var newState = self.state
                     newState.transaction = tx
                     newState.state = .loaded
@@ -141,9 +141,9 @@ final class TransactionSignViewModel: ViewModel {
         switch input {
         case .hideError:
             state.errorState = nil
-        case .openSolscan:
+        case .openExplorer:
             guard let signature = state.transaction?.signature else { return }
-            UIApplication.shared.open(URL.solscanURL(signature: signature, isDevnet: AppConfig.serverType.isDevelop))
+            BlockchainExplorer.openExplorer(blockchain: state.account.blockchain, txSignature: signature)
         case .sign:
             self.state.state = .signing
             Task { @MainActor in
@@ -158,6 +158,7 @@ final class TransactionSignViewModel: ViewModel {
                     self.state = newState
                     pollTxService?.startPoll()
                 } catch {
+                    debugPrint(error.localizedDescription)
                     var newState = self.state
                     newState.state = .loaded
                     newState.errorState = .error(error.localizedDescription)
@@ -188,10 +189,10 @@ final class TransactionSignViewModel: ViewModel {
         }
     }
 
-    private func getActualTx() async throws -> Transaction? {
-        guard case .byDeal(let deal) = state.type else { return nil }
+    private func getTx() async throws -> Transaction? {
+        guard case .byDeal(let deal, let type) = state.type else { return nil }
         return try await withCheckedThrowingContinuation({ continuation in
-            dealService?.getActualTransaction(dealId: deal.id, silent: false, completion: { result in
+            dealService?.getTransaction(dealId: deal.id,  silent: false, type: type, completion: { result in
                 continuation.resume(with: result)
             })
         })
@@ -199,7 +200,7 @@ final class TransactionSignViewModel: ViewModel {
 
     private func sign() async throws -> Transaction? {
         switch state.type {
-        case .byDeal(let deal):
+        case .byDeal(let deal, _):
             return try await withCheckedThrowingContinuation({ continuation in
                 guard let transaction = state.transaction else {
                     continuation.resume(throwing: TransactionSignError.transactionIsNull)
@@ -222,11 +223,11 @@ final class TransactionSignViewModel: ViewModel {
                 }
                 switch tx.type {
                 case .wrapSOL:
-                    accountService?.signWrap(.init(id: tx.id, transaction: message, signature: signature), completion: { result in
+                    transactionsService?.signWrap(.init(id: tx.id, transaction: message, signature: signature), completion: { result in
                         continuation.resume(with: result)
                     })
                 case .unwrapAllSOL:
-                    accountService?.signUnwrapAll(.init(id: tx.id, transaction: message, signature: signature), completion: { result in
+                    transactionsService?.signUnwrapAll(.init(id: tx.id, transaction: message, signature: signature), completion: { result in
                         continuation.resume(with: result)
                     })
                 case .dealFinish, .dealInit, .dealCancel:

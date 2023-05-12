@@ -67,11 +67,11 @@ struct WrapTokenState {
 final class WrapTokenViewModel: ViewModel {
 
     @Published private(set) var state: WrapTokenState
-    private var accountService: ContractusAPI.AccountService?
+    private var transactionsService: ContractusAPI.TransactionsService?
 
-    init(state: WrapTokenState, accountService: ContractusAPI.AccountService?) {
+    init(state: WrapTokenState, transactionsService: ContractusAPI.TransactionsService?) {
         self.state = state
-        self.accountService = accountService
+        self.transactionsService = transactionsService
     }
 
     func trigger(_ input: WrapTokenInput, after: AfterTrigger?) {
@@ -98,7 +98,7 @@ final class WrapTokenViewModel: ViewModel {
                 guard let amount = AmountFormatter.format(string: amount, token: state.from.token) else {
                     return
                 }
-                let operationAmount = Amount(amount, token: state.from.token)
+                let operationAmount = AmountValue(amount)
                 state.state = .loading
                 Task { @MainActor in
                     do {
@@ -127,9 +127,9 @@ final class WrapTokenViewModel: ViewModel {
         }
     }
 
-    func sendWrap(amount: Amount) async throws -> Transaction {
+    func sendWrap(amount: AmountValue) async throws -> Transaction {
         try await withCheckedThrowingContinuation({ continuation in
-            accountService?.wrap(amount, completion: { result in
+            transactionsService?.wrap(amount, completion: { result in
                 continuation.resume(with: result)
             })
         })
@@ -137,10 +137,19 @@ final class WrapTokenViewModel: ViewModel {
 
     func sendUnwrap() async throws -> Transaction {
         try await withCheckedThrowingContinuation({ continuation in
-            accountService?.unwrapAll(completion: { result in
+            transactionsService?.unwrapAll(completion: { result in
                 continuation.resume(with: result)
             })
         })
     }
 
+}
+
+fileprivate extension ContractusAPI.Blockchain {
+    var decimals: Int {
+        switch self {
+        case .solana:
+            return 9
+        }
+    }
 }
