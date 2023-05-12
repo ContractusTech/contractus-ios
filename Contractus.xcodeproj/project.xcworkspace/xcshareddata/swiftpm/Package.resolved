@@ -114,8 +114,8 @@
         "repositoryURL": "https://github.com/p2p-org/solana-swift",
         "state": {
           "branch": null,
-          "revision": "72f1a7887b64b68f7430c06abca1b379f1738609",
-          "version": "2.5.0"
+          "revision": "c8bead282faabbd68cfb90e2bae0da461c2f7635",
+          "version": "3.0.0"
         }
       },
       {
@@ -150,8 +150,8 @@
         "repositoryURL": "https://github.com/bigearsenal/task-retrying-swift.git",
         "state": {
           "branch": null,
-          "revision": "645eaaf207a6f39ab4b469558d916ae23df199b5",
-          "version": "1.0.3"
+          "revision": "208f1e8dfa93022a7d39ab5b334d5f43a934d4b1",
+          "version": "2.0.0"
         }
       },
       {

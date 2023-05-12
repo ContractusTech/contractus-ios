@@ -49,7 +49,7 @@ struct DealView: View {
         case importSharedKey
         case filePreview(URL)
         case shareSecret
-        case confirm
+        case signTx(TransactionType)
         case confirmCancel
     }
 
@@ -508,7 +508,7 @@ struct DealView: View {
                             case .sign:
                                 if viewModel.state.isSignedByPartner {
                                     CButton(title: R.string.localizable.dealButtonsSignAndStart(), style: .primary, size: .large, isLoading: false) {
-                                        activeModalType = .confirm
+                                        activeModalType = .signTx(.dealInit)
                                     }
                                     Text(R.string.localizable.dealDescriptionCommandPartnerAlreadySigned())
                                         .font(.footnote)
@@ -516,7 +516,7 @@ struct DealView: View {
                                         .foregroundColor(R.color.labelBackgroundAttention.color)
                                 } else {
                                     CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.state.canSign) {
-                                        activeModalType = .confirm
+                                        activeModalType = .signTx(.dealInit)
                                     }
                                     Text(R.string.localizable.dealDescriptionCommandFirstSign())
                                         .font(.footnote)
@@ -533,14 +533,14 @@ struct DealView: View {
                                     .foregroundColor(R.color.labelBackgroundAttention.color)
                             case .cancelDeal:
                                 CButton(title: R.string.localizable.dealButtonsStopDeal(), style: .cancel, size: .large, isLoading: false) {
-                                    // TODO: - Add
+                                    activeModalType = .signTx(.dealCancel)
                                 }
                                 Text(R.string.localizable.dealDescriptionCommandStopDeal())
                                     .font(.footnote)
                                     .foregroundColor(R.color.yellow.color)
                             case .finishDeal:
                                 CButton(title: R.string.localizable.dealButtonsFinishDeal(), style: .primary, size: .large, isLoading: false) {
-                                    // TODO: - Add
+                                    activeModalType = .signTx(.dealFinish)
                                 }
                                 Text(R.string.localizable.dealDescriptionCommandFinishDeal())
                                     .font(.footnote)
@@ -583,8 +583,8 @@ struct DealView: View {
             case .confirmCancel:
                 // TODO: -
                 EmptyView()
-            case .confirm:
-                TransactionSignView(account: viewModel.state.account, type: .byDeal(viewModel.state.deal)) {
+            case .signTx(let type):
+                TransactionSignView(account: viewModel.state.account, type: .byDeal(viewModel.state.deal, type)) {
                     viewModel.trigger(.updateTx)
                     callback()
                     
