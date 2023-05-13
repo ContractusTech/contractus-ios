@@ -296,6 +296,12 @@ final class DealViewModel: ViewModel {
             guard let downloadingUUID = downloadingUUID else { return }
             state.previewState = .none
             filesAPIService?.cancelDownload(by: downloadingUUID)
+        case .finishDeal:
+            Task {
+                let tx = try? await getFinishTx()
+
+            }
+
         }
     }
 
@@ -435,6 +441,14 @@ final class DealViewModel: ViewModel {
     private func getActualTx() async throws -> ContractusAPI.Transaction {
         try await withCheckedThrowingContinuation({ continuation in
             dealService?.getActualTransaction(dealId: state.deal.id, silent: true, completion: { result in
+                continuation.resume(with: result)
+            })
+        })
+    }
+
+    private func getFinishTx() async throws -> ContractusAPI.Transaction {
+        try await withCheckedThrowingContinuation({ continuation in
+            dealService?.getTransaction(dealId: state.deal.id, silent: false, type: .dealFinish, completion: { result in
                 continuation.resume(with: result)
             })
         })

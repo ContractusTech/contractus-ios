@@ -310,7 +310,7 @@ struct MainView: View {
     @ViewBuilder
     func wrapView(amountNativeToken: Amount, amountWrapToken: Amount) -> some View {
 
-        WrapTokenView(viewModel: AnyViewModel<WrapTokenState, WrapTokenInput>(WrapTokenViewModel(state: .init(account: viewModel.account, amountNativeToken: amountNativeToken, amountWrapToken: amountWrapToken), accountService: (try? APIServiceFactory.shared.makeAccountService()))))
+        WrapTokenView(viewModel: AnyViewModel<WrapTokenState, WrapTokenInput>(WrapTokenViewModel(state: .init(account: viewModel.account, amountNativeToken: amountNativeToken, amountWrapToken: amountWrapToken), transactionsService: (try? APIServiceFactory.shared.makeTransactionsService()))))
     }
 
     private func dealRole(deal: Deal) -> DealItemView.DealRoleType {        

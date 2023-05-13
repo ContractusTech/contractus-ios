@@ -57,6 +57,7 @@ struct FieldCopyButton: View {
         }
     }
 }
+
 struct TransactionDetailFieldView: View {
 
     enum FieldButton: Identifiable {
@@ -251,7 +252,7 @@ struct TransactionSignView: View {
                                     .custom(
                                         icon: Constants.arrowRightImage,
                                         callback: {
-                                            viewModel.trigger(.openSolscan)
+                                            viewModel.trigger(.openExplorer)
                                         }),
                                 ]
                             )
@@ -429,7 +430,7 @@ struct TransactionSignView: View {
 struct SignConfirmView_Previews: PreviewProvider {
 
     static var previews: some View {
-        TransactionSignView(account: Mock.account, type: .byDeal(Mock.deal)) {
+        TransactionSignView(account: Mock.account, type: .byDeal(Mock.deal, .dealFinish)) {
 
         } closeAction: { _ in
             
