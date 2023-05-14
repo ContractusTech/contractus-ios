@@ -80,7 +80,6 @@ struct DealView: View {
                             Text(R.string.localizable.dealNoSecretKeyInformation())
                                 .font(.footnote)
                                 .multilineTextAlignment(.leading)
-
                         }
                         Spacer()
 
@@ -88,11 +87,9 @@ struct DealView: View {
                             title: R.string.localizable.commonImport(),
                             style: .primary,
                             size: .default,
-                            isLoading: false)
-                        {
-                            activeModalType = .importSharedKey
-                        }
-
+                            isLoading: false) {
+                                activeModalType = .importSharedKey
+                            }
                     }
                     .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
                     .background(R.color.labelBackgroundAttention.color)
@@ -125,8 +122,8 @@ struct DealView: View {
                                         }
                                     }
                                     Spacer()
-                                    if viewModel.state.isYouExecutor && viewModel.state.canEdit {
-                                        CButton(title: viewModel.state.clientPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false) {
+                                    if !viewModel.state.ownerIsClient && viewModel.state.isYouExecutor {
+                                        CButton(title: viewModel.state.clientPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
                                             activeModalType = .editContractor(viewModel.state.deal.contractorPublicKey)
                                         }
                                     }
@@ -158,12 +155,9 @@ struct DealView: View {
 
                                     }
                                     Spacer()
-                                    if viewModel.state.canEdit {
-                                        CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false) {
-                                            activeModalType = .changeAmount
-                                        }
+                                    CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
+                                        activeModalType = .changeAmount
                                     }
-
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
                             }
@@ -192,7 +186,6 @@ struct DealView: View {
                                         } else {
                                             Text(ContentMask.mask(from: viewModel.state.executorPublicKey))
                                         }
-
                                     }
                                     Spacer()
                                     if viewModel.state.isOwnerDeal && viewModel.state.youIsClient {
@@ -200,14 +193,12 @@ struct DealView: View {
                                             activeModalType = .editContractor(viewModel.state.executorPublicKey)
                                         }
                                     }
-
                                 }
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 6, trailing: 0))
 
                                 Text(R.string.localizable.dealHintAboutExecutor())
                                     .font(.footnote)
                                     .foregroundColor(R.color.secondaryText.color)
-
                             }
                             .padding(14)
                             .background(R.color.secondaryBackground.color)
@@ -315,16 +306,13 @@ struct DealView: View {
                             }
 
                             Spacer()
-                            if viewModel.state.canEdit {
-                                CButton(title: (viewModel.state.deal.meta?.contentIsEmpty ?? true) ? R.string.localizable.commonSet() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false) {
-                                    if self.viewModel.isYouChecker && !self.viewModel.state.isOwnerDeal {
-                                        activeModalType = .viewTextDealDetails
-                                    } else {
-                                        activeModalType = .editTextDealDetails
-                                    }
+                            CButton(title: (viewModel.state.deal.meta?.contentIsEmpty ?? true) ? R.string.localizable.commonSet() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
+                                if self.viewModel.isYouChecker && !self.viewModel.state.isOwnerDeal {
+                                    activeModalType = .viewTextDealDetails
+                                } else {
+                                    activeModalType = .editTextDealDetails
                                 }
                             }
-
                         }
                         VStack(alignment: .leading) {
                             if let content = viewModel.state.deal.meta?.content {
@@ -356,13 +344,10 @@ struct DealView: View {
                                     .font(.title3.weight(.regular))
                             }
                             Spacer()
-                            if viewModel.state.canEdit {
-                                CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false) {
-                                    uploaderState = .medium
-                                    uploaderContentType = .metadata
-                                }
+                            CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
+                                uploaderState = .medium
+                                uploaderContentType = .metadata
                             }
-
                         }
                         VStack(alignment: .leading, spacing: 4) {
                             if viewModel.state.deal.meta?.files.isEmpty ?? true {
@@ -469,7 +454,6 @@ struct DealView: View {
                                     uploaderState = .medium
                                     uploaderContentType = .result
                                 }
-
                             }
                             VStack(alignment: .leading) {
                                 if viewModel.state.deal.results?.files.isEmpty ?? true {
@@ -533,14 +517,14 @@ struct DealView: View {
                                     .foregroundColor(R.color.labelBackgroundAttention.color)
                             case .cancelDeal:
                                 CButton(title: R.string.localizable.dealButtonsCancelDeal(), style: .cancel, size: .large, isLoading: false) {
-                                    activeModalType = .signTx(.dealCancel)
+                                    actionsType = .confirmCancel
                                 }
                                 Text(R.string.localizable.dealDescriptionCommandStopDeal())
                                     .font(.footnote)
                                     .foregroundColor(R.color.yellow.color)
                             case .finishDeal:
                                 CButton(title: R.string.localizable.dealButtonsFinishDeal(), style: .primary, size: .large, isLoading: false) {
-                                    activeModalType = .signTx(.dealFinish)
+                                    actionsType = .confirmFinish
                                 }
                                 Text(R.string.localizable.dealDescriptionCommandFinishDeal())
                                     .font(.footnote)
@@ -850,7 +834,7 @@ struct DealView: View {
     private func actionSheetCancelButtons() -> [Alert.Button] {
         return [
             Alert.Button.destructive(Text(R.string.localizable.dealCancel())) {
-                viewModel.trigger(.finishDeal)
+                activeModalType = .signTx(.dealCancel)
             },
             Alert.Button.cancel() {
             }
@@ -860,7 +844,6 @@ struct DealView: View {
     private func actionSheetFinishButtons() -> [Alert.Button] {
         return [
             Alert.Button.destructive(Text(R.string.localizable.dealFinish())) {
-//                viewModel.trigger(.finishDeal)
                 activeModalType = .signTx(.dealFinish)
             },
             Alert.Button.cancel() {
@@ -927,7 +910,6 @@ struct FileItemView: View {
             Button {
                 action(.open)
             } label: {
-
                 HStack(alignment: .center, spacing: 6) {
                     if decryptedName != nil  {
                         Constants.file
@@ -961,7 +943,6 @@ struct FileItemView: View {
                         .frame(height: 14)
                     }
                 }
-
             }
 
             Spacer()
@@ -983,7 +964,6 @@ struct FileItemView: View {
         } message: {
             Text("You want delete file?")
         }
-
     }
 }
 
@@ -1036,8 +1016,6 @@ struct DealView_Previews: PreviewProvider {
             }
         }
         .previewDisplayName("File items")
-
-
     }
 }
 

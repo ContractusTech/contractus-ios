@@ -372,7 +372,6 @@ final class DealViewModel: ViewModel {
         if state.isOwnerDeal {
             decryptKey()
         } else {
-
             guard let clientSecret = secretStorage?.getSharedSecret(for: state.deal.id) else {
                 self.state.canEdit = false
                 return
@@ -384,10 +383,8 @@ final class DealViewModel: ViewModel {
                 }
                 self.state.decryptedKey = secretKey
                 self.state.canEdit = true
-                
                 self.checkLocalFiles()
             }
-
         }
     }
 
