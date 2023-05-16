@@ -961,7 +961,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 229 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 230 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1759,6 +1759,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let enterMessage = Rswift.StringResource(key: "enter.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: To sign the contract, you need to specify the contractor and the cost
+      ///
+      /// Locales: en
+      static let dealDescriptionCommandCantSign = Rswift.StringResource(key: "deal.description-command.cant-sign", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Token
       ///
       /// Locales: en
@@ -4877,6 +4881,21 @@ struct R: Rswift.Validatable {
 
         let format = NSLocalizedString("enter.message", bundle: bundle, comment: "")
         return String(format: format, locale: locale, value1)
+      }
+
+      /// en translation: To sign the contract, you need to specify the contractor and the cost
+      ///
+      /// Locales: en
+      static func dealDescriptionCommandCantSign(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.description-command.cant-sign", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.description-command.cant-sign"
+        }
+
+        return NSLocalizedString("deal.description-command.cant-sign", bundle: bundle, comment: "")
       }
 
       /// en translation: Token

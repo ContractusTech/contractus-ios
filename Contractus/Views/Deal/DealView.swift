@@ -502,10 +502,16 @@ struct DealView: View {
                                     CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.state.canSign) {
                                         activeModalType = .signTx(.dealInit)
                                     }
-                                    Text(R.string.localizable.dealDescriptionCommandFirstSign())
-                                        .font(.footnote)
-                                        .multilineTextAlignment(.center)
-                                        .foregroundColor(R.color.labelBackgroundAttention.color)
+                                    if viewModel.state.canSign {
+                                        Text(R.string.localizable.dealDescriptionCommandFirstSign())
+                                            .font(.footnote)
+                                            .multilineTextAlignment(.center)
+                                            .foregroundColor(R.color.labelBackgroundAttention.color)
+                                    } else {
+                                        Text(R.string.localizable.dealDescriptionCommandCantSign())
+                                            .font(.footnote)
+                                            .multilineTextAlignment(.center)
+                                            .foregroundColor(R.color.labelBackgroundAttention.color)                                    }
                                 }
                             case .cancelSign:
                                 CButton(title: R.string.localizable.dealButtonsCancelSign(), style: .cancel, size: .large, isLoading: false) {
