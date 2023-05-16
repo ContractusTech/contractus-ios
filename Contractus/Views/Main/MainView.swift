@@ -53,7 +53,6 @@ struct MainView: View {
 
         JGProgressHUDPresenter(userInteractionOnHUD: true) {
             NavigationView {
-
                 ScrollView {
                     VStack {
                         BalanceView(
@@ -65,6 +64,14 @@ struct MainView: View {
                             }, swapAction: { fromAmount, toAmount in
                                 sheetType = .wrap(from: fromAmount, to: toAmount)
                             })
+
+                        if !viewModel.state.statistics.isEmpty {
+                            StatisticsView(items: viewModel.state.statistics) { item in
+                                // TODO: - Info tap handler
+                            }
+
+                        }
+
                         HStack(alignment: .center, spacing: 0) {
                             VStack {
                                 Button {
@@ -72,7 +79,8 @@ struct MainView: View {
                                 } label: {
                                     HStack(spacing: 8) {
                                         Text(dealTitle(type: dealsType))
-                                            .font(.title.weight(.regular))
+                                            .font(.title2.weight(.medium))
+                                            .foregroundColor(R.color.textBase.color)
                                         HStack {
                                             Constants.arrowDownImage
                                                 .resizable()
@@ -108,7 +116,7 @@ struct MainView: View {
 
 
                         }
-                        .padding(EdgeInsets(top: 16, leading: 8, bottom: 12, trailing: 8))
+                        .padding(EdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8))
 
                         switch viewModel.state.dealsState {
                         case .loaded:
@@ -145,18 +153,16 @@ struct MainView: View {
                                         Button {
                                             selectedDeal = item
                                         } label: {
-
                                             DealItemView(
                                                 amountFormatted: item.amountFormatted,
                                                 tokenSymbol: item.token.code,
                                                 withPublicKey: item.getPartnersBy(viewModel.state.account.publicKey),
                                                 status: item.status,
                                                 roleType: dealRole(deal: item))
-
                                         }
                                     }
                                 }
-                                .padding(.bottom, 42)
+                                .padding(EdgeInsets(top: 0, leading: 8, bottom: 42, trailing: 8))
                             }
 
                         case .loading:
@@ -166,9 +172,6 @@ struct MainView: View {
                             .padding(50)
                         }
                     }
-                    .padding(4)
-                    
-
                 }.refreshableCompat(loadingViewBackgroundColor: .clear, onRefresh: { done in
                     viewModel.trigger(.load(dealsType)) {
                         done()

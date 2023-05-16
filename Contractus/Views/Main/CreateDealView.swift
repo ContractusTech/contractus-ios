@@ -27,49 +27,70 @@ struct DealRoleView: View {
     var action: (RoleType) -> Void
 
     var body: some View {
-        Button {
-            action(type)
-        } label: {
-            HStack(alignment: .center) {
+        HStack {
+            ZStack(alignment: .topTrailing) {
+                VStack(alignment: .center, spacing: 0) {
+                    switch type {
+                    case .client:
+                        R.image.dealClient.image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100)
+                    case .executor:
+                        R.image.dealExecutor.image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100)
+                    }
+                    HStack {
+                        Spacer()
+                        VStack(alignment: .center, spacing: 4) {
+
+                            Text(title)
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                                .foregroundColor(R.color.textBase.color)
+                                .multilineTextAlignment(.center)
+                            Text(subtitle)
+                                .font(.footnote)
+                                .foregroundColor(R.color.secondaryText.color)
+                                .multilineTextAlignment(.center)
+                        }
+                        Spacer()
+                    }
+
+                }
+                .padding(12)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(isSelected ? R.color.textBase.color : R.color.baseSeparator.color, lineWidth: 1)
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(R.color.secondaryBackground.color)
+                        )
+                )
                 if isSelected {
                     Constants.selectedImage
                         .resizable()
                         .frame(width: 20, height: 20, alignment: .center)
                         .foregroundColor(R.color.textBase.color)
+                        .offset(.init(width: -12, height: 12))
                 } else {
                     Constants.notSelectedImage
                         .resizable()
                         .frame(width: 20, height: 20, alignment: .center)
-                        .foregroundColor(R.color.textBase.color)
+                        .foregroundColor(R.color.textBase.color.opacity(0.3))
+                        .offset(.init(width: -12, height: 12))
                 }
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundColor(R.color.textBase.color)
-                        .multilineTextAlignment(.leading)
-                    Text(subtitle)
-                        .font(.footnote)
-                        .foregroundColor(R.color.secondaryText.color)
-                        .multilineTextAlignment(.leading)
-                }
-                .padding(EdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 0))
-                Spacer()
             }
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                
-                    .stroke(isSelected ? R.color.textBase.color : R.color.buttonBorderSecondary.color, lineWidth: 1)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(R.color.secondaryBackground.color)
-                    ))
 
-
-
+        }.onTapGesture {
+            ImpactGenerator.soft()
+            action(type)
         }
+
+
     }
 
     var title: String {
@@ -133,17 +154,17 @@ struct CreateDealView: View {
                             headerText: R.string.localizable.newDealTitle(),
                             titleText: R.string.localizable.newDealSubtitle(),
                             subTitleText: nil)
+                        HStack(alignment: .center, spacing: 8) {
 
-//                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
-                        VStack(spacing: 12) {
                             DealRoleView(type: .client, isSelected: selectedType == .client) { role in
                                 selectedType = role
                             }
+
                             DealRoleView(type: .executor, isSelected: selectedType == .executor) { role in
                                 selectedType = role
                             }
-                            Spacer()
-                        }.padding()
+
+                        }.padding(8)
                     }
                     .onChange(of: viewModel.state.state) { state in
                         switch state {
@@ -209,6 +230,7 @@ extension CreateDealView.AlertType: Identifiable {
 struct CreateDealView_Previews: PreviewProvider {
     static var previews: some View {
         CreateDealView(viewModel: AnyViewModel<CreateDealState, CreateDealInput>(CreateDealViewModel(account: Mock.account, accountAPIService: nil, dealsAPIService: nil)))
+//            .previewDevice(PreviewDevice(rawValue: "iPhone 8"))
 
 
     }

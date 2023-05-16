@@ -31,6 +31,7 @@ struct MainState {
     }
 
     var account: CommonAccount
+    var statistics: [ContractusAPI.AccountStatistic] = []
     var balance: Balance?
     var deals: [ContractusAPI.Deal] = []
     var dealsState: DealsState = .loading
@@ -69,8 +70,9 @@ final class MainViewModel: ViewModel {
             Task { @MainActor in
                 self.tokens = (try? await loadTokens()) ?? []
                 self.state.availableTokens = self.tokens.filter({ $0.address != nil })
-                self.state.balance = try? await loadBalance()
-                after?()
+                let accountInfo = try? await loadAccountInfo()
+                self.state.balance = accountInfo?.balance
+                self.state.statistics = accountInfo?.statistics ?? []
             }
         case .loadBalance:
             Task { @MainActor in
@@ -85,7 +87,9 @@ final class MainViewModel: ViewModel {
             }
             Task { @MainActor in
                 self.tokens = (try? await loadTokens()) ?? []
-                self.state.balance = try? await loadBalance()
+                let accountInfo = try? await loadAccountInfo()
+                self.state.balance = accountInfo?.balance
+                self.state.statistics = accountInfo?.statistics ?? []
             }
             Task { @MainActor in
                 let deals = try? await self.loadDeals(type: type)
@@ -163,6 +167,25 @@ final class MainViewModel: ViewModel {
     private func loadTokens() async throws -> [ContractusAPI.Token] {
         try await withCheckedThrowingContinuation { continues in
             resourcesAPIService?.tokens(completion: { result in
+                switch result {
+                case .failure(let error):
+                    continues.resume(throwing: error)
+                case .success(let tokens):
+                    continues.resume(returning: tokens)
+                }
+            })
+        }
+    }
+
+    private func loadAccountInfo() async throws -> (statistics: [AccountStatistic], balance: Balance) {
+        async let balance = loadBalance()
+        async let statistics = loadStatistics(currency: .defaultCurrency)
+        return try await (statistics, balance)
+    }
+
+    private func loadStatistics(currency: Currency) async throws -> [ContractusAPI.AccountStatistic] {
+        try await withCheckedThrowingContinuation { continues in
+            accountAPIService?.getStatistics(currency.code, completion: { result in
                 switch result {
                 case .failure(let error):
                     continues.resume(throwing: error)
