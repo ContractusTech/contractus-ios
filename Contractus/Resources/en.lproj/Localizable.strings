@@ -155,8 +155,10 @@
 "deal.buttons.sign" = "Sign";
 "deal.buttons.sign-and-start" = "Sign and start";
 "deal.buttons.cancel-sign" = "Cancel sign";
-"deal.buttons.stop-deal" = "Stop deal";
+"deal.buttons.cancel-deal" = "Cancel deal";
 "deal.buttons.finish-deal" = "Finish deal";
+"deal.finish" = "Finish deal";
+"deal.cancel" = "Cancel deal";
 
 "deal.description-command.partner-already-signed" = "The partner has already signed the contract. The work of the contract will begin when you sign the contract.";
 "deal.description-command.first-sign" = "Sign the contract, the work of the contract starts automatically when your partner signs it";

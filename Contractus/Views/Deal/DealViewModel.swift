@@ -29,11 +29,11 @@ enum DealInput {
     case cancel
     case cancelDownload
     case cancelSign
-    case finishDeal
     case none
     case saveKey(ScanResult)
     case hideError
     case sheetClose
+    case finishDeal
 }
 
 struct DealState {
@@ -200,6 +200,8 @@ final class DealViewModel: ViewModel {
                     after?()
                 }
             })
+        case .finishDeal:
+            state.state = .loading
         case .none:
             state.state = .none
         case .sheetClose:
@@ -370,7 +372,6 @@ final class DealViewModel: ViewModel {
         if state.isOwnerDeal {
             decryptKey()
         } else {
-
             guard let clientSecret = secretStorage?.getSharedSecret(for: state.deal.id) else {
                 self.state.canEdit = false
                 return
@@ -382,10 +383,8 @@ final class DealViewModel: ViewModel {
                 }
                 self.state.decryptedKey = secretKey
                 self.state.canEdit = true
-                
                 self.checkLocalFiles()
             }
-
         }
     }
 
