@@ -72,6 +72,17 @@ public extension Currency {
         formatter.locale = local
         return formatter.string(from: double as NSNumber)
     }
+
+    func format(double: Double, local: Locale = Locale(identifier: "en")) -> String? {
+        let formatter = NumberFormatter()
+        formatter.allowsFloats = true
+        formatter.numberStyle = .currency
+        formatter.maximumFractionDigits = Int(2)
+        formatter.currencyCode = ""
+        formatter.currencySymbol = self.symbol
+        formatter.locale = local
+        return formatter.string(from: double as NSNumber)
+    }
 }
 
 extension Currency: Equatable {

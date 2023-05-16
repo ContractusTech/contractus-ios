@@ -13,6 +13,7 @@ fileprivate enum Constants {
     static let noneCoinImage = Image("NONE-CoinLogo")
     static let swapImage = Image(systemName: "arrow.triangle.swap")
     static let infoImage = Image(systemName: "info.circle.fill")
+    static let arrowUp = Image(systemName: "chevron.up")
 }
 
 struct BalanceViewModel {
@@ -82,6 +83,8 @@ struct BalanceView: View {
     var infoAction: () -> Void
     var swapAction: (Amount, Amount) -> Void
 
+    @State private var isTokensVisible = FlagsStorage.shared.mainTokensVisibility
+
     var body: some View {
         VStack {
             // MARK: - Top
@@ -93,7 +96,7 @@ struct BalanceView: View {
                             .fill(R.color.thirdBackground.color.opacity(0.4))
                             .cornerRadius(4)
                             .frame(width: 100, height: 15, alignment: .leading)
-                            .padding(SwiftUI.EdgeInsets(top: 0, leading: 0, bottom: 4, trailing: 0))
+                            .padding(0)
                         Rectangle()
                             .fill(R.color.thirdBackground.color.opacity(0.4))
                             .cornerRadius(8)
@@ -104,19 +107,16 @@ struct BalanceView: View {
                             .frame(width: 0, height: 10, alignment: .leading)
 
                     case .loaded(let balance):
-                        HStack {
-                            Text(R.string.localizable.balanceTitle())
-                                .font(.footnote.weight(.semibold))
-                                .textCase(.uppercase)
-                                .foregroundColor(R.color.secondaryText.color)
-                        }
+                        Text(R.string.localizable.balanceTitle())
+                            .font(.footnote.weight(.semibold))
+                            .textCase(.uppercase)
+                            .foregroundColor(R.color.secondaryText.color)
                         Text(balance.estimateAmountFormatted)
                             .font(.largeTitle.weight(SwiftUI.Font.Weight.light))
                             .foregroundColor(R.color.textBase.color)
                     }
-
                 }
-                .padding(EdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0))
+                .padding(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
                 Spacer()
 
                 Button {
@@ -138,7 +138,6 @@ struct BalanceView: View {
             // MARK: - Coins
             switch state {
             case .empty:
-
                 VStack {
                     VStack(alignment: .leading) {
                         HStack(alignment: .center, spacing: 12){
@@ -172,106 +171,50 @@ struct BalanceView: View {
                     .cornerRadius(16)
 
                 }
+                .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
             case .loaded(let balance):
-                VStack(spacing: 4) {
-                    if let token = balance.servicedToken {
-                        VStack(alignment: .leading, spacing: 0) {
-                            HStack(alignment: .center, spacing: 4){
-                                Text(token.amount.token.code)
-                                    .font(.footnote.weight(.semibold))
-                                    .foregroundColor(R.color.textBase.color)
+                Divider()
+                    .overlay(isTokensVisible ? R.color.mainBackground.color : R.color.buttonBorderSecondary.color)
+                HStack {
 
-
-                                if token.price > 0, let price = token.currency.format(double: token.price, withCode: false) {
-                                    Text(price)
-                                        .font(.footnote.weight(.semibold))
-                                        .textCase(.uppercase)
-                                        .foregroundColor(R.color.secondaryText.color)
-                                }
-                                Spacer()
-                                HStack(spacing: 6) {
-                                    Button {
-                                        infoAction()
-                                    } label: {
-                                        Constants.infoImage
-                                            .resizable()
-                                            .frame(width: 16, height: 16)
-                                            .aspectRatio(contentMode: .fit)
-                                            .foregroundColor(R.color.secondaryText.color)
-                                    }
-                                    Text(token.amount.formatted())
-                                        .font(.footnote.weight(.semibold))
-                                        .foregroundColor(R.color.textBase.color)
-                                }
-
-                            }
-                            .padding(EdgeInsets(top: 16, leading: 10, bottom: 16, trailing: 10))
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isTokensVisible.toggle()
+                            FlagsStorage.shared.mainTokensVisibility = isTokensVisible
                         }
-                        .background(R.color.secondaryBackground.color)
-                        .cornerRadius(16)
-                        .padding(0)
+                    } label: {
+                        HStack {
+                            Text(R.string.localizable.commonTokens())
+                                .font(.footnote.weight(.semibold))
+                                .textCase(.uppercase)
+                                .foregroundColor(R.color.secondaryText.color)
+                            Constants.arrowUp
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 10, height: 10)
+                                .rotationEffect(.degrees(isTokensVisible ? 0 : 180))
+                                .foregroundColor(R.color.secondaryText.color)
+                                .padding(6)
+                                .background(R.color.secondaryBackground.color)
+                                .cornerRadius(10)
+                        }
                     }
-                    if !balance.wrap.tokens.isEmpty {
-                        ZStack(alignment: .center) {
+                    Spacer()
+                    // TODO: - Add settings button
+
+                }
+                .padding(EdgeInsets(top: 2, leading: 8, bottom: 0, trailing: 8))
+                if isTokensVisible {
+                    VStack(spacing: 4) {
+
+                        if let token = balance.servicedToken {
                             VStack(alignment: .leading, spacing: 0) {
-                                ForEach(balance.wrap.tokens) { token in
-                                    HStack(alignment: .center, spacing: 4) {
-                                        Text(token.amount.token.code)
-                                            .font(.footnote.weight(.semibold))
-                                            .textCase(.uppercase)
-                                            .foregroundColor(R.color.textBase.color)
-                                        if token.price > 0,
-                                           let price = token.currency.format(double: token.price, withCode: false)
-                                        {
-                                            Text(price)
-                                                .font(.footnote.weight(.semibold))
-                                                .textCase(.uppercase)
-                                                .foregroundColor(R.color.secondaryText.color)
-                                        }
-
-                                        Spacer()
-                                        Text(token.amount.formatted())
-                                            .font(.footnote.weight(.semibold))
-                                            .textCase(.uppercase)
-                                            .foregroundColor(R.color.textBase.color)
-                                    }
-                                    .padding(EdgeInsets(top: 16, leading: 10, bottom: 16, trailing: 10))
-                                    if token.amount.token.code != balance.wrap.tokens.last?.amount.token.code { Divider().foregroundColor(R.color.buttonBorderSecondary.color) }
-                                }
-                            }
-                            .background(R.color.secondaryBackground.color)
-                            .cornerRadius(16)
-                            if balance.canWrap {
-                                Button {
-                                    swapAction(balance.wrap.tokens.first!.amount, balance.wrap.tokens.last!.amount)
-                                } label: {
-                                    HStack {
-                                        Constants.swapImage
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 15, height: 15)
-                                            .foregroundColor(R.color.textBase.color)
-                                    }
-                                    .padding()
-                                    .background(RoundedRectangle(cornerRadius: 15)
-                                            .fill(R.color.secondaryBackground.color)
-
-                                        )
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .stroke(R.color.buttonBorderSecondary.color, lineWidth: 1)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                    if !balance.tokens.isEmpty {
-                        VStack(alignment: .leading, spacing: 0) {
-                            ForEach(balance.tokens) { token in
                                 HStack(alignment: .center, spacing: 4){
                                     Text(token.amount.token.code)
                                         .font(.footnote.weight(.semibold))
                                         .foregroundColor(R.color.textBase.color)
+
+
                                     if token.price > 0, let price = token.currency.format(double: token.price, withCode: false) {
                                         Text(price)
                                             .font(.footnote.weight(.semibold))
@@ -279,22 +222,122 @@ struct BalanceView: View {
                                             .foregroundColor(R.color.secondaryText.color)
                                     }
                                     Spacer()
-                                    Text(token.amount.formatted())
-                                        .font(.footnote.weight(.semibold))
-                                        .foregroundColor(R.color.textBase.color)
+                                    HStack(spacing: 6) {
+                                        Button {
+                                            infoAction()
+                                        } label: {
+                                            Constants.infoImage
+                                                .resizable()
+                                                .frame(width: 16, height: 16)
+                                                .aspectRatio(contentMode: .fit)
+                                                .foregroundColor(R.color.secondaryText.color)
+                                        }
+                                        Text(token.amount.formatted())
+                                            .font(.footnote.weight(.semibold))
+                                            .foregroundColor(R.color.textBase.color)
+                                    }
+
                                 }
                                 .padding(EdgeInsets(top: 16, leading: 10, bottom: 16, trailing: 10))
-                                if token.amount.token.code != balance.tokens.last?.amount.token.code { Divider().foregroundColor(R.color.buttonBorderSecondary.color) }
+                            }
+                            .background(R.color.secondaryBackground.color)
+                            .cornerRadius(16)
+                            .padding(0)
+                        }
+
+                        if !balance.wrap.tokens.isEmpty {
+                            ZStack(alignment: .center) {
+                                VStack(alignment: .leading, spacing: 0) {
+                                    ForEach(balance.wrap.tokens) { token in
+                                        HStack(alignment: .center, spacing: 4) {
+                                            Text(token.amount.token.code)
+                                                .font(.footnote.weight(.semibold))
+                                                .textCase(.uppercase)
+                                                .foregroundColor(R.color.textBase.color)
+                                            if token.price > 0,
+                                               let price = token.currency.format(double: token.price, withCode: false)
+                                            {
+                                                Text(price)
+                                                    .font(.footnote.weight(.semibold))
+                                                    .textCase(.uppercase)
+                                                    .foregroundColor(R.color.secondaryText.color)
+                                            }
+
+                                            Spacer()
+                                            Text(token.amount.formatted())
+                                                .font(.footnote.weight(.semibold))
+                                                .textCase(.uppercase)
+                                                .foregroundColor(R.color.textBase.color)
+                                        }
+                                        .padding(EdgeInsets(top: 16, leading: 10, bottom: 16, trailing: 10))
+                                        if token.amount.token.code != balance.wrap.tokens.last?.amount.token.code { Divider().foregroundColor(R.color.buttonBorderSecondary.color) }
+                                    }
+                                }
+                                .background(R.color.secondaryBackground.color)
+                                .cornerRadius(16)
+                                if balance.canWrap {
+                                    Button {
+                                        swapAction(balance.wrap.tokens.first!.amount, balance.wrap.tokens.last!.amount)
+                                    } label: {
+                                        HStack {
+                                            Constants.swapImage
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 15, height: 15)
+                                                .foregroundColor(R.color.textBase.color)
+                                        }
+                                        .padding()
+                                        .background(RoundedRectangle(cornerRadius: 15)
+                                                .fill(R.color.secondaryBackground.color)
+
+                                            )
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .stroke(R.color.buttonBorderSecondary.color, lineWidth: 1)
+                                        )
+                                    }
+                                }
                             }
                         }
-                        .background(R.color.secondaryBackground.color)
-                        .cornerRadius(16)
-                        .padding(0)
 
-                    } else {
-                        EmptyView()
+                        if !balance.tokens.isEmpty {
+                            VStack(alignment: .leading, spacing: 0) {
+                                ForEach(balance.tokens) { token in
+                                    HStack(alignment: .center, spacing: 4){
+                                        Text(token.amount.token.code)
+                                            .font(.footnote.weight(.semibold))
+                                            .foregroundColor(R.color.textBase.color)
+                                        if token.price > 0, let price = token.currency.format(double: token.price, withCode: false) {
+                                            Text(price)
+                                                .font(.footnote.weight(.semibold))
+                                                .textCase(.uppercase)
+                                                .foregroundColor(R.color.secondaryText.color)
+                                        }
+                                        Spacer()
+                                        Text(token.amount.formatted())
+                                            .font(.footnote.weight(.semibold))
+                                            .foregroundColor(R.color.textBase.color)
+                                    }
+                                    .padding(EdgeInsets(top: 16, leading: 10, bottom: 16, trailing: 10))
+                                    if token.amount.token.code != balance.tokens.last?.amount.token.code { Divider().foregroundColor(R.color.buttonBorderSecondary.color) }
+                                }
+                            }
+                            .background(R.color.secondaryBackground.color)
+                            .cornerRadius(16)
+                            .padding(0)
+
+                        } else {
+                            EmptyView()
+                        }
                     }
+                    .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
+                    .transition(.asymmetric(
+                        insertion: .scale(scale: 0, anchor: UnitPoint(x: 0.5, y: -0.1)),
+                        removal: .scale(scale: 0, anchor: UnitPoint(x: 0.5, y: -0.1)))
+                    )
                 }
+                Divider()
+                    .overlay(isTokensVisible ? R.color.mainBackground.color : R.color.buttonBorderSecondary.color)
             }
 
         }

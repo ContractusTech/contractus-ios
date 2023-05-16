@@ -55,6 +55,12 @@ public final class AccountService: BaseService {
         }
     }
 
+    public func getStatistics(_ currencyCode: String, completion: @escaping (Swift.Result<[AccountStatistic], APIClientError>) -> Void) {
+        self.request(path: .accountStatistics, httpMethod: .get, data: [ "currency": currencyCode ]) { (result: Result<[AccountStatistic], APIClientError>) in
+            completion(result)
+        }
+    }
+
     public func getBalance(_ request: BalanceRequest, completion: @escaping (Swift.Result<Balance, APIClientError>) -> Void) {
         self.request(path: .balance, httpMethod: .post, data: request) { (result: Result<Balance, APIClientError>) in
             completion(result)

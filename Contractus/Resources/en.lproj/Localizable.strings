@@ -39,6 +39,10 @@
 "common.share" = "Share";
 "common.select" = "Select";
 "common.backup" = "Backup";
+"common.tokens" = "Tokens";
+"common.token" = "Token";
+"common.coin" = "Coin";
+"common.coins" = "Coins";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create-wallet" = "Create new wallet";
@@ -192,6 +196,12 @@
 "main.empty.title" = "No deals yet";
 "main.empty.message" = "Your account must be specified in deal \nor create own deal by tap on «New Deal»";
 "main.about.tiers" = "About tiers";
+
+"main.statistics.revenue-30" = "Revenue, 30d";
+"main.statistics.revenue-all" = "Revenue, all";
+"main.statistics.paid-30" = "Paid, 30d";
+"main.statistics.paid-all" = "Paid, all";
+"main.statistics.locked" = "Locked";
 
 "changeAmount.title" = "Change amount";
 "changeAmount.amount" = "Amount";
