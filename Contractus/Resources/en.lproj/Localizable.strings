@@ -244,6 +244,7 @@
 "transactionSign.title.signed" = "Signed";
 "transactionSign.subtitle.unsigned-init-deal" = "Of transaction. Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.";
 "transactionSign.subtitle.finish-deal" = "Once signed, the transaction will be completed and the executor will receive the funds";
+"transactionSign.subtitle.cancel-deal" = "Once signed, the transaction will be cancelled and the client's funds will be refunded";
 "transactionSign.subtitle.common" = "After signing, the transaction will start executing";
 "transactionSign.subtitle.processing" = "The transaction will soon be completed";
 "transactionSign.subtitle.error" = "Try again";
