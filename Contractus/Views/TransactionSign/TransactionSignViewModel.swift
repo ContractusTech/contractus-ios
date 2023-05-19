@@ -98,7 +98,7 @@ final class TransactionSignViewModel: ViewModel {
                 account: account,
                 state: .loading,
                 type: type,
-                informationFields: Self.fieldsByDeal(deal, account: account))
+                informationFields: Self.fieldsByDeal(deal, txType: txType, account: account))
 
             Task { @MainActor in
                 do {
@@ -241,9 +241,9 @@ final class TransactionSignViewModel: ViewModel {
         }
     }
 
-    static private func fieldsByDeal(_ deal: Deal, account: CommonAccount) -> [TransactionSignState.InformationItem] {
+    static private func fieldsByDeal(_ deal: Deal, txType: TransactionType, account: CommonAccount) -> [TransactionSignState.InformationItem] {
         var fields: [TransactionSignState.InformationItem] = [
-            .init(title: R.string.localizable.transactionSignFieldsType() , value: "Confirm Deal", titleDescription: nil, valueDescription: nil),
+            .init(title: R.string.localizable.transactionSignFieldsType() , value: txType.title, titleDescription: nil, valueDescription: nil),
             .init(title: R.string.localizable.transactionSignFieldsAmount(), value: deal.token.format(amount: deal.amount, withCode: true), titleDescription: nil, valueDescription: nil),
         ]
 
