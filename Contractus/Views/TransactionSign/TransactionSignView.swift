@@ -390,16 +390,18 @@ struct TransactionSignView: View {
         case .processing:
             return R.string.localizable.transactionSignSubtitleProcessing()
         case .error:
-            return "Try again"
+            return R.string.localizable.transactionSignSubtitleError()
         case .new:
             switch viewModel.state.transaction?.type {
             case .dealInit:
                 return R.string.localizable.transactionSignSubtitleUnsignedInitDeal()
+            case .dealFinish:
+                return R.string.localizable.transactionSignSubtitleFinishDeal()
             default:
                 return R.string.localizable.transactionSignSubtitleCommon()
             }
         case .finished:
-            return "Transaction completed successfully"
+            return R.string.localizable.transactionSignSubtitleFinished()
         case .none:
             return ""
         }
@@ -434,13 +436,15 @@ struct SignConfirmView_Previews: PreviewProvider {
 
         } closeAction: { _ in
             
-        }.previewDisplayName("By Deal")
+        }
+        .previewDisplayName("By Deal")
 
         TransactionSignView(account: Mock.account, type: .byTransaction(Mock.wrapTransactionProcessing)) {
 
         } closeAction: { _ in
 
-        }.previewDisplayName("By Transaction")
+        }
+        .previewDisplayName("By Transaction")
 
     }
 }
