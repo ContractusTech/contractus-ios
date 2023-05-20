@@ -127,7 +127,8 @@ struct DealView: View {
                                             activeModalType = .editContractor(viewModel.state.deal.contractorPublicKey)
                                         }
                                     }
-                                }.padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+                                }
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
                                 if viewModel.state.isYouExecutor && viewModel.state.canEdit {
                                     Text(R.string.localizable.dealHintPayAccount())
                                         .font(.footnote)
@@ -164,6 +165,7 @@ struct DealView: View {
                             .padding(14)
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
+                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
 
                             // MARK: - Executor
                             VStack(alignment: .leading) {
@@ -203,6 +205,7 @@ struct DealView: View {
                             .padding(14)
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
+                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                         }
                         ZStack {
                             Circle()
@@ -280,6 +283,7 @@ struct DealView: View {
                     .padding(14)
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(20)
+                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                 }
 
             }
@@ -334,6 +338,7 @@ struct DealView: View {
                     .padding(EdgeInsets(top: 22, leading: 26, bottom: 22, trailing: 26))
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(20)
+                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                 }
                 Spacer(minLength: 4)
                 VStack {
@@ -379,6 +384,7 @@ struct DealView: View {
                 }
                 .background(R.color.secondaryBackground.color)
                 .cornerRadius(20)
+                .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
 
                 if viewModel.state.showResult {
                     VStack(alignment: .leading) {
@@ -482,6 +488,7 @@ struct DealView: View {
                     }
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(20)
+                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                 }
 
                 // MARK: - Actions
@@ -533,7 +540,6 @@ struct DealView: View {
                             }
                         }
                     }
-
                 }
                 .padding(EdgeInsets(top: 20, leading: 20, bottom: 24, trailing: 20))
             }

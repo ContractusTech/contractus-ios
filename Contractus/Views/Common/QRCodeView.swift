@@ -29,7 +29,7 @@ struct QRCodeView: View {
             if let content = qrContent {
                 content
                     .components(.everything)
-                    .pixelShape(QRCode.PixelShape.Vertical(cornerRadiusFraction: 0.5))
+                    .pixelShape(QRCode.PixelShape.Vertical(cornerRadiusFraction: 0.2))
                     .eyeShape(QRCode.EyeShape.Squircle())
                     .foregroundColor(.black)
                     .background(.white)

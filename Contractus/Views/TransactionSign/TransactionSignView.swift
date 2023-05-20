@@ -195,6 +195,7 @@ struct TransactionSignView: View {
                     }
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(20)
+                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                     if let tx = viewModel.state.transaction?.transaction {
                         VStack(alignment: .leading, spacing: 0) {
                             VStack(alignment: .leading) {
@@ -241,6 +242,7 @@ struct TransactionSignView: View {
                         }
                         .background(R.color.secondaryBackground.color)
                         .cornerRadius(20)
+                        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                     }
                     if let tx = viewModel.state.transaction, let signature = tx.signature, !signature.isEmpty {
                         VStack(alignment: .leading, spacing: 0) {
@@ -259,6 +261,7 @@ struct TransactionSignView: View {
                         }
                         .background(R.color.secondaryBackground.color)
                         .cornerRadius(20)
+                        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                     }
                 }
                 .padding(UIConstants.contentInset)
@@ -333,12 +336,12 @@ struct TransactionSignView: View {
                 ProgressView()
             case .new, .none:
                 RoundedRectangle(cornerRadius: 17)
-                    .fill(R.color.textBase.color)
+                    .fill(R.color.secondaryBackground.color)
                 Constants.shieldImage
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 21, height: 21)
-                    .foregroundColor(R.color.secondaryBackground.color)
+                    .foregroundColor(R.color.textBase.color)
             case .error:
                 RoundedRectangle(cornerRadius: 17)
                     .fill(R.color.labelBackgroundError.color)
