@@ -961,7 +961,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 233 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 234 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1479,6 +1479,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonOk = Rswift.StringResource(key: "common.ok", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Once signed, the transaction will be cancelled and the client's funds will be refunded
+      ///
+      /// Locales: en
+      static let transactionSignSubtitleCancelDeal = Rswift.StringResource(key: "transactionSign.subtitle.cancel-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Once signed, the transaction will be completed and the executor will receive the funds
       ///
       /// Locales: en
@@ -3841,6 +3845,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.ok", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Once signed, the transaction will be cancelled and the client's funds will be refunded
+      ///
+      /// Locales: en
+      static func transactionSignSubtitleCancelDeal(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.subtitle.cancel-deal", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.subtitle.cancel-deal"
+        }
+
+        return NSLocalizedString("transactionSign.subtitle.cancel-deal", bundle: bundle, comment: "")
       }
 
       /// en translation: Once signed, the transaction will be completed and the executor will receive the funds

@@ -397,6 +397,8 @@ struct TransactionSignView: View {
                 return R.string.localizable.transactionSignSubtitleUnsignedInitDeal()
             case .dealFinish:
                 return R.string.localizable.transactionSignSubtitleFinishDeal()
+            case .dealCancel:
+                return R.string.localizable.transactionSignSubtitleCancelDeal()
             default:
                 return R.string.localizable.transactionSignSubtitleCommon()
             }
