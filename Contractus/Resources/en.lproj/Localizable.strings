@@ -166,6 +166,7 @@
 
 "deal.description-command.partner-already-signed" = "The partner has already signed the contract. The work of the contract will begin when you sign the contract.";
 "deal.description-command.first-sign" = "Sign the contract, the work of the contract starts automatically when your partner signs it";
+"deal.description-command.cant-sign" = "To sign the contract, you need to specify the contractor and the cost";
 "deal.description-command.cancel-sign" = "You can cancel your signature before your partner signs the contract. The work of the contract will begin when the partner signs.";
 "deal.description-command.stop-deal" = "You can stop the contract all funds will be refunded.";
 "deal.description-command.finish-deal" = "If all the work is done as specified in the contract you can complete the contract, the contractor will receive payment. The checker will receive a commission for services.";
@@ -243,8 +244,12 @@
 "transactionSign.title.need-sign" = "Signing\n the transaction";
 "transactionSign.title.signed" = "Signed";
 "transactionSign.subtitle.unsigned-init-deal" = "Of transaction. Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.";
+"transactionSign.subtitle.finish-deal" = "Once signed, the transaction will be completed and the executor will receive the funds";
+"transactionSign.subtitle.cancel-deal" = "Once signed, the transaction will be cancelled and the client's funds will be refunded";
 "transactionSign.subtitle.common" = "After signing, the transaction will start executing";
 "transactionSign.subtitle.processing" = "The transaction will soon be completed";
+"transactionSign.subtitle.error" = "Try again";
+"transactionSign.subtitle.finished" = "Transaction completed successfully";
 
 "transaction.type.init-deal" = "Start deal";
 "transaction.type.finish-deal" = "Finish deal";

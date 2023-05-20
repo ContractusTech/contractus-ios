@@ -509,10 +509,17 @@ struct DealView: View {
                                     CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.state.canSign) {
                                         activeModalType = .signTx(.dealInit)
                                     }
-                                    Text(R.string.localizable.dealDescriptionCommandFirstSign())
-                                        .font(.footnote)
-                                        .multilineTextAlignment(.center)
-                                        .foregroundColor(R.color.labelBackgroundAttention.color)
+                                    if viewModel.state.canSign {
+                                        Text(R.string.localizable.dealDescriptionCommandFirstSign())
+                                            .font(.footnote)
+                                            .multilineTextAlignment(.center)
+                                            .foregroundColor(R.color.labelBackgroundAttention.color)
+                                    } else {
+                                        Text(R.string.localizable.dealDescriptionCommandCantSign())
+                                            .font(.footnote)
+                                            .multilineTextAlignment(.center)
+                                            .foregroundColor(R.color.labelBackgroundAttention.color)
+                                    }
                                 }
                             case .cancelSign:
                                 CButton(title: R.string.localizable.dealButtonsCancelSign(), style: .cancel, size: .large, isLoading: false) {
@@ -530,7 +537,7 @@ struct DealView: View {
                                     .font(.footnote)
                                     .foregroundColor(R.color.yellow.color)
                             case .finishDeal:
-                                CButton(title: R.string.localizable.dealButtonsFinishDeal(), style: .primary, size: .large, isLoading: false) {
+                                CButton(title: R.string.localizable.dealButtonsFinishDeal(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.state.isYouChecker) {
                                     actionsType = .confirmFinish
                                 }
                                 Text(R.string.localizable.dealDescriptionCommandFinishDeal())
@@ -572,16 +579,14 @@ struct DealView: View {
             switch type {
             case .signTx(let type):
                 TransactionSignView(account: viewModel.state.account, type: .byDeal(viewModel.state.deal, type)) {
-                    viewModel.trigger(.updateTx)
+                    viewModel.trigger(.update(nil))
                     callback()
-                    
                 } closeAction: { afterSign in
                     // TODO: - Close
                 }
                 .interactiveDismiss(canDismissSheet: false)
             case .importSharedKey:
                 QRCodeScannerView(configuration: .scannerAndInput, blockchain: viewModel.state.account.blockchain) { result in
-
                     viewModel.trigger(.saveKey(result))
                     activeModalType = nil
                 }
@@ -610,14 +615,12 @@ struct DealView: View {
                     contentType: .result,
                     secretKey: viewModel.state.decryptedKey, dealService: try? APIServiceFactory.shared.makeDealsService())),
                                action: { result in
-
                     switch result {
                     case .close:
                         activeModalType = nil
                     case .success(let meta):
                         viewModel.trigger(.updateContent(meta, .result))
                     }
-
                 })
                 .interactiveDismiss(canDismissSheet: false)
             case .changeAmount, .changeCheckerAmount:
