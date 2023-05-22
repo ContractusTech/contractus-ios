@@ -34,6 +34,7 @@ enum DealInput {
     case hideError
     case sheetClose
     case finishDeal
+    case uploaderContentType(DealsService.ContentType?)
 }
 
 struct DealState {
@@ -76,6 +77,7 @@ struct DealState {
     var decryptingFiles: [String:Bool] = [:]
     var isSignedByPartner: Bool = false
     var errorState: ErrorState?
+    var uploaderContentType: DealsService.ContentType?
 
     var isOwnerDeal: Bool {
         deal.ownerPublicKey == account.publicKey
@@ -300,9 +302,9 @@ final class DealViewModel: ViewModel {
         case .finishDeal:
             Task {
                 let tx = try? await getFinishTx()
-
             }
-
+        case .uploaderContentType(let type):
+            state.uploaderContentType = type
         }
     }
 

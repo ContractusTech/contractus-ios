@@ -64,7 +64,6 @@ struct DealView: View {
     @State private var alertType: AlertType?
     @State private var actionsType: ActionsSheetType?
     @State private var uploaderState: ResizableSheetState = .hidden
-    @State private var uploaderContentType: DealsService.ContentType?
 //    @State private var showActionMenu: Bool = false
 
     var body: some View {
@@ -346,7 +345,7 @@ struct DealView: View {
                             Spacer()
                             CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
                                 uploaderState = .medium
-                                uploaderContentType = .metadata
+                                viewModel.trigger(.uploaderContentType(.metadata))
                             }
                         }
                         VStack(alignment: .leading, spacing: 4) {
@@ -421,9 +420,9 @@ struct DealView: View {
                                 }
                             }
                             VStack(alignment: .leading) {
-                                if let content = viewModel.state.deal.meta?.content {
+                                if let results = viewModel.state.deal.results?.content {
                                     HStack {
-                                        Text(content.text)
+                                        Text(ContentMask.maskAll(results.text))
                                         Spacer()
                                     }
 
@@ -450,9 +449,11 @@ struct DealView: View {
                                     Label(text: R.string.localizable.commonEncrypted(), type: .default)
                                 }
                                 Spacer()
-                                CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false) {
-                                    uploaderState = .medium
-                                    uploaderContentType = .result
+                                if viewModel.state.canSendResult {
+                                    CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false) {
+                                        uploaderState = .medium
+                                        viewModel.trigger(.uploaderContentType(.result))
+                                    }
                                 }
                             }
                             VStack(alignment: .leading) {
@@ -777,21 +778,21 @@ struct DealView: View {
         UploadFileView(
             viewModel: AnyViewModel<UploadFileState, UploadFileInput>(UploadFileViewModel(
                 dealId: viewModel.state.deal.id,
-                content: uploaderContentType == .result ? viewModel.state.deal.results ?? .init(files: []) : viewModel.state.deal.meta ?? .init(files: []),
-                contentType: uploaderContentType ?? .metadata,
+                content: viewModel.state.uploaderContentType == .result ? viewModel.state.deal.results ?? .init(files: []) : viewModel.state.deal.meta ?? .init(files: []),
+                contentType: viewModel.state.uploaderContentType ?? .metadata,
                 secretKey: viewModel.state.decryptedKey,
                 dealService: try? APIServiceFactory.shared.makeDealsService(),
                 filesAPIService: try? APIServiceFactory.shared.makeFileService())), action: { actionType in
             switch actionType {
             case .close:
                 uploaderState = .hidden
-                uploaderContentType = nil
+                viewModel.trigger(.uploaderContentType(nil))
 
             case .success(let meta, let contentType):
                 viewModel.trigger(.updateContent(meta, contentType))
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                     uploaderState = .hidden
-                    uploaderContentType = nil
+                    viewModel.trigger(.uploaderContentType(nil))
                 })
             }
         })
