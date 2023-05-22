@@ -42,6 +42,7 @@ struct DealView: View {
     enum ActiveModalType: Equatable {
         case viewTextDealDetails
         case editTextDealDetails
+        case viewTextDealResult
         case editTextDealResult
         case editContractor(String?)
         case editChecker(String?)
@@ -360,9 +361,8 @@ struct DealView: View {
                                 ForEach(viewModel.state.deal.meta?.files ?? []) { file in
                                     FileItemView(
                                         file: file,
-                                        decryptedName: viewModel.state.decryptedFiles[file.md5]?.lastPathComponent)
-                                    { action in
-
+                                        decryptedName: viewModel.state.decryptedFiles[file.md5]?.lastPathComponent
+                                    ) { action in
                                         switch action {
                                         case .open:
                                             viewModel.trigger(.openFile(file))
@@ -410,12 +410,12 @@ struct DealView: View {
                                 Spacer()
 
                                 if viewModel.state.canSendResult {
-                                    CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false) {
+                                    CButton(title: (viewModel.state.deal.results?.contentIsEmpty ?? true) ? R.string.localizable.commonAdd() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false) {
                                         activeModalType = .editTextDealResult
                                     }
                                 } else {
                                     CButton(title: R.string.localizable.commonView(), style: .secondary, size: .default, isLoading: false) {
-                                        // TODO: -
+                                        activeModalType = .viewTextDealResult
                                     }
                                 }
                             }
@@ -466,7 +466,10 @@ struct DealView: View {
                                 } else {
                                     if let files = viewModel.state.deal.results?.files {
                                         ForEach(files) { file in
-                                            FileItemView(file: file) { action in
+                                            FileItemView(
+                                                file: file,
+                                                decryptedName: viewModel.state.decryptedFiles[file.md5]?.lastPathComponent
+                                            ) { action in
                                                 switch action {
                                                 case .open:
                                                     viewModel.trigger(.openFile(file))
@@ -603,8 +606,8 @@ struct DealView: View {
 
                 })
                 .interactiveDismiss(canDismissSheet: false)
-            case .editTextDealResult:
-                TextEditorView(allowEdit: true, viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
+            case .editTextDealResult, .viewTextDealResult:
+                TextEditorView(allowEdit: type == .editTextDealResult, viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
                     dealId: viewModel.state.deal.id,
                     content: viewModel.state.deal.results ?? .init(files: []),
                     contentType: .result,

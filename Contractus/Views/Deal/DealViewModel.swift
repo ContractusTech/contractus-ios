@@ -292,9 +292,19 @@ final class DealViewModel: ViewModel {
                     self?.state.deal.meta = meta
                     self?.state.state = .none
                 })
-
-        case .deleteResultFile(_):
-            break
+        case .deleteResultFile(let file):
+            state.state = .loading
+            let results = DealMetadata(
+                content: state.deal.results?.content,
+                files: state.deal.results?.files.filter({ $0 != file }) ?? [])
+            dealService?.update(
+                dealId: state.deal.id,
+                typeContent: .result,
+                meta: UpdateDealMetadata(meta: results, updatedAt: Date(), force: true),
+                completion: {[weak self] result in
+                    self?.state.deal.results = results
+                    self?.state.state = .none
+                })
         case .cancelDownload:
             guard let downloadingUUID = downloadingUUID else { return }
             state.previewState = .none
