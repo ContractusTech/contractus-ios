@@ -134,6 +134,7 @@
 		FE54313D29D36D8800EEF906 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE54313C29D36D8800EEF906 /* AccountsView.swift */; };
 		FE5F427429AF22FA00A1E506 /* netfox in Frameworks */ = {isa = PBXBuildFile; productRef = FE5F427329AF22FA00A1E506 /* netfox */; };
 		FECE864B29ADCA1B003144CF /* Array+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECE864A29ADCA1B003144CF /* Array+Ex.swift */; };
+		FEE467E62A1C0F010046938F /* UIImage+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE467E52A1C0F010046938F /* UIImage+Ex.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -287,6 +288,7 @@
 		FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectView.swift; sourceTree = "<group>"; };
 		FE54313C29D36D8800EEF906 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
 		FECE864A29ADCA1B003144CF /* Array+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Ex.swift"; sourceTree = "<group>"; };
+		FEE467E52A1C0F010046938F /* UIImage+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -663,6 +665,7 @@
 				6DB5F8B7294D7B2D00AE612A /* JGProgressHUD+Ex.swift */,
 				6D6777C32999F26B004FC207 /* Font+Ex.swift */,
 				6D6E60D329EE2F08008AB833 /* TransactionStatus+Ex.swift */,
+				FEE467E52A1C0F010046938F /* UIImage+Ex.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -923,6 +926,7 @@
 				6D8EFD8528D88ED10064F5DA /* AddContractorView.swift in Sources */,
 				6D0F7F45298C20C800EC2C74 /* WrapTokenViewModel.swift in Sources */,
 				6DFED9332930F1EE00AF727A /* ImpactGenerator.swift in Sources */,
+				FEE467E62A1C0F010046938F /* UIImage+Ex.swift in Sources */,
 				6D8EFDA128E044A80064F5DA /* SharedSecretStorage.swift in Sources */,
 				6DEEDFF429F8E6CD00216D44 /* BackupStorage.swift in Sources */,
 				6D3AA48B292EB5C100596061 /* MenuView.swift in Sources */,
@@ -1181,7 +1185,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Contractus/Preview Content\"";
-				DEVELOPMENT_TEAM = Q424U5CAPS;
+				DEVELOPMENT_TEAM = 58HB3X4JG2;
 				ENABLE_PREVIEWS = YES;
 				GCC_NO_COMMON_BLOCKS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1220,7 +1224,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Contractus/Preview Content\"";
-				DEVELOPMENT_TEAM = Q424U5CAPS;
+				DEVELOPMENT_TEAM = 58HB3X4JG2;
 				ENABLE_PREVIEWS = YES;
 				GCC_NO_COMMON_BLOCKS = NO;
 				GENERATE_INFOPLIST_FILE = YES;

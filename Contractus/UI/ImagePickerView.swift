@@ -42,11 +42,11 @@ struct ImagePickerView: UIViewControllerRepresentable {
         }
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-
-            if
-                let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage,
-                let url = info[UIImagePickerController.InfoKey.imageURL] as? URL {
-
+            let imgName = UUID().uuidString + ".png"
+            let documentDirectory = NSTemporaryDirectory()
+            let url = info[UIImagePickerController.InfoKey.imageURL] as? URL ?? URL(string: documentDirectory.appending(imgName))
+            
+            if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage, let url = url {
                 parent.action?(image, url)
             }
 
