@@ -67,16 +67,20 @@ public final class DealsService: BaseService {
     }
 
     public func update(dealId: String, typeContent: ContentType, meta: UpdateDealMetadata, completion: @escaping (Swift.Result<DealMetadata, APIClientError>) -> Void) {
-        let path: ServicePath
-
         switch typeContent {
         case .metadata:
-            path = .dealMetadata(dealId)
+            self.request(path: .dealMetadata(dealId), httpMethod: .post, data: meta) { (result: Swift.Result<DealMetadata, APIClientError>) in
+                completion(result)
+            }
         case .result:
-            path = .dealResult(dealId)
-        }
-        self.request(path: path, httpMethod: .post, data: meta) { (result: Swift.Result<DealMetadata, APIClientError>) in
-            completion(result)
+            let result = UpdateDealResults(
+                result: meta.meta,
+                updatedAt: meta.updatedAt,
+                force: meta.force
+            )
+            self.request(path: .dealResult(dealId), httpMethod: .post, data: result) { (result: Swift.Result<DealMetadata, APIClientError>) in
+                completion(result)
+            }
         }
     }
 

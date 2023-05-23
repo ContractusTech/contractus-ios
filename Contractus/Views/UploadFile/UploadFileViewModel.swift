@@ -183,7 +183,7 @@ fileprivate extension UploadFileViewModel {
             files.append(.init(md5: file.file.md5, url: file.file.url, name: file.encryptedName, encrypted: true, size: file.file.size))
         }
 
-        var meta = DealMetadata(content: state.content.content, files: files)
+        let meta = DealMetadata(content: state.content.content, files: files)
         self.updateMetadata(id: self.state.dealId, meta: meta, force: false)
             .receive(on: RunLoop.main)
             .sink { result in
