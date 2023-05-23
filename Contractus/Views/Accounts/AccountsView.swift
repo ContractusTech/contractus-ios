@@ -95,10 +95,10 @@ struct AccountsView: View {
                                     ZStack {
                                         Constants.checkmarkImage
                                             .imageScale(.small)
-                                            .foregroundColor(R.color.accentColor.color)
+                                            .foregroundColor(R.color.buttonTextPrimary.color)
                                     }
                                     .frame(width: 24, height: 24)
-                                    .background(R.color.fourthBackground.color)
+                                    .background(R.color.accentColor.color)
                                     .cornerRadius(7)
                                 } else {
                                     ZStack {}
@@ -108,7 +108,7 @@ struct AccountsView: View {
                                                 cornerRadius: 7,
                                                 style: .continuous
                                             )
-                                            .stroke(R.color.fourthBackground.color, lineWidth: 1)
+                                            .stroke(R.color.accentColor.color, lineWidth: 1)
                                         )
                                 }
                             }

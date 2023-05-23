@@ -12,8 +12,8 @@ import SolanaSwift
 import UIKit
 
 enum CreateDealInput {
-    case createDealAsClient,
-         createDealAsExecutor,
+    case createDealWithChecker(OwnerRole),
+         createDeal(OwnerRole, PerformanceBondType),
          copy,
          hideError
 }
@@ -47,10 +47,10 @@ final class CreateDealViewModel: ViewModel {
 
     func trigger(_ input: CreateDealInput, after: AfterTrigger? = nil) {
         switch input {
-        case .createDealAsClient:
-            create(for: .client)
-        case .createDealAsExecutor:
-            create(for: .executor)
+        case .createDealWithChecker(let role):
+            create(for: role, witchChecker: true, bondType: .none)
+        case .createDeal(let role, let bondType):
+            create(for: role, witchChecker: false, bondType: bondType)
         case .copy:
             if let share = state.shareable?.shareContent {
                 UIPasteboard.general.string = share
@@ -62,7 +62,7 @@ final class CreateDealViewModel: ViewModel {
 
     // MARK: - Private Methods
 
-    private func create(for role: OwnerRole) {
+    private func create(for role: OwnerRole, witchChecker: Bool, bondType: PerformanceBondType) {
 
         Task { @MainActor in
             guard let secret = try? await SharedSecretService.createSharedSecret(privateKey: state.account.privateKey) else {
@@ -73,7 +73,10 @@ final class CreateDealViewModel: ViewModel {
                 role: role,
                 encryptedSecretKey: secret.base64EncodedSecret,
                 secretKeyHash: secret.hashOriginalKey,
-                sharedKey: secret.serverSecret.base64EncodedString())
+                sharedKey: secret.serverSecret.base64EncodedString(),
+                performanceBondType: bondType,
+                completionCheckType: witchChecker ? .checker : .none
+            )
 
             do {
                 let deal = try await self.createDeal(deal: newDeal)

@@ -27,7 +27,7 @@ public enum AmountFormatter {
 //        if withCode {
 //            return String(format: "%@ %@", code, formattedAmount).trimmingCharacters(in: .whitespacesAndNewlines)
 //        }
-        return formattedAmount
+        return formattedAmount.trimmingCharacters(in: .whitespaces)
     }
 
     public static func format(string: String, decimal: Int, code: String? = nil, local: Locale = .current) -> BigUInt? {

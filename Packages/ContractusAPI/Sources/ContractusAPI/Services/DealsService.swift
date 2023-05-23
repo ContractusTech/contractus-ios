@@ -66,7 +66,7 @@ public final class DealsService: BaseService {
         }
     }
 
-    public func update(dealId: String, data: UpdateAmountDeal, completion: @escaping (Swift.Result<Deal, APIClientError>) -> Void) {
+    public func update(dealId: String, data: UpdateDeal, completion: @escaping (Swift.Result<Deal, APIClientError>) -> Void) {
         self.request(path: .deal(dealId), httpMethod: .post, data: data) { (result: Swift.Result<Deal, APIClientError>) in
             completion(result)
         }

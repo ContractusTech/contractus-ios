@@ -87,7 +87,6 @@ struct TopTextBlockView: View {
                             RoundedRectangle(cornerRadius: 20).fill(informationType.background)
                             RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.textBase.color.opacity(0.07))
                         }
-
                     }
 //                    .cornerRadius(20)
                     Spacer()

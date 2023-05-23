@@ -143,6 +143,35 @@ struct DealState {
         }
     }
 
+    var clientBondAmount: String {
+        if ownerIsClient {
+            return deal.ownerBondFormatted
+        }
+        return deal.contractorBondFormatted
+    }
+
+    var executorBondAmount: String {
+        if ownerIsClient {
+            return deal.contractorBondFormatted
+        }
+        return deal.ownerBondFormatted
+    }
+
+    var clientBondToken: ContractusAPI.Token? {
+        if ownerIsClient {
+            return deal.ownerBondToken
+        }
+        return deal.contractorBondToken
+    }
+
+    var executorBondToken: ContractusAPI.Token? {
+        if ownerIsClient {
+            return deal.contractorBondToken
+        }
+        return deal.ownerBondToken
+    }
+
+
     var currentMainActions: [MainActionType] = []
 }
 
