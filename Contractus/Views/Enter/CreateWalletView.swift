@@ -53,7 +53,7 @@ struct CreateWalletView: View {
 
                     } label: {
 
-                        CButton(title: R.string.localizable.createWalletButtonNext(), style: .secondary, size: .large, isLoading: false) {
+                        CButton(title: R.string.localizable.createWalletButtonNext(), style: .primary, size: .large, isLoading: false) {
                             isActive = true
                         }
 

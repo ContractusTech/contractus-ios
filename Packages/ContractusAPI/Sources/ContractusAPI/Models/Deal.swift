@@ -46,7 +46,7 @@ public struct Deal: Decodable {
              ownerRole,
              meta,
              status,
-             results,
+             result,
              metaUpdatedAt,
              ownerBondAmount,
              ownerBondToken,
@@ -72,7 +72,7 @@ public struct Deal: Decodable {
     public let ownerRole: OwnerRole
     public var meta: DealMetadata?
     public var metaUpdatedAt: String?
-    public var results: DealMetadata?
+    public var result: DealMetadata?
 
     public var ownerBondAmount: BigUInt?
     public var ownerBondToken: Token?
@@ -101,7 +101,7 @@ public struct Deal: Decodable {
         metaUpdatedAt: String? = nil,
         ownerRole: OwnerRole,
         meta: DealMetadata?,
-        results: DealMetadata?,
+        result: DealMetadata?,
         ownerBondAmount: BigUInt? = nil,
         ownerBondToken: Token? = nil,
         contractorBondAmount: BigUInt? = nil,
@@ -123,7 +123,7 @@ public struct Deal: Decodable {
         self.updatedAt = updatedAt
         self.ownerRole = ownerRole
         self.meta = meta
-        self.results = results
+        self.result = result
         self.metaUpdatedAt = metaUpdatedAt
         self.amountFee = amountFee
         self.checkerAmount = checkerAmount
@@ -149,8 +149,8 @@ public struct Deal: Decodable {
         meta?.content?.text.isEmpty ?? true && meta?.files.isEmpty ?? true
     }
 
-    public var resultsIsEmpty: Bool {
-        results?.content?.text.isEmpty ?? true && results?.files.isEmpty ?? true
+    public var resultIsEmpty: Bool {
+        result?.content?.text.isEmpty ?? true && result?.files.isEmpty ?? true
     }
 
     public var amountFeeFormatted: String {
@@ -182,7 +182,7 @@ public struct Deal: Decodable {
         self.updatedAt = try? container.decodeIfPresent(String.self, forKey: .updatedAt)
         self.ownerRole = try container.decode(OwnerRole.self, forKey: .ownerRole)
         self.meta = try? container.decodeIfPresent(DealMetadata.self, forKey: .meta)
-        self.results = try? container.decodeIfPresent(DealMetadata.self, forKey: .result)
+        self.result = try? container.decodeIfPresent(DealMetadata.self, forKey: .result)
         self.metaUpdatedAt = try? container.decodeIfPresent(String.self, forKey: .metaUpdatedAt)
         self.status = (try? container.decodeIfPresent(DealStatus.self, forKey: .status)) ?? .unknown
         let amountFee = (try? container.decode(String.self, forKey: .amountFee)) ?? "0"

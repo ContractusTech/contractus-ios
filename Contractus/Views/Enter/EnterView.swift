@@ -106,7 +106,7 @@ struct EnterView: View {
                         }
                         .environmentObject(viewModel)
                     } label: {
-                        CButton(title: R.string.localizable.enterButtonCreateWallet(), style: .primary, size: .large, isLoading: false)
+                        CButton(title: R.string.localizable.enterButtonCreate(), style: .primary, size: .large, isLoading: false)
                         {
                             self.selectedView = .createWallet
                         }
@@ -144,7 +144,6 @@ struct EnterView: View {
             .baseBackground()
             .navigationBarTitleDisplayMode(.inline)
             .edgesIgnoringSafeArea(.bottom)
-//            .edgesIgnoringSafeArea(.top)
         }
     }
     

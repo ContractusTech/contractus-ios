@@ -202,7 +202,7 @@ struct AccountsView: View {
 
     private func actionSheetMenuButtons() -> [Alert.Button] {
         return [
-            Alert.Button.default(Text(R.string.localizable.enterButtonCreateWallet())) {
+            Alert.Button.default(Text(R.string.localizable.enterButtonCreate())) {
                 self.selectedView = .createWallet
             },
             Alert.Button.default(Text(R.string.localizable.enterButtonImport())) {

@@ -526,7 +526,7 @@ struct DealView: View {
                                 Spacer()
 
                                 if viewModel.state.canSendResult {
-                                    CButton(title: (viewModel.state.deal.results?.contentIsEmpty ?? true) ? R.string.localizable.commonAdd() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false) {
+                                    CButton(title: (viewModel.state.deal.result?.contentIsEmpty ?? true) ? R.string.localizable.commonAdd() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false) {
                                         activeModalType = .editTextDealResult
                                     }
                                 } else {
@@ -536,9 +536,9 @@ struct DealView: View {
                                 }
                             }
                             VStack(alignment: .leading) {
-                                if let results = viewModel.state.deal.results?.content {
+                                if let result = viewModel.state.deal.result?.content {
                                     HStack {
-                                        Text(ContentMask.maskAll(results.text))
+                                        Text(ContentMask.maskAll(result.text))
                                         Spacer()
                                     }
 
@@ -573,14 +573,14 @@ struct DealView: View {
                                 }
                             }
                             VStack(alignment: .leading) {
-                                if viewModel.state.deal.results?.files.isEmpty ?? true {
+                                if viewModel.state.deal.result?.files.isEmpty ?? true {
                                     HStack {
                                         Text(R.string.localizable.commonEmpty())
                                             .foregroundColor(R.color.secondaryText.color)
                                         Spacer()
                                     }
                                 } else {
-                                    if let files = viewModel.state.deal.results?.files {
+                                    if let files = viewModel.state.deal.result?.files {
                                         ForEach(files) { file in
                                             FileItemView(
                                                 file: file,
@@ -725,7 +725,7 @@ struct DealView: View {
             case .editTextDealResult, .viewTextDealResult:
                 TextEditorView(allowEdit: type == .editTextDealResult, viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
                     dealId: viewModel.state.deal.id,
-                    content: viewModel.state.deal.results ?? .init(files: []),
+                    content: viewModel.state.deal.result ?? .init(files: []),
                     contentType: .result,
                     secretKey: viewModel.state.decryptedKey, dealService: try? APIServiceFactory.shared.makeDealsService())),
                                action: { result in
@@ -928,7 +928,7 @@ struct DealView: View {
         UploadFileView(
             viewModel: AnyViewModel<UploadFileState, UploadFileInput>(UploadFileViewModel(
                 dealId: viewModel.state.deal.id,
-                content: viewModel.state.uploaderContentType == .result ? viewModel.state.deal.results ?? .init(files: []) : viewModel.state.deal.meta ?? .init(files: []),
+                content: viewModel.state.uploaderContentType == .result ? viewModel.state.deal.result ?? .init(files: []) : viewModel.state.deal.meta ?? .init(files: []),
                 contentType: viewModel.state.uploaderContentType ?? .metadata,
                 secretKey: viewModel.state.decryptedKey,
                 dealService: try? APIServiceFactory.shared.makeDealsService(),

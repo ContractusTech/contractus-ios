@@ -279,7 +279,7 @@ final class DealViewModel: ViewModel {
             case .metadata:
                 state.deal.meta = content
             case .result:
-                state.deal.results = content
+                state.deal.result = content
             }
         case .openFile(let file):
             state.previewState = .none
@@ -322,15 +322,15 @@ final class DealViewModel: ViewModel {
                 })
         case .deleteResultFile(let file):
             state.state = .loading
-            let results = DealMetadata(
-                content: state.deal.results?.content,
-                files: state.deal.results?.files.filter({ $0 != file }) ?? [])
+            let result = DealMetadata(
+                content: state.deal.result?.content,
+                files: state.deal.result?.files.filter({ $0 != file }) ?? [])
             dealService?.update(
                 dealId: state.deal.id,
                 typeContent: .result,
-                meta: UpdateDealMetadata(meta: results, updatedAt: Date(), force: true),
-                completion: {[weak self] result in
-                    self?.state.deal.results = results
+                meta: UpdateDealMetadata(meta: result, updatedAt: Date(), force: true),
+                completion: {[weak self] _ in
+                    self?.state.deal.result = result
                     self?.state.state = .none
                 })
         case .cancelDownload:

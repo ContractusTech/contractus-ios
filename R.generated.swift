@@ -1219,10 +1219,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let enterAddAccountSubtitle = Rswift.StringResource(key: "enter.add-account.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Create new wallet
+      /// en translation: Create new
       ///
       /// Locales: en
-      static let enterButtonCreateWallet = Rswift.StringResource(key: "enter.button.create-wallet", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      static let enterButtonCreate = Rswift.StringResource(key: "enter.button.create", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Currency
       ///
       /// Locales: en
@@ -2882,19 +2882,19 @@ struct R: Rswift.Validatable {
         return String(format: format, locale: locale, value1)
       }
 
-      /// en translation: Create new wallet
+      /// en translation: Create new
       ///
       /// Locales: en
-      static func enterButtonCreateWallet(preferredLanguages: [String]? = nil) -> String {
+      static func enterButtonCreate(preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("enter.button.create-wallet", bundle: hostingBundle, comment: "")
+          return NSLocalizedString("enter.button.create", bundle: hostingBundle, comment: "")
         }
 
         guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "enter.button.create-wallet"
+          return "enter.button.create"
         }
 
-        return NSLocalizedString("enter.button.create-wallet", bundle: bundle, comment: "")
+        return NSLocalizedString("enter.button.create", bundle: bundle, comment: "")
       }
 
       /// en translation: Currency

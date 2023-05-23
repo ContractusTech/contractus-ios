@@ -74,7 +74,7 @@ struct BackupInformationView: View {
 
                 HStack {
 
-                    CButton(title: R.string.localizable.backupInformationButtonContinue(), style: .secondary, size: .large, isLoading: false)
+                    CButton(title: R.string.localizable.backupInformationButtonContinue(), style: .primary, size: .large, isLoading: false)
                     {
                         viewModel.trigger(.saveAccount(backupToiCloud: self.allowBackupToiCloud))
                         completion()
