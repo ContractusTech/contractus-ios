@@ -7,8 +7,19 @@
 
 import SwiftUI
 
+fileprivate enum Constants {
+    static let rightArrowIcon = Image(systemName: "chevron.right")
+    static let personIcon = Image(systemName: "person.2.circle.fill")
+    static let sliderIcon = Image(systemName: "slider.horizontal.3")
+    static let lockIcon = Image(systemName: "lock.fill")
+    static let bellIcon = Image(systemName: "bell.badge")
+    static let personCropIcon = Image(systemName: "person.crop.rectangle.stack.fill")
+    static let faqIcon = Image(systemName: "questionmark.circle")
+
+}
+
 struct MenuItemView<Destination>: View where Destination: View {
-    var icon: String
+    var icon: Image
     var title: String
     var linkTo: Destination
 
@@ -25,23 +36,22 @@ struct MenuItemView<Destination>: View where Destination: View {
             } label: {
                 HStack(spacing: 12) {
                     ZStack {
-                        Image(systemName: icon)
-                            .foregroundColor(.white)
+                        icon.foregroundColor(R.color.textBase.color)
                     }
-                    .frame(width: 28, height: 28)
-                    .background(Color.black)
+                    .frame(width: 32, height: 32)
+                    .background(R.color.mainBackground.color)
                     .cornerRadius(9)
                     Text(title)
                     Spacer()
-                    Image(systemName: "chevron.right")
+                    Constants.rightArrowIcon
                         .foregroundColor(R.color.whiteSeparator.color)
                 }
                 .frame(height: 62)
                 .padding(.horizontal, 16)
                 .background(
-                    Color(R.color.secondaryBackground()!)
+                    R.color.secondaryBackground.color
                         .clipped()
-                        .cornerRadius(20)
+                        .cornerRadius(17)
                 )
             }
         }
@@ -77,7 +87,7 @@ struct MenuView: View {
                 ScrollView {
                     VStack(spacing: 2) {
                         MenuItemView (
-                            icon: "person.2.circle.fill",
+                            icon: Constants.personIcon,
                             title: "Accounts",
                             linkTo: AccountsView(viewModel: .init(AccountsViewModel(
                                 accountStorage: ServiceFactory.shared.makeAccountStorage(),
@@ -96,22 +106,22 @@ struct MenuView: View {
                         MenuSectionView()
                         
                         MenuItemView (
-                            icon: "slider.horizontal.3",
+                            icon: Constants.sliderIcon,
                             title: "Common settings",
                             linkTo: EmptyView()
                         )
                         MenuItemView (
-                            icon: "lock.fill",
+                            icon: Constants.lockIcon,
                             title: "Security",
                             linkTo: EmptyView()
                         )
                         MenuItemView (
-                            icon: "bell.badge",
+                            icon: Constants.bellIcon,
                             title: "Push notifications",
                             linkTo: EmptyView()
                         )
                         MenuItemView (
-                            icon: "person.crop.rectangle.stack.fill",
+                            icon: Constants.personCropIcon,
                             title: "Common settings",
                             linkTo: EmptyView()
                         )
@@ -119,7 +129,7 @@ struct MenuView: View {
                         MenuSectionView()
                         
                         MenuItemView (
-                            icon: "questionmark.circle",
+                            icon: Constants.faqIcon,
                             title: "F.A.Q.",
                             linkTo: EmptyView()
                         )

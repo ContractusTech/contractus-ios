@@ -61,14 +61,10 @@ struct DealRoleView: View {
 
                 }
                 .padding(12)
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(isSelected ? R.color.textBase.color : R.color.baseSeparator.color, lineWidth: 1)
-                        .background(
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(R.color.secondaryBackground.color)
-                        )
-                )
+                .background(R.color.secondaryBackground.color)
+                .cornerRadius(20)
+                .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+
                 if isSelected {
                     Constants.selectedImage
                         .resizable()

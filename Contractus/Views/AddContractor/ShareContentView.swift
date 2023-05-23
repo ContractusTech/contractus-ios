@@ -61,7 +61,7 @@ struct ShareContentView: View {
 
                     QRCodeView(content: rawContent)
 
-                    Text("Or you can send this value to a partner any way you like")
+                    Text(R.string.localizable.shareNote())
                         .multilineTextAlignment(.center)
                         .font(.footnote)
                         .foregroundColor(R.color.secondaryText.color)
@@ -87,7 +87,6 @@ struct ShareContentView: View {
         }
 
         .baseBackground()
-        //        .navigationTitle("QR Code")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .padding(EdgeInsets(top: 16, leading: 16, bottom: UIConstants.bottomInset, trailing: 16))

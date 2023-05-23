@@ -60,8 +60,7 @@ struct DealItemView: View {
 
             VStack(alignment:.leading, spacing: 2) {
                 Text(partnerTypeTitle)
-                    .font(.callout)
-                    .fontWeight(.medium)
+                    .font(.footnote)
                     .foregroundColor(R.color.textBase.color)
 
                 if let pk = withPublicKey {
@@ -80,32 +79,25 @@ struct DealItemView: View {
         .padding(6)
         .background(R.color.secondaryBackground.color)
         .cornerRadius(20)
+        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
     }
 
     @ViewBuilder
     func statusLabel() -> some View {
         Text(status.statusTitle)
-            .font(.caption.weight(.medium))
+            .font(.footnote.weight(.medium))
             .textCase(.uppercase)
             .foregroundColor(status.statusColor)
             .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
-//            .background(R.color.white.color)
-//            .cornerRadius(10)
-//            .shadow(color: .black.opacity(0.1), radius: 3)
-
     }
 
     @ViewBuilder
     func roleLabel() -> some View {
         Text(roleType.title)
-            .font(.caption.weight(.medium))
+            .font(.footnote.weight(.medium))
             .textCase(.uppercase)
             .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
             .foregroundColor(roleType.color)
-//            .background(R.color.white.color)
-//            .cornerRadius(10)
-//            .shadow(color: .black.opacity(0.1), radius: 3)
-
     }
 
     private var isStrikethrough: Bool {

@@ -22,8 +22,10 @@ struct StatisticsItemView: View {
             HStack {
                 Text(item.title)
                     .font(.footnote)
-                    .foregroundColor(R.color.secondaryText.color)
+                    .foregroundColor(R.color.textBase.color)
+                Spacer()
                 if item.displayInfoIcon {
+
                     Button {
                         infoTapAction?(item)
                     } label: {
@@ -34,7 +36,7 @@ struct StatisticsItemView: View {
                             .foregroundColor(R.color.secondaryText.color)
                     }
                 }
-                Spacer()
+
             }
             Text(item.value)
                 .foregroundColor(item.valueColor)
@@ -44,7 +46,7 @@ struct StatisticsItemView: View {
         .padding(12)
         .background(R.color.secondaryBackground.color)
         .cornerRadius(20)
-        .shadow(color: R.color.shadowColor.color.opacity(0.2), radius: 4)
+        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
 
     }
 }
