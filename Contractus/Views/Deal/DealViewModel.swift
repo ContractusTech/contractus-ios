@@ -20,6 +20,8 @@ enum DealViewModelError: Error {
 enum DealInput {
     case changeAmount(Amount)
     case changeCheckerAmount(Amount)
+    case changeOwnerBondAmount(Amount)
+    case changeContractorBondAmount(Amount)
     case update(Deal?)
     case updateTx
     case openFile(MetadataFile)
@@ -114,7 +116,7 @@ struct DealState {
     }
 
     var isYouChecker: Bool {
-        deal.checkerPublicKey == account.publicKey || (deal.checkerPublicKey == nil && isOwnerDeal && ownerIsClient)
+        deal.checkerPublicKey == account.publicKey // || (deal.checkerPublicKey == nil && isOwnerDeal && ownerIsClient)
     }
 
     var canSendResult: Bool {
@@ -363,6 +365,12 @@ final class DealViewModel: ViewModel {
                 .store(in: &cancelable)
         case .uploaderContentType(let type):
             state.uploaderContentType = type
+        case .changeOwnerBondAmount(let amount):
+            state.deal.ownerBondAmount = amount.value
+            state.deal.ownerBondToken = amount.token
+        case .changeContractorBondAmount(let amount):
+            state.deal.contractorBondAmount = amount.value
+            state.deal.contractorBondToken = amount.token
         }
     }
 

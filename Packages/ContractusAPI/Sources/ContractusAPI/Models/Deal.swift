@@ -51,7 +51,8 @@ public struct Deal: Decodable {
              ownerBondAmount,
              ownerBondToken,
              contractorBondAmount,
-             contractorBondToken
+             contractorBondToken,
+             deadline
     }
     public let id: String
     public let completionCheckType: CompletionCheckType
@@ -62,16 +63,16 @@ public struct Deal: Decodable {
     public let encryptedSecretKey: String?
     public let secretKeyHash: String?
     public let sharedKey: String?
-    public var createdAt: String
+    public var createdAt: Date
     public var amount: BigUInt
     public var amountFee: BigUInt
     public var checkerAmount: BigUInt?
     public var status: DealStatus
     public var token: Token
-    public var updatedAt: String?
+    public var updatedAt: Date?
     public let ownerRole: OwnerRole
     public var meta: DealMetadata?
-    public var metaUpdatedAt: String?
+    public var metaUpdatedAt: Date?
     public var result: DealMetadata?
 
     public var ownerBondAmount: BigUInt?
@@ -79,6 +80,7 @@ public struct Deal: Decodable {
 
     public var contractorBondAmount: BigUInt?
     public var contractorBondToken: Token?
+    public var deadline: Date?
 
 
     public init(
@@ -91,21 +93,22 @@ public struct Deal: Decodable {
         encryptedSecretKey: String? = nil,
         secretKeyHash: String? = nil,
         sharedKey: String? = nil,
-        createdAt: String,
+        createdAt: Date,
         amount: BigUInt,
         amountFee: BigUInt,
         checkerAmount: BigUInt?,
         status: DealStatus,
         token: Token,
-        updatedAt: String? = nil,
-        metaUpdatedAt: String? = nil,
+        updatedAt: Date? = nil,
+        metaUpdatedAt: Date? = nil,
         ownerRole: OwnerRole,
         meta: DealMetadata?,
         result: DealMetadata?,
         ownerBondAmount: BigUInt? = nil,
         ownerBondToken: Token? = nil,
         contractorBondAmount: BigUInt? = nil,
-        contractorBondToken: Token? = nil)
+        contractorBondToken: Token? = nil,
+        deadline: Date? = nil)
     {
         self.id = id
         self.performanceBondType = performanceBondType
@@ -131,6 +134,7 @@ public struct Deal: Decodable {
         self.contractorBondToken = contractorBondToken
         self.ownerBondAmount = ownerBondAmount
         self.contractorBondAmount = contractorBondAmount
+        self.deadline = deadline
     }
 
     public var amountFormatted: String {
@@ -175,15 +179,20 @@ public struct Deal: Decodable {
         self.encryptedSecretKey = try? container.decodeIfPresent(String.self, forKey: .encryptedSecretKey)
         self.secretKeyHash = try? container.decodeIfPresent(String.self, forKey: .secretKeyHash)
         self.sharedKey = try? container.decodeIfPresent(String.self, forKey: .sharedKey)
-        self.createdAt = try container.decode(String.self, forKey: .createdAt)
+        let createdAt = try container.decode(String.self, forKey: .createdAt)
+        self.createdAt = createdAt.asDate!
         let amount = try container.decode(String.self, forKey: .amount)
         self.amount = BigUInt(stringLiteral: amount)
         self.token = try container.decode(Token.self, forKey: .token)
-        self.updatedAt = try? container.decodeIfPresent(String.self, forKey: .updatedAt)
+        if let updatedAt = try? container.decodeIfPresent(String.self, forKey: .updatedAt) {
+            self.updatedAt = updatedAt.asDate
+        }
         self.ownerRole = try container.decode(OwnerRole.self, forKey: .ownerRole)
         self.meta = try? container.decodeIfPresent(DealMetadata.self, forKey: .meta)
         self.result = try? container.decodeIfPresent(DealMetadata.self, forKey: .result)
-        self.metaUpdatedAt = try? container.decodeIfPresent(String.self, forKey: .metaUpdatedAt)
+        if let metaUpdatedAt = try? container.decodeIfPresent(String.self, forKey: .metaUpdatedAt) {
+            self.metaUpdatedAt = metaUpdatedAt.asDate
+        }
         self.status = (try? container.decodeIfPresent(DealStatus.self, forKey: .status)) ?? .unknown
         let amountFee = (try? container.decode(String.self, forKey: .amountFee)) ?? "0"
         self.amountFee = BigUInt(stringLiteral: amountFee)
@@ -198,6 +207,10 @@ public struct Deal: Decodable {
 
         if let contractorBondAmount = try? container.decode(String.self, forKey: .contractorBondAmount) {
             self.contractorBondAmount = BigUInt(stringLiteral: contractorBondAmount)
+        }
+
+        if let deadline = try? container.decode(String.self, forKey: .deadline) {
+            self.deadline = deadline.asDate
         }
 
         self.ownerBondToken = try? container.decodeIfPresent(Token.self, forKey: .ownerBondToken)
@@ -239,14 +252,24 @@ public struct UpdateDeal: Codable {
     let checkerAmount: Amount?
     let ownerBondAmount: Amount?
     let contractorBondAmount: Amount?
+    let deadline: Date?
 
-    public init(amount: Amount?, checkerAmount: Amount?, ownerBondAmount: Amount?, contractorBondAmount: Amount?) {
+    public init(amount: Amount?, checkerAmount: Amount?, ownerBondAmount: Amount?, contractorBondAmount: Amount?, deadline: Date?) {
         self.amount = amount
         self.checkerAmount = checkerAmount
         self.ownerBondAmount = ownerBondAmount
         self.contractorBondAmount = contractorBondAmount
+        self.deadline = deadline
     }
 
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amount, forKey: .amount)
+        try container.encodeIfPresent(self.checkerAmount, forKey: .checkerAmount)
+        try container.encodeIfPresent(self.ownerBondAmount, forKey: .ownerBondAmount)
+        try container.encodeIfPresent(self.contractorBondAmount, forKey: .contractorBondAmount)
+        try container.encodeIfPresent(self.deadline?.asServerString, forKey: .deadline)
+    }
 }
 
 public struct CancelDeal: Codable {

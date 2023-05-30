@@ -149,13 +149,14 @@ struct CreateDealView: View {
                         })
                     ), isActive: $isShowShareSecretKey, label: { EmptyView() })
                     .isDetailLink(false)
-                    VStack(spacing: 8) {
+                    VStack(spacing: 12) {
+                        HStack {
+                            Text(R.string.localizable.newDealSubtitle())
+                                .font(.title3.weight(.semibold))
 
-                        TopTextBlockView(
-                            informationType: .none,
-                            headerText: R.string.localizable.newDealTitle(),
-                            titleText: R.string.localizable.newDealSubtitle(),
-                            subTitleText: nil)
+                            Spacer()
+                        }
+                        .padding(.top, 24)
                         HStack(alignment: .center, spacing: 8) {
 
                             DealRoleView(type: .client, isSelected: selectedRole == .client) { role in
@@ -167,19 +168,25 @@ struct CreateDealView: View {
                             }
 
                         }
-                        VStack {
+                        VStack(spacing: 0) {
 
                             HStack {
                                 Toggle(isOn: $allowChecker.animation(.linear(duration: 0.2))) {
                                     VStack(alignment: .leading, spacing: 6) {
                                         Text("Check by third party")
+                                            .font(.body)
+                                            .fontWeight(.semibold)
                                         Text("The decision to complete the deal will be made by a third party. ")
                                             .font(.footnote)
                                             .foregroundColor(R.color.secondaryText.color)
                                     }
                                 }
                             }
-                            .padding(EdgeInsets(top: 16, leading: 8, bottom: 16, trailing: 8))
+                            .padding(16)
+                            .background(content: {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(R.color.baseSeparator.color)
+                            })
                             if !allowChecker {
                                 HStack {
                                     Text("Who will add the performance bond?")
@@ -293,6 +300,7 @@ struct CreateDealView: View {
                     }
                 }
             }
+            .navigationBarTitle(R.string.localizable.newDealTitle(), displayMode: .inline)
 
         }
         .navigationBarBackButtonHidden()

@@ -32,11 +32,7 @@ struct BackupInformationView: View {
         ZStack(alignment: .bottomLeading) {
             ScrollView {
                 VStack(alignment: .center, spacing: 24) {
-                    TopTextBlockView(
-                        informationType: informationType,
-                        headerText: titleText,
-                        titleText: largeTitleText,
-                        subTitleText: informationText)
+                    BaseTopTextBlockView(titleText: largeTitleText, subTitleText: informationText)
 
                     CopyContentView(content: privateKey.toBase58(), contentType: .privateKey) { _ in
                         viewModel.trigger(.copyForBackup)

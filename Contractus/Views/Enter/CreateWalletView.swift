@@ -26,11 +26,13 @@ struct CreateWalletView: View {
 
                     VStack(alignment: .center, spacing: 24) {
 
-                        TopTextBlockView(
-                            informationType: .none,
-                            headerText: "New wallet",
-                            titleText: R.string.localizable.createWalletTitle(),
-                            subTitleText: R.string.localizable.createWalletSubtitle())
+                        BaseTopTextBlockView(
+                            titleText: R.string.localizable.createWalletTitle(), subTitleText: R.string.localizable.createWalletSubtitle())
+//                        TopTextBlockView(
+//                            informationType: .none,
+//                            headerText: "New wallet",
+//                            titleText: R.string.localizable.createWalletTitle(),
+//                            subTitleText: R.string.localizable.createWalletSubtitle())
                         CopyContentView(content: ContentMask.mask(from: account.privateKey.toBase58()), contentType: .privateKey) { _ in
                             viewModel.trigger(.copyPrivateKey)
                         }

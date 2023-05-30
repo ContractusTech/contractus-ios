@@ -139,13 +139,13 @@ final class ChangeAmountViewModel: ViewModel {
             let data: UpdateDeal
             switch state.amountType {
             case .deal:
-                data = UpdateDeal(amount: state.amount, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: nil)
+                data = UpdateDeal(amount: state.amount, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: nil, deadline: nil)
             case .checker:
-                data = UpdateDeal(amount: nil, checkerAmount: state.amount, ownerBondAmount: nil, contractorBondAmount: nil)
+                data = UpdateDeal(amount: nil, checkerAmount: state.amount, ownerBondAmount: nil, contractorBondAmount: nil, deadline: nil)
             case .contractorBond:
-                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: state.amount)
+                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: state.amount, deadline: nil)
             case .ownerBond:
-                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: state.amount, contractorBondAmount: nil)
+                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: state.amount, contractorBondAmount: nil, deadline: nil)
             }
             dealService?.update(dealId: state.deal.id, data: data, completion: { [weak self] result in
                 switch result {

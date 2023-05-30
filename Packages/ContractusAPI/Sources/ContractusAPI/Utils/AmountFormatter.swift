@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AmountFormatter.swift
 //  
 //
 //  Created by Simon Hudishkin on 02.02.2023.
