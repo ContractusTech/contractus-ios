@@ -28,8 +28,8 @@ struct ImportPrivateKeyView: View {
         ZStack(alignment: .bottomLeading) {
             ScrollView {
                 VStack {
-                    TopTextBlockView(
-                        headerText: "Import",
+
+                    BaseTopTextBlockView(
                         titleText: "Enter private key",
                         subTitleText: "Of the client who will perform the work under the contract.")
 

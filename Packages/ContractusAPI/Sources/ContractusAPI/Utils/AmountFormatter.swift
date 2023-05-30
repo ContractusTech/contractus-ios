@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AmountFormatter.swift
 //  
 //
 //  Created by Simon Hudishkin on 02.02.2023.
@@ -27,7 +27,7 @@ public enum AmountFormatter {
 //        if withCode {
 //            return String(format: "%@ %@", code, formattedAmount).trimmingCharacters(in: .whitespacesAndNewlines)
 //        }
-        return formattedAmount
+        return formattedAmount.trimmingCharacters(in: .whitespaces)
     }
 
     public static func format(string: String, decimal: Int, code: String? = nil, local: Locale = .current) -> BigUInt? {

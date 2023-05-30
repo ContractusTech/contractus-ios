@@ -14,6 +14,7 @@ import BigInt
 import SwiftUIPullToRefresh
 
 fileprivate enum Constants {
+    static let shieldImage = Image(systemName: "checkmark.shield.fill")
     static let remove = Image(systemName: "xmark.circle.fill")
     static let dotsImage = Image(systemName: "ellipsis")
     static let dotsCircleImage = Image(systemName: "ellipsis.circle")
@@ -49,6 +50,8 @@ struct DealView: View {
         case editChecker(String?)
         case changeAmount
         case changeCheckerAmount
+        case changeContractorBond
+        case changeOwnerBond
         case importSharedKey
         case filePreview(URL)
         case shareSecret
@@ -66,7 +69,7 @@ struct DealView: View {
     @State private var alertType: AlertType?
     @State private var actionsType: ActionsSheetType?
     @State private var uploaderState: ResizableSheetState = .hidden
-//    @State private var showActionMenu: Bool = false
+    @State private var showDeadlinePicker: Bool = false
 
     var body: some View {
         ScrollView {
@@ -75,26 +78,30 @@ struct DealView: View {
                     HStack(spacing: 1) {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(R.string.localizable.dealNoSecretKey())
-                                .font(.body)
-                                .fontWeight(.bold)
+                                .foregroundColor(R.color.textBase.color)
+                                .font(.body.weight(.semibold))
                                 .multilineTextAlignment(.leading)
                             Text(R.string.localizable.dealNoSecretKeyInformation())
                                 .font(.footnote)
+                                .foregroundColor(R.color.textBase.color)
                                 .multilineTextAlignment(.leading)
                         }
                         Spacer()
 
                         CButton(
                             title: R.string.localizable.commonImport(),
-                            style: .primary,
+                            style: .warn,
                             size: .default,
                             isLoading: false) {
                                 activeModalType = .importSharedKey
                             }
                     }
                     .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
-                    .background(R.color.labelBackgroundAttention.color)
-                    .cornerRadius(12)
+                    .background {
+                        RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.yellow.color)
+                    }
+                    .cornerRadius(20)
+                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                 }
                 VStack {
                     ZStack(alignment: .bottomLeading) {
@@ -150,7 +157,7 @@ struct DealView: View {
                                         }
                                         HStack(alignment: .lastTextBaseline) {
                                             Text(viewModel.state.deal.amountFormatted)
-                                                .font(.largeTitle)
+                                                .font(.title)
                                             Text(viewModel.state.deal.token.code).font(.footnote.weight(.semibold))
                                                 .foregroundColor(R.color.secondaryText.color)
                                         }
@@ -221,74 +228,247 @@ struct DealView: View {
                         .frame(width: 28, height: 28)
                         .offset(CGSize(width: 20, height: -93))
                     }
-//                    Spacer(minLength: 16)
+                    //                    Spacer(minLength: 16)
 
                     // MARK: - Verifier
-                    VStack(alignment: .leading) {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack {
-                                    Text(R.string.localizable.dealTextVerifier())
-                                        .font(.footnote.weight(.semibold))
-                                        .textCase(.uppercase)
-                                        .foregroundColor(R.color.secondaryText.color)
-                                }
-                                HStack {
-                                    if viewModel.state.isYouChecker {
-                                        Text(R.string.localizable.commonYou())
-                                    } else if viewModel.state.deal.checkerPublicKey?.isEmpty ?? true {
-                                        if !viewModel.state.clientPublicKey.isEmpty {
-                                            Text(ContentMask.mask(from: viewModel.state.clientPublicKey))
-                                            Label(text: R.string.localizable.commonOwner(), type: .primary)
+                    if viewModel.state.deal.completionCheckType == .checker {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        Text(R.string.localizable.dealTextVerifier())
+                                            .font(.footnote.weight(.semibold))
+                                            .textCase(.uppercase)
+                                            .foregroundColor(R.color.secondaryText.color)
+                                    }
+                                    HStack {
+                                        if viewModel.state.isYouChecker {
+                                            Text(R.string.localizable.commonYou())
+                                        } else if viewModel.state.deal.checkerPublicKey?.isEmpty ?? true {
+                                            if !viewModel.state.clientPublicKey.isEmpty {
+                                                Text(ContentMask.mask(from: viewModel.state.clientPublicKey))
+                                                Label(text: R.string.localizable.commonOwner(), type: .primary)
+                                            } else {
+                                                Text(R.string.localizable.commonEmpty())
+                                            }
                                         } else {
-                                            Text(R.string.localizable.commonEmpty())
+                                            Text(ContentMask.mask(from: viewModel.state.deal.checkerPublicKey))
                                         }
-                                    } else {
-                                        Text(ContentMask.mask(from: viewModel.state.deal.checkerPublicKey))
                                     }
                                 }
+                                Spacer()
+                                if viewModel.state.isOwnerDeal || viewModel.state.isYouChecker {
+                                    CButton(title: "", icon: Constants.rewardImage, style: .secondary, size: .default, isLoading: false) {
+                                        activeModalType = .changeCheckerAmount
+                                    }
+                                }
+
+                                if viewModel.state.isOwnerDeal && viewModel.state.canEdit {
+                                    CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false) {
+                                        activeModalType = .editChecker(viewModel.state.deal.checkerPublicKey)
+                                    }
+                                }
+
                             }
+                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 6, trailing: 0))
+                            if viewModel.state.isYouChecker {
+                                Text(R.string.localizable.dealHintYouVerifier())
+                                    .font(.footnote)
+                                    .foregroundColor(R.color.secondaryText.color)
+                            }
+                            else if (viewModel.state.deal.checkerPublicKey?.isEmpty ?? true && viewModel.state.isOwnerDeal) {
+                                Text(R.string.localizable.dealHintEmptyVerifier())
+                                    .font(.footnote)
+                                    .foregroundColor(R.color.textWarn.color)
+                            }
+                            else if viewModel.state.isYouExecutor {
+                                Text(R.string.localizable.dealHintYouExecutor())
+                                    .font(.footnote)
+                                    .foregroundColor(R.color.secondaryText.color)
+                            } else {
+                                Text(R.string.localizable.dealHintVerifier())
+                                    .font(.footnote)
+                                    .foregroundColor(R.color.secondaryText.color)
+                            }
+
+                        }
+                        .padding(14)
+                        .background(R.color.secondaryBackground.color)
+                        .cornerRadius(20)
+                        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                    }
+
+                    switch viewModel.state.deal.performanceBondType {
+                    case .none:
+                        EmptyView()
+                    default:
+
+                        HStack(alignment: .center) {
+                            Constants.shieldImage
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 21, height: 21)
+                                .foregroundColor(R.color.secondaryText.color)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Performance bond")
+                                    .foregroundColor(R.color.textBase.color)
+                                    .font(.title3)
+
+                                Text("This is guarantee to mitigate the risks. ")
+                                    .foregroundColor(R.color.secondaryText.color)
+                                    .font(.footnote)
+
+                            }
+
                             Spacer()
-//                            if viewModel.state.isOwnerDeal && !viewModel.state.isYouChecker {
-//                                CButton(title: "", icon: Constants.rewardImage, style: .secondary, size: .default, isLoading: false) {
-//                                    activeModalType = .changeCheckerAmount
-//                                }
-//                            }
+                        }
+                        .padding(EdgeInsets(top: 16, leading: 4, bottom: 0, trailing: 4))
 
-                            // TODO: - Add feature: change verifier
-//                            if viewModel.state.isOwnerDeal && viewModel.state.canEdit {
-//                                CButton(title: R.string.localizable.commonChange(), style: .secondary, size: .default, isLoading: false) {
-//                                    activeModalType = .editChecker(viewModel.state.deal.checkerPublicKey)
-//                                }
-//                            }
+                        VStack(alignment: .leading, spacing: 0) {
+                            // MARK: - Bond
+                            if viewModel.state.deal.performanceBondType == .onlyClient ||
+                                viewModel.state.deal.performanceBondType == .both {
+                                HStack(alignment: .top) {
+                                    VStack(alignment: .leading, spacing: 6) {
+                                        HStack {
+                                            Text("Client")
+                                                .font(.footnote.weight(.semibold))
+                                                .textCase(.uppercase)
+                                                .foregroundColor(R.color.secondaryText.color)
+
+                                        }
+
+                                        VStack(alignment: .leading, spacing: 8) {
+                                            if viewModel.state.clientBondAmount.isEmpty {
+                                                Text(R.string.localizable.commonEmpty())
+                                                    .font(.title)
+
+                                            } else {
+                                                HStack(alignment: .lastTextBaseline, spacing: 4) {
+                                                    Text(viewModel.state.clientBondAmount)
+                                                        .font(.title)
+                                                    Text(viewModel.state.clientBondToken?.code ?? "").font(.footnote.weight(.semibold))
+                                                        .foregroundColor(R.color.secondaryText.color)
+                                                }
+                                            }
+                                            Text("Upon completion the funds will be returned to the client")
+                                                .font(.footnote)
+                                                .foregroundColor(R.color.secondaryText.color)
+                                        }
+                                    }
+                                    Spacer()
+                                    CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !(viewModel.state.isOwnerDeal)) {
+                                        activeModalType = !viewModel.state.ownerIsExecutor ? .changeOwnerBond : .changeContractorBond
+                                    }
+                                }
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 12, trailing: 0))
+
+                            }
+                            if viewModel.state.deal.performanceBondType == .both {
+                                Divider().foregroundColor(R.color.baseSeparator.color).padding(EdgeInsets(top: 0, leading: -20, bottom: 0, trailing: -20))
+                            }
+
+                            if viewModel.state.deal.performanceBondType == .onlyExecutor ||
+                                viewModel.state.deal.performanceBondType == .both {
+
+                                // MARK: - Executor
+                                HStack(alignment: .top) {
+                                    VStack(alignment: .leading, spacing: 6) {
+                                        HStack {
+                                            Text("Executor")
+                                                .font(.footnote.weight(.semibold))
+                                                .textCase(.uppercase)
+                                                .foregroundColor(R.color.secondaryText.color)
+
+                                        }
+                                        VStack(alignment: .leading, spacing: 8) {
+                                            if viewModel.state.executorBondAmount.isEmpty {
+                                                Text(R.string.localizable.commonEmpty())
+                                                    .font(.title)
+
+                                            } else {
+                                                HStack(alignment: .lastTextBaseline, spacing: 4) {
+                                                    Text(viewModel.state.executorBondAmount)
+                                                        .font(.title)
+                                                    Text(viewModel.state.executorBondToken?.code ?? "").font(.footnote.weight(.semibold))
+                                                        .foregroundColor(R.color.secondaryText.color)
+                                                }
+                                            }
+
+                                            Text("Upon completion the funds will be returned to the executor")
+                                                .font(.footnote)
+                                                .foregroundColor(R.color.secondaryText.color)
+                                        }
+                                    }
+                                    Spacer()
+                                    CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !(viewModel.state.isOwnerDeal)) {
+                                        activeModalType = viewModel.state.ownerIsExecutor ? .changeOwnerBond : .changeContractorBond
+                                    }
+                                }
+                                .padding(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
+                            }
 
                         }
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 6, trailing: 0))
-                        if viewModel.state.isYouChecker {
-                            Text(R.string.localizable.dealHintYouVerifier())
-                                .font(.footnote)
-                                .foregroundColor(R.color.secondaryText.color)
-                        }
-                        else if (viewModel.state.deal.checkerPublicKey?.isEmpty ?? true && viewModel.state.isOwnerDeal) {
-                            Text(R.string.localizable.dealHintEmptyVerifier())
-                                .font(.footnote)
-                                .foregroundColor(R.color.textWarn.color)
-                        }
-                        else if viewModel.state.isYouExecutor {
-                            Text(R.string.localizable.dealHintYouExecutor())
-                                .font(.footnote)
-                                .foregroundColor(R.color.secondaryText.color)
-                        } else {
-                            Text(R.string.localizable.dealHintVerifier())
-                                .font(.footnote)
-                                .foregroundColor(R.color.secondaryText.color)
+                        .padding(14)
+                        .background(R.color.secondaryBackground.color)
+                        .cornerRadius(20)
+                        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+
+                        if viewModel.state.deal.performanceBondType == .both {
+                            VStack(alignment: .leading, spacing: 0) {
+                                HStack(alignment: .top) {
+                                    VStack(alignment: .leading, spacing: 6) {
+                                        HStack {
+                                            Text("Deadline")
+                                                .font(.footnote.weight(.semibold))
+                                                .textCase(.uppercase)
+                                                .foregroundColor(R.color.secondaryText.color)
+
+                                        }
+
+                                        VStack(alignment: .leading, spacing: 8) {
+                                            HStack(alignment: .lastTextBaseline, spacing: 4) {
+                                                if let deadline = viewModel.state.deal.deadline {
+                                                    Text(deadline.asDateFormatted())
+                                                        .font(.title)
+                                                } else {
+                                                    Text(R.string.localizable.commonEmpty())
+                                                        .font(.title)
+                                                }
+
+                                            }
+                                            Text("If the counter parties do not agree before the appointed date, the contract is terminated and the funds are returned to all parties.")
+                                                .font(.footnote)
+                                                .foregroundColor(R.color.secondaryText.color)
+
+                                        }
+                                        .popover(isPresented: $showDeadlinePicker) {
+                                            DeadlineView(
+                                                viewModel: .init(DeadlineViewModel(
+                                                    deal: viewModel.state.deal,
+                                                    account: viewModel.state.account,
+                                                    dealService: try? APIServiceFactory.shared.makeDealsService()))) { updatedDeal in
+                                                        viewModel.trigger(.update(updatedDeal))
+
+                                                }
+                                        }
+                                    }
+                                    Spacer()
+                                    CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !(viewModel.state.isOwnerDeal)) {
+                                        showDeadlinePicker.toggle()
+                                    }
+                                }
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 12, trailing: 0))
+                            }
+                            .padding(14)
+                            .background(R.color.secondaryBackground.color)
+                            .cornerRadius(20)
+                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                         }
 
                     }
-                    .padding(14)
-                    .background(R.color.secondaryBackground.color)
-                    .cornerRadius(20)
-                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+
                 }
 
             }
@@ -421,7 +601,7 @@ struct DealView: View {
                                 Spacer()
 
                                 if viewModel.state.canSendResult {
-                                    CButton(title: (viewModel.state.deal.results?.contentIsEmpty ?? true) ? R.string.localizable.commonAdd() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false) {
+                                    CButton(title: (viewModel.state.deal.result?.contentIsEmpty ?? true) ? R.string.localizable.commonAdd() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false) {
                                         activeModalType = .editTextDealResult
                                     }
                                 } else {
@@ -431,9 +611,9 @@ struct DealView: View {
                                 }
                             }
                             VStack(alignment: .leading) {
-                                if let results = viewModel.state.deal.results?.content {
+                                if let result = viewModel.state.deal.result?.content {
                                     HStack {
-                                        Text(ContentMask.maskAll(results.text))
+                                        Text(ContentMask.maskAll(result.text))
                                         Spacer()
                                     }
 
@@ -468,14 +648,14 @@ struct DealView: View {
                                 }
                             }
                             VStack(alignment: .leading) {
-                                if viewModel.state.deal.results?.files.isEmpty ?? true {
+                                if viewModel.state.deal.result?.files.isEmpty ?? true {
                                     HStack {
                                         Text(R.string.localizable.commonEmpty())
                                             .foregroundColor(R.color.secondaryText.color)
                                         Spacer()
                                     }
                                 } else {
-                                    if let files = viewModel.state.deal.results?.files {
+                                    if let files = viewModel.state.deal.result?.files {
                                         ForEach(files) { file in
                                             FileItemView(
                                                 file: file,
@@ -620,7 +800,7 @@ struct DealView: View {
             case .editTextDealResult, .viewTextDealResult:
                 TextEditorView(allowEdit: type == .editTextDealResult, viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
                     dealId: viewModel.state.deal.id,
-                    content: viewModel.state.deal.results ?? .init(files: []),
+                    content: viewModel.state.deal.result ?? .init(files: []),
                     contentType: .result,
                     secretKey: viewModel.state.decryptedKey, dealService: try? APIServiceFactory.shared.makeDealsService())),
                                action: { result in
@@ -647,6 +827,33 @@ struct DealView: View {
                             viewModel.trigger(.changeAmount(newAmount))
                         case .checker:
                             viewModel.trigger(.changeCheckerAmount(newAmount))
+                        case .ownerBond:
+                            break
+                        case .contractorBond:
+                            break
+                        }
+
+                    })
+                .interactiveDismiss(canDismissSheet: false)
+            case .changeOwnerBond, .changeContractorBond:
+                ChangeAmountView(
+                    viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>(
+                        ChangeAmountViewModel(
+                            deal: viewModel.state.deal,
+                            account: viewModel.state.account,
+                            amountType: type == .changeOwnerBond ? .ownerBond : .contractorBond,
+                            dealService: try? APIServiceFactory.shared.makeDealsService())),
+                    availableTokens: availableTokens,
+                    didChange: { newAmount, typeAmount in
+                        switch typeAmount {
+                        case .deal:
+                            viewModel.trigger(.changeAmount(newAmount))
+                        case .checker:
+                            viewModel.trigger(.changeCheckerAmount(newAmount))
+                        case .ownerBond:
+                            viewModel.trigger(.changeOwnerBondAmount(newAmount))
+                        case .contractorBond:
+                            viewModel.trigger(.changeContractorBondAmount(newAmount))
                         }
 
                     })
@@ -796,24 +1003,24 @@ struct DealView: View {
         UploadFileView(
             viewModel: AnyViewModel<UploadFileState, UploadFileInput>(UploadFileViewModel(
                 dealId: viewModel.state.deal.id,
-                content: viewModel.state.uploaderContentType == .result ? viewModel.state.deal.results ?? .init(files: []) : viewModel.state.deal.meta ?? .init(files: []),
+                content: viewModel.state.uploaderContentType == .result ? viewModel.state.deal.result ?? .init(files: []) : viewModel.state.deal.meta ?? .init(files: []),
                 contentType: viewModel.state.uploaderContentType ?? .metadata,
                 secretKey: viewModel.state.decryptedKey,
                 dealService: try? APIServiceFactory.shared.makeDealsService(),
                 filesAPIService: try? APIServiceFactory.shared.makeFileService())), action: { actionType in
-            switch actionType {
-            case .close:
-                uploaderState = .hidden
-                viewModel.trigger(.uploaderContentType(nil))
+                    switch actionType {
+                    case .close:
+                        uploaderState = .hidden
+                        viewModel.trigger(.uploaderContentType(nil))
 
-            case .success(let meta, let contentType):
-                viewModel.trigger(.updateContent(meta, contentType))
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                    uploaderState = .hidden
-                    viewModel.trigger(.uploaderContentType(nil))
+                    case .success(let meta, let contentType):
+                        viewModel.trigger(.updateContent(meta, contentType))
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                            uploaderState = .hidden
+                            viewModel.trigger(.uploaderContentType(nil))
+                        })
+                    }
                 })
-            }
-        })
         .padding(16)
     }
 
@@ -821,7 +1028,7 @@ struct DealView: View {
         if viewModel.isOwnerDeal {
             return [
                 Alert.Button.default(Text("Share Secret")) {
-                     activeModalType = .shareSecret
+                    activeModalType = .shareSecret
                 },
                 Alert.Button.destructive(Text("Cancel deal")) {
                     viewModel.trigger(.cancel) {
@@ -1002,6 +1209,7 @@ struct FileItemView: View {
     }
 }
 
+
 extension DealView.ActiveModalType: Identifiable {
     var id: String {
         return "\(self)"
@@ -1035,8 +1243,8 @@ struct DealView_Previews: PreviewProvider {
                     filesAPIService: nil,
                     secretStorage: nil)),
                      availableTokens: [Mock.tokenSOL, Mock.tokenWSOL]) {
-                        
-                    }
+
+            }
         }
         .previewDisplayName("Form")
         VStack {

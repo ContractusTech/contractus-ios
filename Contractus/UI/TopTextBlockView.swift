@@ -87,9 +87,7 @@ struct TopTextBlockView: View {
                             RoundedRectangle(cornerRadius: 20).fill(informationType.background)
                             RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.textBase.color.opacity(0.07))
                         }
-
                     }
-//                    .cornerRadius(20)
                     Spacer()
                 }
                 .padding(EdgeInsets(top: 12, leading: 0, bottom: 8, trailing: 0))
@@ -105,8 +103,7 @@ struct TopTextBlockView: View {
                 HStack {
                     Spacer()
                     Text(subTitleText)
-                        .font(.callout)
-                        // .foregroundColor(R.color.secondaryText.color)
+                        .font(.footnote)
                         .multilineTextAlignment(.center)
                         .padding(EdgeInsets(top: 12, leading: 20, bottom: 0, trailing: 20))
                     Spacer()

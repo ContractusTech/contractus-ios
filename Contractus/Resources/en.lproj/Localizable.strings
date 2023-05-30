@@ -45,11 +45,12 @@
 "common.coins" = "Coins";
 
 "enter.subtitle" = "Welcome to";
-"enter.button.create-wallet" = "Create new wallet";
+"enter.button.create" = "Create new";
 "enter.button.import" = "Import exists";
 "enter.message" = "To get started you need a %@ account";
 "enter.terms" = "By pressed, you agree to [Terms](https://google.com) and [Privacy Policy](https://google.com)";
 "enter.add-account.subtitle" = "Create a new %@ account or import an existing one.";
+"enter.add-account.title" = "Add account";
 
 "createWallet.button.next" = "Next";
 "createWallet.button.copied" = "Private key copied!";

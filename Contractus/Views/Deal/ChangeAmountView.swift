@@ -57,7 +57,6 @@ struct ChangeAmountView: View {
                                         .font(.body.weight(.semibold))
                                 }
                             }
-                            .disabled(!viewModel.state.allowChangeCurrency)
                             .pickerStyle(.menu)
                             Divider().frame(height: 30)
                             TextField(R.string.localizable.changeAmountAmount(), text: $amountString)
@@ -75,121 +74,124 @@ struct ChangeAmountView: View {
 
                         Divider()
 
-                        VStack(spacing: 12) {
-                            HStack {
-                                VStack {
-                                    Text(R.string.localizable.changeAmountDealAmount())
-                                        .font(.body)
-                                        .foregroundColor(viewModel.state.amountType == .deal ? R.color.textBase.color : R.color.secondaryText.color)
-                                        .multilineTextAlignment(.leading)
-                                }
-
-                                Spacer()
-                                if viewModel.state.state != .loading  {
-                                    Text(viewModel.state.dealAmount.formatted(withCode: true))
-                                        .font(.body)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(viewModel.state.amountType == .deal ? R.color.textBase.color : R.color.secondaryText.color)
-                                        .multilineTextAlignment(.leading)
-                                } else {
-                                    RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
-                                        .frame(width: 42, height: 19)
-                                }
-                            }
-                            if !viewModel.state.checkerIsYou {
+                        switch viewModel.amountType {
+                        case .deal, .checker:
+                            VStack(spacing: 12) {
                                 HStack {
                                     VStack {
-                                        Text(R.string.localizable.changeAmountVerificationAmount())
+                                        Text(R.string.localizable.changeAmountDealAmount())
                                             .font(.body)
-                                            .foregroundColor(viewModel.state.amountType == .checker ? R.color.textBase.color : R.color.secondaryText.color)
+                                            .foregroundColor(viewModel.state.amountType == .deal ? R.color.textBase.color : R.color.secondaryText.color)
                                             .multilineTextAlignment(.leading)
                                     }
 
                                     Spacer()
                                     if viewModel.state.state != .loading  {
-                                        Text(viewModel.state.checkerAmount.formatted(withCode: true))
+                                        Text(viewModel.state.dealAmount.formatted(withCode: true))
                                             .font(.body)
                                             .fontWeight(.bold)
-                                            .foregroundColor(viewModel.state.amountType == .checker ? R.color.textBase.color : R.color.secondaryText.color)
+                                            .foregroundColor(viewModel.state.amountType == .deal ? R.color.textBase.color : R.color.secondaryText.color)
                                             .multilineTextAlignment(.leading)
                                     } else {
                                         RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
                                             .frame(width: 42, height: 19)
                                     }
                                 }
-                            }
-                        }
+                                if !viewModel.state.checkerIsYou {
+                                    HStack {
+                                        VStack {
+                                            Text(R.string.localizable.changeAmountVerificationAmount())
+                                                .font(.body)
+                                                .foregroundColor(viewModel.state.amountType == .checker ? R.color.textBase.color : R.color.secondaryText.color)
+                                                .multilineTextAlignment(.leading)
+                                        }
 
-                        Divider()
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack(alignment: .top) {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text(R.string.localizable.changeAmountFeeTitle())
+                                        Spacer()
+                                        if viewModel.state.state != .loading  {
+                                            Text(viewModel.state.checkerAmount.formatted(withCode: true))
+                                                .font(.body)
+                                                .fontWeight(.bold)
+                                                .foregroundColor(viewModel.state.amountType == .checker ? R.color.textBase.color : R.color.secondaryText.color)
+                                                .multilineTextAlignment(.leading)
+                                        } else {
+                                            RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
+                                                .frame(width: 42, height: 19)
+                                        }
+                                    }
+                                }
+                            }
+                            Divider()
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack(alignment: .top) {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text(R.string.localizable.changeAmountFeeTitle())
+                                            .font(.body)
+                                            .foregroundColor(R.color.textBase.color)
+                                            .multilineTextAlignment(.leading)
+                                    }
+
+                                    Spacer()
+                                    if viewModel.state.feePercent == 0 && viewModel.state.state != .loading {
+                                        Label(text: R.string.localizable.changeAmountFeeFree(), type: .primary)
+                                    } else {
+                                        if !viewModel.state.feeFormatted.isEmpty  {
+                                            Text(viewModel.state.feeFormatted)
+                                                .font(.body)
+                                                .fontWeight(.medium)
+                                                .foregroundColor(R.color.textBase.color)
+                                                .multilineTextAlignment(.leading)
+                                        } else {
+                                            RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
+                                                .frame(width: 42, height: 19)
+                                        }
+                                    }
+                                }
+                                VStack(alignment: .leading, spacing: 4) {
+
+                                    if !viewModel.state.fiatFeeFormatted.isEmpty {
+                                        Text("Estimate fiat amount \(viewModel.state.fiatFeeFormatted)")
+                                            .font(.footnote.weight(.semibold))
+                                            .foregroundColor(R.color.secondaryText.color)
+                                            .multilineTextAlignment(.leading)
+                                    }
+
+                                    Text(R.string.localizable.changeAmountFeeCalculateDescription())
+                                        .font(.footnote)
+                                        .foregroundColor(R.color.labelTextAttention.color)
+                                        .multilineTextAlignment(.leading)
+                                    Text(R.string.localizable.changeAmountFeeDescription())
+                                        .font(.footnote)
+                                        .foregroundColor(R.color.secondaryText.color)
+                                        .multilineTextAlignment(.leading)
+                                }
+
+
+                            }
+                            Divider()
+
+                            HStack {
+                                VStack {
+                                    Text(R.string.localizable.changeAmountTotalAmount())
                                         .font(.body)
                                         .foregroundColor(R.color.textBase.color)
                                         .multilineTextAlignment(.leading)
                                 }
 
                                 Spacer()
-                                if viewModel.state.feePercent == 0 && viewModel.state.state != .loading {
-                                    Label(text: R.string.localizable.changeAmountFeeFree(), type: .primary)
-                                } else {
-                                    if !viewModel.state.feeFormatted.isEmpty  {
-                                        Text(viewModel.state.feeFormatted)
-                                            .font(.body)
-                                            .fontWeight(.medium)
-                                            .foregroundColor(R.color.textBase.color)
-                                            .multilineTextAlignment(.leading)
-                                    } else {
-                                        RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
-                                            .frame(width: 42, height: 19)
-                                    }
-                                }
-                            }
-                            VStack(alignment: .leading, spacing: 4) {
-
-                                if !viewModel.state.fiatFeeFormatted.isEmpty {
-                                    Text("Estimate fiat amount \(viewModel.state.fiatFeeFormatted)")
-                                        .font(.footnote.weight(.semibold))
-                                        .foregroundColor(R.color.secondaryText.color)
+                                if viewModel.state.state != .loading  {
+                                    Text(viewModel.state.totalAmount.formatted(withCode: true))
+                                        .font(.body)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(R.color.textBase.color)
                                         .multilineTextAlignment(.leading)
+                                } else {
+                                    RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
+                                        .frame(width: 42, height: 19)
                                 }
-
-                                Text(R.string.localizable.changeAmountFeeCalculateDescription())
-                                    .font(.footnote)
-                                    .foregroundColor(R.color.labelTextAttention.color)
-                                    .multilineTextAlignment(.leading)
-                                Text(R.string.localizable.changeAmountFeeDescription())
-                                    .font(.footnote)
-                                    .foregroundColor(R.color.secondaryText.color)
-                                    .multilineTextAlignment(.leading)
                             }
-
-
+                        case .ownerBond, .contractorBond:
+                            Text("Bond")
                         }
-                        Divider()
-
-                        HStack {
-                            VStack {
-                                Text(R.string.localizable.changeAmountTotalAmount())
-                                    .font(.body)
-                                    .foregroundColor(R.color.textBase.color)
-                                    .multilineTextAlignment(.leading)
-                            }
-
-                            Spacer()
-                            if viewModel.state.state != .loading  {
-                                Text(viewModel.state.totalAmount.formatted(withCode: true))
-                                    .font(.body)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(R.color.textBase.color)
-                                    .multilineTextAlignment(.leading)
-                            } else {
-                                RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
-                                    .frame(width: 42, height: 19)
-                            }
-                        }
-
                     }
                 }
 
@@ -251,6 +253,30 @@ struct ChangeAmountView: View {
             return R.string.localizable.changeAmountTitle()
         case .checker:
             return "Cost of verification"
+        case .contractorBond:
+            if viewModel.contractorIsClient {
+                if viewModel.state.clientIsYou {
+                    return "Bond of client (you)"
+                }
+                return "Bond of client"
+            } else {
+                if !viewModel.state.clientIsYou {
+                    return "Bond of executor (you)"
+                }
+                return "Bond of executor"
+            }
+        case .ownerBond:
+            if viewModel.ownerIsClient {
+                if viewModel.state.clientIsYou {
+                    return "Bond of client (you)"
+                }
+                return "Bond of client"
+            } else {
+                if !viewModel.state.clientIsYou {
+                    return "Bond of executor (you)"
+                }
+                return "Bond of executor"
+            }
         }
     }
 }

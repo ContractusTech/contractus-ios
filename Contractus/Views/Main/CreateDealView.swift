@@ -13,6 +13,7 @@ fileprivate enum Constants {
     static let selectedImage = Image(systemName: "circle.inset.filled")
     static let contractImage = Image(systemName: "doc.badge.plus")
     static let closeImage = Image(systemName: "xmark")
+    static let checkmarkImage = Image(systemName: "checkmark")
 }
 
 // MARK: - DealRoleView
@@ -63,6 +64,8 @@ struct DealRoleView: View {
                 .padding(12)
                 .background(R.color.secondaryBackground.color)
                 .cornerRadius(20)
+                .overlay(RoundedRectangle(cornerRadius: 20)
+                    .stroke(isSelected ? R.color.accentColor.color : .clear, lineWidth: 1.4))
                 .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
 
                 if isSelected {
@@ -121,9 +124,12 @@ struct CreateDealView: View {
     @StateObject var viewModel: AnyViewModel<CreateDealState, CreateDealInput>
     var didCreated: ((Deal?) -> Void)?
 
-    @State private var selectedType: DealRoleView.RoleType?
+    @State private var selectedRole: DealRoleView.RoleType?
     @State private var isShowShareSecretKey: Bool = false
     @State private var alertType: AlertType?
+    @State private var performanceBondType: PerformanceBondType?
+    @State private var allowChecker: Bool = false
+    private let types: [PerformanceBondType] = [.none, .onlyClient, .onlyExecutor, .both]
 
     var body: some View {
         NavigationView {
@@ -143,25 +149,101 @@ struct CreateDealView: View {
                         })
                     ), isActive: $isShowShareSecretKey, label: { EmptyView() })
                     .isDetailLink(false)
-                    VStack {
+                    VStack(spacing: 12) {
+                        HStack {
+                            Text(R.string.localizable.newDealSubtitle())
+                                .font(.title3.weight(.semibold))
 
-                        TopTextBlockView(
-                            informationType: .none,
-                            headerText: R.string.localizable.newDealTitle(),
-                            titleText: R.string.localizable.newDealSubtitle(),
-                            subTitleText: nil)
+                            Spacer()
+                        }
+                        .padding(.top, 24)
                         HStack(alignment: .center, spacing: 8) {
 
-                            DealRoleView(type: .client, isSelected: selectedType == .client) { role in
-                                selectedType = role
+                            DealRoleView(type: .client, isSelected: selectedRole == .client) { role in
+                                selectedRole = role
                             }
 
-                            DealRoleView(type: .executor, isSelected: selectedType == .executor) { role in
-                                selectedType = role
+                            DealRoleView(type: .executor, isSelected: selectedRole == .executor) { role in
+                                selectedRole = role
                             }
 
-                        }.padding(8)
+                        }
+                        VStack(spacing: 0) {
+
+                            HStack {
+                                Toggle(isOn: $allowChecker.animation(.linear(duration: 0.2))) {
+                                    VStack(alignment: .leading, spacing: 6) {
+                                        Text("Check by third party")
+                                            .font(.body)
+                                            .fontWeight(.semibold)
+                                        Text("The decision to complete the deal will be made by a third party. ")
+                                            .font(.footnote)
+                                            .foregroundColor(R.color.secondaryText.color)
+                                    }
+                                }
+                            }
+                            .padding(16)
+                            .background(content: {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(R.color.baseSeparator.color)
+                            })
+                            if !allowChecker {
+                                HStack {
+                                    Text("Who will add the performance bond?")
+                                        .font(.title3.weight(.semibold))
+
+                                    Spacer()
+                                }
+                                .padding(.top, 24)
+                                .padding(.bottom, 12)
+
+                                VStack {
+                                    ForEach(types, id: \.self) { type in
+                                        Button {
+                                            performanceBondType = type
+                                        } label: {
+                                            HStack {
+                                                Text(type.title)
+                                                Spacer()
+                                                if performanceBondType == type {
+                                                    ZStack {
+                                                        Constants.checkmarkImage
+                                                            .imageScale(.small)
+                                                            .foregroundColor(R.color.buttonTextPrimary.color)
+                                                    }
+                                                    .frame(width: 24, height: 24)
+                                                    .background(R.color.accentColor.color)
+                                                    .cornerRadius(7)
+                                                } else {
+                                                    ZStack {}
+                                                        .frame(width: 24,  height: 24)
+                                                        .overlay(
+                                                            RoundedRectangle(
+                                                                cornerRadius: 7,
+                                                                style: .continuous
+                                                            )
+                                                            .stroke(R.color.fourthBackground.color, lineWidth: 1)
+                                                        )
+                                                }
+                                            }
+                                            .padding(EdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20))
+                                        }
+
+                                        if types.last != type {
+                                            Divider().foregroundColor(R.color.baseSeparator.color)
+                                        }
+                                    }
+                                }
+                                .padding(.top, 8)
+                                .padding(.bottom, 8)
+                                .background(R.color.secondaryBackground.color)
+                                .cornerRadius(20)
+                                .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                            }
+
+                        }
                     }
+                    .padding(8)
                     .onChange(of: viewModel.state.state) { state in
                         switch state {
                         case .none, .creating:
@@ -174,11 +256,23 @@ struct CreateDealView: View {
                         }
                     }
                 }
+                .safeAreaInset(edge: .bottom, content: {
+                    CButton(title: R.string.localizable.commonCreate(), style: .primary, size: .large, isLoading: viewModel.state.state == .creating, isDisabled: !allowCreateDeal) {
 
-                CButton(title: R.string.localizable.commonCreate(), style: .primary, size: .large, isLoading: viewModel.state.state == .creating, isDisabled: selectedType == nil) {
-                    viewModel.trigger(selectedType == .client ? .createDealAsClient : .createDealAsExecutor)
-                }
-                .padding(EdgeInsets(top: 16, leading: 16, bottom: 28, trailing: 16))
+                        guard let selectedRole = selectedRole else { return }
+                        if allowChecker {
+                            viewModel.trigger(.createDealWithChecker(selectedRole.role))
+                            return
+                        }
+
+                        guard let performanceBondType = performanceBondType else { return }
+                        viewModel.trigger(.createDeal(selectedRole.role, performanceBondType))
+                    }
+                    .padding(EdgeInsets(top: 16, leading: 8, bottom: 28, trailing: 8))
+                })
+
+
+
             }
             .alert(item: $alertType, content: { type in
                 switch type {
@@ -206,9 +300,14 @@ struct CreateDealView: View {
                     }
                 }
             }
+            .navigationBarTitle(R.string.localizable.newDealTitle(), displayMode: .inline)
 
         }
         .navigationBarBackButtonHidden()
+    }
+
+    var allowCreateDeal: Bool {
+        selectedRole != nil && (performanceBondType != nil || allowChecker)
     }
 }
 
@@ -217,6 +316,32 @@ extension CreateDealView.AlertType: Identifiable {
         switch self {
         case .error:
             return "error"
+        }
+    }
+}
+
+extension PerformanceBondType {
+    var title: String {
+        switch self {
+        case .none:
+            return "Nobody"
+        case .both:
+            return "Both, client and executor"
+        case .onlyClient:
+            return "Only client"
+        case .onlyExecutor:
+            return "Only executor"
+        }
+    }
+}
+
+fileprivate extension DealRoleView.RoleType {
+    var role: OwnerRole {
+        switch self {
+        case .client:
+            return .client
+        case .executor:
+            return .executor
         }
     }
 }

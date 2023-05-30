@@ -20,6 +20,8 @@ enum DealViewModelError: Error {
 enum DealInput {
     case changeAmount(Amount)
     case changeCheckerAmount(Amount)
+    case changeOwnerBondAmount(Amount)
+    case changeContractorBondAmount(Amount)
     case update(Deal?)
     case updateTx
     case openFile(MetadataFile)
@@ -114,7 +116,7 @@ struct DealState {
     }
 
     var isYouChecker: Bool {
-        deal.checkerPublicKey == account.publicKey || (deal.checkerPublicKey == nil && isOwnerDeal && ownerIsClient)
+        deal.checkerPublicKey == account.publicKey // || (deal.checkerPublicKey == nil && isOwnerDeal && ownerIsClient)
     }
 
     var canSendResult: Bool {
@@ -142,6 +144,35 @@ struct DealState {
             return deal.ownerPublicKey
         }
     }
+
+    var clientBondAmount: String {
+        if ownerIsClient {
+            return deal.ownerBondFormatted
+        }
+        return deal.contractorBondFormatted
+    }
+
+    var executorBondAmount: String {
+        if ownerIsClient {
+            return deal.contractorBondFormatted
+        }
+        return deal.ownerBondFormatted
+    }
+
+    var clientBondToken: ContractusAPI.Token? {
+        if ownerIsClient {
+            return deal.ownerBondToken
+        }
+        return deal.contractorBondToken
+    }
+
+    var executorBondToken: ContractusAPI.Token? {
+        if ownerIsClient {
+            return deal.contractorBondToken
+        }
+        return deal.ownerBondToken
+    }
+
 
     var currentMainActions: [MainActionType] = []
 }
@@ -250,7 +281,7 @@ final class DealViewModel: ViewModel {
             case .metadata:
                 state.deal.meta = content
             case .result:
-                state.deal.results = content
+                state.deal.result = content
             }
         case .openFile(let file):
             state.previewState = .none
@@ -293,15 +324,15 @@ final class DealViewModel: ViewModel {
                 })
         case .deleteResultFile(let file):
             state.state = .loading
-            let results = DealMetadata(
-                content: state.deal.results?.content,
-                files: state.deal.results?.files.filter({ $0 != file }) ?? [])
+            let result = DealMetadata(
+                content: state.deal.result?.content,
+                files: state.deal.result?.files.filter({ $0 != file }) ?? [])
             dealService?.update(
                 dealId: state.deal.id,
                 typeContent: .result,
-                meta: UpdateDealMetadata(meta: results, updatedAt: Date(), force: true),
-                completion: {[weak self] result in
-                    self?.state.deal.results = results
+                meta: UpdateDealMetadata(meta: result, updatedAt: Date(), force: true),
+                completion: {[weak self] _ in
+                    self?.state.deal.result = result
                     self?.state.state = .none
                 })
         case .cancelDownload:
@@ -334,6 +365,12 @@ final class DealViewModel: ViewModel {
                 .store(in: &cancelable)
         case .uploaderContentType(let type):
             state.uploaderContentType = type
+        case .changeOwnerBondAmount(let amount):
+            state.deal.ownerBondAmount = amount.value
+            state.deal.ownerBondToken = amount.token
+        case .changeContractorBondAmount(let amount):
+            state.deal.contractorBondAmount = amount.value
+            state.deal.contractorBondToken = amount.token
         }
     }
 

@@ -16,7 +16,7 @@ enum Mock {
     }()
 
     static let deal: ContractusAPI.Deal = {
-        return Deal(id: "", ownerPublicKey: "", createdAt: "", amount: "10000000", amountFee: "100", checkerAmount: nil, status: .new, token: Self.tokenSOL, ownerRole: .client, meta: DealMetadata(files: []), results: DealMetadata(files: []))
+        return Deal(id: "", completionCheckType: .checker, performanceBondType: .both, ownerPublicKey: "", createdAt: Date(), amount: "10000000", amountFee: "100", checkerAmount: nil, status: .new, token: Self.tokenSOL, ownerRole: .client, meta: DealMetadata(files: []), result: DealMetadata(files: []))
     }()
 
     static let wrapTransaction: ContractusAPI.Transaction = {

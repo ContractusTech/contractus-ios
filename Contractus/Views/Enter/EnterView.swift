@@ -56,8 +56,8 @@ struct EnterView: View {
                         // TODO: - Move text in localization
                         VStack {
                             TopTextBlockView(
-                                headerText: "Add new",
-                                titleText: R.string.localizable.commonAccount(),
+                                headerText: nil,
+                                titleText: R.string.localizable.enterAddAccountTitle(),
                                 subTitleText: R.string.localizable.enterAddAccountSubtitle(blockchain.rawValue.capitalized))
 
                             R.image.addAccount.image
@@ -66,6 +66,7 @@ struct EnterView: View {
                                 .frame(width: 220, height: 220)
 
                         }
+                        .padding(.top, 16)
 
                     }
                 }
@@ -106,7 +107,7 @@ struct EnterView: View {
                         }
                         .environmentObject(viewModel)
                     } label: {
-                        CButton(title: R.string.localizable.enterButtonCreateWallet(), style: .primary, size: .large, isLoading: false)
+                        CButton(title: R.string.localizable.enterButtonCreate(), style: .primary, size: .large, isLoading: false)
                         {
                             self.selectedView = .createWallet
                         }
@@ -144,7 +145,6 @@ struct EnterView: View {
             .baseBackground()
             .navigationBarTitleDisplayMode(.inline)
             .edgesIgnoringSafeArea(.bottom)
-//            .edgesIgnoringSafeArea(.top)
         }
     }
     

@@ -16,12 +16,14 @@ enum ChangeAmountInput {
 }
 
 enum AmountValueType {
-    case deal, checker
+    case deal, checker, ownerBond, contractorBond
 
-    var asAmountFeeType: AmountFeeType {
+    var asAmountFeeType: AmountFeeType? {
         switch self {
         case .checker: return .checkerAmount
         case .deal: return .dealAmount
+        case .ownerBond, .contractorBond:
+            return nil
         }
     }
 }
@@ -48,6 +50,8 @@ struct ChangeAmountState {
             return Amount(amount.value + (deal.checkerAmount ?? 0) + feeAmount.value, token: amount.token)
         case .checker:
             return Amount(amount.value + deal.amount + feeAmount.value, token: amount.token)
+        case .ownerBond, .contractorBond:
+            return Amount(amount.value, token: amount.token)
         }
     }
 
@@ -75,6 +79,19 @@ struct ChangeAmountState {
 
     var checkerIsYou: Bool {
         account.publicKey == deal.checkerPublicKey || deal.checkerPublicKey == nil
+    }
+
+    var clientIsYou: Bool {
+        account.publicKey == deal.ownerPublicKey && deal.ownerRole == .client ||
+        account.publicKey == deal.contractorPublicKey && deal.ownerRole == .executor
+    }
+
+    var contractorIsClient: Bool {
+        account.publicKey == deal.contractorPublicKey && deal.ownerRole == .executor
+    }
+
+    var ownerIsClient: Bool {
+        account.publicKey == deal.ownerPublicKey && deal.ownerRole == .client
     }
 }
 
@@ -119,12 +136,16 @@ final class ChangeAmountViewModel: ViewModel {
             updateFee(amount: newAmount)
         case .update:
             self.state.state = .changingAmount
-            let data: UpdateAmountDeal
+            let data: UpdateDeal
             switch state.amountType {
             case .deal:
-                data = UpdateAmountDeal(amount: state.amount, checkerAmount: nil)
+                data = UpdateDeal(amount: state.amount, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: nil, deadline: nil)
             case .checker:
-                data = UpdateAmountDeal(amount: nil, checkerAmount: state.amount)
+                data = UpdateDeal(amount: nil, checkerAmount: state.amount, ownerBondAmount: nil, contractorBondAmount: nil, deadline: nil)
+            case .contractorBond:
+                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: state.amount, deadline: nil)
+            case .ownerBond:
+                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: state.amount, contractorBondAmount: nil, deadline: nil)
             }
             dealService?.update(dealId: state.deal.id, data: data, completion: { [weak self] result in
                 switch result {
@@ -138,6 +159,8 @@ final class ChangeAmountViewModel: ViewModel {
     }
 
     private func updateFee(amount: Amount) {
+        guard let feeType = state.amountType.asAmountFeeType else { return }
+
         if amount.value.isZero {
             var newState = self.state
             newState.feePercent = 0
@@ -149,7 +172,7 @@ final class ChangeAmountViewModel: ViewModel {
             return
         }
         self.state.state = .loading
-        dealService?.getFee(dealId: state.deal.id, data: CalculateDealFee(amount: amount, type: state.amountType.asAmountFeeType), completion: {[weak self] result in
+        dealService?.getFee(dealId: state.deal.id, data: CalculateDealFee(amount: amount, type: feeType), completion: {[weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let fee):

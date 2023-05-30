@@ -32,11 +32,7 @@ struct BackupInformationView: View {
         ZStack(alignment: .bottomLeading) {
             ScrollView {
                 VStack(alignment: .center, spacing: 24) {
-                    TopTextBlockView(
-                        informationType: informationType,
-                        headerText: titleText,
-                        titleText: largeTitleText,
-                        subTitleText: informationText)
+                    BaseTopTextBlockView(titleText: largeTitleText, subTitleText: informationText)
 
                     CopyContentView(content: privateKey.toBase58(), contentType: .privateKey) { _ in
                         viewModel.trigger(.copyForBackup)
@@ -74,7 +70,7 @@ struct BackupInformationView: View {
 
                 HStack {
 
-                    CButton(title: R.string.localizable.backupInformationButtonContinue(), style: .secondary, size: .large, isLoading: false)
+                    CButton(title: R.string.localizable.backupInformationButtonContinue(), style: .primary, size: .large, isLoading: false)
                     {
                         viewModel.trigger(.saveAccount(backupToiCloud: self.allowBackupToiCloud))
                         completion()

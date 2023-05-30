@@ -26,6 +26,11 @@ public struct Token: Codable {
         case serviced
     }
 
+    private enum RequestCodingKeys: CodingKey {
+        case code
+        case address
+    }
+
     public init(code: String, name: String? = nil, address: String? = nil, native: Bool, decimals: Int, serviced: Bool) {
         self.code = code
         self.name = name
@@ -36,7 +41,7 @@ public struct Token: Codable {
     }
 
     public init(from decoder: Decoder) throws {
-        let container: KeyedDecodingContainer<Token.CodingKeys> = try decoder.container(keyedBy: Token.CodingKeys.self)
+        let container = try decoder.container(keyedBy: Token.CodingKeys.self)
 
         self.code = try container.decode(String.self, forKey: Token.CodingKeys.code)
         self.name = try? container.decodeIfPresent(String.self, forKey: Token.CodingKeys.name)
@@ -48,14 +53,10 @@ public struct Token: Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container: KeyedEncodingContainer<Token.CodingKeys> = encoder.container(keyedBy: Token.CodingKeys.self)
+        var container = encoder.container(keyedBy: Token.RequestCodingKeys.self)
 
-        try container.encode(self.code, forKey: Token.CodingKeys.code)
-        try container.encodeIfPresent(self.name, forKey: Token.CodingKeys.name)
-        try container.encodeIfPresent(self.address, forKey: Token.CodingKeys.address)
-        try container.encode(self.native, forKey: Token.CodingKeys.native)
-        try container.encode(self.decimals, forKey: Token.CodingKeys.decimals)
-        try container.encode(self.serviced, forKey: Token.CodingKeys.serviced)
+        try container.encode(self.code, forKey: Token.RequestCodingKeys.code)
+        try container.encodeIfPresent(self.address, forKey: Token.RequestCodingKeys.address)
     }
 }
 
