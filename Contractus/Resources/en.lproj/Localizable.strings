@@ -192,6 +192,7 @@
 
 "share.title.default" = "Share key";
 "share.subtitle.default" = "For edit and sign contract partner must have this data.";
+"share.note" = "Or you can send this value to a partner any way you like";
 
 "main.title.deals" = "Active deals";
 "main.title.new-deal" = "New deal";

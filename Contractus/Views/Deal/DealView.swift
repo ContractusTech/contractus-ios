@@ -43,6 +43,7 @@ struct DealView: View {
     enum ActiveModalType: Equatable {
         case viewTextDealDetails
         case editTextDealDetails
+        case viewTextDealResult
         case editTextDealResult
         case editContractor(String?)
         case editChecker(String?)
@@ -65,7 +66,6 @@ struct DealView: View {
     @State private var alertType: AlertType?
     @State private var actionsType: ActionsSheetType?
     @State private var uploaderState: ResizableSheetState = .hidden
-    @State private var uploaderContentType: DealsService.ContentType?
 //    @State private var showActionMenu: Bool = false
 
     var body: some View {
@@ -128,7 +128,8 @@ struct DealView: View {
                                             activeModalType = .editContractor(viewModel.state.deal.contractorPublicKey)
                                         }
                                     }
-                                }.padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+                                }
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
                                 if viewModel.state.isYouExecutor && viewModel.state.canEdit {
                                     Text(R.string.localizable.dealHintPayAccount())
                                         .font(.footnote)
@@ -165,6 +166,7 @@ struct DealView: View {
                             .padding(14)
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
+                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
 
                             // MARK: - Executor
                             VStack(alignment: .leading) {
@@ -204,6 +206,7 @@ struct DealView: View {
                             .padding(14)
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
+                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                         }
                         ZStack {
                             Circle()
@@ -281,6 +284,7 @@ struct DealView: View {
                     .padding(14)
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(20)
+                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                 }
 
             }
@@ -335,6 +339,7 @@ struct DealView: View {
                     .padding(EdgeInsets(top: 22, leading: 26, bottom: 22, trailing: 26))
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(20)
+                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                 }
                 Spacer(minLength: 4)
                 VStack {
@@ -347,7 +352,7 @@ struct DealView: View {
                             Spacer()
                             CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
                                 uploaderState = .medium
-                                uploaderContentType = .metadata
+                                viewModel.trigger(.uploaderContentType(.metadata))
                             }
                         }
                         VStack(alignment: .leading, spacing: 4) {
@@ -362,9 +367,8 @@ struct DealView: View {
                                 ForEach(viewModel.state.deal.meta?.files ?? []) { file in
                                     FileItemView(
                                         file: file,
-                                        decryptedName: viewModel.state.decryptedFiles[file.md5]?.lastPathComponent)
-                                    { action in
-
+                                        decryptedName: viewModel.state.decryptedFiles[file.md5]?.lastPathComponent
+                                    ) { action in
                                         switch action {
                                         case .open:
                                             viewModel.trigger(.openFile(file))
@@ -380,6 +384,7 @@ struct DealView: View {
                 }
                 .background(R.color.secondaryBackground.color)
                 .cornerRadius(20)
+                .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
 
                 if viewModel.state.showResult {
                     VStack(alignment: .leading) {
@@ -412,19 +417,19 @@ struct DealView: View {
                                 Spacer()
 
                                 if viewModel.state.canSendResult {
-                                    CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false) {
+                                    CButton(title: (viewModel.state.deal.results?.contentIsEmpty ?? true) ? R.string.localizable.commonAdd() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false) {
                                         activeModalType = .editTextDealResult
                                     }
                                 } else {
                                     CButton(title: R.string.localizable.commonView(), style: .secondary, size: .default, isLoading: false) {
-                                        // TODO: -
+                                        activeModalType = .viewTextDealResult
                                     }
                                 }
                             }
                             VStack(alignment: .leading) {
-                                if let content = viewModel.state.deal.meta?.content {
+                                if let results = viewModel.state.deal.results?.content {
                                     HStack {
-                                        Text(content.text)
+                                        Text(ContentMask.maskAll(results.text))
                                         Spacer()
                                     }
 
@@ -451,9 +456,11 @@ struct DealView: View {
                                     Label(text: R.string.localizable.commonEncrypted(), type: .default)
                                 }
                                 Spacer()
-                                CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false) {
-                                    uploaderState = .medium
-                                    uploaderContentType = .result
+                                if viewModel.state.canSendResult {
+                                    CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false) {
+                                        uploaderState = .medium
+                                        viewModel.trigger(.uploaderContentType(.result))
+                                    }
                                 }
                             }
                             VStack(alignment: .leading) {
@@ -466,7 +473,10 @@ struct DealView: View {
                                 } else {
                                     if let files = viewModel.state.deal.results?.files {
                                         ForEach(files) { file in
-                                            FileItemView(file: file) { action in
+                                            FileItemView(
+                                                file: file,
+                                                decryptedName: viewModel.state.decryptedFiles[file.md5]?.lastPathComponent
+                                            ) { action in
                                                 switch action {
                                                 case .open:
                                                     viewModel.trigger(.openFile(file))
@@ -483,6 +493,7 @@ struct DealView: View {
                     }
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(20)
+                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                 }
 
                 // MARK: - Actions
@@ -541,7 +552,6 @@ struct DealView: View {
                             }
                         }
                     }
-
                 }
                 .padding(EdgeInsets(top: 20, leading: 20, bottom: 24, trailing: 20))
             }
@@ -603,8 +613,8 @@ struct DealView: View {
 
                 })
                 .interactiveDismiss(canDismissSheet: false)
-            case .editTextDealResult:
-                TextEditorView(allowEdit: true, viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
+            case .editTextDealResult, .viewTextDealResult:
+                TextEditorView(allowEdit: type == .editTextDealResult, viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
                     dealId: viewModel.state.deal.id,
                     content: viewModel.state.deal.results ?? .init(files: []),
                     contentType: .result,
@@ -782,21 +792,21 @@ struct DealView: View {
         UploadFileView(
             viewModel: AnyViewModel<UploadFileState, UploadFileInput>(UploadFileViewModel(
                 dealId: viewModel.state.deal.id,
-                content: uploaderContentType == .result ? viewModel.state.deal.results ?? .init(files: []) : viewModel.state.deal.meta ?? .init(files: []),
-                contentType: uploaderContentType ?? .metadata,
+                content: viewModel.state.uploaderContentType == .result ? viewModel.state.deal.results ?? .init(files: []) : viewModel.state.deal.meta ?? .init(files: []),
+                contentType: viewModel.state.uploaderContentType ?? .metadata,
                 secretKey: viewModel.state.decryptedKey,
                 dealService: try? APIServiceFactory.shared.makeDealsService(),
                 filesAPIService: try? APIServiceFactory.shared.makeFileService())), action: { actionType in
             switch actionType {
             case .close:
                 uploaderState = .hidden
-                uploaderContentType = nil
+                viewModel.trigger(.uploaderContentType(nil))
 
             case .success(let meta, let contentType):
                 viewModel.trigger(.updateContent(meta, contentType))
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                     uploaderState = .hidden
-                    uploaderContentType = nil
+                    viewModel.trigger(.uploaderContentType(nil))
                 })
             }
         })

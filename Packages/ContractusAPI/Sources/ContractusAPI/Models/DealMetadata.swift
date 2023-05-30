@@ -87,5 +87,17 @@ public struct UpdateDealMetadata: Codable {
         self.updatedAt = updatedAt
         self.force = force
     }
+}
 
+public struct UpdateDealResults: Codable {
+
+    public let result: DealMetadata
+    public let updatedAt: Date
+    public let force: Bool
+
+    public init(result: DealMetadata, updatedAt: Date, force: Bool) {
+        self.result = result
+        self.updatedAt = updatedAt
+        self.force = force
+    }
 }

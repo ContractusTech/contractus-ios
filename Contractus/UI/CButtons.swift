@@ -65,9 +65,9 @@ struct CButton: View {
         var edge: EdgeInsets {
             switch self {
             case .large:
-                return EdgeInsets(top: 14, leading: 26, bottom: 14, trailing: 26)
+                return EdgeInsets(top: 15, leading: 26, bottom: 15, trailing: 26)
             case .small:
-                return EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
+                return EdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12)
             case .default:
                 return EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
             }
@@ -99,11 +99,11 @@ struct CButton: View {
     private var cornerRadius: CGFloat {
         switch size {
         case .default:
-            return roundedCorner ? 34 : 16
+            return roundedCorner ? 34 : 13
         case .small:
-            return roundedCorner ? 34 : 10
+            return roundedCorner ? 34 : 8
         case .large:
-            return roundedCorner ? 34 : 19
+            return roundedCorner ? 34 : 17
         }
     }
 
@@ -291,6 +291,7 @@ struct CButton_Previews: PreviewProvider {
 
             }
         }
+        .padding()
         .previewDisplayName("Light theme")
         .preferredColorScheme(.light)
 
@@ -366,6 +367,7 @@ struct CButton_Previews: PreviewProvider {
 
             }
         }
+        .padding()
         .previewDisplayName("Dark theme")
         .preferredColorScheme(.dark)
 

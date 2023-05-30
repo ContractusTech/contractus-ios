@@ -19,11 +19,10 @@ protocol RawedFile {
     func rawFile(with name: String?) -> RawFile
 }
 
-
 extension RawFile: Equatable {
 
     static func fromImage(_ image: UIImage, path: URL) -> RawFile? {
-        if let data = image.pngData() {
+        if let data = image.rotate(radians: 0)?.pngData() {
             return RawFile(data: data, name: path.lastPathComponent, mimeType: mimeTypes["png"]!)
         }
         return nil

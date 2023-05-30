@@ -36,7 +36,7 @@ public struct Deal: Decodable {
              ownerRole,
              meta,
              status,
-             results,
+             result,
              metaUpdatedAt
     }
     public let id: String
@@ -137,7 +137,7 @@ public struct Deal: Decodable {
         self.updatedAt = try? container.decodeIfPresent(String.self, forKey: .updatedAt)
         self.ownerRole = try container.decode(OwnerRole.self, forKey: .ownerRole)
         self.meta = try? container.decodeIfPresent(DealMetadata.self, forKey: .meta)
-        self.results = try? container.decodeIfPresent(DealMetadata.self, forKey: .results)
+        self.results = try? container.decodeIfPresent(DealMetadata.self, forKey: .result)
         self.metaUpdatedAt = try? container.decodeIfPresent(String.self, forKey: .metaUpdatedAt)
         self.status = (try? container.decodeIfPresent(DealStatus.self, forKey: .status)) ?? .unknown
         let amountFee = (try? container.decode(String.self, forKey: .amountFee)) ?? "0"

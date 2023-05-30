@@ -200,7 +200,6 @@ struct UploadFileView: View {
                     if let rawFile = RawFile.fromImage(image, path: path) {
                         viewModel.trigger(.selected(rawFile))
                     }
-
                 }
             case .selectImage:
                 ImagePickerView(sourceType: .photoLibrary) { image, path in

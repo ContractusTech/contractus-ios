@@ -35,6 +35,7 @@ enum DealInput {
     case sheetClose
     case finishDeal
     case deleteContractor(ParticipateType)
+    case uploaderContentType(DealsService.ContentType?)
 }
 
 struct DealState {
@@ -77,6 +78,7 @@ struct DealState {
     var decryptingFiles: [String:Bool] = [:]
     var isSignedByPartner: Bool = false
     var errorState: ErrorState?
+    var uploaderContentType: DealsService.ContentType?
 
     var isOwnerDeal: Bool {
         deal.ownerPublicKey == account.publicKey
@@ -289,9 +291,19 @@ final class DealViewModel: ViewModel {
                     self?.state.deal.meta = meta
                     self?.state.state = .none
                 })
-
-        case .deleteResultFile(_):
-            break
+        case .deleteResultFile(let file):
+            state.state = .loading
+            let results = DealMetadata(
+                content: state.deal.results?.content,
+                files: state.deal.results?.files.filter({ $0 != file }) ?? [])
+            dealService?.update(
+                dealId: state.deal.id,
+                typeContent: .result,
+                meta: UpdateDealMetadata(meta: results, updatedAt: Date(), force: true),
+                completion: {[weak self] result in
+                    self?.state.deal.results = results
+                    self?.state.state = .none
+                })
         case .cancelDownload:
             guard let downloadingUUID = downloadingUUID else { return }
             state.previewState = .none
@@ -320,6 +332,8 @@ final class DealViewModel: ViewModel {
                     self.state.state = .success
                 }
                 .store(in: &cancelable)
+        case .uploaderContentType(let type):
+            state.uploaderContentType = type
         }
     }
 
