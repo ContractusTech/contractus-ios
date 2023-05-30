@@ -88,7 +88,7 @@ struct R: Rswift.Validatable {
     try intern.validate()
   }
 
-  /// This `R.color` struct is generated, and contains static references to 40 colors.
+  /// This `R.color` struct is generated, and contains static references to 39 colors.
   struct color {
     /// Color `AccentColor`.
     static let accentColor = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentColor")
@@ -164,8 +164,6 @@ struct R: Rswift.Validatable {
     static let whiteSeparator = Rswift.ColorResource(bundle: R.hostingBundle, name: "WhiteSeparator")
     /// Color `White`.
     static let white = Rswift.ColorResource(bundle: R.hostingBundle, name: "White")
-    /// Color `Yellow-200`.
-    static let yellow200 = Rswift.ColorResource(bundle: R.hostingBundle, name: "Yellow-200")
     /// Color `Yellow`.
     static let yellow = Rswift.ColorResource(bundle: R.hostingBundle, name: "Yellow")
     /// Color `black`.
@@ -514,15 +512,6 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
-    /// `UIColor(named: "Yellow-200", bundle: ..., traitCollection: ...)`
-    @available(tvOS 11.0, *)
-    @available(iOS 11.0, *)
-    static func yellow200(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
-      return UIKit.UIColor(resource: R.color.yellow200, compatibleWith: traitCollection)
-    }
-    #endif
-
-    #if os(iOS) || os(tvOS)
     /// `UIColor(named: "black", bundle: ..., traitCollection: ...)`
     @available(tvOS 11.0, *)
     @available(iOS 11.0, *)
@@ -836,14 +825,6 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(watchOS)
-    /// `UIColor(named: "Yellow-200", bundle: ..., traitCollection: ...)`
-    @available(watchOSApplicationExtension 4.0, *)
-    static func yellow200(_: Void = ()) -> UIKit.UIColor? {
-      return UIKit.UIColor(named: R.color.yellow200.name)
-    }
-    #endif
-
-    #if os(watchOS)
     /// `UIColor(named: "black", bundle: ..., traitCollection: ...)`
     @available(watchOSApplicationExtension 4.0, *)
     static func black(_: Void = ()) -> UIKit.UIColor? {
@@ -961,7 +942,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 237 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 238 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1007,6 +988,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsAdd = Rswift.StringResource(key: "accounts.add", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Add account
+      ///
+      /// Locales: en
+      static let enterAddAccountTitle = Rswift.StringResource(key: "enter.add-account.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Add checker
       ///
       /// Locales: en
@@ -2083,6 +2068,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.add", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Add account
+      ///
+      /// Locales: en
+      static func enterAddAccountTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("enter.add-account.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "enter.add-account.title"
+        }
+
+        return NSLocalizedString("enter.add-account.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Add checker
