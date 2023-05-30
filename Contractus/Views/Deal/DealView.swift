@@ -37,6 +37,7 @@ struct DealView: View {
         case dealActions
         case confirmCancelSign
         case confirmFinish
+        case executorActions
     }
 
     enum ActiveModalType: Equatable {
@@ -192,7 +193,11 @@ struct DealView: View {
                                     Spacer()
                                     if viewModel.state.isOwnerDeal && viewModel.state.youIsClient {
                                         CButton(title: viewModel.state.executorPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false) {
-                                            activeModalType = .editContractor(viewModel.state.executorPublicKey)
+                                            if viewModel.state.executorPublicKey.isEmpty {
+                                                activeModalType = .editContractor(viewModel.state.executorPublicKey)
+                                            } else {
+                                                actionsType = .executorActions
+                                            }
                                         }
                                     }
                                 }
@@ -762,6 +767,10 @@ struct DealView: View {
                 return ActionSheet(
                     title: Text(R.string.localizable.commonSelectAction()),
                     buttons: actionSheetFinishButtons())
+            case .executorActions:
+                return ActionSheet(
+                    title: Text(R.string.localizable.commonSelectAction()),
+                    buttons: actionSheetEditExecutorButtons())
             }
         })
         .toolbar {
@@ -858,6 +867,19 @@ struct DealView: View {
         return [
             Alert.Button.destructive(Text(R.string.localizable.dealFinish())) {
                 activeModalType = .signTx(.dealFinish)
+            },
+            Alert.Button.cancel() {
+            }
+        ]
+    }
+
+    private func actionSheetEditExecutorButtons() -> [Alert.Button] {
+        return [
+            Alert.Button.destructive(Text(R.string.localizable.dealExecutorDeleteAccount())) {
+                viewModel.trigger(.deleteContractor(.contractor))
+            },
+            Alert.Button.default(Text(R.string.localizable.dealExecutorEditAccount())) {
+                activeModalType = .editContractor(viewModel.state.executorPublicKey)
             },
             Alert.Button.cancel() {
             }

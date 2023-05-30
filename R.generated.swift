@@ -961,7 +961,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 234 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 237 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1247,6 +1247,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsDeleteAccount = Rswift.StringResource(key: "accounts.delete.account", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Delete account
+      ///
+      /// Locales: en
+      static let dealExecutorDeleteAccount = Rswift.StringResource(key: "deal.executor.delete-account", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Delete from iCloud backup
       ///
       /// Locales: en
@@ -1279,6 +1283,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonEdit = Rswift.StringResource(key: "common.edit", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Edit
+      ///
+      /// Locales: en
+      static let dealExecutorEditAccount = Rswift.StringResource(key: "deal.executor.edit-account", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Edit
       ///
       /// Locales: en
@@ -1491,6 +1499,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonOpen = Rswift.StringResource(key: "common.open", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Or you can send this value to a partner any way you like
+      ///
+      /// Locales: en
+      static let shareNote = Rswift.StringResource(key: "share.note", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Owner
       ///
       /// Locales: en
@@ -2975,6 +2987,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("accounts.delete.account", bundle: bundle, comment: "")
       }
 
+      /// en translation: Delete account
+      ///
+      /// Locales: en
+      static func dealExecutorDeleteAccount(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.executor.delete-account", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.executor.delete-account"
+        }
+
+        return NSLocalizedString("deal.executor.delete-account", bundle: bundle, comment: "")
+      }
+
       /// en translation: Delete from iCloud backup
       ///
       /// Locales: en
@@ -3093,6 +3120,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.edit", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Edit
+      ///
+      /// Locales: en
+      static func dealExecutorEditAccount(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.executor.edit-account", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.executor.edit-account"
+        }
+
+        return NSLocalizedString("deal.executor.edit-account", bundle: bundle, comment: "")
       }
 
       /// en translation: Edit
@@ -3890,6 +3932,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.open", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Or you can send this value to a partner any way you like
+      ///
+      /// Locales: en
+      static func shareNote(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("share.note", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "share.note"
+        }
+
+        return NSLocalizedString("share.note", bundle: bundle, comment: "")
       }
 
       /// en translation: Owner

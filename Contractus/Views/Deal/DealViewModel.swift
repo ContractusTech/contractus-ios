@@ -34,6 +34,7 @@ enum DealInput {
     case hideError
     case sheetClose
     case finishDeal
+    case deleteContractor(ParticipateType)
     case uploaderContentType(DealsService.ContentType?)
 }
 
@@ -202,8 +203,6 @@ final class DealViewModel: ViewModel {
                     after?()
                 }
             })
-        case .finishDeal:
-            state.state = .loading
         case .none:
             state.state = .none
         case .sheetClose:
@@ -311,8 +310,28 @@ final class DealViewModel: ViewModel {
             filesAPIService?.cancelDownload(by: downloadingUUID)
         case .finishDeal:
             Task {
+                state.state = .loading
                 let tx = try? await getFinishTx()
+                state.state = .none
             }
+        case .deleteContractor(let type):
+            self.state.state = .loading
+            self.deleteContractor(type: type)
+                .receive(on: RunLoop.main)
+                .sink { result in
+                    switch result {
+                    case .failure(let error):
+                        debugPrint(error)
+                        self.state.errorState = .error(error.readableDescription)
+                        self.state.state = .none
+                    case .finished:
+                        after?()
+                    }
+                } receiveValue: { deal in
+                    self.state.deal = deal
+                    self.state.state = .success
+                }
+                .store(in: &cancelable)
         case .uploaderContentType(let type):
             state.uploaderContentType = type
         }
@@ -462,6 +481,22 @@ final class DealViewModel: ViewModel {
                 continuation.resume(with: result)
             })
         })
+    }
+
+    private func deleteContractor(type: ParticipateType) -> Future<Deal, Error> {
+        Future { promise in
+            self.dealService?.deleteParticipate(
+                from: self.state.deal.id,
+                type: type,
+                completion: { result in
+                    switch result {
+                    case .failure(let error):
+                        promise(.failure(error as Error))
+                    case .success(let deal):
+                        promise(.success(deal))
+                }
+            })
+        }
     }
 
     private func downloadFile(url: URL) async throws -> URL {

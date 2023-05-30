@@ -60,6 +60,12 @@ public final class DealsService: BaseService {
         }
     }
 
+    public func deleteParticipate(from dealId: String, type: ParticipateType, completion: @escaping (Swift.Result<Deal, APIClientError>) -> Void) {
+        self.request(path: .participant(dealId), httpMethod: .delete, data: ["type": type]) { (result: Swift.Result<Deal, APIClientError>) in
+            completion(result)
+        }
+    }
+
     public func update(dealId: String, data: UpdateAmountDeal, completion: @escaping (Swift.Result<Deal, APIClientError>) -> Void) {
         self.request(path: .deal(dealId), httpMethod: .post, data: data) { (result: Swift.Result<Deal, APIClientError>) in
             completion(result)
