@@ -193,7 +193,11 @@ struct DealView: View {
                                     Spacer()
                                     if viewModel.state.isOwnerDeal && viewModel.state.youIsClient {
                                         CButton(title: viewModel.state.executorPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false) {
-                                            actionsType = .executorActions
+                                            if viewModel.state.executorPublicKey.isEmpty {
+                                                activeModalType = .editContractor(viewModel.state.executorPublicKey)
+                                            } else {
+                                                actionsType = .executorActions
+                                            }
                                         }
                                     }
                                 }
