@@ -164,8 +164,10 @@ struct DealView: View {
 
                                     }
                                     Spacer()
-                                    CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
-                                        activeModalType = .changeAmount
+                                    if viewModel.state.canEditDeal {
+                                        CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
+                                            activeModalType = .changeAmount
+                                        }
                                     }
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
@@ -198,7 +200,7 @@ struct DealView: View {
                                         }
                                     }
                                     Spacer()
-                                    if viewModel.state.isOwnerDeal && viewModel.state.youIsClient {
+                                    if viewModel.state.isOwnerDeal && viewModel.state.youIsClient && viewModel.state.canEditDeal {
                                         CButton(title: viewModel.state.executorPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false) {
                                             if viewModel.state.executorPublicKey.isEmpty {
                                                 activeModalType = .editContractor(viewModel.state.executorPublicKey)
@@ -358,8 +360,10 @@ struct DealView: View {
                                         }
                                     }
                                     Spacer()
-                                    CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !(viewModel.state.isOwnerDeal)) {
-                                        activeModalType = !viewModel.state.ownerIsExecutor ? .changeOwnerBond : .changeContractorBond
+                                    if viewModel.state.canEditDeal {
+                                        CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !(viewModel.state.isOwnerDeal)) {
+                                            activeModalType = !viewModel.state.ownerIsExecutor ? .changeOwnerBond : .changeContractorBond
+                                        }
                                     }
                                 }
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 12, trailing: 0))
@@ -402,8 +406,10 @@ struct DealView: View {
                                         }
                                     }
                                     Spacer()
-                                    CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !(viewModel.state.isOwnerDeal)) {
-                                        activeModalType = viewModel.state.ownerIsExecutor ? .changeOwnerBond : .changeContractorBond
+                                    if viewModel.state.canEditDeal {
+                                        CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !(viewModel.state.isOwnerDeal)) {
+                                            activeModalType = viewModel.state.ownerIsExecutor ? .changeOwnerBond : .changeContractorBond
+                                        }
                                     }
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
@@ -415,6 +421,7 @@ struct DealView: View {
                         .cornerRadius(20)
                         .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
 
+                        // MARK: - Deadline
                         if viewModel.state.deal.performanceBondType == .both {
                             VStack(alignment: .leading, spacing: 0) {
                                 HStack(alignment: .top) {
@@ -455,8 +462,10 @@ struct DealView: View {
                                         }
                                     }
                                     Spacer()
-                                    CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !(viewModel.state.isOwnerDeal)) {
-                                        showDeadlinePicker.toggle()
+                                    if viewModel.state.canEditDeal {
+                                        CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !(viewModel.state.isOwnerDeal)) {
+                                            showDeadlinePicker.toggle()
+                                        }
                                     }
                                 }
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 12, trailing: 0))
@@ -495,11 +504,13 @@ struct DealView: View {
                             }
 
                             Spacer()
-                            CButton(title: (viewModel.state.deal.meta?.contentIsEmpty ?? true) ? R.string.localizable.commonSet() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
-                                if self.viewModel.isYouChecker && !self.viewModel.state.isOwnerDeal {
-                                    activeModalType = .viewTextDealDetails
-                                } else {
-                                    activeModalType = .editTextDealDetails
+                            if viewModel.state.canEditDeal {
+                                CButton(title: (viewModel.state.deal.meta?.contentIsEmpty ?? true) ? R.string.localizable.commonSet() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
+                                    if self.viewModel.isYouChecker && !self.viewModel.state.isOwnerDeal {
+                                        activeModalType = .viewTextDealDetails
+                                    } else {
+                                        activeModalType = .editTextDealDetails
+                                    }
                                 }
                             }
                         }
@@ -534,9 +545,11 @@ struct DealView: View {
                                     .font(.title3.weight(.regular))
                             }
                             Spacer()
-                            CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
-                                uploaderState = .medium
-                                viewModel.trigger(.uploaderContentType(.metadata))
+                            if viewModel.state.canEditDeal {
+                                CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
+                                    uploaderState = .medium
+                                    viewModel.trigger(.uploaderContentType(.metadata))
+                                }
                             }
                         }
                         VStack(alignment: .leading, spacing: 4) {
