@@ -126,6 +126,10 @@ struct DealState {
     var showResult: Bool {
         deal.status == .working
     }
+    
+    var canEditDeal: Bool {
+        deal.status == .new
+    }
 
     var clientPublicKey: String {
         switch deal.ownerRole {
