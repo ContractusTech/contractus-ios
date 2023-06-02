@@ -128,6 +128,7 @@
 "deal.text.text" = "Text";
 "deal.text.files" = "Files";
 "deal.text.details" = "Details";
+"deal.text.earning" = "Earning";
 "deal.status.finished" = "Done";
 "deal.status.canceled" = "Cancel";
 "deal.status.new" = "New";
