@@ -942,7 +942,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 238 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 240 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1040,6 +1040,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealCancelSignTitle = Rswift.StringResource(key: "deal.cancel.sign.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Are you sure you want to clear account?
+      ///
+      /// Locales: en
+      static let dealExecutorClearAccountMessage = Rswift.StringResource(key: "deal.executor.clear-account.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Are you sure you want to delete your account from the app and backup? Be careful, you will not be able to restore the account.
       ///
       /// Locales: en
@@ -1144,6 +1148,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealSubtitle = Rswift.StringResource(key: "newDeal.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Clear
+      ///
+      /// Locales: en
+      static let dealExecutorClearAccount = Rswift.StringResource(key: "deal.executor.clear-account", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Client
       ///
       /// Locales: en
@@ -1232,10 +1240,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsDeleteAccount = Rswift.StringResource(key: "accounts.delete.account", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Delete account
-      ///
-      /// Locales: en
-      static let dealExecutorDeleteAccount = Rswift.StringResource(key: "deal.executor.delete-account", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Delete from iCloud backup
       ///
       /// Locales: en
@@ -1852,6 +1856,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let enterSubtitle = Rswift.StringResource(key: "enter.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Yes, clear
+      ///
+      /// Locales: en
+      static let dealExecutorClearAccountConfirm = Rswift.StringResource(key: "deal.executor.clear-account.confirm", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Yes, delete
       ///
       /// Locales: en
@@ -2265,6 +2273,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.cancel.sign.title", bundle: bundle, comment: "")
       }
 
+      /// en translation: Are you sure you want to clear account?
+      ///
+      /// Locales: en
+      static func dealExecutorClearAccountMessage(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.executor.clear-account.message", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.executor.clear-account.message"
+        }
+
+        return NSLocalizedString("deal.executor.clear-account.message", bundle: bundle, comment: "")
+      }
+
       /// en translation: Are you sure you want to delete your account from the app and backup? Be careful, you will not be able to restore the account.
       ///
       /// Locales: en
@@ -2655,6 +2678,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("newDeal.subtitle", bundle: bundle, comment: "")
       }
 
+      /// en translation: Clear
+      ///
+      /// Locales: en
+      static func dealExecutorClearAccount(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.executor.clear-account", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.executor.clear-account"
+        }
+
+        return NSLocalizedString("deal.executor.clear-account", bundle: bundle, comment: "")
+      }
+
       /// en translation: Client
       ///
       /// Locales: en
@@ -2985,21 +3023,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.delete.account", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Delete account
-      ///
-      /// Locales: en
-      static func dealExecutorDeleteAccount(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("deal.executor.delete-account", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "deal.executor.delete-account"
-        }
-
-        return NSLocalizedString("deal.executor.delete-account", bundle: bundle, comment: "")
       }
 
       /// en translation: Delete from iCloud backup
@@ -5316,6 +5339,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("enter.subtitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Yes, clear
+      ///
+      /// Locales: en
+      static func dealExecutorClearAccountConfirm(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.executor.clear-account.confirm", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.executor.clear-account.confirm"
+        }
+
+        return NSLocalizedString("deal.executor.clear-account.confirm", bundle: bundle, comment: "")
       }
 
       /// en translation: Yes, delete

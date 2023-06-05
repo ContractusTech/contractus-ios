@@ -31,6 +31,7 @@ struct DealView: View {
 
     enum AlertType {
         case error(String)
+        case confirmClear
     }
 
     enum ActionsSheetType: Equatable {
@@ -963,9 +964,19 @@ struct DealView: View {
                 return Alert(
                     title: Text(R.string.localizable.commonError()),
                     message: Text(message),
-                    dismissButton: .default(Text(R.string.localizable.commonOk()), action: {
+                    dismissButton: .default(Text(R.string.localizable.commonOk())) {
                         viewModel.trigger(.hideError)
-                    }))
+                    }
+                )
+            case .confirmClear:
+                return Alert(
+                    title: Text(R.string.localizable.dealExecutorClearAccount()),
+                    message: Text(R.string.localizable.dealExecutorClearAccountMessage()),
+                    primaryButton: .cancel(),
+                    secondaryButton: .destructive(Text(R.string.localizable.dealExecutorClearAccountConfirm())) {
+                        viewModel.trigger(.deleteContractor(.contractor))
+                    }
+                )
             }
         })
 
@@ -1095,8 +1106,8 @@ struct DealView: View {
 
     private func actionSheetEditExecutorButtons() -> [Alert.Button] {
         return [
-            Alert.Button.destructive(Text(R.string.localizable.dealExecutorDeleteAccount())) {
-                viewModel.trigger(.deleteContractor(.contractor))
+            Alert.Button.destructive(Text(R.string.localizable.dealExecutorClearAccount())) {
+                alertType = .confirmClear
             },
             Alert.Button.default(Text(R.string.localizable.dealExecutorEditAccount())) {
                 activeModalType = .editContractor(viewModel.state.executorPublicKey)
@@ -1234,6 +1245,8 @@ extension DealView.AlertType: Identifiable {
         switch self {
         case .error:
             return "error"
+        case .confirmClear:
+            return "confirmClear"
         }
     }
 }
