@@ -159,7 +159,7 @@ struct MainView: View {
                                                 withPublicKey: item.getPartnersBy(viewModel.state.account.publicKey),
                                                 status: item.status,
                                                 roleType: dealRole(deal: item),
-                                                timeSinceCreated: item.timeFromStartFormatted,
+                                                timeSinceCreated: item.createdAt.relativeDateFormatted,
                                                 checkerAmount: item.amountFeeCheckerFormatted)
                                         }
                                     }

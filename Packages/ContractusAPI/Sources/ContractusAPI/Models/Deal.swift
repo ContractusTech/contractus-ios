@@ -168,23 +168,6 @@ public struct Deal: Decodable {
         return nil
     }
     
-    public var timeFromStartFormatted: String {
-        let seconds = Int(Date().timeIntervalSince(self.createdAt))
-        let days = seconds / (24 * 3600)
-        let hours = (seconds % (24 * 3600)) / 3600
-        let minutes = (seconds % 3600) / 60
-        
-        if days > 0 {
-            return "\(days)d \(hours)h \(minutes)m"
-        } else {
-            if hours > 0 {
-                return "\(hours)h \(minutes)m"
-            } else {
-                return "\(minutes)m"
-            }
-        }
-    }
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)

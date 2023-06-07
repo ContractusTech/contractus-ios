@@ -239,7 +239,7 @@ struct DealItemView_Previews: PreviewProvider {
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .canceled,
                     roleType: .checker,
-                    timeSinceCreated: Mock.deal.timeFromStartFormatted,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
@@ -248,7 +248,7 @@ struct DealItemView_Previews: PreviewProvider {
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .new,
                     roleType: .receive,
-                    timeSinceCreated: Mock.deal.timeFromStartFormatted,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
@@ -257,7 +257,7 @@ struct DealItemView_Previews: PreviewProvider {
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .working,
                     roleType: .pay,
-                    timeSinceCreated: Mock.deal.timeFromStartFormatted,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
@@ -266,7 +266,7 @@ struct DealItemView_Previews: PreviewProvider {
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .finished,
                     roleType: .receive,
-                    timeSinceCreated: Mock.deal.timeFromStartFormatted,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
@@ -275,7 +275,7 @@ struct DealItemView_Previews: PreviewProvider {
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .finished,
                     roleType: .pay,
-                    timeSinceCreated: Mock.deal.timeFromStartFormatted,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
@@ -284,7 +284,7 @@ struct DealItemView_Previews: PreviewProvider {
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .inProcessing,
                     roleType: .pay,
-                    timeSinceCreated: Mock.deal.timeFromStartFormatted,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
@@ -293,7 +293,7 @@ struct DealItemView_Previews: PreviewProvider {
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .pending,
                     roleType: .pay,
-                    timeSinceCreated: Mock.deal.timeFromStartFormatted,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
             }
         }

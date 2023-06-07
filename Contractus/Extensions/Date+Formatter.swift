@@ -16,4 +16,15 @@ extension Date {
         formatter.setLocalizedDateFormatFromTemplate("dd MMMM YYYY")
         return formatter.string(from: self)
     }
+        
+    public var relativeDateFormatted: String {
+        let dcf: DateComponentsFormatter = DateComponentsFormatter()
+        dcf.includesApproximationPhrase = false
+        dcf.includesTimeRemainingPhrase = false
+        dcf.allowsFractionalUnits = false
+        dcf.maximumUnitCount = 1
+        dcf.unitsStyle = .abbreviated
+        dcf.allowedUnits = [.second, .minute, .hour, .day, .month, .year]
+        return dcf.string(from: self, to: Date()) ?? ""
+    }
 }
