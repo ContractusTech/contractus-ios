@@ -26,57 +26,69 @@ struct DealItemView: View {
     let withPublicKey: String?
     let status: DealStatus
     let roleType: DealRoleType
+    let timeSinceCreated: String
+    let checkerAmount: String?
 
     var body: some View {
-        VStack(alignment:.leading, spacing: 12) {
-            ZStack(alignment: .leading) {
-                HStack {
-                    statusLabel()
-                    Spacer()
-                    roleLabel()
+        VStack(alignment:.leading, spacing: 0) {
+            HStack(spacing: 0) {
+                statusLabel()
+                Spacer()
+                Text(timeSinceCreated)
+                    .font(.footnote.weight(.medium))
+                    .foregroundColor(R.color.whiteSeparator.color)
+            }
+            
+            HStack(spacing: 5) {
+                Text(amountPrefix + amountFormatted)
+                    .font(.title.weight(.regular))
+                    .strikethrough(isStrikethrough, color: colorAmountText)
+                    .foregroundColor(colorAmountText)
+                VStack(alignment: .leading, spacing: 0) {
+                    partnerTypeImage()
 
-                }
-                .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 6))
-                .offset(x: 0, y: -(SIZE_BLOCK / 2 - 16))
-
-                VStack(alignment: .center, spacing: 0) {
-                    HStack {
-                        Spacer()
-                        Text(amountPrefix + amountFormatted)
-                            .font(.title.weight(.semibold))
-                            .strikethrough(isStrikethrough, color: colorAmountText)
-                            .foregroundColor(colorAmountText)
-                        Spacer()
-                    }
                     Text(tokenSymbol)
-                        .font(.body.weight(.semibold))
+                        .font(.footnote.weight(.semibold))
                         .foregroundColor(R.color.secondaryText.color)
                 }
-                .offset(CGSize(width: 0, height: 6))
+                Spacer()
             }
-            .frame(height: SIZE_BLOCK)
-            .baseBackground()
-            .cornerRadius(16)
+            .padding(.top, 6)
+            
+            if roleType == .checker && !(checkerAmount ?? "").isEmpty {
+                HStack(spacing: 4) {
+                    Text(R.string.localizable.dealTextEarning())
+                        .font(.footnote)
+                        .foregroundColor(R.color.secondaryText.color)
+                    Text(checkerAmount ?? "")
+                        .font(.footnote)
+                        .foregroundColor(R.color.baseGreen.color)
+                }
+            } else {
+                Text(R.string.localizable.dealTextEarning())
+                    .font(.footnote)
+                    .foregroundColor(.clear)
+            }
 
             VStack(alignment:.leading, spacing: 2) {
                 Text(partnerTypeTitle)
-                    .font(.footnote)
-                    .foregroundColor(R.color.textBase.color)
+                    .font(.footnote.weight(.medium))
+                    .foregroundColor(R.color.secondaryText.color)
 
                 if let pk = withPublicKey {
                     Text(ContentMask.mask(from: pk))
                         .font(.subheadline.weight(.medium))
-                        .foregroundColor(R.color.secondaryText.color)
+                        .foregroundColor(status == .canceled ? R.color.secondaryText.color : R.color.textBase.color)
                         
                 } else {
                     Text(R.string.localizable.commonEmpty())
                         .font(.subheadline.weight(.medium))
-                        .foregroundColor(R.color.secondaryText.color)
+                        .foregroundColor(status == .canceled ? R.color.secondaryText.color : R.color.textBase.color)
                 }
             }
-            .padding(EdgeInsets(top: 0, leading: 4, bottom: 8, trailing: 4))
+            .padding(.top, 22)
         }
-        .padding(6)
+        .padding(EdgeInsets(top: 13, leading: 11, bottom: 16, trailing: 14))
         .background(R.color.secondaryBackground.color)
         .cornerRadius(20)
         .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
@@ -88,7 +100,6 @@ struct DealItemView: View {
             .font(.footnote.weight(.medium))
             .textCase(.uppercase)
             .foregroundColor(status.statusColor)
-            .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
     }
 
     @ViewBuilder
@@ -96,7 +107,6 @@ struct DealItemView: View {
         Text(roleType.title)
             .font(.footnote.weight(.medium))
             .textCase(.uppercase)
-            .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
             .foregroundColor(roleType.color)
     }
 
@@ -124,9 +134,27 @@ struct DealItemView: View {
     private var partnerTypeTitle: String {
         switch roleType {
         case .receive, .checker:
-            return R.string.localizable.dealTextForClient()
+            return R.string.localizable.dealTextClient()
         case .pay:
             return R.string.localizable.dealTextExecutor()
+        }
+    }
+    
+    @ViewBuilder
+    func partnerTypeImage() -> some View {
+        switch roleType {
+        case .receive:
+            Constants.iconReceive
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(R.color.baseGreen.color)
+        case .checker:
+            Constants.iconReceive
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(R.color.whiteSeparator.color)
+        case .pay:
+            Constants.iconPayment
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(R.color.secondaryText.color)
         }
     }
 }
@@ -210,49 +238,63 @@ struct DealItemView_Previews: PreviewProvider {
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .canceled,
-                    roleType: .checker)
+                    roleType: .checker,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
+                    checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
                     amountFormatted: Mock.deal.amountFormatted,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .new,
-                    roleType: .receive)
+                    roleType: .receive,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
+                    checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
                     amountFormatted: Mock.deal.amountFormatted,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .working,
-                    roleType: .pay)
+                    roleType: .pay,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
+                    checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
                     amountFormatted: Mock.deal.amountFormatted,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .finished,
-                    roleType: .receive)
+                    roleType: .receive,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
+                    checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
                     amountFormatted: Mock.deal.amountFormatted,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .finished,
-                    roleType: .pay)
+                    roleType: .pay,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
+                    checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
                     amountFormatted: Mock.deal.amountFormatted,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .inProcessing,
-                    roleType: .pay)
+                    roleType: .pay,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
+                    checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
                     amountFormatted: Mock.deal.amountFormatted,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .pending,
-                    roleType: .pay)
+                    roleType: .pay,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
+                    checkerAmount: Mock.deal.amountFeeCheckerFormatted)
             }
         }
         .padding(.horizontal, 100)
