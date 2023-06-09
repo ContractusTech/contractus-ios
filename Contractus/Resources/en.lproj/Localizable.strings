@@ -221,6 +221,8 @@
 "changeAmount.verification-amount" = "Cost of verification";
 "changeAmount.fee-description" = "The fee is taken after the contract is signed by all parties and the start of the contract.";
 "changeAmount.fee-calculate-description" = "The fee is calculated from the amount of the transaction and the cost of the verification service of result";
+"changeAmount.holder.mode" = "Holder mode";
+"changeAmount.holder.mode.hint" = "Deal without fee";
 
 "addContractor.title.contractor" = "Add partner";
 "addContractor.title.checker" = "Add checker";

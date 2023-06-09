@@ -808,7 +808,6 @@ struct DealView: View {
                     case .success(let meta):
                         viewModel.trigger(.updateContent(meta, .metadata))
                     }
-
                 })
                 .interactiveDismiss(canDismissSheet: false)
             case .editTextDealResult, .viewTextDealResult:
@@ -833,12 +832,15 @@ struct DealView: View {
                             deal: viewModel.state.deal,
                             account: viewModel.state.account,
                             amountType: type == .changeAmount ? .deal : .checker,
-                            dealService: try? APIServiceFactory.shared.makeDealsService())),
+                            dealService: try? APIServiceFactory.shared.makeDealsService(),
+                            tier: viewModel.state.tier
+                        )
+                    ),
                     availableTokens: availableTokens,
-                    didChange: { newAmount, typeAmount in
+                    didChange: { newAmount, typeAmount, allowHolderMode in
                         switch typeAmount {
                         case .deal:
-                            viewModel.trigger(.changeAmount(newAmount))
+                            viewModel.trigger(.changeAmount(newAmount, allowHolderMode))
                         case .checker:
                             viewModel.trigger(.changeCheckerAmount(newAmount))
                         case .ownerBond:
@@ -846,7 +848,6 @@ struct DealView: View {
                         case .contractorBond:
                             break
                         }
-
                     })
                 .interactiveDismiss(canDismissSheet: false)
             case .changeOwnerBond, .changeContractorBond:
@@ -856,12 +857,15 @@ struct DealView: View {
                             deal: viewModel.state.deal,
                             account: viewModel.state.account,
                             amountType: type == .changeOwnerBond ? .ownerBond : .contractorBond,
-                            dealService: try? APIServiceFactory.shared.makeDealsService())),
+                            dealService: try? APIServiceFactory.shared.makeDealsService(),
+                            tier: viewModel.state.tier
+                        )
+                    ),
                     availableTokens: availableTokens,
-                    didChange: { newAmount, typeAmount in
+                    didChange: { newAmount, typeAmount, allowHolderMode in
                         switch typeAmount {
                         case .deal:
-                            viewModel.trigger(.changeAmount(newAmount))
+                            viewModel.trigger(.changeAmount(newAmount, allowHolderMode))
                         case .checker:
                             viewModel.trigger(.changeCheckerAmount(newAmount))
                         case .ownerBond:
@@ -869,7 +873,6 @@ struct DealView: View {
                         case .contractorBond:
                             viewModel.trigger(.changeContractorBondAmount(newAmount))
                         }
-
                     })
                 .interactiveDismiss(canDismissSheet: false)
             case .editContractor(let publicKey):
@@ -1263,7 +1266,13 @@ struct DealView_Previews: PreviewProvider {
         NavigationView {
             DealView(viewModel: AnyViewModel<DealState, DealInput>(
                 DealViewModel(
-                    state: DealState(account: Mock.account, availableTokens: Mock.tokenList, deal: Mock.deal, isSignedByPartner: true),
+                    state: DealState(
+                        account: Mock.account,
+                        availableTokens: Mock.tokenList,
+                        tier: .basic,
+                        deal: Mock.deal,
+                        isSignedByPartner: true
+                    ),
                     dealService: nil,
                     transactionSignService: nil,
                     filesAPIService: nil,

@@ -52,7 +52,8 @@ public struct Deal: Decodable {
              ownerBondToken,
              contractorBondAmount,
              contractorBondToken,
-             deadline
+             deadline,
+             allowHolderMode
     }
     public let id: String
     public let completionCheckType: CompletionCheckType
@@ -81,7 +82,7 @@ public struct Deal: Decodable {
     public var contractorBondAmount: BigUInt?
     public var contractorBondToken: Token?
     public var deadline: Date?
-
+    public var allowHolderMode: Bool?
 
     public init(
         id: String,
@@ -108,7 +109,8 @@ public struct Deal: Decodable {
         ownerBondToken: Token? = nil,
         contractorBondAmount: BigUInt? = nil,
         contractorBondToken: Token? = nil,
-        deadline: Date? = nil)
+        deadline: Date? = nil,
+        allowHolderMode: Bool? = nil)
     {
         self.id = id
         self.performanceBondType = performanceBondType
@@ -135,6 +137,7 @@ public struct Deal: Decodable {
         self.ownerBondAmount = ownerBondAmount
         self.contractorBondAmount = contractorBondAmount
         self.deadline = deadline
+        self.allowHolderMode = allowHolderMode
     }
 
     public var amountFormatted: String {
@@ -213,6 +216,10 @@ public struct Deal: Decodable {
             self.deadline = deadline.asDate
         }
 
+        if let allowHolderMode = try? container.decode(Bool.self, forKey: .allowHolderMode) {
+            self.allowHolderMode = allowHolderMode
+        }
+
         self.ownerBondToken = try? container.decodeIfPresent(Token.self, forKey: .ownerBondToken)
         self.contractorBondToken = try? container.decodeIfPresent(Token.self, forKey: .contractorBondToken)
     }
@@ -253,13 +260,15 @@ public struct UpdateDeal: Codable {
     let ownerBondAmount: Amount?
     let contractorBondAmount: Amount?
     let deadline: Date?
+    let allowHolderMode: Bool?
 
-    public init(amount: Amount?, checkerAmount: Amount?, ownerBondAmount: Amount?, contractorBondAmount: Amount?, deadline: Date?) {
+    public init(amount: Amount?, checkerAmount: Amount?, ownerBondAmount: Amount?, contractorBondAmount: Amount?, deadline: Date?, allowHolderMode: Bool?) {
         self.amount = amount
         self.checkerAmount = checkerAmount
         self.ownerBondAmount = ownerBondAmount
         self.contractorBondAmount = contractorBondAmount
         self.deadline = deadline
+        self.allowHolderMode = allowHolderMode
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -269,6 +278,7 @@ public struct UpdateDeal: Codable {
         try container.encodeIfPresent(self.ownerBondAmount, forKey: .ownerBondAmount)
         try container.encodeIfPresent(self.contractorBondAmount, forKey: .contractorBondAmount)
         try container.encodeIfPresent(self.deadline?.asServerString, forKey: .deadline)
+        try container.encodeIfPresent(self.allowHolderMode, forKey: .allowHolderMode)
     }
 }
 
@@ -287,10 +297,12 @@ public enum AmountFeeType: String, Codable {
 public struct CalculateDealFee: Codable {
     public let amount: Amount
     public let type: AmountFeeType
+    public let allowHolderMode: Bool
 
-    public init(amount: Amount, type: AmountFeeType) {
+    public init(amount: Amount, type: AmountFeeType, allowHolderMode: Bool) {
         self.amount = amount
         self.type = type
+        self.allowHolderMode = allowHolderMode
     }
 }
 

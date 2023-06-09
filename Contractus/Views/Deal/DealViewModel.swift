@@ -18,7 +18,7 @@ enum DealViewModelError: Error {
 }
 
 enum DealInput {
-    case changeAmount(Amount)
+    case changeAmount(Amount, Bool)
     case changeCheckerAmount(Amount)
     case changeOwnerBondAmount(Amount)
     case changeContractorBondAmount(Amount)
@@ -68,6 +68,7 @@ struct DealState {
 
     let account: CommonAccount
     let availableTokens: [ContractusAPI.Token]
+    let tier: Balance.Tier
     var deal: ContractusAPI.Deal
     var shareDeal: ShareableDeal?
     var canEdit: Bool = false
@@ -262,8 +263,9 @@ final class DealViewModel: ViewModel {
                 }
             }
 
-        case .changeAmount(let amount):
+        case .changeAmount(let amount, let allowHolderMode):
             state.deal.amount = amount.value
+            state.deal.allowHolderMode = allowHolderMode
             state.deal.token = amount.token
         case .changeCheckerAmount(let amount):
             state.deal.checkerAmount = amount.value

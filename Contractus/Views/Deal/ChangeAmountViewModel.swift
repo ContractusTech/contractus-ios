@@ -12,6 +12,7 @@ import Combine
 enum ChangeAmountInput {
     case changeAmount(String, Token)
     case changeToken(Token)
+    case changeholderMode(Bool)
     case update
 }
 
@@ -30,19 +31,21 @@ enum AmountValueType {
 
 struct ChangeAmountState {
 
-
     enum State: Equatable {
         case loading, changingAmount, error(String), success, none
     }
+
     var state: State = .none
     var deal: Deal
     let amountType: AmountValueType
     var amount: Amount
+    var tier: Balance.Tier
     var feeAmount: Amount
     var feePercent: Double = 0
     var feeFormatted: String = ""
     var fiatFeeFormatted: String = ""
     let account: CommonAccount
+    var allowHolderMode: Bool
 
     var totalAmount: Amount {
         switch amountType {
@@ -102,14 +105,16 @@ final class ChangeAmountViewModel: ViewModel {
     private var dealService: ContractusAPI.DealsService?
     private var store = Set<AnyCancellable>()
 
-    init(deal: Deal, account: CommonAccount, amountType: AmountValueType, dealService: ContractusAPI.DealsService?)
+    init(deal: Deal, account: CommonAccount, amountType: AmountValueType, dealService: ContractusAPI.DealsService?, tier: Balance.Tier)
     {
         self.state = .init(
             deal: deal,
             amountType: amountType,
             amount: amountType == .deal ? Amount(deal.amount, token: deal.token) : Amount(deal.checkerAmount ?? 0, token: deal.token),
+            tier: tier,
             feeAmount: Amount(deal.amountFee, token: deal.token),
-            account: account
+            account: account,
+            allowHolderMode: false
         )
         self.dealService = dealService
     }
@@ -134,18 +139,22 @@ final class ChangeAmountViewModel: ViewModel {
             let newAmount = Amount(amount, token: token)
             self.state.amount = newAmount
             updateFee(amount: newAmount)
+        case .changeholderMode(let holderMode):
+            self.state.allowHolderMode = holderMode
+            let amount = self.state.amount
+            updateFee(amount: amount)
         case .update:
             self.state.state = .changingAmount
             let data: UpdateDeal
             switch state.amountType {
             case .deal:
-                data = UpdateDeal(amount: state.amount, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: nil, deadline: nil)
+                data = UpdateDeal(amount: state.amount, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: nil, deadline: nil, allowHolderMode: state.allowHolderMode)
             case .checker:
-                data = UpdateDeal(amount: nil, checkerAmount: state.amount, ownerBondAmount: nil, contractorBondAmount: nil, deadline: nil)
+                data = UpdateDeal(amount: nil, checkerAmount: state.amount, ownerBondAmount: nil, contractorBondAmount: nil, deadline: nil, allowHolderMode: state.allowHolderMode)
             case .contractorBond:
-                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: state.amount, deadline: nil)
+                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: state.amount, deadline: nil, allowHolderMode: state.allowHolderMode)
             case .ownerBond:
-                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: state.amount, contractorBondAmount: nil, deadline: nil)
+                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: state.amount, contractorBondAmount: nil, deadline: nil, allowHolderMode: state.allowHolderMode)
             }
             dealService?.update(dealId: state.deal.id, data: data, completion: { [weak self] result in
                 switch result {
@@ -172,7 +181,8 @@ final class ChangeAmountViewModel: ViewModel {
             return
         }
         self.state.state = .loading
-        dealService?.getFee(dealId: state.deal.id, data: CalculateDealFee(amount: amount, type: feeType), completion: {[weak self] result in
+        let holderMode = self.state.allowHolderMode
+        dealService?.getFee(dealId: state.deal.id, data: CalculateDealFee(amount: amount, type: feeType, allowHolderMode: holderMode), completion: {[weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let fee):
