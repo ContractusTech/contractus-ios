@@ -55,6 +55,7 @@ struct TextFieldView: View {
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
+                .inset(by: 0.5)
                 .stroke(R.color.textFieldBorder.color, lineWidth: 1)
         )
         .sheet(isPresented: $isPresentedQRScan) {

@@ -97,6 +97,7 @@ struct TextEditorView: View {
                 }
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
+                        .inset(by: 0.5)
                         .stroke(R.color.textFieldBorder.color, lineWidth: mode != .view ? 1 : 0))
             }
             .padding()

@@ -44,10 +44,9 @@ struct WrapTokenView: View {
                                 .opacity(viewModel.operationType == .unwrap ? 0.8 : 1.0)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 20)
+                                        .inset(by: 0.5)
                                         .stroke(R.color.textFieldBorder.color, lineWidth: 1)
-                                    )
-
-
+                                )
 
                             HStack {
                                 Button {
@@ -61,6 +60,7 @@ struct WrapTokenView: View {
                                         .cornerRadius(10)
                                         .overlay {
                                             RoundedRectangle(cornerRadius: 10)
+                                                .inset(by: 0.5)
                                                 .stroke(R.color.baseSeparator.color, lineWidth: 1)
                                         }
                                 }
@@ -112,6 +112,7 @@ struct WrapTokenView: View {
                         .padding(16)
                         .overlay {
                             RoundedRectangle(cornerRadius: 20)
+                                .inset(by: 0.5)
                                 .stroke(R.color.baseSeparator.color, lineWidth: 1)
                         }
 

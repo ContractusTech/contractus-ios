@@ -60,13 +60,12 @@ struct CopyContentView: View {
             }
         }
         .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
-        .background(
+        .background(R.color.textFieldBackground.color)
+        .cornerRadius(12)
+        .overlay(
             RoundedRectangle(cornerRadius: 12)
-            .fill(R.color.textFieldBackground.color)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(R.color.textFieldBorder.color, lineWidth: 1)
-            )
+                .inset(by: 0.5)
+                .stroke(R.color.textFieldBorder.color, lineWidth: 1)
         )
     }
 }
