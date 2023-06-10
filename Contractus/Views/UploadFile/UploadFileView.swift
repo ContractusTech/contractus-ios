@@ -326,7 +326,9 @@ struct UploadFileItemView: View {
         .cornerRadius(24)
         .overlay(
             RoundedRectangle(cornerRadius: 24)
-                .stroke(R.color.textFieldBorder.color, lineWidth: 1))
+                .inset(by: 0.5)
+                .stroke(R.color.textFieldBorder.color, lineWidth: 1)
+        )
     }
 
 

@@ -90,10 +90,10 @@ struct AboutAccountView: View {
                             }.disabled(!existInBackup)
                         }
                         .padding(16)
-                        .background(content: {
+                        .background {
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(R.color.baseSeparator.color)
-                        })
+                        }
                     }
                     .padding(EdgeInsets(top: 42, leading: 18, bottom: 12, trailing: 18))
                     .opacity(existInBackup ? 1 : 0.4)
@@ -120,10 +120,10 @@ struct AboutAccountView: View {
                             }
                         }
                         .padding(16)
-                        .background(content: {
+                        .background {
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(R.color.baseSeparator.color)
-                        })
+                        }
                     }
                     .padding(EdgeInsets(top: 42, leading: 18, bottom: 12, trailing: 18))
                 }

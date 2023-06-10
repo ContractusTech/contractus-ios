@@ -942,7 +942,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 241 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 243 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1224,6 +1224,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonDeal = Rswift.StringResource(key: "common.deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Deal without fee
+      ///
+      /// Locales: en
+      static let changeAmountHolderModeHint = Rswift.StringResource(key: "changeAmount.holder.mode.hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Delete account
       ///
       /// Locales: en
@@ -1400,6 +1404,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let uploadFileButtonSelectGallery = Rswift.StringResource(key: "uploadFile.button.select-gallery", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Holder mode
+      ///
+      /// Locales: en
+      static let changeAmountHolderMode = Rswift.StringResource(key: "changeAmount.holder.mode", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: If all the work is done as specified in the contract you can complete the contract, the contractor will receive payment. The checker will receive a commission for services.
       ///
       /// Locales: en
@@ -2969,6 +2977,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.deal", bundle: bundle, comment: "")
       }
 
+      /// en translation: Deal without fee
+      ///
+      /// Locales: en
+      static func changeAmountHolderModeHint(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.holder.mode.hint", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.holder.mode.hint"
+        }
+
+        return NSLocalizedString("changeAmount.holder.mode.hint", bundle: bundle, comment: "")
+      }
+
       /// en translation: Delete account
       ///
       /// Locales: en
@@ -3629,6 +3652,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("uploadFile.button.select-gallery", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Holder mode
+      ///
+      /// Locales: en
+      static func changeAmountHolderMode(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.holder.mode", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.holder.mode"
+        }
+
+        return NSLocalizedString("changeAmount.holder.mode", bundle: bundle, comment: "")
       }
 
       /// en translation: If all the work is done as specified in the contract you can complete the contract, the contractor will receive payment. The checker will receive a commission for services.

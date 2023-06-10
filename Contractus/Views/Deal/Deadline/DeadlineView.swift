@@ -55,10 +55,10 @@ struct DeadlineView: View {
                             .foregroundColor(R.color.secondaryText.color)
                     }
                     .padding(16)
-                    .background(content: {
+                    .background {
                         RoundedRectangle(cornerRadius: 12)
                             .stroke(R.color.baseSeparator.color)
-                    })
+                    }
 
                     Spacer()
                 }

@@ -64,7 +64,7 @@ final class DeadlineViewModel: ViewModel {
 
     private func update(deadline: Date) async throws -> Deal {
         try await withCheckedThrowingContinuation { continuation in
-            dealService?.update(dealId: state.deal.id, data: UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: nil, deadline: deadline), completion: { result in
+            dealService?.update(dealId: state.deal.id, data: UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: nil, deadline: deadline, allowHolderMode: nil), completion: { result in
                 continuation.resume(with: result)
             })
         }

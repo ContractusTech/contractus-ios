@@ -27,23 +27,24 @@ struct ChangeAmountView: View {
     @StateObject var viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>
     @State private var amountString: String = ""
     @State private var token: ContractusAPI.Token
+    
+    @State var holderMode: Bool = false
 
     let amountPublisher = PassthroughSubject<String, Never>()
     private let availableTokens: [ContractusAPI.Token]
-    private var didChange: (Amount, AmountValueType) -> Void
+    private var didChange: (Amount, AmountValueType, Bool) -> Void
 
     init(
         viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>,
         availableTokens: [ContractusAPI.Token],
-        didChange: @escaping (Amount, AmountValueType) -> Void) {
-
-            self._amountString = State(initialValue: viewModel.state.amount.formatted())
-            self._token = State(initialValue: viewModel.state.amount.token)
-            self._viewModel = StateObject(wrappedValue: viewModel)
-            self.availableTokens = availableTokens
-            self.didChange = didChange
-
-        }
+        didChange: @escaping (Amount, AmountValueType, Bool) -> Void
+    ) {
+        self._amountString = State(initialValue: viewModel.state.amount.formatted())
+        self._token = State(initialValue: viewModel.state.amount.token)
+        self._viewModel = StateObject(wrappedValue: viewModel)
+        self.availableTokens = availableTokens
+        self.didChange = didChange
+    }
 
     var body: some View {
         NavigationView {
@@ -69,34 +70,13 @@ struct ChangeAmountView: View {
                         .cornerRadius(12)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
+                                .inset(by: 0.5)
                                 .stroke(R.color.textFieldBorder.color, lineWidth: 1)
                         )
-
-                        Divider()
 
                         switch viewModel.amountType {
                         case .deal, .checker:
                             VStack(spacing: 12) {
-                                HStack {
-                                    VStack {
-                                        Text(R.string.localizable.changeAmountDealAmount())
-                                            .font(.body)
-                                            .foregroundColor(viewModel.state.amountType == .deal ? R.color.textBase.color : R.color.secondaryText.color)
-                                            .multilineTextAlignment(.leading)
-                                    }
-
-                                    Spacer()
-                                    if viewModel.state.state != .loading  {
-                                        Text(viewModel.state.dealAmount.formatted(withCode: true))
-                                            .font(.body)
-                                            .fontWeight(.bold)
-                                            .foregroundColor(viewModel.state.amountType == .deal ? R.color.textBase.color : R.color.secondaryText.color)
-                                            .multilineTextAlignment(.leading)
-                                    } else {
-                                        RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
-                                            .frame(width: 42, height: 19)
-                                    }
-                                }
                                 if !viewModel.state.checkerIsYou {
                                     HStack {
                                         VStack {
@@ -114,60 +94,88 @@ struct ChangeAmountView: View {
                                                 .foregroundColor(viewModel.state.amountType == .checker ? R.color.textBase.color : R.color.secondaryText.color)
                                                 .multilineTextAlignment(.leading)
                                         } else {
-                                            RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
+                                            RoundedRectangle(cornerRadius: 16)
+                                                .fill(R.color.thirdBackground.color)
                                                 .frame(width: 42, height: 19)
                                         }
                                     }
                                 }
                             }
-                            Divider()
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack(alignment: .top) {
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        Text(R.string.localizable.changeAmountFeeTitle())
+                            VStack(spacing: 16) {
+                                HStack(alignment: .center) {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(R.string.localizable.changeAmountHolderMode())
                                             .font(.body)
                                             .foregroundColor(R.color.textBase.color)
                                             .multilineTextAlignment(.leading)
-                                    }
-
-                                    Spacer()
-                                    if viewModel.state.feePercent == 0 && viewModel.state.state != .loading {
-                                        Label(text: R.string.localizable.changeAmountFeeFree(), type: .primary)
-                                    } else {
-                                        if !viewModel.state.feeFormatted.isEmpty  {
-                                            Text(viewModel.state.feeFormatted)
-                                                .font(.body)
-                                                .fontWeight(.medium)
-                                                .foregroundColor(R.color.textBase.color)
-                                                .multilineTextAlignment(.leading)
-                                        } else {
-                                            RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
-                                                .frame(width: 42, height: 19)
-                                        }
-                                    }
-                                }
-                                VStack(alignment: .leading, spacing: 4) {
-
-                                    if !viewModel.state.fiatFeeFormatted.isEmpty {
-                                        Text("Estimate fiat amount \(viewModel.state.fiatFeeFormatted)")
-                                            .font(.footnote.weight(.semibold))
+                                        
+                                        Text(R.string.localizable.changeAmountHolderModeHint())
+                                            .font(.footnote)
                                             .foregroundColor(R.color.secondaryText.color)
                                             .multilineTextAlignment(.leading)
                                     }
 
-                                    Text(R.string.localizable.changeAmountFeeCalculateDescription())
-                                        .font(.footnote)
-                                        .foregroundColor(R.color.labelTextAttention.color)
-                                        .multilineTextAlignment(.leading)
-                                    Text(R.string.localizable.changeAmountFeeDescription())
-                                        .font(.footnote)
-                                        .foregroundColor(R.color.secondaryText.color)
-                                        .multilineTextAlignment(.leading)
+                                    Spacer()
+                                    
+                                    Toggle(isOn: $holderMode) {}
+                                        .disabled(viewModel.state.tier == .basic)
                                 }
+                                
+                                BorderDivider(
+                                    color: R.color.textFieldBorder.color,
+                                    width: 1
+                                )
+                                .padding(.horizontal, -12)
+                                
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack(alignment: .top) {
+                                        VStack(alignment: .leading, spacing: 8) {
+                                            Text(R.string.localizable.changeAmountFeeTitle())
+                                                .font(.body)
+                                                .foregroundColor(R.color.textBase.color)
+                                                .multilineTextAlignment(.leading)
+                                        }
+                                        
+                                        Spacer()
+                                        if viewModel.state.feePercent == 0 && viewModel.state.state != .loading {
+                                            Label(text: R.string.localizable.changeAmountFeeFree(), type: .primary)
+                                        } else {
+                                            if !viewModel.state.feeFormatted.isEmpty  {
+                                                Text(viewModel.state.feeFormatted)
+                                                    .font(.body)
+                                                    .fontWeight(.medium)
+                                                    .foregroundColor(R.color.textBase.color)
+                                                    .multilineTextAlignment(.leading)
+                                            } else {
+                                                RoundedRectangle(cornerRadius: 16)
+                                                    .fill(R.color.thirdBackground.color)
+                                                    .frame(width: 42, height: 19)
+                                            }
+                                        }
+                                    }
+                                    VStack(alignment: .leading, spacing: 4) {
 
+                                        if !viewModel.state.fiatFeeFormatted.isEmpty {
+                                            Text("Estimate fiat amount \(viewModel.state.fiatFeeFormatted)")
+                                                .font(.footnote.weight(.semibold))
+                                                .foregroundColor(R.color.secondaryText.color)
+                                                .multilineTextAlignment(.leading)
+                                        }
 
+                                        Text(R.string.localizable.changeAmountFeeCalculateDescription())
+                                            .font(.footnote)
+                                            .foregroundColor(R.color.labelTextAttention.color)
+                                            .multilineTextAlignment(.leading)
+                                    }
+                                }
                             }
-                            Divider()
+                            .padding(.all, 12)
+                            .cornerRadius(12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .inset(by: 0.5)
+                                    .stroke(R.color.textFieldBorder.color, lineWidth: 1)
+                            )
 
                             HStack {
                                 VStack {
@@ -185,7 +193,8 @@ struct ChangeAmountView: View {
                                         .foregroundColor(R.color.textBase.color)
                                         .multilineTextAlignment(.leading)
                                 } else {
-                                    RoundedRectangle(cornerRadius: 16).fill(R.color.thirdBackground.color)
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .fill(R.color.thirdBackground.color)
                                         .frame(width: 42, height: 19)
                                 }
                             }
@@ -195,17 +204,23 @@ struct ChangeAmountView: View {
                     }
                 }
 
+                VStack(spacing: 24) {
+                    Text(R.string.localizable.changeAmountFeeDescription())
+                        .multilineTextAlignment(.center)
+                        .font(.footnote)
+                        .foregroundColor(R.color.secondaryText.color)
+                        .multilineTextAlignment(.leading)
 
-                CButton(
-                    title: R.string.localizable.commonChange(),
-                    style: .primary,
-                    size: .large,
-                    isLoading: viewModel.state.state == .changingAmount,
-                    isDisabled: (!viewModel.state.isValid || viewModel.state.state == .loading))
-                {
-                    viewModel.trigger(.update)
+                    CButton(
+                        title: R.string.localizable.commonChange(),
+                        style: .primary,
+                        size: .large,
+                        isLoading: viewModel.state.state == .changingAmount,
+                        isDisabled: (!viewModel.state.isValid || viewModel.state.state == .loading)
+                    ) {
+                        viewModel.trigger(.update)
+                    }
                 }
-
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
             }
             .onChange(of: amountString, perform: { newAmount in
@@ -213,7 +228,7 @@ struct ChangeAmountView: View {
             })
             .onChange(of: viewModel.state.state, perform: { newValue in
                 if newValue == .success {
-                    didChange(viewModel.amount, viewModel.state.amountType)
+                    didChange(viewModel.amount, viewModel.state.amountType, viewModel.allowHolderMode)
                     presentationMode.wrappedValue.dismiss()
                 }
             })
@@ -222,6 +237,9 @@ struct ChangeAmountView: View {
             })
             .onReceive(amountPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main), perform: { amountText in
                 viewModel.trigger(.changeAmount(amountText, token))
+            })
+            .onChange(of: holderMode, perform: { newValue in
+                viewModel.trigger(.changeholderMode(newValue))
             })
             .toolbar{
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -232,7 +250,6 @@ struct ChangeAmountView: View {
                             .resizable()
                             .frame(width: 21, height: 21)
                             .foregroundColor(R.color.textBase.color)
-
                     }
                 }
             }
@@ -243,6 +260,10 @@ struct ChangeAmountView: View {
             .edgesIgnoringSafeArea(.bottom)
         }
         .onAppear {
+            if let allowHolderMode = viewModel.state.deal.allowHolderMode {
+                self.holderMode = allowHolderMode
+                viewModel.trigger(.changeholderMode(allowHolderMode))
+            }
             viewModel.trigger(.changeAmount(amountString, token))
         }
     }
@@ -285,7 +306,7 @@ struct ChangeAmountView_Previews: PreviewProvider {
     static var previews: some View {
         ChangeAmountView(
             viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>(ChangeAmountViewModel(
-                deal: Mock.deal, account: Mock.account, amountType: .deal, dealService: nil)), availableTokens: Mock.tokenList) { _, _  in
+                deal: Mock.deal, account: Mock.account, amountType: .deal, dealService: nil, tier: .basic)), availableTokens: Mock.tokenList) { _, _, _  in
 
                 }
     }
