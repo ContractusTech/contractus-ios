@@ -138,7 +138,15 @@ struct ChangeAmountView: View {
                                         
                                         Spacer()
                                         if viewModel.state.feePercent == 0 && viewModel.state.state != .loading {
-                                            Label(text: R.string.localizable.changeAmountFeeFree(), type: .primary)
+                                            if viewModel.state.noAmount {
+                                                Text("➖")
+                                                    .font(.body)
+                                                    .fontWeight(.medium)
+                                                    .foregroundColor(R.color.secondaryText.color)
+                                                    .multilineTextAlignment(.leading)
+                                            } else {
+                                                Label(text: R.string.localizable.changeAmountFeeFree(), type: .primary)
+                                            }
                                         } else {
                                             if !viewModel.state.feeFormatted.isEmpty  {
                                                 Text(viewModel.state.feeFormatted)
