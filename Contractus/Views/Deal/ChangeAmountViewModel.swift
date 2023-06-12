@@ -44,6 +44,7 @@ struct ChangeAmountState {
     var feePercent: Double = 0
     var feeFormatted: String = ""
     var fiatFeeFormatted: String = ""
+    var noAmount: Bool = false
     let account: CommonAccount
     var allowHolderMode: Bool
 
@@ -124,8 +125,10 @@ final class ChangeAmountViewModel: ViewModel {
         switch input {
         case .changeAmount(let amount, let token):
             var amount = amount
+            state.noAmount = false
             if amount.isEmpty {
                 amount = "0"
+                state.noAmount = true
             }
             if Amount.isValid(amount, token: token) {
                 let newAmount = Amount(amount, token: token)
