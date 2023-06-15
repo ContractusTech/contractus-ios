@@ -207,7 +207,10 @@ struct ChangeAmountView: View {
                                 }
                             }
                         case .ownerBond, .contractorBond:
-                            Text("Bond")
+                            Text(bondText)
+                                .font(.footnote)
+                                .foregroundColor(R.color.secondaryText.color)
+                                .multilineTextAlignment(.center)
                         }
                     }
                 }
@@ -305,6 +308,39 @@ struct ChangeAmountView: View {
                     return "Bond of executor (you)"
                 }
                 return "Bond of executor"
+            }
+        }
+    }
+    
+    var bondText: String {
+        switch viewModel.state.amountType {
+        case .deal:
+            return ""
+        case .checker:
+            return ""
+        case .contractorBond:
+            if viewModel.contractorIsClient {
+                if viewModel.state.clientIsYou {
+                    return R.string.localizable.changeAmountBondOwner()
+                }
+                return R.string.localizable.changeAmountBondContractor()
+            } else {
+                if !viewModel.state.clientIsYou {
+                    return R.string.localizable.changeAmountBondOwner()
+                }
+                return R.string.localizable.changeAmountBondContractor()
+            }
+        case .ownerBond:
+            if viewModel.ownerIsClient {
+                if viewModel.state.clientIsYou {
+                    return R.string.localizable.changeAmountBondOwner()
+                }
+                return R.string.localizable.changeAmountBondContractor()
+            } else {
+                if !viewModel.state.clientIsYou {
+                    return R.string.localizable.changeAmountBondOwner()
+                }
+                return R.string.localizable.changeAmountBondContractor()
             }
         }
     }
