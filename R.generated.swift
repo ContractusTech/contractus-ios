@@ -942,7 +942,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 243 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 245 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1720,6 +1720,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealHintPayAccount = Rswift.StringResource(key: "deal.hint.pay-account", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The amount of performance bonds will be blocked on partner account for the duration of the deal. After completion will be fully refunded
+      ///
+      /// Locales: en
+      static let changeAmountBondContractor = Rswift.StringResource(key: "changeAmount.bond.contractor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The amount of performance bonds will be blocked on your account for the duration of the deal. After completion will be fully refunded to you
+      ///
+      /// Locales: en
+      static let changeAmountBondOwner = Rswift.StringResource(key: "changeAmount.bond.owner", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The contract description was updated while you were editing your version. Forced update to your version?
       ///
       /// Locales: en
@@ -4837,6 +4845,36 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.hint.pay-account", bundle: bundle, comment: "")
+      }
+
+      /// en translation: The amount of performance bonds will be blocked on partner account for the duration of the deal. After completion will be fully refunded
+      ///
+      /// Locales: en
+      static func changeAmountBondContractor(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.bond.contractor", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.bond.contractor"
+        }
+
+        return NSLocalizedString("changeAmount.bond.contractor", bundle: bundle, comment: "")
+      }
+
+      /// en translation: The amount of performance bonds will be blocked on your account for the duration of the deal. After completion will be fully refunded to you
+      ///
+      /// Locales: en
+      static func changeAmountBondOwner(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.bond.owner", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.bond.owner"
+        }
+
+        return NSLocalizedString("changeAmount.bond.owner", bundle: bundle, comment: "")
       }
 
       /// en translation: The contract description was updated while you were editing your version. Forced update to your version?

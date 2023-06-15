@@ -408,7 +408,7 @@ struct DealView: View {
                                     }
                                     Spacer()
                                     if viewModel.state.canEditDeal {
-                                        CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !(viewModel.state.isOwnerDeal)) {
+                                        CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: false) {
                                             activeModalType = viewModel.state.ownerIsExecutor ? .changeOwnerBond : .changeContractorBond
                                         }
                                     }
