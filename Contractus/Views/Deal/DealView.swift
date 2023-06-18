@@ -166,7 +166,7 @@ struct DealView: View {
                                     }
                                     Spacer()
                                     if viewModel.state.canEditDeal {
-                                        CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
+                                        CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit || viewModel.state.currentMainActions.contains(.cancelSign)) {
                                             activeModalType = .changeAmount
                                         }
                                     }
@@ -202,7 +202,7 @@ struct DealView: View {
                                     }
                                     Spacer()
                                     if viewModel.state.isOwnerDeal && viewModel.state.youIsClient && viewModel.state.canEditDeal {
-                                        CButton(title: viewModel.state.executorPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false) {
+                                        CButton(title: viewModel.state.executorPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: viewModel.state.currentMainActions.contains(.cancelSign)) {
                                             if viewModel.state.executorPublicKey.isEmpty {
                                                 activeModalType = .editContractor(viewModel.state.executorPublicKey)
                                             } else {
@@ -506,7 +506,7 @@ struct DealView: View {
 
                             Spacer()
                             if viewModel.state.canEditDeal {
-                                CButton(title: (viewModel.state.deal.meta?.contentIsEmpty ?? true) ? R.string.localizable.commonSet() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
+                                CButton(title: (viewModel.state.deal.meta?.contentIsEmpty ?? true) ? R.string.localizable.commonSet() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit || viewModel.state.currentMainActions.contains(.cancelSign)) {
                                     if self.viewModel.isYouChecker && !self.viewModel.state.isOwnerDeal {
                                         activeModalType = .viewTextDealDetails
                                     } else {
@@ -547,7 +547,7 @@ struct DealView: View {
                             }
                             Spacer()
                             if viewModel.state.canEditDeal {
-                                CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
+                                CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit || viewModel.state.currentMainActions.contains(.cancelSign)) {
                                     uploaderState = .medium
                                     viewModel.trigger(.uploaderContentType(.metadata))
                                 }
