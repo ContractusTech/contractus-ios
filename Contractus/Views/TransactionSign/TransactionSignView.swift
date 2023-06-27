@@ -23,8 +23,6 @@ private enum Constants {
     static let copyImage = Image(systemName: "square.on.square")
 }
 
-fileprivate let HEIGHT_TX_VIEW: CGFloat = 120
-
 struct FieldCopyButton: View {
     let content: String
     @State private var copiedNotification: Bool = false
@@ -90,7 +88,7 @@ struct TransactionDetailFieldView: View {
 
             Spacer()
             VStack {
-                HStack(spacing: 8) {
+                HStack(spacing: 6) {
                     Text(value)
                         .font(.body)
                         .foregroundColor(valueTextColor)
@@ -139,7 +137,7 @@ struct TransactionSignView: View {
     var closeAction: (Bool) -> Void
 
     @State private var alertType: AlertType?
-    @State private var heightTransaction: CGFloat? = HEIGHT_TX_VIEW
+    @State private var showTx: Bool = false
 
     init(account: CommonAccount, type: TransactionSignType, signedAction: @escaping () -> Void, closeAction: @escaping (Bool) -> Void) {
         self._viewModel = .init(
@@ -165,13 +163,14 @@ struct TransactionSignView: View {
                             Text(title)
                                 .font(.largeTitle.weight(.medium))
                                 .tracking(-1.1)
+                                .lineSpacing(-1.1)
                                 .multilineTextAlignment(.center)
                                 .foregroundColor(R.color.textBase.color)
                             HStack {
                                 Spacer()
                                 Text(subtitle)
                                     .foregroundColor(R.color.secondaryText.color)
-                                    .font(.callout)
+                                    .font(.footnote)
                                     .multilineTextAlignment(.center)
                                     .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                                 Spacer()
@@ -207,36 +206,36 @@ struct TransactionSignView: View {
                                         Text(R.string.localizable.transactionSignFieldsBase64())
                                             .font(.body)
                                             .foregroundColor(R.color.secondaryText.color)
+
+                                        Spacer()
+
+                                        Button {
+                                            showTx.toggle()
+
+                                        } label: {
+                                            transactionButtonImage
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 16, height: 16)
+                                                .foregroundColor(R.color.textBase.color)
+                                        }
+                                    }
+                                }
+                                if showTx {
+                                    VStack(alignment: .leading) {
+                                        Text(tx)
+                                            .font(.footnote.monospaced())
+                                            .foregroundColor(R.color.secondaryText.color)
+                                    }
+                                    HStack(spacing: 6) {
+                                        CButton(title: R.string.localizable.commonCopy(), style: .secondary, size: .default, isLoading: false) {
+                                            ImpactGenerator.light()
+                                            UIPasteboard.general.string = tx
+                                        }
+                                        Spacer()
                                     }
                                 }
 
-                                Spacer()
-                                VStack(alignment: .leading) {
-                                    Text(tx)
-                                        .font(.footnote.monospaced())
-                                        .foregroundColor(R.color.secondaryText.color)
-                                        .frame(height: heightTransaction)
-                                }
-                                HStack(spacing: 6) {
-                                    CButton(title: R.string.localizable.commonCopy(), style: .secondary, size: .default, isLoading: false) {
-                                        ImpactGenerator.light()
-                                        UIPasteboard.general.string = tx
-                                    }
-                                    Spacer()
-                                    Button {
-                                        if heightTransaction == HEIGHT_TX_VIEW {
-                                            heightTransaction = nil
-                                        } else {
-                                            heightTransaction = HEIGHT_TX_VIEW
-                                        }
-                                    } label: {
-                                        transactionButtonImage
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 16, height: 16)
-                                            .foregroundColor(R.color.textBase.color)
-                                    }
-                                }
                             }
                             .padding()
                         }
@@ -427,7 +426,7 @@ struct TransactionSignView: View {
     }
 
     var transactionButtonImage: Image {
-        if heightTransaction == HEIGHT_TX_VIEW {
+        if !showTx {
             return Constants.arrowDownImage
         }
         return Constants.arrowUpImage

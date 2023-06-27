@@ -248,12 +248,7 @@ struct DealView: View {
                                         if viewModel.state.isYouChecker {
                                             Text(R.string.localizable.commonYou())
                                         } else if viewModel.state.deal.checkerPublicKey?.isEmpty ?? true {
-                                            if !viewModel.state.clientPublicKey.isEmpty {
-                                                Text(ContentMask.mask(from: viewModel.state.clientPublicKey))
-                                                Label(text: R.string.localizable.commonOwner(), type: .primary)
-                                            } else {
-                                                Text(R.string.localizable.commonEmpty())
-                                            }
+                                            Text(R.string.localizable.commonEmpty())
                                         } else {
                                             Text(ContentMask.mask(from: viewModel.state.deal.checkerPublicKey))
                                         }
@@ -700,7 +695,7 @@ struct DealView: View {
                         ForEach(viewModel.currentMainActions) { actionType in
                             switch actionType {
                             case .sign:
-                                if viewModel.state.isSignedByPartner {
+                                if viewModel.state.isSignedByPartners {
                                     CButton(title: R.string.localizable.dealButtonsSignAndStart(), style: .primary, size: .large, isLoading: false) {
                                         activeModalType = .signTx(.dealInit)
                                     }
@@ -1271,7 +1266,7 @@ struct DealView_Previews: PreviewProvider {
                         availableTokens: Mock.tokenList,
                         tier: .basic,
                         deal: Mock.deal,
-                        isSignedByPartner: true
+                        isSignedByPartners: true
                     ),
                     dealService: nil,
                     transactionSignService: nil,

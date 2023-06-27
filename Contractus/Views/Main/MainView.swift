@@ -295,7 +295,6 @@ struct MainView: View {
             .onAppear{
                 load()
             }
-            .tintIfCan(R.color.textBase.color)
         }
     }
 
