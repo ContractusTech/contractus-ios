@@ -43,6 +43,8 @@
 "common.token" = "Token";
 "common.coin" = "Coin";
 "common.coins" = "Coins";
+"common.on" = "On";
+"common.off" = "Off";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
@@ -225,6 +227,7 @@
 "changeAmount.holder.mode.hint" = "Deal without fee";
 "changeAmount.bond.owner" = "The amount of performance bonds will be blocked on your account for the duration of the deal. After completion will be fully refunded to you";
 "changeAmount.bond.contractor" = "The amount of performance bonds will be blocked on partner account for the duration of the deal. After completion will be fully refunded";
+"changeAmount.estimate.fiat" = "Estimate fiat amountt";
 
 "addContractor.title.contractor" = "Add partner";
 "addContractor.title.checker" = "Add checker";
