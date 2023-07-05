@@ -835,9 +835,13 @@ struct DealView: View {
                     didChange: { newAmount, typeAmount, allowHolderMode in
                         switch typeAmount {
                         case .deal:
-                            viewModel.trigger(.changeAmount(newAmount, allowHolderMode))
+                            viewModel.trigger(.changeAmount(newAmount, allowHolderMode)) {
+                                viewModel.trigger(.update(nil))
+                            }
                         case .checker:
-                            viewModel.trigger(.changeCheckerAmount(newAmount))
+                            viewModel.trigger(.changeCheckerAmount(newAmount)) {
+                                viewModel.trigger(.update(nil))
+                            }
                         case .ownerBond:
                             break
                         case .contractorBond:
@@ -972,7 +976,9 @@ struct DealView: View {
                     message: Text(R.string.localizable.dealExecutorClearAccountMessage()),
                     primaryButton: .cancel(),
                     secondaryButton: .destructive(Text(R.string.localizable.dealExecutorClearAccountConfirm())) {
-                        viewModel.trigger(.deleteContractor(.contractor))
+                        viewModel.trigger(.deleteContractor(.contractor)) {
+                            viewModel.trigger(.update(nil))
+                        }
                     }
                 )
             }

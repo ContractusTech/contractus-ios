@@ -267,13 +267,16 @@ final class DealViewModel: ViewModel {
             state.deal.amount = amount.value
             state.deal.allowHolderMode = allowHolderMode
             state.deal.token = amount.token
+            after?()
         case .changeCheckerAmount(let amount):
             state.deal.checkerAmount = amount.value
+            after?()
         case .updateTx:
             loadActualTx()
         case .update(let deal):
             if let deal = deal {
                 self.state.deal = deal
+                loadActualTx()
                 return
             }
             Task { @MainActor in
