@@ -1,21 +1,14 @@
-//
-//  File.swift
-//  
-//
-//  Created by Simon Hudishkin on 24.07.2022.
-//
-
 import Foundation
 import Alamofire
 
 public class APIClient {
-
     let session: Session
     let server: ServerType
     private let interceptor: ContractusInterceptor
 
-    public init(server: ServerType, authorizationHeader: AuthorizationHeader? = nil) {
-        self.interceptor = ContractusInterceptor(authorizationHeader: authorizationHeader)
+    public init(server: ServerType) {
+        self.interceptor = ContractusInterceptor()
+
         self.session = Session(interceptor: self.interceptor)
         self.server = server
     }
@@ -23,22 +16,9 @@ public class APIClient {
     public func updateHeader(authorizationHeader: AuthorizationHeader? = nil) {
         interceptor.authorizationHeader = authorizationHeader
     }
-}
 
-class ContractusInterceptor: RequestInterceptor {
-
-    var authorizationHeader: AuthorizationHeader?
-
-    init(authorizationHeader: AuthorizationHeader?) {
-        self.authorizationHeader = authorizationHeader
-    }
-
-    func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
-
-        var urlRequest = urlRequest
-        if let authorizationHeader = authorizationHeader {
-            urlRequest.headers.add(authorizationHeader.value)
-        }
-        completion(.success(urlRequest))
+    public func performVerifyDevice(_ action: @escaping VerifyDeviceAction) {
+        interceptor.performVerifyDevice = action
     }
 }
+

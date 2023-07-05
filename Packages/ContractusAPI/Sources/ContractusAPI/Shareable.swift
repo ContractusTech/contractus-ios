@@ -1,10 +1,3 @@
-//
-//  Shareable.swift
-//  
-//
-//  Created by Simon Hudishkin on 06.10.2022.
-//
-
 import Foundation
 
 public enum ShareableError: Error {

@@ -1,10 +1,3 @@
-//
-//  AuthorizationHeaderFactory.swift
-//  
-//
-//  Created by Simon Hudishkin on 24.07.2022.
-//
-
 import Foundation
 import Alamofire
 import TweetNacl
@@ -34,11 +27,11 @@ public struct AuthorizationHeader {
 
 public struct AuthorizationHeaderBuilder {
 
-    public static func build(for blockchain: Blockchain, with keyPair: KeyPair, deviceId: String) throws -> AuthorizationHeader {
+    public static func build(for blockchain: Blockchain, message: String, with keyPair: KeyPair, deviceId: String) throws -> AuthorizationHeader {
         switch blockchain {
         case .solana:
             let sign = try NaclSign.signDetached(
-                message: blockchain.rawValue.data(using: .utf8)!,
+                message: message.data(using: .utf8)!,
                 secretKey: keyPair.privateKey)
 
             let signatureBase58 = Base58.base58Encode([UInt8](sign))

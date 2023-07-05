@@ -30,7 +30,7 @@ final class AccountServiceImpl: AccountService {
         switch blockchain {
         case .solana:
             let keyPair = try solanaGenerateKeyPair()
-            return try Account(secretKey: keyPair.privateKey).commonAccount
+            return try KeyPair(secretKey: keyPair.privateKey).commonAccount
         }
     }
 
@@ -38,7 +38,7 @@ final class AccountServiceImpl: AccountService {
         switch blockchain {
         case .solana:
             let privateKeyUInt8 = Base58.decode(privateKey)
-            return try Account(secretKey: Data(privateKeyUInt8)).commonAccount
+            return try KeyPair(secretKey: Data(privateKeyUInt8)).commonAccount
         }
     }
 

@@ -9,6 +9,7 @@ import Foundation
 import Alamofire
 
 public enum ServicePath {
+    case verifyDevice
     case accounts
     case currentAccount
     case accountStatistics
@@ -34,6 +35,8 @@ public enum ServicePath {
 
     var value: String {
         switch self {
+        case .verifyDevice:
+            return "/auth/verify-device"
         case .wrap:
             return "/tx/wrap"
         case .signWrap:
@@ -96,6 +99,7 @@ public class BaseService {
     }
 
     func request<T: Decodable, E: Encodable>(
+        withAuth: Bool = true,
         path: ServicePath,
         httpMethod: HTTPMethod,
         data: E? = nil,
@@ -108,11 +112,10 @@ public class BaseService {
         default:
             encoder = JSONParameterEncoder.default
         }
-        client.session.request(client.server.path(path.value), method: httpMethod, parameters: data, encoder: encoder)
+        (withAuth ? client.session : Session.default).request(client.server.path(path.value), method: httpMethod, parameters: data, encoder: encoder)
             .validate()
             .responseDecodable(of: T.self) {[weak self] response in
                 guard let self = self else { return }
-                debugPrint(String(data: response.request?.httpBody ?? Data(), encoding: .utf8))
                 completion(self.process(response: response))
         }
     }
