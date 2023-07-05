@@ -39,7 +39,6 @@
 		6D530DBC28E23780006F52C6 /* CreateDealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D530DBB28E23780006F52C6 /* CreateDealView.swift */; };
 		6D530DBE28E2AD82006F52C6 /* CreateDealViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D530DBD28E2AD82006F52C6 /* CreateDealViewModel.swift */; };
 		6D5900FA2892340400EC318E /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5900F92892340400EC318E /* R.generated.swift */; };
-		6D590106289383D600EC318E /* ContractusAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 6D590105289383D600EC318E /* ContractusAPI */; };
 		6D5A65A728E3F5110081533C /* ChangeAmountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5A65A628E3F5110081533C /* ChangeAmountViewModel.swift */; };
 		6D6777C42999F26B004FC207 /* Font+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6777C32999F26B004FC207 /* Font+Ex.swift */; };
 		6D6E60D429EE2F08008AB833 /* TransactionStatus+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6E60D329EE2F08008AB833 /* TransactionStatus+Ex.swift */; };
@@ -103,6 +102,7 @@
 		6DB5F8B6294D762300AE612A /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 6DB5F8B5294D762300AE612A /* JGProgressHUD */; };
 		6DB5F8B8294D7B2D00AE612A /* JGProgressHUD+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB5F8B7294D7B2D00AE612A /* JGProgressHUD+Ex.swift */; };
 		6DB83CA92899FE5C006A4667 /* DealItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB83CA82899FE5C006A4667 /* DealItemView.swift */; };
+		6DB9C3DA2A555F1B0011C817 /* ContractusAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 6DB9C3D92A555F1B0011C817 /* ContractusAPI */; };
 		6DBCA45C288F076D00F918B6 /* AccountService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBCA45B288F076D00F918B6 /* AccountService.swift */; };
 		6DBCA45E288F1EAF00F918B6 /* AccountStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBCA45D288F1EAF00F918B6 /* AccountStorage.swift */; };
 		6DBCA461288F213500F918B6 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBCA460288F213500F918B6 /* MainView.swift */; };
@@ -205,7 +205,6 @@
 		6D530DBB28E23780006F52C6 /* CreateDealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDealView.swift; sourceTree = "<group>"; };
 		6D530DBD28E2AD82006F52C6 /* CreateDealViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDealViewModel.swift; sourceTree = "<group>"; };
 		6D5900F92892340400EC318E /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
-		6D5901032893839100EC318E /* ContractusAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ContractusAPI; path = Packages/ContractusAPI; sourceTree = "<group>"; };
 		6D5901082893887E00EC318E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6D5A65A628E3F5110081533C /* ChangeAmountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeAmountViewModel.swift; sourceTree = "<group>"; };
 		6D6777C32999F26B004FC207 /* Font+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Ex.swift"; sourceTree = "<group>"; };
@@ -263,6 +262,7 @@
 		6DB5F8A2293EFA0800AE612A /* Double+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Ex.swift"; sourceTree = "<group>"; };
 		6DB5F8B7294D7B2D00AE612A /* JGProgressHUD+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JGProgressHUD+Ex.swift"; sourceTree = "<group>"; };
 		6DB83CA82899FE5C006A4667 /* DealItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealItemView.swift; sourceTree = "<group>"; };
+		6DB9C3D82A555E8B0011C817 /* ContractusAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ContractusAPI; path = Packages/ContractusAPI; sourceTree = "<group>"; };
 		6DBCA45B288F076D00F918B6 /* AccountService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountService.swift; sourceTree = "<group>"; };
 		6DBCA45D288F1EAF00F918B6 /* AccountStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStorage.swift; sourceTree = "<group>"; };
 		6DBCA460288F213500F918B6 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -314,9 +314,9 @@
 				6DB5F8B6294D762300AE612A /* JGProgressHUD in Frameworks */,
 				6D6EE39E289FBEBA00635E60 /* QRCode in Frameworks */,
 				6D8EFD9328D8EB5B0064F5DA /* SolanaSwift in Frameworks */,
-				6D590106289383D600EC318E /* ContractusAPI in Frameworks */,
 				6DAA5E772898BDFA00BA1965 /* CryptoSwift in Frameworks */,
 				6DDA818328C0D3E10022E005 /* Introspect in Frameworks */,
+				6DB9C3DA2A555F1B0011C817 /* ContractusAPI in Frameworks */,
 				6DB547F928B9E87C003D2A8A /* ResizableSheet in Frameworks */,
 				6D75F2E6288EA37E0092D182 /* KeychainAccess in Frameworks */,
 			);
@@ -472,8 +472,8 @@
 		6D75F2F1288EAB1A0092D182 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				6D5901032893839100EC318E /* ContractusAPI */,
 				6DBF3A3D28D64D7F00952D8A /* sss-swift */,
+				6DB9C3D82A555E8B0011C817 /* ContractusAPI */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -769,7 +769,6 @@
 			name = Contractus;
 			packageProductDependencies = (
 				6D75F2E5288EA37E0092D182 /* KeychainAccess */,
-				6D590105289383D600EC318E /* ContractusAPI */,
 				6D75528F289662250069935B /* Rswift */,
 				6DAA5E762898BDFA00BA1965 /* CryptoSwift */,
 				6D6EE39D289FBEBA00635E60 /* QRCode */,
@@ -781,6 +780,7 @@
 				6D0DA7612930A6960024EF30 /* CodeScanner */,
 				6DB5F8B5294D762300AE612A /* JGProgressHUD */,
 				FE5F427329AF22FA00A1E506 /* netfox */,
+				6DB9C3D92A555F1B0011C817 /* ContractusAPI */,
 			);
 			productName = Contractus;
 			productReference = 6D97AEED288D196200EB61D0 /* Contractus.app */;
@@ -1213,7 +1213,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Contractus/Preview Content\"";
-				DEVELOPMENT_TEAM = 58HB3X4JG2;
+				DEVELOPMENT_TEAM = Q424U5CAPS;
 				ENABLE_PREVIEWS = YES;
 				GCC_NO_COMMON_BLOCKS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1252,7 +1252,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Contractus/Preview Content\"";
-				DEVELOPMENT_TEAM = 58HB3X4JG2;
+				DEVELOPMENT_TEAM = Q424U5CAPS;
 				ENABLE_PREVIEWS = YES;
 				GCC_NO_COMMON_BLOCKS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1501,10 +1501,6 @@
 			package = 6D530DB828E2302E006F52C6 /* XCRemoteSwiftPackageReference "swiftui-pull-to-refresh" */;
 			productName = SwiftUIPullToRefresh;
 		};
-		6D590105289383D600EC318E /* ContractusAPI */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = ContractusAPI;
-		};
 		6D6EE39D289FBEBA00635E60 /* QRCode */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6D6EE39C289FBEBA00635E60 /* XCRemoteSwiftPackageReference "QRCode" */;
@@ -1543,6 +1539,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6DB5F8B4294D762300AE612A /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
 			productName = JGProgressHUD;
+		};
+		6DB9C3D92A555F1B0011C817 /* ContractusAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ContractusAPI;
 		};
 		6DDA818228C0D3E10022E005 /* Introspect */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -9,6 +9,7 @@ import SwiftUI
 import SolanaSwift
 import ResizableSheet
 import SwiftUIPullToRefresh
+import ContractusAPI 
 
 fileprivate enum Constants {
     static let arrowDownImage = Image(systemName: "chevron.down")
