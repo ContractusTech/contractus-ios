@@ -177,7 +177,7 @@ final class ChangeAmountViewModel: ViewModel {
             var newState = self.state
             newState.feePercent = 0
             newState.feeAmount = Amount(UInt64(0), token: amount.token)
-            newState.feeFormatted = "(0%) \(Amount(UInt64(0), token: amount.token).formatted(withCode: true))"
+            newState.feeFormatted = Amount(UInt64(0), token: amount.token).formatted(withCode: true)
             newState.fiatFeeFormatted = "-" //fee.fiatCurrency.format(double: 0, withCode: true) ?? ""
             newState.state = .none
             self.state = newState
@@ -192,8 +192,9 @@ final class ChangeAmountViewModel: ViewModel {
                 var newState = self.state
                 newState.feePercent = fee.percent
                 newState.feeAmount = fee.feeAmount
-                newState.feeFormatted = "(\(fee.percent.formatAsPercent())%) \(fee.feeAmount.formatted(withCode: true))"
-                newState.fiatFeeFormatted = fee.fiatCurrency.format(double: fee.fiatFee, withCode: true) ?? ""
+                newState.feeFormatted = fee.feeAmount.formatted(withCode: true)
+                let fiatCurrency = fee.fiatCurrency.format(double: fee.fiatFee, withCode: true)
+                newState.fiatFeeFormatted = fiatCurrency != nil ? "\(fiatCurrency!) (\(fee.percent.formatAsPercent())%)" : ""
                 newState.state = .none
                 self.state = newState
             case .failure(let error):

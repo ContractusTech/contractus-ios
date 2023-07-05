@@ -12,6 +12,7 @@ import TweetNacl
 protocol TransactionSignService {
     func sign(txBase64: String, by secretKey: Data) throws -> (signature: String, message: String)
     func isSigned(txBase64: String, publicKey: Data) -> Bool
+    func isSigned(txBase64: String, publicKeys: [PublicKey]) -> [PublicKey]
 }
 
 final class SolanaTransactionSignServiceImpl: TransactionSignService {
@@ -47,9 +48,20 @@ final class SolanaTransactionSignServiceImpl: TransactionSignService {
     }
 
     func isSigned(txBase64: String, publicKey: Data) -> Bool {
-        
         guard let dataToSign = Data(base64Encoded: txBase64), let publicKey = try? PublicKey(data: publicKey) else { return false }
-        var tx = try? Transaction.from(data: dataToSign)
+        return _isSigned(txData: dataToSign, publicKey: publicKey)
+    }
+
+    func isSigned(txBase64: String, publicKeys: [PublicKey]) -> [PublicKey] {
+        guard let dataToSign = Data(base64Encoded: txBase64) else { return [] }
+        return publicKeys.compactMap { publicKey in
+            guard _isSigned(txData: dataToSign, publicKey: publicKey) else { return nil }
+            return publicKey
+        }
+    }
+
+    private func _isSigned(txData: Data, publicKey: PublicKey) -> Bool {
+        let tx = try? Transaction.from(data: txData)
         return tx?.signatures.first(where: {$0.publicKey == publicKey && $0.signature != nil}) != nil
     }
 }

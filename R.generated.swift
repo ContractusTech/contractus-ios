@@ -942,7 +942,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 245 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 248 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1332,6 +1332,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let balanceTitle = Rswift.StringResource(key: "balance.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Estimate fiat amountt
+      ///
+      /// Locales: en
+      static let changeAmountEstimateFiat = Rswift.StringResource(key: "changeAmount.estimate.fiat", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Executor
       ///
       /// Locales: en
@@ -1484,10 +1488,18 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignSubtitleUnsignedInitDeal = Rswift.StringResource(key: "transactionSign.subtitle.unsigned-init-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Off
+      ///
+      /// Locales: en
+      static let commonOff = Rswift.StringResource(key: "common.off", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Ok
       ///
       /// Locales: en
       static let commonOk = Rswift.StringResource(key: "common.ok", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: On
+      ///
+      /// Locales: en
+      static let commonOn = Rswift.StringResource(key: "common.on", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Once signed, the transaction will be cancelled and the client's funds will be refunded
       ///
       /// Locales: en
@@ -3390,6 +3402,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("balance.title", bundle: bundle, comment: "")
       }
 
+      /// en translation: Estimate fiat amountt
+      ///
+      /// Locales: en
+      static func changeAmountEstimateFiat(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.estimate.fiat", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.estimate.fiat"
+        }
+
+        return NSLocalizedString("changeAmount.estimate.fiat", bundle: bundle, comment: "")
+      }
+
       /// en translation: Executor
       ///
       /// Locales: en
@@ -3962,6 +3989,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("transactionSign.subtitle.unsigned-init-deal", bundle: bundle, comment: "")
       }
 
+      /// en translation: Off
+      ///
+      /// Locales: en
+      static func commonOff(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.off", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.off"
+        }
+
+        return NSLocalizedString("common.off", bundle: bundle, comment: "")
+      }
+
       /// en translation: Ok
       ///
       /// Locales: en
@@ -3975,6 +4017,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.ok", bundle: bundle, comment: "")
+      }
+
+      /// en translation: On
+      ///
+      /// Locales: en
+      static func commonOn(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.on", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.on"
+        }
+
+        return NSLocalizedString("common.on", bundle: bundle, comment: "")
       }
 
       /// en translation: Once signed, the transaction will be cancelled and the client's funds will be refunded
