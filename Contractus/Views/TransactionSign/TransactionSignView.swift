@@ -75,7 +75,7 @@ struct TransactionDetailFieldView: View {
 
     var body: some View {
         HStack {
-            VStack {
+            VStack(alignment: .leading, spacing: 8) {
                 Text(title)
                     .font(.body)
                     .foregroundColor(R.color.textBase.color)
