@@ -37,48 +37,49 @@ struct QRCodeScannerView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 24) {
-                CodeScannerView(codeTypes: [.qr], simulatedData: "Paul Hudson") { response in
-                    switch response {
-                    case .success(let result):
-                        value = result.string
-                    case .failure(let error):
-                        print(error.localizedDescription)
+            ZStack {
+                R.color.mainBackground.color
+                VStack(spacing: 24) {
+                    CodeScannerView(codeTypes: [.qr], simulatedData: "Paul Hudson") { response in
+                        switch response {
+                        case .success(let result):
+                            value = result.string
+                        case .failure(let error):
+                            print(error.localizedDescription)
+                        }
                     }
-                }
-                .frame(width: 300, height: 300)
-                .cornerRadius(12)
+                    .frame(width: 300, height: 300)
+                    .cornerRadius(12)
 
-                if configuration == .scannerAndInput {
-
-                    Text("Or manual")
-                    TextFieldView(
-                        placeholder: "Enter value", blockchain: viewModel.state.blockchain,
-                        allowQRScan: false,
-                        value: value
-                    ) { newValue in
-                        value = newValue
-
+                    if configuration == .scannerAndInput {
+                        Text("Or manual")
+                        TextFieldView(
+                            placeholder: "Enter value", blockchain: viewModel.state.blockchain,
+                            allowQRScan: false,
+                            value: value
+                        ) { newValue in
+                            value = newValue
+                        }
+                        .ignoresSafeArea(.keyboard, edges: .bottom)
                     }
-                    .ignoresSafeArea(.keyboard, edges: .bottom)
+                    Spacer()
                 }
-                Spacer()
-            }
-            .padding(UIConstants.contentInset)
-            .padding(.bottom, keyboard.currentHeight)
-            .animation(.easeOut(duration: 0.16))
-            .edgesIgnoringSafeArea(.bottom)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle("Scan QR code")
-            .onChange(of: value) { newValue in
-                viewModel.trigger(.parse(newValue))
-            }
-            .onChange(of: viewModel.state.state) { newState in
-                switch newState {
-                case .valid(let result):
-                    callback?(result)
-                default:
-                    break
+                .padding(UIConstants.contentInset)
+                .padding(.bottom, keyboard.currentHeight)
+                .animation(.easeOut(duration: 0.16), value: keyboard.currentHeight)
+                .edgesIgnoringSafeArea(.bottom)
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationTitle("Scan QR code")
+                .onChange(of: value) { newValue in
+                    viewModel.trigger(.parse(newValue))
+                }
+                .onChange(of: viewModel.state.state) { newState in
+                    switch newState {
+                    case .valid(let result):
+                        callback?(result)
+                    default:
+                        break
+                    }
                 }
             }
             .baseBackground()

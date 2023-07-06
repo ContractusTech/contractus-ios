@@ -146,6 +146,15 @@
         }
       },
       {
+        "package": "SwiftUI-Shimmer",
+        "repositoryURL": "https://github.com/markiv/SwiftUI-Shimmer",
+        "state": {
+          "branch": null,
+          "revision": "17b66b0e7d94d2d3f220bbcb021b5026436f06c7",
+          "version": "1.3.0"
+        }
+      },
+      {
         "package": "Task_retrying",
         "repositoryURL": "https://github.com/bigearsenal/task-retrying-swift.git",
         "state": {

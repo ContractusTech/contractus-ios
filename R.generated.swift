@@ -942,7 +942,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 270 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 273 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1436,6 +1436,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let shareSubtitleDefault = Rswift.StringResource(key: "share.subtitle.default", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: For the period of the deal will be lock 10k CTUS
+      ///
+      /// Locales: en
+      static let transactionSignSubtitleHolderMode = Rswift.StringResource(key: "transactionSign.subtitle.holder-mode", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Force update
       ///
       /// Locales: en
@@ -1460,6 +1464,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let changeAmountHolderMode = Rswift.StringResource(key: "changeAmount.holder.mode", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Holder mode
+      ///
+      /// Locales: en
+      static let transactionSignFieldsHolderMode = Rswift.StringResource(key: "transactionSign.fields.holder-mode", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: If all the work is done as specified in the contract you can complete the contract, the contractor will receive payment. The checker will receive a commission for services.
       ///
       /// Locales: en
@@ -1612,6 +1620,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealPerformanceBond = Rswift.StringResource(key: "deal.performance.bond", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Performance bond
+      ///
+      /// Locales: en
+      static let transactionSignFieldsBond = Rswift.StringResource(key: "transactionSign.fields.bond", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Performs the work specified in the contract.
       ///
       /// Locales: en
@@ -3880,6 +3892,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("share.subtitle.default", bundle: bundle, comment: "")
       }
 
+      /// en translation: For the period of the deal will be lock 10k CTUS
+      ///
+      /// Locales: en
+      static func transactionSignSubtitleHolderMode(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.subtitle.holder-mode", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.subtitle.holder-mode"
+        }
+
+        return NSLocalizedString("transactionSign.subtitle.holder-mode", bundle: bundle, comment: "")
+      }
+
       /// en translation: Force update
       ///
       /// Locales: en
@@ -3970,6 +3997,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("changeAmount.holder.mode", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Holder mode
+      ///
+      /// Locales: en
+      static func transactionSignFieldsHolderMode(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.fields.holder-mode", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.fields.holder-mode"
+        }
+
+        return NSLocalizedString("transactionSign.fields.holder-mode", bundle: bundle, comment: "")
       }
 
       /// en translation: If all the work is done as specified in the contract you can complete the contract, the contractor will receive payment. The checker will receive a commission for services.
@@ -4540,6 +4582,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.performance.bond", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Performance bond
+      ///
+      /// Locales: en
+      static func transactionSignFieldsBond(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.fields.bond", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.fields.bond"
+        }
+
+        return NSLocalizedString("transactionSign.fields.bond", bundle: bundle, comment: "")
       }
 
       /// en translation: Performs the work specified in the contract.

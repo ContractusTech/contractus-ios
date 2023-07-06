@@ -133,6 +133,7 @@
 		6DFED9332930F1EE00AF727A /* ImpactGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED9322930F1EE00AF727A /* ImpactGenerator.swift */; };
 		6DFED935293207D200AF727A /* QRCodeScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED934293207D200AF727A /* QRCodeScannerViewModel.swift */; };
 		6DFED939293262F300AF727A /* SharablePublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED938293262F300AF727A /* SharablePublicKey.swift */; };
+		FE0F36802A552C2D00EEC595 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = FE0F367F2A552C2D00EEC595 /* Shimmer */; };
 		FE1D8DDE2A31115A003D97BC /* BorderDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D8DDD2A31115A003D97BC /* BorderDivider.swift */; };
 		FE1E3DD429D3597E009B0E57 /* AboutAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */; };
 		FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */; };
@@ -318,6 +319,7 @@
 				6DDA818328C0D3E10022E005 /* Introspect in Frameworks */,
 				6DB9C3DA2A555F1B0011C817 /* ContractusAPI in Frameworks */,
 				6DB547F928B9E87C003D2A8A /* ResizableSheet in Frameworks */,
+				FE0F36802A552C2D00EEC595 /* Shimmer in Frameworks */,
 				6D75F2E6288EA37E0092D182 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -780,6 +782,7 @@
 				6D0DA7612930A6960024EF30 /* CodeScanner */,
 				6DB5F8B5294D762300AE612A /* JGProgressHUD */,
 				FE5F427329AF22FA00A1E506 /* netfox */,
+				FE0F367F2A552C2D00EEC595 /* Shimmer */,
 				6DB9C3D92A555F1B0011C817 /* ContractusAPI */,
 			);
 			productName = Contractus;
@@ -866,6 +869,7 @@
 				6D0DA7602930A6960024EF30 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				6DB5F8B4294D762300AE612A /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				FE5F427229AF22FA00A1E506 /* XCRemoteSwiftPackageReference "netfox" */,
+				FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 			);
 			productRefGroup = 6D97AEEE288D196200EB61D0 /* Products */;
 			projectDirPath = "";
@@ -1480,6 +1484,14 @@
 				version = 0.1.4;
 			};
 		};
+		FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		FE5F427229AF22FA00A1E506 /* XCRemoteSwiftPackageReference "netfox" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kasketis/netfox";
@@ -1548,6 +1560,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6DDA818128C0D3E10022E005 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
 			productName = Introspect;
+		};
+		FE0F367F2A552C2D00EEC595 /* Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
+			productName = Shimmer;
 		};
 		FE5F427329AF22FA00A1E506 /* netfox */ = {
 			isa = XCSwiftPackageProductDependency;

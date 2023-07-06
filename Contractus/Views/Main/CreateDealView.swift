@@ -333,6 +333,19 @@ extension PerformanceBondType {
             return "Only executor"
         }
     }
+    
+    var shortTitle: String {
+        switch self {
+        case .none:
+            return "Nobody"
+        case .both:
+            return "Both"
+        case .onlyClient:
+            return "Client"
+        case .onlyExecutor:
+            return "Executor"
+        }
+    }
 }
 
 fileprivate extension DealRoleView.RoleType {

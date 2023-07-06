@@ -130,6 +130,8 @@ struct DealState {
     var canEditDeal: Bool {
         deal.status == .new
     }
+    
+    var editIsVisible: Bool = false
 
     var clientPublicKey: String {
         switch deal.ownerRole {
@@ -266,13 +268,16 @@ final class DealViewModel: ViewModel {
             state.deal.amount = amount.value
             state.deal.allowHolderMode = allowHolderMode
             state.deal.token = amount.token
+            loadActualTx()
         case .changeCheckerAmount(let amount):
             state.deal.checkerAmount = amount.value
+            loadActualTx()
         case .updateTx:
             loadActualTx()
         case .update(let deal):
             if let deal = deal {
                 self.state.deal = deal
+                loadActualTx()
                 return
             }
             Task { @MainActor in
@@ -359,6 +364,7 @@ final class DealViewModel: ViewModel {
                     }
                 } receiveValue: { deal in
                     self.state.deal = deal
+                    self.loadActualTx()
                     self.state.state = .success
                 }
                 .store(in: &cancelable)
@@ -384,6 +390,7 @@ final class DealViewModel: ViewModel {
                 await MainActor.run(body: {[weak self, actions, isSignedByPartners] in
                     self?.state.isSignedByPartners = isSignedByPartners
                     self?.state.currentMainActions = actions
+                    self?.state.editIsVisible = !state.currentMainActions.contains(.cancelSign)
                 })
                 
              } catch let error as ContractusAPI.APIClientError {
@@ -394,6 +401,7 @@ final class DealViewModel: ViewModel {
                             self?.state.isSignedByPartners = false
                             self?.state.currentMainActions = [.sign]
                             self?.state.canSign = true
+                            self?.state.editIsVisible = !state.currentMainActions.contains(.cancelSign)
                         })
                         return
                     }
@@ -403,6 +411,7 @@ final class DealViewModel: ViewModel {
                             self?.state.currentMainActions = [.sign]
                             self?.state.canSign = false
                             self?.state.state = .none
+                            self?.state.editIsVisible = !state.currentMainActions.contains(.cancelSign)
                         })
                         return
                     }
