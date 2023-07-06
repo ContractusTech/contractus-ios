@@ -269,13 +269,16 @@ final class DealViewModel: ViewModel {
             state.deal.amount = amount.value
             state.deal.allowHolderMode = allowHolderMode
             state.deal.token = amount.token
+            loadActualTx()
         case .changeCheckerAmount(let amount):
             state.deal.checkerAmount = amount.value
+            loadActualTx()
         case .updateTx:
             loadActualTx()
         case .update(let deal):
             if let deal = deal {
                 self.state.deal = deal
+                loadActualTx()
                 return
             }
             Task { @MainActor in
@@ -368,6 +371,7 @@ final class DealViewModel: ViewModel {
                     }
                 } receiveValue: { deal in
                     self.state.deal = deal
+                    self.loadActualTx()
                     self.state.state = .success
                 }
                 .store(in: &cancelable)
