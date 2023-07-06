@@ -309,11 +309,11 @@ struct DealView: View {
                                 .foregroundColor(R.color.secondaryText.color)
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Performance bond")
+                                Text(R.string.localizable.dealPerformanceBond())
                                     .foregroundColor(R.color.textBase.color)
                                     .font(.title3)
 
-                                Text("This is guarantee to mitigate the risks. ")
+                                Text(R.string.localizable.dealPerformanceBondSubtitle())
                                     .foregroundColor(R.color.secondaryText.color)
                                     .font(.footnote)
 
@@ -330,7 +330,7 @@ struct DealView: View {
                                 HStack(alignment: .top) {
                                     VStack(alignment: .leading, spacing: 6) {
                                         HStack {
-                                            Text("Client")
+                                            Text(R.string.localizable.dealTextClient())
                                                 .font(.footnote.weight(.semibold))
                                                 .textCase(.uppercase)
                                                 .foregroundColor(R.color.secondaryText.color)
@@ -350,7 +350,7 @@ struct DealView: View {
                                                         .foregroundColor(R.color.secondaryText.color)
                                                 }
                                             }
-                                            Text("Upon completion the funds will be returned to the client")
+                                            Text(R.string.localizable.dealBondClientSubtitle())
                                                 .font(.footnote)
                                                 .foregroundColor(R.color.secondaryText.color)
                                         }
@@ -376,7 +376,7 @@ struct DealView: View {
                                 HStack(alignment: .top) {
                                     VStack(alignment: .leading, spacing: 6) {
                                         HStack {
-                                            Text("Executor")
+                                            Text(R.string.localizable.dealTextExecutor())
                                                 .font(.footnote.weight(.semibold))
                                                 .textCase(.uppercase)
                                                 .foregroundColor(R.color.secondaryText.color)
@@ -396,7 +396,7 @@ struct DealView: View {
                                                 }
                                             }
 
-                                            Text("Upon completion the funds will be returned to the executor")
+                                            Text(R.string.localizable.dealBondExecutorSubtitle())
                                                 .font(.footnote)
                                                 .foregroundColor(R.color.secondaryText.color)
                                         }
@@ -423,7 +423,7 @@ struct DealView: View {
                                 HStack(alignment: .top) {
                                     VStack(alignment: .leading, spacing: 6) {
                                         HStack {
-                                            Text("Deadline")
+                                            Text(R.string.localizable.dealTextDeadline())
                                                 .font(.footnote.weight(.semibold))
                                                 .textCase(.uppercase)
                                                 .foregroundColor(R.color.secondaryText.color)
@@ -441,7 +441,7 @@ struct DealView: View {
                                                 }
 
                                             }
-                                            Text("If the counter parties do not agree before the appointed date, the contract is terminated and the funds are returned to all parties.")
+                                            Text(R.string.localizable.dealBondDeadlineSubtitle())
                                                 .font(.footnote)
                                                 .foregroundColor(R.color.secondaryText.color)
 
@@ -1049,10 +1049,10 @@ struct DealView: View {
     private func actionSheetMenuButtons() -> [Alert.Button] {
         if viewModel.isOwnerDeal {
             return [
-                Alert.Button.default(Text("Share Secret")) {
+                Alert.Button.default(Text(R.string.localizable.dealShareSecret())) {
                     activeModalType = .shareSecret
                 },
-                Alert.Button.destructive(Text("Cancel deal")) {
+                Alert.Button.destructive(Text(R.string.localizable.dealCancel())) {
                     viewModel.trigger(.cancel) {
                         self.callback()
                         self.presentationMode.wrappedValue.dismiss()
@@ -1063,7 +1063,7 @@ struct DealView: View {
                 }]
         }
         return [
-            Alert.Button.destructive(Text("Decline")) {
+            Alert.Button.destructive(Text(R.string.localizable.dealTextDecline())) {
                 viewModel.trigger(.cancel) {
                     self.callback()
                     self.presentationMode.wrappedValue.dismiss()
@@ -1122,7 +1122,7 @@ struct DealView: View {
         }
         hudCoordinator.showHUD {
             let hud = CHUD()
-            hud.textLabel.text = "Downloading"
+            hud.textLabel.text = R.string.localizable.commonDownloading()
             hud.indicatorView = JGProgressHUDPieIndicatorView()
             hud.progress = Float(progress)
             hud.cancelPressedAction = {
@@ -1135,7 +1135,7 @@ struct DealView: View {
     }
 
     private func decryptingHUD() {
-        let text = "Decrypting"
+        let text = R.string.localizable.commonDecrypting()
         if let hud = hudCoordinator.presentedHUD {
             hud.textLabel.text = text
             hud.indicatorView = JGProgressHUDIndicatorView()
@@ -1222,11 +1222,11 @@ struct FileItemView: View {
         }
         .padding(.bottom, 8)
         .confirmationDialog("", isPresented: $confirmPresented) {
-            Button("Yes, delete", role: .destructive) {
+            Button(R.string.localizable.dealDeleteAlertButton(), role: .destructive) {
                 action(.delete)
             }
         } message: {
-            Text("You want delete file?")
+            Text(R.string.localizable.dealDeleteAlertMessage())
         }
     }
 }

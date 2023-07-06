@@ -35,7 +35,6 @@ enum DealInput {
     case saveKey(ScanResult)
     case hideError
     case sheetClose
-    case finishDeal
     case deleteContractor(ParticipateType)
     case uploaderContentType(DealsService.ContentType?)
 }
@@ -235,7 +234,7 @@ final class DealViewModel: ViewModel {
                 switch result {
                 case .failure(let error):
                     self?.state.errorState = .error(error.localizedDescription)
-                case .success(let deal):
+                case .success:
                     after?()
                 }
             })
@@ -345,12 +344,6 @@ final class DealViewModel: ViewModel {
             guard let downloadingUUID = downloadingUUID else { return }
             state.previewState = .none
             filesAPIService?.cancelDownload(by: downloadingUUID)
-        case .finishDeal:
-            Task {
-                state.state = .loading
-                let tx = try? await getFinishTx()
-                state.state = .none
-            }
         case .deleteContractor(let type):
             self.state.state = .loading
             self.deleteContractor(type: type)
@@ -575,7 +568,7 @@ final class DealViewModel: ViewModel {
             debugPrint("downloadFile error");
             await MainActor.run {
                 state.previewState = .none
-                state.errorState = .error("Download file error")
+                state.errorState = .error(R.string.localizable.errorDownloadFile())
             }
             return nil
         }
@@ -594,7 +587,7 @@ final class DealViewModel: ViewModel {
             debugPrint("Decrypt error");
             await MainActor.run {
                 state.previewState = .none
-                state.errorState = .error("Decrypt file error")
+                state.errorState = .error(R.string.localizable.errorDecryptFile())
             }
             return nil
         }

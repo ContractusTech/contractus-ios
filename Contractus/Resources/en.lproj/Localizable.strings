@@ -45,6 +45,8 @@
 "common.coins" = "Coins";
 "common.on" = "On";
 "common.off" = "Off";
+"common.downloading" = "Downloading";
+"common.decrypting" = "Decrypting";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
@@ -131,6 +133,8 @@
 "deal.text.files" = "Files";
 "deal.text.details" = "Details";
 "deal.text.earning" = "Earning";
+"deal.text.deadline" = "Deadline";
+"deal.text.decline" = "Decline";
 "deal.status.finished" = "Done";
 "deal.status.canceled" = "Cancel";
 "deal.status.new" = "New";
@@ -167,18 +171,24 @@
 "deal.buttons.finish-deal" = "Finish deal";
 "deal.finish" = "Finish deal";
 "deal.cancel" = "Cancel deal";
+"deal.share.secret" = "Share Secret";
 "deal.executor.clear-account" = "Clear";
 "deal.executor.edit-account" = "Edit";
 "deal.executor.clear-account.message" = "Are you sure you want to clear account?";
 "deal.executor.clear-account.confirm" = "Yes, clear";
-
-
+"deal.performance.bond" = "Performance bond";
+"deal.performance.bond.subtitle" = "This is guarantee to mitigate the risks.";
+"deal.bond.client.subtitle" = "Upon completion the funds will be returned to the client";
+"deal.bond.executor.subtitle" = "Upon completion the funds will be returned to the client";
+"deal.bond.deadline.subtitle" = "If the counter parties do not agree before the appointed date, the contract is terminated and the funds are returned to all parties.";
 "deal.description-command.partner-already-signed" = "The partner has already signed the contract. The work of the contract will begin when you sign the contract.";
 "deal.description-command.first-sign" = "Sign the contract, the work of the contract starts automatically when your partner signs it";
 "deal.description-command.cant-sign" = "To sign the contract, you need to specify the contractor and the cost";
 "deal.description-command.cancel-sign" = "You can cancel your signature before your partner signs the contract. The work of the contract will begin when the partner signs.";
 "deal.description-command.stop-deal" = "You can stop the contract all funds will be refunded.";
 "deal.description-command.finish-deal" = "If all the work is done as specified in the contract you can complete the contract, the contractor will receive payment. The checker will receive a commission for services.";
+"deal.delete.alert.button" = "Yes, delete";
+"deal.delete.alert.message" = "You want delete file?";
 
 "newDeal.title" = "New deal";
 "newDeal.subtitle" = "Choose your role";
@@ -278,3 +288,6 @@
 "aboutAccount.confirm.full-delete.message" = "Are you sure you want to delete your account from the app and backup? Be careful, you will not be able to restore the account.";
 "aboutAccount.confirm.full-delete.title" = "Delete account";
 "aboutAccount.confirm.yes" = "Delete account";
+
+"error.download.file" = "Download file error";
+"error.decrypt.file" = "Decrypt file error";
