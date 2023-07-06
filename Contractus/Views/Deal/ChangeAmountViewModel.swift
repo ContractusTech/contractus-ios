@@ -74,7 +74,12 @@ struct ChangeAmountState {
     }
 
     var isValid: Bool {
-        amount.value != 0
+        switch amountType {
+        case .ownerBond, .contractorBond:
+            return amount.value >= 0
+        default:
+            return amount.value != 0
+        }
     }
 
     var allowChangeCurrency: Bool {
