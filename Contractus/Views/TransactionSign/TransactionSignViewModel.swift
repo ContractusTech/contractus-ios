@@ -110,11 +110,32 @@ final class TransactionSignViewModel: ViewModel {
                     if let tx = tx {
                         initPollTxService(id: tx.id)
                         if let fee = tx.fee {
-                            newState.informationFields.append(.init(title: R.string.localizable.transactionSignStatusesNeedSign(), value: deal.token.format(amount: fee, withCode: true), titleDescription: nil, valueDescription: nil))
+                            newState.informationFields.append(.init(
+                                title: R.string.localizable.transactionSignFieldsFee(),
+                                value: deal.token.format(amount: fee, withCode: true),
+                                titleDescription: nil,
+                                valueDescription: nil
+                            ))
                         }
                     }
 
-
+                    if let _ = deal.allowHolderMode {
+                        newState.informationFields.append(.init(
+                            title: R.string.localizable.transactionSignFieldsHolderMode(),
+                            value: R.string.localizable.commonOn(),
+                            titleDescription: R.string.localizable.transactionSignSubtitleHolderMode(),
+                            valueDescription: nil
+                        ))
+                    }
+                    
+                    if deal.performanceBondType != .none {
+                        newState.informationFields.append(.init(
+                            title: R.string.localizable.transactionSignFieldsBond(),
+                            value: deal.performanceBondType.shortTitle,
+                            titleDescription: nil,
+                            valueDescription: nil
+                        ))
+                    }
                     self.state = newState
                 } catch {
                     var newState = self.state
