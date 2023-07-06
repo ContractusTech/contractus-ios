@@ -411,30 +411,30 @@ struct ChangeAmountView: View {
         case .deal:
             return R.string.localizable.changeAmountTitle()
         case .checker:
-            return "Cost of verification"
+            return R.string.localizable.changeAmountVerificationAmount()
         case .contractorBond:
             if viewModel.contractorIsClient {
                 if viewModel.state.clientIsYou {
-                    return "Bond of client (you)"
+                    return R.string.localizable.changeAmountBondClientYou()
                 }
-                return "Bond of client"
+                return R.string.localizable.changeAmountBondClient()
             } else {
                 if !viewModel.state.clientIsYou {
-                    return "Bond of executor (you)"
+                    return R.string.localizable.changeAmountBondExecutorYou()
                 }
-                return "Bond of executor"
+                return R.string.localizable.changeAmountBondExecutor()
             }
         case .ownerBond:
             if viewModel.ownerIsClient {
                 if viewModel.state.clientIsYou {
-                    return "Bond of client (you)"
+                    return R.string.localizable.changeAmountBondClientYou()
                 }
-                return "Bond of client"
+                return R.string.localizable.changeAmountBondClient()
             } else {
                 if !viewModel.state.clientIsYou {
-                    return "Bond of executor (you)"
+                    return R.string.localizable.changeAmountBondExecutorYou()
                 }
-                return "Bond of executor"
+                return R.string.localizable.changeAmountBondExecutor()
             }
         }
     }

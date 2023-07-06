@@ -942,7 +942,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 262 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 270 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1076,6 +1076,22 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsWarningSubtitle = Rswift.StringResource(key: "accounts.warning.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Bond of client
+      ///
+      /// Locales: en
+      static let changeAmountBondClient = Rswift.StringResource(key: "changeAmount.bond.client", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Bond of client (you)
+      ///
+      /// Locales: en
+      static let changeAmountBondClientYou = Rswift.StringResource(key: "changeAmount.bond.client.you", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Bond of executor
+      ///
+      /// Locales: en
+      static let changeAmountBondExecutor = Rswift.StringResource(key: "changeAmount.bond.executor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Bond of executor (you)
+      ///
+      /// Locales: en
+      static let changeAmountBondExecutorYou = Rswift.StringResource(key: "changeAmount.bond.executor.you", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: By pressed «Continue» you confirm that you have saved your private key
       ///
       /// Locales: en
@@ -1220,10 +1236,18 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealChangeAmountCurrency = Rswift.StringResource(key: "deal.changeAmount.currency", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Date
+      ///
+      /// Locales: en
+      static let commonDate = Rswift.StringResource(key: "common.date", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Deadline
       ///
       /// Locales: en
       static let dealTextDeadline = Rswift.StringResource(key: "deal.text.deadline", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Deadline of deal
+      ///
+      /// Locales: en
+      static let deadlineOfDeal = Rswift.StringResource(key: "deadline.of.deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Deal
       ///
       /// Locales: en
@@ -1676,6 +1700,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonSelectAction = Rswift.StringResource(key: "common.select-action", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Select deadline
+      ///
+      /// Locales: en
+      static let deadlineTitle = Rswift.StringResource(key: "deadline.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Select file
       ///
       /// Locales: en
@@ -1968,6 +1996,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsDeleteWarning = Rswift.StringResource(key: "accounts.delete.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: You must complete the deal by this date or the deal will be stopped and funds will be refunded to all parties. The service fee is not refundable.
+      ///
+      /// Locales: en
+      static let deadlineComment = Rswift.StringResource(key: "deadline.comment", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: You need to specify the Account that will check the result of the contract.
       ///
       /// Locales: en
@@ -2494,6 +2526,66 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.warning.subtitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Bond of client
+      ///
+      /// Locales: en
+      static func changeAmountBondClient(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.bond.client", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.bond.client"
+        }
+
+        return NSLocalizedString("changeAmount.bond.client", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Bond of client (you)
+      ///
+      /// Locales: en
+      static func changeAmountBondClientYou(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.bond.client.you", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.bond.client.you"
+        }
+
+        return NSLocalizedString("changeAmount.bond.client.you", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Bond of executor
+      ///
+      /// Locales: en
+      static func changeAmountBondExecutor(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.bond.executor", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.bond.executor"
+        }
+
+        return NSLocalizedString("changeAmount.bond.executor", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Bond of executor (you)
+      ///
+      /// Locales: en
+      static func changeAmountBondExecutorYou(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.bond.executor.you", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.bond.executor.you"
+        }
+
+        return NSLocalizedString("changeAmount.bond.executor.you", bundle: bundle, comment: "")
       }
 
       /// en translation: By pressed «Continue» you confirm that you have saved your private key
@@ -3038,6 +3130,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.changeAmount.currency", bundle: bundle, comment: "")
       }
 
+      /// en translation: Date
+      ///
+      /// Locales: en
+      static func commonDate(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.date", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.date"
+        }
+
+        return NSLocalizedString("common.date", bundle: bundle, comment: "")
+      }
+
       /// en translation: Deadline
       ///
       /// Locales: en
@@ -3051,6 +3158,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.text.deadline", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Deadline of deal
+      ///
+      /// Locales: en
+      static func deadlineOfDeal(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deadline.of.deal", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deadline.of.deal"
+        }
+
+        return NSLocalizedString("deadline.of.deal", bundle: bundle, comment: "")
       }
 
       /// en translation: Deal
@@ -4750,6 +4872,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.select-action", bundle: bundle, comment: "")
       }
 
+      /// en translation: Select deadline
+      ///
+      /// Locales: en
+      static func deadlineTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deadline.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deadline.title"
+        }
+
+        return NSLocalizedString("deadline.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Select file
       ///
       /// Locales: en
@@ -5847,6 +5984,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.delete.warning", bundle: bundle, comment: "")
+      }
+
+      /// en translation: You must complete the deal by this date or the deal will be stopped and funds will be refunded to all parties. The service fee is not refundable.
+      ///
+      /// Locales: en
+      static func deadlineComment(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deadline.comment", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deadline.comment"
+        }
+
+        return NSLocalizedString("deadline.comment", bundle: bundle, comment: "")
       }
 
       /// en translation: You need to specify the Account that will check the result of the contract.

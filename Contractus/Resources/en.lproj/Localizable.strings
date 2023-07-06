@@ -29,6 +29,7 @@
 "common.app-name" = "Contractus";
 "common.set" = "Set";
 "common.done" = "Done";
+"common.date" = "Date";
 "common.select-action" = "Select action";
 "common.deal" = "Deal";
 "common.file" = "File";
@@ -190,6 +191,10 @@
 "deal.delete.alert.button" = "Yes, delete";
 "deal.delete.alert.message" = "You want delete file?";
 
+"deadline.title" = "Select deadline";
+"deadline.of.deal" = "Deadline of deal";
+"deadline.comment" = "You must complete the deal by this date or the deal will be stopped and funds will be refunded to all parties. The service fee is not refundable.";
+
 "newDeal.title" = "New deal";
 "newDeal.subtitle" = "Choose your role";
 "newDeal.title.client" = "Client";
@@ -238,6 +243,10 @@
 "changeAmount.bond.owner" = "The amount of performance bonds will be blocked on your account for the duration of the deal. After completion will be fully refunded to you";
 "changeAmount.bond.contractor" = "The amount of performance bonds will be blocked on partner account for the duration of the deal. After completion will be fully refunded";
 "changeAmount.estimate.fiat" = "Estimate fiat amountt";
+"changeAmount.bond.client.you" = "Bond of client (you)";
+"changeAmount.bond.client" = "Bond of client";
+"changeAmount.bond.executor.you" = "Bond of executor (you)";
+"changeAmount.bond.executor" = "Bond of executor";
 
 "addContractor.title.contractor" = "Add partner";
 "addContractor.title.checker" = "Add checker";
