@@ -46,8 +46,7 @@ final class AccountsViewModel: ViewModel {
         case .reload:
             self.state.accounts = accountStorage.getAccounts().map {.init(account: $0, existInBackup: backupStorage.existInBackup(privateKey: $0.privateKey.toBase58(), blockchain: $0.blockchain))}
         case .changeAccount(let commonAccount):
-            APIServiceFactory.shared.setAccount(for: commonAccount)
-            accountStorage.setCurrentAccount(account: commonAccount)
+            AppManagerImpl.shared.setAccount(for: commonAccount)
             state.currentAccount = commonAccount
 
         case .backup(let account, let allow):

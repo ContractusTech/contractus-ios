@@ -25,32 +25,36 @@ final class APIServiceFactory {
     
     func makeAccountService() throws -> ContractusAPI.AccountService {
         try checkAccount()
-        return ContractusAPI.AccountService(client: AppManager.shared.client)
+        return ContractusAPI.AccountService(client: ServiceClient.shared.client)
     }
 
     func makeTransactionsService() throws -> ContractusAPI.TransactionsService {
         try checkAccount()
-        return ContractusAPI.TransactionsService(client: AppManager.shared.client)
+        return ContractusAPI.TransactionsService(client: ServiceClient.shared.client)
     }
 
     func makeFileService() throws -> ContractusAPI.FilesService {
         try checkAccount()
-        return ContractusAPI.FilesService(client: AppManager.shared.client)
+        return ContractusAPI.FilesService(client: ServiceClient.shared.client)
     }
 
     func makeResourcesService() throws -> ContractusAPI.ResourcesService {
         try checkAccount()
-        return ContractusAPI.ResourcesService(client: AppManager.shared.client)
+        return ContractusAPI.ResourcesService(client: ServiceClient.shared.client)
     }
 
     func makeDealsService() throws -> ContractusAPI.DealsService {
         try checkAccount()
-        return ContractusAPI.DealsService(client: AppManager.shared.client)
+        return ContractusAPI.DealsService(client: ServiceClient.shared.client)
+    }
+
+    func makeAuthService() -> ContractusAPI.AuthService {
+        return ContractusAPI.AuthService(client: ServiceClient.shared.client)
     }
 
     // MARK: - Private Methods
 
     private func checkAccount() throws {
-        guard !AppManager.shared.accountIsEmpty else { throw APIServiceFactoryError.accountNotSet }
+        guard ServiceClient.shared.client.hasHeader else { throw APIServiceFactoryError.accountNotSet }
     }
 }

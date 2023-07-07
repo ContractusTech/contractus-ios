@@ -11,7 +11,8 @@ public struct AuthorizationHeaderData: Encodable {
     let blockchain: String
     let pubKey: String
     let signature: String
-    let deviceId: String
+    let identifier: String
+    let type: String = "IOS"
 }
 
 public struct AuthorizationHeader {
@@ -27,7 +28,7 @@ public struct AuthorizationHeader {
 
 public struct AuthorizationHeaderBuilder {
 
-    public static func build(for blockchain: Blockchain, message: String, with keyPair: KeyPair, deviceId: String) throws -> AuthorizationHeader {
+    public static func build(for blockchain: Blockchain, message: String, with keyPair: KeyPair, identifier: String) throws -> AuthorizationHeader {
         switch blockchain {
         case .solana:
             let sign = try NaclSign.signDetached(
@@ -35,7 +36,7 @@ public struct AuthorizationHeaderBuilder {
                 secretKey: keyPair.privateKey)
 
             let signatureBase58 = Base58.base58Encode([UInt8](sign))
-            return try AuthorizationHeader(data: AuthorizationHeaderData(blockchain: blockchain.rawValue, pubKey: keyPair.publicKey, signature: signatureBase58, deviceId: deviceId))
+            return try AuthorizationHeader(data: AuthorizationHeaderData(blockchain: blockchain.rawValue, pubKey: keyPair.publicKey, signature: signatureBase58, identifier: identifier))
 
         }
     }

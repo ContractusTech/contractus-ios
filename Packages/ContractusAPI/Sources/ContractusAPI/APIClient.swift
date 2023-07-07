@@ -3,8 +3,12 @@ import Alamofire
 
 public class APIClient {
     let session: Session
-    let server: ServerType
+    public let server: ServerType
     private let interceptor: ContractusInterceptor
+
+    public var hasHeader: Bool {
+        interceptor.authorizationHeader != nil
+    }
 
     public init(server: ServerType) {
         self.interceptor = ContractusInterceptor()

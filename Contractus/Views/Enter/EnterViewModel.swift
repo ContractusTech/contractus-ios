@@ -61,10 +61,10 @@ final class EnterViewModel: ViewModel {
             state.errorState = nil
         case .importPrivateKey(let privateKey):
             guard let blockchain = state.blockchain else { return }
-            if accountService.existAccount(privateKey) {
-                state.errorState = .error("This account already added.")
-                return
-            }
+//            if accountService.existAccount(privateKey) {
+//                state.errorState = .error("This account already added.")
+//                return
+//            }
             guard let account = try? accountService.restore(by: privateKey, blockchain: blockchain) else {
                 self.state.isValidImportedPrivateKey = false
                 self.state.account = nil

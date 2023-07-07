@@ -14,7 +14,7 @@ import ContractusAPI
 
 struct RootState {
     enum State {
-        case hasAccount(CommonAccount), noAccount
+        case hasAccount(CommonAccount), noAccount, loading, error(Error)
     }
 
     enum TransactionState: Equatable {
@@ -25,40 +25,24 @@ struct RootState {
 }
 
 enum RootInput {
-    case savedAccount(CommonAccount), logout, signTx(TransactionSignType), cancelTx
+    case savedAccount(CommonAccount), logout, signTx(TransactionSignType), cancelTx, reload
 }
 
 final class RootViewModel: ViewModel {
 
     @Published private(set) var state: RootState
-    private let accountStorage: AccountStorage
+    private let appManager: AppManager
 
-    init(accountStorage: AccountStorage) {
-        self.accountStorage = accountStorage
-        if let account = accountStorage.getCurrentAccount() {
-            // TODO: - Не очень правильное решение + вынести deviceId
-            APIServiceFactory.shared.setAccount(for: account)
-            remoteEventService = try? APIServiceFactory.shared.makeWebSocket()
-            remoteEventService?.connect()
-            remoteEventService?.disconnectHandler = {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    remoteEventService?.connect()
-                }
-            }
-
-            self.state = RootState(state: .hasAccount(account))
-        } else {
-            self.state = RootState(state: .noAccount)
-
-            remoteEventService?.disconnect()
-            remoteEventService = nil
-        }
+    init(appManager: AppManager) {
+        self.appManager = appManager
+        self.state = .init(state: .loading)
+        self.reload()
     }
 
     func trigger(_ input: RootInput, after: AfterTrigger? = nil) {
         switch input {
         case .savedAccount(let account):
-            APIServiceFactory.shared.setAccount(for: account)
+            appManager.setAccount(for: account)
             state.state = .hasAccount(account)
         case .signTx(let type):
             state.transactionState = .needSign(type)
@@ -66,14 +50,33 @@ final class RootViewModel: ViewModel {
             state.transactionState = .none
         case .logout:
             state.state = .noAccount
-            APIServiceFactory.shared.clearAccount()
-            accountStorage.clearCurrentAccount()
+            appManager.clearAccount()
+        case .reload:
+            state.state = .loading
+            appManager.clearAccount()
+            reload()
+
+        }
+    }
+
+    func reload() {
+        Task { @MainActor [weak self] in
+            do {
+                try await appManager.sync()
+                self?.state.state = .hasAccount(appManager.currentAccount)
+            } catch AppManagerImpl.AppManagerError.noCurrentAccount {
+                self?.state.state = .noAccount
+                AppManagerImpl.shared.clearAccount()
+                debugPrint(".noAccount")
+            } catch {
+                self?.state.state = .error(error)
+                debugPrint(error.readableDescription)
+            }
         }
     }
 }
 
-let appState = AnyViewModel<RootState, RootInput>(RootViewModel(accountStorage: ServiceFactory.shared.makeAccountStorage()))
-var remoteEventService: WebSocket?
+let appState = AnyViewModel<RootState, RootInput>(RootViewModel(appManager: AppManagerImpl.shared))
 
 @main
 struct ContractusApp: App {
@@ -95,6 +98,10 @@ struct ContractusApp: App {
         WindowGroup {
             Group {
                 switch rootViewModel.state.state {
+                case .error(let error):
+                    errorView(error: error)
+                case .loading:
+                    syncView()
                 case .noAccount:
                     EnterView(completion: { account in
                         rootViewModel.trigger(.savedAccount(account))
@@ -144,6 +151,38 @@ struct ContractusApp: App {
             }
         } else {
             EmptyView()
+        }
+    }
+
+    @ViewBuilder
+    func syncView() -> some View {
+        VStack {
+            Spacer()
+            ProgressView()
+                .progressViewStyle(.circular)
+            Spacer()
+        }
+    }
+
+    @ViewBuilder
+    func errorView(error: Error) -> some View {
+        HStack {
+            Text("Error device identification")
+            HStack {
+                Button {
+                    rootViewModel.trigger(.reload)
+                } label: {
+                    Text("Try again")
+                        .font(.body.bold())
+                }
+
+                Button {
+
+                } label: {
+                    Text("Get debug info")
+                        .font(.body.bold())
+                }
+            }
         }
     }
 }

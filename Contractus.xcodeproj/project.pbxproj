@@ -31,6 +31,7 @@
 		6D44B5602A0E0B20008C561D /* BlockchainExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B55F2A0E0B20008C561D /* BlockchainExplorer.swift */; };
 		6D44B5622A0FA42F008C561D /* FlagsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B5612A0FA42F008C561D /* FlagsStorage.swift */; };
 		6D44B5642A0FAB37008C561D /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B5632A0FAB37008C561D /* StatisticsView.swift */; };
+		6D4D99F32A5601A1007668B0 /* IdentifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4D99F22A5601A1007668B0 /* IdentifierService.swift */; };
 		6D4DCB2C28AC8DC200EE86C0 /* ChangeAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DCB2B28AC8DC200EE86C0 /* ChangeAmountView.swift */; };
 		6D4FAB4F293B084800076743 /* TextEditor+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4FAB4E293B084800076743 /* TextEditor+Ex.swift */; };
 		6D4FAB51293B384D00076743 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4FAB50293B384D00076743 /* KeyboardResponder.swift */; };
@@ -102,9 +103,9 @@
 		6DB5F8B6294D762300AE612A /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 6DB5F8B5294D762300AE612A /* JGProgressHUD */; };
 		6DB5F8B8294D7B2D00AE612A /* JGProgressHUD+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB5F8B7294D7B2D00AE612A /* JGProgressHUD+Ex.swift */; };
 		6DB83CA92899FE5C006A4667 /* DealItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB83CA82899FE5C006A4667 /* DealItemView.swift */; };
-		6DB9C3DA2A555F1B0011C817 /* ContractusAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 6DB9C3D92A555F1B0011C817 /* ContractusAPI */; };
 		6DB9C3D52A552D7B0011C817 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9C3D42A552D7B0011C817 /* AppManager.swift */; };
 		6DB9C3D72A5532760011C817 /* AuthStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB9C3D62A5532760011C817 /* AuthStorage.swift */; };
+		6DB9C3DA2A555F1B0011C817 /* ContractusAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 6DB9C3D92A555F1B0011C817 /* ContractusAPI */; };
 		6DBCA45C288F076D00F918B6 /* AccountService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBCA45B288F076D00F918B6 /* AccountService.swift */; };
 		6DBCA45E288F1EAF00F918B6 /* AccountStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBCA45D288F1EAF00F918B6 /* AccountStorage.swift */; };
 		6DBCA461288F213500F918B6 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBCA460288F213500F918B6 /* MainView.swift */; };
@@ -201,6 +202,7 @@
 		6D44B55F2A0E0B20008C561D /* BlockchainExplorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainExplorer.swift; sourceTree = "<group>"; };
 		6D44B5612A0FA42F008C561D /* FlagsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagsStorage.swift; sourceTree = "<group>"; };
 		6D44B5632A0FAB37008C561D /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		6D4D99F22A5601A1007668B0 /* IdentifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifierService.swift; sourceTree = "<group>"; };
 		6D4DCB2B28AC8DC200EE86C0 /* ChangeAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeAmountView.swift; sourceTree = "<group>"; };
 		6D4FAB4E293B084800076743 /* TextEditor+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextEditor+Ex.swift"; sourceTree = "<group>"; };
 		6D4FAB50293B384D00076743 /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
@@ -265,9 +267,9 @@
 		6DB5F8A2293EFA0800AE612A /* Double+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Ex.swift"; sourceTree = "<group>"; };
 		6DB5F8B7294D7B2D00AE612A /* JGProgressHUD+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JGProgressHUD+Ex.swift"; sourceTree = "<group>"; };
 		6DB83CA82899FE5C006A4667 /* DealItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealItemView.swift; sourceTree = "<group>"; };
-		6DB9C3D82A555E8B0011C817 /* ContractusAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ContractusAPI; path = Packages/ContractusAPI; sourceTree = "<group>"; };
 		6DB9C3D42A552D7B0011C817 /* AppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
 		6DB9C3D62A5532760011C817 /* AuthStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStorage.swift; sourceTree = "<group>"; };
+		6DB9C3D82A555E8B0011C817 /* ContractusAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ContractusAPI; path = Packages/ContractusAPI; sourceTree = "<group>"; };
 		6DBCA45B288F076D00F918B6 /* AccountService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountService.swift; sourceTree = "<group>"; };
 		6DBCA45D288F1EAF00F918B6 /* AccountStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStorage.swift; sourceTree = "<group>"; };
 		6DBCA460288F213500F918B6 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -596,6 +598,7 @@
 		6DBCA45A288F06C700F918B6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				6D4D99F22A5601A1007668B0 /* IdentifierService.swift */,
 				6DC2C02428C98332005C9EBE /* TransactionSignService.swift */,
 				6DBCA45B288F076D00F918B6 /* AccountService.swift */,
 				6D6EE387289DB40A00635E60 /* BlockchainService.swift */,
@@ -1030,6 +1033,7 @@
 				6DAA5E802898D33300BA1965 /* AppConfig.swift in Sources */,
 				6D75F2F0288EA9C70092D182 /* EnterView.swift in Sources */,
 				6D6EE38D289E25FF00635E60 /* UploadFileView.swift in Sources */,
+				6D4D99F32A5601A1007668B0 /* IdentifierService.swift in Sources */,
 				FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */,
 				6DAA5E7B2898C25500BA1965 /* RandomStrings.swift in Sources */,
 				6DC2C02728C99C0A005C9EBE /* ServiceFactory.swift in Sources */,
