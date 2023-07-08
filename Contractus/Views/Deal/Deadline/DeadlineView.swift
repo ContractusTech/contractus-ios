@@ -37,7 +37,7 @@ struct DeadlineView: View {
         NavigationView {
             ScrollView {
                 VStack {
-                    DatePicker("Date", selection: $deadline,  in: allowDates, displayedComponents: .date)
+                    DatePicker(R.string.localizable.commonDate(), selection: $deadline,  in: allowDates, displayedComponents: .date)
                         .labelsHidden()
                         .datePickerStyle(GraphicalDatePickerStyle())
                         .padding(12)
@@ -46,11 +46,11 @@ struct DeadlineView: View {
                         .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Deadline of deal")
+                        Text(R.string.localizable.deadlineOfDeal())
                             .font(.footnote)
                         Text(deadline.asDateFormatted())
                             .font(.title2.weight(.semibold))
-                        Text("You must complete the deal by this date or the deal will be stopped and funds will be refunded to all parties. The service fee is not refundable.")
+                        Text(R.string.localizable.deadlineComment())
                             .font(.footnote)
                             .foregroundColor(R.color.secondaryText.color)
                     }
@@ -101,7 +101,7 @@ struct DeadlineView: View {
                 }
                 .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
             })
-            .navigationBarTitle(Text("Select deadline"), displayMode: .inline)
+            .navigationBarTitle(Text(R.string.localizable.deadlineTitle()), displayMode: .inline)
 
         }
     }
