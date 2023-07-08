@@ -11,11 +11,14 @@ final class ServiceClient {
     }
 }
 
-protocol AppManager {
+protocol AppManager: AnyObject {
     var currentAccount: CommonAccount! { get }
+    var invalidDeviceHandler: ((Error) -> Void)? { get set }
+
     func sync() async throws
     func setAccount(for account: CommonAccount)
     func clearAccount()
+    func debugInfo() -> [String]
 }
 
 final class AppManagerImpl: AppManager {
@@ -30,16 +33,14 @@ final class AppManagerImpl: AppManager {
         authStorage: KeychainAuthStorage(),
         authService: APIServiceFactory.shared.makeAuthService())
 
+    var invalidDeviceHandler: ((Error) -> Void)?
+    
     private(set) var accountIsEmpty = true
-    public var deviceId: String!
-
     private(set) var currentAccount: CommonAccount!
-
     private let accountStorage: AccountStorage
     private let idService: IdentifierService
     private let authStorage: AuthStorage
     private let authService: ContractusAPI.AuthService
-
     private(set) var webSocket: WebSocket!
 
     private init(accountStorage: AccountStorage, idService: IdentifierService, authStorage: AuthStorage, authService: ContractusAPI.AuthService) {
@@ -115,6 +116,15 @@ final class AppManagerImpl: AppManager {
         }
     }
 
+    func debugInfo() -> [String] {
+        [
+            "Identificator: \n\(idService.identifier ?? "-")",
+            "Token: \n\(idService.deviceToken ?? "-")",
+            "DeviceInfo: \n\(UIDevice.current.systemName), \(UIDevice.current.model), \(UIDevice.current.systemVersion)"
+
+        ]
+    }
+
     private func buildHeader(for account: CommonAccount, identifier: String, message: String) throws -> ContractusAPI.AuthorizationHeader {
         return try AuthorizationHeaderBuilder.build(
             for: account.blockchain,
@@ -142,6 +152,8 @@ final class AppManagerImpl: AppManager {
             guard let self = self else { return }
             switch result {
             case .failure(let error):
+                self.clearAccount()
+                self.invalidDeviceHandler?(error)
                 callback(.failure(error))
             case .success(let message):
                 do {
@@ -160,6 +172,8 @@ final class AppManagerImpl: AppManager {
 
 
 class MockAppManager: AppManager {
+
+    var invalidDeviceHandler: ((Error) -> Void)?
     var currentAccount: CommonAccount!
 
     func sync() async throws { }
@@ -170,5 +184,9 @@ class MockAppManager: AppManager {
 
     func clearAccount() {
         currentAccount = nil
+    }
+
+    func debugInfo() -> [String] {
+        []
     }
 }

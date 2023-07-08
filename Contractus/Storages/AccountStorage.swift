@@ -24,7 +24,7 @@ protocol AccountStorage {
 final class KeychainAccountStorage: AccountStorage {
 
     enum Keys: String {
-        static let serviceKey = "app.tech.Contractus.Account"
+        static let serviceKey = "\(Bundle.main.bundleIdentifier!).Account"
         case currentAccountKey
         case accountList
     }
@@ -73,7 +73,7 @@ final class KeychainAccountStorage: AccountStorage {
     }
 
     func removeAccount(by publicKey: String) {
-        var accounts = getAccounts().filter { $0.publicKey != publicKey }
+        let accounts = getAccounts().filter { $0.publicKey != publicKey }
         guard let json = try? encoder.encode(accounts) else { return }
         try? keychain.set(json, key: Keys.accountList.rawValue)
     }

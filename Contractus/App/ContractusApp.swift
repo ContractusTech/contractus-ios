@@ -1,16 +1,10 @@
-//
-//  ContractusApp.swift
-//  Contractus
-//
-//  Created by Simon Hudishkin on 24.07.2022.
-//
-
 import SwiftUI
 import SolanaSwift
 import UIKit
 import ResizableSheet
 import netfox
 import ContractusAPI
+import Combine
 
 struct RootState {
     enum State {
@@ -37,6 +31,9 @@ final class RootViewModel: ViewModel {
         self.appManager = appManager
         self.state = .init(state: .loading)
         self.reload()
+        self.appManager.invalidDeviceHandler = { error in
+            self.state = .init(state: .error(error))
+        }
     }
 
     func trigger(_ input: RootInput, after: AfterTrigger? = nil) {
@@ -55,11 +52,14 @@ final class RootViewModel: ViewModel {
             state.state = .loading
             appManager.clearAccount()
             reload()
-
         }
     }
 
-    func reload() {
+    func debugInfo() -> [String] {
+        appManager.debugInfo()
+    }
+
+    private func reload() {
         Task { @MainActor [weak self] in
             do {
                 try await appManager.sync()
@@ -138,6 +138,7 @@ struct ContractusApp: App {
             }
             .navigationBarColor()
             .animation(.default, value: rootViewModel.state)
+            .background(R.color.mainBackground.color)
         }
     }
 
@@ -166,24 +167,47 @@ struct ContractusApp: App {
 
     @ViewBuilder
     func errorView(error: Error) -> some View {
-        HStack {
-            Text("Error device identification")
-            HStack {
-                Button {
-                    rootViewModel.trigger(.reload)
-                } label: {
-                    Text("Try again")
-                        .font(.body.bold())
+        ScrollView {
+            VStack(spacing: 16) {
+                Image(systemName: "iphone.slash")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 48, height: 48)
+
+                    .foregroundColor(R.color.yellow.color)
+                Text("Error device identification")
+                HStack(spacing: 12) {
+                    CButton(title: "Try again", style: .secondary, size: .default, isLoading: false) {
+                        rootViewModel.trigger(.reload)
+                    }
+
+                    CButton(title: "Support", style: .primary, size: .default, isLoading: false) {
+
+                    }
                 }
 
-                Button {
-
-                } label: {
-                    Text("Get debug info")
-                        .font(.body.bold())
+                Divider()
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Information")
+                        .bold()
+                    ForEach(AppManagerImpl.shared.debugInfo(), id: \.self) { item in
+                        Text(item)
+                            .font(.callout)
+                    }
+                    CButton(title: "Copy", style: .secondary, size: .small, isLoading: false) {
+                        UIPasteboard.general.string = AppManagerImpl.shared.debugInfo().joined(separator: "\n")
+                        ImpactGenerator.light()
+                    }
                 }
             }
+            .padding(EdgeInsets(top: 32, leading: 16, bottom: 24, trailing: 16))
+            .background(R.color.secondaryBackground.color)
+            .cornerRadius(20)
         }
+
+
+
+
     }
 }
 

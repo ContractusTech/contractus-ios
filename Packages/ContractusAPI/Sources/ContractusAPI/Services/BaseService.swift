@@ -121,7 +121,7 @@ public class BaseService {
     }
 
     func process<T: Decodable>(response: AFDataResponse<T>) -> Swift.Result<T, APIClientError> {
-        debugPrint(String(data: response.data ?? Data(), encoding: .utf8))
+        debugPrint(String(data: response.data ?? Data(), encoding: .utf8) ?? "")
         guard let value = response.value else {
             if let error = self.parseError(data: response.data) {
                 return .failure(error)
