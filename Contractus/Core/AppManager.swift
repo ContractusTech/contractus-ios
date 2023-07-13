@@ -54,6 +54,10 @@ final class AppManagerImpl: AppManager {
                 callback(result)
             }
         }
+
+        ServiceClient.shared.client.setBlockedAuthorizationHandler { error in
+            self.invalidDeviceHandler?(error)
+        }
     }
 
     func setAccount(for account: CommonAccount) {
@@ -119,7 +123,7 @@ final class AppManagerImpl: AppManager {
     func debugInfo() -> [String] {
         [
             "Identificator: \n\(idService.identifier ?? "-")",
-            "Token: \n\(idService.deviceToken ?? "-")",
+            // "Token: \n\(idService.deviceToken ?? "-")",
             "DeviceInfo: \n\(UIDevice.current.systemName), \(UIDevice.current.model), \(UIDevice.current.systemVersion)"
 
         ]
@@ -152,7 +156,6 @@ final class AppManagerImpl: AppManager {
             guard let self = self else { return }
             switch result {
             case .failure(let error):
-                self.clearAccount()
                 self.invalidDeviceHandler?(error)
                 callback(.failure(error))
             case .success(let message):

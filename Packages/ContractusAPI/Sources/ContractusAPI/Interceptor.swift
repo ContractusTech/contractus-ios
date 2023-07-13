@@ -2,10 +2,12 @@ import Foundation
 import Alamofire
 
 public typealias VerifyDeviceAction = (@escaping (Result<AuthorizationHeader, Error>) -> Void) -> Void
+public typealias BlockedAuthorizationAction = (Error) -> Void
 
 class ContractusInterceptor: RequestInterceptor {
     var authorizationHeader: AuthorizationHeader?
     var performVerifyDevice: VerifyDeviceAction?
+    var blockedAuthorization: BlockedAuthorizationAction?
 
     init() { }
 
@@ -20,6 +22,9 @@ class ContractusInterceptor: RequestInterceptor {
 
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
         guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 else {
+            if error.asAFError?.responseCode == 423 {
+                self.blockedAuthorization?(APIClientError.serviceError(.init(statusCode: 423, error: "Device is invalid or blocked.")))
+            }
             return completion(.doNotRetryWithError(error))
         }
 
@@ -32,5 +37,12 @@ class ContractusInterceptor: RequestInterceptor {
                 completion(.retry)
             }
         }
+    }
+
+    private func parseError(data: Data?) -> APIClientError? {
+        if let data = data, let error = try? JSONDecoder().decode(ServiceError.self, from: data) {
+            return APIClientError.serviceError(error)
+        }
+        return nil
     }
 }

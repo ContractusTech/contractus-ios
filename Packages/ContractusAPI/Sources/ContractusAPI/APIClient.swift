@@ -24,5 +24,9 @@ public class APIClient {
     public func performVerifyDevice(_ action: @escaping VerifyDeviceAction) {
         interceptor.performVerifyDevice = action
     }
+
+    public func setBlockedAuthorizationHandler(_ action: BlockedAuthorizationAction?) {
+        interceptor.blockedAuthorization = action
+    }
 }
 

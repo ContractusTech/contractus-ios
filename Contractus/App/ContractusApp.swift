@@ -50,7 +50,7 @@ final class RootViewModel: ViewModel {
             appManager.clearAccount()
         case .reload:
             state.state = .loading
-            appManager.clearAccount()
+            // appManager.clearAccount()
             reload()
         }
     }
@@ -169,20 +169,20 @@ struct ContractusApp: App {
     func errorView(error: Error) -> some View {
         ScrollView {
             VStack(spacing: 16) {
-                Image(systemName: "iphone.slash")
+                Image(systemName:  error.isDeviceCheckError ? "iphone.slash" : "wifi.exclamationmark")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 48, height: 48)
+                    .foregroundColor( error.isDeviceCheckError ? R.color.yellow.color : R.color.blue.color)
+                Text(error.readableDescription)
 
-                    .foregroundColor(R.color.yellow.color)
-                Text("Error device identification")
                 HStack(spacing: 12) {
                     CButton(title: "Try again", style: .secondary, size: .default, isLoading: false) {
                         rootViewModel.trigger(.reload)
                     }
 
                     CButton(title: "Support", style: .primary, size: .default, isLoading: false) {
-
+                        //TODO: - open E-mail app
                     }
                 }
 
@@ -208,6 +208,18 @@ struct ContractusApp: App {
 
 
 
+    }
+}
+
+fileprivate extension Error {
+    var isDeviceCheckError: Bool {
+        let error = (self as? ContractusAPI.APIClientError)
+        switch error {
+        case .serviceError(let error):
+            return error.statusCode == 423
+        default:
+            return false
+        }
     }
 }
 

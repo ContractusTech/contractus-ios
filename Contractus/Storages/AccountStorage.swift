@@ -24,7 +24,7 @@ protocol AccountStorage {
 final class KeychainAccountStorage: AccountStorage {
 
     enum Keys: String {
-        static let serviceKey = "\(Bundle.main.bundleIdentifier!).Account"
+        static let serviceKey = "\(AppConfig.bundleId).Account"
         case currentAccountKey
         case accountList
     }

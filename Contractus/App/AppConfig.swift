@@ -25,4 +25,6 @@ enum AppConfig {
     static let deviceId: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
 
     static let tiersInformationURL: URL = URL(string: "https://contractus.tech")! // TODO: - Need change
+
+    static let bundleId = Bundle.main.bundleIdentifier!
 }

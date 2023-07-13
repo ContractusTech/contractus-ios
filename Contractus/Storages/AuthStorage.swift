@@ -10,7 +10,7 @@ protocol AuthStorage {
 final class KeychainAuthStorage: AuthStorage {
 
     enum Keys: String {
-        static let serviceKey = "\(Bundle.main.bundleIdentifier!).AuthMessage"
+        static let serviceKey = "\(AppConfig.bundleId).AuthMessage"
         case authMessage
         case expired
     }
