@@ -87,6 +87,8 @@ final class AppManagerImpl: AppManager {
             
         }
         accountIsEmpty = false
+
+        accountStorage.setCurrentAccount(account: account)
     }
 
     func clearAccount() {
