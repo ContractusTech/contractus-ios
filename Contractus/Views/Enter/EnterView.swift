@@ -166,14 +166,14 @@ struct EnterView_Previews: PreviewProvider {
         EnterView(completion: {_ in })
             .environmentObject(
                 AnyViewModel<RootState, RootInput>(RootViewModel(
-                    accountStorage: MockAccountStorage()
+                    appManager: MockAppManager()
                 ))
             )
 
         EnterView(viewType: .addAccount, completion: {_ in })
             .environmentObject(
                 AnyViewModel<RootState, RootInput>(RootViewModel(
-                    accountStorage: MockAccountStorage()
+                    appManager: MockAppManager()
                 ))
             )
     }

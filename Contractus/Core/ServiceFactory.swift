@@ -24,4 +24,8 @@ final class ServiceFactory {
     func makeAccountStorage() -> AccountStorage {
         KeychainAccountStorage()
     }
+
+    func makeIdService() -> IdentifierService {
+        IdentifierService(authStorage: KeychainAuthStorage())
+    }
 }

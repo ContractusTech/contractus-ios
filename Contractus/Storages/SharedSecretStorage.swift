@@ -16,7 +16,7 @@ protocol SharedSecretStorage {
     func deleteSharedSecret(for dealId: String) throws
 }
 
-fileprivate let SERVICE = "app.me.Contractus.SharedSecret"
+fileprivate let SERVICE = "\(AppConfig.bundleId).SharedSecret"
 fileprivate let KEY_FORMAT = "sharedSecret.deal_%@"
 
 final class SharedSecretStorageImpl: SharedSecretStorage {

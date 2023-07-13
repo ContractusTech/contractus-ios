@@ -22,7 +22,7 @@ protocol WrappedAccount {
     var commonAccount: CommonAccount { get }
 }
 
-extension SolanaSwift.Account: WrappedAccount {
+extension SolanaSwift.KeyPair: WrappedAccount {
     var commonAccount: CommonAccount {
         .init(
             publicKeyData: self.publicKey.data,

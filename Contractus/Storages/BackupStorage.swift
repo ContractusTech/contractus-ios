@@ -25,7 +25,7 @@ protocol BackupStorage {
 final class iCloudBackupStorage: BackupStorage {
 
     enum Keys: String {
-        static let serviceKey = "app.tech.Contractus.Backup"
+        static let serviceKey = "\(AppConfig.bundleId).Backup"
         case privateKeys
     }
 
