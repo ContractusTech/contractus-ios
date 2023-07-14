@@ -13,7 +13,11 @@ fileprivate enum Constants {
 }
 
 struct ServerSelectView: View {
-    @State var items: [ServerType]
+    #if DEBUG
+    @State private var items: [ServerType] =  [.developer(), .production(), .local()]
+    #else
+    @State private var items: [ServerType] =  [.developer(), .production()]
+    #endif
     @State var selectedItem: ServerType?
 
     @State private var confirmAlert: Bool = false
@@ -60,6 +64,6 @@ struct ServerSelectView: View {
 
 struct ServerSelectView_Previews: PreviewProvider {
     static var previews: some View {
-        ServerSelectView(items: [.developer(), .production()])
+        ServerSelectView()
     }
 }

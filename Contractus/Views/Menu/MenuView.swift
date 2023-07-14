@@ -146,7 +146,7 @@ struct MenuView: View {
 
             }
             .sheet(isPresented: $showServerSelection, content: {
-                ServerSelectView(items: [.developer(), .production()])
+                ServerSelectView()
             })
             .baseBackground()
             .navigationTitle("Settings")

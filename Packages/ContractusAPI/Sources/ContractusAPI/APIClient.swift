@@ -4,29 +4,40 @@ import Alamofire
 public class APIClient {
     let session: Session
     public let server: ServerType
-    private let interceptor: ContractusInterceptor
+
+    private var interceptor: AuthenticationInterceptor<OAuthAuthenticator>
+    private var authenticator = OAuthAuthenticator()
 
     public var hasHeader: Bool {
-        interceptor.authorizationHeader != nil
+        interceptor.credential != nil
     }
 
     public init(server: ServerType) {
-        self.interceptor = ContractusInterceptor()
+        self.authenticator = OAuthAuthenticator()
 
-        self.session = Session(interceptor: self.interceptor)
+        self.interceptor = AuthenticationInterceptor(
+            authenticator: authenticator,
+            credential: nil)
+        self.session = Session(interceptor: interceptor)
         self.server = server
+
     }
 
     public func updateHeader(authorizationHeader: AuthorizationHeader? = nil) {
-        interceptor.authorizationHeader = authorizationHeader
+        if let authorizationHeader = authorizationHeader {
+            interceptor.credential = .init(value: authorizationHeader.value, expiredAt: authorizationHeader.expiredAt)
+        } else {
+            interceptor.credential =  nil
+        }
+
     }
 
     public func performVerifyDevice(_ action: @escaping VerifyDeviceAction) {
-        interceptor.performVerifyDevice = action
+        authenticator.performVerifyDevice = action
     }
 
     public func setBlockedAuthorizationHandler(_ action: BlockedAuthorizationAction?) {
-        interceptor.blockedAuthorization = action
+        authenticator.blockedAuthorization = action
     }
 }
 

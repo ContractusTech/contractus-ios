@@ -33,7 +33,7 @@ final class ConfigStorage {
         case .developer:
             return .developer(version)
         case .local:
-            return .developer()
+            return .local()
         case .custom:
             return .custom(api: url, ws: wsUrl)
         }

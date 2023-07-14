@@ -3,7 +3,7 @@ import KeychainAccess
 
 protocol AuthStorage {
     func saveMessageForSign(_ message: String, date: Date) throws
-    func getMessageForSign() -> String?
+    func getMessageForSign() -> (String, Date)?
     func clear()
 }
 
@@ -29,22 +29,22 @@ final class KeychainAuthStorage: AuthStorage {
         try keychain.set(formatter.string(from: date), key: Keys.expired.rawValue)
     }
 
-    func getMessageForSign() -> String? {
-        if isExpired() {
+    func getMessageForSign() -> (String, Date)? {
+        guard let message = try? keychain.get(Keys.authMessage.rawValue), let date = expiredDate(), date > Date() else {
             return nil
         }
-        return try? keychain.get(Keys.authMessage.rawValue)
+
+        return (message, date)
     }
 
     func clear() {
         try? keychain.remove(Keys.authMessage.rawValue)
     }
 
-    private func isExpired() -> Bool {
+    private func expiredDate() -> Date? {
         guard let dateString = try? keychain.get(Keys.expired.rawValue), let date = formatter.date(from: dateString) else {
-            return false
+            return nil
         }
-        return date < Date()
+        return date
     }
-
 }

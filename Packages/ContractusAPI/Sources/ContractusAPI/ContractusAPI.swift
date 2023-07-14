@@ -26,7 +26,7 @@ public enum ServerType {
         case .developer(let version):
             return server.appendingPathComponent("api").appendingPathComponent(version.rawValue)
         case .local(let version, _, _):
-            return server.appendingPathComponent("api").appendingPathComponent(version.rawValue)
+            return server.appendingPathComponent(version.rawValue)
         case .custom(let url, _):
             return url
         }
@@ -78,7 +78,7 @@ public enum ServerType {
         case .developer:
             return URL(string: "wss://\(developerAddress)")!
         case .local( _, _, let port):
-            return URL(string: "http://\(localAddress):\(port)")!
+            return URL(string: "ws://\(localAddress):\(port)")!
         case .custom(_, let wsUrl):
             return wsUrl
         }
