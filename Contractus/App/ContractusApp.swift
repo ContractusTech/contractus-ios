@@ -32,7 +32,9 @@ final class RootViewModel: ViewModel {
         self.state = .init(state: .loading)
         self.reload()
         self.appManager.invalidDeviceHandler = { error in
-            self.state = .init(state: .error(error))
+            DispatchQueue.main.async {
+                self.state = .init(state: .error(error))
+            }
         }
     }
 

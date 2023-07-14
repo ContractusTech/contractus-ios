@@ -64,7 +64,7 @@ final class AppManagerImpl: AppManager {
 
         currentAccount = account
 
-        guard let message = authStorage.getMessageForSign(), let header = try? buildHeader(for: account, identifier: idService.identifier, message: message) else {
+        guard let (message, expiredAt) = authStorage.getMessageForSign(), let header = try? buildHeader(for: account, identifier: idService.identifier, message: message, expiredAt: expiredAt) else {
             ServiceClient.shared.client.updateHeader(authorizationHeader: nil)
             accountIsEmpty = true
             currentAccount = nil
@@ -83,9 +83,7 @@ final class AppManagerImpl: AppManager {
             webSocket.update(header: header)
         }
 
-        webSocket.disconnectHandler = {
-            
-        }
+        webSocket.disconnectHandler = { }
         accountIsEmpty = false
 
         accountStorage.setCurrentAccount(account: account)
@@ -107,9 +105,17 @@ final class AppManagerImpl: AppManager {
         }
 
         if authStorage.getMessageForSign() == nil {
-            let message = try await verifyDeviceToken(deviceToken: deviceToken, identifier: idService.identifier)
-            try authStorage.saveMessageForSign(message.message, date: message.expiredAt)
+            do {
+                let message = try await verifyDeviceToken(deviceToken: deviceToken, identifier: idService.identifier)
+                try authStorage.saveMessageForSign(message.message, date: message.expiredAt)
+            } catch(let error) {
+                if error.asAFError?.responseCode == 423 {
+                    authStorage.clear()
+                }
+                throw AppManagerError.invalidSignMessage
+            }
         }
+
 
         guard let account = accountStorage.getCurrentAccount() else {
             throw AppManagerError.noCurrentAccount
@@ -131,12 +137,13 @@ final class AppManagerImpl: AppManager {
         ]
     }
 
-    private func buildHeader(for account: CommonAccount, identifier: String, message: String) throws -> ContractusAPI.AuthorizationHeader {
+    private func buildHeader(for account: CommonAccount, identifier: String, message: String, expiredAt: Date) throws -> ContractusAPI.AuthorizationHeader {
         return try AuthorizationHeaderBuilder.build(
             for: account.blockchain,
             message: message,
             with: (publicKey: account.publicKey, privateKey: account.privateKey),
-            identifier: identifier
+            identifier: identifier,
+            expiredAt: expiredAt
         )
     }
 
@@ -162,7 +169,13 @@ final class AppManagerImpl: AppManager {
                 callback(.failure(error))
             case .success(let message):
                 do {
-                    let header = try self.buildHeader(for: self.currentAccount, identifier: identifier, message: message.message)
+                    let header = try self.buildHeader(
+                        for: self.currentAccount,
+                        identifier: identifier,
+                        message: message.message,
+                        expiredAt: message.expiredAt)
+
+                    try? self.authStorage.saveMessageForSign(message.message, date: message.expiredAt)
                     callback(.success(header))
                 } catch {
                     callback(.failure(error))

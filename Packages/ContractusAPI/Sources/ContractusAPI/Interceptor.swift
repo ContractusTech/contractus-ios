@@ -4,45 +4,52 @@ import Alamofire
 public typealias VerifyDeviceAction = (@escaping (Result<AuthorizationHeader, Error>) -> Void) -> Void
 public typealias BlockedAuthorizationAction = (Error) -> Void
 
-class ContractusInterceptor: RequestInterceptor {
-    var authorizationHeader: AuthorizationHeader?
+struct OAuthCredential: AuthenticationCredential {
+    let value: HTTPHeader
+    let expiredAt: Date
+    var requiresRefresh: Bool { expiredAt < Date() }
+}
+
+final class OAuthAuthenticator: Authenticator {
+
     var performVerifyDevice: VerifyDeviceAction?
     var blockedAuthorization: BlockedAuthorizationAction?
 
-    init() { }
-
-    func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
-
-        var urlRequest = urlRequest
-        if let authorizationHeader = authorizationHeader {
-            urlRequest.headers.add(authorizationHeader.value)
-        }
-        completion(.success(urlRequest))
+    func apply(_ credential: OAuthCredential, to urlRequest: inout URLRequest) {
+        urlRequest.headers.add(credential.value)
     }
 
-    func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 else {
-            if error.asAFError?.responseCode == 423 {
-                self.blockedAuthorization?(APIClientError.serviceError(.init(statusCode: 423, error: "Device is invalid or blocked.")))
-            }
-            return completion(.doNotRetryWithError(error))
-        }
+    func refresh(_ credential: OAuthCredential,
+                 for session: Session,
+                 completion: @escaping (Result<OAuthCredential, Error>) -> Void) {
 
         performVerifyDevice? { result in
             switch result {
             case .failure(let error):
-                completion(.doNotRetryWithError(error))
+                if error.asAFError?.responseCode == 423 {
+                    self.blockedHandler()
+                }
+                completion(.failure(error))
             case .success(let header):
-                self.authorizationHeader = header
-                completion(.retry)
+                completion(.success(.init(value: header.value, expiredAt: header.expiredAt)))
             }
         }
     }
 
-    private func parseError(data: Data?) -> APIClientError? {
-        if let data = data, let error = try? JSONDecoder().decode(ServiceError.self, from: data) {
-            return APIClientError.serviceError(error)
+    func didRequest(_ urlRequest: URLRequest,
+                    with response: HTTPURLResponse,
+                    failDueToAuthenticationError error: Error) -> Bool {
+        if response.statusCode == 423 {
+            self.blockedHandler()
         }
-        return nil
+        return response.statusCode == 401
+    }
+
+    func isRequest(_ urlRequest: URLRequest, authenticatedWith credential: OAuthCredential) -> Bool {
+        return urlRequest.headers[credential.value.name] == credential.value.value
+    }
+
+    private func blockedHandler() {
+        self.blockedAuthorization?(APIClientError.serviceError(.init(statusCode: 423, error: "Device is invalid or blocked.")))
     }
 }

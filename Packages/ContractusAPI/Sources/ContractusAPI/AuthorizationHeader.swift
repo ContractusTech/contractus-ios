@@ -18,9 +18,11 @@ public struct AuthorizationHeaderData: Encodable {
 public struct AuthorizationHeader {
     let data: AuthorizationHeaderData
     let value: HTTPHeader
+    let expiredAt: Date
 
-    public init(data: AuthorizationHeaderData) throws {
+    public init(data: AuthorizationHeaderData, expiredAt: Date) throws {
         self.data = data
+        self.expiredAt = expiredAt
         let header = try JSONEncoder().encode(data)
         self.value = HTTPHeader(name: HEADER_NAME, value: header.base64EncodedString())
     }
@@ -28,7 +30,7 @@ public struct AuthorizationHeader {
 
 public struct AuthorizationHeaderBuilder {
 
-    public static func build(for blockchain: Blockchain, message: String, with keyPair: KeyPair, identifier: String) throws -> AuthorizationHeader {
+    public static func build(for blockchain: Blockchain, message: String, with keyPair: KeyPair, identifier: String, expiredAt: Date) throws -> AuthorizationHeader {
         switch blockchain {
         case .solana:
             let sign = try NaclSign.signDetached(
@@ -36,7 +38,7 @@ public struct AuthorizationHeaderBuilder {
                 secretKey: keyPair.privateKey)
 
             let signatureBase58 = Base58.base58Encode([UInt8](sign))
-            return try AuthorizationHeader(data: AuthorizationHeaderData(blockchain: blockchain.rawValue, pubKey: keyPair.publicKey, signature: signatureBase58, identifier: identifier))
+            return try AuthorizationHeader(data: AuthorizationHeaderData(blockchain: blockchain.rawValue, pubKey: keyPair.publicKey, signature: signatureBase58, identifier: identifier), expiredAt: expiredAt)
 
         }
     }

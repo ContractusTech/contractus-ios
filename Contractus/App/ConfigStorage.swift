@@ -15,7 +15,7 @@ final class ConfigStorage {
     }
     
     enum ServerTypeString: String {
-        case production, developer, custom
+        case production, developer, local, custom
     }
 
     static func getServer(defaultServer: ServerType = .developer()) -> ServerType {
@@ -32,6 +32,8 @@ final class ConfigStorage {
             return .production(version)
         case .developer:
             return .developer(version)
+        case .local:
+            return .local()
         case .custom:
             return .custom(api: url, ws: wsUrl)
         }
