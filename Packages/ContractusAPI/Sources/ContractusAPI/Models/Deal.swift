@@ -143,6 +143,10 @@ public struct Deal: Decodable {
     public var amountFormatted: String {
         token.format(amount: self.amount, withCode: false)
     }
+    
+    public var amountFormattedShort: String {
+        token.formatShort(amount: self.amount, withCode: false)
+    }
 
     public var ownerBondFormatted: String {
         ownerBondToken?.format(amount: self.ownerBondAmount ?? BigUInt(), withCode: false) ?? ""

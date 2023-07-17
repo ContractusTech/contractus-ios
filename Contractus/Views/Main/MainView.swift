@@ -155,7 +155,7 @@ struct MainView: View {
                                             selectedDeal = item
                                         } label: {
                                             DealItemView(
-                                                amountFormatted: item.amountFormatted,
+                                                amountFormatted: item.amountFormattedShort,
                                                 tokenSymbol: item.token.code,
                                                 withPublicKey: item.getPartnersBy(viewModel.state.account.publicKey),
                                                 status: item.status,

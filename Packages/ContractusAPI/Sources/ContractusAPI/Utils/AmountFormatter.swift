@@ -18,6 +18,7 @@ public enum AmountFormatter {
         let formatter = NumberFormatter()
         formatter.allowsFloats = decimal > 0
         formatter.numberStyle = .currency
+        formatter.roundingMode = .halfDown
         formatter.maximumFractionDigits = decimal
         formatter.currencyCode = ""
         formatter.currencySymbol = code ?? ""
@@ -58,5 +59,55 @@ public enum AmountFormatter {
     public static func format(amount: BigUInt, token: Token, withCode: Bool = true, local: Locale = .current) -> String {
         return format(amount: amount, decimal: token.decimals, code: withCode ? token.code : nil, local: local)
     }
-    
+
+    public static func formatShort(amount: BigUInt, token: Token, withCode: Bool = true, local: Locale = .current) -> String {
+        let computedAmount = Double(amount) / pow(Double(10), Double(token.decimals))
+
+        if computedAmount < 1 {
+            return format(amount: amount, decimal: token.decimals, code: withCode ? token.code : nil, local: local)
+        }
+
+        let numFormatter = NumberFormatter()
+
+        typealias Abbrevation = (threshold: Double, divisor: Double, suffix: String)
+        let abbreviations: [Abbrevation] = [(0, 1, ""),
+                                            (1000.0, 1000.0, "k"),
+                                            (1_000_000.0, 1_000_000.0, "m"),
+                                            (100_000_000.0, 1_000_000_000.0, "b")]
+                                            // Can add more !
+
+        let startValue = computedAmount
+        let abbreviation: Abbrevation = {
+            var prevAbbreviation = abbreviations[0]
+            for tmpAbbreviation in abbreviations {
+                if (startValue < tmpAbbreviation.threshold) {
+                    break
+                }
+                prevAbbreviation = tmpAbbreviation
+            }
+            return prevAbbreviation
+        } ()
+
+        var maxFractionDigits = 1
+        switch computedAmount {
+        case _ where computedAmount < 100_000:
+            maxFractionDigits = 1
+        case _ where computedAmount < 1_000_000:
+            maxFractionDigits = 0
+        case _ where computedAmount >= 1_000_000:
+            maxFractionDigits = 2
+        default:
+            maxFractionDigits = 1
+        }
+
+        let value = computedAmount / abbreviation.divisor
+        numFormatter.positiveSuffix = abbreviation.suffix
+        numFormatter.negativeSuffix = abbreviation.suffix
+        numFormatter.allowsFloats = true
+        numFormatter.minimumIntegerDigits = 1
+        numFormatter.minimumFractionDigits = 0
+        numFormatter.maximumFractionDigits = maxFractionDigits
+
+        return numFormatter.string(from: NSNumber(value: value))!
+    }
 }
