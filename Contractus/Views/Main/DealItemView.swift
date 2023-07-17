@@ -44,6 +44,7 @@ struct DealItemView: View {
             HStack(spacing: 5) {
                 HStack(spacing: 0) {
                     amountPrefix()
+                        .foregroundColor(colorAmountText)
                     Text(amountFormatted == "less" ? "0.001" : amountFormatted)
                         .font(.title.weight(.regular))
                         .strikethrough(isStrikethrough, color: colorAmountText)
