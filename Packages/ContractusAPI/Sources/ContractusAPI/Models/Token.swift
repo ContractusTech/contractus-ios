@@ -69,6 +69,10 @@ public extension Token {
     func format(string: String, withCode: Bool = false) -> BigUInt? {
         AmountFormatter.format(string: string, token: self, withCode: withCode)
     }
+    
+    func formatShort(amount: BigUInt, withCode: Bool = false) -> String {
+        AmountFormatter.formatShort(amount: amount, token: self, withCode: withCode)
+    }
 //
 //    static func from(code: String, blockchain: Blockchain = .solana) -> Token {
 //        switch blockchain {

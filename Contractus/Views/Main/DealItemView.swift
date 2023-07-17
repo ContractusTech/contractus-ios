@@ -234,7 +234,7 @@ struct DealItemView_Previews: PreviewProvider {
         ScrollView {
             VStack {
                 DealItemView(
-                    amountFormatted: Mock.deal.amountFormatted,
+                    amountFormatted: Mock.deal.amountFormattedShort,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .canceled,
@@ -243,7 +243,7 @@ struct DealItemView_Previews: PreviewProvider {
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
-                    amountFormatted: Mock.deal.amountFormatted,
+                    amountFormatted: Mock.deal.amountFormattedShort,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .new,
@@ -252,7 +252,7 @@ struct DealItemView_Previews: PreviewProvider {
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
-                    amountFormatted: Mock.deal.amountFormatted,
+                    amountFormatted: Mock.deal.amountFormattedShort,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .working,
@@ -261,7 +261,7 @@ struct DealItemView_Previews: PreviewProvider {
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
-                    amountFormatted: Mock.deal.amountFormatted,
+                    amountFormatted: Mock.deal.amountFormattedShort,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .finished,
@@ -270,7 +270,7 @@ struct DealItemView_Previews: PreviewProvider {
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
-                    amountFormatted: Mock.deal.amountFormatted,
+                    amountFormatted: Mock.deal.amountFormattedShort,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .finished,
@@ -279,7 +279,7 @@ struct DealItemView_Previews: PreviewProvider {
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
-                    amountFormatted: Mock.deal.amountFormatted,
+                    amountFormatted: Mock.deal.amountFormattedShort,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .inProcessing,
@@ -288,7 +288,7 @@ struct DealItemView_Previews: PreviewProvider {
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
 
                 DealItemView(
-                    amountFormatted: Mock.deal.amountFormatted,
+                    amountFormatted: Mock.deal.amountFormattedShort,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
                     status: .pending,
