@@ -12,6 +12,8 @@ private enum Constants {
     static let iconPayment = Image(systemName: "arrow.up.right")
     static let iconReceive = Image(systemName: "arrow.down.left")
     static let iconChecker = Image(systemName: "person.fill.checkmark")
+    static let iconLess = Image(systemName: "lessthan")
+    static let iconPlus = Image(systemName: "plus")
 }
 
 fileprivate let SIZE_BLOCK: CGFloat = 110
@@ -40,10 +42,14 @@ struct DealItemView: View {
             }
             
             HStack(spacing: 5) {
-                Text(amountPrefix + amountFormatted)
-                    .font(.title.weight(.regular))
-                    .strikethrough(isStrikethrough, color: colorAmountText)
-                    .foregroundColor(colorAmountText)
+                HStack(spacing: 0) {
+                    amountPrefix()
+                        .foregroundColor(colorAmountText)
+                    Text(amountFormatted == "less" ? "0.001" : amountFormatted)
+                        .font(.title.weight(.regular))
+                        .strikethrough(isStrikethrough, color: colorAmountText)
+                        .foregroundColor(colorAmountText)
+                }
                 VStack(alignment: .leading, spacing: 0) {
                     partnerTypeImage()
 
@@ -125,10 +131,16 @@ struct DealItemView: View {
         }
     }
 
-    private var amountPrefix: String {
-        return status == .finished && roleType == .receive
-        ? "+"
-        : ""
+    @ViewBuilder
+    func amountPrefix() -> some View {
+        if amountFormatted == "less" {
+            Constants.iconLess
+        }
+        if status == .finished && roleType == .receive {
+            Constants.iconPlus
+        } else {
+            EmptyView()
+        }
     }
 
     private var partnerTypeTitle: String {
