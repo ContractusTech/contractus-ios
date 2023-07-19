@@ -119,7 +119,7 @@ final class TransactionSignViewModel: ViewModel {
                         }
                     }
 
-                    if let _ = deal.allowHolderMode {
+                    if let allowHolderMode = deal.allowHolderMode, allowHolderMode {
                         newState.informationFields.append(.init(
                             title: R.string.localizable.transactionSignFieldsHolderMode(),
                             value: R.string.localizable.commonOn(),
