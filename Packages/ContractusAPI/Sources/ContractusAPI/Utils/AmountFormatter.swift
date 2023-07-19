@@ -63,7 +63,7 @@ public enum AmountFormatter {
     public static func formatShort(amount: BigUInt, token: Token, withCode: Bool = true, local: Locale = .current) -> String {
         let computedAmount = Double(amount) / pow(Double(10), Double(token.decimals))
 
-        if computedAmount < 0.001 {
+        if computedAmount < 0.001 && computedAmount > 0 {
             return "less"
         }
         if computedAmount < 1 {
