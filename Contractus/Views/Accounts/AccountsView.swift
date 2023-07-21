@@ -213,7 +213,7 @@ struct AccountsView: View {
             }]
     }
 
-    @ViewBuilder
+    
     private func accountView(type: SheetType) -> some View {
         var title: String
         var largeTitle: String

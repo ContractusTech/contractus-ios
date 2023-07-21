@@ -126,7 +126,7 @@ struct DealItemView: View {
             return R.color.secondaryText.color
         case .finished:
             return roleType == .receive ? R.color.baseGreen.color : R.color.textBase.color
-        case .new, .pending, .working, .unknown, .inProcessing:
+        default:
             return R.color.textBase.color
         }
     }
@@ -207,9 +207,9 @@ private extension DealStatus {
             return R.color.redText.color
         case .new:
             return R.color.blue.color
-        case .pending, .inProcessing:
+        case .canceling, .finishing, .starting:
             return R.color.secondaryText.color
-        case .working:
+        case .started:
             return R.color.textBase.color
         case .unknown:
             return R.color.secondaryText.color
@@ -224,14 +224,12 @@ private extension DealStatus {
             return R.string.localizable.dealStatusCanceled()
         case .new:
             return R.string.localizable.dealStatusNew()
-        case .pending:
+        case .canceling, .finishing, .starting:
             return R.string.localizable.dealStatusPending()
-        case .working:
+        case .started:
             return R.string.localizable.dealStatusWorking()
         case .unknown:
             return R.string.localizable.dealStatusUnknown()
-        case .inProcessing:
-            return R.string.localizable.dealStatusProcessing()
         }
     }
 }
@@ -267,7 +265,7 @@ struct DealItemView_Previews: PreviewProvider {
                     amountFormatted: Mock.deal.amountFormattedShort,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
-                    status: .working,
+                    status: .started,
                     roleType: .pay,
                     timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
@@ -294,7 +292,7 @@ struct DealItemView_Previews: PreviewProvider {
                     amountFormatted: Mock.deal.amountFormattedShort,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
-                    status: .inProcessing,
+                    status: .finishing,
                     roleType: .pay,
                     timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)
@@ -303,7 +301,16 @@ struct DealItemView_Previews: PreviewProvider {
                     amountFormatted: Mock.deal.amountFormattedShort,
                     tokenSymbol: Mock.deal.token.code,
                     withPublicKey: Mock.deal.contractorPublicKey,
-                    status: .pending,
+                    status: .canceling,
+                    roleType: .pay,
+                    timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
+                    checkerAmount: Mock.deal.amountFeeCheckerFormatted)
+
+                DealItemView(
+                    amountFormatted: Mock.deal.amountFormattedShort,
+                    tokenSymbol: Mock.deal.token.code,
+                    withPublicKey: Mock.deal.contractorPublicKey,
+                    status: .starting,
                     roleType: .pay,
                     timeSinceCreated: Mock.deal.createdAt.relativeDateFormatted,
                     checkerAmount: Mock.deal.amountFeeCheckerFormatted)

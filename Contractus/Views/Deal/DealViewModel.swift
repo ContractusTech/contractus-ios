@@ -63,6 +63,10 @@ struct DealState {
         case finishDeal
         /// Deal not working yet and user want cancel your sign
         case cancelSign
+        /// Deal tx is processing
+        case waiting
+
+        case none
     }
 
     let account: CommonAccount
@@ -120,11 +124,11 @@ struct DealState {
     }
 
     var canSendResult: Bool {
-        deal.status == .working && isYouExecutor
+        deal.status == .started && isYouExecutor
     }
 
     var showResult: Bool {
-        deal.status == .working
+        deal.status == .started
     }
     
     var canEditDeal: Bool {
@@ -209,7 +213,10 @@ final class DealViewModel: ViewModel {
         self.filesAPIService = filesAPIService
         self.transactionSignService = transactionSignService
         self.secretStorage = secretStorage
-        self.loadActualTx()
+        Task {
+            await self.updateActions()
+        }
+
         self.checkAvailableDecrypt()
     }
 
@@ -222,7 +229,7 @@ final class DealViewModel: ViewModel {
                 do {
                     state.state = .loading
                     try await cancelSign()
-                    loadActualTx()
+                    await updateActions()
 
                 } catch(let error) {
                     state.errorState = .error(error.readableDescription)
@@ -268,22 +275,33 @@ final class DealViewModel: ViewModel {
             state.deal.amount = amount.value
             state.deal.allowHolderMode = allowHolderMode
             state.deal.token = amount.token
-            loadActualTx()
+            Task {
+                await updateActions()
+            }
+
         case .changeCheckerAmount(let amount):
             state.deal.checkerAmount = amount.value
-            loadActualTx()
+            Task {
+                await updateActions()
+            }
         case .updateTx:
-            loadActualTx()
+            Task {
+                await updateActions()
+            }
         case .update(let deal):
             if let deal = deal {
                 self.state.deal = deal
-                loadActualTx()
+                Task {
+                    await updateActions()
+                }
                 return
             }
             Task { @MainActor in
                 guard let deal = try? await getDeal() else { return }
                 self.state.deal = deal
-                loadActualTx()
+                Task {
+                    await updateActions()
+                }
                 after?()
             }
         case .updateContent(let content, let contentType):
@@ -364,7 +382,9 @@ final class DealViewModel: ViewModel {
                     }
                 } receiveValue: { deal in
                     self.state.deal = deal
-                    self.loadActualTx()
+                    Task {
+                        await self.updateActions()
+                    }
                     self.state.state = .success
                 }
                 .store(in: &cancelable)
@@ -381,49 +401,76 @@ final class DealViewModel: ViewModel {
 
     // MARK: - Private Methods
 
-    private func loadActualTx() {
-        Task {
-            do {
-                let tx = try await getActualTx()
-                let (isSigned, isSignedByPartners) = getSignatureStatus(tx: tx)
-                let actions = getDealActions(for: state.deal, isSigned: isSigned)
-                await MainActor.run(body: {[weak self, actions, isSignedByPartners] in
-                    self?.state.isSignedByPartners = isSignedByPartners
-                    self?.state.currentMainActions = actions
-                    self?.state.editIsVisible = !state.currentMainActions.contains(.cancelSign)
-                })
-                
-             } catch let error as ContractusAPI.APIClientError {
-                switch error {
-                case .serviceError(let info):
-                    if info.statusCode == 404 {
-                        await MainActor.run(body: {[weak self] in
-                            self?.state.isSignedByPartners = false
-                            self?.state.currentMainActions = [.sign]
-                            self?.state.canSign = true
-                            self?.state.editIsVisible = !state.currentMainActions.contains(.cancelSign)
-                        })
-                        return
-                    }
-                    if info.statusCode == 405 {
-                        await MainActor.run(body: {[weak self] in
-                            self?.state.isSignedByPartners = false
-                            self?.state.currentMainActions = [.sign]
-                            self?.state.canSign = false
-                            self?.state.state = .none
-                            self?.state.editIsVisible = !state.currentMainActions.contains(.cancelSign)
-                        })
-                        return
-                    }
-                case .commonError, .unknownError:
-                    break
-                }
-            } catch {
-                return
-            }
 
+
+    @MainActor
+    private func updateActions() async {
+        let actions = (try? await getDealActions()) ?? DealAction(actions: [])
+        if state.isOwnerDeal {
+            self.state.isSignedByPartners = (actions.signedByContractor ?? false && actions.signedByChecker ?? true)
+        } else {
+            self.state.isSignedByPartners = (actions.signedByOwner ?? false && actions.signedByChecker ?? true)
         }
+
+        var dealActions = actions.actions.map { $0.action }
+        if dealActions.isEmpty {
+            dealActions = [.none]
+        }
+        self.state.currentMainActions = dealActions
+
     }
+
+//    private func loadActualTx() {
+//        Task {
+//            do {
+//                let tx = try await getActualTx()
+//                let (isSigned, isSignedByPartners) = getSignatureStatus(tx: tx)
+//                var actions = getDealActions(for: state.deal, isSigned: isSigned)
+//                if actions.isEmpty && tx.status == .processing {
+//                    actions = [.waiting]
+//                }
+//                await MainActor.run(body: {[weak self, actions, isSignedByPartners] in
+//                    guard let self = self else { return }
+//                    self.state.isSignedByPartners = isSignedByPartners
+//                    self.state.currentMainActions = actions
+//                    self.state.editIsVisible = !self.state.currentMainActions.contains(.cancelSign)
+//                })
+//
+//             } catch let error as ContractusAPI.APIClientError {
+//                switch error {
+//                case .serviceError(let info):
+//                    if info.statusCode == 404 {
+//                        await MainActor.run(body: {[weak self] in
+//                            guard let self = self else { return }
+//
+//                            self.state.isSignedByPartners = false
+//                            self.state.currentMainActions = [.sign]
+//                            self.state.canSign = true
+//                            self.state.editIsVisible = !self.state.currentMainActions.contains(.cancelSign)
+//                        })
+//                        return
+//                    }
+//                    if info.statusCode == 405 {
+//                        await MainActor.run(body: {[weak self] in
+//                            guard let self = self else { return }
+//
+//                            self.state.isSignedByPartners = false
+//                            self.state.currentMainActions = [.sign]
+//                            self.state.canSign = false
+//                            self.state.state = .none
+//                            self.state.editIsVisible = !self.state.currentMainActions.contains(.cancelSign)
+//                        })
+//                        return
+//                    }
+//                case .commonError, .unknownError:
+//                    break
+//                }
+//            } catch {
+//                return
+//            }
+//
+//        }
+//    }
 
     private func checkAvailableDecrypt() {
         if state.isOwnerDeal {
@@ -503,6 +550,14 @@ final class DealViewModel: ViewModel {
     private func getFinishTx() async throws -> ContractusAPI.Transaction {
         try await withCheckedThrowingContinuation({ continuation in
             dealService?.getTransaction(dealId: state.deal.id, silent: false, type: .dealFinish, completion: { result in
+                continuation.resume(with: result)
+            })
+        })
+    }
+
+    private func getDealActions() async throws -> ContractusAPI.DealAction {
+        try await withCheckedThrowingContinuation({ continuation in
+            dealService?.actions(dealId: state.deal.id, completion: { result in
                 continuation.resume(with: result)
             })
         })
@@ -635,7 +690,8 @@ final class DealViewModel: ViewModel {
         }
     }
     
-    private func getDealActions(for deal: Deal, isSigned: Bool) -> [State.MainActionType] {
+    private func getDealActions(for deal: Deal, isSigned: Bool, actions: DealAction) -> [State.MainActionType] {
+
         let actions: [State.MainActionType]
         switch deal.status {
         case .new:
@@ -644,9 +700,9 @@ final class DealViewModel: ViewModel {
             } else {
                 actions = [.sign]
             }
-        case .canceled, .unknown, .finished, .pending, .inProcessing:
+        case .canceled, .unknown, .finished, .canceling, .finishing, .starting:
             actions = []
-        case .working:
+        case .started:
             actions = [.finishDeal, .cancelDeal]
         }
 
@@ -677,5 +733,20 @@ extension MetadataFile: Identifiable {
         bcf.allowedUnits = [.useMB]
         bcf.countStyle = .file
         return bcf.string(fromByteCount: Int64(self.size))
+    }
+}
+
+extension DealAction.Action {
+    var action: DealState.MainActionType {
+        switch self {
+        case .cancel:
+            return .cancelDeal
+        case .finish:
+            return .finishDeal
+        case .sign:
+            return .sign
+        case .cancelSign:
+            return .cancelSign
+        }
     }
 }

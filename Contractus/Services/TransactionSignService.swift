@@ -26,7 +26,7 @@ final class SolanaTransactionSignServiceImpl: TransactionSignService {
         guard !txBase64.isEmpty else {
             throw TransactionSignServiceError.transactionIsEmpty
         }
-        guard let account = try? Account(secretKey: secretKey), let dataToSign = Data(base64Encoded: txBase64) else {
+        guard let account = try? KeyPair(secretKey: secretKey), let dataToSign = Data(base64Encoded: txBase64) else {
             throw TransactionSignServiceError.failed
         }
 
