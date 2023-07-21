@@ -113,10 +113,21 @@ final class ChangeAmountViewModel: ViewModel {
 
     init(deal: Deal, account: CommonAccount, amountType: AmountValueType, dealService: ContractusAPI.DealsService?, tier: Balance.Tier)
     {
+        var amount: Amount
+        switch amountType {
+        case .deal:
+            amount = Amount(deal.amount, token: deal.token)
+        case .checker:
+            amount = Amount(deal.checkerAmount ?? 0, token: deal.token)
+        case .ownerBond:
+            amount = Amount(deal.ownerBondAmount ?? 0, token: deal.token)
+        case .contractorBond:
+            amount = Amount(deal.contractorBondAmount ?? 0, token: deal.token)
+        }
         self.state = .init(
             deal: deal,
             amountType: amountType,
-            amount: amountType == .deal ? Amount(deal.amount, token: deal.token) : Amount(deal.checkerAmount ?? 0, token: deal.token),
+            amount: amount,
             tier: tier,
             feeAmount: Amount(deal.amountFee, token: deal.token),
             account: account,

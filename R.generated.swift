@@ -942,7 +942,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 273 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 276 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1816,6 +1816,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let changeAmountBondOwner = Rswift.StringResource(key: "changeAmount.bond.owner", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The checker must not be the same as the parties to the deal
+      ///
+      /// Locales: en
+      static let addContractorErrorChecker = Rswift.StringResource(key: "addContractor.error.checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The contract description was updated while you were editing your version. Forced update to your version?
       ///
       /// Locales: en
@@ -1844,6 +1848,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let shareContentSubtitleSecretKey = Rswift.StringResource(key: "shareContent.subtitle.secret-key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The party to the deal must not be the same as the checker
+      ///
+      /// Locales: en
+      static let addContractorErrorContractor = Rswift.StringResource(key: "addContractor.error.contractor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The secret key
       ///
       /// Locales: en
@@ -1976,6 +1984,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let enterSubtitle = Rswift.StringResource(key: "enter.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Wrong %@ public key
+      ///
+      /// Locales: en
+      static let addContractorErrorWrongPublicKey = Rswift.StringResource(key: "addContractor.error.wrong-public-key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Yes, clear
       ///
       /// Locales: en
@@ -5319,6 +5331,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("changeAmount.bond.owner", bundle: bundle, comment: "")
       }
 
+      /// en translation: The checker must not be the same as the parties to the deal
+      ///
+      /// Locales: en
+      static func addContractorErrorChecker(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("addContractor.error.checker", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "addContractor.error.checker"
+        }
+
+        return NSLocalizedString("addContractor.error.checker", bundle: bundle, comment: "")
+      }
+
       /// en translation: The contract description was updated while you were editing your version. Forced update to your version?
       ///
       /// Locales: en
@@ -5422,6 +5449,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("shareContent.subtitle.secret-key", bundle: bundle, comment: "")
+      }
+
+      /// en translation: The party to the deal must not be the same as the checker
+      ///
+      /// Locales: en
+      static func addContractorErrorContractor(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("addContractor.error.contractor", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "addContractor.error.contractor"
+        }
+
+        return NSLocalizedString("addContractor.error.contractor", bundle: bundle, comment: "")
       }
 
       /// en translation: The secret key
@@ -5921,6 +5963,23 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("enter.subtitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Wrong %@ public key
+      ///
+      /// Locales: en
+      static func addContractorErrorWrongPublicKey(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("addContractor.error.wrong-public-key", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "addContractor.error.wrong-public-key"
+        }
+
+        let format = NSLocalizedString("addContractor.error.wrong-public-key", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
       }
 
       /// en translation: Yes, clear
