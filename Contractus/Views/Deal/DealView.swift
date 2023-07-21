@@ -72,7 +72,6 @@ struct DealView: View {
     @State private var actionsType: ActionsSheetType?
     @State private var uploaderState: ResizableSheetState = .hidden
     @State private var showDeadlinePicker: Bool = false
-    @State private var isAnimating = false
 
     var body: some View {
         ScrollView {
@@ -869,12 +868,6 @@ struct DealView: View {
             }
             .supportedState([.medium])
         })
-
-        .onAppear {
-            withAnimation(Animation.default.speed(0.15).delay(0).repeatForever(autoreverses: true)) {
-                self.isAnimating = true
-            }
-        }
         .sheet(item: $activeModalType, onDismiss: {
             viewModel.trigger(.sheetClose)
         }) { type in
