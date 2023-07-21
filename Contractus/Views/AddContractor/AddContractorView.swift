@@ -88,8 +88,30 @@ struct AddContractorView: View {
                     label: { EmptyView() }
                 )
                 Spacer()
-                CButton(title: R.string.localizable.commonAdd(), style: .primary, size: .large, isLoading: viewModel.state.isLoading, isDisabled: viewModel.state.state == .invalidPublicKey) {
-                    viewModel.trigger(.addContractor)
+                if case let .invalidPublicKey(error) = viewModel.state.state {
+                    Text(error)
+                        .font(.callout)
+                        .foregroundColor(R.color.redText.color)
+                        .multilineTextAlignment(.center)
+                    CButton(
+                        title: R.string.localizable.commonAdd(),
+                        style: .primary,
+                        size: .large,
+                        isLoading: viewModel.state.isLoading,
+                        isDisabled: true
+                    ) {
+                        viewModel.trigger(.addContractor)
+                    }
+                } else {
+                    CButton(
+                        title: R.string.localizable.commonAdd(),
+                        style: .primary,
+                        size: .large,
+                        isLoading: viewModel.state.isLoading,
+                        isDisabled: false
+                    ) {
+                        viewModel.trigger(.addContractor)
+                    }
                 }
             }
             .padding(EdgeInsets(top: 16, leading: 16, bottom: 24, trailing: 16))

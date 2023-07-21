@@ -211,6 +211,9 @@
 "addContractor.type-account-info" = "Account must be %@ blockchain";
 "addContractor.success-added.checker" = "Checker successfully added!";
 "addContractor.success-added.partner" = "Partner successfully added!";
+"addContractor.error.wrong-public-key" = "Wrong %@ public key";
+"addContractor.error.checker" = "The checker must not be the same as the parties to the deal";
+"addContractor.error.contractor" = "The party to the deal must not be the same as the checker";
 
 "share.title.default" = "Share key";
 "share.subtitle.default" = "For edit and sign contract partner must have this data.";

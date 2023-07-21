@@ -23,7 +23,7 @@ struct AddContractorState {
     }
 
     enum State: Equatable {
-        case none, validPublicKey, loading, invalidPublicKey, successAdded
+        case none, validPublicKey, loading, invalidPublicKey(String), successAdded
     }
 
     let participateType: ParticipateType
@@ -82,7 +82,8 @@ final class AddContractorViewModel: ViewModel {
         case .dismissError:
             state.errorState = nil
         case .validate(let publicKey):
-            self.state.state = AccountValidator.isValidPublicKey(string: publicKey, blockchain: state.blockchain) ? .validPublicKey : .invalidPublicKey
+            self.state.state = AccountValidator.isValidPublicKey(string: publicKey, blockchain: state.blockchain) ? .validPublicKey : .invalidPublicKey(R.string.localizable.addContractorErrorWrongPublicKey(state.blockchain.rawValue))
+            checkKeyAlreadyInDeal(publicKey)
             self.state.publicKey = publicKey
         case .addContractor:
             self.state.state = .loading
@@ -125,4 +126,12 @@ final class AddContractorViewModel: ViewModel {
         }
     }
 
+    func checkKeyAlreadyInDeal(_ publicKey: String) {
+        if publicKey == self.state.deal.checkerPublicKey || publicKey == self.state.deal.ownerPublicKey {
+            self.state.state = .invalidPublicKey(R.string.localizable.addContractorErrorContractor())
+        }
+        if publicKey == self.state.deal.contractorPublicKey || publicKey == self.state.deal.ownerPublicKey {
+            self.state.state = .invalidPublicKey(R.string.localizable.addContractorErrorChecker())
+        }
+    }
 }
