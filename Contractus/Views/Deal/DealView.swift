@@ -790,6 +790,8 @@ struct DealView: View {
                         VStack(alignment: .center, spacing: 12) {
                             ForEach(viewModel.currentMainActions) { actionType in
                                 switch actionType {
+                                case .none:
+                                    EmptyView()
                                 case .sign:
                                     if viewModel.state.isSignedByPartners {
                                         CButton(title: R.string.localizable.dealButtonsSignAndStart(), style: .primary, size: .large, isLoading: false) {
@@ -831,13 +833,15 @@ struct DealView: View {
                                         .font(.footnote)
                                         .foregroundColor(R.color.yellow.color)
                                 case .finishDeal:
-                                    CButton(title: R.string.localizable.dealButtonsFinishDeal(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.state.isYouChecker) {
+                                    CButton(title: R.string.localizable.dealButtonsFinishDeal(), style: .primary, size: .large, isLoading: false, isDisabled: false) {
                                         actionsType = .confirmFinish
                                     }
                                     Text(R.string.localizable.dealDescriptionCommandFinishDeal())
                                         .font(.footnote)
                                         .multilineTextAlignment(.center)
                                         .foregroundColor(R.color.labelBackgroundAttention.color)
+                                case .waiting:
+                                    CButton(title: R.string.localizable.dealStatusProcessing(), style: .primary, size: .large, isLoading: true, isDisabled: true) { }
                                 }
                             }
                         }

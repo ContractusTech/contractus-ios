@@ -392,7 +392,11 @@ struct TransactionSignView: View {
         case .processing:
             return R.string.localizable.transactionSignSubtitleProcessing()
         case .error:
-            return R.string.localizable.transactionSignSubtitleError()
+            if let errorMessage = viewModel.state.transaction?.errorDetail?.message {
+                return errorMessage
+            } else {
+                return R.string.localizable.transactionSignSubtitleError()
+            }
         case .new:
             switch viewModel.state.transaction?.type {
             case .dealInit:

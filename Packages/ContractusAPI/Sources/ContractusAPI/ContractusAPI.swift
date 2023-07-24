@@ -103,7 +103,7 @@ public enum ServerType {
 
     public var isDevelop: Bool {
         switch self {
-        case .developer:
+        case .developer, .local:
             return true
         default:
             return false

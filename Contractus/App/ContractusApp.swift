@@ -63,15 +63,16 @@ final class RootViewModel: ViewModel {
 
     private func reload() {
         Task { @MainActor [weak self] in
+            guard let self = self else { return }
             do {
-                try await appManager.sync()
-                self?.state.state = .hasAccount(appManager.currentAccount)
+                try await self.appManager.sync()
+                self.state.state = .hasAccount(self.appManager.currentAccount)
             } catch AppManagerImpl.AppManagerError.noCurrentAccount {
-                self?.state.state = .noAccount
+                self.state.state = .noAccount
                 AppManagerImpl.shared.clearAccount()
                 debugPrint(".noAccount")
             } catch {
-                self?.state.state = .error(error)
+                self.state.state = .error(error)
                 debugPrint(error.readableDescription)
             }
         }

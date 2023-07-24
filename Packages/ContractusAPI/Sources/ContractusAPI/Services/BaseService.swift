@@ -25,6 +25,7 @@ public enum ServicePath {
     case dealSign(String, TransactionType)
     case uploadFile
     case deal(String)
+    case dealAction(String)
     case participant(String)
     case balance
     case dealFee(dealId: String)
@@ -59,6 +60,8 @@ public enum ServicePath {
             return "/deals"
         case .deal(let id):
             return "/deals/\(id)"
+        case .dealAction(let id):
+            return "/deals/\(id)/actions"
         case .dealMetadata(let id):
             return "/deals/\(id)/meta"
         case .tokens:

@@ -14,6 +14,11 @@ public enum TransactionStatus: String, Codable {
 
 public struct Transaction: Decodable, Equatable {
 
+    public struct ErrorDetail: Decodable, Equatable {
+        public let name: String
+        public let message: String?
+    }
+
     public let id: String
     public let type: TransactionType
     public let transaction: String
@@ -27,6 +32,7 @@ public struct Transaction: Decodable, Equatable {
     public let contractorSignature: String?
     public let checkerSignature: String?
     public let signature: String?
+    public let errorDetail: ErrorDetail?
 
     public init(
         id: String,
@@ -41,8 +47,9 @@ public struct Transaction: Decodable, Equatable {
         contractorSignature: String? = nil,
         signature: String? = nil,
         checkerSignature: String? = nil,
-        fee: BigUInt? = nil)
-    {
+        fee: BigUInt? = nil,
+        errorDetail: ErrorDetail? = nil
+    ){
         self.id = id
         self.type = type
         self.status = status
@@ -56,6 +63,7 @@ public struct Transaction: Decodable, Equatable {
         self.checkerSignature = checkerSignature
         self.fee = fee
         self.signature = signature
+        self.errorDetail = errorDetail
     }
 
     enum CodingKeys: CodingKey {
@@ -72,6 +80,7 @@ public struct Transaction: Decodable, Equatable {
         case fee
         case signature
         case status
+        case details
     }
 
     public init(from decoder: Decoder) throws {
@@ -95,29 +104,19 @@ public struct Transaction: Decodable, Equatable {
         self.checkerSignature = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.checkerSignature)
         self.status = try container.decode(TransactionStatus.self, forKey: Transaction.CodingKeys.status)
 
+        if let errorDetail = try? container.decode(ErrorDetail.self, forKey: Transaction.CodingKeys.details) {
+            self.errorDetail = errorDetail
+        } else {
+            self.errorDetail = nil
+        }
+
         let fee = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.fee)
         if let fee = fee {
             self.fee = BigUInt(stringLiteral: fee)
         } else {
             self.fee = nil
         }
-
     }
-
-//    public func encode(to encoder: Encoder) throws {
-//        var container: KeyedEncodingContainer<Transaction.CodingKeys> = encoder.container(keyedBy: Transaction.CodingKeys.self)
-//
-//        try container.encode(self.id, forKey: Transaction.CodingKeys.id)
-//        try container.encode(self.type, forKey: Transaction.CodingKeys.type)
-//        try container.encode(self.transaction, forKey: Transaction.CodingKeys.transaction)
-//        try container.encode(self.status, forKey: Transaction.CodingKeys.status)
-//        try container.encode(self.initializerPublicKey, forKey: Transaction.CodingKeys.initializerPublicKey)
-//        try container.encodeIfPresent(self.amount, forKey: Transaction.CodingKeys.amount)
-//        try container.encodeIfPresent(self.fee, forKey: Transaction.CodingKeys.fee)
-//        try container.encodeIfPresent(self.ownerSignature, forKey: Transaction.CodingKeys.ownerSignature)
-//        try container.encodeIfPresent(self.contractorSignature, forKey: Transaction.CodingKeys.contractorSignature)
-//        try container.encodeIfPresent(self.checkerSignature, forKey: Transaction.CodingKeys.checkerSignature)
-//    }
 
     public var amountFormatted: String? {
         guard let amount = amount, let token = token else {

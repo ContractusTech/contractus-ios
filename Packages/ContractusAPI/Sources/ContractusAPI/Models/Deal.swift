@@ -21,7 +21,7 @@ public enum OwnerRole: String, Codable {
 }
 
 public enum DealStatus: String, Codable {
-    case new = "NEW", pending = "PENDING", working = "WORKING", finished = "FINISHED", canceled = "CANCELED", inProcessing = "IN_PROCESSING", unknown
+    case new = "NEW", starting = "STARTING", started = "STARTED", finished = "FINISHED", finishing = "FINISHING", canceled = "CANCELED", canceling = "CANCELING", unknown
 }
 
 public struct Deal: Decodable {

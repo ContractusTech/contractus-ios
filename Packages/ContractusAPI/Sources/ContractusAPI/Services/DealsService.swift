@@ -29,7 +29,7 @@ public final class DealsService: BaseService {
     }
 
     public enum FilterByStatus: String, Encodable {
-        case new = "NEW", pending = "PENDING", working = "WORKING", finished = "FINISHED" , canceled = "CANCELED", inProcessing = "IN_PROCESSING"
+        case new = "NEW", starting = "STARTING", started = "STARTED", finished = "FINISHED", finishing = "FINISHING", canceled = "CANCELED", canceling = "CANCELING"
     }
 
     public enum ContentType {
@@ -68,6 +68,12 @@ public final class DealsService: BaseService {
 
     public func update(dealId: String, data: UpdateDeal, completion: @escaping (Swift.Result<Deal, APIClientError>) -> Void) {
         self.request(path: .deal(dealId), httpMethod: .post, data: data) { (result: Swift.Result<Deal, APIClientError>) in
+            completion(result)
+        }
+    }
+
+    public func actions(dealId: String, completion: @escaping (Swift.Result<DealAction, APIClientError>) -> Void) {
+        self.request(path: .dealAction(dealId), httpMethod: .get, data: Empty()) { (result: Swift.Result<DealAction, APIClientError>) in
             completion(result)
         }
     }
@@ -117,33 +123,6 @@ public final class DealsService: BaseService {
     public func cancelSignTransaction(dealId: String, completion: @escaping (Swift.Result<Success, APIClientError>) -> Void) {
         self.request(path: .dealSign(dealId, .dealInit), httpMethod: .delete, data: Empty()) { (result: Swift.Result<Success, APIClientError>) in
             completion(result)
-        }
-    }
-
-    public func getActualTransaction(dealId: String, silent: Bool, completion: @escaping (Swift.Result<Transaction, APIClientError>) -> Void) {
-        transactions(dealId: dealId) { result in
-            switch result {
-            case .success(let txList):
-                var type: TransactionType = .dealInit
-                if txList.isEmpty {
-                    type = .dealInit
-                } else if txList.count == 1 && !txList[0].transaction.isEmpty {
-                    return completion(.success(txList[0]))
-                }
-
-                // TODO: - Не доделано, надо добавить определение других типов транзакций (cancel, finish)
-
-                self.getTransaction(dealId: dealId, silent: silent, type: type) { result in
-                    switch result {
-                    case .success(let tx):
-                        completion(.success(tx))
-                    case .failure(let failure):
-                        completion(.failure(failure))
-                    }
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
         }
     }
 
