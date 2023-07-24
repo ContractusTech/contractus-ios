@@ -833,7 +833,7 @@ struct DealView: View {
                                         .font(.footnote)
                                         .foregroundColor(R.color.yellow.color)
                                 case .finishDeal:
-                                    CButton(title: R.string.localizable.dealButtonsFinishDeal(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.state.isYouChecker) {
+                                    CButton(title: R.string.localizable.dealButtonsFinishDeal(), style: .primary, size: .large, isLoading: false, isDisabled: false) {
                                         actionsType = .confirmFinish
                                     }
                                     Text(R.string.localizable.dealDescriptionCommandFinishDeal())

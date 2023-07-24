@@ -224,10 +224,14 @@ private extension DealStatus {
             return R.string.localizable.dealStatusCanceled()
         case .new:
             return R.string.localizable.dealStatusNew()
-        case .canceling, .finishing, .starting:
-            return R.string.localizable.dealStatusPending()
+        case .canceling:
+            return R.string.localizable.dealStatusCanceling()
+        case .finishing:
+            return R.string.localizable.dealStatusFinishing()
+        case .starting:
+            return R.string.localizable.dealStatusStarting()
         case .started:
-            return R.string.localizable.dealStatusWorking()
+            return R.string.localizable.dealStatusStarted()
         case .unknown:
             return R.string.localizable.dealStatusUnknown()
         }
