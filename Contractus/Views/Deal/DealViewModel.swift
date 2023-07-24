@@ -401,8 +401,6 @@ final class DealViewModel: ViewModel {
 
     // MARK: - Private Methods
 
-
-
     @MainActor
     private func updateActions() async {
         let actions = (try? await getDealActions()) ?? DealAction(actions: [])
@@ -419,58 +417,6 @@ final class DealViewModel: ViewModel {
         self.state.currentMainActions = dealActions
 
     }
-
-//    private func loadActualTx() {
-//        Task {
-//            do {
-//                let tx = try await getActualTx()
-//                let (isSigned, isSignedByPartners) = getSignatureStatus(tx: tx)
-//                var actions = getDealActions(for: state.deal, isSigned: isSigned)
-//                if actions.isEmpty && tx.status == .processing {
-//                    actions = [.waiting]
-//                }
-//                await MainActor.run(body: {[weak self, actions, isSignedByPartners] in
-//                    guard let self = self else { return }
-//                    self.state.isSignedByPartners = isSignedByPartners
-//                    self.state.currentMainActions = actions
-//                    self.state.editIsVisible = !self.state.currentMainActions.contains(.cancelSign)
-//                })
-//
-//             } catch let error as ContractusAPI.APIClientError {
-//                switch error {
-//                case .serviceError(let info):
-//                    if info.statusCode == 404 {
-//                        await MainActor.run(body: {[weak self] in
-//                            guard let self = self else { return }
-//
-//                            self.state.isSignedByPartners = false
-//                            self.state.currentMainActions = [.sign]
-//                            self.state.canSign = true
-//                            self.state.editIsVisible = !self.state.currentMainActions.contains(.cancelSign)
-//                        })
-//                        return
-//                    }
-//                    if info.statusCode == 405 {
-//                        await MainActor.run(body: {[weak self] in
-//                            guard let self = self else { return }
-//
-//                            self.state.isSignedByPartners = false
-//                            self.state.currentMainActions = [.sign]
-//                            self.state.canSign = false
-//                            self.state.state = .none
-//                            self.state.editIsVisible = !self.state.currentMainActions.contains(.cancelSign)
-//                        })
-//                        return
-//                    }
-//                case .commonError, .unknownError:
-//                    break
-//                }
-//            } catch {
-//                return
-//            }
-//
-//        }
-//    }
 
     private func checkAvailableDecrypt() {
         if state.isOwnerDeal {
@@ -539,47 +485,12 @@ final class DealViewModel: ViewModel {
         })
     }
 
-    private func getActualTx() async throws -> ContractusAPI.Transaction {
-        try await withCheckedThrowingContinuation({ continuation in
-            dealService?.getActualTransaction(dealId: state.deal.id, silent: true, completion: { result in
-                continuation.resume(with: result)
-            })
-        })
-    }
-
-    private func getFinishTx() async throws -> ContractusAPI.Transaction {
-        try await withCheckedThrowingContinuation({ continuation in
-            dealService?.getTransaction(dealId: state.deal.id, silent: false, type: .dealFinish, completion: { result in
-                continuation.resume(with: result)
-            })
-        })
-    }
-
     private func getDealActions() async throws -> ContractusAPI.DealAction {
         try await withCheckedThrowingContinuation({ continuation in
             dealService?.actions(dealId: state.deal.id, completion: { result in
                 continuation.resume(with: result)
             })
         })
-    }
-
-    private func getSignatureStatus(tx: ContractusAPI.Transaction) -> (isSigned: Bool, isSignedByPartners: Bool) {
-        var isSignedByPartners: Bool = false
-        let publicKey = try? PublicKey(data: state.account.publicKeyData)
-        let pubKeys = [state.deal.checkerPublicKey, state.deal.contractorPublicKey, state.deal.ownerPublicKey].compactMap { try? PublicKey(string: $0 ?? "") }
-
-        let signedPubKeys = transactionSignService?.isSigned(txBase64: tx.transaction, publicKeys: pubKeys) ?? []
-        let needChecker = state.deal.completionCheckType == .checker
-
-        let isSigned = signedPubKeys.contains { $0 == publicKey }
-        var countPartners = 2
-        if needChecker {
-            countPartners += 1
-        }
-        isSignedByPartners = isSigned ? signedPubKeys.count == countPartners : signedPubKeys.count == countPartners - 1
-
-        return (isSigned, isSignedByPartners)
-
     }
 
     private func deleteContractor(type: ParticipateType) -> Future<Deal, Error> {
