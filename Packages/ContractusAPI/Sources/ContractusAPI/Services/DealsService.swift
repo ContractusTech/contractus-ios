@@ -126,37 +126,6 @@ public final class DealsService: BaseService {
         }
     }
 
-    public func getActualTransaction(dealId: String, silent: Bool, completion: @escaping (Swift.Result<Transaction, APIClientError>) -> Void) {
-        transactions(dealId: dealId) { result in
-            switch result {
-            case .success(let txList):
-                var type: TransactionType = .dealInit
-                if txList.isEmpty {
-                    type = .dealInit
-                } else {
-                    let newTxs = txList.filter { $0.status == .new }
-                    if newTxs.count == 1 && !newTxs[0].transaction.isEmpty {
-                        return completion(.success(txList[0]))
-                    }
-                    
-                }
-
-                // TODO: - Не доделано, надо добавить определение других типов транзакций (cancel, finish)
-
-                self.getTransaction(dealId: dealId, silent: silent, type: type) { result in
-                    switch result {
-                    case .success(let tx):
-                        completion(.success(tx))
-                    case .failure(let failure):
-                        completion(.failure(failure))
-                    }
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-
     public func getFee(dealId: String, data: CalculateDealFee, completion: @escaping (Swift.Result<DealFee, APIClientError>) -> Void) {
         self.request(path: .dealFee(dealId: dealId), httpMethod: .post, data: data) { (result: Swift.Result<DealFee, APIClientError>) in
             completion(result)
