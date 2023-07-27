@@ -13,7 +13,10 @@ import QRCode
 
 private enum Constants {
     static let successSignedImage = Image(systemName: "checkmark.circle.fill")
+
     static let successSignedShieldImage = Image(systemName: "checkmark.shield.fill")
+
+    static let failTxImage = Image(systemName: "xmark.octagon.fill")
     static let shieldImage = Image(systemName: "exclamationmark.shield.fill")
     static let arrowDownImage = Image(systemName: "chevron.down")
     static let arrowUpImage = Image(systemName: "chevron.up")
@@ -21,6 +24,7 @@ private enum Constants {
     static let successCopyImage = Image(systemName: "checkmark")
     static let errorImage = Image(systemName: "xmark.circle.fill")
     static let copyImage = Image(systemName: "square.on.square")
+    static let confirmTxImage = Image(systemName: "checkmark.seal.fill")
 }
 
 struct FieldCopyButton: View {
@@ -77,7 +81,7 @@ struct TransactionDetailFieldView: View {
         HStack {
             VStack(alignment: .leading, spacing: 8) {
                 Text(title)
-                    .font(.body)
+                    .font(.callout)
                     .foregroundColor(R.color.textBase.color)
                 if let titleDescription = titleDescription {
                     Text(titleDescription)
@@ -90,7 +94,7 @@ struct TransactionDetailFieldView: View {
             VStack {
                 HStack(spacing: 6) {
                     Text(value)
-                        .font(.body)
+                        .font(.callout)
                         .foregroundColor(valueTextColor)
                     if isLoading {
                         ProgressView()
@@ -172,113 +176,115 @@ struct TransactionSignView: View {
                                     .foregroundColor(R.color.secondaryText.color)
                                     .font(.footnote)
                                     .multilineTextAlignment(.center)
-                                    .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+                                    .padding(EdgeInsets(top: 0, leading: 32, bottom: 0, trailing: 32))
                                 Spacer()
                             }
                         }
 
                     }
-                    .padding(.bottom, 24)
+                    .padding(.bottom, 0)
                     .padding(.top, 24)
-                    VStack(alignment: .leading, spacing: 0) {
-
-
-                        ForEach(viewModel.state.informationFields) { item in
-                            TransactionDetailFieldView(
-                                title: item.title,
-                                value: item.value,
-                                isLoading: false,
-                                titleDescription: item.titleDescription,
-                                valueDescription: item.valueDescription)
-                        }
-                    }
-                    .background(R.color.secondaryBackground.color)
-                    .cornerRadius(20)
-                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
-                    if let tx = viewModel.state.transaction?.transaction {
+                    VStack {
                         VStack(alignment: .leading, spacing: 0) {
-                            VStack(alignment: .leading) {
-                                VStack(alignment: .leading) {
-                                    HStack {
-                                        Text(R.string.localizable.transactionSignFieldsTx())
-                                            .font(.body)
-                                            .foregroundColor(R.color.textBase.color)
-                                        Text(R.string.localizable.transactionSignFieldsBase64())
-                                            .font(.body)
-                                            .foregroundColor(R.color.secondaryText.color)
-
-                                        Spacer()
-
-                                        Button {
-                                            showTx.toggle()
-
-                                        } label: {
-                                            transactionButtonImage
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width: 16, height: 16)
-                                                .foregroundColor(R.color.textBase.color)
-                                        }
-                                    }
-                                }
-                                if showTx {
-                                    VStack(alignment: .leading) {
-                                        Text(tx)
-                                            .font(.footnote.monospaced())
-                                            .foregroundColor(R.color.secondaryText.color)
-                                    }
-                                    HStack(spacing: 6) {
-                                        CButton(title: R.string.localizable.commonCopy(), style: .secondary, size: .default, isLoading: false) {
-                                            ImpactGenerator.light()
-                                            UIPasteboard.general.string = tx
-                                        }
-                                        Spacer()
-                                    }
+                            ForEach(viewModel.state.informationFields) { item in
+                                TransactionDetailFieldView(
+                                    title: item.title,
+                                    value: item.value,
+                                    isLoading: false,
+                                    titleDescription: item.titleDescription,
+                                    valueDescription: item.valueDescription)
+                                if viewModel.state.informationFields.last == item {
+                                    EmptyView()
+                                } else {
+                                    Divider().foregroundColor(R.color.baseSeparator.color).padding(EdgeInsets(top: 0, leading: -20, bottom: 0, trailing: -20))
                                 }
 
                             }
-                            .padding()
                         }
                         .background(R.color.secondaryBackground.color)
                         .cornerRadius(20)
                         .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
-                    }
-                    if let tx = viewModel.state.transaction, let signature = tx.signature, !signature.isEmpty {
-                        VStack(alignment: .leading, spacing: 0) {
-                            TransactionDetailFieldView(
-                                title: R.string.localizable.transactionSignFieldsSignature(),
-                                value: ContentMask.mask(from: signature),
-                                buttons: [
-                                    .copy(value: signature),
-                                    .custom(
-                                        icon: Constants.arrowRightImage,
-                                        callback: {
-                                            viewModel.trigger(.openExplorer)
-                                        }),
-                                ]
-                            )
+                        if let tx = viewModel.state.transaction?.transaction {
+                            VStack(alignment: .leading, spacing: 0) {
+                                VStack(alignment: .leading) {
+                                    VStack(alignment: .leading) {
+                                        HStack {
+                                            Text(R.string.localizable.transactionSignFieldsTx())
+                                                .font(.body)
+                                                .foregroundColor(R.color.textBase.color)
+                                            Text(R.string.localizable.transactionSignFieldsBase64())
+                                                .font(.body)
+                                                .foregroundColor(R.color.secondaryText.color)
+
+                                            Spacer()
+
+                                            Button {
+                                                withAnimation(.easeInOut(duration: 0.2)) {
+                                                    showTx.toggle()
+                                                }
+
+
+                                            } label: {
+                                                transactionButtonImage
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 16, height: 16)
+                                                    .foregroundColor(R.color.textBase.color)
+                                            }
+                                        }
+                                    }
+                                    if showTx {
+                                        VStack(alignment: .leading) {
+                                            Text(tx)
+                                                .font(.footnote.monospaced())
+                                                .foregroundColor(R.color.secondaryText.color)
+                                        }
+                                        HStack(spacing: 6) {
+                                            CButton(title: R.string.localizable.commonCopy(), style: .secondary, size: .default, isLoading: false) {
+                                                ImpactGenerator.light()
+                                                UIPasteboard.general.string = tx
+                                            }
+                                            Spacer()
+                                        }
+                                    }
+                                }
+                                .padding()
+                            }
+                            .background(R.color.secondaryBackground.color)
+                            .cornerRadius(20)
+                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+
+                            if let tx = viewModel.state.transaction, let signature = tx.signature, !signature.isEmpty {
+                                VStack(alignment: .leading, spacing: 0) {
+                                    TransactionDetailFieldView(
+                                        title: R.string.localizable.transactionSignFieldsSignature(),
+                                        value: ContentMask.mask(from: signature),
+                                        buttons: [
+                                            .copy(value: signature),
+                                            .custom(
+                                                icon: Constants.arrowRightImage,
+                                                callback: {
+                                                    viewModel.trigger(.openExplorer)
+                                                }),
+                                        ]
+                                    )
+                                }
+                                .background(R.color.secondaryBackground.color)
+                                .cornerRadius(20)
+                                .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                            }
                         }
-                        .background(R.color.secondaryBackground.color)
-                        .cornerRadius(20)
-                        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+
+
                     }
+                    .padding()
+
                 }
                 .padding(UIConstants.contentInset)
                 .padding(.bottom, 150)
             }
             VStack(spacing: 12) {
-                CButton(
-                    title: signButtonTitle,
-                    icon: viewModel.state.state == .signed ? Constants.successSignedImage : nil,
-                    style: .primary,
-                    size: .large,
-                    isLoading: viewModel.state.state == .signing,
-                    isDisabled: viewModel.state.state == .loading || viewModel.state.state == .signing || viewModel.state.state == .signed || !viewModel.state.allowSign) {
-                    viewModel.trigger(.sign) {
-                        
-                    }
-                }
-
+                signButton
                 CButton(title: cancelButtonTitle, style: .secondary, size: .large, isLoading: false, isDisabled: viewModel.state.state == .loading || viewModel.state.state == .signing) {
                     presentationMode.wrappedValue.dismiss()
                     closeAction(viewModel.state.transaction?.status != .new)
@@ -319,45 +325,80 @@ struct TransactionSignView: View {
     }
 
     var imageStatusView: some View {
-        ZStack {
+        let size: CGFloat = 28
+        return ZStack {
             switch viewModel.transaction?.status {
             case .finished:
                 RoundedRectangle(cornerRadius: 17)
-                    .fill(R.color.baseGreen.color)
-                Constants.successSignedShieldImage
+                    .stroke(R.color.thirdBackground.color, style: .init(lineWidth: 1))
+                Constants.confirmTxImage
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 21, height: 21)
-                    .foregroundColor(R.color.secondaryBackground.color)
+                    .frame(width: size, height: size)
+                    .foregroundColor(R.color.baseGreen.color)
             case .processing:
                 RoundedRectangle(cornerRadius: 17)
-                    .fill(R.color.secondaryBackground.color)
+                    .stroke(R.color.thirdBackground.color, style: .init(lineWidth: 1))
                 ProgressView()
             case .new, .none:
                 RoundedRectangle(cornerRadius: 17)
-                    .fill(R.color.secondaryBackground.color)
-                Constants.shieldImage
+                    .stroke(R.color.thirdBackground.color, style: .init(lineWidth: 1))
+                Constants.confirmTxImage
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 21, height: 21)
-                    .foregroundColor(R.color.textBase.color)
+                    .frame(width: size, height: size)
+                    .foregroundColor(R.color.thirdBackground.color)
             case .error:
                 RoundedRectangle(cornerRadius: 17)
-                    .fill(R.color.labelBackgroundError.color)
-                Constants.errorImage
+                    .stroke(R.color.thirdBackground.color, style: .init(lineWidth: 1))
+                Constants.failTxImage
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 21, height: 21)
-                    .foregroundColor(R.color.white.color)
+                    .frame(width: size, height: size)
+                    .foregroundColor(R.color.labelBackgroundError.color)
             }
         }
-        .frame(width: 48, height: 48)
+        .frame(width: size * 2, height: size * 2)
+    }
+
+    var signButton: some View {
+        var icon: Image?
+        let loading: Bool = viewModel.state.state == .signing || viewModel.state.transaction?.status == .processing
+        let isDisable = viewModel.state.state == .loading || viewModel.state.state == .signing || viewModel.state.state == .signed || !viewModel.state.allowSign || viewModel.state.transaction?.status == .error
+        var style: CButton.Style = .primary
+        switch viewModel.state.transaction?.status {
+        case .finished:
+            icon = Constants.confirmTxImage
+            style = .success
+        case .error:
+            icon = Constants.failTxImage
+        default: break
+        }
+        return CButton(
+            title: signButtonTitle,
+            icon: icon,
+            style: style,
+            size: .large,
+            isLoading: loading,
+            isDisabled: isDisable
+        ){
+            viewModel.trigger(.sign) { }
+        }
     }
 
     var signButtonTitle: String {
         switch viewModel.state.state {
         case .signed:
-            return R.string.localizable.transactionSignButtonsSigned()
+            switch viewModel.transaction?.status {
+            case .processing:
+                return R.string.localizable.transactionSignButtonsProcessing()
+            case .finished:
+                return R.string.localizable.transactionSignButtonsCompleted()
+            case .error:
+                return R.string.localizable.transactionSignButtonsError()
+            default:
+                return ""
+            }
         case .signing:
             return R.string.localizable.transactionSignButtonsSigning()
         case .loading:
@@ -375,45 +416,28 @@ struct TransactionSignView: View {
     }
 
     var title: String {
-        switch viewModel.transaction?.status {
-        case .finished:
-            return R.string.localizable.transactionSignStatusesDone()
-        case .processing:
-            return R.string.localizable.transactionSignStatusesProcessing()
-        case .error:
-            return R.string.localizable.transactionSignStatusesError()
-        case .new, .none:
-            return R.string.localizable.transactionSignTitleNeedSign()
-        }
+        return R.string.localizable.transactionSignTitleConfirm()
     }
 
     var subtitle: String {
-        switch viewModel.transaction?.status {
-        case .processing:
-            return R.string.localizable.transactionSignSubtitleProcessing()
-        case .error:
-            if let errorMessage = viewModel.state.transaction?.errorDetail?.message {
-                return errorMessage
-            } else {
-                return R.string.localizable.transactionSignSubtitleError()
-            }
-        case .new:
-            switch viewModel.state.transaction?.type {
-            case .dealInit:
-                return R.string.localizable.transactionSignSubtitleUnsignedInitDeal()
-            case .dealFinish:
-                return R.string.localizable.transactionSignSubtitleFinishDeal()
-            case .dealCancel:
-                return R.string.localizable.transactionSignSubtitleCancelDeal()
-            default:
-                return R.string.localizable.transactionSignSubtitleCommon()
-            }
-        case .finished:
-            return R.string.localizable.transactionSignSubtitleFinished()
+        if let errorMessage = viewModel.state.transaction?.errorDetail?.message {
+            return errorMessage
+        }
+
+        switch viewModel.state.transaction?.type {
+        case .dealInit:
+            return R.string.localizable.transactionSignSubtitleUnsignedInitDeal()
+        case .dealFinish:
+            return R.string.localizable.transactionSignSubtitleFinishDeal()
+        case .dealCancel:
+            return R.string.localizable.transactionSignSubtitleCancelDeal()
+        case .unwrapAllSOL:
+            return R.string.localizable.transactionSignSubtitleUnwrap()
+        case .wrapSOL:
+            return R.string.localizable.transactionSignSubtitleWrap()
         case .none:
             return ""
         }
-
     }
 
     var statusTextColor: Color {

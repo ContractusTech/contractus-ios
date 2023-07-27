@@ -48,6 +48,7 @@
 "common.off" = "Off";
 "common.downloading" = "Downloading";
 "common.decrypting" = "Decrypting";
+"common.confirm" = "Confirm";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
@@ -181,6 +182,9 @@
 "deal.executor.edit-account" = "Edit";
 "deal.executor.clear-account.message" = "Are you sure you want to clear account?";
 "deal.executor.clear-account.confirm" = "Yes, clear";
+"deal.revoke.message" = "Are you sure you want to revoke the deal?";
+"deal.revoke.actions.confirm" = "Yes, cancel";
+"deal.executor.clear-account.confirm" = "Yes, clear";
 "deal.performance.bond" = "Performance bond";
 "deal.performance.bond.subtitle" = "This is guarantee to mitigate the risks.";
 "deal.bond.client.subtitle" = "Upon completion the funds will be returned to the client";
@@ -192,6 +196,7 @@
 "deal.description-command.cancel-sign" = "You can cancel your signature before your partner signs the contract. The work of the contract will begin when the partner signs.";
 "deal.description-command.stop-deal" = "You can stop the contract all funds will be refunded.";
 "deal.description-command.finish-deal" = "If all the work is done as specified in the contract you can complete the contract, the contractor will receive payment. The checker will receive a commission for services.";
+"deal.description-command.revoke-deal" = "You can cancel the deal before it starts.";
 "deal.delete.alert.button" = "Yes, delete";
 "deal.delete.alert.message" = "You want delete file?";
 
@@ -281,15 +286,20 @@
 "transactionSign.fields.free-fee" = "Free";
 "transactionSign.buttons.signed" = "Signed";
 "transactionSign.buttons.signing" = "Signing...";
+"transactionSign.buttons.processing" = "Processing...";
+"transactionSign.buttons.completed" = "Completed";
+"transactionSign.buttons.error" = "Transaction failed";
 "transactionSign.buttons.loading" = "Loading...";
-"transactionSign.buttons.sign" = "Confirm and sign";
+"transactionSign.buttons.sign" = "Sign and confirm";
 "transactionSign.title.need-sign" = "Signing\n the transaction";
 "transactionSign.title.signed" = "Signed";
+"transactionSign.title.confirm" = "Confirm\nTransaction";
 "transactionSign.subtitle.unsigned-init-deal" = "Of transaction. Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.";
-"transactionSign.subtitle.finish-deal" = "Once signed, the transaction will be completed and the executor will receive the funds";
-"transactionSign.subtitle.cancel-deal" = "Once signed, the transaction will be cancelled and the client's funds will be refunded";
-"transactionSign.subtitle.common" = "After signing, the transaction will start executing";
-"transactionSign.subtitle.processing" = "The transaction will soon be completed";
+"transactionSign.subtitle.finish-deal" = "The contractor will receive the funds and the deal will be successfully completed.";
+"transactionSign.subtitle.cancel-deal" = "The client's funds will be refunded and the deal will canceled";
+"transactionSign.subtitle.unwrap" = "And your token will be unwraped\ninto a native token";
+"transactionSign.subtitle.wrap" = "And your native token will be wraped";
+"transactionSign.subtitle.processing" = "Processing...";
 "transactionSign.subtitle.error" = "Try again";
 "transactionSign.subtitle.finished" = "Transaction completed successfully";
 "transactionSign.subtitle.holder-mode" = "For the period of the deal will be lock 10k CTUS";

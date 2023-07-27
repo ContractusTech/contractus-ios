@@ -3,7 +3,7 @@ import Foundation
 public struct DealAction: Decodable {
 
     public enum Action: String, Decodable {
-        case sign = "SIGN", cancelSign = "CANCEL_SIGN", finish = "FINISH", cancel = "CANCEL"
+        case sign = "SIGN", cancelSign = "CANCEL_SIGN", finish = "FINISH", cancel = "CANCEL", revoke = "REVOKE"
     }
 
     public let signedByChecker: Bool?

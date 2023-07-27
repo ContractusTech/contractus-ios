@@ -33,6 +33,7 @@ struct DealView: View {
     enum AlertType {
         case error(String)
         case confirmClear
+        case confirmRevoke
     }
 
     enum ActionsSheetType: Equatable {
@@ -842,6 +843,16 @@ struct DealView: View {
                                         .foregroundColor(R.color.labelBackgroundAttention.color)
                                 case .waiting:
                                     CButton(title: R.string.localizable.dealStatusProcessing(), style: .primary, size: .large, isLoading: true, isDisabled: true) { }
+                                case .revoke:
+                                    CButton(title: R.string.localizable.dealButtonsCancelDeal(), style: .secondaryCancel, size: .large, isLoading: false) {
+
+                                        alertType = .confirmRevoke
+                                        
+                                    }
+                                    Text(R.string.localizable.dealDescriptionCommandRevokeDeal())
+                                        .font(.footnote)
+                                        .multilineTextAlignment(.center)
+                                        .foregroundColor(R.color.secondaryText.color)
                                 }
                             }
                         }
@@ -1076,6 +1087,18 @@ struct DealView: View {
                         viewModel.trigger(.deleteContractor(.contractor))
                     }
                 )
+            case .confirmRevoke:
+                return Alert(
+                    title: Text(R.string.localizable.commonConfirm()),
+                    message: Text(R.string.localizable.dealRevokeMessage()),
+                    primaryButton: .cancel(),
+                    secondaryButton: .destructive(Text(R.string.localizable.dealRevokeActionsConfirm())) {
+                        viewModel.trigger(.cancel) {
+                            self.callback()
+                            self.presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+                )
             }
         })
 
@@ -1153,12 +1176,12 @@ struct DealView: View {
                 Alert.Button.default(Text(R.string.localizable.dealShareSecret())) {
                     activeModalType = .shareSecret
                 },
-                Alert.Button.destructive(Text(R.string.localizable.dealCancel())) {
-                    viewModel.trigger(.cancel) {
-                        self.callback()
-                        self.presentationMode.wrappedValue.dismiss()
-                    }
-                },
+//                Alert.Button.destructive(Text(R.string.localizable.dealCancel())) {
+//                    viewModel.trigger(.cancel) {
+//                        self.callback()
+//                        self.presentationMode.wrappedValue.dismiss()
+//                    }
+//                },
                 Alert.Button.cancel() {
 
                 }]
@@ -1346,6 +1369,8 @@ extension DealView.AlertType: Identifiable {
             return "error"
         case .confirmClear:
             return "confirmClear"
+        case .confirmRevoke:
+            return "confirmRevoke"
         }
     }
 }
