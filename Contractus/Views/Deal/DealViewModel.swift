@@ -415,8 +415,11 @@ final class DealViewModel: ViewModel {
         if dealActions.isEmpty {
             dealActions = [.none]
         }
-        self.state.currentMainActions = dealActions
 
+        var state = self.state
+        state.editIsVisible = !dealActions.contains(.cancelSign)
+        state.currentMainActions = dealActions
+        self.state = state
     }
 
     private func checkAvailableDecrypt() {

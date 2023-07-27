@@ -1568,10 +1568,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorDescriptionExecutor = Rswift.StringResource(key: "addContractor.description.executor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Of transaction. Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.
-      ///
-      /// Locales: en
-      static let transactionSignSubtitleUnsignedInitDeal = Rswift.StringResource(key: "transactionSign.subtitle.unsigned-init-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Off
       ///
       /// Locales: en
@@ -1584,6 +1580,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonOn = Rswift.StringResource(key: "common.on", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.
+      ///
+      /// Locales: en
+      static let transactionSignSubtitleUnsignedInitDeal = Rswift.StringResource(key: "transactionSign.subtitle.unsigned-init-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Open
       ///
       /// Locales: en
@@ -4445,21 +4445,6 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("addContractor.description.executor", bundle: bundle, comment: "")
       }
 
-      /// en translation: Of transaction. Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.
-      ///
-      /// Locales: en
-      static func transactionSignSubtitleUnsignedInitDeal(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("transactionSign.subtitle.unsigned-init-deal", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "transactionSign.subtitle.unsigned-init-deal"
-        }
-
-        return NSLocalizedString("transactionSign.subtitle.unsigned-init-deal", bundle: bundle, comment: "")
-      }
-
       /// en translation: Off
       ///
       /// Locales: en
@@ -4503,6 +4488,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.on", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.
+      ///
+      /// Locales: en
+      static func transactionSignSubtitleUnsignedInitDeal(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.subtitle.unsigned-init-deal", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.subtitle.unsigned-init-deal"
+        }
+
+        return NSLocalizedString("transactionSign.subtitle.unsigned-init-deal", bundle: bundle, comment: "")
       }
 
       /// en translation: Open

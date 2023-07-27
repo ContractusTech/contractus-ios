@@ -294,7 +294,7 @@
 "transactionSign.title.need-sign" = "Signing\n the transaction";
 "transactionSign.title.signed" = "Signed";
 "transactionSign.title.confirm" = "Confirm\nTransaction";
-"transactionSign.subtitle.unsigned-init-deal" = "Of transaction. Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.";
+"transactionSign.subtitle.unsigned-init-deal" = "Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.";
 "transactionSign.subtitle.finish-deal" = "The contractor will receive the funds and the deal will be successfully completed.";
 "transactionSign.subtitle.cancel-deal" = "The client's funds will be refunded and the deal will canceled";
 "transactionSign.subtitle.unwrap" = "And your token will be unwraped\ninto a native token";

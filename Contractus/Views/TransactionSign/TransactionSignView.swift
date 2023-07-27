@@ -170,15 +170,16 @@ struct TransactionSignView: View {
                                 .lineSpacing(-1.1)
                                 .multilineTextAlignment(.center)
                                 .foregroundColor(R.color.textBase.color)
-                            HStack {
+
+                            HStack(alignment: .center) {
                                 Spacer()
                                 Text(subtitle)
                                     .foregroundColor(R.color.secondaryText.color)
                                     .font(.footnote)
                                     .multilineTextAlignment(.center)
-                                    .padding(EdgeInsets(top: 0, leading: 32, bottom: 0, trailing: 32))
                                 Spacer()
                             }
+                            .padding(EdgeInsets(top: 0, leading: 32, bottom: 0, trailing: 32))
                         }
 
                     }
@@ -423,8 +424,15 @@ struct TransactionSignView: View {
         if let errorMessage = viewModel.state.transaction?.errorDetail?.message {
             return errorMessage
         }
-
-        switch viewModel.state.transaction?.type {
+        var txType: TransactionType?
+        switch viewModel.state.type  {
+        case .byDeal(_, let type):
+            txType = type
+        case .byTransaction(let tx):
+            txType = tx.type
+        default: break
+        }
+        switch txType ?? viewModel.state.transaction?.type {
         case .dealInit:
             return R.string.localizable.transactionSignSubtitleUnsignedInitDeal()
         case .dealFinish:

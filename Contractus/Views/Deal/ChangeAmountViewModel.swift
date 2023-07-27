@@ -78,7 +78,7 @@ struct ChangeAmountState {
         case .ownerBond, .contractorBond:
             return amount.value >= 0
         default:
-            return amount.value != 0
+            return amount.value >= 0
         }
     }
 
@@ -189,16 +189,16 @@ final class ChangeAmountViewModel: ViewModel {
     private func updateFee(amount: Amount) {
         guard let feeType = state.amountType.asAmountFeeType else { return }
 
-        if amount.value.isZero {
-            var newState = self.state
-            newState.feePercent = 0
-            newState.feeAmount = Amount(UInt64(0), token: amount.token)
-            newState.feeFormatted = Amount(UInt64(0), token: amount.token).formatted(withCode: true)
-            newState.fiatFeeFormatted = "-" //fee.fiatCurrency.format(double: 0, withCode: true) ?? ""
-            newState.state = .none
-            self.state = newState
-            return
-        }
+//        if amount.value.isZero {
+//            var newState = self.state
+//            newState.feePercent = 0
+//            newState.feeAmount = Amount(UInt64(0), token: amount.token)
+//            newState.feeFormatted = Amount(UInt64(0), token: amount.token).formatted(withCode: true)
+//            newState.fiatFeeFormatted = "-" //fee.fiatCurrency.format(double: 0, withCode: true) ?? ""
+//            newState.state = .none
+//            self.state = newState
+//            return
+//        }
         self.state.state = .loading
         let holderMode = self.state.allowHolderMode
         dealService?.getFee(dealId: state.deal.id, data: CalculateDealFee(amount: amount, type: feeType, allowHolderMode: holderMode), completion: {[weak self] result in
