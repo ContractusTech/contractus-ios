@@ -169,9 +169,8 @@ struct CreateDealView: View {
 
                         }
                         VStack(spacing: 0) {
-
                             HStack {
-                                Toggle(isOn: $allowChecker.animation(.linear(duration: 0.2))) {
+                                Toggle(isOn: $allowChecker.animation(.easeInOut(duration: 0.1))) {
                                     VStack(alignment: .leading, spacing: 6) {
                                         Text("Check by third party")
                                             .font(.body)

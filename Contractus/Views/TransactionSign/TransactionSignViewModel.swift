@@ -34,7 +34,7 @@ struct TransactionSignState {
         case loading, loaded, signing, signed
     }
 
-    struct InformationItem: Identifiable {
+    struct InformationItem: Equatable, Identifiable {
         var id: String {
             return "\(self)"
         }
@@ -205,6 +205,10 @@ final class TransactionSignViewModel: ViewModel {
         self.pollTxService?.handler = {[weak self] tx in
             self?.state.transaction = tx
             if tx?.status == .finished {
+                ImpactGenerator.success()
+                self?.pollTxService?.endPoll()
+            } else if tx?.status == .error {
+                ImpactGenerator.error()
                 self?.pollTxService?.endPoll()
             }
         }

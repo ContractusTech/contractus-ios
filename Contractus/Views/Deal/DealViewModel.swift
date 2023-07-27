@@ -65,7 +65,8 @@ struct DealState {
         case cancelSign
         /// Deal tx is processing
         case waiting
-
+        /// Cancel deal before start deal
+        case revoke
         case none
     }
 
@@ -658,6 +659,8 @@ extension DealAction.Action {
             return .sign
         case .cancelSign:
             return .cancelSign
+        case .revoke:
+            return .revoke
         }
     }
 }

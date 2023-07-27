@@ -22,4 +22,14 @@ enum ImpactGenerator {
         let impactMed = UIImpactFeedbackGenerator(style: .rigid)
         impactMed.impactOccurred(intensity: 0.6)
     }
+
+    static func success() {
+        let notify = UINotificationFeedbackGenerator()
+        notify.notificationOccurred(.success)
+    }
+
+    static func error() {
+        let notify = UINotificationFeedbackGenerator()
+        notify.notificationOccurred(.error)
+    }
 }
