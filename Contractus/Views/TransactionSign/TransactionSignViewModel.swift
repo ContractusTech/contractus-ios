@@ -99,7 +99,6 @@ final class TransactionSignViewModel: ViewModel {
                 state: .loading,
                 type: type,
                 informationFields: Self.fieldsByDeal(deal, txType: txType, account: account))
-
             Task { @MainActor in
                 do {
                     let tx = try await getTx()
