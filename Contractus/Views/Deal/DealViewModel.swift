@@ -300,9 +300,7 @@ final class DealViewModel: ViewModel {
             Task { @MainActor in
                 guard let deal = try? await getDeal() else { return }
                 self.state.deal = deal
-                Task {
-                    await updateActions()
-                }
+                await updateActions()
                 after?()
             }
         case .updateContent(let content, let contentType):

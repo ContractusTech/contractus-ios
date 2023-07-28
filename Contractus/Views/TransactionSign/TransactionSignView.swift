@@ -398,7 +398,7 @@ struct TransactionSignView: View {
             case .error:
                 return R.string.localizable.transactionSignButtonsError()
             default:
-                return ""
+                return R.string.localizable.transactionSignButtonsSigned()
             }
         case .signing:
             return R.string.localizable.transactionSignButtonsSigning()
