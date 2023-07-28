@@ -169,11 +169,11 @@ final class ChangeAmountViewModel: ViewModel {
             case .deal:
                 data = UpdateDeal(amount: state.amount, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: nil, deadline: nil, allowHolderMode: state.allowHolderMode)
             case .checker:
-                data = UpdateDeal(amount: nil, checkerAmount: state.amount, ownerBondAmount: nil, contractorBondAmount: nil, deadline: nil, allowHolderMode: state.allowHolderMode)
+                data = UpdateDeal(amount: nil, checkerAmount: state.amount, ownerBondAmount: nil, contractorBondAmount: nil, deadline: nil, allowHolderMode: nil)
             case .contractorBond:
-                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: state.amount, deadline: nil, allowHolderMode: state.allowHolderMode)
+                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: nil, contractorBondAmount: state.amount, deadline: nil, allowHolderMode: nil)
             case .ownerBond:
-                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: state.amount, contractorBondAmount: nil, deadline: nil, allowHolderMode: state.allowHolderMode)
+                data = UpdateDeal(amount: nil, checkerAmount: nil, ownerBondAmount: state.amount, contractorBondAmount: nil, deadline: nil, allowHolderMode: nil)
             }
             dealService?.update(dealId: state.deal.id, data: data, completion: { [weak self] result in
                 switch result {
