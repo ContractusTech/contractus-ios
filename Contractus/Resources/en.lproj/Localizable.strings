@@ -49,11 +49,13 @@
 "common.downloading" = "Downloading";
 "common.decrypting" = "Decrypting";
 "common.confirm" = "Confirm";
+"common.you-account" = "Your public key";
+"common.top-up" = "Top Up";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
 "enter.button.import" = "Import exists";
-"enter.message" = "To get started you need a %@ account";
+"enter.message" = "Powered by %@";
 "enter.terms" = "By pressed, you agree to [Terms](https://google.com) and [Privacy Policy](https://google.com)";
 "enter.add-account.subtitle" = "Create a new %@ account or import an existing one.";
 "enter.add-account.title" = "Add account";
@@ -99,6 +101,7 @@
 
 "shareContent.title.secret-key" = "The secret key";
 "shareContent.subtitle.secret-key" = "The partner need scan the QR code to start working on the contract.";
+"shareContent.subtitle" = "Used to top up account or added to a deal by partners";
 
 "uploadFile.button.select" = "Select";
 "uploadFile.button.select-gallery" = "Gallery";
@@ -234,6 +237,7 @@
 "main.empty.title" = "No deals yet";
 "main.empty.message" = "Your account must be specified in deal \nor create own deal by tap on «New Deal»";
 "main.about.tiers" = "About tiers";
+"main.title.filter" = "Filter";
 
 "main.statistics.revenue-30" = "Revenue, 30d";
 "main.statistics.revenue-all" = "Revenue, all";
@@ -320,3 +324,10 @@
 
 "error.download.file" = "Download file error";
 "error.decrypt.file" = "Decrypt file error";
+
+"topup.title.cards" = "By cards (soon)";
+"topup.title.crypto" = "By crypto";
+"topup.title.load" = "Get a loan (soon)";
+"topup.subtitle.cards" = "Deposit by fiat";
+"topup.subtitle.crypto" = "Deposit from another account";
+"topup.subtitle.load" = "Obtain loan funds for the deal";

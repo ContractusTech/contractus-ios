@@ -189,7 +189,7 @@ struct CreateDealView: View {
                             if !allowChecker {
                                 HStack {
                                     Text("Who will add the performance bond?")
-                                        .font(.title3.weight(.semibold))
+                                        .font(.body.weight(.semibold))
 
                                     Spacer()
                                 }

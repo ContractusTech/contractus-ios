@@ -122,6 +122,7 @@
 		6DC1C237291C34A20009FE96 /* URL+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC1C236291C34A20009FE96 /* URL+Ex.swift */; };
 		6DC2C02528C98332005C9EBE /* TransactionSignService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC2C02428C98332005C9EBE /* TransactionSignService.swift */; };
 		6DC2C02728C99C0A005C9EBE /* ServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC2C02628C99C0A005C9EBE /* ServiceFactory.swift */; };
+		6DC558652A76633C0054F2FC /* TopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC558642A76633C0054F2FC /* TopUpView.swift */; };
 		6DD28E252A1C85360093E553 /* BaseTopTextBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E242A1C85360093E553 /* BaseTopTextBlockView.swift */; };
 		6DD28E272A1C9C6A0093E553 /* Date+Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */; };
 		6DD28E292A1DF3B10093E553 /* DeadlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E282A1DF3B10093E553 /* DeadlineView.swift */; };
@@ -287,6 +288,7 @@
 		6DC1C236291C34A20009FE96 /* URL+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Ex.swift"; sourceTree = "<group>"; };
 		6DC2C02428C98332005C9EBE /* TransactionSignService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSignService.swift; sourceTree = "<group>"; };
 		6DC2C02628C99C0A005C9EBE /* ServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceFactory.swift; sourceTree = "<group>"; };
+		6DC558642A76633C0054F2FC /* TopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopUpView.swift; sourceTree = "<group>"; };
 		6DD28E242A1C85360093E553 /* BaseTopTextBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTopTextBlockView.swift; sourceTree = "<group>"; };
 		6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatter.swift"; sourceTree = "<group>"; };
 		6DD28E282A1DF3B10093E553 /* DeadlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadlineView.swift; sourceTree = "<group>"; };
@@ -619,6 +621,7 @@
 				6D530DBB28E23780006F52C6 /* CreateDealView.swift */,
 				6D530DBD28E2AD82006F52C6 /* CreateDealViewModel.swift */,
 				6D44B5632A0FAB37008C561D /* StatisticsView.swift */,
+				6DC558642A76633C0054F2FC /* TopUpView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -1035,6 +1038,7 @@
 				6D6EE38D289E25FF00635E60 /* UploadFileView.swift in Sources */,
 				6D4D99F32A5601A1007668B0 /* IdentifierService.swift in Sources */,
 				FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */,
+				6DC558652A76633C0054F2FC /* TopUpView.swift in Sources */,
 				6DAA5E7B2898C25500BA1965 /* RandomStrings.swift in Sources */,
 				6DC2C02728C99C0A005C9EBE /* ServiceFactory.swift in Sources */,
 				6DD28E272A1C9C6A0093E553 /* Date+Formatter.swift in Sources */,
