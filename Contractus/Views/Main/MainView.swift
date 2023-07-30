@@ -46,6 +46,7 @@ struct MainView: View {
     @State var sheetType: SheetType? = .none
     @State var dealsType: MainViewModel.State.DealType = .all
     @State var transactionSignType: TransactionSignType?
+    @State private var topUpState: ResizableSheetState = .hidden
 
 
     @State private var showDealFilter: Bool = false
@@ -59,7 +60,7 @@ struct MainView: View {
                         BalanceView(
                             state: viewModel.state.balance != nil ? .loaded(.init(balance: viewModel.state.balance!)) : .empty,
                             topUpAction: {
-                                // TODO: - TopUp Tapped
+                                topUpState = .medium
                             }, infoAction: {
                                 sheetType = .webView(AppConfig.tiersInformationURL)
                             }, swapAction: { fromAmount, toAmount in
@@ -70,7 +71,6 @@ struct MainView: View {
                             StatisticsView(items: viewModel.state.statistics) { item in
                                 // TODO: - Info tap handler
                             }
-
                         }
 
                         HStack(alignment: .center, spacing: 0) {
@@ -187,14 +187,36 @@ struct MainView: View {
                 .onChange(of: dealsType, perform: { newType in
                     viewModel.trigger(.load(newType))
                 })
-                .confirmationDialog(Text("Filter"), isPresented: $showDealFilter, actions: {
+                .confirmationDialog(Text(R.string.localizable.mainTitleFilter()), isPresented: $showDealFilter, actions: {
                     ForEach(MainViewModel.State.DealType.allCases, id: \.self) { type in
                         Button(dealTitle(type: type), role: .none) {
                             dealsType = type
                         }
                     }
-
-
+                })
+                .resizableSheet($topUpState, builder: { builder in
+                    builder.content { context in
+                        TopUpView { type in
+                            switch type {
+                            case .crypto:
+                                sheetType = .sharePublicKey
+                                topUpState = .hidden
+                            case .fiat, .load:
+                                // TODO: - 
+                                break
+                            }
+                        }
+                    }
+                    .animation(.easeOut.speed(1.8))
+                    .background { context in
+                        Color.black
+                            .opacity(context.state == .medium ? 0.5 : 0)
+                            .ignoresSafeArea()
+                            .onTapGesture(perform: {
+                                topUpState = .hidden
+                            })
+                    }
+                    .supportedState([.medium, .hidden])
                 })
 
                 .sheet(item: $sheetType, content: { type in
@@ -240,8 +262,13 @@ struct MainView: View {
                             viewModel.trigger(.executeScanResult(result))
                         }
                     case .sharePublicKey:
+                        // TODO: - Refactor
                         if let shareData = try? SharablePublicKey(shareContent: viewModel.state.account.publicKey) {
-                            ShareContentView(content: shareData, topTitle: "Sharing", title: "Your public key", subTitle: "") { _ in
+                            ShareContentView(
+                                content: shareData,
+                                topTitle: R.string.localizable.commonAccount(),
+                                title: R.string.localizable.commonYouAccount(),
+                                subTitle: R.string.localizable.shareContentSubtitle()) { _ in
 
                             } dismissAction: {
                                 sheetType = .none

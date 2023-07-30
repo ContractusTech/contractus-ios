@@ -11,7 +11,7 @@ import ContractusAPI
 import SwiftUI
 import QRCode
 
-private enum Constants {
+fileprivate enum Constants {
     static let successSignedImage = Image(systemName: "checkmark.circle.fill")
 
     static let successSignedShieldImage = Image(systemName: "checkmark.shield.fill")

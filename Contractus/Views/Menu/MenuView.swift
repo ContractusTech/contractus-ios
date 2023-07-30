@@ -143,6 +143,7 @@ struct MenuView: View {
                     .onTapGesture(count: 3, perform: {
                         showServerSelection.toggle()
                     })
+                    .padding()
 
             }
             .sheet(isPresented: $showServerSelection, content: {

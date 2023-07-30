@@ -77,7 +77,7 @@ struct TopTextBlockView: View {
                         }
                         Text(headerText)
                             .multilineTextAlignment(.center)
-                            .font(.footnote.weight(.bold))
+                            .font(.footnote.weight(.medium))
                             .textCase(.uppercase)
                             .foregroundColor(informationType.textColor)
                     }
