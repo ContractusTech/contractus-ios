@@ -170,13 +170,39 @@ final class TransactionSignViewModel: ViewModel {
                 do {
                     let transaction = try await sign()
                     var newState = self.state
+//                  MOCK: - Error transaction
+//                    let transaction = Transaction(
+//                        id: "1",
+//                        type: .dealInit,
+//                        status: .error,
+//                        transaction: "MOCK TRANSACTION",
+//                        initializerPublicKey: "",
+//                        amount: nil,
+//                        token: nil,
+//                        ownerSignature: nil,
+//                        contractorSignature: nil,
+//                        signature: nil,
+//                        checkerSignature: nil,
+//                        fee: nil,
+//                        errorDetail: Transaction.ErrorDetail(name: "TRANSACTION ERROR", message: "MOCK TRANSACTION GLOBAL ERROR MESSAGE")
+//                    )
+//                    newState.transaction = transaction
+//                    newState.state = .loaded
+//                    newState.errorState = .error((newState.transaction?.errorDetail!.name)!)
+//                  END MOCK
+
                     newState.errorState = nil
                     newState.state = .signed
                     if let transaction = transaction {
                         newState.transaction = transaction
+                        if transaction.status == .error {
+                            newState.state = .loaded
+                            newState.errorState = .error((newState.transaction?.errorDetail!.name)!)
+                        } else {
+                            pollTxService?.startPoll()
+                        }
                     }
                     self.state = newState
-                    pollTxService?.startPoll()
                 } catch {
                     debugPrint(error.localizedDescription)
                     var newState = self.state

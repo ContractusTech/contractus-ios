@@ -17,6 +17,14 @@ public struct Transaction: Decodable, Equatable {
     public struct ErrorDetail: Decodable, Equatable {
         public let name: String
         public let message: String?
+        
+        public init(
+            name: String,
+            message: String
+        ) {
+            self.name = name
+            self.message = message
+        }
     }
 
     public let id: String
@@ -49,7 +57,7 @@ public struct Transaction: Decodable, Equatable {
         checkerSignature: String? = nil,
         fee: BigUInt? = nil,
         errorDetail: ErrorDetail? = nil
-    ){
+    ) {
         self.id = id
         self.type = type
         self.status = status

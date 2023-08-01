@@ -373,6 +373,7 @@ struct TransactionSignView: View {
             style = .success
         case .error:
             icon = Constants.failTxImage
+            style = .cancel
         default: break
         }
         return CButton(
@@ -406,6 +407,18 @@ struct TransactionSignView: View {
             return R.string.localizable.transactionSignButtonsLoading()
         case .loaded:
             return R.string.localizable.transactionSignButtonsSign()
+        }
+    }
+    
+    var signButtonImage: Image? {
+        if viewModel.state.transaction?.status == .error {
+            return Constants.errorImage
+        }
+        switch viewModel.state.state {
+        case .signed:
+            return Constants.successSignedImage
+        case .signing, .loading, .loaded:
+            return nil
         }
     }
 
