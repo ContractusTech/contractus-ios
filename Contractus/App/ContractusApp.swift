@@ -42,7 +42,7 @@ final class RootViewModel: ViewModel {
         switch input {
         case .savedAccount(let account):
             appManager.setAccount(for: account)
-            state.state = .hasAccount(account)
+            reload()
         case .signTx(let type):
             state.transactionState = .needSign(type)
         case .cancelTx:
