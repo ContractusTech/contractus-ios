@@ -410,18 +410,6 @@ struct TransactionSignView: View {
         }
     }
     
-    var signButtonImage: Image? {
-        if viewModel.state.transaction?.status == .error {
-            return Constants.errorImage
-        }
-        switch viewModel.state.state {
-        case .signed:
-            return Constants.successSignedImage
-        case .signing, .loading, .loaded:
-            return nil
-        }
-    }
-
     var cancelButtonTitle: String {
         if viewModel.state.state == .signed {
             return R.string.localizable.commonClose()
