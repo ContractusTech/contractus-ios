@@ -104,7 +104,7 @@ struct MenuView: View {
                                 }
                         
                         MenuSectionView()
-                        
+                        #if DEBUG 
                         MenuItemView (
                             icon: Constants.sliderIcon,
                             title: "Common settings",
@@ -133,6 +133,7 @@ struct MenuView: View {
                             title: "F.A.Q.",
                             linkTo: EmptyView()
                         )
+                        #endif
                     }
                 }
                 .padding(.horizontal, 5)
