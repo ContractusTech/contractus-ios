@@ -194,7 +194,7 @@ struct MainView: View {
                         }
                     }
                 })
-                .resizableSheet($topUpState, builder: { builder in
+                .resizableSheet($topUpState, id: "topUp", builder: { builder in
                     builder.content { context in
                         TopUpView { type in
                             switch type {

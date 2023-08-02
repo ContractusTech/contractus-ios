@@ -871,7 +871,7 @@ struct DealView: View {
                 $0.hidesWhenStopped = false
             }
         })
-        .resizableSheet($uploaderState, builder: { builder in
+        .resizableSheet($uploaderState, id: "uploader", builder: { builder in
             builder.content { context in
                 uploaderView()
             }
