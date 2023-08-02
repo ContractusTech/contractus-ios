@@ -5,6 +5,7 @@ import ResizableSheet
 import netfox
 import ContractusAPI
 import Combine
+import Firebase
 
 struct RootState {
     enum State {
@@ -229,10 +230,15 @@ fileprivate extension Error {
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         appearanceSetup()
-        
-        if case .developer = AppConfig.serverType {
+
+        switch AppConfig.serverType  {
+        case .local, .developer:
             NFX.sharedInstance().start()
+        default:
+            break
         }
+
+        FirebaseApp.configure()
 
         return true
     }

@@ -124,6 +124,10 @@
 		6DC2C02728C99C0A005C9EBE /* ServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC2C02628C99C0A005C9EBE /* ServiceFactory.swift */; };
 		6DC558652A76633C0054F2FC /* TopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC558642A76633C0054F2FC /* TopUpView.swift */; };
 		6DC5586A2A7987320054F2FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DC558692A7987320054F2FC /* GoogleService-Info.plist */; };
+		6DC5586E2A7A18A60054F2FC /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC5586D2A7A18A60054F2FC /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		6DC558702A7A18A60054F2FC /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC5586F2A7A18A60054F2FC /* FirebaseCrashlytics */; };
+		6DC558722A7A18A60054F2FC /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC558712A7A18A60054F2FC /* FirebasePerformance */; };
+		6DC558742A7A18A60054F2FC /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC558732A7A18A60054F2FC /* FirebaseRemoteConfig */; };
 		6DD28E252A1C85360093E553 /* BaseTopTextBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E242A1C85360093E553 /* BaseTopTextBlockView.swift */; };
 		6DD28E272A1C9C6A0093E553 /* Date+Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */; };
 		6DD28E292A1DF3B10093E553 /* DeadlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E282A1DF3B10093E553 /* DeadlineView.swift */; };
@@ -318,6 +322,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE5F427429AF22FA00A1E506 /* netfox in Frameworks */,
+				6DC5586E2A7A18A60054F2FC /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				6D8EFD8A28D898B50064F5DA /* ShamirSecretSharing in Frameworks */,
 				6D755290289662250069935B /* Rswift in Frameworks */,
 				6D530DBA28E2302E006F52C6 /* SwiftUIPullToRefresh in Frameworks */,
@@ -325,10 +330,13 @@
 				6DB5F8B6294D762300AE612A /* JGProgressHUD in Frameworks */,
 				6D6EE39E289FBEBA00635E60 /* QRCode in Frameworks */,
 				6D8EFD9328D8EB5B0064F5DA /* SolanaSwift in Frameworks */,
+				6DC558742A7A18A60054F2FC /* FirebaseRemoteConfig in Frameworks */,
+				6DC558722A7A18A60054F2FC /* FirebasePerformance in Frameworks */,
 				6DAA5E772898BDFA00BA1965 /* CryptoSwift in Frameworks */,
 				6DDA818328C0D3E10022E005 /* Introspect in Frameworks */,
 				6DB9C3DA2A555F1B0011C817 /* ContractusAPI in Frameworks */,
 				6DB547F928B9E87C003D2A8A /* ResizableSheet in Frameworks */,
+				6DC558702A7A18A60054F2FC /* FirebaseCrashlytics in Frameworks */,
 				FE0F36802A552C2D00EEC595 /* Shimmer in Frameworks */,
 				6D75F2E6288EA37E0092D182 /* KeychainAccess in Frameworks */,
 			);
@@ -807,6 +815,10 @@
 				FE5F427329AF22FA00A1E506 /* netfox */,
 				FE0F367F2A552C2D00EEC595 /* Shimmer */,
 				6DB9C3D92A555F1B0011C817 /* ContractusAPI */,
+				6DC5586D2A7A18A60054F2FC /* FirebaseAnalyticsWithoutAdIdSupport */,
+				6DC5586F2A7A18A60054F2FC /* FirebaseCrashlytics */,
+				6DC558712A7A18A60054F2FC /* FirebasePerformance */,
+				6DC558732A7A18A60054F2FC /* FirebaseRemoteConfig */,
 			);
 			productName = Contractus;
 			productReference = 6D97AEED288D196200EB61D0 /* Contractus.app */;
@@ -893,6 +905,7 @@
 				6DB5F8B4294D762300AE612A /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				FE5F427229AF22FA00A1E506 /* XCRemoteSwiftPackageReference "netfox" */,
 				FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
+				6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 6D97AEEE288D196200EB61D0 /* Products */;
 			projectDirPath = "";
@@ -1506,6 +1519,14 @@
 				version = 2.2.0;
 			};
 		};
+		6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
 		6DDA818128C0D3E10022E005 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
@@ -1585,6 +1606,26 @@
 		6DB9C3D92A555F1B0011C817 /* ContractusAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ContractusAPI;
+		};
+		6DC5586D2A7A18A60054F2FC /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		6DC5586F2A7A18A60054F2FC /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		6DC558712A7A18A60054F2FC /* FirebasePerformance */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebasePerformance;
+		};
+		6DC558732A7A18A60054F2FC /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
 		};
 		6DDA818228C0D3E10022E005 /* Introspect */ = {
 			isa = XCSwiftPackageProductDependency;
