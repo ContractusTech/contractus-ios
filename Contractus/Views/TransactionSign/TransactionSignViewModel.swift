@@ -298,20 +298,22 @@ final class TransactionSignViewModel: ViewModel {
                 valueDescription: nil))
         }
 
-        if let fee = tx.feeFormatted {
-            fields.append(.init(
-                title: R.string.localizable.transactionSignFieldsFee(),
-                value: fee,
-                titleDescription: nil,
-                valueDescription: nil))
-        } else {
-            fields.append(.init(
-                title: R.string.localizable.transactionSignFieldsFee(),
-                value: R.string.localizable.transactionSignFieldsFreeFee(),
-                titleDescription: nil,
-                valueDescription: nil))
+        if tx.type == .dealInit {
+            if let fee = tx.feeFormatted {
+                fields.append(.init(
+                    title: R.string.localizable.transactionSignFieldsFee(),
+                    value: fee,
+                    titleDescription: nil,
+                    valueDescription: nil))
+            } else {
+                fields.append(.init(
+                    title: R.string.localizable.transactionSignFieldsFee(),
+                    value: R.string.localizable.transactionSignFieldsFreeFee(),
+                    titleDescription: nil,
+                    valueDescription: nil))
+            }
         }
-        
+
         return fields
     }
 }

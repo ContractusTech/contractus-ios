@@ -248,10 +248,16 @@ struct DealView: View {
                                                 
                                             }
                                             HStack(alignment: .lastTextBaseline) {
-                                                Text(viewModel.state.deal.amountFormatted)
-                                                    .font(.title)
-                                                Text(viewModel.state.deal.token.code).font(.footnote.weight(.semibold))
-                                                    .foregroundColor(R.color.secondaryText.color)
+                                                if viewModel.state.deal.amount > 0 {
+                                                    Text(viewModel.state.deal.amountFormatted)
+                                                        .font(.title)
+                                                    Text(viewModel.state.deal.token.code).font(.footnote.weight(.semibold))
+                                                        .foregroundColor(R.color.secondaryText.color)
+                                                } else {
+                                                    Text(R.string.localizable.commonEmpty())
+                                                        .font(.title)
+                                                }
+                                                
                                             }
                                             
                                         }

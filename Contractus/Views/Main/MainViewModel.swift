@@ -87,6 +87,7 @@ final class MainViewModel: ViewModel {
             }
             Task { @MainActor in
                 self.tokens = (try? await loadTokens()) ?? []
+                self.state.availableTokens = self.tokens.filter({ $0.address != nil })
                 let accountInfo = try? await loadAccountInfo()
                 self.state.balance = accountInfo?.balance
                 self.state.statistics = accountInfo?.statistics ?? []
