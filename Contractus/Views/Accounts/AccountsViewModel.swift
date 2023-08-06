@@ -44,19 +44,21 @@ final class AccountsViewModel: ViewModel {
     func trigger(_ input: Input, after: AfterTrigger? = nil) {
         switch input {
         case .reload:
-            self.state.accounts = accountStorage.getAccounts().map {.init(account: $0, existInBackup: backupStorage.existInBackup(privateKey: $0.privateKey.toBase58(), blockchain: $0.blockchain))}
+            self.state.accounts = accountStorage.getAccounts().map {
+                .init(account: $0, existInBackup: backupStorage.existInBackup(privateKey: $0.privateKey.toBase58(), blockchain: $0.blockchain))
+            }
         case .changeAccount(let commonAccount):
             AppManagerImpl.shared.setAccount(for: commonAccount)
             state.currentAccount = commonAccount
-
         case .backup(let account, let allow):
             if allow {
                 try? backupStorage.savePrivateKey(.init(publicKey: account.publicKey, privateKey: account.privateKey.toBase58(), blockchain: account.blockchain))
             } else {
                 try? backupStorage.removePrivateKey(account.privateKey.toBase58(), blockchain: account.blockchain)
             }
-            self.state.accounts = accountStorage.getAccounts().map {.init(account: $0, existInBackup: backupStorage.existInBackup(privateKey: $0.privateKey.toBase58(), blockchain: $0.blockchain))}
-
+            self.state.accounts = accountStorage.getAccounts().map {
+                .init(account: $0, existInBackup: backupStorage.existInBackup(privateKey: $0.privateKey.toBase58(), blockchain: $0.blockchain))
+            }
         case .deleteAccount(let account, let fromBackup):
             if fromBackup {
                 try? backupStorage.removePrivateKey(account.privateKey.toBase58(), blockchain: account.blockchain)
@@ -67,19 +69,16 @@ final class AccountsViewModel: ViewModel {
                 appState.trigger(.logout)
             } else {
                 if account.publicKey == state.currentAccount?.publicKey, let current = state.accounts.first?.account {
-                    accountStorage.setCurrentAccount(account: current)
+                    AppManagerImpl.shared.setAccount(for: current)
                     state.currentAccount = current
                 }
             }
-
-
 //            accountStorage.updateAccounts(accounts: <#T##[CommonAccount]#>)
 //            if accounts.isEmpty {
 //                accountStorage.clearCurrentAccount()
 //            }
 //            accountStorage.updateAccounts(accounts: accounts)
         }
-
     }
 }
 

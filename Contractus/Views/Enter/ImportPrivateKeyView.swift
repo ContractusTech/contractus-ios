@@ -102,8 +102,6 @@ struct ImportPrivateKeyView: View {
                 } else {
                     EmptyView()
                 }
-
-
             } label: {
                 CButton(title: "Import", style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.isValidImportedPrivateKey) {
                     isActiveBackup.toggle()
