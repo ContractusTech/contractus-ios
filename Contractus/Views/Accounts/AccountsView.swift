@@ -152,6 +152,7 @@ struct AccountsView: View {
                 NavigationLink(tag: NavigateViewType.addWallet, selection: $selectedView) {
                     EnterView(viewType: .addAccount) { account in
                         selectedView = .none
+                        viewModel.trigger(.changeAccount(account))
                         viewModel.trigger(.reload)
                     }
                 } label: {
@@ -279,8 +280,14 @@ extension AccountsView.SheetType: Identifiable {
 
 struct AccountsView_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = AnyViewModel<MenuState, MenuInput>(MenuViewModel(accountStorage: MockAccountStorage()))
-        AccountsView(viewModel: .init(AccountsViewModel(accountStorage: MockAccountStorage(), backupStorage: BackupStorageMock()))) { _ in
+        AccountsView(
+            viewModel: .init(
+                AccountsViewModel(
+                    accountStorage: MockAccountStorage(),
+                    backupStorage: BackupStorageMock()
+                )
+            )
+        ) { _ in
 
         }
     }

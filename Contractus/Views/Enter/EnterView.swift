@@ -36,7 +36,6 @@ struct EnterView: View {
                 ScrollView {
                     switch viewType {
                     case .enterApp:
-
                         VStack(alignment: .center, spacing: 8) {
                             Text(R.string.localizable.enterSubtitle())
                                 .font(.subheadline)
@@ -50,10 +49,8 @@ struct EnterView: View {
                                 .multilineTextAlignment(.center)
                                 .frame(maxWidth: .infinity, alignment: .center)
                         }
-
                         .padding(EdgeInsets(top: 104, leading: 20, bottom: 20, trailing: 20))
                     case .addAccount:
-                        // TODO: - Move text in localization
                         VStack {
                             TopTextBlockView(
                                 headerText: nil,
@@ -67,7 +64,6 @@ struct EnterView: View {
 
                         }
                         .padding(.top, 16)
-
                     }
                 }
 
