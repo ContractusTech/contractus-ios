@@ -12,14 +12,13 @@ import SolanaSwift
 import UIKit
 
 enum CreateDealInput {
-    case createDealWithChecker(OwnerRole),
-         createDeal(OwnerRole, PerformanceBondType),
+    case createDealWithChecker(OwnerRole, Bool),
+         createDeal(OwnerRole, PerformanceBondType, Bool),
          copy,
          hideError
 }
 
 struct CreateDealState {
-
     enum State: Equatable {
         case none, creating, success, error(String)
     }
@@ -47,10 +46,10 @@ final class CreateDealViewModel: ViewModel {
 
     func trigger(_ input: CreateDealInput, after: AfterTrigger? = nil) {
         switch input {
-        case .createDealWithChecker(let role):
-            create(for: role, witchChecker: true, bondType: .none)
-        case .createDeal(let role, let bondType):
-            create(for: role, witchChecker: false, bondType: bondType)
+        case .createDealWithChecker(let role, let encrypt):
+            create(for: role, witchChecker: true, bondType: .none, encrypt: encrypt)
+        case .createDeal(let role, let bondType, let encrypt):
+            create(for: role, witchChecker: false, bondType: bondType, encrypt: encrypt)
         case .copy:
             if let share = state.shareable?.shareContent {
                 UIPasteboard.general.string = share
@@ -62,14 +61,15 @@ final class CreateDealViewModel: ViewModel {
 
     // MARK: - Private Methods
 
-    private func create(for role: OwnerRole, witchChecker: Bool, bondType: PerformanceBondType) {
+    private func create(for role: OwnerRole, witchChecker: Bool, bondType: PerformanceBondType, encrypt: Bool) {
 
         Task { @MainActor in
             guard let secret = try? await SharedSecretService.createSharedSecret(privateKey: state.account.privateKey) else {
                 return
             }
             self.state.state = .creating
-            let newDeal = NewDeal(
+            let newDeal = encrypt
+            ? NewDeal(
                 role: role,
                 encryptedSecretKey: secret.base64EncodedSecret,
                 secretKeyHash: secret.hashOriginalKey,
@@ -77,20 +77,25 @@ final class CreateDealViewModel: ViewModel {
                 performanceBondType: bondType,
                 completionCheckType: witchChecker ? .checker : .none
             )
+            : NewDeal(
+                role: role,
+                performanceBondType: bondType,
+                completionCheckType: witchChecker ? .checker : .none
+            )
 
             do {
                 let deal = try await self.createDeal(deal: newDeal)
                 var newState = self.state
-                newState.shareable = ShareableDeal(dealId: deal.id, secretBase64: secret.clientSecret.base64EncodedString())
+                if encrypt {
+                    newState.shareable = ShareableDeal(dealId: deal.id, secretBase64: secret.clientSecret.base64EncodedString())
+                }
                 newState.state = .success
                 newState.createdDeal = deal
                 self.state = newState
             } catch {
                 self.state.state = .error(error.readableDescription)
             }
-
         }
-        
     }
 
     private func createDeal(deal: NewDeal) async throws -> Deal {

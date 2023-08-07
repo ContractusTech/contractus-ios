@@ -216,6 +216,7 @@
 "newDeal.created.top.title" = "Created";
 "newDeal.created.title" = "The secret key";
 "newDeal.created.subTitle" = "The partner need scan the QR code to start working on the contract.";
+"newDeal.encrypt.title" = "Encrypt transaction details";
 "newDeal.check.title" = "Check by third party";
 "newDeal.check.subtitle" = "The decision to complete the deal will be made by a third party.";
 "newDeal.bond.title" = "Who will add the performance bond?";
