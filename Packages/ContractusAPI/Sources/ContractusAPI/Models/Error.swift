@@ -32,7 +32,8 @@ public enum APIClientError: Error, LocalizedError {
         case .commonError(let error):
             return error.localizedDescription
         case .serviceError(let error):
-            return error.message ?? error.error
+            let message = error.validation?.values.compactMap { $0.message }.joined(separator: ".")
+            return (message?.isEmpty ?? true) ? error.message : message
         case .unknownError:
             return "Something wrong"
         }
