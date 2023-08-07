@@ -213,6 +213,20 @@
 "newDeal.title.executor" = "Executor";
 "newDeal.subtitle.client" = "If you pay to some service or product";
 "newDeal.subtitle.executor" = "If you provide service or sell goods";
+"newDeal.created.top.title" = "Created";
+"newDeal.created.title" = "The secret key";
+"newDeal.created.subTitle" = "The partner need scan the QR code to start working on the contract.";
+"newDeal.check.title" = "Check by third party";
+"newDeal.check.subtitle" = "The decision to complete the deal will be made by a third party.";
+"newDeal.bond.title" = "Who will add the performance bond?";
+"newDeal.bond.nobody" = "Nobody";
+"newDeal.bond.both" = "Both, client and executor";
+"newDeal.bond.client" = "Only client";
+"newDeal.bond.executor" = "Only executor";
+"newDeal.bond.short.nobody" = "Nobody";
+"newDeal.bond.short.both" = "Both";
+"newDeal.bond.short.client" = "Client";
+"newDeal.bond.short.executor" = "Executor";
 
 "addContractor.title.enter-key" = "Enter public key";
 "addContractor.title.partner" = "Add partner";

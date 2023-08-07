@@ -138,9 +138,9 @@ struct CreateDealView: View {
                     NavigationLink(destination: LazyView(ShareContentView(
                         informationType: .success,
                         content: viewModel.state.shareable!,
-                        topTitle: "Created",
-                        title: "The secret key",
-                        subTitle: "The partner need scan the QR code to start working on the contract.",
+                        topTitle: R.string.localizable.newDealCreatedTopTitle(),
+                        title: R.string.localizable.newDealCreatedTitle(),
+                        subTitle: R.string.localizable.newDealCreatedSubTitle(),
                         copyAction: { _ in
 
                         },
@@ -172,10 +172,10 @@ struct CreateDealView: View {
                             HStack {
                                 Toggle(isOn: $allowChecker.animation(.easeInOut(duration: 0.1))) {
                                     VStack(alignment: .leading, spacing: 6) {
-                                        Text("Check by third party")
+                                        Text(R.string.localizable.newDealCheckTitle())
                                             .font(.body)
                                             .fontWeight(.semibold)
-                                        Text("The decision to complete the deal will be made by a third party. ")
+                                        Text(R.string.localizable.newDealCheckSubtitle())
                                             .font(.footnote)
                                             .foregroundColor(R.color.secondaryText.color)
                                     }
@@ -188,7 +188,7 @@ struct CreateDealView: View {
                             })
                             if !allowChecker {
                                 HStack {
-                                    Text("Who will add the performance bond?")
+                                    Text(R.string.localizable.newDealBondTitle())
                                         .font(.body.weight(.semibold))
 
                                     Spacer()
@@ -279,7 +279,7 @@ struct CreateDealView: View {
                     return Alert(
                         title: Text(R.string.localizable.commonError()),
                         message: Text(message),
-                        dismissButton: .default(Text("Ok"), action: {
+                        dismissButton: .default(Text(R.string.localizable.commonOk()), action: {
                             viewModel.trigger(.hideError)
                         }))
                 }
@@ -314,7 +314,7 @@ extension CreateDealView.AlertType: Identifiable {
     var id: String {
         switch self {
         case .error:
-            return "error"
+            return R.string.localizable.commonError()
         }
     }
 }
@@ -323,26 +323,26 @@ extension PerformanceBondType {
     var title: String {
         switch self {
         case .none:
-            return "Nobody"
+            return R.string.localizable.newDealBondNobody()
         case .both:
-            return "Both, client and executor"
+            return R.string.localizable.newDealBondBoth()
         case .onlyClient:
-            return "Only client"
+            return R.string.localizable.newDealBondClient()
         case .onlyExecutor:
-            return "Only executor"
+            return R.string.localizable.newDealBondExecutor()
         }
     }
     
     var shortTitle: String {
         switch self {
         case .none:
-            return "Nobody"
+            return R.string.localizable.newDealBondShortNobody()
         case .both:
-            return "Both"
+            return R.string.localizable.newDealBondShortBoth()
         case .onlyClient:
-            return "Client"
+            return R.string.localizable.newDealBondShortClient()
         case .onlyExecutor:
-            return "Executor"
+            return R.string.localizable.newDealBondShortExecutor()
         }
     }
 }
