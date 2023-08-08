@@ -144,6 +144,7 @@ struct MainView: View {
                                         }
                                         .padding(.leading, 40)
                                         .padding(.trailing, 40)
+                                        .padding(.bottom, 40)
 
                                     }
 

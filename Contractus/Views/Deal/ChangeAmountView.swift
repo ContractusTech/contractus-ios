@@ -18,6 +18,7 @@ extension Currency: Hashable {
 
 fileprivate enum Constants {
     static let closeImage = Image(systemName: "xmark")
+    static let infoImage = Image(systemName: "info.circle.fill")
 }
 
 struct ChangeAmountView: View {
@@ -27,8 +28,9 @@ struct ChangeAmountView: View {
     @StateObject var viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>
     @State private var amountString: String = ""
     @State private var token: ContractusAPI.Token
-    
+    @State private var showInfo: Bool = false
     @State var holderMode: Bool = false
+
 
     let amountPublisher = PassthroughSubject<String, Never>()
     private let availableTokens: [ContractusAPI.Token]
@@ -104,17 +106,28 @@ struct ChangeAmountView: View {
                             VStack(spacing: 16) {
                                 HStack(alignment: .center) {
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text(R.string.localizable.changeAmountHolderMode())
-                                            .font(.body)
-                                            .foregroundColor(R.color.textBase.color)
-                                            .multilineTextAlignment(.leading)
+                                        HStack {
+                                            Text(R.string.localizable.changeAmountHolderMode())
+                                                .font(.body)
+                                                .foregroundColor(R.color.textBase.color)
+                                                .multilineTextAlignment(.leading)
+                                            Button {
+                                                showInfo = true
+                                            } label: {
+                                                Constants.infoImage
+                                                    .resizable()
+                                                    .frame(width: 16, height: 16)
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .foregroundColor(R.color.secondaryText.color)
+                                            }
+                                        }
+
                                         
                                         Text(R.string.localizable.changeAmountHolderModeHint())
                                             .font(.footnote)
                                             .foregroundColor(R.color.secondaryText.color)
                                             .multilineTextAlignment(.leading)
                                     }
-
                                     Spacer()
                                     
                                     Toggle(isOn: $holderMode) {}
@@ -378,6 +391,18 @@ struct ChangeAmountView: View {
             })
             .onChange(of: holderMode, perform: { newValue in
                 viewModel.trigger(.changeholderMode(newValue))
+            })
+            .sheet(isPresented: $showInfo, content: {
+                NavigationView {
+                    WebView(url: AppConfig.holderModeURL)
+                        .edgesIgnoringSafeArea(.bottom)
+                        .navigationBarItems(
+                            trailing: Button(R.string.localizable.commonClose(), action: {
+                                showInfo = false
+                        }))
+                        .navigationTitle(R.string.localizable.commonInfo())
+                        .navigationBarTitleDisplayMode(.inline)
+                }.baseBackground()
             })
             .toolbar{
                 ToolbarItem(placement: .navigationBarLeading) {
