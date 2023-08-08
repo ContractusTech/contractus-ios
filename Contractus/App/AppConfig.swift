@@ -24,7 +24,19 @@ enum AppConfig {
 
     static let deviceId: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
 
-    static let tiersInformationURL: URL = URL(string: "https://contractus.tech")! // TODO: - Need change
-
     static let bundleId = Bundle.main.bundleIdentifier!
+
+    // MARK: - Information URL's
+
+    static let tiersInformationURL: URL = URL(string: "https://contractus.gitbook.io/docs/tiers")!
+
+    static let holderModeURL: URL = URL(string: "https://contractus.gitbook.io/docs/holder-mode")!
+
+    static let faqURL: URL = URL(string: "https://contractus.gitbook.io/docs/faq")!
+
+    static let lockedFundsURL: URL = URL(string: "https://contractus.gitbook.io/docs/faq")!
+
+    static let feesURL: URL = URL(string: "https://contractus.gitbook.io/docs/fees")!
+
+    static let ctusInfoURL: URL = URL(string: "https://contractus.gitbook.io/docs/ctus-token")!
 }
