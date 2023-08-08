@@ -25,9 +25,6 @@ public enum AmountFormatter {
         formatter.locale = local
         let amount = Double(amount) / pow(Double(10), Double(decimal))
         let formattedAmount = formatter.string(from: NSNumber(value: amount)) ?? ""
-//        if withCode {
-//            return String(format: "%@ %@", code, formattedAmount).trimmingCharacters(in: .whitespacesAndNewlines)
-//        }
         return formattedAmount.trimmingCharacters(in: .whitespaces)
     }
 
@@ -46,7 +43,6 @@ public enum AmountFormatter {
         guard let amount = formatter.number(from: string) else { return nil }
         return BigUInt(amount.doubleValue * pow(Double(10), Double(decimal)))
     }
-
 
     public static func format(amount: UInt64, token: Token, withCode: Bool = true, local: Locale = .current) -> String {
         return format(amount: BigUInt(amount), decimal: token.decimals, code: withCode ? token.code : nil, local: local)
@@ -111,6 +107,12 @@ public enum AmountFormatter {
         numFormatter.minimumFractionDigits = 0
         numFormatter.maximumFractionDigits = maxFractionDigits
 
-        return numFormatter.string(from: NSNumber(value: value))!
+        let formattedAmount = numFormatter.string(from: NSNumber(value: value))!
+
+        if withCode {
+            return String(format: "%@ %@", formattedAmount, token.code).trimmingCharacters(in: .whitespacesAndNewlines)
+        } else {
+            return formattedAmount.trimmingCharacters(in: .whitespaces)
+        }
     }
 }

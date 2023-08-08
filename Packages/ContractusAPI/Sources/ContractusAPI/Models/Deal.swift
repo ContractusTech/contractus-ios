@@ -170,7 +170,7 @@ public struct Deal: Decodable {
 
     public var amountFeeCheckerFormatted: String? {
         if let checkerAmount = checkerAmount {
-            return token.format(amount: checkerAmount, withCode: false)
+            return token.format(amount: checkerAmount, withCode: true)
         }
         return nil
     }
