@@ -197,7 +197,7 @@ struct TransactionSignView: View {
                                 if viewModel.state.informationFields.last == item {
                                     EmptyView()
                                 } else {
-                                    Divider().foregroundColor(R.color.baseSeparator.color).padding(EdgeInsets(top: 0, leading: -20, bottom: 0, trailing: -20))
+                                    Divider().foregroundColor(R.color.baseSeparator.color.opacity(0.5)).padding(EdgeInsets(top: 0, leading: -20, bottom: 0, trailing: -20))
                                 }
 
                             }
@@ -343,12 +343,12 @@ struct TransactionSignView: View {
                 ProgressView()
             case .new, .none:
                 RoundedRectangle(cornerRadius: 17)
-                    .stroke(R.color.thirdBackground.color, style: .init(lineWidth: 1))
+                    .stroke(R.color.baseSeparator.color, style: .init(lineWidth: 1))
                 Constants.confirmTxImage
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: size, height: size)
-                    .foregroundColor(R.color.thirdBackground.color)
+                    .foregroundColor(R.color.baseSeparator.color)
             case .error:
                 RoundedRectangle(cornerRadius: 17)
                     .stroke(R.color.thirdBackground.color, style: .init(lineWidth: 1))
