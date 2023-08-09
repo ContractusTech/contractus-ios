@@ -33,6 +33,7 @@ struct DealView: View {
     enum AlertType {
         case error(String)
         case confirmClear
+        case confirmClearChecker
         case confirmRevoke
     }
 
@@ -42,6 +43,7 @@ struct DealView: View {
         case confirmCancelSign
         case confirmFinish
         case executorActions
+        case checkerActions
     }
 
     enum ActiveModalType: Equatable {
@@ -366,7 +368,11 @@ struct DealView: View {
 
                                     if viewModel.state.isOwnerDeal && viewModel.state.canEdit {
                                         CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false) {
-                                            activeModalType = .editChecker(viewModel.state.deal.checkerPublicKey)
+                                            if viewModel.state.deal.checkerPublicKey?.isEmpty ?? true {
+                                                activeModalType = .editChecker(viewModel.state.deal.checkerPublicKey)
+                                            } else {
+                                                actionsType = .checkerActions
+                                            }
                                         }
                                         .opacity(viewModel.state.editIsVisible ? 1 : 0)
                                         .animation(Animation.easeInOut(duration: 0.1), value: viewModel.state.editIsVisible)
@@ -1093,6 +1099,15 @@ struct DealView: View {
                         viewModel.trigger(.deleteContractor(.contractor))
                     }
                 )
+            case .confirmClearChecker:
+                return Alert(
+                    title: Text(R.string.localizable.dealExecutorClearAccount()),
+                    message: Text(R.string.localizable.dealExecutorClearAccountMessage()),
+                    primaryButton: .cancel(),
+                    secondaryButton: .destructive(Text(R.string.localizable.dealExecutorClearAccountConfirm())) {
+                        viewModel.trigger(.deleteContractor(.checker))
+                    }
+                )
             case .confirmRevoke:
                 return Alert(
                     title: Text(R.string.localizable.commonConfirm()),
@@ -1130,6 +1145,10 @@ struct DealView: View {
                 return ActionSheet(
                     title: Text(R.string.localizable.commonSelectAction()),
                     buttons: actionSheetEditExecutorButtons())
+            case .checkerActions:
+                return ActionSheet(
+                    title: Text(R.string.localizable.commonSelectAction()),
+                    buttons: actionSheetEditCheckerButtons())
             }
         })
         .toolbar {
@@ -1239,6 +1258,19 @@ struct DealView: View {
             },
             Alert.Button.default(Text(R.string.localizable.dealExecutorEditAccount())) {
                 activeModalType = .editContractor(viewModel.state.executorPublicKey)
+            },
+            Alert.Button.cancel() {
+            }
+        ]
+    }
+
+    private func actionSheetEditCheckerButtons() -> [Alert.Button] {
+        return [
+            Alert.Button.destructive(Text(R.string.localizable.dealExecutorClearAccount())) {
+                alertType = .confirmClearChecker
+            },
+            Alert.Button.default(Text(R.string.localizable.dealExecutorEditAccount())) {
+                activeModalType = .editChecker(viewModel.state.deal.checkerPublicKey)
             },
             Alert.Button.cancel() {
             }
@@ -1377,6 +1409,8 @@ extension DealView.AlertType: Identifiable {
             return "confirmClear"
         case .confirmRevoke:
             return "confirmRevoke"
+        case .confirmClearChecker:
+            return "confirmClearChecker"
         }
     }
 }
