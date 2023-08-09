@@ -127,13 +127,12 @@ struct MenuView: View {
                         )
                         
                         MenuSectionView()
-                        
+                        #endif
                         MenuItemView (
                             icon: Constants.faqIcon,
                             title: "F.A.Q.",
-                            linkTo: EmptyView()
+                            linkTo: faqView
                         )
-                        #endif
                     }
                 }
                 .padding(.horizontal, 5)
@@ -158,6 +157,13 @@ struct MenuView: View {
             }
         }
         .interactiveDismissDisabled(!interactiveDismiss)
+    }
+
+    var faqView: some View {
+        WebView(url: AppConfig.faqURL)
+            .edgesIgnoringSafeArea(.bottom)
+            .navigationTitle("FAQ")
+            .navigationBarTitleDisplayMode(.inline)
     }
     
     var versionFormatted: String {

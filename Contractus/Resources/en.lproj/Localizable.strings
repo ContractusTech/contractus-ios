@@ -51,6 +51,7 @@
 "common.confirm" = "Confirm";
 "common.you-account" = "Your public key";
 "common.top-up" = "Top Up";
+"common.info" = "Info";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";

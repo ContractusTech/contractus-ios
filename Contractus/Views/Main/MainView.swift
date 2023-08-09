@@ -62,14 +62,16 @@ struct MainView: View {
                             topUpAction: {
                                 topUpState = .medium
                             }, infoAction: {
-                                sheetType = .webView(AppConfig.tiersInformationURL)
+                                sheetType = .webView(AppConfig.ctusInfoURL)
                             }, swapAction: { fromAmount, toAmount in
                                 sheetType = .wrap(from: fromAmount, to: toAmount)
                             })
 
                         if !viewModel.state.statistics.isEmpty {
                             StatisticsView(items: viewModel.state.statistics) { item in
-                                // TODO: - Info tap handler
+                                if item.type == .locked {
+                                    sheetType = .webView(AppConfig.faqURL)
+                                }
                             }
                         }
 
@@ -142,6 +144,7 @@ struct MainView: View {
                                         }
                                         .padding(.leading, 40)
                                         .padding(.trailing, 40)
+                                        .padding(.bottom, 40)
 
                                     }
 
