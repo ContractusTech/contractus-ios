@@ -1,6 +1,6 @@
 if [[ -z "${GOOGLE_SERVICE_INFO}" ]]; then
-  cat $GOOGLE_SERVICE_INFO > /Contractus/Resourses/GoogleService-Info.plist
-  echo "Google service copied successfully"
+  	echo "No Google service"
 else
-  echo "No Google service"
+	cat $GOOGLE_SERVICE_INFO > /Contractus/Resourses/GoogleService-Info.plist
+  	echo "Google service copied successfully"
 fi
