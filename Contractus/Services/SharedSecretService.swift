@@ -72,10 +72,10 @@ enum SharedSecretService {
 
     private static func getSharedSecret(key: [UInt8], privateKey: Data) async throws -> SharedSecret {
         guard
-                let sharedParts = try? SSS.createShares(data: key),
-                sharedParts.count == 2,
-                let serverSecret = sharedParts.first,
-                let clientSecret = sharedParts.last else
+            let sharedParts = try? SSS.createShares(data: key),
+            sharedParts.count == 2,
+            let serverSecret = sharedParts.first,
+            let clientSecret = sharedParts.last else
         {
             throw SharedSecretServiceError.invalidSecretKey
         }

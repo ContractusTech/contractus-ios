@@ -441,10 +441,13 @@ final class DealViewModel: ViewModel {
     }
 
     private func decryptKey() {
-        guard let key = state.deal.encryptedSecretKey else { return }
+        guard let key = state.deal.encryptedSecretKey else {
+            self.state.canEdit = true
+            return
+        }
         Task { @MainActor in
 
-            guard let secret = try? await SharedSecretService.encryptSharedSecretKey(base64String:key, hashOriginalKey: state.deal.secretKeyHash,  privateKey:state.account.privateKey) else {
+            guard let secret = try? await SharedSecretService.encryptSharedSecretKey(base64String: key, hashOriginalKey: state.deal.secretKeyHash,  privateKey: state.account.privateKey) else {
                 self.state.canEdit = false
                 self.state.decryptedKey = Data()
                 return

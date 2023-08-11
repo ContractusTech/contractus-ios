@@ -240,9 +240,9 @@ extension Deal: Equatable {}
 
 public struct NewDeal: Encodable {
     public let role: OwnerRole
-    public let encryptedSecretKey: String
-    public let secretKeyHash: String
-    public let sharedKey: String
+    public let encryptedSecretKey: String?
+    public let secretKeyHash: String?
+    public let sharedKey: String?
     public let performanceBondType: PerformanceBondType
     public let completionCheckType: CompletionCheckType
 
@@ -255,6 +255,14 @@ public struct NewDeal: Encodable {
         self.completionCheckType = completionCheckType
     }
 
+    public init(role: OwnerRole, performanceBondType: PerformanceBondType, completionCheckType: CompletionCheckType) {
+        self.role = role
+        self.encryptedSecretKey = nil
+        self.secretKeyHash = nil
+        self.sharedKey = nil
+        self.performanceBondType = performanceBondType
+        self.completionCheckType = completionCheckType
+    }
 }
 
 public struct UpdateDeal: Codable {

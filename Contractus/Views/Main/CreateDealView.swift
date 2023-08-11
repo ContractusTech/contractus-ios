@@ -59,7 +59,6 @@ struct DealRoleView: View {
                         }
                         Spacer()
                     }
-
                 }
                 .padding(12)
                 .background(R.color.secondaryBackground.color)
@@ -81,15 +80,12 @@ struct DealRoleView: View {
                         .foregroundColor(R.color.textBase.color.opacity(0.3))
                         .offset(.init(width: -12, height: 12))
                 }
-
             }
 
         }.onTapGesture {
             ImpactGenerator.soft()
             action(type)
         }
-
-
     }
 
     var title: String {
@@ -129,6 +125,7 @@ struct CreateDealView: View {
     @State private var alertType: AlertType?
     @State private var performanceBondType: PerformanceBondType?
     @State private var allowChecker: Bool = false
+    @State private var allowEncrypt: Bool = true
     private let types: [PerformanceBondType] = [.none, .onlyClient, .onlyExecutor, .both]
 
     var body: some View {
@@ -169,6 +166,22 @@ struct CreateDealView: View {
 
                         }
                         VStack(spacing: 0) {
+                            HStack {
+                                Toggle(isOn: $allowEncrypt.animation(.easeInOut(duration: 0.1))) {
+                                    VStack(alignment: .leading, spacing: 6) {
+                                        Text(R.string.localizable.newDealEncryptTitle())
+                                            .font(.body)
+                                            .fontWeight(.semibold)
+                                    }
+                                }
+                            }
+                            .padding(16)
+                            .background(content: {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(R.color.baseSeparator.color)
+                            })
+                            .padding(.bottom, 12)
+
                             HStack {
                                 Toggle(isOn: $allowChecker.animation(.easeInOut(duration: 0.1))) {
                                     VStack(alignment: .leading, spacing: 6) {
@@ -249,7 +262,11 @@ struct CreateDealView: View {
                             break
                         case .success:
                             didCreated?(viewModel.state.createdDeal)
-                            isShowShareSecretKey.toggle()
+                            if viewModel.state.createdDeal?.sharedKey != nil {
+                                isShowShareSecretKey.toggle()
+                            } else {
+                                presentationMode.wrappedValue.dismiss()
+                            }
                         case .error(let message):
                             self.alertType = .error(message)
                         }
@@ -260,12 +277,12 @@ struct CreateDealView: View {
 
                         guard let selectedRole = selectedRole else { return }
                         if allowChecker {
-                            viewModel.trigger(.createDealWithChecker(selectedRole.role))
+                            viewModel.trigger(.createDealWithChecker(selectedRole.role, allowEncrypt))
                             return
                         }
 
                         guard let performanceBondType = performanceBondType else { return }
-                        viewModel.trigger(.createDeal(selectedRole.role, performanceBondType))
+                        viewModel.trigger(.createDeal(selectedRole.role, performanceBondType, allowEncrypt))
                     }
                     .padding(EdgeInsets(top: 16, leading: 8, bottom: 28, trailing: 8))
                 })
@@ -364,8 +381,6 @@ struct CreateDealView_Previews: PreviewProvider {
     static var previews: some View {
         CreateDealView(viewModel: AnyViewModel<CreateDealState, CreateDealInput>(CreateDealViewModel(account: Mock.account, accountAPIService: nil, dealsAPIService: nil)))
 //            .previewDevice(PreviewDevice(rawValue: "iPhone 8"))
-
-
     }
 }
 
