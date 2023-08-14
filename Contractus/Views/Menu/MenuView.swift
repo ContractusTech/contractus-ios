@@ -100,6 +100,7 @@ struct MenuView: View {
                                     }
                                     // TODO: - Logout handler
                                 }) {
+                                    EventService.shared.send(event: DefaultAnalyticsEvent.settingsAccountsTap)
                                     interactiveDismiss = false
                                 }
                         
@@ -132,7 +133,9 @@ struct MenuView: View {
                             icon: Constants.faqIcon,
                             title: "F.A.Q.",
                             linkTo: faqView
-                        )
+                        ) {
+                            EventService.shared.send(event: DefaultAnalyticsEvent.settingsFaqTap)
+                        }
                     }
                 }
                 .padding(.horizontal, 5)
@@ -153,6 +156,7 @@ struct MenuView: View {
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
+                EventService.shared.send(event: DefaultAnalyticsEvent.settingsOpen)
                 interactiveDismiss = true
             }
         }

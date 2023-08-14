@@ -143,12 +143,18 @@ struct AboutAccountView: View {
                 .padding(EdgeInsets(top: 16, leading: 18, bottom: 24, trailing: 18))
             }
         }
+        .onChange(of: backupToiCloud) { allowBackup in
+            EventService.shared.send(event: ExtendedAnalyticsEvent.backupAccountTap(allowBackup))
+        }
         .confirmationDialog(
             Text(confirmDeleteTitle), isPresented: $showConfirmDelete, actions: {
             Button(R.string.localizable.aboutAccountConfirmYes(), role: .destructive) {
+                EventService.shared.send(event: ExtendedAnalyticsEvent.deleteAccountTap(true))
                 completion(.delete(fromBackup: removeFromBackup))
             }
-            Button(R.string.localizable.commonCancel(), role: .cancel) { }
+            Button(R.string.localizable.commonCancel(), role: .cancel) {
+                EventService.shared.send(event: ExtendedAnalyticsEvent.deleteAccountTap(false))
+            }
         })
         .baseBackground()
         .edgesIgnoringSafeArea(.bottom)

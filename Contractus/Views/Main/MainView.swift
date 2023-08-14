@@ -60,6 +60,7 @@ struct MainView: View {
                         BalanceView(
                             state: viewModel.state.balance != nil ? .loaded(.init(balance: viewModel.state.balance!)) : .empty,
                             topUpAction: {
+                                EventService.shared.send(event: DefaultAnalyticsEvent.mainTopupTap)
                                 topUpState = .medium
                             }, infoAction: {
                                 sheetType = .webView(AppConfig.ctusInfoURL)
@@ -102,6 +103,7 @@ struct MainView: View {
                                 style: .clear,
                                 size: .default,
                                 isLoading: false) {
+                                    EventService.shared.send(event: DefaultAnalyticsEvent.mainAccountAddressTap)
                                     sheetType = .sharePublicKey
                                 }
                             Rectangle()
@@ -114,6 +116,7 @@ struct MainView: View {
                                 style: .primary,
                                 size: .default,
                                 isLoading: false) {
+                                    EventService.shared.send(event: DefaultAnalyticsEvent.mainNewDealTap)
                                     sheetType = .newDeal
                                 }
 
@@ -147,8 +150,6 @@ struct MainView: View {
                                         .padding(.bottom, 40)
 
                                     }
-
-
                                 }
                                 .padding(10)
                             } else {
@@ -156,6 +157,7 @@ struct MainView: View {
                                     ForEach(viewModel.deals, id: \.id) { item in
                                         Button {
                                             selectedDeal = item
+                                            EventService.shared.send(event: DefaultAnalyticsEvent.mainDealTap)
                                         } label: {
                                             DealItemView(
                                                 amountFormatted: item.amountFormattedShort,
@@ -287,7 +289,10 @@ struct MainView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
-                        Button  {
+                        Button {
+                            if let tier = viewModel.state.balance?.tier {
+                                EventService.shared.send(event: ExtendedAnalyticsEvent.mainTiersTap(tier))
+                            }
                             sheetType = .webView(AppConfig.tiersInformationURL)
                         } label: {
                             VStack(alignment: .center, spacing: 3) {
@@ -304,6 +309,7 @@ struct MainView: View {
                     }
                     ToolbarItemGroup(placement: .navigationBarLeading) {
                         Button {
+                            EventService.shared.send(event: DefaultAnalyticsEvent.mainSettingsTap)
                             sheetType = .menu
                         } label: {
                             Constants.menuImage
@@ -312,6 +318,7 @@ struct MainView: View {
 
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button {
+                            EventService.shared.send(event: DefaultAnalyticsEvent.mainQRscannerTap)
                             sheetType = .qrScan
                         } label: {
                             Constants.scanQRImage
@@ -324,6 +331,7 @@ struct MainView: View {
             .environment(\.resizableSheetCenter, resizableSheetCenter ?? PreviewResizableSheetCenter.shared)
             .navigationViewStyle(StackNavigationViewStyle())
             .onAppear{
+                EventService.shared.send(event: DefaultAnalyticsEvent.mainOpen)
                 load()
             }
         }

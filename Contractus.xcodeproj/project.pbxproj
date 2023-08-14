@@ -148,6 +148,7 @@
 		FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */; };
 		FE54313D29D36D8800EEF906 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE54313C29D36D8800EEF906 /* AccountsView.swift */; };
 		FE5F427429AF22FA00A1E506 /* netfox in Frameworks */ = {isa = PBXBuildFile; productRef = FE5F427329AF22FA00A1E506 /* netfox */; };
+		FECDCC5D2A87F21800047A95 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECDCC5C2A87F21800047A95 /* EventService.swift */; };
 		FECE864B29ADCA1B003144CF /* Array+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECE864A29ADCA1B003144CF /* Array+Ex.swift */; };
 		FEE467E62A1C0F010046938F /* UIImage+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE467E52A1C0F010046938F /* UIImage+Ex.swift */; };
 /* End PBXBuildFile section */
@@ -312,6 +313,7 @@
 		FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAccountView.swift; sourceTree = "<group>"; };
 		FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectView.swift; sourceTree = "<group>"; };
 		FE54313C29D36D8800EEF906 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
+		FECDCC5C2A87F21800047A95 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
 		FECE864A29ADCA1B003144CF /* Array+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Ex.swift"; sourceTree = "<group>"; };
 		FEE467E52A1C0F010046938F /* UIImage+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -460,19 +462,19 @@
 		6D75F2ED288EA99E0092D182 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				6DF9CBF529F9530B004B95F4 /* Accounts */,
-				6D0F7F41298B9FC900EC2C74 /* Wrap */,
-				6D0DA7632930A7040024EF30 /* QRCodeScanner */,
-				6D3AA489292EB55C00596061 /* Menu */,
-				FE52628729AD3360004E0BCD /* ServerSelect */,
 				6D8EFD8628D88F570064F5DA /* AddContractor */,
+				6DF9CBF529F9530B004B95F4 /* Accounts */,
+				6D6EE383289C677500635E60 /* Common */,
+				6D6EE3A328A09DAF00635E60 /* Deal */,
+				6D75F2EE288EA9A70092D182 /* Enter */,
+				6DBCA45F288F212400F918B6 /* Main */,
+				6D3AA489292EB55C00596061 /* Menu */,
+				6D0DA7632930A7040024EF30 /* QRCodeScanner */,
+				FE52628729AD3360004E0BCD /* ServerSelect */,
 				6D2E0AF728AF342D002BA683 /* TextEditorView */,
 				6D74735F29655E9000A5F6E7 /* TransactionSign */,
-				6D6EE3A328A09DAF00635E60 /* Deal */,
 				6D6EE38B289E25EA00635E60 /* UploadFile */,
-				6D6EE383289C677500635E60 /* Common */,
-				6DBCA45F288F212400F918B6 /* Main */,
-				6D75F2EE288EA9A70092D182 /* Enter */,
+				6D0F7F41298B9FC900EC2C74 /* Wrap */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -611,13 +613,14 @@
 		6DBCA45A288F06C700F918B6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				6D4D99F22A5601A1007668B0 /* IdentifierService.swift */,
-				6DC2C02428C98332005C9EBE /* TransactionSignService.swift */,
 				6DBCA45B288F076D00F918B6 /* AccountService.swift */,
 				6D6EE387289DB40A00635E60 /* BlockchainService.swift */,
-				6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */,
+				FECDCC5C2A87F21800047A95 /* EventService.swift */,
 				6D6EE3A128A0517700635E60 /* FilesService.swift */,
+				6D4D99F22A5601A1007668B0 /* IdentifierService.swift */,
 				6DF6ADC22994EAA300A50598 /* SharedSecretService.swift */,
+				6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */,
+				6DC2C02428C98332005C9EBE /* TransactionSignService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1008,6 +1011,7 @@
 				6D530DBE28E2AD82006F52C6 /* CreateDealViewModel.swift in Sources */,
 				6DD28E252A1C85360093E553 /* BaseTopTextBlockView.swift in Sources */,
 				6D44B5642A0FAB37008C561D /* StatisticsView.swift in Sources */,
+				FECDCC5D2A87F21800047A95 /* EventService.swift in Sources */,
 				6D6EE38F289E260D00635E60 /* UploadFileViewModel.swift in Sources */,
 				6DBCA47B2890832800F918B6 /* EnterViewModel.swift in Sources */,
 				6D6E60D429EE2F08008AB833 /* TransactionStatus+Ex.swift in Sources */,

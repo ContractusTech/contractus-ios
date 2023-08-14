@@ -88,6 +88,9 @@ struct BackupInformationView: View {
         .onAppear {
             viewModel.trigger(.createIfNeeded)
         }
+        .onChange(of: allowBackupToiCloud) { allowBackup in
+            EventService.shared.send(event: ExtendedAnalyticsEvent.startBackupTap(allowBackup))
+        }
         .navigationBarTitleDisplayMode(.inline)
         .baseBackground()
         .edgesIgnoringSafeArea(.bottom)
