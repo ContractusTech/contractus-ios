@@ -240,6 +240,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         FirebaseApp.configure()
 
+        EventService.shared.send(event: DefaultAnalyticsEvent.startApp)
         return true
     }
 }

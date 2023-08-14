@@ -86,6 +86,7 @@ final class AddContractorViewModel: ViewModel {
             checkKeyAlreadyInDeal(publicKey)
             self.state.publicKey = publicKey
         case .addContractor:
+            EventService.shared.send(event: ExtendedAnalyticsEvent.dealContractorUpdateTap(state.ownerIsClient ? .executor : .client))
             self.state.state = .loading
             self.addContractor()
                 .receive(on: RunLoop.main)

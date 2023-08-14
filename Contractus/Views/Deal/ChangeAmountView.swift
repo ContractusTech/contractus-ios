@@ -369,6 +369,7 @@ struct ChangeAmountView: View {
                         isLoading: viewModel.state.state == .changingAmount,
                         isDisabled: (!viewModel.state.isValid || viewModel.state.state == .loading)
                     ) {
+                        EventService.shared.send(event: DefaultAnalyticsEvent.dealChangeAmountUpdateTap)
                         viewModel.trigger(.update)
                     }
                 }

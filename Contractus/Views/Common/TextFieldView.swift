@@ -23,6 +23,7 @@ struct TextFieldView: View {
     @State var value: String = ""
     @State private var isPresentedQRScan = false
     var changeValue: (String) -> Void
+    var onQRTap: (() -> Void)?
 
     var body: some View {
         HStack(spacing: 12) {
@@ -42,6 +43,7 @@ struct TextFieldView: View {
             if allowQRScan {
                 Button {
                     isPresentedQRScan.toggle()
+                    onQRTap?()
                 } label: {
                     Constants.qrScanIcon
                         .resizable()

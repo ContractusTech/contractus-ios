@@ -105,6 +105,7 @@ struct EnterView: View {
                     } label: {
                         CButton(title: R.string.localizable.enterButtonCreate(), style: .primary, size: .large, isLoading: false)
                         {
+                            EventService.shared.send(event: DefaultAnalyticsEvent.startNewAccountTap)
                             self.selectedView = .createWallet
                         }
                     }
@@ -117,6 +118,7 @@ struct EnterView: View {
                     } label: {
                         CButton(title: R.string.localizable.enterButtonImport(), style: .secondary, size: .large, isLoading: false)
                         {
+                            EventService.shared.send(event: DefaultAnalyticsEvent.startImportAccountTap)
                             self.selectedView = .importWallet
                         }
                     }

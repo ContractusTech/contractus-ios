@@ -221,6 +221,7 @@ struct TransactionSignView: View {
 
                                             Button {
                                                 withAnimation(.easeInOut(duration: 0.2)) {
+                                                    EventService.shared.send(event: DefaultAnalyticsEvent.txDataViewTap)
                                                     showTx.toggle()
                                                 }
 
@@ -242,6 +243,7 @@ struct TransactionSignView: View {
                                         }
                                         HStack(spacing: 6) {
                                             CButton(title: R.string.localizable.commonCopy(), style: .secondary, size: .default, isLoading: false) {
+                                                EventService.shared.send(event: DefaultAnalyticsEvent.txDataCopyTap)
                                                 ImpactGenerator.light()
                                                 UIPasteboard.general.string = tx
                                             }
@@ -265,6 +267,7 @@ struct TransactionSignView: View {
                                             .custom(
                                                 icon: Constants.arrowRightImage,
                                                 callback: {
+                                                    EventService.shared.send(event: DefaultAnalyticsEvent.txSignatureTap)
                                                     viewModel.trigger(.openExplorer)
                                                 }),
                                         ]
@@ -275,11 +278,8 @@ struct TransactionSignView: View {
                                 .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                             }
                         }
-
-
                     }
                     .padding()
-
                 }
                 .padding(UIConstants.contentInset)
                 .padding(.bottom, 150)
@@ -310,6 +310,9 @@ struct TransactionSignView: View {
                 break
             }
         })
+        .onAppear {
+            EventService.shared.send(event: DefaultAnalyticsEvent.txOpen)
+        }
         .alert(item: $alertType, content: { type in
             switch type {
             case .error(let message):
@@ -382,7 +385,8 @@ struct TransactionSignView: View {
             size: .large,
             isLoading: loading,
             isDisabled: isDisable
-        ){
+        ) {
+            EventService.shared.send(event: DefaultAnalyticsEvent.txSignTap)
             viewModel.trigger(.sign) { }
         }
     }

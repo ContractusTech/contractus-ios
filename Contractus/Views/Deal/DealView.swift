@@ -226,6 +226,7 @@ struct DealView: View {
                                         Spacer()
                                         if !viewModel.state.ownerIsClient && viewModel.state.isYouExecutor {
                                             CButton(title: viewModel.state.clientPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
+                                                EventService.shared.send(event: ExtendedAnalyticsEvent.dealContractorTap(.client))
                                                 activeModalType = .editContractor(viewModel.state.deal.contractorPublicKey)
                                             }
                                         }
@@ -266,6 +267,7 @@ struct DealView: View {
                                         Spacer()
                                         if viewModel.state.canEditDeal {
                                             CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit || viewModel.state.currentMainActions.contains(.cancelSign)) {
+                                                EventService.shared.send(event: DefaultAnalyticsEvent.dealChangeAmountTap)
                                                 activeModalType = .changeAmount
                                             }
                                             .opacity(viewModel.state.editIsVisible ? 1 : 0)
@@ -304,6 +306,7 @@ struct DealView: View {
                                         Spacer()
                                         if viewModel.state.isOwnerDeal && viewModel.state.youIsClient && viewModel.state.canEditDeal {
                                             CButton(title: viewModel.state.executorPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: viewModel.state.currentMainActions.contains(.cancelSign)) {
+                                                EventService.shared.send(event: ExtendedAnalyticsEvent.dealContractorTap(.executor))
                                                 if viewModel.state.executorPublicKey.isEmpty {
                                                     activeModalType = .editContractor(viewModel.state.executorPublicKey)
                                                 } else {
@@ -368,6 +371,7 @@ struct DealView: View {
 
                                     if viewModel.state.isOwnerDeal && viewModel.state.canEdit {
                                         CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false) {
+                                            EventService.shared.send(event: ExtendedAnalyticsEvent.dealContractorTap(.checker))
                                             if viewModel.state.deal.checkerPublicKey?.isEmpty ?? true {
                                                 activeModalType = .editChecker(viewModel.state.deal.checkerPublicKey)
                                             } else {
@@ -607,6 +611,7 @@ struct DealView: View {
                                 Spacer()
                                 if viewModel.state.canEditDeal {
                                     CButton(title: (viewModel.state.deal.meta?.contentIsEmpty ?? true) ? R.string.localizable.commonSet() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit || viewModel.state.currentMainActions.contains(.cancelSign)) {
+                                        EventService.shared.send(event: DefaultAnalyticsEvent.dealDescriptionTap)
                                         if self.viewModel.isYouChecker && !self.viewModel.state.isOwnerDeal {
                                             activeModalType = .viewTextDealDetails
                                         } else {
@@ -650,6 +655,7 @@ struct DealView: View {
                                 Spacer()
                                 if viewModel.state.canEditDeal {
                                     CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit || viewModel.state.currentMainActions.contains(.cancelSign)) {
+                                        EventService.shared.send(event: DefaultAnalyticsEvent.dealDescriptionAddFileTap)
                                         uploaderState = .medium
                                         viewModel.trigger(.uploaderContentType(.metadata))
                                     }
@@ -720,6 +726,7 @@ struct DealView: View {
                                     
                                     if viewModel.state.canSendResult {
                                         CButton(title: (viewModel.state.deal.result?.contentIsEmpty ?? true) ? R.string.localizable.commonAdd() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false) {
+                                            EventService.shared.send(event: DefaultAnalyticsEvent.dealResultTap)
                                             activeModalType = .editTextDealResult
                                         }
                                     } else {
@@ -760,6 +767,7 @@ struct DealView: View {
                                     Spacer()
                                     if viewModel.state.canSendResult {
                                         CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false) {
+                                            EventService.shared.send(event: DefaultAnalyticsEvent.dealResultAddFileTap)
                                             uploaderState = .medium
                                             viewModel.trigger(.uploaderContentType(.result))
                                         }
@@ -808,6 +816,7 @@ struct DealView: View {
                                 case .sign:
                                     if viewModel.state.isSignedByPartners {
                                         CButton(title: R.string.localizable.dealButtonsSignAndStart(), style: .primary, size: .large, isLoading: false) {
+                                            EventService.shared.send(event: DefaultAnalyticsEvent.dealSignTap)
                                             activeModalType = .signTx(.dealInit)
                                         }
                                         Text(R.string.localizable.dealDescriptionCommandPartnerAlreadySigned())
@@ -816,6 +825,7 @@ struct DealView: View {
                                             .foregroundColor(R.color.labelBackgroundAttention.color)
                                     } else {
                                         CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.state.canSign) {
+                                            EventService.shared.send(event: DefaultAnalyticsEvent.dealSignTap)
                                             activeModalType = .signTx(.dealInit)
                                         }
                                         if viewModel.state.canSign {
@@ -1115,6 +1125,7 @@ struct DealView: View {
                     primaryButton: .cancel(),
                     secondaryButton: .destructive(Text(R.string.localizable.dealRevokeActionsConfirm())) {
                         viewModel.trigger(.cancel) {
+                            EventService.shared.send(event: DefaultAnalyticsEvent.dealRevokeTap)
                             self.callback()
                             self.presentationMode.wrappedValue.dismiss()
                         }
@@ -1122,7 +1133,6 @@ struct DealView: View {
                 )
             }
         })
-
         .actionSheet(item: $actionsType, content: { type in
             switch type {
             case .confirmCancel:
@@ -1151,6 +1161,9 @@ struct DealView: View {
                     buttons: actionSheetEditCheckerButtons())
             }
         })
+        .onAppear {
+            EventService.shared.send(event: DefaultAnalyticsEvent.dealOpen)
+        }
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 if viewModel.state.isOwnerDeal {

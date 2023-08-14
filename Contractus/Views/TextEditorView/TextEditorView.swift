@@ -113,6 +113,12 @@ struct TextEditorView: View {
                         switch mode {
                         case .edit:
                             Button {
+                                switch viewModel.state.contentType {
+                                case .metadata:
+                                    EventService.shared.send(event: DefaultAnalyticsEvent.dealDescriptionSaveTap)
+                                case .result:
+                                    EventService.shared.send(event: DefaultAnalyticsEvent.dealResultSaveTap)
+                                }
                                 viewModel.trigger(.update(content, false))
                             } label: {
                                 Text(R.string.localizable.commonSave())

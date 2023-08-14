@@ -62,10 +62,13 @@ struct AddContractorView: View {
 
                     TextFieldView(
                         placeholder: R.string.localizable.commonPublicKey(), blockchain: viewModel.blockchain,
-                        value: viewModel.state.publicKey
-                    ) { newValue in
+                        value: viewModel.state.publicKey,
+                        changeValue: { newValue in
                             viewModel.trigger(.validate(newValue))
+                        }, onQRTap: {
+                            EventService.shared.send(event: DefaultAnalyticsEvent.dealContractorQrscannerTap)
                         }
+                    )
                     Text(R.string.localizable.addContractorTypeAccountInfo(viewModel.state.blockchain.rawValue))
                         .font(.callout)
                         .foregroundColor(R.color.secondaryText.color)

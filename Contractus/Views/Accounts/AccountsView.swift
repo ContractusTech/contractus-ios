@@ -46,6 +46,13 @@ struct AccountsView: View {
     @State private var selectedView: NavigateViewType? = .none
     @State private var sheetType: SheetType? = .none
 
+    private var isEditing: Bool {
+      if editMode?.wrappedValue.isEditing == true {
+         return true
+       }
+       return false
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 2) {
@@ -83,9 +90,11 @@ struct AccountsView: View {
                         Spacer()
                         if editMode?.wrappedValue == .active {
                             CButton(title: R.string.localizable.commonBackup(), style: .secondary, size: .small, isLoading: false, roundedCorner: false) {
+                                EventService.shared.send(event: DefaultAnalyticsEvent.accountsBackupTap)
                                 sheetType = .backup(item)
                             }
                             CButton(title: R.string.localizable.accountsEditRemove(), style: .cancel, size: .small, isLoading: false, roundedCorner: false) {
+                                EventService.shared.send(event: DefaultAnalyticsEvent.accountsRemoveTap)
                                 sheetType = .delete(item)
                             }
                             .padding(.trailing, 13)
@@ -123,6 +132,7 @@ struct AccountsView: View {
                             .cornerRadius(20)
                     )
                     .onTapGesture {
+                        EventService.shared.send(event: DefaultAnalyticsEvent.accountsSelectTap)
                         viewModel.trigger(.changeAccount(item.account))
                     }
                 }
@@ -145,10 +155,11 @@ struct AccountsView: View {
                     )
                     .contentShape(Rectangle())
                     .onTapGesture {
+                        EventService.shared.send(event: DefaultAnalyticsEvent.accountsAddTap)
                         selectedView = .addWallet
                     }
                 }
-                
+
                 NavigationLink(tag: NavigateViewType.addWallet, selection: $selectedView) {
                     EnterView(viewType: .addAccount) { account in
                         selectedView = .none
@@ -165,6 +176,14 @@ struct AccountsView: View {
             }
         }
         .baseBackground()
+        .onAppear {
+            EventService.shared.send(event: DefaultAnalyticsEvent.accountsOpen)
+        }
+        .onChange(of: isEditing) { value in
+            if value {
+                EventService.shared.send(event: DefaultAnalyticsEvent.accountsEditTap)
+            }
+        }
         .navigationTitle(R.string.localizable.accountsTitle())
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

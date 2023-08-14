@@ -252,7 +252,6 @@ struct CreateDealView: View {
                                 .cornerRadius(20)
                                 .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                             }
-
                         }
                     }
                     .padding(8)
@@ -263,6 +262,7 @@ struct CreateDealView: View {
                         case .success:
                             didCreated?(viewModel.state.createdDeal)
                             if viewModel.state.createdDeal?.sharedKey != nil {
+                                EventService.shared.send(event: DefaultAnalyticsEvent.newDealOpenSuccessWithSk)
                                 isShowShareSecretKey.toggle()
                             } else {
                                 presentationMode.wrappedValue.dismiss()
@@ -274,21 +274,21 @@ struct CreateDealView: View {
                 }
                 .safeAreaInset(edge: .bottom, content: {
                     CButton(title: R.string.localizable.commonCreate(), style: .primary, size: .large, isLoading: viewModel.state.state == .creating, isDisabled: !allowCreateDeal) {
-
+                        
                         guard let selectedRole = selectedRole else { return }
                         if allowChecker {
+                            EventService.shared.send(event: ExtendedAnalyticsEvent.newDealCreateTap(selectedRole.role, allowChecker, .none, allowEncrypt))
                             viewModel.trigger(.createDealWithChecker(selectedRole.role, allowEncrypt))
                             return
                         }
 
                         guard let performanceBondType = performanceBondType else { return }
+
+                        EventService.shared.send(event: ExtendedAnalyticsEvent.newDealCreateTap(selectedRole.role, allowChecker, performanceBondType, allowEncrypt))
                         viewModel.trigger(.createDeal(selectedRole.role, performanceBondType, allowEncrypt))
                     }
                     .padding(EdgeInsets(top: 16, leading: 8, bottom: 28, trailing: 8))
                 })
-
-
-
             }
             .alert(item: $alertType, content: { type in
                 switch type {
@@ -303,6 +303,9 @@ struct CreateDealView: View {
             })
             .baseBackground()
             .edgesIgnoringSafeArea(.bottom)
+            .onAppear {
+                EventService.shared.send(event: DefaultAnalyticsEvent.newDealOpen)
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
@@ -317,7 +320,6 @@ struct CreateDealView: View {
                 }
             }
             .navigationBarTitle(R.string.localizable.newDealTitle(), displayMode: .inline)
-
         }
         .navigationBarBackButtonHidden()
     }
