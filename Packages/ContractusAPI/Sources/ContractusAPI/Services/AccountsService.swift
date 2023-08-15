@@ -66,4 +66,10 @@ public final class AccountService: BaseService {
             completion(result)
         }
     }
+
+    public func getTopUpMethods(completion: @escaping (Swift.Result<TopUpMethods, APIClientError>) -> Void) {
+        self.request(path: .topUp, httpMethod: .post, data: Empty()) { (result: Result<TopUpMethods, APIClientError>) in
+            completion(result)
+        }
+    }
 }
