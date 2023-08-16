@@ -11,6 +11,7 @@ import Alamofire
 public enum ServicePath {
     case verifyDevice
     case accounts
+    case topUp
     case currentAccount
     case accountStatistics
     case deals
@@ -93,7 +94,8 @@ public enum ServicePath {
             return "/referrals"
         case .createPromocode:
             return "/referrals"
-
+        case .topUp:
+            return "/accounts/topup"
         }
     }
 }

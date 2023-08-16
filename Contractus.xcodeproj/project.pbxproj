@@ -128,6 +128,9 @@
 		6DC558702A7A18A60054F2FC /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC5586F2A7A18A60054F2FC /* FirebaseCrashlytics */; };
 		6DC558722A7A18A60054F2FC /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC558712A7A18A60054F2FC /* FirebasePerformance */; };
 		6DC558742A7A18A60054F2FC /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC558732A7A18A60054F2FC /* FirebaseRemoteConfig */; };
+		6DCA42C92A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 6DCA42C62A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh */; };
+		6DCA42CA2A8A5C6100C6E4D7 /* ci_post_clone.sh in Resources */ = {isa = PBXBuildFile; fileRef = 6DCA42C72A8A5C6100C6E4D7 /* ci_post_clone.sh */; };
+		6DCA42CB2A8A5C6100C6E4D7 /* ci_pre_xcodebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 6DCA42C82A8A5C6100C6E4D7 /* ci_pre_xcodebuild.sh */; };
 		6DD28E252A1C85360093E553 /* BaseTopTextBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E242A1C85360093E553 /* BaseTopTextBlockView.swift */; };
 		6DD28E272A1C9C6A0093E553 /* Date+Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */; };
 		6DD28E292A1DF3B10093E553 /* DeadlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E282A1DF3B10093E553 /* DeadlineView.swift */; };
@@ -296,6 +299,9 @@
 		6DC2C02628C99C0A005C9EBE /* ServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceFactory.swift; sourceTree = "<group>"; };
 		6DC558642A76633C0054F2FC /* TopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopUpView.swift; sourceTree = "<group>"; };
 		6DC558692A7987320054F2FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6DCA42C62A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
+		6DCA42C72A8A5C6100C6E4D7 /* ci_post_clone.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
+		6DCA42C82A8A5C6100C6E4D7 /* ci_pre_xcodebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = ci_pre_xcodebuild.sh; sourceTree = "<group>"; };
 		6DD28E242A1C85360093E553 /* BaseTopTextBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTopTextBlockView.swift; sourceTree = "<group>"; };
 		6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatter.swift"; sourceTree = "<group>"; };
 		6DD28E282A1DF3B10093E553 /* DeadlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadlineView.swift; sourceTree = "<group>"; };
@@ -754,6 +760,9 @@
 		6DC5586B2A79895D0054F2FC /* ci_scripts */ = {
 			isa = PBXGroup;
 			children = (
+				6DCA42C72A8A5C6100C6E4D7 /* ci_post_clone.sh */,
+				6DCA42C62A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh */,
+				6DCA42C82A8A5C6100C6E4D7 /* ci_pre_xcodebuild.sh */,
 			);
 			path = ci_scripts;
 			sourceTree = "<group>";
@@ -926,9 +935,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DCA42CB2A8A5C6100C6E4D7 /* ci_pre_xcodebuild.sh in Resources */,
 				6D97AEF8288D196400EB61D0 /* Preview Assets.xcassets in Resources */,
 				6DC5586A2A7987320054F2FC /* GoogleService-Info.plist in Resources */,
 				6DBCA4832890E44200F918B6 /* Localizable.strings in Resources */,
+				6DCA42C92A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh in Resources */,
+				6DCA42CA2A8A5C6100C6E4D7 /* ci_post_clone.sh in Resources */,
 				6D97AEF5288D196400EB61D0 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

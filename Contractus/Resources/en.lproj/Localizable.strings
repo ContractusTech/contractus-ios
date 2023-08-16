@@ -52,6 +52,7 @@
 "common.you-account" = "Your public key";
 "common.top-up" = "Top Up";
 "common.info" = "Info";
+"common.service-unavailable" = "Service unavailable";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
@@ -341,7 +342,7 @@
 "error.download.file" = "Download file error";
 "error.decrypt.file" = "Decrypt file error";
 
-"topup.title.cards" = "By cards (soon)";
+"topup.title.cards" = "By cards";
 "topup.title.crypto" = "By crypto";
 "topup.title.load" = "Get a loan (soon)";
 "topup.subtitle.cards" = "Deposit by fiat";
