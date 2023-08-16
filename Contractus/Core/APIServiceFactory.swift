@@ -52,6 +52,10 @@ final class APIServiceFactory {
         return ContractusAPI.AuthService(client: ServiceClient.shared.client)
     }
 
+    func makeReferralsService() -> ContractusAPI.ReferralService {
+        return ContractusAPI.ReferralService(client: ServiceClient.shared.client)
+    }
+
     // MARK: - Private Methods
 
     private func checkAccount() throws {
