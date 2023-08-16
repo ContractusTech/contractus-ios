@@ -835,14 +835,38 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.file` struct is generated, and contains static references to 1 files.
+  /// This `R.file` struct is generated, and contains static references to 4 files.
   struct file {
     /// Resource file `GoogleService-Info.plist`.
     static let googleServiceInfoPlist = Rswift.FileResource(bundle: R.hostingBundle, name: "GoogleService-Info", pathExtension: "plist")
+    /// Resource file `ci_post_clone.sh`.
+    static let ci_post_cloneSh = Rswift.FileResource(bundle: R.hostingBundle, name: "ci_post_clone", pathExtension: "sh")
+    /// Resource file `ci_post_xcodebuild.sh`.
+    static let ci_post_xcodebuildSh = Rswift.FileResource(bundle: R.hostingBundle, name: "ci_post_xcodebuild", pathExtension: "sh")
+    /// Resource file `ci_pre_xcodebuild.sh`.
+    static let ci_pre_xcodebuildSh = Rswift.FileResource(bundle: R.hostingBundle, name: "ci_pre_xcodebuild", pathExtension: "sh")
 
     /// `bundle.url(forResource: "GoogleService-Info", withExtension: "plist")`
     static func googleServiceInfoPlist(_: Void = ()) -> Foundation.URL? {
       let fileResource = R.file.googleServiceInfoPlist
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+
+    /// `bundle.url(forResource: "ci_post_clone", withExtension: "sh")`
+    static func ci_post_cloneSh(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.ci_post_cloneSh
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+
+    /// `bundle.url(forResource: "ci_post_xcodebuild", withExtension: "sh")`
+    static func ci_post_xcodebuildSh(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.ci_post_xcodebuildSh
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+
+    /// `bundle.url(forResource: "ci_pre_xcodebuild", withExtension: "sh")`
+    static func ci_pre_xcodebuildSh(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.ci_pre_xcodebuildSh
       return fileResource.bundle.url(forResource: fileResource)
     }
 
@@ -956,7 +980,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 313 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 314 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1122,7 +1146,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealBondBoth = Rswift.StringResource(key: "newDeal.bond.both", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: By cards (soon)
+      /// en translation: By cards
       ///
       /// Locales: en
       static let topupTitleCards = Rswift.StringResource(key: "topup.title.cards", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
@@ -1850,6 +1874,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let changeAmountFeeTitle = Rswift.StringResource(key: "changeAmount.fee-title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Service unavailable
+      ///
+      /// Locales: en
+      static let commonServiceUnavailable = Rswift.StringResource(key: "common.service-unavailable", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Set
       ///
       /// Locales: en
@@ -2834,7 +2862,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("newDeal.bond.both", bundle: bundle, comment: "")
       }
 
-      /// en translation: By cards (soon)
+      /// en translation: By cards
       ///
       /// Locales: en
       static func topupTitleCards(preferredLanguages: [String]? = nil) -> String {
@@ -5568,6 +5596,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("changeAmount.fee-title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Service unavailable
+      ///
+      /// Locales: en
+      static func commonServiceUnavailable(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.service-unavailable", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.service-unavailable"
+        }
+
+        return NSLocalizedString("common.service-unavailable", bundle: bundle, comment: "")
       }
 
       /// en translation: Set
