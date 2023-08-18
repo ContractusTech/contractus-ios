@@ -1280,7 +1280,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Contractus/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Contractus access to your camera to take photos and videos. Contractus does not attach content to deals without permission.  Also, the Camera is used to scan QR codes.";
-				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Allow Contractus access to your camera to take photos and videos. Contractus does not attach content to deals without permission.";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Allow Contractus access to your library. Contractus does not attach content to deals without permission.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow Contractus access to a media library to attach to your deals";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1320,7 +1320,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Contractus/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Contractus access to your camera to take photos and videos. Contractus does not attach content to deals without permission.  Also, the Camera is used to scan QR codes.";
-				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Allow Contractus access to your camera to take photos and videos. Contractus does not attach content to deals without permission.";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Allow Contractus access to your library. Contractus does not attach content to deals without permission.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow Contractus access to a media library to attach to your deals";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
