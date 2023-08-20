@@ -12,6 +12,7 @@ import SwiftUIPullToRefresh
 import ContractusAPI 
 
 fileprivate enum Constants {
+    static let closeImage = Image(systemName: "xmark")
     static let arrowDownImage = Image(systemName: "chevron.down")
     static let plusImage = Image(systemName: "plus")
     static let menuImage = Image(systemName: "gearshape")
@@ -30,7 +31,7 @@ fileprivate enum Constants {
 struct MainView: View {
 
     enum SheetType {
-        case newDeal, menu, qrScan, sharePublicKey, wrap(from: Amount, to: Amount), webView(URL)
+        case newDeal, menu, qrScan, sharePublicKey, wrap(from: Amount, to: Amount), webView(URL), topUp(URL)
     }
 
     var resizableSheetCenter: ResizableSheetCenter? {
@@ -62,6 +63,7 @@ struct MainView: View {
                             topUpAction: {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.mainTopupTap)
                                 topUpState = .medium
+                                ImpactGenerator.soft()
                             }, infoAction: {
                                 sheetType = .webView(AppConfig.ctusInfoURL)
                             }, swapAction: { fromAmount, toAmount in
@@ -206,9 +208,11 @@ struct MainView: View {
                             case .crypto:
                                 sheetType = .sharePublicKey
                                 topUpState = .hidden
-                            case .fiat, .load:
-                                // TODO: - 
-                                break
+                            case .fiat(let url):
+                                sheetType = .topUp(url)
+                                topUpState = .hidden
+                            case .loan:
+                                break;
                             }
                         }
                     }
@@ -226,6 +230,24 @@ struct MainView: View {
 
                 .sheet(item: $sheetType, content: { type in
                     switch type {
+                    case .topUp(let url):
+                        NavigationView {
+                            WebView(url: url)
+                                .edgesIgnoringSafeArea(.bottom)
+                                .navigationBarItems(
+                                    trailing: Button(action: {
+                                        sheetType = nil
+                                    }, label: {
+                                        Constants.closeImage
+                                            .resizable()
+                                            .frame(width: 21, height: 21)
+                                            .foregroundColor(R.color.textBase.color)
+                                    }))
+                                .navigationTitle(R.string.localizable.commonTopUp())
+                                .navigationBarTitleDisplayMode(.inline)
+                        }
+                        .baseBackground()
+                        .interactiveDismiss(canDismissSheet: false)
                     case .webView(let url):
                         NavigationView {
                             WebView(url: url)

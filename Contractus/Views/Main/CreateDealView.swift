@@ -307,7 +307,7 @@ struct CreateDealView: View {
                 EventService.shared.send(event: DefaultAnalyticsEvent.newDealOpen)
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
