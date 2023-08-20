@@ -14,10 +14,10 @@ fileprivate enum Constants {
 }
 
 struct ReferralView: View {
-    
+
     @State var copiedNotification: Bool = false
     @State var promoIsPresented: Bool = false
-    
+
     @StateObject var viewModel: AnyViewModel<ReferralState, ReferralInput>
 
     init() {
@@ -60,6 +60,7 @@ struct ReferralView: View {
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
                                             copiedNotification = false
                                         })
+                                        EventService.shared.send(event: DefaultAnalyticsEvent.referralCodeCopyTap)
                                     } label: {
                                         HStack {
                                             if copiedNotification {
@@ -81,6 +82,7 @@ struct ReferralView: View {
                                 }
                             } else {
                                 CButton(title: R.string.localizable.referralPromocodeRequest(), style: .secondary, size: .small, isLoading: false) {
+                                    EventService.shared.send(event: DefaultAnalyticsEvent.referralCodeCreateTap)
                                     viewModel.trigger(.create)
                                 }
                             }
@@ -95,7 +97,7 @@ struct ReferralView: View {
                     .cornerRadius(20)
                     .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
-                    
+
                     // MARK: - Bonus
                     HStack {
                         VStack(alignment: .leading, spacing: 12) {
@@ -108,17 +110,17 @@ struct ReferralView: View {
                             }
                             
                             if viewModel.state.state == .applied {
-                            CButton(title: R.string.localizable.referralPromocodeApplied(), style: .success, size: .small, isLoading: false, isDisabled: true) {}
+                                CButton(title: R.string.localizable.referralPromocodeApplied(), style: .success, size: .small, isLoading: false, isDisabled: true) {}
                             } else {
                                 CButton(title: R.string.localizable.referralPromocodeApply(), style: .secondary, size: .small, isLoading: false) {
+                                    EventService.shared.send(event: DefaultAnalyticsEvent.referralApplyCodeFormTap)
                                     promoIsPresented.toggle()
                                 }
                             }
-                            
+
                             Text(R.string.localizable.referralBonusSubtitle())
                                 .font(.footnote.weight(.semibold))
                                 .foregroundColor(R.color.secondaryText.color)
-                            
                         }
                     }
                     .padding(EdgeInsets(top: 16, leading: 13, bottom: 20, trailing: 13))
@@ -136,10 +138,10 @@ struct ReferralView: View {
                                     .textCase(.uppercase)
                                     .foregroundColor(R.color.secondaryText.color)
                                     .padding(.bottom, 10)
-                                
+
                                 Spacer()
                             }
-                            
+
                             ForEach(viewModel.state.prizes.indices, id: \.self) { index in
                                 ReferralPrizeItemView(item: viewModel.state.prizes[index])
                                 if index != viewModel.state.prizes.count - 1 {
@@ -159,7 +161,7 @@ struct ReferralView: View {
         }
         .baseBackground()
         .onAppear {
-//            EventService.shared.send(event: DefaultAnalyticsEvent.referralOpen)
+            EventService.shared.send(event: DefaultAnalyticsEvent.referralOpen)
         }
         .navigationTitle(R.string.localizable.referralTitle())
         .navigationBarTitleDisplayMode(.inline)
@@ -168,12 +170,10 @@ struct ReferralView: View {
                 .environmentObject(viewModel)
         }
     }
-    
-    
 }
 
 struct LoadingReferralView: View {
-    
+
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 12) {
@@ -181,14 +181,13 @@ struct LoadingReferralView: View {
                     .font(.footnote.weight(.semibold))
                     .textCase(.uppercase)
                     .foregroundColor(R.color.secondaryText.color)
-                
+
                 Text(R.string.localizable.commonEmpty())
                     .font(.largeTitle.weight(.semibold))
                     .opacity(0)
 
                 Text(R.string.localizable.commonEmpty())
                     .opacity(0)
-                
             }
             Spacer()
         }
@@ -208,18 +207,21 @@ struct ReferralPrizeItemView: View {
         HStack {
             Text(item.title)
                 .font(.footnote.weight(.regular))
-
+                .foregroundColor(item.type == .unknown ? R.color.textWarn.color : R.color.textBase.color)
             Spacer()
+            
             if let subtitle = item.subtitle {
                 Text(subtitle)
                     .font(.footnote.weight(.regular))
                     .foregroundColor(R.color.secondaryText.color)
+                    .opacity(item.type == .unknown ? 0 : 1)
                 Spacer()
             }
             Text("\(item.applied ? "+" : "")\(item.amount)")
                 .font(.footnote.weight(.regular))
                 .foregroundColor(item.applied ? R.color.baseGreen.color : R.color.secondaryText.color)
-        }
+                .opacity(item.type == .unknown ? 0 : 1)
+         }
     }
 }
 

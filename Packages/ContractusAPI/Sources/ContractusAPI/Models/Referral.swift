@@ -3,10 +3,15 @@ import Foundation
 public struct ReferralProgram: Decodable {
 
     public enum PrizeType: String, Decodable {
-        case signup = "SIGNUP"
-        case applyPromocode = "APPLY_PROMOCODE"
-//        case applyPromocodeReferrer = "APPLY_PROMOCODE_REFERRER"
-        case applyPromocodeReferrer = "APPLY_PROMOCODE_REFFERER"
+        case signup = "SIGNUP",
+             applyPromocode = "APPLY_PROMOCODE",
+             applyPromocodeReferrer = "APPLY_PROMOCODE_REFERRER",
+             unknown
+        
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            self = try PrizeType(rawValue: container.decode(RawValue.self)) ?? .unknown
+        }
     }
 
     public struct Prize: Decodable {

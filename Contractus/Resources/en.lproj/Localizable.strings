@@ -361,6 +361,7 @@
 "referral.prize.signup" = "Airdrop after Sign up";
 "referral.prize.apply" = "For using the promo code";
 "referral.prize.apply.refferer" = "For using my promo code";
+"referral.prize.unknown" = "Unsupported prize, update the app";
 
 "promocode.title" = "Promocode";
 "promocode.enter" = "Enter promo";

@@ -11,10 +11,10 @@ import BigInt
 
 enum ReferralInput {
     case apply(String), create, resetError
-    
 }
 
 struct PrizeItem: Hashable {
+    let type: ReferralProgram.PrizeType
     let title: String
     let subtitle: String?
     let amount: String
@@ -59,7 +59,7 @@ final class ReferralViewModel: ViewModel {
                 var newState = self.state
                 newState.promocode = referral?.promocode
                 newState.prizes = (referral?.prizes ?? []).map { $0.toPrizeItem() }
-                if (referral?.prizes ?? []).contains(where: {$0.type == .applyPromocode}) {
+                if (referral?.prizes ?? []).contains(where: { $0.type == .applyPromocode && $0.applied}) {
                     newState.state = .applied
                 } else {
                     newState.state = .loaded
@@ -84,12 +84,15 @@ final class ReferralViewModel: ViewModel {
                     let response = try await applyPromocode(data: data)
                     var newState = self.state
                     if response?.status == .error {
+                        EventService.shared.send(event: ExtendedAnalyticsEvent.referralApplyCodeError(R.string.localizable.promocodeNotFound()))
                         newState.errorState = .error(R.string.localizable.promocodeNotFound())
                     } else {
                         newState.state = .applied
-                        self.state = newState
+                        EventService.shared.send(event: DefaultAnalyticsEvent.referralApplyCodeSuccess)
                     }
+                    self.state = newState
                 } catch {
+                    EventService.shared.send(event: ExtendedAnalyticsEvent.referralApplyCodeError(error.localizedDescription))
                     var newState = self.state
                     newState.errorState = .error(error.localizedDescription)
                     newState.state = .loaded
@@ -145,6 +148,7 @@ final class ReferralViewModel: ViewModel {
 extension ReferralProgram.Prize {
     func toPrizeItem() -> PrizeItem {
         return .init(
+            type: self.type,
             title: self.name(),
             subtitle: self.count > 1 ? "\(count)×\(self.amount.formatted(withCode: true))" : nil,
             amount: self.count > 1 ? self.countedAmount().formatted(withCode: true) : self.amount.formatted(withCode: true),
@@ -160,6 +164,8 @@ extension ReferralProgram.Prize {
             return R.string.localizable.referralPrizeApply()
         case .applyPromocodeReferrer:
             return R.string.localizable.referralPrizeApplyRefferer()
+        case .unknown:
+            return R.string.localizable.referralPrizeUnknown()
         }
     }
     

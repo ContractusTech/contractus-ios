@@ -48,6 +48,7 @@ struct PromocodeView: View {
                 
                 Spacer()
                 CButton(title: R.string.localizable.promocodeApply(), style: .primary, size: .large, isLoading: false, isDisabled: value.isEmpty) {
+                    EventService.shared.send(event: DefaultAnalyticsEvent.referralApplyCodeTap)
                     viewModel.trigger(.apply(value)) {}
                 }
                 .padding(.bottom, 16)
