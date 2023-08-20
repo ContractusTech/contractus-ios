@@ -15,6 +15,7 @@ fileprivate enum Constants {
     static let bellIcon = Image(systemName: "bell.badge")
     static let personCropIcon = Image(systemName: "person.crop.rectangle.stack.fill")
     static let faqIcon = Image(systemName: "questionmark.circle")
+    static let giftIcon = Image(systemName: "giftcard")
 
 }
 
@@ -112,20 +113,25 @@ struct MenuView: View {
                             linkTo: EmptyView()
                         )
                         MenuItemView (
-                            icon: Constants.lockIcon,
-                            title: "Security",
-                            linkTo: EmptyView()
+                            icon: Constants.giftIcon,
+                            title: "Referral program",
+                            linkTo: ReferralView()
                         )
-                        MenuItemView (
-                            icon: Constants.bellIcon,
-                            title: "Push notifications",
-                            linkTo: EmptyView()
-                        )
-                        MenuItemView (
-                            icon: Constants.personCropIcon,
-                            title: "Common settings",
-                            linkTo: EmptyView()
-                        )
+//                        MenuItemView (
+//                            icon: Constants.lockIcon,
+//                            title: "Security",
+//                            linkTo: EmptyView()
+//                        )
+//                        MenuItemView (
+//                            icon: Constants.bellIcon,
+//                            title: "Push notifications",
+//                            linkTo: EmptyView()
+//                        )
+//                        MenuItemView (
+//                            icon: Constants.personCropIcon,
+//                            title: "Common settings",
+//                            linkTo: EmptyView()
+//                        )
                         
                         MenuSectionView()
                         #endif

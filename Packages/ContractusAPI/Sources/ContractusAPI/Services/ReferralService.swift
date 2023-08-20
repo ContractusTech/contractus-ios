@@ -6,6 +6,10 @@ public final class ReferralService: BaseService {
 
     public struct CreatePromocode: Encodable {
         public let promocode: String
+        
+        public init(promocode: String) {
+            self.promocode = promocode
+        }
     }
 
     public func getInformation(completion: @escaping (Swift.Result<ReferralProgram, APIClientError>) -> Void) {
@@ -21,7 +25,7 @@ public final class ReferralService: BaseService {
     }
 
     public func applyPromocode(_ data: CreatePromocode, completion: @escaping (Swift.Result<ReferralProgramResult, APIClientError>) -> Void) {
-        self.request(path: .accountStatistics, httpMethod: .post, data: data) { (result: Result<ReferralProgramResult, APIClientError>) in
+        self.request(path: .applyPromocode, httpMethod: .post, data: data) { (result: Result<ReferralProgramResult, APIClientError>) in
             completion(result)
         }
     }

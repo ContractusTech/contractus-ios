@@ -956,7 +956,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 313 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 329 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1030,6 +1030,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealHintYouVerifier = Rswift.StringResource(key: "deal.hint.you-verifier", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Airdrop after Sign up
+      ///
+      /// Locales: en
+      static let referralPrizeSignup = Rswift.StringResource(key: "referral.prize.signup", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Airdrops and prizes
+      ///
+      /// Locales: en
+      static let referralAirdropTitle = Rswift.StringResource(key: "referral.airdrop.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Amount
       ///
       /// Locales: en
@@ -1054,6 +1062,18 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignSubtitleUnwrap = Rswift.StringResource(key: "transactionSign.subtitle.unwrap", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Apply
+      ///
+      /// Locales: en
+      static let promocodeApply = Rswift.StringResource(key: "promocode.apply", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Apply promo code
+      ///
+      /// Locales: en
+      static let referralPromocodeApply = Rswift.StringResource(key: "referral.promocode.apply", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Apply the user's promocode that you and the referent get bonuses
+      ///
+      /// Locales: en
+      static let referralBonusSubtitle = Rswift.StringResource(key: "referral.bonus.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Are you sure you want to cancel sign?
       ///
       /// Locales: en
@@ -1442,6 +1462,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextEditorEditorPlaceholder = Rswift.StringResource(key: "deal.textEditor.editor-placeholder", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Enter promo
+      ///
+      /// Locales: en
+      static let promocodeEnter = Rswift.StringResource(key: "promocode.enter", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Enter public key
       ///
       /// Locales: en
@@ -1526,6 +1550,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignSubtitleHolderMode = Rswift.StringResource(key: "transactionSign.subtitle.holder-mode", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: For using my promo code
+      ///
+      /// Locales: en
+      static let referralPrizeApplyRefferer = Rswift.StringResource(key: "referral.prize.apply.refferer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: For using the promo code
+      ///
+      /// Locales: en
+      static let referralPrizeApply = Rswift.StringResource(key: "referral.prize.apply", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Force update
       ///
       /// Locales: en
@@ -1550,6 +1582,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let topupTitleLoad = Rswift.StringResource(key: "topup.title.load", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Get bonus
+      ///
+      /// Locales: en
+      static let referralBonusTitle = Rswift.StringResource(key: "referral.bonus.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Holder mode
       ///
       /// Locales: en
@@ -1770,10 +1806,26 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignSubtitleProcessing = Rswift.StringResource(key: "transactionSign.subtitle.processing", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Promocode
+      ///
+      /// Locales: en
+      static let promocodeTitle = Rswift.StringResource(key: "promocode.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Promocode applied
+      ///
+      /// Locales: en
+      static let referralPromocodeApplied = Rswift.StringResource(key: "referral.promocode.applied", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Promocode not found
+      ///
+      /// Locales: en
+      static let promocodeNotFound = Rswift.StringResource(key: "promocode.not.found", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Public key
       ///
       /// Locales: en
       static let commonPublicKey = Rswift.StringResource(key: "common.public-key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Referral Program
+      ///
+      /// Locales: en
+      static let referralTitle = Rswift.StringResource(key: "referral.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Remove
       ///
       /// Locales: en
@@ -1782,6 +1834,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsDeleteTitle = Rswift.StringResource(key: "accounts.delete.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Request promo code
+      ///
+      /// Locales: en
+      static let referralPromocodeRequest = Rswift.StringResource(key: "referral.promocode.request", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Results
       ///
       /// Locales: en
@@ -1842,6 +1898,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let qrCodeWarningMessage = Rswift.StringResource(key: "qrCode.warning.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Send the code to other users so that after the registration of the referred user you will receive a bonus
+      ///
+      /// Locales: en
+      static let referralPromocodeSubtitle = Rswift.StringResource(key: "referral.promocode.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Service Fee
       ///
       /// Locales: en
@@ -2198,6 +2258,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let createWalletTitle = Rswift.StringResource(key: "createWallet.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Your promo code
+      ///
+      /// Locales: en
+      static let referralPromocodeTitle = Rswift.StringResource(key: "referral.promocode.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Your public key
       ///
       /// Locales: en
@@ -2489,6 +2553,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.hint.you-verifier", bundle: bundle, comment: "")
       }
 
+      /// en translation: Airdrop after Sign up
+      ///
+      /// Locales: en
+      static func referralPrizeSignup(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.prize.signup", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.prize.signup"
+        }
+
+        return NSLocalizedString("referral.prize.signup", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Airdrops and prizes
+      ///
+      /// Locales: en
+      static func referralAirdropTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.airdrop.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.airdrop.title"
+        }
+
+        return NSLocalizedString("referral.airdrop.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Amount
       ///
       /// Locales: en
@@ -2577,6 +2671,51 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.subtitle.unwrap", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Apply
+      ///
+      /// Locales: en
+      static func promocodeApply(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("promocode.apply", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "promocode.apply"
+        }
+
+        return NSLocalizedString("promocode.apply", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Apply promo code
+      ///
+      /// Locales: en
+      static func referralPromocodeApply(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.promocode.apply", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.promocode.apply"
+        }
+
+        return NSLocalizedString("referral.promocode.apply", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Apply the user's promocode that you and the referent get bonuses
+      ///
+      /// Locales: en
+      static func referralBonusSubtitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.bonus.subtitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.bonus.subtitle"
+        }
+
+        return NSLocalizedString("referral.bonus.subtitle", bundle: bundle, comment: "")
       }
 
       /// en translation: Are you sure you want to cancel sign?
@@ -4036,6 +4175,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.textEditor.editor-placeholder", bundle: bundle, comment: "")
       }
 
+      /// en translation: Enter promo
+      ///
+      /// Locales: en
+      static func promocodeEnter(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("promocode.enter", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "promocode.enter"
+        }
+
+        return NSLocalizedString("promocode.enter", bundle: bundle, comment: "")
+      }
+
       /// en translation: Enter public key
       ///
       /// Locales: en
@@ -4351,6 +4505,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("transactionSign.subtitle.holder-mode", bundle: bundle, comment: "")
       }
 
+      /// en translation: For using my promo code
+      ///
+      /// Locales: en
+      static func referralPrizeApplyRefferer(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.prize.apply.refferer", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.prize.apply.refferer"
+        }
+
+        return NSLocalizedString("referral.prize.apply.refferer", bundle: bundle, comment: "")
+      }
+
+      /// en translation: For using the promo code
+      ///
+      /// Locales: en
+      static func referralPrizeApply(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.prize.apply", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.prize.apply"
+        }
+
+        return NSLocalizedString("referral.prize.apply", bundle: bundle, comment: "")
+      }
+
       /// en translation: Force update
       ///
       /// Locales: en
@@ -4441,6 +4625,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("topup.title.load", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Get bonus
+      ///
+      /// Locales: en
+      static func referralBonusTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.bonus.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.bonus.title"
+        }
+
+        return NSLocalizedString("referral.bonus.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Holder mode
@@ -5270,6 +5469,51 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("transactionSign.subtitle.processing", bundle: bundle, comment: "")
       }
 
+      /// en translation: Promocode
+      ///
+      /// Locales: en
+      static func promocodeTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("promocode.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "promocode.title"
+        }
+
+        return NSLocalizedString("promocode.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Promocode applied
+      ///
+      /// Locales: en
+      static func referralPromocodeApplied(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.promocode.applied", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.promocode.applied"
+        }
+
+        return NSLocalizedString("referral.promocode.applied", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Promocode not found
+      ///
+      /// Locales: en
+      static func promocodeNotFound(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("promocode.not.found", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "promocode.not.found"
+        }
+
+        return NSLocalizedString("promocode.not.found", bundle: bundle, comment: "")
+      }
+
       /// en translation: Public key
       ///
       /// Locales: en
@@ -5283,6 +5527,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.public-key", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Referral Program
+      ///
+      /// Locales: en
+      static func referralTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.title"
+        }
+
+        return NSLocalizedString("referral.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Remove
@@ -5313,6 +5572,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.delete.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Request promo code
+      ///
+      /// Locales: en
+      static func referralPromocodeRequest(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.promocode.request", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.promocode.request"
+        }
+
+        return NSLocalizedString("referral.promocode.request", bundle: bundle, comment: "")
       }
 
       /// en translation: Results
@@ -5538,6 +5812,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("qrCode.warning.message", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Send the code to other users so that after the registration of the referred user you will receive a bonus
+      ///
+      /// Locales: en
+      static func referralPromocodeSubtitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.promocode.subtitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.promocode.subtitle"
+        }
+
+        return NSLocalizedString("referral.promocode.subtitle", bundle: bundle, comment: "")
       }
 
       /// en translation: Service Fee
@@ -6877,6 +7166,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("createWallet.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Your promo code
+      ///
+      /// Locales: en
+      static func referralPromocodeTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.promocode.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.promocode.title"
+        }
+
+        return NSLocalizedString("referral.promocode.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Your public key
