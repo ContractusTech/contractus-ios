@@ -362,6 +362,7 @@
 "referral.prize.apply" = "For using the promo code";
 "referral.prize.apply.refferer" = "For using my promo code";
 "referral.prize.unknown" = "Unsupported prize, update the app";
+"referral.prize.times" = "times";
 
 "promocode.title" = "Promocode";
 "promocode.enter" = "Enter promo";

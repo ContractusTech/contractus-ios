@@ -17,6 +17,7 @@ public struct ReferralProgram: Decodable {
     public struct Prize: Decodable {
         public let type: PrizeType
         public let amount: Amount
+        public let price: Amount
         public let applied: Bool
         public let count: Int
         public let description: String?

@@ -980,7 +980,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 331 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 332 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -2302,6 +2302,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealFileNoName = Rswift.StringResource(key: "deal.file.no-name", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: times
+      ///
+      /// Locales: en
+      static let referralPrizeTimes = Rswift.StringResource(key: "referral.prize.times", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: wSOL ➞ SOL
       ///
       /// Locales: en
@@ -7273,6 +7277,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.file.no-name", bundle: bundle, comment: "")
+      }
+
+      /// en translation: times
+      ///
+      /// Locales: en
+      static func referralPrizeTimes(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.prize.times", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.prize.times"
+        }
+
+        return NSLocalizedString("referral.prize.times", bundle: bundle, comment: "")
       }
 
       /// en translation: wSOL ➞ SOL

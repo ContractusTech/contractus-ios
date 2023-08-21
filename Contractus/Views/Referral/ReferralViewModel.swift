@@ -7,7 +7,6 @@
 
 import Foundation
 import ContractusAPI
-import BigInt
 
 enum ReferralInput {
     case apply(String), create, resetError
@@ -150,8 +149,8 @@ extension ReferralProgram.Prize {
         return .init(
             type: self.type,
             title: self.name(),
-            subtitle: self.count > 1 ? "\(count)×\(self.amount.formatted(withCode: true))" : nil,
-            amount: self.count > 1 ? self.countedAmount().formatted(withCode: true) : self.amount.formatted(withCode: true),
+            subtitle: self.count > 1 ? "\(count) \(R.string.localizable.referralPrizeTimes())" : nil,
+            amount: self.count > 1 ? self.amount.formatted(withCode: true) : self.price.formatted(withCode: true),
             applied: applied
         )
     }
@@ -167,11 +166,5 @@ extension ReferralProgram.Prize {
         case .unknown:
             return R.string.localizable.referralPrizeUnknown()
         }
-    }
-    
-    func countedAmount() -> Amount {
-        let newValue = self.amount.value.multiplied(by: BigUInt(self.count))
-        return Amount(newValue, token: self.amount.token)
-        
     }
 }
