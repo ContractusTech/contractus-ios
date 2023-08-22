@@ -151,6 +151,7 @@
 		FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */; };
 		FE54313D29D36D8800EEF906 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE54313C29D36D8800EEF906 /* AccountsView.swift */; };
 		FE5F427429AF22FA00A1E506 /* netfox in Frameworks */ = {isa = PBXBuildFile; productRef = FE5F427329AF22FA00A1E506 /* netfox */; };
+		FE9623732A94C4610075929B /* TopUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9623722A94C4600075929B /* TopUpViewModel.swift */; };
 		FECDCC5D2A87F21800047A95 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECDCC5C2A87F21800047A95 /* EventService.swift */; };
 		FECE864B29ADCA1B003144CF /* Array+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECE864A29ADCA1B003144CF /* Array+Ex.swift */; };
 		FEE467E62A1C0F010046938F /* UIImage+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE467E52A1C0F010046938F /* UIImage+Ex.swift */; };
@@ -319,6 +320,7 @@
 		FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAccountView.swift; sourceTree = "<group>"; };
 		FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectView.swift; sourceTree = "<group>"; };
 		FE54313C29D36D8800EEF906 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
+		FE9623722A94C4600075929B /* TopUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopUpViewModel.swift; sourceTree = "<group>"; };
 		FECDCC5C2A87F21800047A95 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
 		FECE864A29ADCA1B003144CF /* Array+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Ex.swift"; sourceTree = "<group>"; };
 		FEE467E52A1C0F010046938F /* UIImage+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ex.swift"; sourceTree = "<group>"; };
@@ -642,6 +644,7 @@
 				6D530DBD28E2AD82006F52C6 /* CreateDealViewModel.swift */,
 				6D44B5632A0FAB37008C561D /* StatisticsView.swift */,
 				6DC558642A76633C0054F2FC /* TopUpView.swift */,
+				FE9623722A94C4600075929B /* TopUpViewModel.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -988,6 +991,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DBCA4872890E5DE00F918B6 /* CreateWalletView.swift in Sources */,
+				FE9623732A94C4610075929B /* TopUpViewModel.swift in Sources */,
 				6DB5F8A3293EFA0800AE612A /* Double+Ex.swift in Sources */,
 				6D44B5602A0E0B20008C561D /* BlockchainExplorer.swift in Sources */,
 				6D0DA75B292FA9A60024EF30 /* NavigationStackModifier.swift in Sources */,
