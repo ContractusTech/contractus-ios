@@ -329,7 +329,7 @@ struct MainView: View {
                                         Text("•")
                                             .font(.caption2)
                                             .foregroundColor(R.color.secondaryText.color)
-                                        Text(AppConfig.serverType.network)
+                                        Text(AppConfig.serverType.networkTitle)
                                             .font(.caption2)
                                             .foregroundColor(R.color.textWarn.color)
                                     }

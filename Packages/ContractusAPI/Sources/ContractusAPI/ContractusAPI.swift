@@ -101,7 +101,7 @@ public enum ServerType {
         }
     }
 
-    public var network: String {
+    public var networkTitle: String {
         switch self {
         case .production:
             return "Mainnet"
