@@ -19,7 +19,8 @@ struct WebView: UIViewRepresentable {
         self.webView.isOpaque = false
         self.webView.backgroundColor = R.color.mainBackground()
         self.webView.scrollView.backgroundColor = R.color.mainBackground()
-        
+
+        self.loadingIndicator.hidesWhenStopped = true
         self.loadingIndicator.startAnimating()
         self.loadingIndicator.center = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2 - 50)
         self.webView.addSubview(loadingIndicator)
@@ -44,7 +45,6 @@ struct WebView: UIViewRepresentable {
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             self.parent.loadingIndicator.stopAnimating()
-            self.parent.loadingIndicator.isHidden = true
         }
     }
 }
