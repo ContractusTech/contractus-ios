@@ -16,6 +16,7 @@ fileprivate enum Constants {
     static let personCropIcon = Image(systemName: "person.crop.rectangle.stack.fill")
     static let faqIcon = Image(systemName: "questionmark.circle")
     static let supportIcon = Image(systemName: "lifepreserver")
+    static let giftIcon = Image(systemName: "giftcard")
 }
 
 struct MenuItemView<Destination>: View where Destination: View {
@@ -98,7 +99,7 @@ struct MenuView: View {
                     VStack(spacing: 2) {
                         MenuItemView (
                             icon: Constants.personIcon,
-                            title: "Accounts",
+                            title: R.string.localizable.menuAccounts(),
                             linkTo: AccountsView(viewModel: .init(AccountsViewModel(
                                 accountStorage: ServiceFactory.shared.makeAccountStorage(),
                                 backupStorage: ServiceFactory.shared.makeBackupStorage()))) { actionType in
@@ -116,38 +117,44 @@ struct MenuView: View {
                         
                         MenuSectionView()
                         #if DEBUG 
+//                        MenuItemView (
+//                            icon: Constants.sliderIcon,
+//                            title: "Common settings",
+//                            linkTo: EmptyView()
+//                        )
                         MenuItemView (
-                            icon: Constants.sliderIcon,
-                            title: "Common settings",
-                            linkTo: EmptyView()
-                        )
-                        MenuItemView (
-                            icon: Constants.lockIcon,
-                            title: "Security",
-                            linkTo: EmptyView()
-                        )
-                        MenuItemView (
-                            icon: Constants.bellIcon,
-                            title: "Push notifications",
-                            linkTo: EmptyView()
-                        )
-                        MenuItemView (
-                            icon: Constants.personCropIcon,
-                            title: "Common settings",
-                            linkTo: EmptyView()
+                            icon: Constants.giftIcon,
+                            title: R.string.localizable.menuReferralProgram(),
+                            linkTo: ReferralView()
                         )
                         MenuItemView<EmptyView> (
                             icon: Constants.supportIcon,
-                            title: "Support"
+                            title: R.string.localizable.menuSupport()
                         ) {
                             let appURL = URL(string: "mailto:\(AppConfig.supportEmail)")!
                             UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
                         }
+//                        MenuItemView (
+//                            icon: Constants.lockIcon,
+//                            title: "Security",
+//                            linkTo: EmptyView()
+//                        )
+//                        MenuItemView (
+//                            icon: Constants.bellIcon,
+//                            title: "Push notifications",
+//                            linkTo: EmptyView()
+//                        )
+//                        MenuItemView (
+//                            icon: Constants.personCropIcon,
+//                            title: "Common settings",
+//                            linkTo: EmptyView()
+//                        )
+                        
                         MenuSectionView()
                         #endif
                         MenuItemView (
                             icon: Constants.faqIcon,
-                            title: "F.A.Q.",
+                            title: R.string.localizable.menuFaq(),
                             linkTo: faqView
                         ) {
                             EventService.shared.send(event: DefaultAnalyticsEvent.settingsFaqTap)
@@ -169,7 +176,7 @@ struct MenuView: View {
                 ServerSelectView()
             })
             .baseBackground()
-            .navigationTitle("Settings")
+            .navigationTitle(R.string.localizable.menuTitle())
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 EventService.shared.send(event: DefaultAnalyticsEvent.settingsOpen)
@@ -182,18 +189,12 @@ struct MenuView: View {
     var faqView: some View {
         WebView(url: AppConfig.faqURL)
             .edgesIgnoringSafeArea(.bottom)
-            .navigationTitle("FAQ")
+            .navigationTitle(R.string.localizable.menuFaq())
             .navigationBarTitleDisplayMode(.inline)
     }
     
-    var supportView: some View {
-        WebView(url: AppConfig.faqURL)
-            .edgesIgnoringSafeArea(.bottom)
-            .navigationTitle("FAQ")
-            .navigationBarTitleDisplayMode(.inline)
-    }
     var versionFormatted: String {
-        return String(format: "v.%@ build %@", AppConfig.version, AppConfig.buildNumber)
+        return R.string.localizable.menuVersion(AppConfig.version, AppConfig.buildNumber)
     }
 }
 
