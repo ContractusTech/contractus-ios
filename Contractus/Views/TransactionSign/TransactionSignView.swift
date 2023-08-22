@@ -334,7 +334,7 @@ struct TransactionSignView: View {
             switch viewModel.transaction?.status {
             case .finished:
                 RoundedRectangle(cornerRadius: 17)
-                    .stroke(R.color.thirdBackground.color, style: .init(lineWidth: 1))
+                    .stroke(R.color.baseGreen.color, style: .init(lineWidth: 1))
                 Constants.confirmTxImage
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -342,7 +342,7 @@ struct TransactionSignView: View {
                     .foregroundColor(R.color.baseGreen.color)
             case .processing:
                 RoundedRectangle(cornerRadius: 17)
-                    .stroke(R.color.thirdBackground.color, style: .init(lineWidth: 1))
+                    .stroke(R.color.baseSeparator.color, style: .init(lineWidth: 1))
                 ProgressView()
             case .new, .none:
                 RoundedRectangle(cornerRadius: 17)
@@ -354,7 +354,7 @@ struct TransactionSignView: View {
                     .foregroundColor(R.color.baseSeparator.color)
             case .error:
                 RoundedRectangle(cornerRadius: 17)
-                    .stroke(R.color.thirdBackground.color, style: .init(lineWidth: 1))
+                    .stroke(R.color.labelBackgroundError.color, style: .init(lineWidth: 1))
                 Constants.failTxImage
                     .resizable()
                     .aspectRatio(contentMode: .fit)

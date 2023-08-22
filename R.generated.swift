@@ -980,7 +980,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 338 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 339 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1066,6 +1066,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let referralAirdropTitle = Rswift.StringResource(key: "referral.airdrop.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: All
+      ///
+      /// Locales: en
+      static let commonAll = Rswift.StringResource(key: "common.all", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Amount
       ///
       /// Locales: en
@@ -2656,6 +2660,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("referral.airdrop.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: All
+      ///
+      /// Locales: en
+      static func commonAll(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.all", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.all"
+        }
+
+        return NSLocalizedString("common.all", bundle: bundle, comment: "")
       }
 
       /// en translation: Amount

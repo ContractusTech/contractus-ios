@@ -53,6 +53,7 @@
 "common.top-up" = "Top Up";
 "common.info" = "Info";
 "common.service-unavailable" = "Service unavailable";
+"common.all" = "All";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
