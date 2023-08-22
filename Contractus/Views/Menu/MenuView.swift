@@ -15,47 +15,57 @@ fileprivate enum Constants {
     static let bellIcon = Image(systemName: "bell.badge")
     static let personCropIcon = Image(systemName: "person.crop.rectangle.stack.fill")
     static let faqIcon = Image(systemName: "questionmark.circle")
-
+    static let supportIcon = Image(systemName: "lifepreserver")
 }
 
 struct MenuItemView<Destination>: View where Destination: View {
     var icon: Image
     var title: String
-    var linkTo: Destination
+    var linkTo: Destination?
 
     var tapHandler: (() -> Void)?
     @State private var isActive: Bool = false
 
     var body: some View {
-        NavigationLink(isActive: $isActive){
-            linkTo
-        } label: {
-            Button {
-                tapHandler?()
-                isActive.toggle()
+        if let linkTo = linkTo {
+            NavigationLink(isActive: $isActive){
+                linkTo
             } label: {
-                HStack(spacing: 12) {
-                    ZStack {
-                        icon.foregroundColor(R.color.textBase.color)
-                    }
-                    .frame(width: 32, height: 32)
-                    .background(R.color.mainBackground.color)
-                    .cornerRadius(9)
-                    Text(title)
-                    Spacer()
-                    Constants.rightArrowIcon
-                        .foregroundColor(R.color.whiteSeparator.color)
-                }
-                .frame(height: 62)
-                .padding(.horizontal, 16)
-                .background(
-                    R.color.secondaryBackground.color
-                        .clipped()
-                        .cornerRadius(17)
-                )
+                itemView()
             }
+            .listRowSeparator(.hidden)
+        } else {
+            itemView()
+                .listRowSeparator(.hidden)
         }
-        .listRowSeparator(.hidden)
+    }
+    
+    @ViewBuilder
+    func itemView() -> some View {
+        Button {
+            tapHandler?()
+            isActive.toggle()
+        } label: {
+            HStack(spacing: 12) {
+                ZStack {
+                    icon.foregroundColor(R.color.textBase.color)
+                }
+                .frame(width: 32, height: 32)
+                .background(R.color.mainBackground.color)
+                .cornerRadius(9)
+                Text(title)
+                Spacer()
+                Constants.rightArrowIcon
+                    .foregroundColor(R.color.whiteSeparator.color)
+            }
+            .frame(height: 62)
+            .padding(.horizontal, 16)
+            .background(
+                R.color.secondaryBackground.color
+                    .clipped()
+                    .cornerRadius(17)
+            )
+        }
     }
 }
 
@@ -126,7 +136,13 @@ struct MenuView: View {
                             title: "Common settings",
                             linkTo: EmptyView()
                         )
-                        
+                        MenuItemView<EmptyView> (
+                            icon: Constants.supportIcon,
+                            title: "Support"
+                        ) {
+                            let appURL = URL(string: "mailto:\(AppConfig.supportEmail)")!
+                            UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
+                        }
                         MenuSectionView()
                         #endif
                         MenuItemView (
@@ -170,6 +186,12 @@ struct MenuView: View {
             .navigationBarTitleDisplayMode(.inline)
     }
     
+    var supportView: some View {
+        WebView(url: AppConfig.faqURL)
+            .edgesIgnoringSafeArea(.bottom)
+            .navigationTitle("FAQ")
+            .navigationBarTitleDisplayMode(.inline)
+    }
     var versionFormatted: String {
         return String(format: "v.%@ build %@", AppConfig.version, AppConfig.buildNumber)
     }
