@@ -81,6 +81,13 @@
 "balance.title" = "Estimate balance";
 "balance.tier" = "Tier";
 
+"menu.title" = "Settings";
+"menu.accounts" = "Accounts";
+"menu.referral.program" = "Referral program";
+"menu.support" = "Support";
+"menu.faq" = "FAQ";
+"menu.version" = "v.%@ build %@";
+
 "accounts.title" = "Accounts";
 "accounts.warning.title" = "Warning!";
 "accounts.warning.subtitle" = "Before delete account backup private key.";

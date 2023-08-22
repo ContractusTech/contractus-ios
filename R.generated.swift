@@ -980,7 +980,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 332 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 338 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1010,6 +1010,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsTitle = Rswift.StringResource(key: "accounts.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Accounts
+      ///
+      /// Locales: en
+      static let menuAccounts = Rswift.StringResource(key: "menu.accounts", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Active - %@
       ///
       /// Locales: en
@@ -1530,6 +1534,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealResultsHint = Rswift.StringResource(key: "deal.results.hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: FAQ
+      ///
+      /// Locales: en
+      static let menuFaq = Rswift.StringResource(key: "menu.faq", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Fee
       ///
       /// Locales: en
@@ -1850,6 +1858,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let referralTitle = Rswift.StringResource(key: "referral.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Referral program
+      ///
+      /// Locales: en
+      static let menuReferralProgram = Rswift.StringResource(key: "menu.referral.program", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Remove
       ///
       /// Locales: en
@@ -1942,6 +1954,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonSet = Rswift.StringResource(key: "common.set", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Settings
+      ///
+      /// Locales: en
+      static let menuTitle = Rswift.StringResource(key: "menu.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Share
       ///
       /// Locales: en
@@ -2010,6 +2026,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let uploadFileStateSuccess = Rswift.StringResource(key: "uploadFile.state.success", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Support
+      ///
+      /// Locales: en
+      static let menuSupport = Rswift.StringResource(key: "menu.support", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Text
       ///
       /// Locales: en
@@ -2306,6 +2326,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let referralPrizeTimes = Rswift.StringResource(key: "referral.prize.times", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: v.%@ build %@
+      ///
+      /// Locales: en
+      static let menuVersion = Rswift.StringResource(key: "menu.version", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: wSOL ➞ SOL
       ///
       /// Locales: en
@@ -2420,6 +2444,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Accounts
+      ///
+      /// Locales: en
+      static func menuAccounts(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("menu.accounts", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "menu.accounts"
+        }
+
+        return NSLocalizedString("menu.accounts", bundle: bundle, comment: "")
       }
 
       /// en translation: Active - %@
@@ -4376,6 +4415,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.results.hint", bundle: bundle, comment: "")
       }
 
+      /// en translation: FAQ
+      ///
+      /// Locales: en
+      static func menuFaq(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("menu.faq", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "menu.faq"
+        }
+
+        return NSLocalizedString("menu.faq", bundle: bundle, comment: "")
+      }
+
       /// en translation: Fee
       ///
       /// Locales: en
@@ -5580,6 +5634,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("referral.title", bundle: bundle, comment: "")
       }
 
+      /// en translation: Referral program
+      ///
+      /// Locales: en
+      static func menuReferralProgram(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("menu.referral.program", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "menu.referral.program"
+        }
+
+        return NSLocalizedString("menu.referral.program", bundle: bundle, comment: "")
+      }
+
       /// en translation: Remove
       ///
       /// Locales: en
@@ -5925,6 +5994,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.set", bundle: bundle, comment: "")
       }
 
+      /// en translation: Settings
+      ///
+      /// Locales: en
+      static func menuTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("menu.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "menu.title"
+        }
+
+        return NSLocalizedString("menu.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Share
       ///
       /// Locales: en
@@ -6178,6 +6262,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("uploadFile.state.success", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Support
+      ///
+      /// Locales: en
+      static func menuSupport(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("menu.support", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "menu.support"
+        }
+
+        return NSLocalizedString("menu.support", bundle: bundle, comment: "")
       }
 
       /// en translation: Text
@@ -7292,6 +7391,23 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("referral.prize.times", bundle: bundle, comment: "")
+      }
+
+      /// en translation: v.%@ build %@
+      ///
+      /// Locales: en
+      static func menuVersion(_ value1: String, _ value2: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("menu.version", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1, value2)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "menu.version"
+        }
+
+        let format = NSLocalizedString("menu.version", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1, value2)
       }
 
       /// en translation: wSOL ➞ SOL

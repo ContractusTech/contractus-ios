@@ -15,48 +15,58 @@ fileprivate enum Constants {
     static let bellIcon = Image(systemName: "bell.badge")
     static let personCropIcon = Image(systemName: "person.crop.rectangle.stack.fill")
     static let faqIcon = Image(systemName: "questionmark.circle")
+    static let supportIcon = Image(systemName: "lifepreserver")
     static let giftIcon = Image(systemName: "giftcard")
-
 }
 
 struct MenuItemView<Destination>: View where Destination: View {
     var icon: Image
     var title: String
-    var linkTo: Destination
+    var linkTo: Destination?
 
     var tapHandler: (() -> Void)?
     @State private var isActive: Bool = false
 
     var body: some View {
-        NavigationLink(isActive: $isActive){
-            linkTo
-        } label: {
-            Button {
-                tapHandler?()
-                isActive.toggle()
+        if let linkTo = linkTo {
+            NavigationLink(isActive: $isActive){
+                linkTo
             } label: {
-                HStack(spacing: 12) {
-                    ZStack {
-                        icon.foregroundColor(R.color.textBase.color)
-                    }
-                    .frame(width: 32, height: 32)
-                    .background(R.color.mainBackground.color)
-                    .cornerRadius(9)
-                    Text(title)
-                    Spacer()
-                    Constants.rightArrowIcon
-                        .foregroundColor(R.color.whiteSeparator.color)
-                }
-                .frame(height: 62)
-                .padding(.horizontal, 16)
-                .background(
-                    R.color.secondaryBackground.color
-                        .clipped()
-                        .cornerRadius(17)
-                )
+                itemView()
             }
+            .listRowSeparator(.hidden)
+        } else {
+            itemView()
+                .listRowSeparator(.hidden)
         }
-        .listRowSeparator(.hidden)
+    }
+    
+    @ViewBuilder
+    func itemView() -> some View {
+        Button {
+            tapHandler?()
+            isActive.toggle()
+        } label: {
+            HStack(spacing: 12) {
+                ZStack {
+                    icon.foregroundColor(R.color.textBase.color)
+                }
+                .frame(width: 32, height: 32)
+                .background(R.color.mainBackground.color)
+                .cornerRadius(9)
+                Text(title)
+                Spacer()
+                Constants.rightArrowIcon
+                    .foregroundColor(R.color.whiteSeparator.color)
+            }
+            .frame(height: 62)
+            .padding(.horizontal, 16)
+            .background(
+                R.color.secondaryBackground.color
+                    .clipped()
+                    .cornerRadius(17)
+            )
+        }
     }
 }
 
@@ -89,7 +99,7 @@ struct MenuView: View {
                     VStack(spacing: 2) {
                         MenuItemView (
                             icon: Constants.personIcon,
-                            title: "Accounts",
+                            title: R.string.localizable.menuAccounts(),
                             linkTo: AccountsView(viewModel: .init(AccountsViewModel(
                                 accountStorage: ServiceFactory.shared.makeAccountStorage(),
                                 backupStorage: ServiceFactory.shared.makeBackupStorage()))) { actionType in
@@ -107,16 +117,23 @@ struct MenuView: View {
                         
                         MenuSectionView()
                         #if DEBUG 
-                        MenuItemView (
-                            icon: Constants.sliderIcon,
-                            title: "Common settings",
-                            linkTo: EmptyView()
-                        )
+//                        MenuItemView (
+//                            icon: Constants.sliderIcon,
+//                            title: "Common settings",
+//                            linkTo: EmptyView()
+//                        )
                         MenuItemView (
                             icon: Constants.giftIcon,
-                            title: "Referral program",
+                            title: R.string.localizable.menuReferralProgram(),
                             linkTo: ReferralView()
                         )
+                        MenuItemView<EmptyView> (
+                            icon: Constants.supportIcon,
+                            title: R.string.localizable.menuSupport()
+                        ) {
+                            let appURL = URL(string: "mailto:\(AppConfig.supportEmail)")!
+                            UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
+                        }
 //                        MenuItemView (
 //                            icon: Constants.lockIcon,
 //                            title: "Security",
@@ -137,7 +154,7 @@ struct MenuView: View {
                         #endif
                         MenuItemView (
                             icon: Constants.faqIcon,
-                            title: "F.A.Q.",
+                            title: R.string.localizable.menuFaq(),
                             linkTo: faqView
                         ) {
                             EventService.shared.send(event: DefaultAnalyticsEvent.settingsFaqTap)
@@ -159,7 +176,7 @@ struct MenuView: View {
                 ServerSelectView()
             })
             .baseBackground()
-            .navigationTitle("Settings")
+            .navigationTitle(R.string.localizable.menuTitle())
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 EventService.shared.send(event: DefaultAnalyticsEvent.settingsOpen)
@@ -172,12 +189,12 @@ struct MenuView: View {
     var faqView: some View {
         WebView(url: AppConfig.faqURL)
             .edgesIgnoringSafeArea(.bottom)
-            .navigationTitle("FAQ")
+            .navigationTitle(R.string.localizable.menuFaq())
             .navigationBarTitleDisplayMode(.inline)
     }
     
     var versionFormatted: String {
-        return String(format: "v.%@ build %@", AppConfig.version, AppConfig.buildNumber)
+        return R.string.localizable.menuVersion(AppConfig.version, AppConfig.buildNumber)
     }
 }
 
