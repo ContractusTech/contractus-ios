@@ -20,6 +20,9 @@ fileprivate let ALLOW_FILE_TYPES: [UTType] = [.image, .data, .text, .pdf, .data,
 
 fileprivate enum Constants {
     static let closeImage = Image(systemName: "xmark")
+    static let phoneImage = Image(systemName: "photo.on.rectangle.angled")
+    static let cameraImage = Image(systemName: "camera")
+    static let docImage = Image(systemName: "doc.viewfinder")
 }
 
 // MARK: - UploadFileView
@@ -64,11 +67,11 @@ struct UploadFileView: View {
                                     .renderingMode(.template)
                                     .resizable()
                                     .frame(width: 12, height: 12)
-                                    .foregroundColor(R.color.buttonIconBase.color)
+                                    .foregroundColor(R.color.buttonTextSecondary.color)
 
                             }
                             .padding(8)
-                            .background(R.color.accentColor.color)
+                            .background(R.color.buttonBackgroundSecondary.color)
                             .cornerRadius(24)
                         }
                         .offset(x: -12, y: 12)
@@ -76,10 +79,6 @@ struct UploadFileView: View {
                 }
             } else {
                 VStack(spacing: 12) {
-                    HStack {
-                        Text(R.string.localizable.uploadFileButtonSelect())
-                            .font(.title2.weight(.heavy))
-                    }
                     HStack(spacing: 12) {
                         Button {
                             sheetType = .selectImage
@@ -87,22 +86,22 @@ struct UploadFileView: View {
                             HStack {
                                 Spacer()
                                 VStack(spacing: 12){
-                                    Image(systemName: "photo.on.rectangle.angled")
-
+                                    Constants.phoneImage
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
-                                        .frame(width: 30, height: 30)
-
+                                        .frame(width: 32, height: 32)
                                         .foregroundColor(R.color.secondaryText.color)
                                     Text(R.string.localizable.uploadFileButtonSelectGallery())
                                         .font(.footnote)
+                                        .foregroundColor(R.color.textBase.color)
                                 }
 
                                 Spacer()
                             }
-                            .padding(16)
+                            .padding(24)
                             .background(R.color.secondaryBackground.color)
-                            .cornerRadius(20)
+                            .cornerRadius(24)
+                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                         }
 
                         Button {
@@ -111,21 +110,22 @@ struct UploadFileView: View {
                             HStack {
                                 Spacer()
                                 VStack(spacing: 12) {
-                                    Image(systemName: "camera")
+                                    Constants.cameraImage
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
-                                        .frame(width: 30, height: 30)
-
+                                        .frame(width: 32, height: 32)
                                         .foregroundColor(R.color.secondaryText.color)
                                     Text(R.string.localizable.uploadFileButtonCamera())
                                         .font(.footnote)
+                                        .foregroundColor(R.color.textBase.color)
                                 }
 
                                 Spacer()
                             }
-                            .padding(16)
+                            .padding(24)
                             .background(R.color.secondaryBackground.color)
-                            .cornerRadius(20)
+                            .cornerRadius(24)
+                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                         }
 
                         Button {
@@ -134,21 +134,22 @@ struct UploadFileView: View {
                             HStack {
                                 Spacer()
                                 VStack(spacing: 12) {
-                                    Image(systemName: "doc.viewfinder")
+                                    Constants.docImage
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
-                                        .frame(width: 24, height: 32)
-
+                                        .frame(width: 28, height: 32)
                                         .foregroundColor(R.color.secondaryText.color)
                                     Text(R.string.localizable.uploadFileButtonFile())
                                         .font(.footnote)
+                                        .foregroundColor(R.color.textBase.color)
                                 }
 
                                 Spacer()
                             }
-                            .padding(16)
+                            .padding(24)
                             .background(R.color.secondaryBackground.color)
-                            .cornerRadius(20)
+                            .cornerRadius(24)
+                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
                         }
                     }
                 }
@@ -160,22 +161,13 @@ struct UploadFileView: View {
             }
 
             if canCancel {
-                Button {
+                CButton(title: R.string.localizable.commonCancel(), style: .secondary, size: .large, isLoading: false) {
                     viewModel.trigger(.clear)
                     action(.close)
-                } label: {
-                    HStack {
-                        Spacer()
-                        Text(R.string.localizable.commonCancel())
-                            .font(.body.weight(.bold))
-                        Spacer()
-                    }
                 }
-                .padding()
             }
         }
-        .padding(.bottom, 16)
-        .padding(.top, 4)
+        .padding(.bottom, 32)
         .onDisappear {
             viewModel.trigger(.clear)
         }
@@ -292,15 +284,12 @@ struct UploadFileItemView: View {
                         .frame(width: 120, height: 120)
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(R.color.secondaryBackground.color)
-                        .cornerRadius(6)
+                        .cornerRadius(12)
                 }
                 else {
                     // TODO: -
                 }
                 VStack(alignment: .center, spacing: 4) {
-                    Text(file.name)
-                        .font(.callout.weight(.medium))
-                        .foregroundColor(R.color.textBase.color)
                     HStack(spacing: 12) {
                         Text(file.formattedSize)
                             .font(.callout.weight(.regular))
@@ -314,7 +303,7 @@ struct UploadFileItemView: View {
                 VStack {
                     Text(R.string.localizable.uploadFileLargeFile())
                         .font(.footnote.weight(.semibold))
-                        .foregroundColor(R.color.labelTextAttention.color)
+                        .foregroundColor(R.color.textWarn.color)
                         .lineLimit(0)
                 }
 
@@ -322,10 +311,8 @@ struct UploadFileItemView: View {
 
         }
         .padding(16)
-        .background(R.color.secondaryBackground.color)
-        .cornerRadius(24)
         .overlay(
-            RoundedRectangle(cornerRadius: 24)
+            RoundedRectangle(cornerRadius: 28)
                 .inset(by: 0.5)
                 .stroke(R.color.textFieldBorder.color, lineWidth: 1)
         )

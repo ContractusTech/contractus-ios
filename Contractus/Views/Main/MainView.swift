@@ -320,10 +320,19 @@ struct MainView: View {
                             VStack(alignment: .center, spacing: 3) {
                                 tierLabel(viewModel.state.balance?.tier)
 
-                                HStack {
+                                HStack(spacing: 2) {
                                     Text(ContentMask.mask(from: viewModel.state.account.publicKey))
                                         .font(.caption2)
                                         .foregroundColor(R.color.secondaryText.color)
+
+                                    if AppConfig.serverType.isDevelop {
+                                        Text("•")
+                                            .font(.caption2)
+                                            .foregroundColor(R.color.secondaryText.color)
+                                        Text(AppConfig.serverType.networkTitle)
+                                            .font(.caption2)
+                                            .foregroundColor(R.color.textWarn.color)
+                                    }
                                 }
 
                             }
@@ -423,7 +432,6 @@ struct MainView: View {
                 Text("\(tier.title)")
                     .font(.caption2.bold())
                     .foregroundColor(tier.textColor)
-
             }
             .padding(EdgeInsets(top: 3, leading: 6, bottom: 3, trailing: 6))
             .background(tier.backgroundColor)

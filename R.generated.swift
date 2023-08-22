@@ -980,7 +980,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 338 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 339 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1038,6 +1038,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorTitleChecker = Rswift.StringResource(key: "addContractor.title.checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Add file
+      ///
+      /// Locales: en
+      static let uploadFileButtonSelect = Rswift.StringResource(key: "uploadFile.button.select", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Add partner
       ///
       /// Locales: en
@@ -1066,6 +1070,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let referralAirdropTitle = Rswift.StringResource(key: "referral.airdrop.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: All
+      ///
+      /// Locales: en
+      static let commonAll = Rswift.StringResource(key: "common.all", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Amount
       ///
       /// Locales: en
@@ -1910,10 +1918,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonSelect = Rswift.StringResource(key: "common.select", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Select
-      ///
-      /// Locales: en
-      static let uploadFileButtonSelect = Rswift.StringResource(key: "uploadFile.button.select", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Select action
       ///
       /// Locales: en
@@ -2553,6 +2557,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("addContractor.title.checker", bundle: bundle, comment: "")
       }
 
+      /// en translation: Add file
+      ///
+      /// Locales: en
+      static func uploadFileButtonSelect(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("uploadFile.button.select", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "uploadFile.button.select"
+        }
+
+        return NSLocalizedString("uploadFile.button.select", bundle: bundle, comment: "")
+      }
+
       /// en translation: Add partner
       ///
       /// Locales: en
@@ -2656,6 +2675,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("referral.airdrop.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: All
+      ///
+      /// Locales: en
+      static func commonAll(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.all", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.all"
+        }
+
+        return NSLocalizedString("common.all", bundle: bundle, comment: "")
       }
 
       /// en translation: Amount
@@ -5827,21 +5861,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.select", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Select
-      ///
-      /// Locales: en
-      static func uploadFileButtonSelect(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("uploadFile.button.select", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "uploadFile.button.select"
-        }
-
-        return NSLocalizedString("uploadFile.button.select", bundle: bundle, comment: "")
       }
 
       /// en translation: Select action

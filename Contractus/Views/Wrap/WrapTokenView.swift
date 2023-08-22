@@ -52,10 +52,9 @@ struct WrapTokenView: View {
                                 Button {
                                     amount = viewModel.from.formatted()
                                 } label: {
-                                    Text("All")
-                                        .font(.footnote.weight(.regular))
+                                    Text(R.string.localizable.commonAll())
+                                        .font(.footnote.weight(.medium))
                                         .padding(8)
-                                        .background(R.color.thirdBackground.color)
                                         .foregroundColor(R.color.textBase.color)
                                         .cornerRadius(10)
                                         .overlay {

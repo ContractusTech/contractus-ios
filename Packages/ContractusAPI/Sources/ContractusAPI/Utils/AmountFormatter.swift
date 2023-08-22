@@ -21,11 +21,11 @@ public enum AmountFormatter {
         formatter.roundingMode = .halfDown
         formatter.maximumFractionDigits = decimal
         formatter.currencyCode = ""
-        formatter.currencySymbol = code ?? ""
+        formatter.currencySymbol = ""
         formatter.locale = local
         let amount = Double(amount) / pow(Double(10), Double(decimal))
         let formattedAmount = formatter.string(from: NSNumber(value: amount)) ?? ""
-        return formattedAmount.trimmingCharacters(in: .whitespaces)
+        return "\(formattedAmount) \(code ?? "")".trimmingCharacters(in: .whitespaces)
     }
 
     public static func format(string: String, decimal: Int, code: String? = nil, local: Locale = .current) -> BigUInt? {
@@ -34,7 +34,7 @@ public enum AmountFormatter {
         formatter.allowsFloats = true
         formatter.numberStyle = .currency
         formatter.maximumFractionDigits = Int(decimal)
-        formatter.currencyCode = code ?? ""
+        formatter.currencyCode = ""
         formatter.currencySymbol = ""
         formatter.locale = local
         if let groupingSeparator = local.groupingSeparator {

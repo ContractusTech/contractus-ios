@@ -53,6 +53,7 @@
 "common.top-up" = "Top Up";
 "common.info" = "Info";
 "common.service-unavailable" = "Service unavailable";
+"common.all" = "All";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
@@ -112,7 +113,7 @@
 "shareContent.subtitle.secret-key" = "The partner need scan the QR code to start working on the contract.";
 "shareContent.subtitle" = "Used to top up account or added to a deal by partners";
 
-"uploadFile.button.select" = "Select";
+"uploadFile.button.select" = "Add file";
 "uploadFile.button.select-gallery" = "Gallery";
 "uploadFile.button.camera" = "Camera";
 "uploadFile.button.file" = "File";
