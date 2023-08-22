@@ -81,6 +81,13 @@
 "balance.title" = "Estimate balance";
 "balance.tier" = "Tier";
 
+"menu.title" = "Settings";
+"menu.accounts" = "Accounts";
+"menu.referral.program" = "Referral program";
+"menu.support" = "Support";
+"menu.faq" = "FAQ";
+"menu.version" = "v.%@ build %@";
+
 "accounts.title" = "Accounts";
 "accounts.warning.title" = "Warning!";
 "accounts.warning.subtitle" = "Before delete account backup private key.";
@@ -348,3 +355,23 @@
 "topup.subtitle.cards" = "Deposit by fiat";
 "topup.subtitle.crypto" = "Deposit from another account";
 "topup.subtitle.load" = "Obtain loan funds for the deal";
+
+"referral.title" = "Referral Program";
+"referral.promocode.title" = "Your promo code";
+"referral.promocode.request" = "Request promo code";
+"referral.promocode.subtitle" = "Send the code to other users so that after the registration of the referred user you will receive a bonus";
+"referral.bonus.title" = "Get bonus";
+"referral.promocode.apply" = "Apply promo code";
+"referral.promocode.applied" = "Promocode applied";
+"referral.bonus.subtitle" = "Apply the user's promocode that you and the referent get bonuses";
+"referral.airdrop.title" = "Airdrops and prizes";
+"referral.prize.signup" = "Airdrop after Sign up";
+"referral.prize.apply" = "For using the promo code";
+"referral.prize.apply.refferer" = "For using my promo code";
+"referral.prize.unknown" = "Unsupported prize, update the app";
+"referral.prize.times" = "times";
+
+"promocode.title" = "Promocode";
+"promocode.enter" = "Enter promo";
+"promocode.apply" = "Apply";
+"promocode.not.found" = "Promocode not found";

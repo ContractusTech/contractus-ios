@@ -152,7 +152,10 @@
 		FE54313D29D36D8800EEF906 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE54313C29D36D8800EEF906 /* AccountsView.swift */; };
 		FE5F427429AF22FA00A1E506 /* netfox in Frameworks */ = {isa = PBXBuildFile; productRef = FE5F427329AF22FA00A1E506 /* netfox */; };
 		FE9623732A94C4610075929B /* TopUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9623722A94C4600075929B /* TopUpViewModel.swift */; };
+		FE8270472A8D4D730092970A /* ReferralViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8270462A8D4D730092970A /* ReferralViewModel.swift */; };
+		FE8D85202A8B883B001DE59F /* PromocodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8D851F2A8B883B001DE59F /* PromocodeView.swift */; };
 		FECDCC5D2A87F21800047A95 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECDCC5C2A87F21800047A95 /* EventService.swift */; };
+		FECDCC602A8B415F00047A95 /* ReferralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECDCC5F2A8B415F00047A95 /* ReferralView.swift */; };
 		FECE864B29ADCA1B003144CF /* Array+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECE864A29ADCA1B003144CF /* Array+Ex.swift */; };
 		FEE467E62A1C0F010046938F /* UIImage+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE467E52A1C0F010046938F /* UIImage+Ex.swift */; };
 /* End PBXBuildFile section */
@@ -321,7 +324,10 @@
 		FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectView.swift; sourceTree = "<group>"; };
 		FE54313C29D36D8800EEF906 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
 		FE9623722A94C4600075929B /* TopUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopUpViewModel.swift; sourceTree = "<group>"; };
+		FE8270462A8D4D730092970A /* ReferralViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralViewModel.swift; sourceTree = "<group>"; };
+		FE8D851F2A8B883B001DE59F /* PromocodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromocodeView.swift; sourceTree = "<group>"; };
 		FECDCC5C2A87F21800047A95 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
+		FECDCC5F2A8B415F00047A95 /* ReferralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralView.swift; sourceTree = "<group>"; };
 		FECE864A29ADCA1B003144CF /* Array+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Ex.swift"; sourceTree = "<group>"; };
 		FEE467E52A1C0F010046938F /* UIImage+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -478,6 +484,7 @@
 				6DBCA45F288F212400F918B6 /* Main */,
 				6D3AA489292EB55C00596061 /* Menu */,
 				6D0DA7632930A7040024EF30 /* QRCodeScanner */,
+				FECDCC5E2A8B409A00047A95 /* Referral */,
 				FE52628729AD3360004E0BCD /* ServerSelect */,
 				6D2E0AF728AF342D002BA683 /* TextEditorView */,
 				6D74735F29655E9000A5F6E7 /* TransactionSign */,
@@ -797,6 +804,16 @@
 			path = ServerSelect;
 			sourceTree = "<group>";
 		};
+		FECDCC5E2A8B409A00047A95 /* Referral */ = {
+			isa = PBXGroup;
+			children = (
+				FECDCC5F2A8B415F00047A95 /* ReferralView.swift */,
+				FE8D851F2A8B883B001DE59F /* PromocodeView.swift */,
+				FE8270462A8D4D730092970A /* ReferralViewModel.swift */,
+			);
+			path = Referral;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -993,6 +1010,7 @@
 				6DBCA4872890E5DE00F918B6 /* CreateWalletView.swift in Sources */,
 				FE9623732A94C4610075929B /* TopUpViewModel.swift in Sources */,
 				6DB5F8A3293EFA0800AE612A /* Double+Ex.swift in Sources */,
+				FE8270472A8D4D730092970A /* ReferralViewModel.swift in Sources */,
 				6D44B5602A0E0B20008C561D /* BlockchainExplorer.swift in Sources */,
 				6D0DA75B292FA9A60024EF30 /* NavigationStackModifier.swift in Sources */,
 				6D6EE395289F9EFE00635E60 /* ImagePickerView.swift in Sources */,
@@ -1048,6 +1066,7 @@
 				6D3184792A00CCA8009DE6F7 /* WebView.swift in Sources */,
 				6D8EFD9928DD68660064F5DA /* LoadingButton.swift in Sources */,
 				6DFED939293262F300AF727A /* SharablePublicKey.swift in Sources */,
+				FE8D85202A8B883B001DE59F /* PromocodeView.swift in Sources */,
 				6D4FAB51293B384D00076743 /* KeyboardResponder.swift in Sources */,
 				6DDA818528C0D6070022E005 /* TextField.swift in Sources */,
 				6D3AA482292CF16300596061 /* SafariView.swift in Sources */,
@@ -1080,6 +1099,7 @@
 				6D97AEF1288D196200EB61D0 /* ContractusApp.swift in Sources */,
 				6DAA5E802898D33300BA1965 /* AppConfig.swift in Sources */,
 				6D75F2F0288EA9C70092D182 /* EnterView.swift in Sources */,
+				FECDCC602A8B415F00047A95 /* ReferralView.swift in Sources */,
 				6D6EE38D289E25FF00635E60 /* UploadFileView.swift in Sources */,
 				6D4D99F32A5601A1007668B0 /* IdentifierService.swift in Sources */,
 				FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */,

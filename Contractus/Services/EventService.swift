@@ -33,7 +33,7 @@ enum DefaultAnalyticsEvent: String {
     case mainSettingsTap = "main_settings_tap"                              /// Нажатие на кнопку Настроек
     case newDealOpen = "new_deal_open"                                      /// Открытие страницы "Создания сделки"
     case newDealCreateTap = "new_deal_create_tap"                           /// Нажатие на "Создать сделку"
-    case newDealOpenSuccessWithSk = "new_deal_open_success_with_sk"    /// Открытие экрана с секретным ключем после создания сделки
+    case newDealOpenSuccessWithSk = "new_deal_open_success_with_sk"         /// Открытие экрана с секретным ключем после создания сделки
     case dealOpen = "deal_open"                                             /// Открытие страницы сделки
     case dealChangeAmountTap = "deal_change_amount_tap"                     /// Открытие экрана изменения стоимости сделки
     case dealChangeAmountUpdateTap = "deal_change_amount_update_tap"        /// Нажатие кнопки на сохранение новой цены
@@ -64,6 +64,13 @@ enum DefaultAnalyticsEvent: String {
     case accountsBackupTap = "accounts_backup_tap"                          /// Нажатие на бэкап
     case backupAccountTap = "backup_account_tap"                            /// На экране бэкапа при смене настройки бэкапа
     case deleteAccountTap = "delete_account_tap"                            /// Подтвержить удаление на экране удаления аккаунта надатие
+    case referralOpen = "referral_open"                                     /// Открытие реферальной программы
+    case referralCodeCopyTap = "referral_code_copy_tap"                     /// Копирование промокода
+    case referralCodeCreateTap = "referral_code_create_tap"                 /// Создание промокода
+    case referralApplyCodeFormTap = "referral_apply_code_form_tap"          /// Нажатие на кнопку открытие формы ввода
+    case referralApplyCodeTap = "referral_apply_code_tap"                   /// Нажатие на "Применить код" на форме ввода
+    case referralApplyCodeSuccess = "referral_apply_code_success"           /// Если успешно применен код
+    case referralApplyCodeError = "referral_apply_code_error"               /// Ошибка при отправке кода
 }
 
 extension DefaultAnalyticsEvent: AnalyticsEvent {
@@ -79,7 +86,8 @@ enum ExtendedAnalyticsEvent {
          dealContractorTap(ContractorType),
          dealContractorUpdateTap(ContractorType),
          backupAccountTap(Bool),
-         deleteAccountTap(Bool)
+         deleteAccountTap(Bool),
+         referralApplyCodeError(String)
 }
 
 extension ExtendedAnalyticsEvent: AnalyticsEvent {
@@ -101,6 +109,8 @@ extension ExtendedAnalyticsEvent: AnalyticsEvent {
             return DefaultAnalyticsEvent.backupAccountTap.rawValue
         case .deleteAccountTap(_):
             return DefaultAnalyticsEvent.deleteAccountTap.rawValue
+        case .referralApplyCodeError(_):
+            return DefaultAnalyticsEvent.referralApplyCodeError.rawValue
         }
     }
     
@@ -122,6 +132,8 @@ extension ExtendedAnalyticsEvent: AnalyticsEvent {
             return ["allow": allow]
         case .deleteAccountTap(let deleteBackup):
             return ["delete_backup": deleteBackup]
+        case .referralApplyCodeError(let message):
+            return ["message": message]
         }
     }
 }
