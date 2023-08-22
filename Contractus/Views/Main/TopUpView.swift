@@ -8,13 +8,20 @@ fileprivate enum Constants {
 }
 
 struct TopUpView: View {
+    enum AlertType {
+        case error(String)
+    }
+
     enum TopUpType {
         case crypto
         case loan
         case fiat(URL)
     }
+
     @StateObject var viewModel: AnyViewModel<TopUpViewModel.State, TopUpViewModel.Inputs> = .init(TopUpViewModel(accountService: try? APIServiceFactory.shared.makeAccountService()))
     
+    @State private var alertType: AlertType?
+
     var action: (TopUpType) -> Void
 
     var body: some View {
@@ -48,10 +55,28 @@ struct TopUpView: View {
                 break
             case .loadingMethods:
                 break
-            case .error(_):
-                break
             }
         }
+        .onChange(of: viewModel.state.errorState) { value in
+            switch value {
+            case .error(let errorMessage):
+                self.alertType = .error(errorMessage)
+            case .none:
+                self.alertType = nil
+            }
+        }
+        .alert(item: $alertType, content: { type in
+            switch type {
+            case .error(let message):
+                return Alert(
+                    title: Text(R.string.localizable.commonError()),
+                    message: Text(message),
+                    dismissButton: .default(Text(R.string.localizable.commonOk())) {
+                        viewModel.trigger(.hideError)
+                    }
+                )
+            }
+        })
     }
 
     @ViewBuilder
@@ -92,53 +117,11 @@ struct TopUpView: View {
     }
 }
 
-final class TopUpViewModel: ViewModel {
-
-    struct State: Equatable {
-        enum State: Equatable {
-            case none, loadingMethods, loaded(URL), error(String)
-        }
-
-        var state: State
-        var disabled: Bool {
-            switch state {
-            case .loadingMethods:
-                return true
-            default: return false
-            }
-        }
-    }
-
-    enum Inputs {
-        case getMethods
-    }
-
-    @Published private(set) var state: State
-
-    private var accountService: ContractusAPI.AccountService?
-
-    init(accountService: ContractusAPI.AccountService?) {
-        self.accountService = accountService
-        self.state = .init(state: .none)
-    }
-
-    func trigger(_ input: Inputs, after: AfterTrigger?) {
-        switch input {
-        case .getMethods:
-            state.state = .loadingMethods
-            accountService?.getTopUpMethods {[weak self] result in
-                switch result {
-                case .success(let data):
-                    if let method = data.methods.first, let url = URL(string: method.url ?? "") {
-                        self?.state.state = .loaded(url)
-                    } else {
-                        self?.state.state = .error(R.string.localizable.commonServiceUnavailable())
-                    }
-
-                case .failure(let error):
-                    self?.state.state = .error(error.localizedDescription)
-                }
-            }
+extension TopUpView.AlertType: Identifiable {
+    var id: String {
+        switch self {
+        case .error:
+            return "error"
         }
     }
 }
