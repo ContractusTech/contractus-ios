@@ -101,6 +101,19 @@ public enum ServerType {
         }
     }
 
+    public var network: String {
+        switch self {
+        case .production:
+            return "Mainnet"
+        case .developer(_):
+            return "Devnet"
+        case .local:
+            return "Devnet"
+        case .custom:
+            return "Custom"
+        }
+    }
+
     public var isDevelop: Bool {
         switch self {
         case .developer, .local:
