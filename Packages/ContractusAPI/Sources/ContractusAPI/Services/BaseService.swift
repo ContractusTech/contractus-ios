@@ -104,6 +104,12 @@ public class BaseService {
 
     let client: APIClient
 
+    private let encoderJSON: ParameterEncoder = {
+        var encoder = JSONParameterEncoder()
+        encoder.encoder.dateEncodingStrategy = .iso8601
+        return encoder
+    }()
+
     public init(client: APIClient) {
         self.client = client
     }
@@ -117,14 +123,14 @@ public class BaseService {
         path: ServicePath,
         httpMethod: HTTPMethod,
         data: E? = nil,
-        completion: @escaping (Swift.Result<T, APIClientError>) -> Void)
-    {
-        let encoder: ParameterEncoder
+        completion: @escaping (Swift.Result<T, APIClientError>) -> Void
+    ){
+        var encoder: ParameterEncoder
         switch httpMethod {
         case .get:
             encoder = URLEncodedFormParameterEncoder.default
         default:
-            encoder = JSONParameterEncoder.default
+            encoder = encoderJSON
         }
         (withAuth ? client.session : Session.default).request(client.server.path(path.value), method: httpMethod, parameters: data, encoder: encoder, headers: client.appHeaders)
             .validate()
