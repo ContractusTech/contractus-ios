@@ -9,7 +9,7 @@ import SwiftUI
 
 fileprivate enum Constants {
     static let rightArrowIcon = Image(systemName: "chevron.right")
-    static let personIcon = Image(systemName: "person.2.circle.fill")
+    static let personIcon = Image(systemName: "person.2.circle")
     static let sliderIcon = Image(systemName: "slider.horizontal.3")
     static let lockIcon = Image(systemName: "lock.fill")
     static let bellIcon = Image(systemName: "bell.badge")
@@ -48,12 +48,11 @@ struct MenuItemView<Destination>: View where Destination: View {
             isActive.toggle()
         } label: {
             HStack(spacing: 12) {
-                ZStack {
-                    icon.foregroundColor(R.color.textBase.color)
-                }
-                .frame(width: 32, height: 32)
-                .background(R.color.mainBackground.color)
-                .cornerRadius(9)
+                icon
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 22, height: 22)
+                    .foregroundColor(R.color.textBase.color)
                 Text(title)
                 Spacer()
                 Constants.rightArrowIcon
@@ -65,6 +64,7 @@ struct MenuItemView<Destination>: View where Destination: View {
                 R.color.secondaryBackground.color
                     .clipped()
                     .cornerRadius(17)
+                    .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
             )
         }
     }

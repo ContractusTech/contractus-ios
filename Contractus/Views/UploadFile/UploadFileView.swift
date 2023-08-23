@@ -70,7 +70,7 @@ struct UploadFileView: View {
                                     .foregroundColor(R.color.buttonTextSecondary.color)
 
                             }
-                            .padding(8)
+                            .padding(24)
                             .background(R.color.buttonBackgroundSecondary.color)
                             .cornerRadius(24)
                         }
@@ -99,9 +99,10 @@ struct UploadFileView: View {
                                 Spacer()
                             }
                             .padding(24)
-                            .background(R.color.secondaryBackground.color)
-                            .cornerRadius(24)
-                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                            .background {
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(R.color.baseSeparator.color)
+                            }
                         }
 
                         Button {
@@ -123,9 +124,10 @@ struct UploadFileView: View {
                                 Spacer()
                             }
                             .padding(24)
-                            .background(R.color.secondaryBackground.color)
-                            .cornerRadius(24)
-                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                            .background {
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(R.color.baseSeparator.color)
+                            }
                         }
 
                         Button {
@@ -147,9 +149,10 @@ struct UploadFileView: View {
                                 Spacer()
                             }
                             .padding(24)
-                            .background(R.color.secondaryBackground.color)
-                            .cornerRadius(24)
-                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                            .background {
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(R.color.baseSeparator.color)
+                            }
                         }
                     }
                 }

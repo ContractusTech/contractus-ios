@@ -65,7 +65,7 @@ struct DealRoleView: View {
                 .cornerRadius(20)
                 .overlay(RoundedRectangle(cornerRadius: 20)
                     .stroke(isSelected ? R.color.accentColor.color : .clear, lineWidth: 1.4))
-                .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
 
                 if isSelected {
                     Constants.selectedImage
@@ -250,7 +250,7 @@ struct CreateDealView: View {
                                 .padding(.bottom, 8)
                                 .background(R.color.secondaryBackground.color)
                                 .cornerRadius(20)
-                                .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                                .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                             }
                         }
                     }

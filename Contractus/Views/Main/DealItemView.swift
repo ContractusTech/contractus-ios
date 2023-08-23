@@ -97,7 +97,7 @@ struct DealItemView: View {
         .padding(EdgeInsets(top: 13, leading: 11, bottom: 16, trailing: 14))
         .background(R.color.secondaryBackground.color)
         .cornerRadius(20)
-        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
     }
 
     @ViewBuilder
