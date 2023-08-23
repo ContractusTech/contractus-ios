@@ -48,6 +48,7 @@ final class TextEditorViewModel: ViewModel {
         self.dealService = dealService
         self.state = TextEditorState(dealId: dealId, content: content, contentType: contentType)
         self.secretKey = secretKey
+        self.startEditContent = Date()
     }
 
     func trigger(_ input: TextEditorInput, after: AfterTrigger? = nil) {
@@ -67,7 +68,7 @@ final class TextEditorViewModel: ViewModel {
                 self.state.isDecrypted = true
                 return
             }
-            startEditContent = Date()
+
             Crypto.decrypt(base64Encrypted: text, with: self.secretKey)
                 .receive(on: RunLoop.main)
                 .sink { result in
