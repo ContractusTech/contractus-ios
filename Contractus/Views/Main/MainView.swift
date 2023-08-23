@@ -216,7 +216,7 @@ struct MainView: View {
                             }
                         }
                     }
-                    .animation(.easeOut.speed(1.8))
+                    .animation(.easeInOut.speed(1.2))
                     .background { context in
                         Color.black
                             .opacity(context.state == .medium ? 0.5 : 0)

@@ -980,7 +980,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 339 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 349 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1498,6 +1498,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextEditorEditorPlaceholder = Rswift.StringResource(key: "deal.textEditor.editor-placeholder", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Enter private key
+      ///
+      /// Locales: en
+      static let importWalletPlaceholder = Rswift.StringResource(key: "importWallet.placeholder", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Enter private key
+      ///
+      /// Locales: en
+      static let importWalletTitle = Rswift.StringResource(key: "importWallet.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Enter promo
       ///
       /// Locales: en
@@ -1506,6 +1514,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorTitleEnterKey = Rswift.StringResource(key: "addContractor.title.enter-key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Enter value
+      ///
+      /// Locales: en
+      static let qrScannerPlaceholder = Rswift.StringResource(key: "qrScanner.placeholder", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Error
       ///
       /// Locales: en
@@ -1542,6 +1554,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealResultsHint = Rswift.StringResource(key: "deal.results.hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Existing account you want to use for deals
+      ///
+      /// Locales: en
+      static let importWalletSubtitle = Rswift.StringResource(key: "importWallet.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: FAQ
       ///
       /// Locales: en
@@ -1662,6 +1678,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let enterButtonImport = Rswift.StringResource(key: "enter.button.import", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Import successful
+      ///
+      /// Locales: en
+      static let importWalletSuccessTitle = Rswift.StringResource(key: "importWallet.success.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: In work
       ///
       /// Locales: en
@@ -1862,6 +1882,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonPublicKey = Rswift.StringResource(key: "common.public-key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: QR Code scanner
+      ///
+      /// Locales: en
+      static let qrScannerTitle = Rswift.StringResource(key: "qrScanner.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Referral Program
       ///
       /// Locales: en
@@ -1906,6 +1930,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonSave = Rswift.StringResource(key: "common.save", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Save your private key to secure store so you don't lose access to your account
+      ///
+      /// Locales: en
+      static let importWalletSuccessDescription = Rswift.StringResource(key: "importWallet.success.description", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Saved
       ///
       /// Locales: en
@@ -2190,11 +2218,11 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let uploadFileStateUploading = Rswift.StringResource(key: "uploadFile.state.uploading", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Upon completion the funds will be returned to the client
+      /// en translation: Upon completion of the deal, the funds will be returned to the client
       ///
       /// Locales: en
       static let dealBondClientSubtitle = Rswift.StringResource(key: "deal.bond.client.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Upon completion the funds will be returned to the client
+      /// en translation: Upon completion of the deal, the funds will be returned to the executor
       ///
       /// Locales: en
       static let dealBondExecutorSubtitle = Rswift.StringResource(key: "deal.bond.executor.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
@@ -2302,6 +2330,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealHintEmptyVerifier = Rswift.StringResource(key: "deal.hint.empty-verifier", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: You safety
+      ///
+      /// Locales: en
+      static let importWalletSuccessLabel = Rswift.StringResource(key: "importWallet.success.label", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: You want delete file?
       ///
       /// Locales: en
@@ -2322,10 +2354,18 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonYouAccount = Rswift.StringResource(key: "common.you-account", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Your public key
+      ///
+      /// Locales: en
+      static let importWalletPublicKey = Rswift.StringResource(key: "importWallet.publicKey", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: [No file name]
       ///
       /// Locales: en
       static let dealFileNoName = Rswift.StringResource(key: "deal.file.no-name", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: or enter value manual
+      ///
+      /// Locales: en
+      static let qrScannerManual = Rswift.StringResource(key: "qrScanner.manual", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: times
       ///
       /// Locales: en
@@ -4284,6 +4324,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.textEditor.editor-placeholder", bundle: bundle, comment: "")
       }
 
+      /// en translation: Enter private key
+      ///
+      /// Locales: en
+      static func importWalletPlaceholder(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("importWallet.placeholder", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "importWallet.placeholder"
+        }
+
+        return NSLocalizedString("importWallet.placeholder", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Enter private key
+      ///
+      /// Locales: en
+      static func importWalletTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("importWallet.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "importWallet.title"
+        }
+
+        return NSLocalizedString("importWallet.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Enter promo
       ///
       /// Locales: en
@@ -4312,6 +4382,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("addContractor.title.enter-key", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Enter value
+      ///
+      /// Locales: en
+      static func qrScannerPlaceholder(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("qrScanner.placeholder", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "qrScanner.placeholder"
+        }
+
+        return NSLocalizedString("qrScanner.placeholder", bundle: bundle, comment: "")
       }
 
       /// en translation: Error
@@ -4447,6 +4532,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.results.hint", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Existing account you want to use for deals
+      ///
+      /// Locales: en
+      static func importWalletSubtitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("importWallet.subtitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "importWallet.subtitle"
+        }
+
+        return NSLocalizedString("importWallet.subtitle", bundle: bundle, comment: "")
       }
 
       /// en translation: FAQ
@@ -4899,6 +4999,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("enter.button.import", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Import successful
+      ///
+      /// Locales: en
+      static func importWalletSuccessTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("importWallet.success.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "importWallet.success.title"
+        }
+
+        return NSLocalizedString("importWallet.success.title", bundle: bundle, comment: "")
       }
 
       /// en translation: In work
@@ -5653,6 +5768,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.public-key", bundle: bundle, comment: "")
       }
 
+      /// en translation: QR Code scanner
+      ///
+      /// Locales: en
+      static func qrScannerTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("qrScanner.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "qrScanner.title"
+        }
+
+        return NSLocalizedString("qrScanner.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Referral Program
       ///
       /// Locales: en
@@ -5816,6 +5946,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.save", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Save your private key to secure store so you don't lose access to your account
+      ///
+      /// Locales: en
+      static func importWalletSuccessDescription(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("importWallet.success.description", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "importWallet.success.description"
+        }
+
+        return NSLocalizedString("importWallet.success.description", bundle: bundle, comment: "")
       }
 
       /// en translation: Saved
@@ -6885,7 +7030,7 @@ struct R: Rswift.Validatable {
         return String(format: format, locale: locale, value1)
       }
 
-      /// en translation: Upon completion the funds will be returned to the client
+      /// en translation: Upon completion of the deal, the funds will be returned to the client
       ///
       /// Locales: en
       static func dealBondClientSubtitle(preferredLanguages: [String]? = nil) -> String {
@@ -6900,7 +7045,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.bond.client.subtitle", bundle: bundle, comment: "")
       }
 
-      /// en translation: Upon completion the funds will be returned to the client
+      /// en translation: Upon completion of the deal, the funds will be returned to the executor
       ///
       /// Locales: en
       static func dealBondExecutorSubtitle(preferredLanguages: [String]? = nil) -> String {
@@ -7307,6 +7452,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.hint.empty-verifier", bundle: bundle, comment: "")
       }
 
+      /// en translation: You safety
+      ///
+      /// Locales: en
+      static func importWalletSuccessLabel(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("importWallet.success.label", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "importWallet.success.label"
+        }
+
+        return NSLocalizedString("importWallet.success.label", bundle: bundle, comment: "")
+      }
+
       /// en translation: You want delete file?
       ///
       /// Locales: en
@@ -7382,6 +7542,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.you-account", bundle: bundle, comment: "")
       }
 
+      /// en translation: Your public key
+      ///
+      /// Locales: en
+      static func importWalletPublicKey(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("importWallet.publicKey", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "importWallet.publicKey"
+        }
+
+        return NSLocalizedString("importWallet.publicKey", bundle: bundle, comment: "")
+      }
+
       /// en translation: [No file name]
       ///
       /// Locales: en
@@ -7395,6 +7570,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.file.no-name", bundle: bundle, comment: "")
+      }
+
+      /// en translation: or enter value manual
+      ///
+      /// Locales: en
+      static func qrScannerManual(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("qrScanner.manual", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "qrScanner.manual"
+        }
+
+        return NSLocalizedString("qrScanner.manual", bundle: bundle, comment: "")
       }
 
       /// en translation: times

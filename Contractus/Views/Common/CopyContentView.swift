@@ -57,6 +57,7 @@ struct CopyContentView: View {
                     }
                 }
                 .frame(width: 24, height: 24)
+                .animation(.easeInOut(duration: 0.2), value: copiedNotification)
             }
         }
         .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
