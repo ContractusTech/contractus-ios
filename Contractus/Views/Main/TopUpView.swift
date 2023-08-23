@@ -93,7 +93,7 @@ struct TopUpView: View {
 
                 VStack(alignment: .leading, spacing: 6){
                     Text(title)
-                        .font(.caption.weight(.semibold))
+                        .font(.callout.weight(.semibold))
                         .foregroundColor(R.color.textBase.color)
                     Text(description)
                         .font(.caption)

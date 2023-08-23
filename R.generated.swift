@@ -1178,6 +1178,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealBondBoth = Rswift.StringResource(key: "newDeal.bond.both", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Buy cryptocurrency, USDT, USDC, SOL, etc
+      ///
+      /// Locales: en
+      static let topupSubtitleCards = Rswift.StringResource(key: "topup.subtitle.cards", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: By cards
       ///
       /// Locales: en
@@ -1410,10 +1414,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let aboutAccountDeleteRemoveBackupTitle = Rswift.StringResource(key: "aboutAccount.delete.remove-backup-title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Deposit by fiat
-      ///
-      /// Locales: en
-      static let topupSubtitleCards = Rswift.StringResource(key: "topup.subtitle.cards", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Deposit from another account
       ///
       /// Locales: en
@@ -1774,7 +1774,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonOpen = Rswift.StringResource(key: "common.open", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Or you can send this value to a partner any way you like
+      /// en translation: Or you can send this value to a partner in any way you like
       ///
       /// Locales: en
       static let shareNote = Rswift.StringResource(key: "share.note", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
@@ -3122,6 +3122,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("newDeal.bond.both", bundle: bundle, comment: "")
       }
 
+      /// en translation: Buy cryptocurrency, USDT, USDC, SOL, etc
+      ///
+      /// Locales: en
+      static func topupSubtitleCards(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("topup.subtitle.cards", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "topup.subtitle.cards"
+        }
+
+        return NSLocalizedString("topup.subtitle.cards", bundle: bundle, comment: "")
+      }
+
       /// en translation: By cards
       ///
       /// Locales: en
@@ -3992,21 +4007,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("aboutAccount.delete.remove-backup-title", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Deposit by fiat
-      ///
-      /// Locales: en
-      static func topupSubtitleCards(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("topup.subtitle.cards", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "topup.subtitle.cards"
-        }
-
-        return NSLocalizedString("topup.subtitle.cards", bundle: bundle, comment: "")
       }
 
       /// en translation: Deposit from another account
@@ -5361,7 +5361,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.open", bundle: bundle, comment: "")
       }
 
-      /// en translation: Or you can send this value to a partner any way you like
+      /// en translation: Or you can send this value to a partner in any way you like
       ///
       /// Locales: en
       static func shareNote(preferredLanguages: [String]? = nil) -> String {

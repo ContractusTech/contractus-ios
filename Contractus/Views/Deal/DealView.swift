@@ -822,7 +822,7 @@ struct DealView: View {
                                         Text(R.string.localizable.dealDescriptionCommandPartnerAlreadySigned())
                                             .font(.footnote)
                                             .multilineTextAlignment(.center)
-                                            .foregroundColor(R.color.labelBackgroundAttention.color)
+                                            .foregroundColor(R.color.secondaryText.color)
                                     } else {
                                         CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.state.canSign) {
                                             EventService.shared.send(event: DefaultAnalyticsEvent.dealSignTap)
@@ -832,12 +832,12 @@ struct DealView: View {
                                             Text(R.string.localizable.dealDescriptionCommandFirstSign())
                                                 .font(.footnote)
                                                 .multilineTextAlignment(.center)
-                                                .foregroundColor(R.color.labelBackgroundAttention.color)
+                                                .foregroundColor(R.color.secondaryText.color)
                                         } else {
                                             Text(R.string.localizable.dealDescriptionCommandCantSign())
                                                 .font(.footnote)
                                                 .multilineTextAlignment(.center)
-                                                .foregroundColor(R.color.labelBackgroundAttention.color)
+                                                .foregroundColor(R.color.secondaryText.color)
                                         }
                                     }
                                 case .cancelSign:
@@ -847,7 +847,7 @@ struct DealView: View {
                                     Text(R.string.localizable.dealDescriptionCommandCancelSign())
                                         .font(.footnote)
                                         .multilineTextAlignment(.center)
-                                        .foregroundColor(R.color.labelBackgroundAttention.color)
+                                        .foregroundColor(R.color.secondaryText.color)
                                 case .cancelDeal:
                                     CButton(title: R.string.localizable.dealButtonsCancelDeal(), style: .cancel, size: .large, isLoading: false) {
                                         actionsType = .confirmCancel
@@ -862,7 +862,7 @@ struct DealView: View {
                                     Text(R.string.localizable.dealDescriptionCommandFinishDeal())
                                         .font(.footnote)
                                         .multilineTextAlignment(.center)
-                                        .foregroundColor(R.color.labelBackgroundAttention.color)
+                                        .foregroundColor(R.color.secondaryText.color)
                                 case .waiting:
                                     CButton(title: R.string.localizable.dealStatusProcessing(), style: .primary, size: .large, isLoading: true, isDisabled: true) { }
                                 case .revoke:

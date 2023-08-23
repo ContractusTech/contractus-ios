@@ -265,7 +265,7 @@
 
 "share.title.default" = "Share key";
 "share.subtitle.default" = "For edit and sign contract partner must have this data.";
-"share.note" = "Or you can send this value to a partner any way you like";
+"share.note" = "Or you can send this value to a partner in any way you like";
 
 "main.title.deals" = "Active deals";
 "main.title.new-deal" = "New deal";
@@ -364,7 +364,7 @@
 "topup.title.cards" = "By cards";
 "topup.title.crypto" = "By crypto";
 "topup.title.load" = "Get a loan (soon)";
-"topup.subtitle.cards" = "Deposit by fiat";
+"topup.subtitle.cards" = "Buy cryptocurrency, USDT, USDC, SOL, etc";
 "topup.subtitle.crypto" = "Deposit from another account";
 "topup.subtitle.load" = "Obtain loan funds for the deal";
 
