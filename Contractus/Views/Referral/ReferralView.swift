@@ -91,11 +91,12 @@ struct ReferralView: View {
                                 .foregroundColor(R.color.secondaryText.color)
                             
                         }
+                        .padding(EdgeInsets(top: 16, leading: 13, bottom: 20, trailing: 13))
                     }
-                    .padding(EdgeInsets(top: 16, leading: 13, bottom: 20, trailing: 13))
+
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(20)
-                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                    .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
 
                     // MARK: - Bonus
@@ -122,11 +123,11 @@ struct ReferralView: View {
                                 .font(.footnote.weight(.semibold))
                                 .foregroundColor(R.color.secondaryText.color)
                         }
+                        .padding(EdgeInsets(top: 16, leading: 13, bottom: 20, trailing: 13))
                     }
-                    .padding(EdgeInsets(top: 16, leading: 13, bottom: 20, trailing: 13))
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(20)
-                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                    .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
                     
                     // MARK: - Prizes
@@ -149,11 +150,11 @@ struct ReferralView: View {
                                 }
                             }
                         }
+                        .padding(EdgeInsets(top: 16, leading: 13, bottom: 20, trailing: 13))
                     }
-                    .padding(EdgeInsets(top: 16, leading: 13, bottom: 20, trailing: 13))
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(20)
-                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                    .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
                 }
             }
@@ -194,7 +195,7 @@ struct LoadingReferralView: View {
         .padding(EdgeInsets(top: 16, leading: 13, bottom: 20, trailing: 13))
         .background(R.color.secondaryBackground.color)
         .cornerRadius(20)
-        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
         .shimmering()
     }

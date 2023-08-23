@@ -46,7 +46,7 @@ struct StatisticsItemView: View {
         .padding(12)
         .background(R.color.secondaryBackground.color)
         .cornerRadius(20)
-        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
 
     }
 }

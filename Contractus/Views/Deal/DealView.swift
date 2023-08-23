@@ -125,7 +125,7 @@ struct DealView: View {
                             .padding(14)
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
-                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
 
                             // MARK: - Executor
                             VStack(alignment: .leading) {
@@ -153,7 +153,7 @@ struct DealView: View {
                             .padding(14)
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
-                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                         }
                         ZStack {
                             Circle()
@@ -195,7 +195,7 @@ struct DealView: View {
                             RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.yellow.color)
                         }
                         .cornerRadius(20)
-                        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     }
                     VStack {
                         ZStack(alignment: .bottomLeading) {
@@ -279,7 +279,7 @@ struct DealView: View {
                                 .padding(14)
                                 .background(R.color.secondaryBackground.color)
                                 .cornerRadius(20)
-                                .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                                .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                                 
                                 // MARK: - Executor
                                 VStack(alignment: .leading) {
@@ -326,7 +326,7 @@ struct DealView: View {
                                 .padding(14)
                                 .background(R.color.secondaryBackground.color)
                                 .cornerRadius(20)
-                                .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                                .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                             }
                             ZStack {
                                 Circle()
@@ -406,7 +406,7 @@ struct DealView: View {
                             .padding(14)
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
-                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                         }
                         
                         switch viewModel.state.deal.performanceBondType {
@@ -528,7 +528,7 @@ struct DealView: View {
                             .padding(14)
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
-                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                         }
 
                         // MARK: - Deadline
@@ -583,7 +583,7 @@ struct DealView: View {
                         .padding(14)
                         .background(R.color.secondaryBackground.color)
                         .cornerRadius(20)
-                        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     }
                 }
                 .padding(EdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12))
@@ -642,7 +642,7 @@ struct DealView: View {
                         .padding(EdgeInsets(top: 22, leading: 26, bottom: 22, trailing: 26))
                         .background(R.color.secondaryBackground.color)
                         .cornerRadius(20)
-                        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     }
                     Spacer(minLength: 4)
                     VStack {
@@ -692,7 +692,7 @@ struct DealView: View {
                     }
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(20)
-                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                    .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     
                     if viewModel.state.showResult {
                         VStack(alignment: .leading) {
@@ -803,7 +803,7 @@ struct DealView: View {
                         }
                         .background(R.color.secondaryBackground.color)
                         .cornerRadius(20)
-                        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     }
                     
                     // MARK: - Actions

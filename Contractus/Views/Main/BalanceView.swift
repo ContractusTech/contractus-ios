@@ -169,7 +169,7 @@ struct BalanceView: View {
                     .padding(8)
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(16)
-                    .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                    .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
 
                 }
                 .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
@@ -244,7 +244,7 @@ struct BalanceView: View {
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(16)
                             .padding(0)
-                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                         }
 
                         if !balance.wrap.tokens.isEmpty {
@@ -277,7 +277,7 @@ struct BalanceView: View {
                                 }
                                 .background(R.color.secondaryBackground.color)
                                 .cornerRadius(16)
-                                .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                                .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                                 if balance.canWrap {
                                     Button {
                                         swapAction(balance.wrap.tokens.first!.amount, balance.wrap.tokens.last!.amount)
@@ -328,7 +328,7 @@ struct BalanceView: View {
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(16)
                             .padding(0)
-                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
 
                         } else {
                             EmptyView()

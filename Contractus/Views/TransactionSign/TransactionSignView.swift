@@ -204,7 +204,7 @@ struct TransactionSignView: View {
                         }
                         .background(R.color.secondaryBackground.color)
                         .cornerRadius(20)
-                        .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                         if let tx = viewModel.state.transaction?.transaction {
                             VStack(alignment: .leading, spacing: 0) {
                                 VStack(alignment: .leading) {
@@ -255,7 +255,7 @@ struct TransactionSignView: View {
                             }
                             .background(R.color.secondaryBackground.color)
                             .cornerRadius(20)
-                            .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
 
                             if let tx = viewModel.state.transaction, let signature = tx.signature, !signature.isEmpty {
                                 VStack(alignment: .leading, spacing: 0) {
@@ -275,7 +275,7 @@ struct TransactionSignView: View {
                                 }
                                 .background(R.color.secondaryBackground.color)
                                 .cornerRadius(20)
-                                .shadow(color: R.color.shadowColor.color.opacity(0.4), radius: 2, y: 1)
+                                .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                             }
                         }
                     }

@@ -130,6 +130,7 @@ struct AccountsView: View {
                         Color(R.color.secondaryBackground()!)
                             .clipped()
                             .cornerRadius(20)
+                            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     )
                     .onTapGesture {
                         EventService.shared.send(event: DefaultAnalyticsEvent.accountsSelectTap)
@@ -140,7 +141,7 @@ struct AccountsView: View {
                     
                     MenuSectionView()
                     
-                    HStack {
+                    HStack(spacing: 12) {
                         Spacer()
                         Constants.plusImage
                         Text(R.string.localizable.accountsAdd())
@@ -152,6 +153,7 @@ struct AccountsView: View {
                         Color(R.color.secondaryBackground()!)
                             .clipped()
                             .cornerRadius(20)
+                            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     )
                     .contentShape(Rectangle())
                     .onTapGesture {
