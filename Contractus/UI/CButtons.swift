@@ -82,11 +82,11 @@ struct CButton: View {
         var font: Font {
             switch self {
             case .large:
-                return .body.weight(.semibold)
+                return .callout.weight(.semibold)
             case .small:
-                return .footnote.weight(.medium)
+                return .footnote.weight(.semibold)
             case .default:
-                return .body.weight(.semibold)
+                return .callout.weight(.semibold)
             }
 
         }

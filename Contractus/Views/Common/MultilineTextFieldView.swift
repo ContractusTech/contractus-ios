@@ -45,15 +45,15 @@ struct MultilineTextFieldView: View {
                 }
                 .padding(.bottom, 24)
             HStack {
-                Button {
-
-                } label: {
-                    Constants.cancelSeeIcon
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(R.color.textBase.color)
-                }
+//                Button {
+//
+//                } label: {
+//                    Constants.cancelSeeIcon
+//                        .resizable()
+//                        .aspectRatio(contentMode: .fit)
+//                        .frame(width: 24, height: 24)
+//                        .foregroundColor(R.color.textBase.color)
+//                }
                 Spacer()
 
                 Button {

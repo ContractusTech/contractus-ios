@@ -23,7 +23,7 @@ extension RawFile: Equatable {
 
     static func fromImage(_ image: UIImage, path: URL) -> RawFile? {
         if let data = image.rotate(radians: 0)?.pngData() {
-            return RawFile(data: data, name: path.lastPathComponent, mimeType: mimeTypes["png"]!)
+            return RawFile(data: data, name: path.lastPathComponent, mimeType: mimeTypes["png"]!.0)
         }
         return nil
     }

@@ -126,7 +126,7 @@ public class BaseService {
         default:
             encoder = JSONParameterEncoder.default
         }
-        (withAuth ? client.session : Session.default).request(client.server.path(path.value), method: httpMethod, parameters: data, encoder: encoder)
+        (withAuth ? client.session : Session.default).request(client.server.path(path.value), method: httpMethod, parameters: data, encoder: encoder, headers: client.appHeaders)
             .validate()
             .responseDecodable(of: T.self) {[weak self] response in
                 guard let self = self else { return }

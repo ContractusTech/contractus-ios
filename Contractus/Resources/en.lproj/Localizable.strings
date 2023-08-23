@@ -70,6 +70,13 @@
 
 "importWallet.foundKeys.title" = "Found %@ private key(s) in iCloud";
 "importWallet.selectBackupKey.title" = "Select from backup";
+"importWallet.title" = "Enter private key";
+"importWallet.subtitle" = "Existing account you want to use for deals";
+"importWallet.placeholder" = "Enter private key";
+"importWallet.publicKey" = "Your public key";
+"importWallet.success.title" = "Import successful";
+"importWallet.success.label" = "You safety";
+"importWallet.success.description" = "Save your private key to secure store so you don't lose access to your account";
 
 "backupInformation.button.continue" = "Continue";
 "backupInformation.title" = "Very important!";
@@ -112,6 +119,10 @@
 "shareContent.title.secret-key" = "The secret key";
 "shareContent.subtitle.secret-key" = "The partner need scan the QR code to start working on the contract.";
 "shareContent.subtitle" = "Used to top up account or added to a deal by partners";
+
+"qrScanner.title" = "QR Code scanner";
+"qrScanner.manual" = "or enter value manual";
+"qrScanner.placeholder" = "Enter value";
 
 "uploadFile.button.select" = "Add file";
 "uploadFile.button.select-gallery" = "Gallery";
@@ -200,8 +211,8 @@
 "deal.executor.clear-account.confirm" = "Yes, clear";
 "deal.performance.bond" = "Performance bond";
 "deal.performance.bond.subtitle" = "This is guarantee to mitigate the risks.";
-"deal.bond.client.subtitle" = "Upon completion the funds will be returned to the client";
-"deal.bond.executor.subtitle" = "Upon completion the funds will be returned to the client";
+"deal.bond.client.subtitle" = "Upon completion of the deal, the funds will be returned to the client";
+"deal.bond.executor.subtitle" = "Upon completion of the deal, the funds will be returned to the executor";
 "deal.bond.deadline.subtitle" = "If the counter parties do not agree before the appointed date, the contract is terminated and the funds are returned to all parties.";
 "deal.description-command.partner-already-signed" = "The partner has already signed the contract. The work of the contract will begin when you sign the contract.";
 "deal.description-command.first-sign" = "Sign the contract, the work of the contract starts automatically when your partner signs it";
@@ -254,7 +265,7 @@
 
 "share.title.default" = "Share key";
 "share.subtitle.default" = "For edit and sign contract partner must have this data.";
-"share.note" = "Or you can send this value to a partner any way you like";
+"share.note" = "Or you can send this value to a partner in any way you like";
 
 "main.title.deals" = "Active deals";
 "main.title.new-deal" = "New deal";
@@ -353,7 +364,7 @@
 "topup.title.cards" = "By cards";
 "topup.title.crypto" = "By crypto";
 "topup.title.load" = "Get a loan (soon)";
-"topup.subtitle.cards" = "Deposit by fiat";
+"topup.subtitle.cards" = "Buy cryptocurrency, USDT, USDC, SOL, etc";
 "topup.subtitle.crypto" = "Deposit from another account";
 "topup.subtitle.load" = "Obtain loan funds for the deal";
 

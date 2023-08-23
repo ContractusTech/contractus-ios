@@ -71,14 +71,14 @@ struct WrapTokenView: View {
                         HStack {
                             HStack {
                                 Spacer()
-                                VStack {
+                                VStack(spacing: 6) {
                                     Text(viewModel.from.token.code)
                                         .foregroundColor(R.color.textBase.color)
-                                        .font(.title3.weight(.bold))
+                                        .font(.title3.weight(.semibold))
 
                                     Text(viewModel.from.formatted())
                                         .foregroundColor(R.color.secondaryText.color)
-                                        .font(.footnote.weight(.regular))
+                                        .font(.footnote.weight(.medium))
                                 }
                                 Spacer()
                             }
@@ -96,13 +96,13 @@ struct WrapTokenView: View {
                             }
                             HStack {
                                 Spacer()
-                                VStack {
+                                VStack(spacing: 6) {
                                     Text(viewModel.to.token.code)
                                         .foregroundColor(R.color.textBase.color)
-                                        .font(.title3.weight(.bold))
+                                        .font(.title3.weight(.semibold))
                                     Text(viewModel.to.formatted())
                                         .foregroundColor(R.color.secondaryText.color)
-                                        .font(.footnote.weight(.regular))
+                                        .font(.footnote.weight(.medium))
                                 }
                                 Spacer()
                             }

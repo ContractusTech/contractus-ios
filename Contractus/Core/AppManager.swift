@@ -3,7 +3,10 @@ import ContractusAPI
 import DeviceCheck
 
 final class ServiceClient {
-    static let shared = ServiceClient(client: .init(server: AppConfig.serverType))
+    static let shared = ServiceClient(client: .init(
+        server: AppConfig.serverType,
+        info: .init(version: AppConfig.version, build: AppConfig.buildNumber))
+    )
     public let client: ContractusAPI.APIClient
 
     private init(client: ContractusAPI.APIClient) {

@@ -38,7 +38,7 @@ struct DealItemView: View {
                 Spacer()
                 Text(timeSinceCreated)
                     .font(.footnote.weight(.medium))
-                    .foregroundColor(R.color.whiteSeparator.color)
+                    .foregroundColor(R.color.secondaryText.color)
             }
             
             HStack(spacing: 5) {

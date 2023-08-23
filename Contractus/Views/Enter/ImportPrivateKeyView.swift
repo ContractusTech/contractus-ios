@@ -30,17 +30,17 @@ struct ImportPrivateKeyView: View {
                 VStack {
 
                     BaseTopTextBlockView(
-                        titleText: "Enter private key",
-                        subTitleText: "Of the client who will perform the work under the contract.")
+                        titleText: R.string.localizable.importWalletTitle(),
+                        subTitleText: R.string.localizable.importWalletSubtitle())
 
                     VStack(alignment: .center, spacing: 24) {
-                        MultilineTextFieldView(placeholder: "Enter private key", value: $privateKey)
+                        MultilineTextFieldView(placeholder: R.string.localizable.importWalletPlaceholder(), value: $privateKey)
 
 
                         if viewModel.state.isValidImportedPrivateKey {
                             VStack(alignment: .leading, spacing: 6) {
                                 HStack {
-                                    Text("Your public key")
+                                    Text(R.string.localizable.importWalletPublicKey())
                                         .font(.footnote.weight(.semibold))
                                         .textCase(.uppercase)
                                         .foregroundColor(R.color.secondaryText.color)
@@ -92,9 +92,9 @@ struct ImportPrivateKeyView: View {
                 if let account = viewModel.state.account {
                     BackupInformationView(
                         informationType: .success,
-                        titleText: "Import successful",
-                        largeTitleText: "You safety",
-                        informationText: "Save your private key to secure store so you don't lose access to your account ",
+                        titleText: R.string.localizable.importWalletSuccessTitle(),
+                        largeTitleText: R.string.localizable.importWalletSuccessLabel(),
+                        informationText: R.string.localizable.importWalletSuccessDescription(),
                         privateKey: account.privateKey,
                         completion: {
                         completion(account)
@@ -103,7 +103,7 @@ struct ImportPrivateKeyView: View {
                     EmptyView()
                 }
             } label: {
-                CButton(title: "Import", style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.isValidImportedPrivateKey) {
+                CButton(title: R.string.localizable.commonImport(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.isValidImportedPrivateKey) {
                     isActiveBackup.toggle()
                 }
             }

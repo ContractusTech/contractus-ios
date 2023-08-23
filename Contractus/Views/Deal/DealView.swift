@@ -663,7 +663,7 @@ struct DealView: View {
                                     .animation(Animation.easeInOut(duration: 0.1), value: viewModel.state.editIsVisible)
                                 }
                             }
-                            VStack(alignment: .leading, spacing: 4) {
+                            VStack(alignment: .leading, spacing: 12) {
                                 if viewModel.state.deal.meta?.files.isEmpty ?? true {
                                     HStack {
                                         Text(R.string.localizable.dealHintEncryptFiles())
@@ -822,7 +822,7 @@ struct DealView: View {
                                         Text(R.string.localizable.dealDescriptionCommandPartnerAlreadySigned())
                                             .font(.footnote)
                                             .multilineTextAlignment(.center)
-                                            .foregroundColor(R.color.labelBackgroundAttention.color)
+                                            .foregroundColor(R.color.secondaryText.color)
                                     } else {
                                         CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.state.canSign) {
                                             EventService.shared.send(event: DefaultAnalyticsEvent.dealSignTap)
@@ -832,12 +832,12 @@ struct DealView: View {
                                             Text(R.string.localizable.dealDescriptionCommandFirstSign())
                                                 .font(.footnote)
                                                 .multilineTextAlignment(.center)
-                                                .foregroundColor(R.color.labelBackgroundAttention.color)
+                                                .foregroundColor(R.color.secondaryText.color)
                                         } else {
                                             Text(R.string.localizable.dealDescriptionCommandCantSign())
                                                 .font(.footnote)
                                                 .multilineTextAlignment(.center)
-                                                .foregroundColor(R.color.labelBackgroundAttention.color)
+                                                .foregroundColor(R.color.secondaryText.color)
                                         }
                                     }
                                 case .cancelSign:
@@ -847,7 +847,7 @@ struct DealView: View {
                                     Text(R.string.localizable.dealDescriptionCommandCancelSign())
                                         .font(.footnote)
                                         .multilineTextAlignment(.center)
-                                        .foregroundColor(R.color.labelBackgroundAttention.color)
+                                        .foregroundColor(R.color.secondaryText.color)
                                 case .cancelDeal:
                                     CButton(title: R.string.localizable.dealButtonsCancelDeal(), style: .cancel, size: .large, isLoading: false) {
                                         actionsType = .confirmCancel
@@ -862,7 +862,7 @@ struct DealView: View {
                                     Text(R.string.localizable.dealDescriptionCommandFinishDeal())
                                         .font(.footnote)
                                         .multilineTextAlignment(.center)
-                                        .foregroundColor(R.color.labelBackgroundAttention.color)
+                                        .foregroundColor(R.color.secondaryText.color)
                                 case .waiting:
                                     CButton(title: R.string.localizable.dealStatusProcessing(), style: .primary, size: .large, isLoading: true, isDisabled: true) { }
                                 case .revoke:
@@ -897,7 +897,7 @@ struct DealView: View {
             builder.content { context in
                 uploaderView()
             }
-            .animation(.easeOut.speed(1.8))
+            .animation(.easeInOut.speed(1.2))
             .background { context in
                 Color.black
                     .opacity(context.state == .medium ? 0.5 : 0)
@@ -1345,63 +1345,99 @@ struct FileItemView: View {
     @State private var confirmPresented: Bool = false
     
     var body: some View {
-        HStack(alignment: .center, spacing: 6) {
-            Button {
-                action(.open)
-            } label: {
-                HStack(alignment: .center, spacing: 6) {
-                    if decryptedName != nil  {
-                        Constants.file
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 24, height: 24)
-                            .foregroundColor(R.color.yellow.color)
-                    } else {
-                        Constants.lockFile
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 24, height: 24)
-                            .foregroundColor(R.color.secondaryText.color)
-
-                    }
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(decryptedName ?? file.name)
-                            .lineLimit(1)
-                            .font(.callout.weight(.medium))
-                            .foregroundColor(R.color.textBase.color)
-                            .truncationMode(.middle)
-
-                        HStack(spacing: 12) {
-                            Text(FileSizeFormatter.shared.format(file.size))
-                                .multilineTextAlignment(.leading)
-                                .font(.footnote.weight(.regular))
-                                .foregroundColor(R.color.secondaryText.color)
-
+        VStack {
+            Divider()
+                .foregroundColor(R.color.baseSeparator.color.opacity(0.2))
+            HStack(alignment: .center, spacing: 6) {
+                Button {
+                    action(.open)
+                } label: {
+                    HStack(alignment: .center, spacing: 8) {
+                        if let decryptedName = decryptedName {
+                            ZStack {
+                                Circle()
+                                    .fill(R.color.mainBackground.color)
+                                    .frame(width: 32, height: 32)
+                                fileImage(fileName: decryptedName)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 16, height: 16)
+                                    .foregroundColor(R.color.secondaryText.color)
+                            }
+                        } else {
+                            ZStack {
+                                Circle()
+                                    .fill(R.color.mainBackground.color)
+                                    .frame(width: 32, height: 32)
+                                Constants.lockFile
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 16, height: 16)
+                                    .foregroundColor(R.color.secondaryText.color)
+                            }
                         }
-                        .frame(height: 14)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(decryptedName ?? ContentMask.maskContent())
+                                .lineLimit(1)
+                                .font(.callout.weight(.medium))
+                                .foregroundColor(R.color.textBase.color)
+                                .truncationMode(.middle)
+
+                            HStack(spacing: 12) {
+                                Text(FileSizeFormatter.shared.format(file.size))
+                                    .multilineTextAlignment(.leading)
+                                    .font(.footnote.weight(.medium))
+                                    .foregroundColor(R.color.secondaryText.color)
+                            }
+                            .frame(height: 14)
+                        }
                     }
                 }
-            }
 
-            Spacer()
-            Button {
-                confirmPresented = true
-            } label: {
-                Constants.remove
-                    .resizable()
-                    .foregroundColor(R.color.secondaryText.color)
-                    .frame(width: 16, height: 16)
-                    .padding(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+                Spacer()
+                Button {
+                    confirmPresented = true
+                } label: {
+                    Constants.remove
+                        .resizable()
+                        .foregroundColor(R.color.secondaryText.color)
+                        .frame(width: 16, height: 16)
+                        .padding(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+                }
             }
+            .padding(.top, 4)
+            .padding(.bottom, 4)
         }
-        .padding(.bottom, 8)
         .confirmationDialog("", isPresented: $confirmPresented) {
             Button(R.string.localizable.dealDeleteAlertButton(), role: .destructive) {
                 action(.delete)
             }
         } message: {
             Text(R.string.localizable.dealDeleteAlertMessage())
+        }
+    }
+
+    func fileImage(fileName: String) -> Image {
+        switch MimeType(path: fileName).fileGroup {
+        case .archive:
+            return Image(systemName: "doc.zipper")
+        case .audio:
+            return Image(systemName: "music.note")
+        case .code:
+            return Image(systemName: "doc.plaintext")
+        case .doc:
+            return Image(systemName: "doc.text")
+        case .image:
+            return Image(systemName: "photo.fill")
+        case .text:
+            return Image(systemName: "doc.plaintext")
+        case .video:
+            return Image(systemName: "video.fill")
+        case .web:
+            return Image(systemName: "doc.plaintext")
+        case .unknown:
+            return Image(systemName: "doc")
         }
     }
 }
@@ -1415,16 +1451,7 @@ extension DealView.ActiveModalType: Identifiable {
 
 extension DealView.AlertType: Identifiable {
     var id: String {
-        switch self {
-        case .error:
-            return "error"
-        case .confirmClear:
-            return "confirmClear"
-        case .confirmRevoke:
-            return "confirmRevoke"
-        case .confirmClearChecker:
-            return "confirmClearChecker"
-        }
+        return "\(self)"
     }
 }
 

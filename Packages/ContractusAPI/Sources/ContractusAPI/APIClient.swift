@@ -2,6 +2,7 @@ import Foundation
 import Alamofire
 
 public class APIClient {
+    let appHeaders: HTTPHeaders
     let session: Session
     public let server: ServerType
 
@@ -12,9 +13,15 @@ public class APIClient {
         interceptor.credential != nil
     }
 
-    public init(server: ServerType) {
+    public init(server: ServerType, info: AppInfo) {
         self.authenticator = OAuthAuthenticator()
 
+        self.appHeaders = [
+            "X-App-Version": info.version,
+            "X-App-Build": info.build,
+            "X-App-Platform": info.platform
+        ]
+        
         self.interceptor = AuthenticationInterceptor(
             authenticator: authenticator,
             credential: nil)
@@ -41,3 +48,16 @@ public class APIClient {
     }
 }
 
+extension APIClient {
+    public struct AppInfo {
+        public let version: String
+        public let build: String
+        public let platform: String = "IOS"
+
+        public init(version: String, build: String) {
+            self.version = version
+            self.build = build
+        }
+    }
+
+}

@@ -194,7 +194,7 @@ struct BalanceView: View {
                                 .scaledToFit()
                                 .frame(width: 10, height: 10)
                                 .rotationEffect(.degrees(isTokensVisible ? 0 : 180))
-                                .foregroundColor(R.color.secondaryText.color)
+                                .foregroundColor(R.color.textBase.color)
                                 .padding(6)
                                 .background(R.color.secondaryBackground.color)
                                 .cornerRadius(10)

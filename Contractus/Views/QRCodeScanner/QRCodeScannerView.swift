@@ -39,8 +39,8 @@ struct QRCodeScannerView: View {
         NavigationView {
             ZStack {
                 R.color.mainBackground.color
-                VStack(spacing: 24) {
-                    CodeScannerView(codeTypes: [.qr], simulatedData: "Paul Hudson") { response in
+                VStack(spacing: 12) {
+                    CodeScannerView(codeTypes: [.qr], simulatedData: "Contractus") { response in
                         switch response {
                         case .success(let result):
                             value = result.string
@@ -48,13 +48,15 @@ struct QRCodeScannerView: View {
                             print(error.localizedDescription)
                         }
                     }
-                    .frame(width: 300, height: 300)
-                    .cornerRadius(12)
+                    .frame(width: 320, height: 320)
+                    .cornerRadius(20)
 
                     if configuration == .scannerAndInput {
-                        Text("Or manual")
+                        Text(R.string.localizable.qrScannerManual())
+                            .font(.callout)
+                            .foregroundColor(R.color.secondaryText.color)
                         TextFieldView(
-                            placeholder: "Enter value", blockchain: viewModel.state.blockchain,
+                            placeholder: R.string.localizable.qrScannerPlaceholder(), blockchain: viewModel.state.blockchain,
                             allowQRScan: false,
                             value: value
                         ) { newValue in
@@ -69,7 +71,7 @@ struct QRCodeScannerView: View {
                 .animation(.easeOut(duration: 0.16), value: keyboard.currentHeight)
                 .edgesIgnoringSafeArea(.bottom)
                 .navigationBarTitleDisplayMode(.inline)
-                .navigationTitle("Scan QR code")
+                .navigationTitle(R.string.localizable.qrScannerTitle())
                 .onChange(of: value) { newValue in
                     viewModel.trigger(.parse(newValue))
                 }

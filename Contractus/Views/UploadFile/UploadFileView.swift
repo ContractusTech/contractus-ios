@@ -276,25 +276,27 @@ struct UploadFileItemView: View {
     var clearAction: () -> Void
 
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(alignment: .center, spacing: 4) {
             if let file = file {
                 if file.isImage, let image = UIImage(data: file.data) {
                     Image(uiImage: image)
                         .resizable()
-                        .frame(width: 120, height: 120)
+                        .frame(width: 110, height: 110)
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(R.color.secondaryBackground.color)
-                        .cornerRadius(12)
+                        .cornerRadius(16)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(R.color.baseSeparator.color, lineWidth: 1)
+                        )
                 }
                 else {
                     // TODO: -
                 }
                 VStack(alignment: .center, spacing: 4) {
-                    HStack(spacing: 12) {
-                        Text(file.formattedSize)
-                            .font(.callout.weight(.regular))
-                            .foregroundColor(R.color.secondaryText.color)
-                    }
+                    Text(file.formattedSize)
+                        .font(.callout.weight(.regular))
+                        .foregroundColor(R.color.secondaryText.color)
                 }
             } else {
                 EmptyView()

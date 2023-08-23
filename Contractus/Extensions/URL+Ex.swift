@@ -9,7 +9,7 @@ import Foundation
 
 extension URL {
     var isImage: Bool {
-        mimeTypes[self.lastPathComponent]?.contains("image") ?? false
+        mimeTypes[self.lastPathComponent]?.1 == .image
     }
 
     static func solscanURL(signature: String, isDevnet: Bool = true) -> URL {

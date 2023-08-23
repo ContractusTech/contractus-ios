@@ -18,7 +18,7 @@ public final class FilesService: BaseService {
         let uploadingFile = self.client.session.upload(multipartFormData: { multipartData in
             multipartData.append(data.data, withName: "file", fileName: data.fileName, mimeType: data.mimeType)
             multipartData.append(data.md5.data(using: .utf8)!, withName: "md5")
-        }, to: client.server.path(ServicePath.uploadFile.value), method: .post)
+        }, to: client.server.path(ServicePath.uploadFile.value), method: .post, headers: client.appHeaders)
 
         uploadingRequests.append(uploadingFile)
         uploadingFile
@@ -53,13 +53,6 @@ public final class FilesService: BaseService {
     }
 
     public func download(url: URL, progressCallback: @escaping (Double) -> Void, completion: @escaping (Swift.Result<URL, APIClientError>) -> Void) -> UUID {
-
-        // - TODO: Delete this
-        var url = url
-        var urlString = url.absoluteString
-        urlString = urlString.replacingOccurrences(of: "http://localhost:3000/", with: self.client.server.server.absoluteString)
-        url = URL(string: urlString)!
-        // -
 
 //        if let documentURL = getLocalDocumentURL(url) {
 //            completion(.success(documentURL))
