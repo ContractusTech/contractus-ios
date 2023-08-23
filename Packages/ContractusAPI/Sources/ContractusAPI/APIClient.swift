@@ -52,7 +52,7 @@ extension APIClient {
     public struct AppInfo {
         public let version: String
         public let build: String
-        public let platform: String = "ios"
+        public let platform: String = "IOS"
 
         public init(version: String, build: String) {
             self.version = version
