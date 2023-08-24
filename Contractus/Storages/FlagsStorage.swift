@@ -11,7 +11,7 @@ import Foundation
 final class FlagsStorage {
 
     private enum Keys: String {
-        case mainTokensVisibility
+        case mainTokensVisibility, onboardingPresented, changelogId
     }
 
     static let shared = FlagsStorage()
@@ -24,6 +24,24 @@ final class FlagsStorage {
         }
         set {
             storage.set(newValue, forKey: Keys.mainTokensVisibility.rawValue)
+        }
+    }
+    
+    var onboardingPresented: Bool {
+        get {
+            storage.bool(forKey: Keys.onboardingPresented.rawValue)
+        }
+        set {
+            storage.set(newValue, forKey: Keys.onboardingPresented.rawValue)
+        }
+    }
+    
+    var changelogId: Int {
+        get {
+            storage.integer(forKey: Keys.changelogId.rawValue)
+        }
+        set {
+            storage.set(newValue, forKey: Keys.changelogId.rawValue)
         }
     }
 }

@@ -48,7 +48,7 @@ struct MainView: View {
     @State var dealsType: MainViewModel.State.DealType = .all
     @State var transactionSignType: TransactionSignType?
     @State private var topUpState: ResizableSheetState = .hidden
-
+    @State var showOnboarding: Bool = false
 
     @State private var showDealFilter: Bool = false
     
@@ -305,6 +305,14 @@ struct MainView: View {
                         }
                     }
                 })
+                .fullScreenCover(isPresented: $showOnboarding) {
+                    OnboardingView(viewModel: AnyViewModel<OnboardingState, OnboardingInput>(OnboardingViewModel(
+                        state: OnboardingState(state: .none, errorState: .none),
+                        onboardingService: ServiceFactory.shared.makeOnboardingService()))
+                    ) {
+                        showOnboarding.toggle()
+                    }
+                }
                 .navigationDestination(for: $selectedDeal) { deal in
                     dealView(deal: deal)
                 }
@@ -364,6 +372,9 @@ struct MainView: View {
             .onAppear{
                 EventService.shared.send(event: DefaultAnalyticsEvent.mainOpen)
                 load()
+                if ServiceFactory.shared.makeOnboardingService().needShowOnboarding() {
+                    showOnboarding = true
+                }
             }
         }
     }

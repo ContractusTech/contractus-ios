@@ -1,0 +1,36 @@
+{
+    "onboarding": {
+        "pages": [
+            {
+                "imageName": null,
+                "imageUrl": "https://s3-alpha-sig.figma.com/img/4bea/bc5d/b6b5192b004b95281f00d983d8c68f21?Expires=1693785600&Signature=kR2DMrQdF8rIw3qgQRdRw4rbkwMFoUupfguJyEJA09v11HZw6d7HOEh7sW5gU4EHFMAJws59Qs4wkHA8QHaPlwIcLJeNzYKtI~NEZtBwIwE9b8MhMmVYZf0Uh-AtvTogbeGkSJxjbmH429g~fxVaUkkL9hwU~6sVcDdDgp9ZLeidjixhH~RGVqZZe6pjPFUlyrpMUJ63taNrfPUJrZzeJgC0grgcz39zdWBaFkQvaSvz16k1jR9L7MUiaR4k5ZUsUWHPhFomEwH3pX3bIquQGEf5XP1vtawAMdPg2ouo7NizowEGCBPyqR4VG6KrWR0Sf1rte5sp0cpvt9aCZ0xgxA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+                "title": "Contractus",
+                "description": "Your Contracts Signed Secure Transparent Guaranteed"
+            },
+            {
+                "imageName": "page1",
+                "imageUrl": null,
+                "title": "Your Contracts for Less",
+                "description": "Penning and signing contracts involving considerable sums is a tedious and lengthy process. Contractus facilitates contract signing by vastly accelerating the process and cutting down associated costs."
+            },
+            {
+                "imageName": "page1",
+                "imageUrl": null,
+                "title": "Security Framework",
+                "description": "Contractus employs a multilayer approach to ensuring the complete safekeeping of client data and contract details."
+            }
+        ],
+        "changelog": {
+            "id": 1,
+            "pages": [
+                {
+                    "imageName": null,
+                    "imageUrl": "https://s3-alpha-sig.figma.com/img/4bea/bc5d/b6b5192b004b95281f00d983d8c68f21?Expires=1693785600&Signature=kR2DMrQdF8rIw3qgQRdRw4rbkwMFoUupfguJyEJA09v11HZw6d7HOEh7sW5gU4EHFMAJws59Qs4wkHA8QHaPlwIcLJeNzYKtI~NEZtBwIwE9b8MhMmVYZf0Uh-AtvTogbeGkSJxjbmH429g~fxVaUkkL9hwU~6sVcDdDgp9ZLeidjixhH~RGVqZZe6pjPFUlyrpMUJ63taNrfPUJrZzeJgC0grgcz39zdWBaFkQvaSvz16k1jR9L7MUiaR4k5ZUsUWHPhFomEwH3pX3bIquQGEf5XP1vtawAMdPg2ouo7NizowEGCBPyqR4VG6KrWR0Sf1rte5sp0cpvt9aCZ0xgxA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+                    "title": "Terms updated",
+                    "description": "We want to be as transparent as possible abount the changes we make to our ***Terms of Service***\n\n[Open Terms](https://apple.com)",
+                    "needAccept": true
+                }
+            ]
+        }
+    }
+}

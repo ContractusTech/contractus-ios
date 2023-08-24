@@ -835,10 +835,12 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.file` struct is generated, and contains static references to 4 files.
+  /// This `R.file` struct is generated, and contains static references to 5 files.
   struct file {
     /// Resource file `GoogleService-Info.plist`.
     static let googleServiceInfoPlist = Rswift.FileResource(bundle: R.hostingBundle, name: "GoogleService-Info", pathExtension: "plist")
+    /// Resource file `Onboarding.json`.
+    static let onboardingJson = Rswift.FileResource(bundle: R.hostingBundle, name: "Onboarding", pathExtension: "json")
     /// Resource file `ci_post_clone.sh`.
     static let ci_post_cloneSh = Rswift.FileResource(bundle: R.hostingBundle, name: "ci_post_clone", pathExtension: "sh")
     /// Resource file `ci_post_xcodebuild.sh`.
@@ -849,6 +851,12 @@ struct R: Rswift.Validatable {
     /// `bundle.url(forResource: "GoogleService-Info", withExtension: "plist")`
     static func googleServiceInfoPlist(_: Void = ()) -> Foundation.URL? {
       let fileResource = R.file.googleServiceInfoPlist
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+
+    /// `bundle.url(forResource: "Onboarding", withExtension: "json")`
+    static func onboardingJson(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.onboardingJson
       return fileResource.bundle.url(forResource: fileResource)
     }
 
@@ -873,7 +881,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 11 images.
+  /// This `R.image` struct is generated, and contains static references to 12 images.
   struct image {
     /// Image `ContractusLogo`.
     static let contractusLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "ContractusLogo")
@@ -895,6 +903,8 @@ struct R: Rswift.Validatable {
     static let dealExecutor = Rswift.ImageResource(bundle: R.hostingBundle, name: "dealExecutor")
     /// Image `emptyDeals`.
     static let emptyDeals = Rswift.ImageResource(bundle: R.hostingBundle, name: "emptyDeals")
+    /// Image `page1`.
+    static let page1 = Rswift.ImageResource(bundle: R.hostingBundle, name: "page1")
     /// Image `solana`.
     static let solana = Rswift.ImageResource(bundle: R.hostingBundle, name: "solana")
 
@@ -969,6 +979,13 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "page1", bundle: ..., traitCollection: ...)`
+    static func page1(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.page1, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIImage(named: "solana", bundle: ..., traitCollection: ...)`
     static func solana(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.solana, compatibleWith: traitCollection)
@@ -980,7 +997,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 349 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 351 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -990,6 +1007,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let mainAboutTiers = Rswift.StringResource(key: "main.about.tiers", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Accept
+      ///
+      /// Locales: en
+      static let commonAccept = Rswift.StringResource(key: "common.accept", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Account
       ///
       /// Locales: en
@@ -2042,6 +2063,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignButtonsSigning = Rswift.StringResource(key: "transactionSign.buttons.signing", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Skip
+      ///
+      /// Locales: en
+      static let commonSkip = Rswift.StringResource(key: "common.skip", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Start deal
       ///
       /// Locales: en
@@ -2407,6 +2432,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("main.about.tiers", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Accept
+      ///
+      /// Locales: en
+      static func commonAccept(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.accept", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.accept"
+        }
+
+        return NSLocalizedString("common.accept", bundle: bundle, comment: "")
       }
 
       /// en translation: Account
@@ -6366,6 +6406,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.buttons.signing", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Skip
+      ///
+      /// Locales: en
+      static func commonSkip(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.skip", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.skip"
+        }
+
+        return NSLocalizedString("common.skip", bundle: bundle, comment: "")
       }
 
       /// en translation: Start deal
