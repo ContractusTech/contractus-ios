@@ -549,7 +549,7 @@ struct DealView: View {
                                     
                                 } else {
                                     HStack {
-                                        Text(R.string.localizable.dealHintEncryptContent())
+                                        Text(viewModel.state.withEncryption ? R.string.localizable.dealHintEncryptContent() : R.string.localizable.dealHintNoEncryptContent())
                                             .font(.footnote)
                                             .foregroundColor(R.color.secondaryText.color)
                                         Spacer()
@@ -583,7 +583,7 @@ struct DealView: View {
                             VStack(alignment: .leading, spacing: 12) {
                                 if viewModel.state.deal.meta?.files.isEmpty ?? true {
                                     HStack {
-                                        Text(R.string.localizable.dealHintEncryptFiles())
+                                        Text(viewModel.state.withEncryption ? R.string.localizable.dealHintEncryptFiles() : R.string.localizable.dealHintNoEncryptFiles())
                                             .font(.footnote)
                                             .foregroundColor(R.color.secondaryText.color)
                                         Spacer()
@@ -656,8 +656,9 @@ struct DealView: View {
                                         
                                     } else {
                                         HStack {
-                                            Text(R.string.localizable.commonEmpty())
+                                            Text(viewModel.state.withEncryption ? R.string.localizable.dealHintEncryptContent() : R.string.localizable.dealHintNoEncryptContent())
                                                 .foregroundColor(R.color.secondaryText.color)
+                                                .font(.footnote)
                                             Spacer()
                                         }
                                     }
@@ -686,8 +687,9 @@ struct DealView: View {
                                 VStack(alignment: .leading) {
                                     if viewModel.state.deal.result?.files.isEmpty ?? true {
                                         HStack {
-                                            Text(R.string.localizable.commonEmpty())
+                                            Text(viewModel.state.withEncryption ? R.string.localizable.dealHintEncryptFiles() : R.string.localizable.dealHintNoEncryptFiles())
                                                 .foregroundColor(R.color.secondaryText.color)
+                                                .font(.footnote)
                                             Spacer()
                                         }
                                     } else {
@@ -1377,7 +1379,7 @@ struct FileItemView: View {
                                 Circle()
                                     .fill(R.color.mainBackground.color)
                                     .frame(width: 32, height: 32)
-                                fileImage(fileName: decryptedName)
+                                decryptedName.imageByFileName
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 16, height: 16)
@@ -1434,29 +1436,6 @@ struct FileItemView: View {
             }
         } message: {
             Text(R.string.localizable.dealDeleteAlertMessage())
-        }
-    }
-
-    func fileImage(fileName: String) -> Image {
-        switch MimeType(path: fileName).fileGroup {
-        case .archive:
-            return Image(systemName: "doc.zipper")
-        case .audio:
-            return Image(systemName: "music.note")
-        case .code:
-            return Image(systemName: "doc.plaintext")
-        case .doc:
-            return Image(systemName: "doc.text")
-        case .image:
-            return Image(systemName: "photo.fill")
-        case .text:
-            return Image(systemName: "doc.plaintext")
-        case .video:
-            return Image(systemName: "video.fill")
-        case .web:
-            return Image(systemName: "doc.plaintext")
-        case .unknown:
-            return Image(systemName: "doc")
         }
     }
 }

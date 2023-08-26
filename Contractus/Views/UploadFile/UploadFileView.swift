@@ -74,10 +74,16 @@ struct UploadFileView: View {
                             .padding(12)
                             .background(R.color.buttonBackgroundSecondary.color)
                             .cornerRadius(24)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(R.color.buttonBorderSecondary.color, lineWidth: 1)
+                            }
                         }
                         .offset(x: -12, y: 12)
                     }
                 }
+
+
             } else {
                 VStack(spacing: 12) {
                     HStack(spacing: 12) {
@@ -172,6 +178,7 @@ struct UploadFileView: View {
             }
         }
         .padding(.bottom, 32)
+        .animation(.easeInOut(duration: 0.1), value: sheetType)
         .onDisappear {
             viewModel.trigger(.clear)
         }
@@ -276,51 +283,63 @@ struct UploadFileItemView: View {
     var clearAction: () -> Void
 
     var body: some View {
-        VStack(alignment: .center, spacing: 4) {
-            if let file = file {
-                if file.isImage, let image = UIImage(data: file.data) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .frame(width: 110, height: 110)
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(R.color.secondaryBackground.color)
-                        .cornerRadius(16)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(R.color.baseSeparator.color, lineWidth: 1)
-                        )
-                } else {
-                    HStack {
-                        Spacer()
-                        VStack(spacing: 8) {
-                            Constants.docFile
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(height: 50)
-                            Text(file.name)
-                                .font(.callout.weight(.regular))
-                                .foregroundColor(R.color.textBase.color)
-                                .cornerRadius(16)
+        HStack {
+            Spacer()
+            VStack(alignment: .center, spacing: 4) {
+                if let file = file {
+                    if file.isImage, let image = UIImage(data: file.data) {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 110, height: 110)
+                            .foregroundColor(R.color.secondaryBackground.color)
+                            .cornerRadius(16)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(R.color.baseSeparator.color, lineWidth: 1)
+                            )
+                    } else {
+                        HStack {
+                            Spacer()
+                            VStack(spacing: 8) {
+                                file.name.imageByFileName
+                                    .resizable()
+                                    .foregroundColor(R.color.secondaryText.color)
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 40)
+                                    .padding(30)
+                                    .background(R.color.fourthBackground.color.opacity(0.6))
+                                    .cornerRadius(16)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 16)
+                                            .stroke(R.color.buttonBorderSecondary.color.opacity(0.7), lineWidth: 1)
+                                    )
+                                Text(file.name)
+                                    .font(.footnote.weight(.semibold))
+                                    .foregroundColor(R.color.textBase.color)
+                                    .cornerRadius(16)
+                            }
+                            Spacer()
                         }
-                        Spacer()
+                    }
+                    VStack(alignment: .center, spacing: 4) {
+                        Text(file.formattedSize)
+                            .font(.footnote.weight(.semibold))
+                            .foregroundColor(R.color.secondaryText.color)
+                    }
+                } else {
+                    EmptyView()
+                }
+                if file?.isLargeForEncrypting ?? false {
+                    VStack {
+                        Text(R.string.localizable.uploadFileLargeFile())
+                            .font(.footnote.weight(.semibold))
+                            .foregroundColor(R.color.textWarn.color)
+                            .lineLimit(0)
                     }
                 }
-                VStack(alignment: .center, spacing: 4) {
-                    Text(file.formattedSize)
-                        .font(.callout.weight(.regular))
-                        .foregroundColor(R.color.secondaryText.color)
-                }
-            } else {
-                EmptyView()
             }
-            if file?.isLargeForEncrypting ?? false {
-                VStack {
-                    Text(R.string.localizable.uploadFileLargeFile())
-                        .font(.footnote.weight(.semibold))
-                        .foregroundColor(R.color.textWarn.color)
-                        .lineLimit(0)
-                }
-            }
+            Spacer()
         }
         .padding(16)
         .overlay(

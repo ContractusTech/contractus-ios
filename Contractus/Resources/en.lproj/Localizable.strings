@@ -185,7 +185,9 @@
 "deal.hint.empty-verifier" = "You need to specify the Account that will check the result of the contract.";
 "deal.hint.verifier" = "After verification by this Account of the result of the contract, the partner receives payment.";
 "deal.hint.encrypt-content" = "This text will be encrypted and available for viewing only to contract partners.";
+"deal.hint.no-encrypt-content" = "This text will be available for viewing only to contract partners.";
 "deal.hint.encrypt-files" = "This files will be encrypted and available for viewing only to contract partners.";
+"deal.hint.no-encrypt-files" = "This files will be available for viewing only to contract partners.";
 "deal.hint.pay-account" = "The account that pays you for the work you do";
 "deal.results.title" = "Results";
 "deal.results.waiting-approve" = "Waiting approve";

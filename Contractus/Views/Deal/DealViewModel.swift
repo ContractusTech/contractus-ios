@@ -184,6 +184,9 @@ struct DealState {
         return deal.ownerBondToken
     }
 
+    var withEncryption: Bool {
+        deal.encryptedSecretKey != nil
+    }
 
     var currentMainActions: [MainActionType] = []
 }

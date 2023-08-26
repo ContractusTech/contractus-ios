@@ -980,7 +980,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 350 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 352 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -2142,6 +2142,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealNoSecretKeyInformation = Rswift.StringResource(key: "deal.no-secret-key-information", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: This files will be available for viewing only to contract partners.
+      ///
+      /// Locales: en
+      static let dealHintNoEncryptFiles = Rswift.StringResource(key: "deal.hint.no-encrypt-files", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: This files will be encrypted and available for viewing only to contract partners.
       ///
       /// Locales: en
@@ -2154,6 +2158,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let createWalletSubtitle = Rswift.StringResource(key: "createWallet.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: This text will be available for viewing only to contract partners.
+      ///
+      /// Locales: en
+      static let dealHintNoEncryptContent = Rswift.StringResource(key: "deal.hint.no-encrypt-content", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: This text will be encrypted and available for viewing only to contract partners.
       ///
       /// Locales: en
@@ -6747,6 +6755,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.no-secret-key-information", bundle: bundle, comment: "")
       }
 
+      /// en translation: This files will be available for viewing only to contract partners.
+      ///
+      /// Locales: en
+      static func dealHintNoEncryptFiles(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.hint.no-encrypt-files", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.hint.no-encrypt-files"
+        }
+
+        return NSLocalizedString("deal.hint.no-encrypt-files", bundle: bundle, comment: "")
+      }
+
       /// en translation: This files will be encrypted and available for viewing only to contract partners.
       ///
       /// Locales: en
@@ -6790,6 +6813,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("createWallet.subtitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: This text will be available for viewing only to contract partners.
+      ///
+      /// Locales: en
+      static func dealHintNoEncryptContent(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.hint.no-encrypt-content", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.hint.no-encrypt-content"
+        }
+
+        return NSLocalizedString("deal.hint.no-encrypt-content", bundle: bundle, comment: "")
       }
 
       /// en translation: This text will be encrypted and available for viewing only to contract partners.
