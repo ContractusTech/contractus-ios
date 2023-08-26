@@ -980,7 +980,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 349 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 350 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1473,7 +1473,7 @@ struct R: Rswift.Validatable {
       /// en translation: Encrypt and upload
       ///
       /// Locales: en
-      static let uploadFileStateUploadFile = Rswift.StringResource(key: "uploadFile.state.upload-file", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      static let uploadFileStateEncryptUploadFile = Rswift.StringResource(key: "uploadFile.state.encrypt-upload-file", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Encrypt transaction details
       ///
       /// Locales: en
@@ -2210,6 +2210,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonUpdate = Rswift.StringResource(key: "common.update", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Upload
+      ///
+      /// Locales: en
+      static let uploadFileStateUploadFile = Rswift.StringResource(key: "uploadFile.state.upload-file", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Upload error
       ///
       /// Locales: en
@@ -4222,16 +4226,16 @@ struct R: Rswift.Validatable {
       /// en translation: Encrypt and upload
       ///
       /// Locales: en
-      static func uploadFileStateUploadFile(preferredLanguages: [String]? = nil) -> String {
+      static func uploadFileStateEncryptUploadFile(preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("uploadFile.state.upload-file", bundle: hostingBundle, comment: "")
+          return NSLocalizedString("uploadFile.state.encrypt-upload-file", bundle: hostingBundle, comment: "")
         }
 
         guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "uploadFile.state.upload-file"
+          return "uploadFile.state.encrypt-upload-file"
         }
 
-        return NSLocalizedString("uploadFile.state.upload-file", bundle: bundle, comment: "")
+        return NSLocalizedString("uploadFile.state.encrypt-upload-file", bundle: bundle, comment: "")
       }
 
       /// en translation: Encrypt transaction details
@@ -6996,6 +7000,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.update", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Upload
+      ///
+      /// Locales: en
+      static func uploadFileStateUploadFile(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("uploadFile.state.upload-file", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "uploadFile.state.upload-file"
+        }
+
+        return NSLocalizedString("uploadFile.state.upload-file", bundle: bundle, comment: "")
       }
 
       /// en translation: Upload error

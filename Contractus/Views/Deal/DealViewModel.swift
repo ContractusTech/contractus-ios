@@ -424,6 +424,10 @@ final class DealViewModel: ViewModel {
         if state.isOwnerDeal {
             decryptKey()
         } else {
+            guard let key = state.deal.encryptedSecretKey else {
+                self.state.canEdit = true
+                return
+            }
             guard let clientSecret = secretStorage?.getSharedSecret(for: state.deal.id) else {
                 self.state.canEdit = false
                 return

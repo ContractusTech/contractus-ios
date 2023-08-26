@@ -134,7 +134,8 @@
 "uploadFile.state.encrypting" = "Encrypting...";
 "uploadFile.state.uploading" = "Uploading - %@";
 "uploadFile.state.success" = "Success upload";
-"uploadFile.state.upload-file" = "Encrypt and upload";
+"uploadFile.state.encrypt-upload-file" = "Encrypt and upload";
+"uploadFile.state.upload-file" = "Upload";
 "uploadFile.state.saving" = "Saving...";
 "uploadFile.state.saved" = "Saved";
 "uploadFile.large-file" = "The file is large. Encryption may take a few minutes";

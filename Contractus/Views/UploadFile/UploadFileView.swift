@@ -23,6 +23,7 @@ fileprivate enum Constants {
     static let phoneImage = Image(systemName: "photo.on.rectangle.angled")
     static let cameraImage = Image(systemName: "camera")
     static let docImage = Image(systemName: "doc.viewfinder")
+    static let docFile = Image(systemName: "doc")
 }
 
 // MARK: - UploadFileView
@@ -70,7 +71,7 @@ struct UploadFileView: View {
                                     .foregroundColor(R.color.buttonTextSecondary.color)
 
                             }
-                            .padding(24)
+                            .padding(12)
                             .background(R.color.buttonBackgroundSecondary.color)
                             .cornerRadius(24)
                         }
@@ -183,7 +184,7 @@ struct UploadFileView: View {
                 })
             case .needConfirmForce:
                 alertType = .needConfirmForceUpdate
-            case .none, .error, .encrypting, .selected, .uploading, .saving:
+            case .none, .error, .encrypting, .selected, .selectedNoKey, .uploading, .saving:
                 break
             }
 
@@ -227,17 +228,14 @@ struct UploadFileView: View {
                         viewModel.trigger(.clear)
                     })
             }
-
         })
-
-
     }
 
     private var canCancel: Bool {
         switch viewModel.state.state {
         case .uploading, .encrypting, .success, .saving:
             return false
-        case .error, .none, .selected, .needConfirmForce:
+        case .error, .none, .selected, .selectedNoKey, .needConfirmForce:
             return true
         }
     }
@@ -246,7 +244,7 @@ struct UploadFileView: View {
         switch viewModel.state.state {
         case .none:
             return false
-        case .selected, .error, .success, .encrypting, .uploading, .saving, .needConfirmForce:
+        case .selected, .selectedNoKey, .error, .success, .encrypting, .uploading, .saving, .needConfirmForce:
             return true
         }
     }
@@ -255,7 +253,7 @@ struct UploadFileView: View {
         switch viewModel.state.state {
         case .none:
             return false
-        case .selected, .error, .success, .encrypting, .uploading, .saving, .needConfirmForce:
+        case .selected, .selectedNoKey, .error, .success, .encrypting, .uploading, .saving, .needConfirmForce:
             return true
         }
     }
@@ -264,11 +262,10 @@ struct UploadFileView: View {
         switch viewModel.state.state {
         case .none, .success, .encrypting, .uploading, .saving, .needConfirmForce:
             return false
-        case .selected, .error:
+        case .selected, .selectedNoKey, .error:
             return true
         }
     }
-
 }
 
 // MARK: - UploadFileItemView
@@ -292,9 +289,21 @@ struct UploadFileItemView: View {
                             RoundedRectangle(cornerRadius: 16)
                                 .stroke(R.color.baseSeparator.color, lineWidth: 1)
                         )
-                }
-                else {
-                    // TODO: -
+                } else {
+                    HStack {
+                        Spacer()
+                        VStack(spacing: 8) {
+                            Constants.docFile
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 50)
+                            Text(file.name)
+                                .font(.callout.weight(.regular))
+                                .foregroundColor(R.color.textBase.color)
+                                .cornerRadius(16)
+                        }
+                        Spacer()
+                    }
                 }
                 VStack(alignment: .center, spacing: 4) {
                     Text(file.formattedSize)
@@ -311,9 +320,7 @@ struct UploadFileItemView: View {
                         .foregroundColor(R.color.textWarn.color)
                         .lineLimit(0)
                 }
-
             }
-
         }
         .padding(16)
         .overlay(
@@ -322,8 +329,6 @@ struct UploadFileItemView: View {
                 .stroke(R.color.textFieldBorder.color, lineWidth: 1)
         )
     }
-
-
 }
 
 // MARK: - UploadingButtonView
@@ -331,7 +336,9 @@ struct UploadFileItemView: View {
 struct UploadingButtonView: View {
 
     let state: UploadFileState.State
+    var allowEncrypt: Bool = true
     var action: () -> Void
+    
 
     var body: some View {
         CButton(title: titleButton, style: .primary, size: .large, isLoading: false, isDisabled: isDisabled) {
@@ -341,7 +348,7 @@ struct UploadingButtonView: View {
 
     private var isDisabled: Bool {
         switch state {
-        case .none, .selected:
+        case .none, .selected, .selectedNoKey:
             return false
         case .encrypting:
             return true
@@ -360,7 +367,7 @@ struct UploadingButtonView: View {
 
     private var textColor: Color {
         switch state {
-        case .none, .selected:
+        case .none, .selected, .selectedNoKey:
             return R.color.buttonTextPrimary.color
         case .encrypting:
             return R.color.secondaryText.color
@@ -387,6 +394,8 @@ struct UploadingButtonView: View {
     private var titleButton: String {
         switch state {
         case .none, .selected:
+            return R.string.localizable.uploadFileStateEncryptUploadFile()
+        case .selectedNoKey:
             return R.string.localizable.uploadFileStateUploadFile()
         case .encrypting:
             return R.string.localizable.uploadFileStateEncrypting()

@@ -73,101 +73,19 @@ struct DealView: View {
     @State private var activeModalType: ActiveModalType?
     @State private var alertType: AlertType?
     @State private var actionsType: ActionsSheetType?
-    @State private var uploaderState: ResizableSheetState = .hidden
+    @State private var metaUploaderState: ResizableSheetState = .hidden
+    @State private var resultUploaderState: ResizableSheetState = .hidden
     @State private var showDeadlinePicker: Bool = false
 
     var body: some View {
         ScrollView {
+
+            // MARK: - Loading view
             if viewModel.currentMainActions.isEmpty {
-                VStack {
-                    ZStack(alignment: .bottomLeading) {
-                        VStack {
-                            VStack(alignment: .leading) {
-                                // MARK: - Client
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 6) {
-                                        HStack {
-                                            Text(R.string.localizable.dealTextClient())
-                                                .font(.footnote.weight(.semibold))
-                                                .textCase(.uppercase)
-                                                .foregroundColor(R.color.secondaryText.color)
-                                            Label(text: R.string.localizable.commonYou(), type: .primary)
-                                                .opacity(0)
-                                        }
-                                        Text(R.string.localizable.commonEmpty())
-                                            .opacity(0)
-                                    }
-                                }
-                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
-                                .shimmering()
-
-                                Divider().foregroundColor(R.color.baseSeparator.color).padding(EdgeInsets(top: 0, leading: -20, bottom: 0, trailing: -20))
-                                
-                                // MARK: - Amount
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 6) {
-                                        HStack {
-                                            Text(R.string.localizable.dealViewAmount())
-                                                .font(.footnote.weight(.semibold))
-                                                .textCase(.uppercase)
-                                                .foregroundColor(R.color.secondaryText.color)
-                                            
-                                        }
-                                        Text(viewModel.state.deal.amountFormatted)
-                                            .font(.title)
-                                            .opacity(0)
-                                    }
-                                    Spacer()
-                                }
-                                .padding(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
-                                .shimmering()
-                            }
-                            .padding(14)
-                            .background(R.color.secondaryBackground.color)
-                            .cornerRadius(20)
-                            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
-
-                            // MARK: - Executor
-                            VStack(alignment: .leading) {
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        HStack {
-                                            Text(R.string.localizable.dealTextExecutor())
-                                                .font(.footnote.weight(.semibold))
-                                                .textCase(.uppercase)
-                                                .foregroundColor(R.color.secondaryText.color)
-                                        }
-                                        Text(R.string.localizable.commonEmpty())
-                                            .opacity(0)
-                                    }
-                                    Spacer()
-                                }
-                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 6, trailing: 0))
-                                .shimmering()
-
-                                Text(R.string.localizable.dealHintAboutExecutor())
-                                    .font(.footnote)
-                                    .foregroundColor(R.color.secondaryText.color)
-                                    .opacity(0)
-                            }
-                            .padding(14)
-                            .background(R.color.secondaryBackground.color)
-                            .cornerRadius(20)
-                            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
-                        }
-                        ZStack {
-                            Circle()
-                                .foregroundColor(R.color.mainBackground.color)
-                                .frame(width: 28, height: 28)
-                            Constants.arrowDownImage.foregroundColor(R.color.secondaryText.color)
-                        }
-                        .frame(width: 28, height: 28)
-                        .offset(CGSize(width: 20, height: -93))
-                    }
-                }
-                .padding(EdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12))
+                LoadingDealView()
             } else {
                 VStack {
+                    // MARK: - No secret key
                     if viewModel.state.state == .none && !viewModel.state.canEdit {
                         HStack(spacing: 1) {
                             VStack(alignment: .leading, spacing: 4) {
@@ -656,8 +574,7 @@ struct DealView: View {
                                 if viewModel.state.canEditDeal {
                                     CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit || viewModel.state.currentMainActions.contains(.cancelSign)) {
                                         EventService.shared.send(event: DefaultAnalyticsEvent.dealDescriptionAddFileTap)
-                                        uploaderState = .medium
-                                        viewModel.trigger(.uploaderContentType(.metadata))
+                                        metaUploaderState = .medium
                                     }
                                     .opacity(viewModel.state.editIsVisible ? 1 : 0)
                                     .animation(Animation.easeInOut(duration: 0.1), value: viewModel.state.editIsVisible)
@@ -700,8 +617,6 @@ struct DealView: View {
                                 Text(R.string.localizable.dealResultsTitle())
                                     .font(.title.weight(.regular))
                                     .foregroundColor(R.color.textBase.color)
-                                
-                                Label(text: R.string.localizable.dealResultsWaitingApprove(), type: .primary)
                                 Spacer()
                             }
                             Text(R.string.localizable.dealResultsHint())
@@ -713,14 +628,11 @@ struct DealView: View {
                         
                         // MARK: - Results
                         VStack {
+                            // MARK: - Results text
                             VStack {
                                 HStack {
-                                    HStack {
-                                        Text(R.string.localizable.dealTextText())
-                                            .font(.title3.weight(.regular))
-                                        
-                                        Label(text: R.string.localizable.commonEncrypted(), type: .default)
-                                    }
+                                    Text(R.string.localizable.dealTextText())
+                                        .font(.title3.weight(.regular))
                                     
                                     Spacer()
                                     
@@ -757,19 +669,17 @@ struct DealView: View {
                         }
                         Spacer(minLength: 4)
                         VStack {
+                            // MARK: - Results files
                             VStack {
                                 HStack {
-                                    HStack {
-                                        Text(R.string.localizable.dealTextFiles())
+                                    Text(R.string.localizable.dealTextFiles())
                                             .font(.title3.weight(.regular))
-                                        Label(text: R.string.localizable.commonEncrypted(), type: .default)
-                                    }
                                     Spacer()
                                     if viewModel.state.canSendResult {
                                         CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false) {
                                             EventService.shared.send(event: DefaultAnalyticsEvent.dealResultAddFileTap)
-                                            uploaderState = .medium
                                             viewModel.trigger(.uploaderContentType(.result))
+                                            resultUploaderState = .medium
                                         }
                                     }
                                 }
@@ -893,9 +803,21 @@ struct DealView: View {
                 $0.hidesWhenStopped = false
             }
         })
-        .resizableSheet($uploaderState, id: "uploader", builder: { builder in
+        .resizableSheet($metaUploaderState, id: "metaUploader", builder: { builder in
             builder.content { context in
-                uploaderView()
+                uploaderView(contentType: .metadata)
+            }
+            .animation(.easeInOut.speed(1.2))
+            .background { context in
+                Color.black
+                    .opacity(context.state == .medium ? 0.5 : 0)
+                    .ignoresSafeArea()
+            }
+            .supportedState([.medium])
+        })
+        .resizableSheet($resultUploaderState, id: "resultsUploader", builder: { builder in
+            builder.content { context in
+                uploaderView(contentType: .result)
             }
             .animation(.easeInOut.speed(1.2))
             .background { context in
@@ -940,19 +862,22 @@ struct DealView: View {
                 })
                 .interactiveDismiss(canDismissSheet: false)
             case .editTextDealResult, .viewTextDealResult:
-                TextEditorView(allowEdit: type == .editTextDealResult, viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
-                    dealId: viewModel.state.deal.id,
-                    content: viewModel.state.deal.result ?? .init(files: []),
-                    contentType: .result,
-                    secretKey: viewModel.state.decryptedKey, dealService: try? APIServiceFactory.shared.makeDealsService())),
-                               action: { result in
-                    switch result {
-                    case .close:
-                        activeModalType = nil
-                    case .success(let meta):
-                        viewModel.trigger(.updateContent(meta, .result))
-                    }
-                })
+                TextEditorView(
+                    allowEdit: type == .editTextDealResult,
+                    viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
+                        dealId: viewModel.state.deal.id,
+                        content: viewModel.state.deal.result ?? .init(files: []),
+                        contentType: .result,
+                        secretKey: viewModel.state.decryptedKey,
+                        dealService: try? APIServiceFactory.shared.makeDealsService())),
+                    action: { result in
+                        switch result {
+                        case .close:
+                            activeModalType = nil
+                        case .success(let meta):
+                            viewModel.trigger(.updateContent(meta, .result))
+                        }
+                    })
                 .interactiveDismiss(canDismissSheet: false)
             case .changeAmount, .changeCheckerAmount:
                 ChangeAmountView(
@@ -1183,28 +1108,30 @@ struct DealView: View {
     }
 
     @ViewBuilder
-    private func uploaderView() -> some View {
+    private func uploaderView(contentType: DealsService.ContentType?) -> some View {
         UploadFileView(
             viewModel: AnyViewModel<UploadFileState, UploadFileInput>(UploadFileViewModel(
                 dealId: viewModel.state.deal.id,
-                content: viewModel.state.uploaderContentType == .result ? viewModel.state.deal.result ?? .init(files: []) : viewModel.state.deal.meta ?? .init(files: []),
-                contentType: viewModel.state.uploaderContentType ?? .metadata,
+                content: contentType == .result
+                    ? viewModel.state.deal.result ?? .init(files: [])
+                    : viewModel.state.deal.meta ?? .init(files: []),
+                contentType: contentType ?? .metadata,
                 secretKey: viewModel.state.decryptedKey,
                 dealService: try? APIServiceFactory.shared.makeDealsService(),
                 filesAPIService: try? APIServiceFactory.shared.makeFileService())), action: { actionType in
                     switch actionType {
                     case .close:
-                        uploaderState = .hidden
-                        viewModel.trigger(.uploaderContentType(nil))
-
+                        metaUploaderState = .hidden
+                        resultUploaderState = .hidden
                     case .success(let meta, let contentType):
                         viewModel.trigger(.updateContent(meta, contentType))
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                            uploaderState = .hidden
-                            viewModel.trigger(.uploaderContentType(nil))
+                            metaUploaderState = .hidden
+                            resultUploaderState = .hidden
                         })
                     }
-                })
+                }
+        )
         .padding(16)
     }
 
@@ -1332,6 +1259,98 @@ struct DealView: View {
     }
 }
 
+struct LoadingDealView: View {
+
+    var body: some View {
+        VStack {
+            ZStack(alignment: .bottomLeading) {
+                VStack {
+                    VStack(alignment: .leading) {
+                        // MARK: - Client
+                        HStack {
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack {
+                                    Text(R.string.localizable.dealTextClient())
+                                        .font(.footnote.weight(.semibold))
+                                        .textCase(.uppercase)
+                                        .foregroundColor(R.color.secondaryText.color)
+                                    Label(text: R.string.localizable.commonYou(), type: .primary)
+                                        .opacity(0)
+                                }
+                                Text(R.string.localizable.commonEmpty())
+                                    .opacity(0)
+                            }
+                        }
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+                        .shimmering()
+
+                        Divider().foregroundColor(R.color.baseSeparator.color).padding(EdgeInsets(top: 0, leading: -20, bottom: 0, trailing: -20))
+                        
+                        // MARK: - Amount
+                        HStack {
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack {
+                                    Text(R.string.localizable.dealViewAmount())
+                                        .font(.footnote.weight(.semibold))
+                                        .textCase(.uppercase)
+                                        .foregroundColor(R.color.secondaryText.color)
+                                    
+                                }
+                                Text(R.string.localizable.commonEmpty())
+                                    .font(.title)
+                                    .opacity(0)
+                            }
+                            Spacer()
+                        }
+                        .padding(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
+                        .shimmering()
+                    }
+                    .padding(14)
+                    .background(R.color.secondaryBackground.color)
+                    .cornerRadius(20)
+                    .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+
+                    // MARK: - Executor
+                    VStack(alignment: .leading) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Text(R.string.localizable.dealTextExecutor())
+                                        .font(.footnote.weight(.semibold))
+                                        .textCase(.uppercase)
+                                        .foregroundColor(R.color.secondaryText.color)
+                                }
+                                Text(R.string.localizable.commonEmpty())
+                                    .opacity(0)
+                            }
+                            Spacer()
+                        }
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 6, trailing: 0))
+                        .shimmering()
+
+                        Text(R.string.localizable.dealHintAboutExecutor())
+                            .font(.footnote)
+                            .foregroundColor(R.color.secondaryText.color)
+                            .opacity(0)
+                    }
+                    .padding(14)
+                    .background(R.color.secondaryBackground.color)
+                    .cornerRadius(20)
+                    .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+                }
+                ZStack {
+                    Circle()
+                        .foregroundColor(R.color.mainBackground.color)
+                        .frame(width: 28, height: 28)
+                    Constants.arrowDownImage.foregroundColor(R.color.secondaryText.color)
+                }
+                .frame(width: 28, height: 28)
+                .offset(CGSize(width: 20, height: -93))
+            }
+        }
+        .padding(EdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12))
+    }
+}
 
 struct FileItemView: View {
 
