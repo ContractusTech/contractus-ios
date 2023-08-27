@@ -521,7 +521,7 @@ struct DealView: View {
                                 HStack(spacing: 8) {
                                     Text(R.string.localizable.dealTextText())
                                         .font(.title3.weight(.regular))
-                                    if !(viewModel.state.deal.meta?.contentIsEmpty ?? true) {
+                                    if !(viewModel.state.deal.meta?.contentIsEmpty ?? true) && viewModel.state.withEncryption {
                                         Label(text: R.string.localizable.commonEncrypted(), type: .default)
                                     }
                                 }
@@ -543,7 +543,9 @@ struct DealView: View {
                             VStack(alignment: .leading) {
                                 if let content = viewModel.state.deal.meta?.content {
                                     HStack {
-                                        Text(ContentMask.maskAll(content.text))
+                                        Text(viewModel.state.withEncryption
+                                             ? ContentMask.maskAll(content.text)
+                                             : content.text.fromBase64() ?? "")
                                         Spacer()
                                     }
                                     
@@ -592,7 +594,8 @@ struct DealView: View {
                                     ForEach(viewModel.state.deal.meta?.files ?? []) { file in
                                         FileItemView(
                                             file: file,
-                                            decryptedName: viewModel.state.decryptedFiles[file.md5]?.lastPathComponent
+                                            decryptedName: viewModel.state.withEncryption ?  viewModel.state.decryptedFiles[file.md5]?.lastPathComponent : file.name,
+                                            showRemove: viewModel.state.editIsVisible
                                         ) { action in
                                             switch action {
                                             case .open:
@@ -1363,6 +1366,7 @@ struct FileItemView: View {
     }
     var file: MetadataFile
     var decryptedName: String?
+    var showRemove: Bool = true
     var action: (Self.ActionType) -> Void
 
     @State private var confirmPresented: Bool = false
@@ -1419,14 +1423,16 @@ struct FileItemView: View {
                 }
 
                 Spacer()
-                Button {
-                    confirmPresented = true
-                } label: {
-                    Constants.remove
-                        .resizable()
-                        .foregroundColor(R.color.secondaryText.color)
-                        .frame(width: 16, height: 16)
-                        .padding(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+                if showRemove {
+                    Button {
+                        confirmPresented = true
+                    } label: {
+                        Constants.remove
+                            .resizable()
+                            .foregroundColor(R.color.secondaryText.color)
+                            .frame(width: 16, height: 16)
+                            .padding(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+                    }
                 }
             }
             .padding(.top, 4)
