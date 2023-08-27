@@ -650,7 +650,9 @@ struct DealView: View {
                                 VStack(alignment: .leading) {
                                     if let result = viewModel.state.deal.result?.content {
                                         HStack {
-                                            Text(ContentMask.maskAll(result.text))
+                                            Text(viewModel.state.withEncryption
+                                                 ? ContentMask.maskAll(result.text)
+                                                 : result.text.fromBase64() ?? "")
                                             Spacer()
                                         }
                                         
@@ -697,7 +699,7 @@ struct DealView: View {
                                             ForEach(files) { file in
                                                 FileItemView(
                                                     file: file,
-                                                    decryptedName: viewModel.state.decryptedFiles[file.md5]?.lastPathComponent
+                                                    decryptedName: viewModel.state.withEncryption ?  viewModel.state.decryptedFiles[file.md5]?.lastPathComponent : file.name
                                                 ) { action in
                                                     switch action {
                                                     case .open:
