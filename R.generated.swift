@@ -980,8 +980,20 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 349 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 355 localization keys.
     struct localizable {
+      /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client
+      ///
+      /// Locales: en
+      static let dealStatusCanceledSubtitleWithChecker = Rswift.StringResource(key: "deal.status.canceled.subtitle.with-checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: %@ was transferred to the account of the executor %@
+      ///
+      /// Locales: en
+      static let dealStatusFinishedSubtitle = Rswift.StringResource(key: "deal.status.finished.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: %@ was transferred to the account of the executor %@ and %@ to the account of the checker
+      ///
+      /// Locales: en
+      static let dealStatusFinishedSubtitleWithChecker = Rswift.StringResource(key: "deal.status.finished.subtitle.with-checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: -
       ///
       /// Locales: en
@@ -1378,6 +1390,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonDeal = Rswift.StringResource(key: "common.deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Deal is canceled
+      ///
+      /// Locales: en
+      static let dealStatusCanceledTitle = Rswift.StringResource(key: "deal.status.canceled.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Deal is finished
+      ///
+      /// Locales: en
+      static let dealStatusFinishedTitle = Rswift.StringResource(key: "deal.status.finished.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Deal without fee
       ///
       /// Locales: en
@@ -2114,6 +2134,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let uploadFileLargeFile = Rswift.StringResource(key: "uploadFile.large-file", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The funds were returned to the client
+      ///
+      /// Locales: en
+      static let dealStatusCanceledSubtitle = Rswift.StringResource(key: "deal.status.canceled.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The partner has already signed the contract. The work of the contract will begin when you sign the contract.
       ///
       /// Locales: en
@@ -2378,6 +2402,57 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionTypeUnwrapWsol = Rswift.StringResource(key: "transaction.type.unwrap-wsol", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+
+      /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client
+      ///
+      /// Locales: en
+      static func dealStatusCanceledSubtitleWithChecker(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("deal.status.canceled.subtitle.with-checker", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.canceled.subtitle.with-checker"
+        }
+
+        let format = NSLocalizedString("deal.status.canceled.subtitle.with-checker", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
+      }
+
+      /// en translation: %@ was transferred to the account of the executor %@
+      ///
+      /// Locales: en
+      static func dealStatusFinishedSubtitle(_ value1: String, _ value2: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("deal.status.finished.subtitle", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1, value2)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.finished.subtitle"
+        }
+
+        let format = NSLocalizedString("deal.status.finished.subtitle", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1, value2)
+      }
+
+      /// en translation: %@ was transferred to the account of the executor %@ and %@ to the account of the checker
+      ///
+      /// Locales: en
+      static func dealStatusFinishedSubtitleWithChecker(_ value1: String, _ value2: String, _ value3: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("deal.status.finished.subtitle.with-checker", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1, value2, value3)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.finished.subtitle.with-checker"
+        }
+
+        let format = NSLocalizedString("deal.status.finished.subtitle.with-checker", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1, value2, value3)
+      }
 
       /// en translation: -
       ///
@@ -3872,6 +3947,36 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.deal", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Deal is canceled
+      ///
+      /// Locales: en
+      static func dealStatusCanceledTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.canceled.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.canceled.title"
+        }
+
+        return NSLocalizedString("deal.status.canceled.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Deal is finished
+      ///
+      /// Locales: en
+      static func dealStatusFinishedTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.finished.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.finished.title"
+        }
+
+        return NSLocalizedString("deal.status.finished.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Deal without fee
@@ -6636,6 +6741,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("uploadFile.large-file", bundle: bundle, comment: "")
+      }
+
+      /// en translation: The funds were returned to the client
+      ///
+      /// Locales: en
+      static func dealStatusCanceledSubtitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.canceled.subtitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.canceled.subtitle"
+        }
+
+        return NSLocalizedString("deal.status.canceled.subtitle", bundle: bundle, comment: "")
       }
 
       /// en translation: The partner has already signed the contract. The work of the contract will begin when you sign the contract.

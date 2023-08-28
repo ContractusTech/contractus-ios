@@ -143,6 +143,10 @@ public struct Deal: Decodable {
     public var amountFormatted: String {
         token.format(amount: self.amount, withCode: false)
     }
+
+    public var amountFormattedWithCode: String {
+        token.format(amount: self.amount, withCode: true)
+    }
     
     public var amountFormattedShort: String {
         token.formatShort(amount: self.amount, withCode: false)

@@ -135,6 +135,10 @@ struct DealState {
     var canEditDeal: Bool {
         deal.status == .new
     }
+
+    var isDealEnded: Bool {
+        deal.status == .canceled || deal.status == .finished
+    }
     
     var editIsVisible: Bool = false
 
