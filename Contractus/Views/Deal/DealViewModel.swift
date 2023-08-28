@@ -137,7 +137,7 @@ struct DealState {
     }
 
     var isDealEnded: Bool {
-        deal.status == .canceled || deal.status == .finished
+        deal.status == .canceled || deal.status == .finished || deal.status == .revoked
     }
     
     var editIsVisible: Bool = false
