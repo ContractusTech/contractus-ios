@@ -22,6 +22,10 @@ public enum OwnerRole: String, Codable {
 
 public enum DealStatus: String, Codable {
     case new = "NEW", starting = "STARTING", started = "STARTED", finished = "FINISHED", finishing = "FINISHING", canceled = "CANCELED", canceling = "CANCELING", revoked = "REVOKED", unknown
+
+    public var isCanceled: Bool {
+        self == .canceled || self == .revoked
+    }
 }
 
 public struct Deal: Decodable {
