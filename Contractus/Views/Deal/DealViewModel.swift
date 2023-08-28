@@ -184,6 +184,9 @@ struct DealState {
         return deal.ownerBondToken
     }
 
+    var withEncryption: Bool {
+        deal.encryptedSecretKey != nil
+    }
 
     var currentMainActions: [MainActionType] = []
 }
@@ -312,7 +315,14 @@ final class DealViewModel: ViewModel {
             }
         case .openFile(let file):
             state.previewState = .none
-            guard !state.decryptedKey.isEmpty, !(state.decryptingFiles[file.md5] ?? false) else { return }
+            guard !state.decryptedKey.isEmpty, !(state.decryptingFiles[file.md5] ?? false) else {
+                if !state.withEncryption {
+                    Task {
+                        await openFile(file)
+                    }
+                }
+                return
+            }
             state.decryptingFiles[file.md5] = true
             if let url = state.decryptedFiles[file.md5] {
                 state.decryptingFiles[file.md5] = nil
@@ -424,6 +434,11 @@ final class DealViewModel: ViewModel {
         if state.isOwnerDeal {
             decryptKey()
         } else {
+            guard let key = state.deal.encryptedSecretKey else {
+                self.state.canEdit = true
+                self.checkLocalFiles()
+                return
+            }
             guard let clientSecret = secretStorage?.getSharedSecret(for: state.deal.id) else {
                 self.state.canEdit = false
                 return
@@ -537,6 +552,43 @@ final class DealViewModel: ViewModel {
         })
     }
 
+    private func openFile(_ file: MetadataFile) async {
+        await MainActor.run {
+            state.previewState = .downloading(0)
+        }
+        guard let filePath = try? await downloadFile(url: file.url) else {
+            debugPrint("downloadFile error");
+            await MainActor.run {
+                state.previewState = .none
+                state.errorState = .error(R.string.localizable.errorDownloadFile())
+            }
+            return
+        }
+        guard let documentsURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else { return }
+        let folderURL = documentsURL.appendingPathComponent(filePath.lastPathComponent, isDirectory: true)
+        let fileURL = folderURL.appendingPathComponent(file.name)
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            state.previewState = .filePreview(fileURL)
+            return
+        }
+        guard let fileData = try? Data(contentsOf: filePath) else { return }
+        do {
+            try? FileManager.default.removeItem(at: fileURL)
+            try fileData.write(to: fileURL)
+        } catch(let error) {
+            debugPrint(error.localizedDescription)
+            self.state.errorState = .error(error.localizedDescription)
+            return
+        }
+        Task {
+            await MainActor.run {
+                state.decryptedFiles[file.md5] = fileURL
+                state.decryptingFiles[file.md5] = nil
+                state.previewState = .filePreview(fileURL)
+            }
+        }
+    }
+    
     private func prepareFileForPreview(_ file: MetadataFile) async -> URL? {
         await MainActor.run {
             state.previewState = .downloading(0)
@@ -590,15 +642,25 @@ final class DealViewModel: ViewModel {
     }
 
     private func checkLocalFiles() {
-        state.deal.meta?.files.forEach { file in
-            Task {
-                let fileNameData = try? await Crypto.decrypt(base64Encrypted: file.name, with: state.decryptedKey)
-                guard let fileNameData = fileNameData else { return }
-                guard let fileName = String(data: fileNameData, encoding: .utf8) else { return }
-                
-                guard let documentsURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else { return }
-                let folderURL = documentsURL.appendingPathComponent(file.url.lastPathComponent, isDirectory: true)
-                let fileURL = folderURL.appendingPathComponent(fileName)
+        var allFiles = state.deal.meta?.files ?? []
+        allFiles.append(contentsOf: state.deal.result?.files ?? [])
+        allFiles.forEach { file in
+            guard let documentsURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else { return }
+            let folderURL = documentsURL.appendingPathComponent(file.url.lastPathComponent, isDirectory: true)
+
+            if state.withEncryption {
+                Task {
+                    let fileNameData = try? await Crypto.decrypt(base64Encrypted: file.name, with: state.decryptedKey)
+                    guard let fileNameData = fileNameData else { return }
+                    guard let fileName = String(data: fileNameData, encoding: .utf8) else { return }
+                    
+                    let fileURL = folderURL.appendingPathComponent(fileName)
+                    if FileManager.default.fileExists(atPath: fileURL.path) {
+                        state.decryptedFiles[file.md5] = fileURL
+                    }
+                }
+            } else {
+                let fileURL = folderURL.appendingPathComponent(file.name)
                 if FileManager.default.fileExists(atPath: fileURL.path) {
                     state.decryptedFiles[file.md5] = fileURL
                 }

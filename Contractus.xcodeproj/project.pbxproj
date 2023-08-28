@@ -145,6 +145,7 @@
 		6DFED9332930F1EE00AF727A /* ImpactGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED9322930F1EE00AF727A /* ImpactGenerator.swift */; };
 		6DFED935293207D200AF727A /* QRCodeScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED934293207D200AF727A /* QRCodeScannerViewModel.swift */; };
 		6DFED939293262F300AF727A /* SharablePublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED938293262F300AF727A /* SharablePublicKey.swift */; };
+		6DFF40BB2A9A144B0042AE78 /* String+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFF40BA2A9A144B0042AE78 /* String+Ex.swift */; };
 		FE0F36802A552C2D00EEC595 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = FE0F367F2A552C2D00EEC595 /* Shimmer */; };
 		FE1D8DDE2A31115A003D97BC /* BorderDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D8DDD2A31115A003D97BC /* BorderDivider.swift */; };
 		FE1E3DD429D3597E009B0E57 /* AboutAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */; };
@@ -319,6 +320,7 @@
 		6DFED9322930F1EE00AF727A /* ImpactGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpactGenerator.swift; sourceTree = "<group>"; };
 		6DFED934293207D200AF727A /* QRCodeScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerViewModel.swift; sourceTree = "<group>"; };
 		6DFED938293262F300AF727A /* SharablePublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharablePublicKey.swift; sourceTree = "<group>"; };
+		6DFF40BA2A9A144B0042AE78 /* String+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ex.swift"; sourceTree = "<group>"; };
 		FE1D8DDD2A31115A003D97BC /* BorderDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderDivider.swift; sourceTree = "<group>"; };
 		FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAccountView.swift; sourceTree = "<group>"; };
 		FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectView.swift; sourceTree = "<group>"; };
@@ -725,6 +727,7 @@
 				6D6E60D329EE2F08008AB833 /* TransactionStatus+Ex.swift */,
 				FEE467E52A1C0F010046938F /* UIImage+Ex.swift */,
 				6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */,
+				6DFF40BA2A9A144B0042AE78 /* String+Ex.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1114,6 +1117,7 @@
 				6DB9C3D72A5532760011C817 /* AuthStorage.swift in Sources */,
 				6D1DF1A42922EC7400B112FC /* CButtons.swift in Sources */,
 				6D8EFDA328E0528A0064F5DA /* FiatCurrency.swift in Sources */,
+				6DFF40BB2A9A144B0042AE78 /* String+Ex.swift in Sources */,
 				6DBCA47E2890E36700F918B6 /* Buttons.swift in Sources */,
 				6D5900FA2892340400EC318E /* R.generated.swift in Sources */,
 				6D2E0AF228AE9833002BA683 /* DealViewModel.swift in Sources */,
