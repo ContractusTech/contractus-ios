@@ -552,7 +552,6 @@ final class DealViewModel: ViewModel {
         })
     }
 
-    /// Сохраняеми и открываем незашифрованный файл
     private func openFile(_ file: MetadataFile) async {
         await MainActor.run {
             state.previewState = .downloading(0)
