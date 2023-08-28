@@ -81,14 +81,15 @@ struct DealView: View {
 
     var body: some View {
         ScrollView {
-            if viewModel.state.isDealEnded {
-                dealStatusView(status: viewModel.state.deal.status)
-            }
+
 
             // MARK: - Loading view
             if viewModel.currentMainActions.isEmpty {
                 LoadingDealView()
             } else {
+                if viewModel.state.isDealEnded {
+                    dealStatusView()
+                }
                 VStack {
                     // MARK: - No secret key
                     if viewModel.state.state == .none && !viewModel.state.canEdit {
@@ -1155,14 +1156,15 @@ struct DealView: View {
     }
 
     @ViewBuilder
-    func dealStatusView(status: DealStatus) -> some View {
-        switch status {
-        case .finished, .canceled:
+    func dealStatusView() -> some View {
+
+        switch viewModel.state.deal.status {
+        case .finished, .canceled, .revoked:
             VStack {
                 HStack {
                     Spacer()
                     VStack(spacing: 8) {
-                        if status == .finished {
+                        if viewModel.state.deal.status == .finished {
                             Constants.doneStatusImage
                                 .resizable()
                                 .frame(width: 24, height: 24)
@@ -1173,10 +1175,10 @@ struct DealView: View {
                                 .frame(width: 24, height: 24)
                                 .foregroundColor(R.color.secondaryText.color)
                         }
-                        Text(statusTitle(status: status))
+                        Text(statusTitle(status: viewModel.state.deal.status))
                             .font(.body.weight(.bold))
                             .foregroundColor(R.color.textBase.color)
-                        Text(statusSubtitle())
+                        Text(statusSubtitle(status: viewModel.state.deal.status))
                             .font(.footnote)
                             .foregroundColor(R.color.secondaryText.color)
                             .multilineTextAlignment(.center)
@@ -1202,12 +1204,15 @@ struct DealView: View {
         return R.string.localizable.dealStatusCanceledTitle()
     }
 
-    private func statusSubtitle() -> String {
+    private func statusSubtitle(status: DealStatus) -> String {
+        if status == .revoked {
+            return R.string.localizable.dealStatusRevokedSubtitle()
+        }
         if viewModel.state.checkerIsEmpty {
             return R.string.localizable.dealStatusFinishedSubtitle(viewModel.deal.amountFormattedWithCode, ContentMask.mask(from: viewModel.executorPublicKey))
 
         }
-        return R.string.localizable.dealStatusFinishedSubtitleWithChecker(viewModel.deal.amountFormattedWithCode, ContentMask.mask(from: viewModel.executorPublicKey), ContentMask.mask(from: viewModel.state.deal.checkerPublicKey ?? ""))
+        return R.string.localizable.dealStatusFinishedSubtitleWithChecker(viewModel.deal.amountFormattedWithCode, ContentMask.mask(from: viewModel.executorPublicKey), viewModel.deal.amountFeeCheckerFormatted ?? "", ContentMask.mask(from: viewModel.state.deal.checkerPublicKey ?? ""))
     }
 
     private func actionSheetMenuButtons() -> [Alert.Button] {

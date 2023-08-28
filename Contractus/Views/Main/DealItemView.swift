@@ -203,7 +203,7 @@ private extension DealStatus {
         switch self {
         case .finished:
             return R.color.baseGreen.color
-        case .canceled:
+        case .canceled, .revoked:
             return R.color.redText.color
         case .new:
             return R.color.blue.color
@@ -220,7 +220,7 @@ private extension DealStatus {
         switch self {
         case .finished:
             return R.string.localizable.dealStatusFinished()
-        case .canceled:
+        case .canceled, .revoked:
             return R.string.localizable.dealStatusCanceled()
         case .new:
             return R.string.localizable.dealStatusNew()

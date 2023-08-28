@@ -229,9 +229,10 @@
 "deal.status.finished.title" = "Deal is finished";
 "deal.status.canceled.title" = "Deal is canceled";
 "deal.status.finished.subtitle" = "%@ was transferred to the account of the executor %@";
-"deal.status.finished.subtitle.with-checker" = "%@ was transferred to the account of the executor %@ and %@ to the account of the checker";
+"deal.status.finished.subtitle.with-checker" = "%@ was transferred to the account of the executor %@ and %@ to the account of the checker %@";
 "deal.status.canceled.subtitle" = "The funds were returned to the client";
 "deal.status.canceled.subtitle.with-checker" = "%@ was transferred to the account of the checker and the balance was returned to the client";
+"deal.status.revoked.subtitle" = "Owner canceled before signing by all parties of the contract";
 
 "deadline.title" = "Select deadline";
 "deadline.of.deal" = "Deadline of deal";
