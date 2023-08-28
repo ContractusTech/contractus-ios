@@ -21,7 +21,11 @@ public enum OwnerRole: String, Codable {
 }
 
 public enum DealStatus: String, Codable {
-    case new = "NEW", starting = "STARTING", started = "STARTED", finished = "FINISHED", finishing = "FINISHING", canceled = "CANCELED", canceling = "CANCELING", unknown
+    case new = "NEW", starting = "STARTING", started = "STARTED", finished = "FINISHED", finishing = "FINISHING", canceled = "CANCELED", canceling = "CANCELING", revoked = "REVOKED", unknown
+
+    public var isCanceled: Bool {
+        self == .canceled || self == .revoked
+    }
 }
 
 public struct Deal: Decodable {
@@ -142,6 +146,10 @@ public struct Deal: Decodable {
 
     public var amountFormatted: String {
         token.format(amount: self.amount, withCode: false)
+    }
+
+    public var amountFormattedWithCode: String {
+        token.format(amount: self.amount, withCode: true)
     }
     
     public var amountFormattedShort: String {

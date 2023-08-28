@@ -84,12 +84,12 @@ struct DealItemView: View {
                 if let pk = withPublicKey {
                     Text(ContentMask.mask(from: pk))
                         .font(.subheadline.weight(.medium))
-                        .foregroundColor(status == .canceled ? R.color.secondaryText.color : R.color.textBase.color)
+                        .foregroundColor(status.isCanceled ? R.color.secondaryText.color : R.color.textBase.color)
                         
                 } else {
                     Text(R.string.localizable.commonEmpty())
                         .font(.subheadline.weight(.medium))
-                        .foregroundColor(status == .canceled ? R.color.secondaryText.color : R.color.textBase.color)
+                        .foregroundColor(status.isCanceled ? R.color.secondaryText.color : R.color.textBase.color)
                 }
             }
             .padding(.top, 22)
@@ -117,12 +117,12 @@ struct DealItemView: View {
     }
 
     private var isStrikethrough: Bool {
-        return status == .canceled
+        return status.isCanceled
     }
 
     private var colorAmountText: Color {
         switch status {
-        case .canceled:
+        case .canceled, .revoked:
             return R.color.secondaryText.color
         case .finished:
             return roleType == .receive ? R.color.baseGreen.color : R.color.textBase.color
@@ -203,8 +203,8 @@ private extension DealStatus {
         switch self {
         case .finished:
             return R.color.baseGreen.color
-        case .canceled:
-            return R.color.redText.color
+        case .canceled, .revoked:
+            return R.color.secondaryText.color
         case .new:
             return R.color.blue.color
         case .canceling, .finishing, .starting:
@@ -220,7 +220,7 @@ private extension DealStatus {
         switch self {
         case .finished:
             return R.string.localizable.dealStatusFinished()
-        case .canceled:
+        case .canceled, .revoked:
             return R.string.localizable.dealStatusCanceled()
         case .new:
             return R.string.localizable.dealStatusNew()

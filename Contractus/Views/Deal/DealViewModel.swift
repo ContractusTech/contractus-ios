@@ -135,6 +135,10 @@ struct DealState {
     var canEditDeal: Bool {
         deal.status == .new
     }
+
+    var isDealEnded: Bool {
+        deal.status == .canceled || deal.status == .finished || deal.status == .revoked
+    }
     
     var editIsVisible: Bool = false
 
@@ -678,7 +682,7 @@ final class DealViewModel: ViewModel {
             } else {
                 actions = [.sign]
             }
-        case .canceled, .unknown, .finished, .canceling, .finishing, .starting:
+        case .canceled, .unknown, .finished, .canceling, .finishing, .starting, .revoked:
             actions = []
         case .started:
             actions = [.finishDeal, .cancelDeal]
