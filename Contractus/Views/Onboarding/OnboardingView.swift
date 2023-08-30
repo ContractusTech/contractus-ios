@@ -19,6 +19,8 @@ struct OnboardingView: View {
                 ForEach(viewModel.state.onboardingPages, id: \.self) { page in
                     OnboardingPageView(page: page)
                         .tag(viewModel.state.onboardingPages.firstIndex(of: page)!)
+                        .contentShape(Rectangle())
+                        .gesture(page.buttonType == .accept ? DragGesture() : nil)
                 }
             }
             .tabViewStyle(PageTabViewStyle())
