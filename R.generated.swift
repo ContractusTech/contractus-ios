@@ -980,7 +980,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 359 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 361 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client
       ///
@@ -1102,6 +1102,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealViewAmount = Rswift.StringResource(key: "deal.view.amount", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Amount of fee
+      ///
+      /// Locales: en
+      static let changeAmountEstimateFiat = Rswift.StringResource(key: "changeAmount.estimate.fiat", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: And your native token will be wraped
       ///
       /// Locales: en
@@ -1350,10 +1354,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsDeleteSubtitle = Rswift.StringResource(key: "accounts.delete.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Cost of verification
-      ///
-      /// Locales: en
-      static let changeAmountVerificationAmount = Rswift.StringResource(key: "changeAmount.verification-amount", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Create
       ///
       /// Locales: en
@@ -1550,10 +1550,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let balanceTitle = Rswift.StringResource(key: "balance.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Estimate fiat amountt
-      ///
-      /// Locales: en
-      static let changeAmountEstimateFiat = Rswift.StringResource(key: "changeAmount.estimate.fiat", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Executor
       ///
       /// Locales: en
@@ -1586,6 +1582,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignFieldsFee = Rswift.StringResource(key: "transactionSign.fields.fee", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Fee of checker
+      ///
+      /// Locales: en
+      static let changeAmountVerificationAmount = Rswift.StringResource(key: "changeAmount.verification-amount", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: File
       ///
       /// Locales: en
@@ -1750,6 +1750,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealBondShortNobody = Rswift.StringResource(key: "newDeal.bond.short.nobody", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Not specified
+      ///
+      /// Locales: en
+      static let commonNotSpecified = Rswift.StringResource(key: "common.not-specified", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Obtain loan funds for the deal
       ///
       /// Locales: en
@@ -2202,6 +2206,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealDescriptionCommandCantSign = Rswift.StringResource(key: "deal.description-command.cant-sign", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: To start the deal, fill in the amount, deadline, the %@ accounts of all parties involved in the deal, and the checker fee (if an checker is in your deal).
+      ///
+      /// Locales: en
+      static let dealInformationAboutSign = Rswift.StringResource(key: "deal.information.about-sign", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Token
       ///
       /// Locales: en
@@ -2881,6 +2889,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.view.amount", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Amount of fee
+      ///
+      /// Locales: en
+      static func changeAmountEstimateFiat(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.estimate.fiat", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.estimate.fiat"
+        }
+
+        return NSLocalizedString("changeAmount.estimate.fiat", bundle: bundle, comment: "")
       }
 
       /// en translation: And your native token will be wraped
@@ -3813,21 +3836,6 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("accounts.delete.subtitle", bundle: bundle, comment: "")
       }
 
-      /// en translation: Cost of verification
-      ///
-      /// Locales: en
-      static func changeAmountVerificationAmount(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("changeAmount.verification-amount", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "changeAmount.verification-amount"
-        }
-
-        return NSLocalizedString("changeAmount.verification-amount", bundle: bundle, comment: "")
-      }
-
       /// en translation: Create
       ///
       /// Locales: en
@@ -4565,21 +4573,6 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("balance.title", bundle: bundle, comment: "")
       }
 
-      /// en translation: Estimate fiat amountt
-      ///
-      /// Locales: en
-      static func changeAmountEstimateFiat(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("changeAmount.estimate.fiat", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "changeAmount.estimate.fiat"
-        }
-
-        return NSLocalizedString("changeAmount.estimate.fiat", bundle: bundle, comment: "")
-      }
-
       /// en translation: Executor
       ///
       /// Locales: en
@@ -4698,6 +4691,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.fields.fee", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Fee of checker
+      ///
+      /// Locales: en
+      static func changeAmountVerificationAmount(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.verification-amount", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.verification-amount"
+        }
+
+        return NSLocalizedString("changeAmount.verification-amount", bundle: bundle, comment: "")
       }
 
       /// en translation: File
@@ -5315,6 +5323,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("newDeal.bond.short.nobody", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Not specified
+      ///
+      /// Locales: en
+      static func commonNotSpecified(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.not-specified", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.not-specified"
+        }
+
+        return NSLocalizedString("common.not-specified", bundle: bundle, comment: "")
       }
 
       /// en translation: Obtain loan funds for the deal
@@ -7012,6 +7035,23 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.description-command.cant-sign", bundle: bundle, comment: "")
+      }
+
+      /// en translation: To start the deal, fill in the amount, deadline, the %@ accounts of all parties involved in the deal, and the checker fee (if an checker is in your deal).
+      ///
+      /// Locales: en
+      static func dealInformationAboutSign(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("deal.information.about-sign", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.information.about-sign"
+        }
+
+        let format = NSLocalizedString("deal.information.about-sign", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
       }
 
       /// en translation: Token

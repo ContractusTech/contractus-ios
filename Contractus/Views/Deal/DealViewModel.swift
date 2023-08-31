@@ -76,7 +76,6 @@ struct DealState {
     var deal: ContractusAPI.Deal
     var shareDeal: ShareableDeal?
     var canEdit: Bool = false
-    var canSign: Bool = true
     var state: State = .none
     var previewState: FileState = .none
     var partnerSecretPartBase64: String = ""
@@ -193,6 +192,10 @@ struct DealState {
     }
 
     var currentMainActions: [MainActionType] = []
+
+    var allowSignDealToStarting: Bool {
+        deal.status == .new && currentMainActions.contains(.sign)
+    }
 }
 
 final class DealViewModel: ViewModel {
@@ -678,25 +681,6 @@ final class DealViewModel: ViewModel {
                 }
             }
         }
-    }
-    
-    private func getDealActions(for deal: Deal, isSigned: Bool, actions: DealAction) -> [State.MainActionType] {
-
-        let actions: [State.MainActionType]
-        switch deal.status {
-        case .new:
-            if isSigned {
-                actions = [.cancelSign]
-            } else {
-                actions = [.sign]
-            }
-        case .canceled, .unknown, .finished, .canceling, .finishing, .starting, .revoked:
-            actions = []
-        case .started:
-            actions = [.finishDeal, .cancelDeal]
-        }
-
-        return actions
     }
 
     private func cancelSign() async throws {

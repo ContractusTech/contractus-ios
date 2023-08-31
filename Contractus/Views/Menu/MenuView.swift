@@ -131,8 +131,7 @@ struct MenuView: View {
                             icon: Constants.supportIcon,
                             title: R.string.localizable.menuSupport()
                         ) {
-                            let appURL = URL(string: "mailto:\(AppConfig.supportEmail)")!
-                            UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
+                            openEmailSupport()
                         }
 //                        MenuItemView (
 //                            icon: Constants.lockIcon,

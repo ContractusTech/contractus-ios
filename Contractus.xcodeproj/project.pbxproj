@@ -118,6 +118,7 @@
 		6DBCA4912891162F00F918B6 /* ContentMask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBCA4902891162F00F918B6 /* ContentMask.swift */; };
 		6DBF39DF28D4734B00952D8A /* SharedSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBF39DE28D4734B00952D8A /* SharedSecret.swift */; };
 		6DBF3A4328D81D2C00952D8A /* UIApplication+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBF3A4228D81D2C00952D8A /* UIApplication+Ex.swift */; };
+		6DBFCE462A9F573D00999E85 /* Open.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFCE452A9F573D00999E85 /* Open.swift */; };
 		6DC1C235291BE6660009FE96 /* DocumentPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC1C234291BE6660009FE96 /* DocumentPickerView.swift */; };
 		6DC1C237291C34A20009FE96 /* URL+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC1C236291C34A20009FE96 /* URL+Ex.swift */; };
 		6DC2C02528C98332005C9EBE /* TransactionSignService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC2C02428C98332005C9EBE /* TransactionSignService.swift */; };
@@ -298,6 +299,7 @@
 		6DBF39DE28D4734B00952D8A /* SharedSecret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedSecret.swift; sourceTree = "<group>"; };
 		6DBF3A3D28D64D7F00952D8A /* sss-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "sss-swift"; path = "Packages/sss-swift"; sourceTree = "<group>"; };
 		6DBF3A4228D81D2C00952D8A /* UIApplication+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Ex.swift"; sourceTree = "<group>"; };
+		6DBFCE452A9F573D00999E85 /* Open.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Open.swift; sourceTree = "<group>"; };
 		6DC1C234291BE6660009FE96 /* DocumentPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerView.swift; sourceTree = "<group>"; };
 		6DC1C236291C34A20009FE96 /* URL+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Ex.swift"; sourceTree = "<group>"; };
 		6DC2C02428C98332005C9EBE /* TransactionSignService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSignService.swift; sourceTree = "<group>"; };
@@ -728,6 +730,7 @@
 				FEE467E52A1C0F010046938F /* UIImage+Ex.swift */,
 				6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */,
 				6DFF40BA2A9A144B0042AE78 /* String+Ex.swift */,
+				6DBFCE452A9F573D00999E85 /* Open.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1078,6 +1081,7 @@
 				6DB83CA92899FE5C006A4667 /* DealItemView.swift in Sources */,
 				6DC1C237291C34A20009FE96 /* URL+Ex.swift in Sources */,
 				6D7552942896BDEC0069935B /* BackupInformationView.swift in Sources */,
+				6DBFCE462A9F573D00999E85 /* Open.swift in Sources */,
 				6D75529A2897848B0069935B /* Mock.swift in Sources */,
 				6DBF3A4328D81D2C00952D8A /* UIApplication+Ex.swift in Sources */,
 				6DFED935293207D200AF727A /* QRCodeScannerViewModel.swift in Sources */,
