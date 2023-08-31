@@ -657,16 +657,20 @@ final class DealViewModel: ViewModel {
                     let fileNameData = try? await Crypto.decrypt(base64Encrypted: file.name, with: state.decryptedKey)
                     guard let fileNameData = fileNameData else { return }
                     guard let fileName = String(data: fileNameData, encoding: .utf8) else { return }
-                    
+
                     let fileURL = folderURL.appendingPathComponent(fileName)
                     if FileManager.default.fileExists(atPath: fileURL.path) {
-                        state.decryptedFiles[file.md5] = fileURL
+                        DispatchQueue.main.async {
+                            self.state.decryptedFiles[file.md5] = fileURL
+                        }
                     }
                 }
             } else {
                 let fileURL = folderURL.appendingPathComponent(file.name)
                 if FileManager.default.fileExists(atPath: fileURL.path) {
-                    state.decryptedFiles[file.md5] = fileURL
+                    DispatchQueue.main.async {
+                        self.state.decryptedFiles[file.md5] = fileURL
+                    }
                 }
             }
         }
