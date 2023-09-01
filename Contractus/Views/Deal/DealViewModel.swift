@@ -283,14 +283,15 @@ final class DealViewModel: ViewModel {
             state.deal.amount = amount.value
             state.deal.allowHolderMode = allowHolderMode
             state.deal.token = amount.token
-            Task {
+            Task { @MainActor in
                 await updateActions()
+                after?()
             }
-
         case .changeCheckerAmount(let amount):
             state.deal.checkerAmount = amount.value
             Task {
                 await updateActions()
+                after?()
             }
         case .updateTx:
             Task {
@@ -301,6 +302,7 @@ final class DealViewModel: ViewModel {
                 self.state.deal = deal
                 Task {
                     await updateActions()
+                    after?()
                 }
                 return
             }
@@ -317,6 +319,7 @@ final class DealViewModel: ViewModel {
             case .result:
                 state.deal.result = content
             }
+            after?()
         case .openFile(let file):
             state.previewState = .none
             guard !state.decryptedKey.isEmpty, !(state.decryptingFiles[file.md5] ?? false) else {
@@ -362,6 +365,7 @@ final class DealViewModel: ViewModel {
                 completion: {[weak self] result in
                     self?.state.deal.meta = meta
                     self?.state.state = .none
+                    after?()
                 })
         case .deleteResultFile(let file):
             state.state = .loading
@@ -375,6 +379,7 @@ final class DealViewModel: ViewModel {
                 completion: {[weak self] _ in
                     self?.state.deal.result = result
                     self?.state.state = .none
+                    after?()
                 })
         case .cancelDownload:
             guard let downloadingUUID = downloadingUUID else { return }
@@ -403,12 +408,15 @@ final class DealViewModel: ViewModel {
                 .store(in: &cancelable)
         case .uploaderContentType(let type):
             state.uploaderContentType = type
+            after?()
         case .changeOwnerBondAmount(let amount):
             state.deal.ownerBondAmount = amount.value
             state.deal.ownerBondToken = amount.token
+            after?()
         case .changeContractorBondAmount(let amount):
             state.deal.contractorBondAmount = amount.value
             state.deal.contractorBondToken = amount.token
+            after?()
         }
     }
 
