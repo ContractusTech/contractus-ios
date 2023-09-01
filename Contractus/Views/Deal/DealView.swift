@@ -172,7 +172,6 @@ struct DealView: View {
                                                     .font(.footnote.weight(.semibold))
                                                     .textCase(.uppercase)
                                                     .foregroundColor(R.color.secondaryText.color)
-                                                
                                             }
                                             HStack(alignment: .lastTextBaseline) {
                                                 if viewModel.state.deal.amount > 0 {
@@ -184,9 +183,7 @@ struct DealView: View {
                                                     Text(R.string.localizable.commonEmpty())
                                                         .font(.title)
                                                 }
-                                                
                                             }
-                                            
                                         }
                                         Spacer()
                                         if viewModel.state.canEditDeal {
@@ -489,7 +486,9 @@ struct DealView: View {
                                                 dealService: try? APIServiceFactory.shared.makeDealsService()
                                             ))
                                         ) { updatedDeal in
-                                            viewModel.trigger(.update(updatedDeal))
+                                            viewModel.trigger(.update(updatedDeal)) {
+                                                self.callback()
+                                            }
                                         }
                                     }
                                 }
@@ -607,7 +606,9 @@ struct DealView: View {
                                             case .open:
                                                 viewModel.trigger(.openFile(file))
                                             case .delete:
-                                                viewModel.trigger(.deleteMetadataFile(file))
+                                                viewModel.trigger(.deleteMetadataFile(file)) {
+                                                    self.callback()
+                                                }
                                             }
                                         }
                                     }
@@ -714,7 +715,9 @@ struct DealView: View {
                                                     case .open:
                                                         viewModel.trigger(.openFile(file))
                                                     case .delete:
-                                                        viewModel.trigger(.deleteResultFile(file))
+                                                        viewModel.trigger(.deleteResultFile(file)) {
+                                                            self.callback()
+                                                        }
                                                     }
                                                 }
                                             }
@@ -786,21 +789,24 @@ struct DealView: View {
                     activeModalType = nil
                 }
             case .editTextDealDetails, .viewTextDealDetails:
-                TextEditorView(allowEdit: type == .editTextDealDetails, viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
-                    dealId: viewModel.state.deal.id,
-                    content: viewModel.state.deal.meta ?? .init(files: []),
-                    contentType: .metadata,
-                    secretKey: viewModel.state.decryptedKey,
-                    dealService: try? APIServiceFactory.shared.makeDealsService())),
-                               action: { result in
-
-                    switch result {
-                    case .close:
-                        activeModalType = nil
-                    case .success(let meta):
-                        viewModel.trigger(.updateContent(meta, .metadata))
-                    }
-                })
+                TextEditorView(
+                    allowEdit: type == .editTextDealDetails,
+                    viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
+                        dealId: viewModel.state.deal.id,
+                        content: viewModel.state.deal.meta ?? .init(files: []),
+                        contentType: .metadata,
+                        secretKey: viewModel.state.decryptedKey,
+                        dealService: try? APIServiceFactory.shared.makeDealsService())),
+                    action: { result in
+                        switch result {
+                        case .close:
+                            activeModalType = nil
+                        case .success(let meta):
+                            viewModel.trigger(.updateContent(meta, .metadata)) {
+                                self.callback()
+                            }
+                        }
+                    })
                 .interactiveDismiss(canDismissSheet: false)
             case .editTextDealResult, .viewTextDealResult:
                 TextEditorView(
@@ -816,7 +822,9 @@ struct DealView: View {
                         case .close:
                             activeModalType = nil
                         case .success(let meta):
-                            viewModel.trigger(.updateContent(meta, .result))
+                            viewModel.trigger(.updateContent(meta, .result)) {
+                                self.callback()
+                            }
                         }
                     })
                 .interactiveDismiss(canDismissSheet: false)
@@ -835,7 +843,9 @@ struct DealView: View {
                     didChange: { newAmount, typeAmount, allowHolderMode in
                         switch typeAmount {
                         case .deal:
-                            viewModel.trigger(.changeAmount(newAmount, allowHolderMode))
+                            viewModel.trigger(.changeAmount(newAmount, allowHolderMode)) {
+                                self.callback()
+                            }
                         case .checker:
                             viewModel.trigger(.changeCheckerAmount(newAmount))
                         case .ownerBond:
@@ -860,13 +870,21 @@ struct DealView: View {
                     didChange: { newAmount, typeAmount, allowHolderMode in
                         switch typeAmount {
                         case .deal:
-                            viewModel.trigger(.changeAmount(newAmount, allowHolderMode))
+                            viewModel.trigger(.changeAmount(newAmount, allowHolderMode)) {
+                                self.callback()
+                            }
                         case .checker:
-                            viewModel.trigger(.changeCheckerAmount(newAmount))
+                            viewModel.trigger(.changeCheckerAmount(newAmount)) {
+                                self.callback()
+                            }
                         case .ownerBond:
-                            viewModel.trigger(.changeOwnerBondAmount(newAmount))
+                            viewModel.trigger(.changeOwnerBondAmount(newAmount)) {
+                                self.callback()
+                            }
                         case .contractorBond:
-                            viewModel.trigger(.changeContractorBondAmount(newAmount))
+                            viewModel.trigger(.changeContractorBondAmount(newAmount)) {
+                                self.callback()
+                            }
                         }
                     })
                 .interactiveDismiss(canDismissSheet: false)
@@ -884,7 +902,9 @@ struct DealView: View {
                         activeModalType = nil
                         return
                     }
-                    viewModel.trigger(.update(deal))
+                    viewModel.trigger(.update(deal)) {
+                        self.callback()
+                    }
                 }
                 .interactiveDismiss(canDismissSheet: false)
             case .editChecker(let publicKey):
@@ -901,7 +921,9 @@ struct DealView: View {
                         activeModalType = nil
                         return
                     }
-                    viewModel.trigger(.update(deal))
+                    viewModel.trigger(.update(deal)) {
+                        self.callback()
+                    }
                 }
                 .interactiveDismiss(canDismissSheet: false)
             case .filePreview(let url):
@@ -972,7 +994,9 @@ struct DealView: View {
                     message: Text(R.string.localizable.dealExecutorClearAccountMessage()),
                     primaryButton: .cancel(),
                     secondaryButton: .destructive(Text(R.string.localizable.dealExecutorClearAccountConfirm())) {
-                        viewModel.trigger(.deleteContractor(.contractor))
+                        viewModel.trigger(.deleteContractor(.contractor)) {
+                            self.callback()
+                        }
                     }
                 )
             case .confirmClearChecker:
@@ -981,7 +1005,9 @@ struct DealView: View {
                     message: Text(R.string.localizable.dealExecutorClearAccountMessage()),
                     primaryButton: .cancel(),
                     secondaryButton: .destructive(Text(R.string.localizable.dealExecutorClearAccountConfirm())) {
-                        viewModel.trigger(.deleteContractor(.checker))
+                        viewModel.trigger(.deleteContractor(.checker)) {
+                            self.callback()
+                        }
                     }
                 )
             case .confirmRevoke:
@@ -1144,7 +1170,9 @@ struct DealView: View {
                         metaUploaderState = .hidden
                         resultUploaderState = .hidden
                     case .success(let meta, let contentType):
-                        viewModel.trigger(.updateContent(meta, contentType))
+                        viewModel.trigger(.updateContent(meta, contentType)) {
+                            self.callback()
+                        }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                             metaUploaderState = .hidden
                             resultUploaderState = .hidden

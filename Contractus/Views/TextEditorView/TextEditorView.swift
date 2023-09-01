@@ -199,6 +199,7 @@ struct TextEditorView: View {
             case .updating:
                 break
             case .success:
+                action(.success(viewModel.state.content))
                 presentationMode.wrappedValue.dismiss()
             }
         })

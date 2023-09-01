@@ -124,11 +124,9 @@ final class TextEditorViewModel: ViewModel {
                     default:
                         self.state.errorState = .error(error.localizedDescription)
                     }
-
                 case .finished:
                     self.state.state = .success
                 }
-
             } receiveValue: { result in
                 self.state.content = result
             }
