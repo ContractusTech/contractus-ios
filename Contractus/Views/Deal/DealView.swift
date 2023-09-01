@@ -600,7 +600,7 @@ struct DealView: View {
                                     ForEach(viewModel.state.deal.meta?.files ?? []) { file in
                                         FileItemView(
                                             file: file,
-                                            decryptedName: viewModel.state.withEncryption ?  viewModel.state.decryptedFiles[file.md5]?.lastPathComponent : file.name,
+                                            decryptedName: viewModel.state.withEncryption ? viewModel.state.decryptedFiles[file.md5]?.lastPathComponent : file.name,
                                             showRemove: viewModel.state.editIsVisible
                                         ) { action in
                                             switch action {
