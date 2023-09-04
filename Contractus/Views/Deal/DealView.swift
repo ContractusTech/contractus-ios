@@ -282,7 +282,7 @@ struct DealView: View {
                                         }
                                     }
                                     Spacer()
-                                    if viewModel.state.isOwnerDeal || viewModel.state.isYouChecker {
+                                    if (viewModel.state.isOwnerDeal || viewModel.state.isYouChecker) && viewModel.state.canEditDeal {
                                         CButton(title: "", icon: Constants.rewardImage, style: .secondary, size: .default, isLoading: false) {
                                             activeModalType = .changeCheckerAmount
                                         }
@@ -290,7 +290,7 @@ struct DealView: View {
                                         .animation(Animation.easeInOut(duration: 0.1), value: viewModel.state.editIsVisible)
                                     }
 
-                                    if viewModel.state.isOwnerDeal && viewModel.state.canEdit {
+                                    if viewModel.state.isOwnerDeal && viewModel.state.canEdit && viewModel.state.canEditDeal {
                                         CButton(title: R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false) {
                                             EventService.shared.send(event: ExtendedAnalyticsEvent.dealContractorTap(.checker))
                                             if viewModel.state.deal.checkerPublicKey?.isEmpty ?? true {
@@ -600,7 +600,7 @@ struct DealView: View {
                                         FileItemView(
                                             file: file,
                                             decryptedName: viewModel.state.withEncryption ? viewModel.state.decryptedFiles[file.md5]?.lastPathComponent : file.name,
-                                            showRemove: viewModel.state.editIsVisible
+                                            showDeleteButton: viewModel.state.editIsVisible && viewModel.state.canEditDeal
                                         ) { action in
                                             switch action {
                                             case .open:
@@ -709,7 +709,8 @@ struct DealView: View {
                                             ForEach(files) { file in
                                                 FileItemView(
                                                     file: file,
-                                                    decryptedName: viewModel.state.withEncryption ?  viewModel.state.decryptedFiles[file.md5]?.lastPathComponent : file.name
+                                                    decryptedName: viewModel.state.withEncryption ?  viewModel.state.decryptedFiles[file.md5]?.lastPathComponent : file.name,
+                                                    showDeleteButton: viewModel.state.canEditDeal
                                                 ) { action in
                                                     switch action {
                                                     case .open:
@@ -1467,7 +1468,7 @@ struct FileItemView: View {
     }
     var file: MetadataFile
     var decryptedName: String?
-    var showRemove: Bool = true
+    var showDeleteButton: Bool = true
     var action: (Self.ActionType) -> Void
 
     @State private var confirmPresented: Bool = false
@@ -1524,7 +1525,7 @@ struct FileItemView: View {
                 }
 
                 Spacer()
-                if showRemove {
+                if showDeleteButton {
                     Button {
                         confirmPresented = true
                     } label: {
