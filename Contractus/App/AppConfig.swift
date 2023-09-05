@@ -10,7 +10,7 @@ import ContractusAPI
 
 enum AppConfig {
 
-    static let serverType: ServerType = ConfigStorage.getServer(defaultServer: .production())
+    static let serverType: ServerType = ConfigStorage.getServer(defaultServer: .developer())
 
     // Length secret key for encrypt content of deal.
     // IMPORTANT: only 64
@@ -41,4 +41,8 @@ enum AppConfig {
     static let feesURL: URL = URL(string: "https://contractus.gitbook.io/docs/fees")!
 
     static let ctusInfoURL: URL = URL(string: "https://contractus.gitbook.io/docs/ctus-token")!
+    
+    static let terms: URL = URL(string: "https://files.contractus.tech/Contractus-Terms.pdf")!
+    
+    static let policy: URL = URL(string: "https://files.contractus.tech/Contractus-PrivacyPolicy.pdf")!
 }
