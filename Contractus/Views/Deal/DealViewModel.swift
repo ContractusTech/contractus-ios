@@ -84,6 +84,7 @@ struct DealState {
     var decryptedFiles: [String:URL] = [:]
     var decryptingFiles: [String:Bool] = [:]
     var isSignedByPartners: Bool = false
+    var action: ContractusAPI.DealAction = DealAction(actions: [])
     var errorState: ErrorState?
     var uploaderContentType: DealsService.ContentType?
 
@@ -430,6 +431,7 @@ final class DealViewModel: ViewModel {
         } else {
             self.state.isSignedByPartners = (actions.signedByOwner ?? false && actions.signedByChecker ?? true)
         }
+        state.action = actions
 
         var dealActions = actions.actions.map { $0.action }
         if dealActions.isEmpty {

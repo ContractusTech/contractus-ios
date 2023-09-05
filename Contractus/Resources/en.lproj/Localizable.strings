@@ -171,6 +171,8 @@
 "deal.status.finished" = "Done";
 "deal.status.started" = "In work";
 "deal.status.starting" = "Starting";
+"deal.signed" = "Signed";
+"deal.no.signature" = "No signature";
 "deal.status.unknown" = "-";
 "deal.status.processing" = "Processing";
 "deal.textEditor.message-force-update" = "The contract description was updated while you were editing your version. Forced update to your version?";
