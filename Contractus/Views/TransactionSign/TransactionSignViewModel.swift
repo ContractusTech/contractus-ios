@@ -126,12 +126,35 @@ final class TransactionSignViewModel: ViewModel {
                             valueDescription: nil
                         ))
                     }
+                    var value: String?
+                    switch deal.performanceBondType {
+                    case .both:
+                        if deal.ownerRole == .client {
+                            value = R.string.localizable.transactionSignFieldsBondTypeBoth(deal.contractorBondFormatted(withCode: true), deal.ownerBondFormatted(withCode: true))
+                        } else {
+                            value = R.string.localizable.transactionSignFieldsBondTypeBoth(deal.ownerBondFormatted(withCode: true), deal.contractorBondFormatted(withCode: true))
+                        }
+                    case .onlyClient:
+                        if deal.ownerRole == .client {
+                            value = R.string.localizable.transactionSignFieldsBondTypeClient(deal.ownerBondFormatted(withCode: true))
+                        } else {
+                            value = R.string.localizable.transactionSignFieldsBondTypeClient(deal.contractorBondFormatted(withCode: true))
+                        }
+                    case .onlyExecutor:
+                        if deal.ownerRole == .client {
+                            value = R.string.localizable.transactionSignFieldsBondTypeExecutor(deal.contractorBondFormatted(withCode: true))
+                        } else {
+                            value = R.string.localizable.transactionSignFieldsBondTypeExecutor(deal.ownerBondFormatted(withCode: true))
+                        }
+                    case .none:
+                        break
+                    }
                     
                     if deal.performanceBondType != .none {
                         newState.informationFields.append(.init(
                             title: R.string.localizable.transactionSignFieldsBond(),
-                            value: deal.performanceBondType.shortTitle,
-                            titleDescription: nil,
+                            value: value ?? "",
+                            titleDescription: deal.performanceBondType.shortTitle,
                             valueDescription: nil
                         ))
                     }
@@ -257,8 +280,6 @@ final class TransactionSignViewModel: ViewModel {
                 case .dealFinish, .dealInit, .dealCancel:
                     continuation.resume(throwing: TransactionSignError.transactionIsNull)
                 }
-
-
             })
         case .byTransactionId(_):
             fatalError("No implementation")
@@ -267,19 +288,42 @@ final class TransactionSignViewModel: ViewModel {
 
     static private func fieldsByDeal(_ deal: Deal, txType: TransactionType, account: CommonAccount) -> [TransactionSignState.InformationItem] {
         var fields: [TransactionSignState.InformationItem] = [
-            .init(title: R.string.localizable.transactionSignFieldsType() , value: txType.title, titleDescription: nil, valueDescription: nil),
-            .init(title: R.string.localizable.transactionSignFieldsAmount(), value: deal.token.format(amount: deal.amount, withCode: true), titleDescription: nil, valueDescription: nil),
+            .init(
+                title: R.string.localizable.transactionSignFieldsType() ,
+                value: txType.title,
+                titleDescription: nil,
+                valueDescription: nil),
+            .init(
+                title: R.string.localizable.transactionSignFieldsAmount(),
+                value: deal.token.format(amount: deal.amount, withCode: true),
+                titleDescription: nil,
+                valueDescription: nil),
         ]
 
         if deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey {
-            fields.insert(.init(title: R.string.localizable.transactionSignFieldsExecutor(), value: ContentMask.mask(from: deal.ownerPublicKey), titleDescription: nil, valueDescription: nil), at: 0)
+            fields.insert(.init(
+                title: R.string.localizable.transactionSignFieldsExecutor(),
+                value: ContentMask.mask(from: deal.ownerPublicKey),
+                titleDescription: nil,
+                valueDescription: nil
+            ), at: 0)
         } else {
             if let contractorPublicKey = deal.contractorPublicKey {
-                fields.insert(.init(title: R.string.localizable.transactionSignFieldsExecutor(), value:  ContentMask.mask(from: contractorPublicKey), titleDescription: nil, valueDescription: nil), at: 0)
+                fields.insert(.init(
+                    title: R.string.localizable.transactionSignFieldsExecutor(),
+                    value:  ContentMask.mask(from: contractorPublicKey),
+                    titleDescription: nil,
+                    valueDescription: nil
+                ), at: 0)
             }
         }
         if let checkerAmount = deal.checkerAmount {
-            fields.append(.init(title: R.string.localizable.transactionSignFieldsVerifierFee(), value: deal.token.format(amount: checkerAmount, withCode: true), titleDescription: nil, valueDescription: nil))
+            fields.append(.init(
+                title: R.string.localizable.transactionSignFieldsVerifierFee(),
+                value: deal.token.format(amount: checkerAmount, withCode: true),
+                titleDescription: nil,
+                valueDescription: nil)
+            )
         }
 
         return fields
@@ -287,7 +331,11 @@ final class TransactionSignViewModel: ViewModel {
 
     static private func fieldsForTx(_ tx: Transaction, account: CommonAccount) -> [TransactionSignState.InformationItem] {
         var fields: [TransactionSignState.InformationItem] = [
-            .init(title: R.string.localizable.transactionSignFieldsType(), value: tx.type.title, titleDescription: nil, valueDescription: nil),
+            .init(
+                title: R.string.localizable.transactionSignFieldsType(),
+                value: tx.type.title,
+                titleDescription: nil,
+                valueDescription: nil),
         ]
 
         if tx.type == .wrapSOL {
@@ -301,7 +349,7 @@ final class TransactionSignViewModel: ViewModel {
         if tx.type == .dealInit {
             if let fee = tx.feeFormatted {
                 fields.append(.init(
-                    title: R.string.localizable.transactionSignFieldsFee(),
+                    title: R.string.localizable.transactionSignFieldsServiceFee(),
                     value: fee,
                     titleDescription: nil,
                     valueDescription: nil))

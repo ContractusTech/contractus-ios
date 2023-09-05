@@ -156,14 +156,6 @@ public struct Deal: Decodable {
         token.formatShort(amount: self.amount, withCode: false)
     }
 
-    public var ownerBondFormatted: String {
-        ownerBondToken?.format(amount: self.ownerBondAmount ?? BigUInt(), withCode: false) ?? ""
-    }
-
-    public var contractorBondFormatted: String {
-        contractorBondToken?.format(amount: self.contractorBondAmount ?? BigUInt(), withCode: false) ?? ""
-    }
-
     public var metadataIsEmpty: Bool {
         meta?.content?.text.isEmpty ?? true && meta?.files.isEmpty ?? true
     }
@@ -241,6 +233,14 @@ public struct Deal: Decodable {
             return self.contractorPublicKey
         }
         return ownerPublicKey
+    }
+
+    public func ownerBondFormatted(withCode: Bool = false) -> String {
+        ownerBondToken?.format(amount: self.ownerBondAmount ?? BigUInt(), withCode: withCode) ?? ""
+    }
+
+    public func contractorBondFormatted(withCode: Bool = false) -> String {
+        contractorBondToken?.format(amount: self.contractorBondAmount ?? BigUInt(), withCode: withCode) ?? ""
     }
 }
 

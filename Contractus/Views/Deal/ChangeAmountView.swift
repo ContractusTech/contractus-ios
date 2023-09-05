@@ -78,31 +78,7 @@ struct ChangeAmountView: View {
 
                         switch viewModel.amountType {
                         case .deal:
-                            VStack(spacing: 12) {
-                                if !viewModel.state.checkerIsYou {
-                                    HStack {
-                                        VStack {
-                                            Text(R.string.localizable.changeAmountVerificationAmount())
-                                                .font(.body)
-                                                .foregroundColor(viewModel.state.amountType == .checker ? R.color.textBase.color : R.color.secondaryText.color)
-                                                .multilineTextAlignment(.leading)
-                                        }
 
-                                        Spacer()
-                                        if viewModel.state.state != .loading  {
-                                            Text(viewModel.state.checkerAmount.formatted(withCode: true))
-                                                .font(.body)
-                                                .fontWeight(.bold)
-                                                .foregroundColor(viewModel.state.amountType == .checker ? R.color.textBase.color : R.color.secondaryText.color)
-                                                .multilineTextAlignment(.leading)
-                                        } else {
-                                            RoundedRectangle(cornerRadius: 16)
-                                                .fill(R.color.thirdBackground.color)
-                                                .frame(width: 42, height: 19)
-                                        }
-                                    }
-                                }
-                            }
                             VStack(spacing: 16) {
                                 HStack(alignment: .center) {
                                     VStack(alignment: .leading, spacing: 2) {
@@ -148,7 +124,6 @@ struct ChangeAmountView: View {
                                                 .foregroundColor(R.color.textBase.color)
                                                 .multilineTextAlignment(.leading)
                                         }
-                                        
                                         Spacer()
                                         if viewModel.state.feePercent == 0 && viewModel.state.state != .loading {
                                             if viewModel.state.noAmount {
@@ -175,14 +150,12 @@ struct ChangeAmountView: View {
                                         }
                                     }
                                     VStack(alignment: .leading, spacing: 4) {
-
                                         if !viewModel.state.fiatFeeFormatted.isEmpty {
-                                            Text("\(R.string.localizable.changeAmountEstimateFiat()) \(viewModel.state.fiatFeeFormatted)")
+                                            Text("\(R.string.localizable.changeAmountEstimateFiat()) ≈ \(viewModel.state.fiatFeeFormatted)")
                                                 .font(.footnote.weight(.semibold))
                                                 .foregroundColor(R.color.secondaryText.color)
                                                 .multilineTextAlignment(.leading)
                                         }
-
                                         Text(R.string.localizable.changeAmountFeeCalculateDescription())
                                             .font(.footnote)
                                             .foregroundColor(R.color.labelTextAttention.color)
@@ -198,6 +171,39 @@ struct ChangeAmountView: View {
                                     .stroke(R.color.textFieldBorder.color, lineWidth: 1)
                             )
 
+                            if !viewModel.state.checkerIsYou {
+                                HStack {
+                                    VStack {
+                                        Text(R.string.localizable.changeAmountVerificationAmount())
+                                            .font(.body)
+                                            .foregroundColor(viewModel.state.amountType == .checker ? R.color.textBase.color : R.color.secondaryText.color)
+                                            .multilineTextAlignment(.leading)
+                                    }
+
+                                    Spacer()
+                                    if viewModel.state.state != .loading  {
+                                        if !(viewModel.state.deal.checkerAmount?.isZero ?? true) {
+                                            Text(viewModel.state.checkerAmount.formatted(withCode: true))
+                                                .font(.body)
+                                                .fontWeight(.semibold)
+                                                .foregroundColor(viewModel.state.amountType == .checker ? R.color.textBase.color : R.color.secondaryText.color)
+                                                .multilineTextAlignment(.leading)
+                                        } else {
+                                            Text(R.string.localizable.commonNotSpecified())
+                                                .font(.body)
+                                                .fontWeight(.semibold)
+                                                .foregroundColor(viewModel.state.amountType == .checker ? R.color.textBase.color : R.color.secondaryText.color)
+                                                .multilineTextAlignment(.leading)
+                                        }
+
+                                    } else {
+                                        RoundedRectangle(cornerRadius: 16)
+                                            .fill(R.color.thirdBackground.color)
+                                            .frame(width: 42, height: 19)
+                                    }
+                                }
+                                Divider()
+                            }
                             HStack {
                                 VStack {
                                     Text(R.string.localizable.changeAmountTotalAmount())
@@ -225,7 +231,7 @@ struct ChangeAmountView: View {
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text(R.string.localizable.changeAmountDealAmount())
                                             .font(.body)
-                                            .foregroundColor(R.color.textBase.color)
+                                            .foregroundColor(R.color.secondaryText.color)
                                             .multilineTextAlignment(.leading)
                                     }
 
@@ -234,7 +240,7 @@ struct ChangeAmountView: View {
                                     Text(viewModel.state.dealAmount.formatted(withCode: true))
                                         .font(.body)
                                         .fontWeight(.bold)
-                                        .foregroundColor(R.color.textBase.color)
+                                        .foregroundColor(R.color.secondaryText.color)
                                         .multilineTextAlignment(.leading)
                                 }
                                 
@@ -248,7 +254,7 @@ struct ChangeAmountView: View {
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text(R.string.localizable.changeAmountHolderMode())
                                             .font(.body)
-                                            .foregroundColor(R.color.textBase.color)
+                                            .foregroundColor(R.color.secondaryText.color)
                                             .multilineTextAlignment(.leading)
                                     }
 
@@ -272,7 +278,7 @@ struct ChangeAmountView: View {
                                         VStack(alignment: .leading, spacing: 8) {
                                             Text(R.string.localizable.changeAmountFeeTitle())
                                                 .font(.body)
-                                                .foregroundColor(R.color.textBase.color)
+                                                .foregroundColor(R.color.secondaryText.color)
                                                 .multilineTextAlignment(.leading)
                                         }
                                         
@@ -291,7 +297,7 @@ struct ChangeAmountView: View {
                                                 Text(viewModel.state.feeFormatted)
                                                     .font(.body)
                                                     .fontWeight(.bold)
-                                                    .foregroundColor(R.color.textBase.color)
+                                                    .foregroundColor(R.color.secondaryText.color)
                                                     .multilineTextAlignment(.leading)
                                             } else {
                                                 RoundedRectangle(cornerRadius: 16)
@@ -311,7 +317,7 @@ struct ChangeAmountView: View {
 
                                         Text(R.string.localizable.changeAmountFeeCalculateDescription())
                                             .font(.footnote)
-                                            .foregroundColor(R.color.labelTextAttention.color)
+                                            .foregroundColor(R.color.secondaryText.color)
                                             .multilineTextAlignment(.leading)
                                     }
                                 }

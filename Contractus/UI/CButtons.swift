@@ -193,25 +193,23 @@ struct CButton: View {
                                 .resizable()
                                 .frame(width: 19, height: 19)
                                 .aspectRatio(contentMode: .fit)
-                                .foregroundColor(style.textColor.opacity(isLoading || isDisabled ? 0.4 : 1.0))
+                                .foregroundColor(style.textColor.opacity(isLoading || isDisabled ? 0.2 : 1.0))
                         }
                         if !title.isEmpty {
                             Text(title)
-                                .foregroundColor(style.textColor.opacity(isLoading || isDisabled ? 0.6 : 1.0))
+                                .foregroundColor(style.textColor.opacity(isLoading || isDisabled ? 0.9 : 1.0))
                                 .font(size.font)
                         }
-
                     }
-
                     Spacer()
                 }
 
                 .padding(size.edge)
-                .background(style.background.opacity(isLoading || isDisabled ? 0.4 : 1.0))
+                .background(style.background.opacity(isLoading || isDisabled ? 0.1 : 1.0))
                 .cornerRadius(cornerRadius)
                 .overlay {
                     RoundedRectangle(cornerRadius: cornerRadius)
-                        .stroke(style.borderColor.opacity(isLoading || isDisabled ? 0.3 : 1.0), lineWidth: 0.6)
+                        .stroke(style.borderColor.opacity(isLoading || isDisabled ? 0.1 : 1.0), lineWidth: 0.6)
                         .padding(0.3)
                 }
             }
