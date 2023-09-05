@@ -124,7 +124,7 @@ struct EnterView: View {
                     }
 
                     if viewType == .enterApp {
-                        Text(.init(R.string.localizable.enterTerms()))
+                        Text(.init(R.string.localizable.enterTerms(AppConfig.terms.absoluteString, AppConfig.policy.absoluteString)))
                             .font(.footnote)
                             .foregroundColor(R.color.secondaryText.color)
                             .fontWeight(.medium)
