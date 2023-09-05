@@ -260,13 +260,13 @@ struct DealView: View {
                         }
                         //                    Spacer(minLength: 16)
                         
-                        // MARK: - Verifier
+                        // MARK: - Checker
                         if viewModel.state.deal.completionCheckType == .checker {
                             VStack(alignment: .leading) {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 8) {
                                         HStack {
-                                            Text(R.string.localizable.dealTextVerifier())
+                                            Text(R.string.localizable.dealTextChecker())
                                                 .font(.footnote.weight(.semibold))
                                                 .textCase(.uppercase)
                                                 .foregroundColor(R.color.secondaryText.color)
@@ -1079,7 +1079,7 @@ struct DealView: View {
     private func actionsView() -> some View {
         VStack {
             VStack(alignment: .center, spacing: 16) {
-                if !viewModel.allowSignDealToStarting && viewModel.isOwnerDeal {
+                if viewModel.displayInformationForSign {
                     VStack(spacing: 8) {
                         CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: true) { }
                         Text(R.string.localizable.dealInformationAboutSign(viewModel.account.blockchain.title))

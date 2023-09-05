@@ -65,7 +65,7 @@ struct TransactionDetailFieldView: View {
     enum FieldButton: Identifiable {
         var id: String { "\(self)" }
         case copy(value: String)
-        case custom(icon: Image?, callback: (() -> Void)?)
+        case custom(icon: Image?, iconColor: Color?, callback: (() -> Void)?)
     }
 
     let title: String
@@ -79,7 +79,7 @@ struct TransactionDetailFieldView: View {
 
     var body: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.callout)
                     .foregroundColor(R.color.textBase.color)
@@ -91,11 +91,12 @@ struct TransactionDetailFieldView: View {
             }
 
             Spacer()
-            VStack {
+            VStack(alignment: .trailing) {
                 HStack(spacing: 6) {
                     Text(value)
                         .font(.callout)
                         .foregroundColor(valueTextColor)
+                        .multilineTextAlignment(.trailing)
                     if isLoading {
                         ProgressView()
                     }
@@ -103,7 +104,7 @@ struct TransactionDetailFieldView: View {
                         switch item {
                         case .copy(let value):
                             FieldCopyButton(content: value)
-                        case .custom(let icon, let callback):
+                        case .custom(let icon, let iconColor, let callback):
                             Button {
                                 callback?()
                             } label: {
@@ -111,7 +112,7 @@ struct TransactionDetailFieldView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 14, height: 14)
-                                    .foregroundColor(R.color.textBase.color)
+                                    .foregroundColor(iconColor ?? R.color.textBase.color)
                             }
                             .frame(width: 24, height: 24)
                         }
@@ -266,6 +267,7 @@ struct TransactionSignView: View {
                                             .copy(value: signature),
                                             .custom(
                                                 icon: Constants.arrowRightImage,
+                                                iconColor: nil,
                                                 callback: {
                                                     EventService.shared.send(event: DefaultAnalyticsEvent.txSignatureTap)
                                                     viewModel.trigger(.openExplorer)
@@ -345,13 +347,24 @@ struct TransactionSignView: View {
                     .stroke(R.color.baseSeparator.color, style: .init(lineWidth: 1))
                 ProgressView()
             case .new, .none:
-                RoundedRectangle(cornerRadius: 17)
-                    .stroke(R.color.baseSeparator.color, style: .init(lineWidth: 1))
-                Constants.confirmTxImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: size, height: size)
-                    .foregroundColor(R.color.baseSeparator.color)
+                if viewModel.state.state == .signed {
+                    RoundedRectangle(cornerRadius: 17)
+                        .stroke(R.color.baseGreen.color, style: .init(lineWidth: 1))
+                    Constants.confirmTxImage
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: size, height: size)
+                        .foregroundColor(R.color.baseGreen.color)
+                } else {
+                    RoundedRectangle(cornerRadius: 17)
+                        .stroke(R.color.baseSeparator.color, style: .init(lineWidth: 1))
+                    Constants.confirmTxImage
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: size, height: size)
+                        .foregroundColor(R.color.baseSeparator.color)
+                }
+
             case .error:
                 RoundedRectangle(cornerRadius: 17)
                     .stroke(R.color.labelBackgroundError.color, style: .init(lineWidth: 1))
@@ -370,13 +383,19 @@ struct TransactionSignView: View {
         let loading: Bool = viewModel.state.state == .signing || viewModel.state.transaction?.status == .processing
         let isDisable = viewModel.state.state == .loading || viewModel.state.state == .signing || viewModel.state.state == .signed || !viewModel.state.allowSign || viewModel.state.transaction?.status == .error
         var style: CButton.Style = .primary
-        switch viewModel.state.transaction?.status {
-        case .finished:
+
+        if viewModel.state.state == .signed {
             icon = Constants.confirmTxImage
             style = .success
-        case .error:
-            icon = Constants.failTxImage
-        default: break
+        } else {
+            switch viewModel.state.transaction?.status {
+            case .finished:
+                icon = Constants.confirmTxImage
+                style = .success
+            case .error:
+                icon = Constants.failTxImage
+            default: break
+            }
         }
         return CButton(
             title: signButtonTitle,

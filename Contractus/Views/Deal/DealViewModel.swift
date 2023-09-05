@@ -161,16 +161,16 @@ struct DealState {
 
     var clientBondAmount: String {
         if ownerIsClient {
-            return deal.ownerBondFormatted
+            return deal.ownerBondFormatted()
         }
-        return deal.contractorBondFormatted
+        return deal.contractorBondFormatted()
     }
 
     var executorBondAmount: String {
         if ownerIsClient {
-            return deal.contractorBondFormatted
+            return deal.contractorBondFormatted()
         }
-        return deal.ownerBondFormatted
+        return deal.ownerBondFormatted()
     }
 
     var clientBondToken: ContractusAPI.Token? {
@@ -193,8 +193,9 @@ struct DealState {
 
     var currentMainActions: [MainActionType] = []
 
-    var allowSignDealToStarting: Bool {
-        deal.status == .new && currentMainActions.contains(.sign)
+    var displayInformationForSign: Bool {
+        deal.status == .new && isOwnerDeal
+        && (!currentMainActions.contains(.cancelSign) && !currentMainActions.contains(.sign))
     }
 }
 

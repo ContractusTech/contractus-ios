@@ -172,6 +172,9 @@ struct CreateDealView: View {
                                         Text(R.string.localizable.newDealEncryptTitle())
                                             .font(.body)
                                             .fontWeight(.semibold)
+                                        Text(R.string.localizable.newDealEncryptSubtitle())
+                                            .font(.footnote)
+                                            .foregroundColor(R.color.secondaryText.color)
                                     }
                                 }
                             }
