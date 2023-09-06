@@ -60,7 +60,7 @@
 "enter.button.create" = "Create new";
 "enter.button.import" = "Import exists";
 "enter.message" = "Powered by %@";
-"enter.terms" = "By pressed, you agree to [Terms](https://google.com) and [Privacy Policy](https://google.com)";
+"enter.terms" = "By pressed, you agree to [Terms](%@) and [Privacy Policy](%@)";
 "enter.add-account.subtitle" = "Create a new %@ account or import an existing one.";
 "enter.add-account.title" = "Add account";
 

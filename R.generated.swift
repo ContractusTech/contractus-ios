@@ -1214,7 +1214,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let backupInformationTooltip = Rswift.StringResource(key: "backupInformation.tooltip", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: By pressed, you agree to [Terms](https://google.com) and [Privacy Policy](https://google.com)
+      /// en translation: By pressed, you agree to [Terms](%@) and [Privacy Policy](%@)
       ///
       /// Locales: en
       static let enterTerms = Rswift.StringResource(key: "enter.terms", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
@@ -3327,19 +3327,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("backupInformation.tooltip", bundle: bundle, comment: "")
       }
 
-      /// en translation: By pressed, you agree to [Terms](https://google.com) and [Privacy Policy](https://google.com)
+      /// en translation: By pressed, you agree to [Terms](%@) and [Privacy Policy](%@)
       ///
       /// Locales: en
-      static func enterTerms(preferredLanguages: [String]? = nil) -> String {
+      static func enterTerms(_ value1: String, _ value2: String, preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("enter.terms", bundle: hostingBundle, comment: "")
+          let format = NSLocalizedString("enter.terms", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1, value2)
         }
 
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
           return "enter.terms"
         }
 
-        return NSLocalizedString("enter.terms", bundle: bundle, comment: "")
+        let format = NSLocalizedString("enter.terms", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1, value2)
       }
 
       /// en translation: Camera
