@@ -384,17 +384,19 @@ struct TransactionSignView: View {
         let isDisable = viewModel.state.state == .loading || viewModel.state.state == .signing || viewModel.state.state == .signed || !viewModel.state.allowSign || viewModel.state.transaction?.status == .error
         var style: CButton.Style = .primary
 
-        if viewModel.state.state == .signed {
+        switch viewModel.state.transaction?.status {
+        case .finished:
             icon = Constants.confirmTxImage
             style = .success
-        } else {
-            switch viewModel.state.transaction?.status {
-            case .finished:
+        case .error:
+            icon = Constants.failTxImage
+            style = .cancel
+        case .processing:
+            style = .primary
+        default:
+            if viewModel.state.state == .signed {
                 icon = Constants.confirmTxImage
                 style = .success
-            case .error:
-                icon = Constants.failTxImage
-            default: break
             }
         }
         return CButton(

@@ -87,9 +87,7 @@ struct DealView: View {
             if viewModel.currentMainActions.isEmpty {
                 LoadingDealView()
             } else {
-                if viewModel.state.isDealEnded {
-                    dealStatusView()
-                }
+
                 VStack {
                     // MARK: - No secret key
                     if viewModel.state.state == .none && !viewModel.state.canEdit {
@@ -120,6 +118,9 @@ struct DealView: View {
                         }
                         .cornerRadius(20)
                         .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+                    }
+                    if viewModel.state.isDealEnded {
+                        dealStatusView()
                     }
                     VStack {
                         ZStack(alignment: .bottomLeading) {
@@ -1252,8 +1253,6 @@ struct DealView: View {
                 .cornerRadius(20)
                 .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
             }
-            .padding(16)
-
         case .unknown, .finishing, .canceling, .started, .starting, .new:
             EmptyView()
         }
@@ -1269,6 +1268,9 @@ struct DealView: View {
     private func statusSubtitle(status: DealStatus) -> String {
         if status == .revoked {
             return R.string.localizable.dealStatusRevokedSubtitle()
+        }
+        if status == .canceled {
+            return R.string.localizable.dealStatusCanceledSubtitle()
         }
         if viewModel.state.checkerIsEmpty {
             return R.string.localizable.dealStatusFinishedSubtitle(viewModel.deal.amountFormattedWithCode, ContentMask.mask(from: viewModel.executorPublicKey))
