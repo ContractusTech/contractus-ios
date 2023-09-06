@@ -161,6 +161,7 @@
 "deal.text.files" = "Files";
 "deal.text.details" = "Details";
 "deal.text.earning" = "Earning";
+"deal.text.earning.not.set" = "Earning is not set";
 "deal.text.deadline" = "Deadline";
 "deal.text.decline" = "Decline";
 "deal.status.finished" = "Done";
