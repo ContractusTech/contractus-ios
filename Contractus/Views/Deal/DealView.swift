@@ -262,7 +262,7 @@ struct DealView: View {
                         
                         // MARK: - Checker
                         if viewModel.state.deal.completionCheckType == .checker {
-                            VStack(alignment: .leading) {
+                            VStack(alignment: .leading, spacing: 0) {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 8) {
                                         HStack {
@@ -270,11 +270,12 @@ struct DealView: View {
                                                 .font(.footnote.weight(.semibold))
                                                 .textCase(.uppercase)
                                                 .foregroundColor(R.color.secondaryText.color)
+                                            if viewModel.state.isYouChecker {
+                                                Label(text: R.string.localizable.commonYou(), type: .primary)
+                                            }
                                         }
                                         HStack {
-                                            if viewModel.state.isYouChecker {
-                                                Text(R.string.localizable.commonYou())
-                                            } else if viewModel.state.deal.checkerPublicKey?.isEmpty ?? true {
+                                            if viewModel.state.deal.checkerPublicKey?.isEmpty ?? true {
                                                 Text(R.string.localizable.commonEmpty())
                                             } else {
                                                 Text(ContentMask.mask(from: viewModel.state.deal.checkerPublicKey))
@@ -303,7 +304,25 @@ struct DealView: View {
                                         .animation(Animation.easeInOut(duration: 0.1), value: viewModel.state.editIsVisible)
                                     }
                                 }
-                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 6, trailing: 0))
+                                .padding(.bottom, 4)
+
+                                if !(viewModel.state.deal.amountFeeCheckerFormatted ?? "").isEmpty {
+                                    HStack(spacing: 6) {
+                                        Text(R.string.localizable.dealTextEarning())
+                                            .font(.footnote)
+                                            .foregroundColor(R.color.secondaryText.color)
+                                        Text(viewModel.state.deal.amountFeeCheckerFormatted ?? "")
+                                            .font(.footnote)
+                                            .foregroundColor(R.color.baseGreen.color)
+                                    }
+                                    .padding(.bottom, 10)
+                                } else {
+                                    Text(R.string.localizable.dealTextEarningNotSet())
+                                        .font(.footnote)
+                                        .foregroundColor(R.color.redText.color)
+                                        .padding(.bottom, 10)
+                                }
+
                                 if viewModel.state.isYouChecker {
                                     Text(R.string.localizable.dealHintYouVerifier())
                                         .font(.footnote)
