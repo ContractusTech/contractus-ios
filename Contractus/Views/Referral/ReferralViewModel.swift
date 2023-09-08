@@ -33,6 +33,7 @@ struct ReferralState {
     var errorState: ErrorState?
     var promocode: String?
     var prizes: [PrizeItem]
+    var allowApply: Bool
 }
 
 final class ReferralViewModel: ViewModel {
@@ -49,7 +50,8 @@ final class ReferralViewModel: ViewModel {
         self.state = .init(
             state: .loading,
             promocode: nil,
-            prizes: []
+            prizes: [],
+            allowApply: true
         )
         
         Task { @MainActor in
@@ -63,6 +65,7 @@ final class ReferralViewModel: ViewModel {
                 } else {
                     newState.state = .loaded
                 }
+                newState.allowApply = referral?.allowApply ?? true
                 self.state = newState
             } catch {
                 var newState = self.state

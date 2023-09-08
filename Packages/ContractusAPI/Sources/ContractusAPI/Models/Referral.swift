@@ -26,6 +26,7 @@ public struct ReferralProgram: Decodable {
     public let promocode: String?
     public let referrerCode: String?
     public let prizes: [Prize]
+    public let allowApply: Bool
 }
 
 public struct ReferralProgramResult: Decodable {

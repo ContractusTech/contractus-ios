@@ -113,13 +113,15 @@ struct ReferralView: View {
                             if viewModel.state.state == .applied {
                                 CButton(title: R.string.localizable.referralPromocodeApplied(), style: .success, size: .small, isLoading: false, isDisabled: true) {}
                             } else {
-                                CButton(title: R.string.localizable.referralPromocodeApply(), style: .secondary, size: .small, isLoading: false) {
+                                CButton(title: R.string.localizable.referralPromocodeApply(), style: .secondary, size: .small, isLoading: false, isDisabled: !viewModel.state.allowApply) {
                                     EventService.shared.send(event: DefaultAnalyticsEvent.referralApplyCodeFormTap)
                                     promoIsPresented.toggle()
                                 }
                             }
 
-                            Text(R.string.localizable.referralBonusSubtitle())
+                            Text(viewModel.state.allowApply
+                                 ? R.string.localizable.referralBonusSubtitle()
+                                 : R.string.localizable.referralBonusApplied())
                                 .font(.footnote.weight(.semibold))
                                 .foregroundColor(R.color.secondaryText.color)
                         }
