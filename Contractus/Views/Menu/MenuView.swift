@@ -116,7 +116,6 @@ struct MenuView: View {
                                 }
                         
                         MenuSectionView()
-                        #if DEBUG 
 //                        MenuItemView (
 //                            icon: Constants.sliderIcon,
 //                            title: "Common settings",
@@ -150,7 +149,6 @@ struct MenuView: View {
 //                        )
                         
                         MenuSectionView()
-                        #endif
                         MenuItemView (
                             icon: Constants.faqIcon,
                             title: R.string.localizable.menuFaq(),
