@@ -89,6 +89,7 @@ struct MenuView: View {
     @State private var tapCount: Int = 0
     @State private var interactiveDismiss: Bool = true
     @State private var showServerSelection: Bool = false
+    @State private var showSupportSelection: Bool = false
     
     var handler: (ActionType) -> Void
 
@@ -130,8 +131,13 @@ struct MenuView: View {
                             icon: Constants.supportIcon,
                             title: R.string.localizable.menuSupport()
                         ) {
-                            openEmailSupport()
+                            showSupportSelection.toggle()
                         }
+                        .actionSheet(isPresented: $showSupportSelection, content: {
+                            ActionSheet(
+                                title: Text(R.string.localizable.menuSupportBy()),
+                                buttons: actionSheetSupportButtons())
+                        })
 //                        MenuItemView (
 //                            icon: Constants.lockIcon,
 //                            title: "Security",
@@ -192,6 +198,19 @@ struct MenuView: View {
     
     var versionFormatted: String {
         return R.string.localizable.menuVersion(AppConfig.version, AppConfig.buildNumber)
+    }
+
+    private func actionSheetSupportButtons() -> [Alert.Button] {
+        return [
+            Alert.Button.default(Text(R.string.localizable.commonEmail())) {
+                openEmailSupport()
+            },
+            Alert.Button.default(Text(R.string.localizable.commonTelegram())) {
+                openTelegramSupport()
+            },
+            Alert.Button.cancel() {
+            }
+        ]
     }
 }
 

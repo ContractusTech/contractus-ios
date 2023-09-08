@@ -20,7 +20,9 @@ enum AppConfig {
     static let sharedKeyLength = 64
     
     static let supportEmail = "support@contractus.tech"
-    
+
+    static let supportTelegram = "https://t.me/ContractusSupportBot"
+
     static let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
 
     static let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
