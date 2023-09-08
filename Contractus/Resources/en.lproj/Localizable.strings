@@ -54,12 +54,13 @@
 "common.info" = "Info";
 "common.service-unavailable" = "Service unavailable";
 "common.all" = "All";
+"common.not-specified" = "Not specified";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
 "enter.button.import" = "Import exists";
 "enter.message" = "Powered by %@";
-"enter.terms" = "By pressed, you agree to [Terms](https://google.com) and [Privacy Policy](https://google.com)";
+"enter.terms" = "By pressed, you agree to [Terms](%@) and [Privacy Policy](%@)";
 "enter.add-account.subtitle" = "Create a new %@ account or import an existing one.";
 "enter.add-account.title" = "Add account";
 
@@ -160,6 +161,7 @@
 "deal.text.files" = "Files";
 "deal.text.details" = "Details";
 "deal.text.earning" = "Earning";
+"deal.text.earning.not.set" = "Earning is not set";
 "deal.text.deadline" = "Deadline";
 "deal.text.decline" = "Decline";
 "deal.status.finished" = "Done";
@@ -183,9 +185,9 @@
 "deal.textEditor.editor-placeholder" = "Enter contract description";
 "deal.hint.about-executor" = "Performs the work specified in the contract.";
 "deal.hint.you-verifier" = "After you check the result of the contract, the contractor receives payment.";
-"deal.hint.you-executor" = "After this Account checks the result of the contract, you get paid.";
+"deal.hint.you-executor" = "After this account checks the result of the contract, you get paid.";
 "deal.hint.empty-verifier" = "You need to specify the Account that will check the result of the contract.";
-"deal.hint.verifier" = "After verification by this Account of the result of the contract, the partner receives payment.";
+"deal.hint.verifier" = "After verification by this account of the result of the contract, the partner receives payment.";
 "deal.hint.encrypt-content" = "This text will be encrypted and available for viewing only to contract partners.";
 "deal.hint.no-encrypt-content" = "This text will be available for viewing only to contract partners.";
 "deal.hint.encrypt-files" = "This files will be encrypted and available for viewing only to contract partners.";
@@ -220,7 +222,7 @@
 "deal.bond.executor.subtitle" = "Upon completion of the deal, the funds will be returned to the executor";
 "deal.bond.deadline.subtitle" = "If the counter parties do not agree before the appointed date, the contract is terminated and the funds are returned to all parties.";
 "deal.description-command.partner-already-signed" = "The partner has already signed the contract. The work of the contract will begin when you sign the contract.";
-"deal.description-command.first-sign" = "Sign the contract, the work of the contract starts automatically when your partner signs it";
+"deal.description-command.first-sign" = "Sign the contract, when all parties (client, executor and checker if need) to the contract sign it it will start to be executed automatically.";
 "deal.description-command.cant-sign" = "To sign the contract, you need to specify the contractor and the cost";
 "deal.description-command.cancel-sign" = "You can cancel your signature before your partner signs the contract. The work of the contract will begin when the partner signs.";
 "deal.description-command.stop-deal" = "You can stop the contract all funds will be refunded.";
@@ -235,7 +237,7 @@
 "deal.status.canceled.subtitle" = "The funds were returned to the client";
 "deal.status.canceled.subtitle.with-checker" = "%@ was transferred to the account of the checker and the balance was returned to the client";
 "deal.status.revoked.subtitle" = "Owner canceled before signing by all parties of the contract";
-
+"deal.information.about-sign" = "To start the deal, fill in the amount, deadline, the %@ accounts of all parties involved in the deal, and the checker fee (if an checker is in your deal).";
 "deadline.title" = "Select deadline";
 "deadline.of.deal" = "Deadline of deal";
 "deadline.comment" = "You must complete the deal by this date or the deal will be stopped and funds will be refunded to all parties. The service fee is not refundable.";
@@ -249,7 +251,8 @@
 "newDeal.created.top.title" = "Created";
 "newDeal.created.title" = "The secret key";
 "newDeal.created.subTitle" = "The partner need scan the QR code to start working on the contract.";
-"newDeal.encrypt.title" = "Encrypt transaction details";
+"newDeal.encrypt.title" = "Encrypt deal details";
+"newDeal.encrypt.subtitle" = "All files and details of deal will be encrypted. The key for decryption will need to be given to all parties to the deal. Available only for mobile app!";
 "newDeal.check.title" = "Check by third party";
 "newDeal.check.subtitle" = "The decision to complete the deal will be made by a third party.";
 "newDeal.bond.title" = "Who will add the performance bond?";
@@ -299,14 +302,14 @@
 "changeAmount.fee-free" = "Free";
 "changeAmount.fee-title" = "Service fee";
 "changeAmount.deal-amount" = "Amount of deal";
-"changeAmount.verification-amount" = "Cost of verification";
+"changeAmount.verification-amount" = "Fee of checker";
 "changeAmount.fee-description" = "The fee is taken after the contract is signed by all parties and the start of the contract.";
 "changeAmount.fee-calculate-description" = "The fee is calculated from the amount of the transaction and the cost of the verification service of result";
 "changeAmount.holder.mode" = "Holder mode";
 "changeAmount.holder.mode.hint" = "Deal without fee";
 "changeAmount.bond.owner" = "The amount of performance bonds will be blocked on your account for the duration of the deal. After completion will be fully refunded to you";
 "changeAmount.bond.contractor" = "The amount of performance bonds will be blocked on partner account for the duration of the deal. After completion will be fully refunded";
-"changeAmount.estimate.fiat" = "Estimate fiat amountt";
+"changeAmount.estimate.fiat" = "Amount of fee";
 "changeAmount.bond.client.you" = "Bond of client (you)";
 "changeAmount.bond.client" = "Bond of client";
 "changeAmount.bond.executor.you" = "Bond of executor (you)";
@@ -322,7 +325,7 @@
 "transactionSign.fields.service-fee" = "Service Fee";
 "transactionSign.fields.executor" = "Executor";
 "transactionSign.fields.amount" = "Amount";
-"transactionSign.fields.verifier-fee" = "Verifier Fee";
+"transactionSign.fields.verifier-fee" = "Checker fee";
 "transactionSign.fields.fee" = "Fee";
 "transactionSign.fields.status" = "Status";
 "transactionSign.fields.type" = "Type";
@@ -331,6 +334,9 @@
 "transactionSign.fields.signature" = "Signature";
 "transactionSign.fields.holder-mode" = "Holder mode";
 "transactionSign.fields.bond" = "Performance bond";
+"transactionSign.fields.bond.type-both" = "Executor %@\nClient %@";
+"transactionSign.fields.bond.type-client" = "Client %@";
+"transactionSign.fields.bond.type-executor" = "Executor %@";
 "transactionSign.statuses.need-sign" = "Pending signature";
 "transactionSign.statuses.processing" = "Processing";
 "transactionSign.statuses.done" = "Done";
@@ -345,20 +351,20 @@
 "transactionSign.buttons.sign" = "Sign and confirm";
 "transactionSign.title.need-sign" = "Signing\n the transaction";
 "transactionSign.title.signed" = "Signed";
-"transactionSign.title.confirm" = "Confirm\nTransaction";
+"transactionSign.title.confirm" = "Confirm";
 "transactionSign.subtitle.unsigned-init-deal" = "Once signed by all parties, the client's funds will be locked in the smart-contract for the entire period of work.";
 "transactionSign.subtitle.finish-deal" = "The contractor will receive the funds and the deal will be successfully completed.";
 "transactionSign.subtitle.cancel-deal" = "The client's funds will be refunded and the deal will canceled";
-"transactionSign.subtitle.unwrap" = "And your token will be unwraped\ninto a native token";
+"transactionSign.subtitle.unwrap" = "And your token will be unwraped\ninto SOL (native token)";
 "transactionSign.subtitle.wrap" = "And your native token will be wraped";
 "transactionSign.subtitle.processing" = "Processing...";
 "transactionSign.subtitle.error" = "Try again";
 "transactionSign.subtitle.finished" = "Transaction completed successfully";
 "transactionSign.subtitle.holder-mode" = "For the period of the deal will be lock 10k CTUS";
 
-"transaction.type.init-deal" = "Start deal";
-"transaction.type.finish-deal" = "Finish deal";
-"transaction.type.cancel-deal" = "Cancel deal";
+"transaction.type.init-deal" = "Start of the deal";
+"transaction.type.finish-deal" = "Complete the deal";
+"transaction.type.cancel-deal" = "Cancel the deal";
 "transaction.type.wrap-sol" = "SOL ➞ wSOL";
 "transaction.type.unwrap-wsol" = "wSOL ➞ SOL";
 

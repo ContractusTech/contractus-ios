@@ -87,9 +87,7 @@ struct DealView: View {
             if viewModel.currentMainActions.isEmpty {
                 LoadingDealView()
             } else {
-                if viewModel.state.isDealEnded {
-                    dealStatusView()
-                }
+
                 VStack {
                     // MARK: - No secret key
                     if viewModel.state.state == .none && !viewModel.state.canEdit {
@@ -120,6 +118,9 @@ struct DealView: View {
                         }
                         .cornerRadius(20)
                         .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+                    }
+                    if viewModel.state.isDealEnded {
+                        dealStatusView()
                     }
                     VStack {
                         ZStack(alignment: .bottomLeading) {
@@ -260,21 +261,22 @@ struct DealView: View {
                         }
                         //                    Spacer(minLength: 16)
                         
-                        // MARK: - Verifier
+                        // MARK: - Checker
                         if viewModel.state.deal.completionCheckType == .checker {
-                            VStack(alignment: .leading) {
+                            VStack(alignment: .leading, spacing: 0) {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 8) {
                                         HStack {
-                                            Text(R.string.localizable.dealTextVerifier())
+                                            Text(R.string.localizable.dealTextChecker())
                                                 .font(.footnote.weight(.semibold))
                                                 .textCase(.uppercase)
                                                 .foregroundColor(R.color.secondaryText.color)
+                                            if viewModel.state.isYouChecker {
+                                                Label(text: R.string.localizable.commonYou(), type: .primary)
+                                            }
                                         }
                                         HStack {
-                                            if viewModel.state.isYouChecker {
-                                                Text(R.string.localizable.commonYou())
-                                            } else if viewModel.state.deal.checkerPublicKey?.isEmpty ?? true {
+                                            if viewModel.state.deal.checkerPublicKey?.isEmpty ?? true {
                                                 Text(R.string.localizable.commonEmpty())
                                             } else {
                                                 Text(ContentMask.mask(from: viewModel.state.deal.checkerPublicKey))
@@ -303,7 +305,25 @@ struct DealView: View {
                                         .animation(Animation.easeInOut(duration: 0.1), value: viewModel.state.editIsVisible)
                                     }
                                 }
-                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 6, trailing: 0))
+                                .padding(.bottom, 4)
+
+                                if !(viewModel.state.deal.amountFeeCheckerFormatted ?? "").isEmpty {
+                                    HStack(spacing: 6) {
+                                        Text(R.string.localizable.dealTextEarning())
+                                            .font(.footnote)
+                                            .foregroundColor(R.color.secondaryText.color)
+                                        Text(viewModel.state.deal.amountFeeCheckerFormatted ?? "")
+                                            .font(.footnote)
+                                            .foregroundColor(R.color.baseGreen.color)
+                                    }
+                                    .padding(.bottom, 10)
+                                } else {
+                                    Text(R.string.localizable.dealTextEarningNotSet())
+                                        .font(.footnote)
+                                        .foregroundColor(R.color.redText.color)
+                                        .padding(.bottom, 10)
+                                }
+
                                 if viewModel.state.isYouChecker {
                                     Text(R.string.localizable.dealHintYouVerifier())
                                         .font(.footnote)
@@ -468,6 +488,7 @@ struct DealView: View {
                                             if let deadline = viewModel.state.deal.deadline {
                                                 Text(deadline.asDateFormatted())
                                                     .font(.title)
+                                                    .foregroundColor(deadline > Date() ? R.color.textBase.color : R.color.redText.color)
                                             } else {
                                                 Text(R.string.localizable.commonEmpty())
                                                     .font(.title)
@@ -1174,79 +1195,92 @@ struct DealView: View {
     @ViewBuilder
     private func actionsView() -> some View {
         VStack {
-            VStack(alignment: .center, spacing: 12) {
+            VStack(alignment: .center, spacing: 16) {
+                if viewModel.displayInformationForSign {
+                    VStack(spacing: 8) {
+                        CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: true) { }
+                        Text(R.string.localizable.dealInformationAboutSign(viewModel.account.blockchain.title))
+                            .font(.footnote)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(R.color.textBase.color)
+                    }
+
+                }
                 ForEach(viewModel.currentMainActions) { actionType in
                     switch actionType {
                     case .none:
                         EmptyView()
                     case .sign:
-                        if viewModel.state.isSignedByPartners {
-                            CButton(title: R.string.localizable.dealButtonsSignAndStart(), style: .primary, size: .large, isLoading: false) {
-                                EventService.shared.send(event: DefaultAnalyticsEvent.dealSignTap)
-                                activeModalType = .signTx(.dealInit)
-                            }
-                            Text(R.string.localizable.dealDescriptionCommandPartnerAlreadySigned())
-                                .font(.footnote)
-                                .multilineTextAlignment(.center)
-                                .foregroundColor(R.color.secondaryText.color)
-                        } else {
-                            CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.state.canSign) {
-                                EventService.shared.send(event: DefaultAnalyticsEvent.dealSignTap)
-                                activeModalType = .signTx(.dealInit)
-                            }
-                            if viewModel.state.canSign {
-                                Text(R.string.localizable.dealDescriptionCommandFirstSign())
+                        VStack(spacing: 8) {
+                            if viewModel.state.isSignedByPartners {
+                                CButton(title: R.string.localizable.dealButtonsSignAndStart(), style: .primary, size: .large, isLoading: false) {
+                                    EventService.shared.send(event: DefaultAnalyticsEvent.dealSignTap)
+                                    activeModalType = .signTx(.dealInit)
+                                }
+                                Text(R.string.localizable.dealDescriptionCommandPartnerAlreadySigned())
                                     .font(.footnote)
                                     .multilineTextAlignment(.center)
                                     .foregroundColor(R.color.secondaryText.color)
                             } else {
-                                Text(R.string.localizable.dealDescriptionCommandCantSign())
+                                CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: false) {
+                                    EventService.shared.send(event: DefaultAnalyticsEvent.dealSignTap)
+                                    activeModalType = .signTx(.dealInit)
+                                }
+                                Text(R.string.localizable.dealDescriptionCommandFirstSign())
                                     .font(.footnote)
                                     .multilineTextAlignment(.center)
                                     .foregroundColor(R.color.secondaryText.color)
                             }
                         }
+
                     case .cancelSign:
-                        CButton(title: R.string.localizable.dealButtonsCancelSign(), style: .cancel, size: .large, isLoading: false) {
-                            actionsType = .confirmCancelSign
+                        VStack(spacing: 8) {
+                            CButton(title: R.string.localizable.dealButtonsCancelSign(), style: .cancel, size: .large, isLoading: false) {
+                                actionsType = .confirmCancelSign
+                            }
+                            Text(R.string.localizable.dealDescriptionCommandCancelSign())
+                                .font(.footnote)
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(R.color.secondaryText.color)
                         }
-                        Text(R.string.localizable.dealDescriptionCommandCancelSign())
-                            .font(.footnote)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(R.color.secondaryText.color)
                     case .cancelDeal:
-                        CButton(title: R.string.localizable.dealButtonsCancelDeal(), style: .cancel, size: .large, isLoading: false) {
-                            actionsType = .confirmCancel
+                        VStack(spacing: 8) {
+                            CButton(title: R.string.localizable.dealButtonsCancelDeal(), style: .cancel, size: .large, isLoading: false) {
+                                actionsType = .confirmCancel
+                            }
+                            Text(R.string.localizable.dealDescriptionCommandStopDeal())
+                                .font(.footnote)
+                                .foregroundColor(R.color.yellow.color)
                         }
-                        Text(R.string.localizable.dealDescriptionCommandStopDeal())
-                            .font(.footnote)
-                            .foregroundColor(R.color.yellow.color)
                     case .finishDeal:
-                        CButton(title: R.string.localizable.dealButtonsFinishDeal(), style: .primary, size: .large, isLoading: false, isDisabled: false) {
-                            actionsType = .confirmFinish
+                        VStack(spacing: 8) {
+                            CButton(title: R.string.localizable.dealButtonsFinishDeal(), style: .primary, size: .large, isLoading: false, isDisabled: false) {
+                                actionsType = .confirmFinish
+                            }
+                            Text(R.string.localizable.dealDescriptionCommandFinishDeal())
+                                .font(.footnote)
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(R.color.secondaryText.color)
                         }
-                        Text(R.string.localizable.dealDescriptionCommandFinishDeal())
-                            .font(.footnote)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(R.color.secondaryText.color)
                     case .waiting:
-                        CButton(title: R.string.localizable.dealStatusProcessing(), style: .primary, size: .large, isLoading: true, isDisabled: true) { }
-                    case .revoke:
-                        CButton(title: R.string.localizable.dealButtonsCancelDeal(), style: .secondaryCancel, size: .large, isLoading: false) {
-
-                            alertType = .confirmRevoke
-
+                        VStack(spacing: 8) {
+                            CButton(title: R.string.localizable.dealStatusProcessing(), style: .primary, size: .large, isLoading: true, isDisabled: true) { }
                         }
-                        Text(R.string.localizable.dealDescriptionCommandRevokeDeal())
-                            .font(.footnote)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(R.color.secondaryText.color)
+
+                    case .revoke:
+                        VStack(spacing: 8) {
+                            CButton(title: R.string.localizable.dealButtonsCancelDeal(), style: .secondaryCancel, size: .large, isLoading: false) {
+
+                                alertType = .confirmRevoke
+
+                            }
+                        }
                     }
                 }
 
             }
         }
-        .padding(EdgeInsets(top: 20, leading: 20, bottom: 24, trailing: 20))
+        .padding(EdgeInsets(top: 20, leading: 20, bottom: 32, trailing: 20))
         .animation(Animation.easeInOut(duration: 0.1), value: viewModel.state.editIsVisible)
     }
 
@@ -1315,8 +1349,6 @@ struct DealView: View {
                 .cornerRadius(20)
                 .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
             }
-            .padding(16)
-
         case .unknown, .finishing, .canceling, .started, .starting, .new:
             EmptyView()
         }
@@ -1332,6 +1364,9 @@ struct DealView: View {
     private func statusSubtitle(status: DealStatus) -> String {
         if status == .revoked {
             return R.string.localizable.dealStatusRevokedSubtitle()
+        }
+        if status == .canceled {
+            return R.string.localizable.dealStatusCanceledSubtitle()
         }
         if viewModel.state.checkerIsEmpty {
             return R.string.localizable.dealStatusFinishedSubtitle(viewModel.deal.amountFormattedWithCode, ContentMask.mask(from: viewModel.executorPublicKey))
