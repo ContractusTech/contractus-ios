@@ -42,6 +42,7 @@ struct PromocodeView: View {
                         .font(.footnote.weight(.semibold))
                         .foregroundColor(R.color.redText.color)
                         .padding(.top, 20)
+                        .multilineTextAlignment(.center)
                         .opacity(value.isEmpty ? 0 : 1)
                         .animation(Animation.easeInOut(duration: 0.2), value: value.isEmpty)
                 }
