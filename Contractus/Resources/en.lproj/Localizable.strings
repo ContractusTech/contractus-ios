@@ -55,6 +55,8 @@
 "common.service-unavailable" = "Service unavailable";
 "common.all" = "All";
 "common.not-specified" = "Not specified";
+"common.email" = "Email";
+"common.telegram" = "Telegram";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
@@ -94,6 +96,7 @@
 "menu.accounts" = "Accounts";
 "menu.referral.program" = "Referral program";
 "menu.support" = "Support";
+"menu.support.by" = "Support by";
 "menu.faq" = "FAQ";
 "menu.version" = "v.%@ build %@";
 
