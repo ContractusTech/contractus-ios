@@ -34,6 +34,7 @@ struct ReferralState {
     var promocode: String?
     var prizes: [PrizeItem]
     var allowApply: Bool
+    var accounts: [ReferralAccount]
 }
 
 final class ReferralViewModel: ViewModel {
@@ -51,7 +52,8 @@ final class ReferralViewModel: ViewModel {
             state: .loading,
             promocode: nil,
             prizes: [],
-            allowApply: true
+            allowApply: true,
+            accounts: []
         )
         
         Task { @MainActor in
@@ -66,6 +68,7 @@ final class ReferralViewModel: ViewModel {
                     newState.state = .loaded
                 }
                 newState.allowApply = referral?.allowApply ?? true
+                newState.accounts = (referral?.prizes ?? []).filter({ $0.type == .applyPromocodeReferrer}).first?.accounts ?? []
                 self.state = newState
             } catch {
                 var newState = self.state
@@ -152,8 +155,8 @@ extension ReferralProgram.Prize {
         return .init(
             type: self.type,
             title: self.name(),
-            subtitle: self.count > 1 ? "\(count) \(R.string.localizable.referralPrizeTimes())" : nil,
-            amount: self.count > 1 ? self.amount.formatted(withCode: true) : self.price.formatted(withCode: true),
+            subtitle: self.count > 0 && self.allowViewAccounts ? "\(count) \(R.string.localizable.referralPrizeTimes())" : nil,
+            amount: self.count > 0 ? self.amount.formatted(withCode: true) : self.price.formatted(withCode: true),
             applied: applied
         )
     }

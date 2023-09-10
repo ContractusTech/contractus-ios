@@ -21,6 +21,8 @@ public struct ReferralProgram: Decodable {
         public let applied: Bool
         public let count: Int
         public let description: String?
+        public let accounts: [ReferralAccount]
+        public let allowViewAccounts: Bool
     }
 
     public let promocode: String?
@@ -31,4 +33,24 @@ public struct ReferralProgram: Decodable {
 
 public struct ReferralProgramResult: Decodable {
     public let status: TransactionStatus
+}
+
+public struct ReferralAccount: Decodable, Hashable {
+    public let publicKey: String
+    public let blockchain: String
+    public let createdAt: Date
+    
+    enum CodingKeys: CodingKey {
+        case publicKey
+        case blockchain
+        case createdAt
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.publicKey = try container.decode(String.self, forKey: .publicKey)
+        self.blockchain = try container.decode(String.self, forKey: .blockchain)
+        let createdAt = try container.decode(String.self, forKey: .createdAt)
+        self.createdAt = createdAt.asDate!
+    }
 }
