@@ -980,7 +980,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 367 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 370 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client
       ///
@@ -1506,6 +1506,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextEditorModeEditor = Rswift.StringResource(key: "deal.textEditor.mode.editor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Email
+      ///
+      /// Locales: en
+      static let commonEmail = Rswift.StringResource(key: "common.email", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Empty
       ///
       /// Locales: en
@@ -2114,6 +2118,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let menuSupport = Rswift.StringResource(key: "menu.support", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Support by
+      ///
+      /// Locales: en
+      static let menuSupportBy = Rswift.StringResource(key: "menu.support.by", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Telegram
+      ///
+      /// Locales: en
+      static let commonTelegram = Rswift.StringResource(key: "common.telegram", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Text
       ///
       /// Locales: en
@@ -4436,6 +4448,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.textEditor.mode.editor", bundle: bundle, comment: "")
       }
 
+      /// en translation: Email
+      ///
+      /// Locales: en
+      static func commonEmail(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.email", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.email"
+        }
+
+        return NSLocalizedString("common.email", bundle: bundle, comment: "")
+      }
+
       /// en translation: Empty
       ///
       /// Locales: en
@@ -6722,6 +6749,36 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("menu.support", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Support by
+      ///
+      /// Locales: en
+      static func menuSupportBy(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("menu.support.by", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "menu.support.by"
+        }
+
+        return NSLocalizedString("menu.support.by", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Telegram
+      ///
+      /// Locales: en
+      static func commonTelegram(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.telegram", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.telegram"
+        }
+
+        return NSLocalizedString("common.telegram", bundle: bundle, comment: "")
       }
 
       /// en translation: Text
