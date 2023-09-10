@@ -980,7 +980,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 369 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 370 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client
       ///
@@ -2198,6 +2198,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorErrorContractor = Rswift.StringResource(key: "addContractor.error.contractor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The promotion code has already been applied or is being processed for this device.
+      ///
+      /// Locales: en
+      static let referralBonusApplied = Rswift.StringResource(key: "referral.bonus.applied", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The secret key
       ///
       /// Locales: en
@@ -7045,6 +7049,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("addContractor.error.contractor", bundle: bundle, comment: "")
+      }
+
+      /// en translation: The promotion code has already been applied or is being processed for this device.
+      ///
+      /// Locales: en
+      static func referralBonusApplied(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.bonus.applied", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.bonus.applied"
+        }
+
+        return NSLocalizedString("referral.bonus.applied", bundle: bundle, comment: "")
       }
 
       /// en translation: The secret key
