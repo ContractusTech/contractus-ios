@@ -6,6 +6,13 @@ fileprivate let localAddress = "localhost"
 
 public enum Blockchain: String, CaseIterable, Hashable {
     case solana
+
+    public var title: String {
+        switch self {
+        case .solana:
+            return "Solana"
+        }
+    }
 }
 
 public enum ServerType {

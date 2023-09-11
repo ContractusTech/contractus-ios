@@ -10,14 +10,20 @@ import ContractusAPI
 
 enum AppConfig {
 
+#if DEBUG
     static let serverType: ServerType = ConfigStorage.getServer(defaultServer: .developer())
-
+#else
+    static let serverType: ServerType = ConfigStorage.getServer(defaultServer: .production())
+#endif
+    
     // Length secret key for encrypt content of deal.
     // IMPORTANT: only 64
     static let sharedKeyLength = 64
     
     static let supportEmail = "support@contractus.tech"
-    
+
+    static let supportTelegram = "https://t.me/ContractusSupportBot"
+
     static let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
 
     static let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
@@ -41,4 +47,8 @@ enum AppConfig {
     static let feesURL: URL = URL(string: "https://contractus.gitbook.io/docs/fees")!
 
     static let ctusInfoURL: URL = URL(string: "https://contractus.gitbook.io/docs/ctus-token")!
+    
+    static let terms: URL = URL(string: "https://files.contractus.tech/Contractus-Terms.pdf")!
+    
+    static let policy: URL = URL(string: "https://files.contractus.tech/Contractus-PrivacyPolicy.pdf")!
 }

@@ -76,7 +76,6 @@ struct DealState {
     var deal: ContractusAPI.Deal
     var shareDeal: ShareableDeal?
     var canEdit: Bool = false
-    var canSign: Bool = true
     var state: State = .none
     var previewState: FileState = .none
     var partnerSecretPartBase64: String = ""
@@ -84,6 +83,7 @@ struct DealState {
     var decryptedFiles: [String:URL] = [:]
     var decryptingFiles: [String:Bool] = [:]
     var isSignedByPartners: Bool = false
+    var action: ContractusAPI.DealAction = DealAction(actions: [])
     var errorState: ErrorState?
     var uploaderContentType: DealsService.ContentType?
 
@@ -135,6 +135,10 @@ struct DealState {
     var canEditDeal: Bool {
         deal.status == .new
     }
+
+    var isDealEnded: Bool {
+        deal.status == .canceled || deal.status == .finished || deal.status == .revoked
+    }
     
     var editIsVisible: Bool = false
 
@@ -158,16 +162,16 @@ struct DealState {
 
     var clientBondAmount: String {
         if ownerIsClient {
-            return deal.ownerBondFormatted
+            return deal.ownerBondFormatted()
         }
-        return deal.contractorBondFormatted
+        return deal.contractorBondFormatted()
     }
 
     var executorBondAmount: String {
         if ownerIsClient {
-            return deal.contractorBondFormatted
+            return deal.contractorBondFormatted()
         }
-        return deal.ownerBondFormatted
+        return deal.ownerBondFormatted()
     }
 
     var clientBondToken: ContractusAPI.Token? {
@@ -184,8 +188,16 @@ struct DealState {
         return deal.ownerBondToken
     }
 
+    var withEncryption: Bool {
+        deal.encryptedSecretKey != nil
+    }
 
     var currentMainActions: [MainActionType] = []
+
+    var displayInformationForSign: Bool {
+        deal.status == .new && isOwnerDeal
+        && (!currentMainActions.contains(.cancelSign) && !currentMainActions.contains(.sign))
+    }
 }
 
 final class DealViewModel: ViewModel {
@@ -276,14 +288,15 @@ final class DealViewModel: ViewModel {
             state.deal.amount = amount.value
             state.deal.allowHolderMode = allowHolderMode
             state.deal.token = amount.token
-            Task {
+            Task { @MainActor in
                 await updateActions()
+                after?()
             }
-
         case .changeCheckerAmount(let amount):
             state.deal.checkerAmount = amount.value
             Task {
                 await updateActions()
+                after?()
             }
         case .updateTx:
             Task {
@@ -294,6 +307,7 @@ final class DealViewModel: ViewModel {
                 self.state.deal = deal
                 Task {
                     await updateActions()
+                    after?()
                 }
                 return
             }
@@ -310,9 +324,17 @@ final class DealViewModel: ViewModel {
             case .result:
                 state.deal.result = content
             }
+            after?()
         case .openFile(let file):
             state.previewState = .none
-            guard !state.decryptedKey.isEmpty, !(state.decryptingFiles[file.md5] ?? false) else { return }
+            guard !state.decryptedKey.isEmpty, !(state.decryptingFiles[file.md5] ?? false) else {
+                if !state.withEncryption {
+                    Task {
+                        await openFile(file)
+                    }
+                }
+                return
+            }
             state.decryptingFiles[file.md5] = true
             if let url = state.decryptedFiles[file.md5] {
                 state.decryptingFiles[file.md5] = nil
@@ -348,6 +370,7 @@ final class DealViewModel: ViewModel {
                 completion: {[weak self] result in
                     self?.state.deal.meta = meta
                     self?.state.state = .none
+                    after?()
                 })
         case .deleteResultFile(let file):
             state.state = .loading
@@ -361,6 +384,7 @@ final class DealViewModel: ViewModel {
                 completion: {[weak self] _ in
                     self?.state.deal.result = result
                     self?.state.state = .none
+                    after?()
                 })
         case .cancelDownload:
             guard let downloadingUUID = downloadingUUID else { return }
@@ -389,12 +413,15 @@ final class DealViewModel: ViewModel {
                 .store(in: &cancelable)
         case .uploaderContentType(let type):
             state.uploaderContentType = type
+            after?()
         case .changeOwnerBondAmount(let amount):
             state.deal.ownerBondAmount = amount.value
             state.deal.ownerBondToken = amount.token
+            after?()
         case .changeContractorBondAmount(let amount):
             state.deal.contractorBondAmount = amount.value
             state.deal.contractorBondToken = amount.token
+            after?()
         }
     }
 
@@ -408,6 +435,7 @@ final class DealViewModel: ViewModel {
         } else {
             self.state.isSignedByPartners = (actions.signedByOwner ?? false && actions.signedByChecker ?? true)
         }
+        state.action = actions
 
         var dealActions = actions.actions.map { $0.action }
         if dealActions.isEmpty {
@@ -424,6 +452,11 @@ final class DealViewModel: ViewModel {
         if state.isOwnerDeal {
             decryptKey()
         } else {
+            guard let key = state.deal.encryptedSecretKey else {
+                self.state.canEdit = true
+                self.checkLocalFiles()
+                return
+            }
             guard let clientSecret = secretStorage?.getSharedSecret(for: state.deal.id) else {
                 self.state.canEdit = false
                 return
@@ -537,6 +570,43 @@ final class DealViewModel: ViewModel {
         })
     }
 
+    private func openFile(_ file: MetadataFile) async {
+        await MainActor.run {
+            state.previewState = .downloading(0)
+        }
+        guard let filePath = try? await downloadFile(url: file.url) else {
+            debugPrint("downloadFile error");
+            await MainActor.run {
+                state.previewState = .none
+                state.errorState = .error(R.string.localizable.errorDownloadFile())
+            }
+            return
+        }
+        guard let documentsURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else { return }
+        let folderURL = documentsURL.appendingPathComponent(filePath.lastPathComponent, isDirectory: true)
+        let fileURL = folderURL.appendingPathComponent(file.name)
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            state.previewState = .filePreview(fileURL)
+            return
+        }
+        guard let fileData = try? Data(contentsOf: filePath) else { return }
+        do {
+            try? FileManager.default.removeItem(at: fileURL)
+            try fileData.write(to: fileURL)
+        } catch(let error) {
+            debugPrint(error.localizedDescription)
+            self.state.errorState = .error(error.localizedDescription)
+            return
+        }
+        Task {
+            await MainActor.run {
+                state.decryptedFiles[file.md5] = fileURL
+                state.decryptingFiles[file.md5] = nil
+                state.previewState = .filePreview(fileURL)
+            }
+        }
+    }
+    
     private func prepareFileForPreview(_ file: MetadataFile) async -> URL? {
         await MainActor.run {
             state.previewState = .downloading(0)
@@ -590,39 +660,30 @@ final class DealViewModel: ViewModel {
     }
 
     private func checkLocalFiles() {
-        state.deal.meta?.files.forEach { file in
-            Task {
-                let fileNameData = try? await Crypto.decrypt(base64Encrypted: file.name, with: state.decryptedKey)
-                guard let fileNameData = fileNameData else { return }
-                guard let fileName = String(data: fileNameData, encoding: .utf8) else { return }
-                
-                guard let documentsURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else { return }
-                let folderURL = documentsURL.appendingPathComponent(file.url.lastPathComponent, isDirectory: true)
-                let fileURL = folderURL.appendingPathComponent(fileName)
+        var allFiles = state.deal.meta?.files ?? []
+        allFiles.append(contentsOf: state.deal.result?.files ?? [])
+        allFiles.forEach { file in
+            guard let documentsURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else { return }
+            let folderURL = documentsURL.appendingPathComponent(file.url.lastPathComponent, isDirectory: true)
+
+            if state.withEncryption {
+                Task { @MainActor in
+                    let fileNameData = try? await Crypto.decrypt(base64Encrypted: file.name, with: state.decryptedKey)
+                    guard let fileNameData = fileNameData else { return }
+                    guard let fileName = String(data: fileNameData, encoding: .utf8) else { return }
+
+                    let fileURL = folderURL.appendingPathComponent(fileName)
+                    if FileManager.default.fileExists(atPath: fileURL.path) {
+                        self.state.decryptedFiles[file.md5] = fileURL
+                    }
+                }
+            } else {
+                let fileURL = folderURL.appendingPathComponent(file.name)
                 if FileManager.default.fileExists(atPath: fileURL.path) {
-                    state.decryptedFiles[file.md5] = fileURL
+                    self.state.decryptedFiles[file.md5] = fileURL
                 }
             }
         }
-    }
-    
-    private func getDealActions(for deal: Deal, isSigned: Bool, actions: DealAction) -> [State.MainActionType] {
-
-        let actions: [State.MainActionType]
-        switch deal.status {
-        case .new:
-            if isSigned {
-                actions = [.cancelSign]
-            } else {
-                actions = [.sign]
-            }
-        case .canceled, .unknown, .finished, .canceling, .finishing, .starting:
-            actions = []
-        case .started:
-            actions = [.finishDeal, .cancelDeal]
-        }
-
-        return actions
     }
 
     private func cancelSign() async throws {

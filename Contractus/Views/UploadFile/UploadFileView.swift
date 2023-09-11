@@ -23,6 +23,7 @@ fileprivate enum Constants {
     static let phoneImage = Image(systemName: "photo.on.rectangle.angled")
     static let cameraImage = Image(systemName: "camera")
     static let docImage = Image(systemName: "doc.viewfinder")
+    static let docFile = Image(systemName: "doc")
 }
 
 // MARK: - UploadFileView
@@ -70,13 +71,19 @@ struct UploadFileView: View {
                                     .foregroundColor(R.color.buttonTextSecondary.color)
 
                             }
-                            .padding(24)
+                            .padding(12)
                             .background(R.color.buttonBackgroundSecondary.color)
                             .cornerRadius(24)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(R.color.buttonBorderSecondary.color, lineWidth: 1)
+                            }
                         }
                         .offset(x: -12, y: 12)
                     }
                 }
+
+
             } else {
                 VStack(spacing: 12) {
                     HStack(spacing: 12) {
@@ -171,6 +178,7 @@ struct UploadFileView: View {
             }
         }
         .padding(.bottom, 32)
+        .animation(.easeInOut(duration: 0.1), value: sheetType)
         .onDisappear {
             viewModel.trigger(.clear)
         }
@@ -183,7 +191,7 @@ struct UploadFileView: View {
                 })
             case .needConfirmForce:
                 alertType = .needConfirmForceUpdate
-            case .none, .error, .encrypting, .selected, .uploading, .saving:
+            case .none, .error, .encrypting, .selected, .selectedNoKey, .uploading, .saving:
                 break
             }
 
@@ -227,17 +235,14 @@ struct UploadFileView: View {
                         viewModel.trigger(.clear)
                     })
             }
-
         })
-
-
     }
 
     private var canCancel: Bool {
         switch viewModel.state.state {
         case .uploading, .encrypting, .success, .saving:
             return false
-        case .error, .none, .selected, .needConfirmForce:
+        case .error, .none, .selected, .selectedNoKey, .needConfirmForce:
             return true
         }
     }
@@ -246,7 +251,7 @@ struct UploadFileView: View {
         switch viewModel.state.state {
         case .none:
             return false
-        case .selected, .error, .success, .encrypting, .uploading, .saving, .needConfirmForce:
+        case .selected, .selectedNoKey, .error, .success, .encrypting, .uploading, .saving, .needConfirmForce:
             return true
         }
     }
@@ -255,7 +260,7 @@ struct UploadFileView: View {
         switch viewModel.state.state {
         case .none:
             return false
-        case .selected, .error, .success, .encrypting, .uploading, .saving, .needConfirmForce:
+        case .selected, .selectedNoKey, .error, .success, .encrypting, .uploading, .saving, .needConfirmForce:
             return true
         }
     }
@@ -264,11 +269,10 @@ struct UploadFileView: View {
         switch viewModel.state.state {
         case .none, .success, .encrypting, .uploading, .saving, .needConfirmForce:
             return false
-        case .selected, .error:
+        case .selected, .selectedNoKey, .error:
             return true
         }
     }
-
 }
 
 // MARK: - UploadFileItemView
@@ -279,41 +283,63 @@ struct UploadFileItemView: View {
     var clearAction: () -> Void
 
     var body: some View {
-        VStack(alignment: .center, spacing: 4) {
-            if let file = file {
-                if file.isImage, let image = UIImage(data: file.data) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .frame(width: 110, height: 110)
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(R.color.secondaryBackground.color)
-                        .cornerRadius(16)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(R.color.baseSeparator.color, lineWidth: 1)
-                        )
+        HStack {
+            Spacer()
+            VStack(alignment: .center, spacing: 4) {
+                if let file = file {
+                    if file.isImage, let image = UIImage(data: file.data) {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 110, height: 110)
+                            .foregroundColor(R.color.secondaryBackground.color)
+                            .cornerRadius(16)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(R.color.baseSeparator.color, lineWidth: 1)
+                            )
+                    } else {
+                        HStack {
+                            Spacer()
+                            VStack(spacing: 8) {
+                                file.name.imageByFileName
+                                    .resizable()
+                                    .foregroundColor(R.color.secondaryText.color)
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 40)
+                                    .padding(30)
+                                    .background(R.color.fourthBackground.color.opacity(0.6))
+                                    .cornerRadius(16)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 16)
+                                            .stroke(R.color.buttonBorderSecondary.color.opacity(0.7), lineWidth: 1)
+                                    )
+                                Text(file.name)
+                                    .font(.footnote.weight(.semibold))
+                                    .foregroundColor(R.color.textBase.color)
+                                    .cornerRadius(16)
+                            }
+                            Spacer()
+                        }
+                    }
+                    VStack(alignment: .center, spacing: 4) {
+                        Text(file.formattedSize)
+                            .font(.footnote.weight(.semibold))
+                            .foregroundColor(R.color.secondaryText.color)
+                    }
+                } else {
+                    EmptyView()
                 }
-                else {
-                    // TODO: -
+                if file?.isLargeForEncrypting ?? false {
+                    VStack {
+                        Text(R.string.localizable.uploadFileLargeFile())
+                            .font(.footnote.weight(.semibold))
+                            .foregroundColor(R.color.textWarn.color)
+                            .lineLimit(0)
+                    }
                 }
-                VStack(alignment: .center, spacing: 4) {
-                    Text(file.formattedSize)
-                        .font(.callout.weight(.regular))
-                        .foregroundColor(R.color.secondaryText.color)
-                }
-            } else {
-                EmptyView()
             }
-            if file?.isLargeForEncrypting ?? false {
-                VStack {
-                    Text(R.string.localizable.uploadFileLargeFile())
-                        .font(.footnote.weight(.semibold))
-                        .foregroundColor(R.color.textWarn.color)
-                        .lineLimit(0)
-                }
-
-            }
-
+            Spacer()
         }
         .padding(16)
         .overlay(
@@ -322,8 +348,6 @@ struct UploadFileItemView: View {
                 .stroke(R.color.textFieldBorder.color, lineWidth: 1)
         )
     }
-
-
 }
 
 // MARK: - UploadingButtonView
@@ -331,7 +355,9 @@ struct UploadFileItemView: View {
 struct UploadingButtonView: View {
 
     let state: UploadFileState.State
+    var allowEncrypt: Bool = true
     var action: () -> Void
+    
 
     var body: some View {
         CButton(title: titleButton, style: .primary, size: .large, isLoading: false, isDisabled: isDisabled) {
@@ -341,7 +367,7 @@ struct UploadingButtonView: View {
 
     private var isDisabled: Bool {
         switch state {
-        case .none, .selected:
+        case .none, .selected, .selectedNoKey:
             return false
         case .encrypting:
             return true
@@ -360,7 +386,7 @@ struct UploadingButtonView: View {
 
     private var textColor: Color {
         switch state {
-        case .none, .selected:
+        case .none, .selected, .selectedNoKey:
             return R.color.buttonTextPrimary.color
         case .encrypting:
             return R.color.secondaryText.color
@@ -387,6 +413,8 @@ struct UploadingButtonView: View {
     private var titleButton: String {
         switch state {
         case .none, .selected:
+            return R.string.localizable.uploadFileStateEncryptUploadFile()
+        case .selectedNoKey:
             return R.string.localizable.uploadFileStateUploadFile()
         case .encrypting:
             return R.string.localizable.uploadFileStateEncrypting()

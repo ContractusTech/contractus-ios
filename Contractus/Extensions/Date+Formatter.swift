@@ -27,4 +27,10 @@ extension Date {
         dcf.allowedUnits = [.second, .minute, .hour, .day, .month, .year]
         return dcf.string(from: self, to: Date()) ?? ""
     }
+    
+    func timeAgoDisplay() -> String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        return formatter.localizedString(for: self, relativeTo: Date())
+    }
 }

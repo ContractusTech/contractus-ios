@@ -21,7 +21,11 @@ public enum OwnerRole: String, Codable {
 }
 
 public enum DealStatus: String, Codable {
-    case new = "NEW", starting = "STARTING", started = "STARTED", finished = "FINISHED", finishing = "FINISHING", canceled = "CANCELED", canceling = "CANCELING", unknown
+    case new = "NEW", starting = "STARTING", started = "STARTED", finished = "FINISHED", finishing = "FINISHING", canceled = "CANCELED", canceling = "CANCELING", revoked = "REVOKED", unknown
+
+    public var isCanceled: Bool {
+        self == .canceled || self == .revoked
+    }
 }
 
 public struct Deal: Decodable {
@@ -143,17 +147,13 @@ public struct Deal: Decodable {
     public var amountFormatted: String {
         token.format(amount: self.amount, withCode: false)
     }
+
+    public var amountFormattedWithCode: String {
+        token.format(amount: self.amount, withCode: true)
+    }
     
     public var amountFormattedShort: String {
         token.formatShort(amount: self.amount, withCode: false)
-    }
-
-    public var ownerBondFormatted: String {
-        ownerBondToken?.format(amount: self.ownerBondAmount ?? BigUInt(), withCode: false) ?? ""
-    }
-
-    public var contractorBondFormatted: String {
-        contractorBondToken?.format(amount: self.contractorBondAmount ?? BigUInt(), withCode: false) ?? ""
     }
 
     public var metadataIsEmpty: Bool {
@@ -233,6 +233,14 @@ public struct Deal: Decodable {
             return self.contractorPublicKey
         }
         return ownerPublicKey
+    }
+
+    public func ownerBondFormatted(withCode: Bool = false) -> String {
+        ownerBondToken?.format(amount: self.ownerBondAmount ?? BigUInt(), withCode: withCode) ?? ""
+    }
+
+    public func contractorBondFormatted(withCode: Bool = false) -> String {
+        contractorBondToken?.format(amount: self.contractorBondAmount ?? BigUInt(), withCode: withCode) ?? ""
     }
 }
 

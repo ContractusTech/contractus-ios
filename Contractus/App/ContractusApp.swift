@@ -88,6 +88,7 @@ struct ContractusApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var rootViewModel = appState
     @State private var showTxSheet: Bool = false
+    @State private var showServerSelection = false
 
     private var transactionSignType: TransactionSignType? {
         switch rootViewModel.transactionState {
@@ -104,6 +105,9 @@ struct ContractusApp: App {
                 switch rootViewModel.state.state {
                 case .error(let error):
                     errorView(error: error)
+                        .sheet(isPresented: $showServerSelection, content: {
+                            ServerSelectView()
+                        })
                 case .loading:
                     syncView()
                 case .noAccount:
@@ -186,7 +190,7 @@ struct ContractusApp: App {
                     }
 
                     CButton(title: "Support", style: .primary, size: .default, isLoading: false) {
-                        //TODO: - open E-mail app
+                        openEmailSupport()
                     }
                 }
 
@@ -194,6 +198,9 @@ struct ContractusApp: App {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Information")
                         .bold()
+                        .onTapGesture(count: 3, perform: {
+                            showServerSelection.toggle()
+                        })
                     ForEach(AppManagerImpl.shared.debugInfo(), id: \.self) { item in
                         Text(item)
                             .font(.callout)

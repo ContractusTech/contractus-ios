@@ -17,6 +17,7 @@ struct ReferralView: View {
 
     @State var copiedNotification: Bool = false
     @State var promoIsPresented: Bool = false
+    @State var accountIsPresented: Bool = false
 
     @StateObject var viewModel: AnyViewModel<ReferralState, ReferralInput>
 
@@ -113,13 +114,15 @@ struct ReferralView: View {
                             if viewModel.state.state == .applied {
                                 CButton(title: R.string.localizable.referralPromocodeApplied(), style: .success, size: .small, isLoading: false, isDisabled: true) {}
                             } else {
-                                CButton(title: R.string.localizable.referralPromocodeApply(), style: .secondary, size: .small, isLoading: false) {
+                                CButton(title: R.string.localizable.referralPromocodeApply(), style: .secondary, size: .small, isLoading: false, isDisabled: !viewModel.state.allowApply) {
                                     EventService.shared.send(event: DefaultAnalyticsEvent.referralApplyCodeFormTap)
                                     promoIsPresented.toggle()
                                 }
                             }
 
-                            Text(R.string.localizable.referralBonusSubtitle())
+                            Text(viewModel.state.allowApply
+                                 ? R.string.localizable.referralBonusSubtitle()
+                                 : R.string.localizable.referralBonusApplied())
                                 .font(.footnote.weight(.semibold))
                                 .foregroundColor(R.color.secondaryText.color)
                         }
@@ -144,7 +147,9 @@ struct ReferralView: View {
                             }
 
                             ForEach(viewModel.state.prizes.indices, id: \.self) { index in
-                                ReferralPrizeItemView(item: viewModel.state.prizes[index])
+                                ReferralPrizeItemView(item: viewModel.state.prizes[index]) {
+                                    accountIsPresented.toggle()
+                                }
                                 if index != viewModel.state.prizes.count - 1 {
                                     Divider().foregroundColor(R.color.buttonBorderSecondary.color)
                                 }
@@ -168,6 +173,10 @@ struct ReferralView: View {
         .navigationBarTitleDisplayMode(.inline)
         .fullScreenCover(isPresented: $promoIsPresented) {
             PromocodeView()
+                .environmentObject(viewModel)
+        }
+        .sheet(isPresented: $accountIsPresented) {
+            ReferralAccountsView()
                 .environmentObject(viewModel)
         }
     }
@@ -203,21 +212,29 @@ struct LoadingReferralView: View {
 
 struct ReferralPrizeItemView: View {
     var item: PrizeItem
-    
+    var onAccountTap: (() -> Void)?
+
     var body: some View {
         HStack {
             Text(item.title)
                 .font(.footnote.weight(.regular))
                 .foregroundColor(item.type == .unknown ? R.color.textWarn.color : R.color.textBase.color)
-            Spacer()
             
             if let subtitle = item.subtitle {
                 Text(subtitle)
                     .font(.footnote.weight(.regular))
                     .foregroundColor(R.color.secondaryText.color)
                     .opacity(item.type == .unknown ? 0 : 1)
-                Spacer()
+                    .background(
+                        R.color.whiteSeparator.color
+                            .frame(height: 2)
+                            .offset(y: 8)
+                    )
+                    .onTapGesture {
+                        onAccountTap?()
+                    }
             }
+            Spacer()
             Text("\(item.applied ? "+" : "")\(item.amount)")
                 .font(.footnote.weight(.regular))
                 .foregroundColor(item.applied ? R.color.baseGreen.color : R.color.secondaryText.color)

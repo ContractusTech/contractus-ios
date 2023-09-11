@@ -29,7 +29,7 @@ public final class DealsService: BaseService {
     }
 
     public enum FilterByStatus: String, Encodable {
-        case new = "NEW", starting = "STARTING", started = "STARTED", finished = "FINISHED", finishing = "FINISHING", canceled = "CANCELED", canceling = "CANCELING"
+        case new = "NEW", starting = "STARTING", started = "STARTED", finished = "FINISHED", finishing = "FINISHING", canceled = "CANCELED", canceling = "CANCELING", revoked = "REVOKED"
     }
 
     public enum ContentType {

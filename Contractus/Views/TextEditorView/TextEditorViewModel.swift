@@ -48,6 +48,7 @@ final class TextEditorViewModel: ViewModel {
         self.dealService = dealService
         self.state = TextEditorState(dealId: dealId, content: content, contentType: contentType)
         self.secretKey = secretKey
+        self.startEditContent = Date()
     }
 
     func trigger(_ input: TextEditorInput, after: AfterTrigger? = nil) {
@@ -58,8 +59,11 @@ final class TextEditorViewModel: ViewModel {
         case .update(let value, let force):
             guard state.isDecrypted else { return }
             state.state = .updating
-            preparingAndUpdateMetadata(text: value, force: force)
-
+            if secretKey.isEmpty {
+                preparingAndUpdateMetadata(text: value, force: force)
+            } else {
+                encryptAndUpdateMetadata(text: value, force: force)
+            }
         case .decrypt:
             self.state.state = .decrypting
             guard let text = self.state.content.content?.text else {
@@ -67,24 +71,32 @@ final class TextEditorViewModel: ViewModel {
                 self.state.isDecrypted = true
                 return
             }
-            startEditContent = Date()
-            Crypto.decrypt(base64Encrypted: text, with: self.secretKey)
-                .receive(on: RunLoop.main)
-                .sink { result in
-                    switch result {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        self.state.errorState = .error(error.localizedDescription)
-                    }
-                } receiveValue: { data in
+            if secretKey.isEmpty {
+                if let text = text.fromBase64() {
                     self.state.isDecrypted = true
-                    self.state.state = .decrypted(String(data: data, encoding: .utf8) ?? "")
-                }.store(in: &cancelable)
+                    self.state.state = .decrypted(text)
+                } else {
+                    self.state.errorState = .error("Error")
+                }
+            } else {
+                Crypto.decrypt(base64Encrypted: text, with: self.secretKey)
+                    .receive(on: RunLoop.main)
+                    .sink { result in
+                        switch result {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            self.state.errorState = .error(error.localizedDescription)
+                        }
+                    } receiveValue: { data in
+                        self.state.isDecrypted = true
+                        self.state.state = .decrypted(String(data: data, encoding: .utf8) ?? "")
+                    }.store(in: &cancelable)
+            }
         }
     }
 
-    private func preparingAndUpdateMetadata(text: String, force: Bool) {
+    private func encryptAndUpdateMetadata(text: String, force: Bool) {
         Crypto.encrypt(message: text, with: secretKey)
             .flatMap({ encryptedData in
                 Future<(String, String), Never> { promise in
@@ -112,15 +124,49 @@ final class TextEditorViewModel: ViewModel {
                     default:
                         self.state.errorState = .error(error.localizedDescription)
                     }
-
                 case .finished:
                     self.state.state = .success
                 }
-
             } receiveValue: { result in
                 self.state.content = result
             }
             .store(in: &cancelable)
+    }
+    
+    private func preparingAndUpdateMetadata(text: String, force: Bool) {
+        Future<(String, String), Never> { promise in
+            let base64 = Data(text.utf8).base64EncodedString()
+            promise(.success((base64, Crypto.md5(data: base64.data(using: .utf8)!))))
+        }
+        .flatMap({ (text, md5) in
+            let meta = DealMetadata(
+                content: TextContent(text: text, md5: md5),
+                files: self.state.content.files)
+            return self.updateMetadata(id: self.state.dealId, meta: meta, force: force)
+        })
+        .receive(on: RunLoop.main)
+        .sink { result in
+            switch result {
+            case .failure(let error):
+                switch error as? ContractusAPI.APIClientError {
+                case .serviceError(let serviceError):
+                    if serviceError.statusCode == 409 {
+                        self.state.state = .needConfirmForce
+                    } else {
+                        fallthrough
+                    }
+                default:
+                    self.state.errorState = .error(error.localizedDescription)
+                }
+
+            case .finished:
+                self.state.state = .success
+            }
+
+        } receiveValue: { result in
+            self.state.content = result
+        }
+        .store(in: &cancelable)
     }
 
     private func updateMetadata(id: String, meta: DealMetadata, force: Bool) -> Future<DealMetadata, Error> {

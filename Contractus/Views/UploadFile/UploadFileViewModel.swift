@@ -19,12 +19,11 @@ struct UploadFileResult: Equatable {
     let file: UploadedFile
     let sourceName: String
     let encryptedName: String
-
 }
 
 struct UploadFileState {
     enum State: Equatable {
-        case none, selected, encrypting, uploading(Int), saving, success(DealMetadata), error(String), needConfirmForce
+        case none, selected, selectedNoKey, encrypting, uploading(Int), saving, success(DealMetadata), error(String), needConfirmForce
     }
     let dealId: String
     var content: DealMetadata
@@ -66,7 +65,7 @@ final class UploadFileViewModel: ViewModel {
         switch input {
         case.selected(let file):
             self.state.selectedFile = file
-            self.state.state = .selected
+            self.state.state = secretKey.isEmpty ? .selectedNoKey : .selected
         case .clear:
             self.state.selectedFile = nil
             self.state.state = .none
@@ -89,7 +88,7 @@ final class UploadFileViewModel: ViewModel {
         case .uploadAndUpdate:
             guard let file = self.state.selectedFile else { return }
             guard !self.secretKey.isEmpty else {
-                debugPrint("Empty Secret Key")
+                uploadFile(file: file)
                 return
             }
             encryptAndUploadFile(file: file)
@@ -122,6 +121,43 @@ fileprivate extension UploadFileViewModel {
                 }
             })
         }
+    }
+    
+    private func uploadFile(file: RawFile) {
+        Future<(UploadFile, String), Never> { promise in
+            promise(.success((UploadFile(
+                md5: Crypto.md5(data: file.data),
+                data: file.data,
+                fileName: UUID().uuidString,
+                mimeType: DEFAULT_MIME_TYPE), file.name)))
+        }
+        .eraseToAnyPublisher()
+        .flatMap({ file, name in
+            self.upload(file: file).eraseToAnyPublisher()
+                .flatMap { file -> AnyPublisher<UploadFileResult, Never> in
+                    Future<UploadFileResult, Never> { promise in
+                        promise(.success(UploadFileResult(
+                            file: file,
+                            sourceName: self.state.selectedFile?.name ?? "",
+                            encryptedName: name)
+                        ))
+                    }
+                    .eraseToAnyPublisher()
+                }
+        })
+        .eraseToAnyPublisher()
+        .receive(on: RunLoop.main)
+        .sink { result in
+            switch result {
+            case .failure(let error):
+                debugPrint(error.localizedDescription)
+                self.state.state = .error(error.localizedDescription)
+            case .finished: break
+            }
+        } receiveValue: { encryptedFile in
+            self.encryptedFile = encryptedFile
+            self.preparingAndUpdateMetadata()
+        }.store(in: &cancelable)
     }
 
     private func encryptAndUploadFile(file: RawFile) {
@@ -227,5 +263,4 @@ fileprivate extension UploadFileViewModel {
             })
         }
     }
-
 }
