@@ -873,7 +873,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 11 images.
+  /// This `R.image` struct is generated, and contains static references to 14 images.
   struct image {
     /// Image `ContractusLogo`.
     static let contractusLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "ContractusLogo")
@@ -895,6 +895,12 @@ struct R: Rswift.Validatable {
     static let dealExecutor = Rswift.ImageResource(bundle: R.hostingBundle, name: "dealExecutor")
     /// Image `emptyDeals`.
     static let emptyDeals = Rswift.ImageResource(bundle: R.hostingBundle, name: "emptyDeals")
+    /// Image `iconDealChecker`.
+    static let iconDealChecker = Rswift.ImageResource(bundle: R.hostingBundle, name: "iconDealChecker")
+    /// Image `iconDealClient`.
+    static let iconDealClient = Rswift.ImageResource(bundle: R.hostingBundle, name: "iconDealClient")
+    /// Image `iconDealExecutor`.
+    static let iconDealExecutor = Rswift.ImageResource(bundle: R.hostingBundle, name: "iconDealExecutor")
     /// Image `solana`.
     static let solana = Rswift.ImageResource(bundle: R.hostingBundle, name: "solana")
 
@@ -969,6 +975,27 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "iconDealChecker", bundle: ..., traitCollection: ...)`
+    static func iconDealChecker(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.iconDealChecker, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "iconDealClient", bundle: ..., traitCollection: ...)`
+    static func iconDealClient(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.iconDealClient, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "iconDealExecutor", bundle: ..., traitCollection: ...)`
+    static func iconDealExecutor(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.iconDealExecutor, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIImage(named: "solana", bundle: ..., traitCollection: ...)`
     static func solana(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.solana, compatibleWith: traitCollection)
@@ -980,7 +1007,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 370 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 372 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client
       ///
@@ -1770,6 +1797,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealNoSecretKey = Rswift.StringResource(key: "deal.no-secret-key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: No signature
+      ///
+      /// Locales: en
+      static let dealNoSignature = Rswift.StringResource(key: "deal.no.signature", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Nobody
       ///
       /// Locales: en
@@ -2082,6 +2113,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignFieldsSignature = Rswift.StringResource(key: "transactionSign.fields.signature", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Signed
+      ///
+      /// Locales: en
+      static let dealSigned = Rswift.StringResource(key: "deal.signed", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Signed
       ///
       /// Locales: en
@@ -5444,6 +5479,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.no-secret-key", bundle: bundle, comment: "")
       }
 
+      /// en translation: No signature
+      ///
+      /// Locales: en
+      static func dealNoSignature(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.no.signature", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.no.signature"
+        }
+
+        return NSLocalizedString("deal.no.signature", bundle: bundle, comment: "")
+      }
+
       /// en translation: Nobody
       ///
       /// Locales: en
@@ -6614,6 +6664,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.fields.signature", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Signed
+      ///
+      /// Locales: en
+      static func dealSigned(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.signed", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.signed"
+        }
+
+        return NSLocalizedString("deal.signed", bundle: bundle, comment: "")
       }
 
       /// en translation: Signed
