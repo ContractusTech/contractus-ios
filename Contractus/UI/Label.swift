@@ -18,12 +18,12 @@ struct Label: View {
     }
 
     enum LabelSize {
-        case small
+        case small, large
     }
 
     let text: String
     let type: TypeLabel
-    let size: LabelSize = .small
+    var size: LabelSize = .small
 
     var body: some View {
         content()
@@ -56,6 +56,8 @@ struct Label: View {
         switch size {
         case .small:
             return .system(size: 12)
+        case .large:
+            return .system(size: 14)
         }
     }
 
@@ -63,12 +65,15 @@ struct Label: View {
         switch size {
         case .small:
             return .init(top: 2, leading: 8, bottom: 2, trailing: 8)
+        case .large:
+            return .init(top: 6, leading: 12, bottom: 6, trailing: 12)
         }
     }
     var corner: Double {
         switch size {
         case .small:
             return 16
+        case .large: return 20
         }
     }
 
@@ -76,6 +81,8 @@ struct Label: View {
         switch size {
         case .small:
             return 8
+        case .large:
+            return 12
         }
     }
 

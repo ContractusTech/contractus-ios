@@ -997,7 +997,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 351 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 353 localization keys.
     struct localizable {
       /// en translation: -
       ///
@@ -1267,6 +1267,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealViewButtonChangeAmount = Rswift.StringResource(key: "deal.view.button.change-amount", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Changes
+      ///
+      /// Locales: en
+      static let commonChanges = Rswift.StringResource(key: "common.changes", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Check by third party
       ///
       /// Locales: en
@@ -1731,6 +1735,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealTitle = Rswift.StringResource(key: "newDeal.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Next
+      ///
+      /// Locales: en
+      static let commonNext = Rswift.StringResource(key: "common.next", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Next
       ///
       /// Locales: en
@@ -3415,6 +3423,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.view.button.change-amount", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Changes
+      ///
+      /// Locales: en
+      static func commonChanges(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.changes", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.changes"
+        }
+
+        return NSLocalizedString("common.changes", bundle: bundle, comment: "")
       }
 
       /// en translation: Check by third party
@@ -5159,6 +5182,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("newDeal.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Next
+      ///
+      /// Locales: en
+      static func commonNext(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.next", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.next"
+        }
+
+        return NSLocalizedString("common.next", bundle: bundle, comment: "")
       }
 
       /// en translation: Next

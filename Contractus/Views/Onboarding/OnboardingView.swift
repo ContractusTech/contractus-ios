@@ -24,50 +24,57 @@ struct OnboardingView: View {
                 }
             }
             .tabViewStyle(PageTabViewStyle())
-            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
+            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
             .padding(.bottom, 20)
-            
-            switch viewModel.state.onboardingPages[selectedPage].buttonType {
-            case .close:
-                CButton(
-                    title: R.string.localizable.commonClose(),
-                    style: .clear,
-                    size: .default,
-                    isLoading: false
-                ) {
-                    viewModel.trigger(.setPresented)
-                    close()
-                }
-                .padding(.bottom, 16)
-            case .skip:
-                CButton(
-                    title: R.string.localizable.commonSkip(),
-                    style: .clear,
-                    size: .default,
-                    isLoading: false
-                ) {
-                    withAnimation{
-                        selectedPage += 1
-                    }
-                }
-                .padding(.bottom, 16)
-            case .accept:
-                CButton(
-                    title: R.string.localizable.commonAccept(),
-                    style: .clear,
-                    size: .default,
-                    isLoading: false
-                ) {
-                    if selectedPage == viewModel.state.pagesCount - 1 {
-                        close()
-                    } else {
-                        withAnimation{
-                            selectedPage += 1
-                        }
-                    }
-                }
-                .padding(.bottom, 16)
+            .onChange(of: selectedPage) { newIndex in
+                update(pageIndex: newIndex)
             }
+            
+            CButton(
+                title: buttonTitle,
+                style: .clear,
+                size: .default,
+                isLoading: false
+            ) {
+                withAnimation {
+                    selectedPage = selectedPage + 1
+                }
+
+            }
+            .padding(.bottom, 16)
+        }
+        .baseBackground()
+    }
+
+    var buttonTitle: String {
+        switch viewModel.state.selectedPage?.buttonType {
+        case .close:
+            return R.string.localizable.commonClose()
+        case .next:
+            return  R.string.localizable.commonNext()
+        case .accept:
+            return R.string.localizable.commonAccept()
+        case .none:
+            return ""
+        }
+    }
+
+    func update(pageIndex: Int) {
+        switch viewModel.state.selectedPage?.buttonType {
+        case .close:
+            close()
+        case .next:
+            viewModel.trigger(.updateActivePage(pageIndex))
+            if !viewModel.state.hasNext {
+                close()
+            }
+        case .accept:
+            viewModel.trigger(.accept)
+            if !viewModel.state.hasNext {
+                close()
+            }
+        case .none:
+            return
         }
     }
 }

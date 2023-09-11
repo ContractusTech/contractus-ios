@@ -8,14 +8,40 @@
 import Foundation
 
 protocol OnboardingService {
-    func loadOnboarding() -> Onboadring?
+    var content: Onboadring? { get }
     func needShowOnboarding() -> Bool
+    func needShowChangelog() -> Bool
+    func needShow() -> Bool
 }
 
 final class OnboardingServiceImpl: OnboardingService {
+
     private let decoder = JSONDecoder()
+
+    var content: Onboadring?
+
+    init() {
+        content = load()
+    }
+
+    func needShow() -> Bool {
+        needShowChangelog() || needShowOnboarding()
+    }
     
-    func loadOnboarding() -> Onboadring? {
+    func needShowOnboarding() -> Bool {
+        guard let content = content else { return false }
+
+        return !FlagsStorage.shared.onboardingPresented
+    }
+
+    func needShowChangelog() -> Bool {
+        guard let content = content else { return false }
+
+        let id = FlagsStorage.shared.changelogId
+        return id < content.onboarding.changelog.id
+    }
+
+    private func load() -> Onboadring? {
         if let path = Bundle.main.path(forResource: "Onboarding", ofType: "json") {
             do {
                 let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
@@ -27,14 +53,5 @@ final class OnboardingServiceImpl: OnboardingService {
             }
         }
         return nil
-    }
-    
-    func needShowOnboarding() -> Bool {
-        if let onboarding = loadOnboarding() {
-            let id = FlagsStorage.shared.changelogId
-            return !(FlagsStorage.shared.onboardingPresented && id >= onboarding.onboarding.changelog.id)
-        } else {
-            return false
-        }
     }
 }

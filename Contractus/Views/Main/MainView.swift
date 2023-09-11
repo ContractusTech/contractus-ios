@@ -43,12 +43,13 @@ struct MainView: View {
 
     @StateObject var viewModel: AnyViewModel<MainState, MainInput>
     var logoutCompletion: () -> Void
-    @State var selectedDeal: Deal?
-    @State var sheetType: SheetType? = .none
-    @State var dealsType: MainViewModel.State.DealType = .all
-    @State var transactionSignType: TransactionSignType?
+    
+    @State private var selectedDeal: Deal?
+    @State private var sheetType: SheetType? = .none
+    @State private var dealsType: MainViewModel.State.DealType = .all
+    @State private var transactionSignType: TransactionSignType?
     @State private var topUpState: ResizableSheetState = .hidden
-    @State var showOnboarding: Bool = false
+    @State private var showOnboarding: Bool = false
 
     @State private var showDealFilter: Bool = false
     
@@ -372,7 +373,7 @@ struct MainView: View {
             .onAppear{
                 EventService.shared.send(event: DefaultAnalyticsEvent.mainOpen)
                 load()
-                if ServiceFactory.shared.makeOnboardingService().needShowOnboarding() {
+                if ServiceFactory.shared.makeOnboardingService().needShow() {
                     showOnboarding = true
                 }
             }

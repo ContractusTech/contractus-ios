@@ -56,6 +56,8 @@
 "common.info" = "Info";
 "common.service-unavailable" = "Service unavailable";
 "common.all" = "All";
+"common.changes" = "Changes";
+"common.next" = "Next";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
