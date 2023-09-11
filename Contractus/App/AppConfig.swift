@@ -10,14 +10,20 @@ import ContractusAPI
 
 enum AppConfig {
 
+#if DEBUG
     static let serverType: ServerType = ConfigStorage.getServer(defaultServer: .developer())
-
+#else
+    static let serverType: ServerType = ConfigStorage.getServer(defaultServer: .production())
+#endif
+    
     // Length secret key for encrypt content of deal.
     // IMPORTANT: only 64
     static let sharedKeyLength = 64
     
     static let supportEmail = "support@contractus.tech"
-    
+
+    static let supportTelegram = "https://t.me/ContractusSupportBot"
+
     static let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
 
     static let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""

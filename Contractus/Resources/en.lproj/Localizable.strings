@@ -55,6 +55,8 @@
 "common.service-unavailable" = "Service unavailable";
 "common.all" = "All";
 "common.not-specified" = "Not specified";
+"common.email" = "Email";
+"common.telegram" = "Telegram";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
@@ -94,6 +96,7 @@
 "menu.accounts" = "Accounts";
 "menu.referral.program" = "Referral program";
 "menu.support" = "Support";
+"menu.support.by" = "Support by";
 "menu.faq" = "FAQ";
 "menu.version" = "v.%@ build %@";
 
@@ -394,6 +397,7 @@
 "referral.promocode.apply" = "Apply promo code";
 "referral.promocode.applied" = "Promocode applied";
 "referral.bonus.subtitle" = "Apply the user's promocode that you and the referent get bonuses";
+"referral.bonus.applied" = "The promotion code has already been applied or is being processed for this device.";
 "referral.airdrop.title" = "Airdrops and prizes";
 "referral.prize.signup" = "Airdrop after Sign up";
 "referral.prize.apply" = "For using the promo code";
