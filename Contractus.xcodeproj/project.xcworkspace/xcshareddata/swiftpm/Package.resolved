@@ -1,0 +1,277 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "abseil",
+        "repositoryURL": "https://github.com/google/abseil-cpp-binary.git",
+        "state": {
+          "branch": null,
+          "revision": "bfc0b6f81adc06ce5121eb23f628473638d67c5c",
+          "version": "1.2022062300.0"
+        }
+      },
+      {
+        "package": "Alamofire",
+        "repositoryURL": "https://github.com/Alamofire/Alamofire.git",
+        "state": {
+          "branch": null,
+          "revision": "8dd85aee02e39dd280c75eef88ffdb86eed4b07b",
+          "version": "5.6.2"
+        }
+      },
+      {
+        "package": "Base58Swift",
+        "repositoryURL": "https://github.com/keefertaylor/Base58Swift.git",
+        "state": {
+          "branch": null,
+          "revision": "1c13ea6b07f1584660526f8bde3d4cc150e91acd",
+          "version": "2.1.14"
+        }
+      },
+      {
+        "package": "BigInt",
+        "repositoryURL": "https://github.com/attaswift/BigInt.git",
+        "state": {
+          "branch": null,
+          "revision": "0ed110f7555c34ff468e72e1686e59721f2b0da6",
+          "version": "5.3.0"
+        }
+      },
+      {
+        "package": "CodeScanner",
+        "repositoryURL": "https://github.com/twostraws/CodeScanner.git",
+        "state": {
+          "branch": null,
+          "revision": "c7859712034a08bb5a018fbe8751c1f1edc4b248",
+          "version": "2.2.1"
+        }
+      },
+      {
+        "package": "CryptoSwift",
+        "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "039f56c5d7960f277087a0be51f5eb04ed0ec073",
+          "version": "1.5.1"
+        }
+      },
+      {
+        "package": "Firebase",
+        "repositoryURL": "https://github.com/firebase/firebase-ios-sdk.git",
+        "state": {
+          "branch": null,
+          "revision": "df2171b0c6afb9e9d4f7e07669d558c510b9f6be",
+          "version": "10.13.0"
+        }
+      },
+      {
+        "package": "GoogleAppMeasurement",
+        "repositoryURL": "https://github.com/google/GoogleAppMeasurement.git",
+        "state": {
+          "branch": null,
+          "revision": "03b9beee1a61f62d32c521e172e192a1663a5e8b",
+          "version": "10.13.0"
+        }
+      },
+      {
+        "package": "GoogleDataTransport",
+        "repositoryURL": "https://github.com/google/GoogleDataTransport.git",
+        "state": {
+          "branch": null,
+          "revision": "aae45a320fd0d11811820335b1eabc8753902a40",
+          "version": "9.2.5"
+        }
+      },
+      {
+        "package": "GoogleUtilities",
+        "repositoryURL": "https://github.com/google/GoogleUtilities.git",
+        "state": {
+          "branch": null,
+          "revision": "c38ce365d77b04a9a300c31061c5227589e5597b",
+          "version": "7.11.5"
+        }
+      },
+      {
+        "package": "gRPC",
+        "repositoryURL": "https://github.com/google/grpc-binary.git",
+        "state": {
+          "branch": null,
+          "revision": "f1b366129d1125be7db83247e003fc333104b569",
+          "version": "1.50.2"
+        }
+      },
+      {
+        "package": "GTMSessionFetcher",
+        "repositoryURL": "https://github.com/google/gtm-session-fetcher.git",
+        "state": {
+          "branch": null,
+          "revision": "d415594121c9e8a4f9d79cecee0965cf35e74dbd",
+          "version": "3.1.1"
+        }
+      },
+      {
+        "package": "JGProgressHUD",
+        "repositoryURL": "https://github.com/JonasGessner/JGProgressHUD.git",
+        "state": {
+          "branch": null,
+          "revision": "78d7cd35f1d90ff74fd82e486f2cbe4b24be8cf9",
+          "version": "2.2.0"
+        }
+      },
+      {
+        "package": "KeychainAccess",
+        "repositoryURL": "https://github.com/kishikawakatsumi/KeychainAccess.git",
+        "state": {
+          "branch": null,
+          "revision": "84e546727d66f1adc5439debad16270d0fdd04e7",
+          "version": "4.2.2"
+        }
+      },
+      {
+        "package": "leveldb",
+        "repositoryURL": "https://github.com/firebase/leveldb.git",
+        "state": {
+          "branch": null,
+          "revision": "0706abcc6b0bd9cedfbb015ba840e4a780b5159b",
+          "version": "1.22.2"
+        }
+      },
+      {
+        "package": "nanopb",
+        "repositoryURL": "https://github.com/firebase/nanopb.git",
+        "state": {
+          "branch": null,
+          "revision": "819d0a2173aff699fb8c364b6fb906f7cdb1a692",
+          "version": "2.30909.0"
+        }
+      },
+      {
+        "package": "netfox",
+        "repositoryURL": "https://github.com/kasketis/netfox",
+        "state": {
+          "branch": null,
+          "revision": "557576032736fd3140422baefb68b8f76c55088f",
+          "version": "1.21.0"
+        }
+      },
+      {
+        "package": "Promises",
+        "repositoryURL": "https://github.com/google/promises.git",
+        "state": {
+          "branch": null,
+          "revision": "e70e889c0196c76d22759eb50d6a0270ca9f1d9e",
+          "version": "2.3.1"
+        }
+      },
+      {
+        "package": "QRCode",
+        "repositoryURL": "https://github.com/dagronf/QRCode.git",
+        "state": {
+          "branch": null,
+          "revision": "fb170ab74523e4af4b9aea60a637d5d9f8fcb90b",
+          "version": "6.0.2"
+        }
+      },
+      {
+        "package": "R.swift.Library",
+        "repositoryURL": "https://github.com/mac-cain13/R.swift.Library",
+        "state": {
+          "branch": "master",
+          "revision": "3a64127e8113cc33179504dfadc91b361d55a0b1",
+          "version": null
+        }
+      },
+      {
+        "package": "ResizableSheet",
+        "repositoryURL": "https://github.com/mtj0928/ResizableSheet",
+        "state": {
+          "branch": null,
+          "revision": "13a498d95fe0a152b153af5b06094524f959cf33",
+          "version": "0.0.5"
+        }
+      },
+      {
+        "package": "secp256k1",
+        "repositoryURL": "https://github.com/Boilertalk/secp256k1.swift.git",
+        "state": {
+          "branch": null,
+          "revision": "45e458ec3be46cf0a6eb68bc947f797852dc65d8",
+          "version": "0.1.6"
+        }
+      },
+      {
+        "package": "SolanaSwift",
+        "repositoryURL": "https://github.com/p2p-org/solana-swift",
+        "state": {
+          "branch": null,
+          "revision": "c8bead282faabbd68cfb90e2bae0da461c2f7635",
+          "version": "3.0.0"
+        }
+      },
+      {
+        "package": "SwiftProtobuf",
+        "repositoryURL": "https://github.com/apple/swift-protobuf.git",
+        "state": {
+          "branch": null,
+          "revision": "ce20dc083ee485524b802669890291c0d8090170",
+          "version": "1.22.1"
+        }
+      },
+      {
+        "package": "swift-qrcode-generator",
+        "repositoryURL": "https://github.com/dagronf/swift-qrcode-generator",
+        "state": {
+          "branch": null,
+          "revision": "5ca09b6a2ad190f94aa3d6ddef45b187f8c0343b",
+          "version": "1.0.3"
+        }
+      },
+      {
+        "package": "Introspect",
+        "repositoryURL": "https://github.com/siteline/SwiftUI-Introspect.git",
+        "state": {
+          "branch": null,
+          "revision": "f2616860a41f9d9932da412a8978fec79c06fe24",
+          "version": "0.1.4"
+        }
+      },
+      {
+        "package": "SwiftUIPullToRefresh",
+        "repositoryURL": "https://github.com/globulus/swiftui-pull-to-refresh",
+        "state": {
+          "branch": null,
+          "revision": "82937f911a588f892acbf7dc4129c38d09012501",
+          "version": "1.1.8"
+        }
+      },
+      {
+        "package": "SwiftUI-Shimmer",
+        "repositoryURL": "https://github.com/markiv/SwiftUI-Shimmer",
+        "state": {
+          "branch": null,
+          "revision": "17b66b0e7d94d2d3f220bbcb021b5026436f06c7",
+          "version": "1.3.0"
+        }
+      },
+      {
+        "package": "Task_retrying",
+        "repositoryURL": "https://github.com/bigearsenal/task-retrying-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "208f1e8dfa93022a7d39ab5b334d5f43a934d4b1",
+          "version": "2.0.0"
+        }
+      },
+      {
+        "package": "TweetNacl",
+        "repositoryURL": "https://github.com/bitmark-inc/tweetnacl-swiftwrap.git",
+        "state": {
+          "branch": null,
+          "revision": "f8fd111642bf2336b11ef9ea828510693106e954",
+          "version": "1.1.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
