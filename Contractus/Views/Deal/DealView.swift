@@ -1105,8 +1105,9 @@ struct DealView: View {
             ZStack(alignment: .topTrailing) {
                 HStack {
                     Spacer()
-                    VStack{
+                    VStack(spacing: 2) {
                         R.image.iconDealClient.image
+                            .padding(.top, 4)
                         Text(R.string.localizable.dealTextClient())
                             .font(.caption.weight(.bold))
                         Text(viewModel.state.action.signedByOwner ?? false
@@ -1132,8 +1133,9 @@ struct DealView: View {
             ZStack(alignment: .topTrailing) {
                 HStack {
                     Spacer()
-                    VStack{
+                    VStack(spacing: 2) {
                         R.image.iconDealExecutor.image
+                            .padding(.top, 4)
                         Text(R.string.localizable.dealTextExecutor())
                             .font(.caption.weight(.bold))
                         Text(viewModel.state.action.signedByContractor ?? false
@@ -1159,8 +1161,9 @@ struct DealView: View {
                 ZStack(alignment: .topTrailing) {
                     HStack {
                         Spacer()
-                        VStack{
+                        VStack(spacing: 2) {
                             R.image.iconDealChecker.image
+                                .padding(.top, 4)
                             Text(R.string.localizable.dealTextChecker())
                                 .font(.caption.weight(.bold))
                             Text(viewModel.state.action.signedByChecker ?? false
