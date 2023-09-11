@@ -15,6 +15,7 @@ enum AppConfig {
 #else
     static let serverType: ServerType = ConfigStorage.getServer(defaultServer: .production())
 #endif
+    
     // Length secret key for encrypt content of deal.
     // IMPORTANT: only 64
     static let sharedKeyLength = 64

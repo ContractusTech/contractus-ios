@@ -753,10 +753,13 @@ struct DealView: View {
                         .cornerRadius(20)
                         .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     }
+                    // MARK: - Sign Status
+                    if viewModel.state.canEditDeal {
+                        signStatus()
+                    }
                     
                     // MARK: - Actions
                     actionsView()
-
                 }
             }
         }
@@ -1094,6 +1097,102 @@ struct DealView: View {
         .baseBackground()
         .edgesIgnoringSafeArea(.bottom)
 
+    }
+
+    @ViewBuilder
+    private func signStatus() -> some View {
+        HStack(spacing: 0) {
+            ZStack(alignment: .topTrailing) {
+                HStack {
+                    Spacer()
+                    VStack(spacing: 2) {
+                        R.image.iconDealClient.image
+                            .padding(.top, 4)
+                        Text(R.string.localizable.dealTextClient())
+                            .font(.caption.weight(.bold))
+                        Text(viewModel.state.action.signedByOwner ?? false
+                             ? R.string.localizable.dealSigned()
+                             : R.string.localizable.dealNoSignature()
+                        )
+                        .font(.caption2)
+                        .foregroundColor(viewModel.state.action.signedByOwner ?? false ? R.color.baseGreen.color : R.color.secondaryText.color)
+                    }
+                    .padding(.vertical, 10)
+                    Spacer()
+                }
+                if viewModel.state.youIsClient {
+                    Text(R.string.localizable.commonYou())
+                        .font(.caption2)
+                        .foregroundColor(R.color.secondaryText.color)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                }
+            }
+            Divider().foregroundColor(R.color.baseSeparator.color)
+            
+            ZStack(alignment: .topTrailing) {
+                HStack {
+                    Spacer()
+                    VStack(spacing: 2) {
+                        R.image.iconDealExecutor.image
+                            .padding(.top, 4)
+                        Text(R.string.localizable.dealTextExecutor())
+                            .font(.caption.weight(.bold))
+                        Text(viewModel.state.action.signedByContractor ?? false
+                             ? R.string.localizable.dealSigned()
+                             : R.string.localizable.dealNoSignature()
+                        )
+                        .font(.caption2)
+                        .foregroundColor(viewModel.state.action.signedByContractor ?? false ? R.color.baseGreen.color : R.color.secondaryText.color)
+                    }
+                    .padding(.vertical, 10)
+                    Spacer()
+                }
+                if viewModel.state.isYouExecutor {
+                    Text(R.string.localizable.commonYou())
+                        .font(.caption2)
+                        .foregroundColor(R.color.secondaryText.color)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                }
+            }
+            if viewModel.state.deal.completionCheckType == .checker {
+                Divider().foregroundColor(R.color.baseSeparator.color)
+                ZStack(alignment: .topTrailing) {
+                    HStack {
+                        Spacer()
+                        VStack(spacing: 2) {
+                            R.image.iconDealChecker.image
+                                .padding(.top, 4)
+                            Text(R.string.localizable.dealTextChecker())
+                                .font(.caption.weight(.bold))
+                            Text(viewModel.state.action.signedByChecker ?? false
+                                 ? R.string.localizable.dealSigned()
+                                 : R.string.localizable.dealNoSignature()
+                            )
+                            .font(.caption2)
+                            .foregroundColor(viewModel.state.action.signedByChecker ?? false ? R.color.baseGreen.color : R.color.secondaryText.color)
+                        }
+                        .padding(.vertical, 10)
+                        Spacer()
+                    }
+                    if viewModel.state.isYouChecker {
+                        Text(R.string.localizable.commonYou())
+                            .font(.caption2)
+                            .foregroundColor(R.color.secondaryText.color)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                    }
+                }
+            }
+        }
+        .background {
+            RoundedRectangle(cornerRadius: 20)
+                .stroke()
+                .fill(R.color.baseSeparator.color)
+        }
+        .padding(.top, 16)
+        .padding(.horizontal, 16)
     }
 
     @ViewBuilder
