@@ -23,8 +23,7 @@ struct OnboardingView: View {
                         .gesture(page.buttonType == .accept ? DragGesture() : nil)
                 }
             }
-            .tabViewStyle(PageTabViewStyle())
-            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+            .tabViewStyle(.page(indexDisplayMode: .always))
             .padding(.bottom, 20)
             
             CButton(

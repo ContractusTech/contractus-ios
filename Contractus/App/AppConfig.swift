@@ -33,6 +33,8 @@ enum AppConfig {
     static let deviceId: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
 
     static let bundleId = Bundle.main.bundleIdentifier!
+    
+    static let isSmallScreen: Bool = UIScreen.main.bounds.width / UIScreen.main.bounds.height > 0.5
 
     // MARK: - Information URL's
 
