@@ -254,6 +254,7 @@
 		6D7552992897848B0069935B /* Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
 		6D75529B28978C450069935B /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		6D75F2EF288EA9C70092D182 /* EnterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterView.swift; sourceTree = "<group>"; };
+		6D7D1FAA2AB3621200D550AA /* Contractus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Contractus.entitlements; sourceTree = "<group>"; };
 		6D7EE71628E9D3070016369C /* ImportPrivateKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportPrivateKeyView.swift; sourceTree = "<group>"; };
 		6D7EE71828E9D4D60016369C /* MultilineTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextFieldView.swift; sourceTree = "<group>"; };
 		6D8EFD8428D88ED10064F5DA /* AddContractorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContractorView.swift; sourceTree = "<group>"; };
@@ -557,6 +558,7 @@
 		6D97AEEF288D196200EB61D0 /* Contractus */ = {
 			isa = PBXGroup;
 			children = (
+				6D7D1FAA2AB3621200D550AA /* Contractus.entitlements */,
 				6DAA5E7E2898D32600BA1965 /* App */,
 				6D5901082893887E00EC318E /* Info.plist */,
 				6DBCA48E2891161200F918B6 /* Utils */,
@@ -1306,6 +1308,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Contractus/Contractus.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1346,6 +1349,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Contractus/Contractus.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
