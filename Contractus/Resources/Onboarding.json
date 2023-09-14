@@ -5,29 +5,29 @@
                 "imageName": "Onboarding_1",
                 "imageUrl": null,
                 "title": "Security",
-                "description": "The details of your contract are encrypted and can only be viewed by those involved in the deal."
+                "description": "The details of each contract are encrypted and can only be viewed by those involved in the deal."
             },
             {
                 "imageName": "Onboarding_2",
                 "imageUrl": null,
                 "title": "Guarantees",
-                "description": "You are sure of your partner's solvency and are protected against unilateral termination of the deal."
+                "description": "You are sure of your partner's solvency and protected against unilateral termination of the deal."
             },
             {
                 "imageName": "Onboarding_3",
                 "imageUrl": null,
                 "title": "Checker",
-                "description": "You can specify a third party who checks the result of the partner's work and decides whether funds should be paid to the partner"
+                "description": "You can specify a third party who checks the result of the work and decides whether to pay out the funds or not."
             },
             {
                 "imageName": "Onboarding_4",
                 "imageUrl": null,
-                "title": "Zero fee",
-                "description": "You can make deals without service fee, after activation of **Holder mode**."
+                "title": "No fees",
+                "description": "You can make your deals without service commission at all, after activation of **Holder mode**."
             }
         ],
         "changelog": {
-            "id": 1,
+            "id": 0,
             "pages": []
         }
     }
