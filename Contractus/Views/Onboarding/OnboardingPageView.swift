@@ -7,11 +7,16 @@
 
 import SwiftUI
 
+fileprivate enum Constants {
+    static let emptyImage = Image("onboarding_empty")
+}
+
 struct OnboardingPageView: View {
     var page: OnboardingPageModel
 
     var body: some View {
         let width = UIScreen.main.bounds.size.width
+        let imagePadding: CGFloat = AppConfig.isSmallScreen ? 6 : 30
         VStack(spacing: 0) {
             ZStack(alignment: .topTrailing) {
                 if let imageName = page.imageName {
@@ -21,7 +26,7 @@ struct OnboardingPageView: View {
                         .saturation(0.0)
                         .cornerRadius(20)
                         .padding(8)
-                        .padding(.bottom, 30)
+                        .padding(.bottom, imagePadding)
                 }
                 if let imageUrl = page.imageUrl {
                     AsyncImage(url: URL(string: imageUrl)) { image in
@@ -31,13 +36,22 @@ struct OnboardingPageView: View {
                             .saturation(0.0)
                             .cornerRadius(20)
                             .padding(8)
-                            .padding(.bottom, 30)
+                            .padding(.bottom, imagePadding)
                     } placeholder: {
                         ProgressView()
                             .frame(width: width - 16, height: width - 16)
                             .padding(8)
-                            .padding(.bottom, 30)
+                            .padding(.bottom, imagePadding)
                     }
+                }
+                if page.imageName == nil && page.imageUrl == nil {
+                    Constants.emptyImage
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .saturation(0.0)
+                        .cornerRadius(20)
+                        .padding(8)
+                        .padding(.bottom, imagePadding)
                 }
 
                 if page.isChangelog {
@@ -47,15 +61,15 @@ struct OnboardingPageView: View {
             }
 
             Text(page.title ?? "")
-                .font(.largeTitle.weight(.semibold))
+                .font(AppConfig.isSmallScreen ? .title.weight(.semibold) : .largeTitle.weight(.semibold))
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 10)
 
             Text(LocalizedStringKey(page.description ?? ""))
-                .font(.body)
+                .font(AppConfig.isSmallScreen ? .callout : .body)
                 .tint(R.color.blue.color)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 50)
+                .padding(.horizontal, AppConfig.isSmallScreen ? 30 : 50)
             
             Spacer()
         }

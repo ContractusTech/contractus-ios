@@ -259,9 +259,9 @@ fileprivate func appearanceSetup() {
         UINavigationBar.appearance().tintColor = color
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: color]
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = color
-        UIPageControl.appearance().currentPageIndicatorTintColor = R.color.accentColor()
-        UIPageControl.appearance().pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.2)
     }
+    UIPageControl.appearance().currentPageIndicatorTintColor = R.color.accentColor()
+    UIPageControl.appearance().pageIndicatorTintColor = R.color.baseSeparator()
 }
 
 
