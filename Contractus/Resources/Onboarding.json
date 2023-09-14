@@ -2,25 +2,25 @@
     "onboarding": {
         "pages": [
             {
-                "imageName": null,
+                "imageName": "Onboarding_1",
                 "imageUrl": null,
                 "title": "Security",
                 "description": "By using Contractus to close deals you guarantee the solvency your client's ability to pay."
             },
             {
-                "imageName": "page1",
+                "imageName": "Onboarding_2",
                 "imageUrl": null,
                 "title": "Guarantees",
                 "description": "You can conclude a contract without the possibility of unilateral termination."
             },
             {
-                "imageName": "page1",
+                "imageName": "Onboarding_3",
                 "imageUrl": null,
                 "title": "Checker",
                 "description": "You can appoint a checker for the result of the work. Only after the verification will the contractor receive his remuneration for the completed work."
             },
             {
-                "imageName": "page1",
+                "imageName": "Onboarding_4",
                 "imageUrl": null,
                 "title": "No commission",
                 "description": "You can conduct deals without commission of the service if you activate the Holder mode."
