@@ -28,6 +28,8 @@ struct WrapTokenView: View {
     @State private var showSign: Bool = false
     @State private var alertType: AlertType?
 
+    @FocusState var isInputActive: Bool
+
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottom) {
@@ -36,6 +38,7 @@ struct WrapTokenView: View {
                         ZStack(alignment: .trailing) {
                             TextField(placeholder, text: $amount)
                                 .keyboardType(.decimalPad)
+                                .focused($isInputActive)
                                 .padding(12)
                                 .background(R.color.textFieldBackground.color)
                                 .cornerRadius(20)
@@ -48,6 +51,14 @@ struct WrapTokenView: View {
                                         .inset(by: 0.5)
                                         .stroke(R.color.textFieldBorder.color, lineWidth: 1)
                                 )
+                                .toolbar {
+                                    ToolbarItemGroup(placement: .keyboard) {
+                                        Spacer()
+                                        Button(R.string.localizable.commonDone()) {
+                                            isInputActive = false
+                                        }.font(.body.weight(.medium))
+                                    }
+                                }
 
                             HStack {
                                 Button {
