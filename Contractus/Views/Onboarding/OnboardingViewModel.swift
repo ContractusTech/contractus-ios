@@ -37,18 +37,18 @@ struct OnboardingState {
     var state: State = .none
 
     var errorState: ErrorState?
-    var onboardingPages: [OnboardingPageModel] = []
+    var pages: [OnboardingPageModel] = []
     var selectedIndex: Int = 0
     var selectedPage: OnboardingPageModel? {
-        onboardingPages[safe: selectedIndex]
+        pages[safe: selectedIndex]
     }
 
     var hasNext: Bool {
-        onboardingPages[safe: (selectedIndex + 1)] != nil
+        pages[safe: (selectedIndex + 1)] != nil
     }
 
     var pagesCount: Int {
-        onboardingPages.count
+        pages.count
     }
 }
 
@@ -78,18 +78,19 @@ final class OnboardingViewModel: ViewModel {
     }
     
     func loadOnboarding() {
-        guard let onboarding = onboardingService?.content?.onboarding else { return }
+        guard let onboardingService = onboardingService, let onboarding = onboardingService.content?.onboarding else { return }
         
         var onboardingPages = onboarding.pages
         var changelogPages: [OnboardingChangelogPage] = []
-        if onboardingService?.needShowChangelog() ?? false {
+
+        if onboardingService.needShowChangelog() {
             changelogPages = onboarding.changelog.pages
 
-            FlagsStorage.shared.changelogId = onboarding.changelog.id
+            onboardingService.setShownChangelog()
         }
 
-        if !FlagsStorage.shared.onboardingPresented {
-            state.onboardingPages = onboardingPages.map {
+        if onboardingService.needShowOnboarding() {
+            state.pages = onboardingPages.map {
                 OnboardingPageModel(
                     imageName: $0.imageName,
                     imageUrl: $0.imageUrl,
@@ -100,17 +101,17 @@ final class OnboardingViewModel: ViewModel {
                 )
             }
 
-            FlagsStorage.shared.onboardingPresented = true
+            onboardingService.setShowOnboarding()
         }
 
-        state.onboardingPages.append(
+        state.pages.append(
             contentsOf: changelogPages.map {
                 OnboardingPageModel(
                     imageName: $0.imageName,
                     imageUrl: $0.imageUrl,
                     title: $0.title,
                     description: $0.description,
-                    buttonType: $0.needAccept ? .accept : changelogPages.last == $0 ? .close : .next,
+                    buttonType: $0.needAccept ? .accept : (changelogPages.last == $0 ? .close : .next),
                     isChangelog: true
                 )
             }

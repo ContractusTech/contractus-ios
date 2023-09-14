@@ -11,6 +11,8 @@ protocol OnboardingService {
     var content: Onboadring? { get }
     func needShowOnboarding() -> Bool
     func needShowChangelog() -> Bool
+    func setShowOnboarding()
+    func setShownChangelog()
     func needShow() -> Bool
 }
 
@@ -27,14 +29,30 @@ final class OnboardingServiceImpl: OnboardingService {
     func needShow() -> Bool {
         needShowChangelog() || needShowOnboarding()
     }
+
+    func setShowOnboarding() {
+        FlagsStorage.shared.onboardingPresented = true
+    }
+
+    func setShownChangelog() {
+        guard let content = content else { return }
+
+        FlagsStorage.shared.changelogId = content.onboarding.changelog.id
+    }
     
     func needShowOnboarding() -> Bool {
+        // TODO: - Remove, need for test
+        return true
+        
         guard let content = content else { return false }
 
         return !FlagsStorage.shared.onboardingPresented
     }
 
     func needShowChangelog() -> Bool {
+        // TODO: - Remove, need for test
+        return true
+
         guard let content = content else { return false }
 
         let id = FlagsStorage.shared.changelogId

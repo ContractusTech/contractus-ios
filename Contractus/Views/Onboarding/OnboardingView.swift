@@ -16,9 +16,9 @@ struct OnboardingView: View {
     var body: some View {
         VStack(spacing: 0) {
             TabView(selection: $selectedPage) {
-                ForEach(viewModel.state.onboardingPages, id: \.self) { page in
+                ForEach(viewModel.state.pages, id: \.self) { page in
                     OnboardingPageView(page: page)
-                        .tag(viewModel.state.onboardingPages.firstIndex(of: page)!)
+                        .tag(viewModel.state.pages.firstIndex(of: page)!)
                         .contentShape(Rectangle())
                         .gesture(page.buttonType == .accept ? DragGesture() : nil)
                 }
@@ -26,19 +26,14 @@ struct OnboardingView: View {
             .tabViewStyle(PageTabViewStyle())
             .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
             .padding(.bottom, 20)
-            .onChange(of: selectedPage) { newIndex in
-                update(pageIndex: newIndex)
-            }
             
             CButton(
-                title: buttonTitle,
-                style: .clear,
+                title: buttonTitle(for: viewModel.state.pages[safe: selectedPage]),
+                style: viewModel.state.pages[safe: selectedPage]?.buttonType == .accept ? .primary : .clear,
                 size: .default,
                 isLoading: false
             ) {
-                withAnimation {
-                    selectedPage = selectedPage + 1
-                }
+                action()
 
             }
             .padding(.bottom, 16)
@@ -46,8 +41,12 @@ struct OnboardingView: View {
         .baseBackground()
     }
 
-    var buttonTitle: String {
-        switch viewModel.state.selectedPage?.buttonType {
+    var hasNext: Bool {
+        viewModel.state.pages[safe: selectedPage + 1] != nil
+    }
+
+    func buttonTitle(for page: OnboardingPageModel?) -> String {
+        switch page?.buttonType {
         case .close:
             return R.string.localizable.commonClose()
         case .next:
@@ -59,22 +58,23 @@ struct OnboardingView: View {
         }
     }
 
-    func update(pageIndex: Int) {
-        switch viewModel.state.selectedPage?.buttonType {
+    func action() {
+        switch viewModel.state.pages[selectedPage].buttonType {
         case .close:
             close()
         case .next:
-            viewModel.trigger(.updateActivePage(pageIndex))
-            if !viewModel.state.hasNext {
+            if hasNext {
+                selectedPage = selectedPage + 1
+            } else {
                 close()
             }
         case .accept:
             viewModel.trigger(.accept)
-            if !viewModel.state.hasNext {
+            if hasNext {
+                selectedPage = selectedPage + 1
+            } else {
                 close()
             }
-        case .none:
-            return
         }
     }
 }
