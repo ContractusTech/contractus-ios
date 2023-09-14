@@ -19,7 +19,7 @@ struct WrapTokenView: View {
         var id: String { "\(self)" }
         case error(String)
     }
-    
+
     @Environment(\.presentationMode) var presentationMode
     @StateObject var viewModel: AnyViewModel<WrapTokenState, WrapTokenInput>
 
@@ -35,6 +35,7 @@ struct WrapTokenView: View {
                     VStack(spacing: 12) {
                         ZStack(alignment: .trailing) {
                             TextField(placeholder, text: $amount)
+                                .keyboardType(.decimalPad)
                                 .padding(12)
                                 .background(R.color.textFieldBackground.color)
                                 .cornerRadius(20)
@@ -82,7 +83,6 @@ struct WrapTokenView: View {
                                 }
                                 Spacer()
                             }
-
                             HStack {
                                 Spacer()
                                 ZStack {
@@ -106,7 +106,6 @@ struct WrapTokenView: View {
                                 }
                                 Spacer()
                             }
-
                         }
                         .padding(16)
                         .overlay {
@@ -116,7 +115,6 @@ struct WrapTokenView: View {
                         }
 
                         Button {
-
                             viewModel.trigger(.swap)
                             amount = viewModel.state.operationType == .unwrap ? viewModel.state.from.formatted() : ""
                         } label: {
@@ -125,13 +123,12 @@ struct WrapTokenView: View {
                                     .resizable()
                                     .frame(width: 12, height: 12)
                                     .foregroundColor(R.color.textBase.color)
-                                Text("Swap")
+                                Text(R.string.localizable.wrapSwap())
                                     .foregroundColor(R.color.textBase.color)
                             }
                         }
                     }
                 }
-
                 CButton(
                     title: buttonTitle,
                     style: .primary,
@@ -142,9 +139,12 @@ struct WrapTokenView: View {
                     viewModel.trigger(.send(amount))
                 }
             }
-            .onChange(of: amount, perform: { newValue in
+            .onAppear() {
+                UIScrollView.appearance().keyboardDismissMode = .onDrag
+            }
+            .onChange(of: amount) { newValue in
                 viewModel.trigger(.update(newValue))
-            })
+            }
             .sheet(isPresented: $showSign) {
                 if let type = viewModel.transactionSignType {
                     TransactionSignView(account: viewModel.state.account, type: type) {
@@ -158,7 +158,6 @@ struct WrapTokenView: View {
                 } else {
                     EmptyView()
                 }
-
             }
             .onChange(of: viewModel.transactionSignType) { type in
                 showSign = type != nil
@@ -171,18 +170,19 @@ struct WrapTokenView: View {
                     self.alertType = nil
                 }
             }
-            .alert(item: $alertType, content: { type in
+            .alert(item: $alertType) { type in
                 switch type {
                 case .error(let message):
                     return Alert(
                         title: Text(R.string.localizable.commonError()),
-                        message: Text(message), dismissButton: Alert.Button.default(Text("Ok"), action: {
+                        message: Text(message),
+                        dismissButton: .default(Text(R.string.localizable.commonOk())) {
                             viewModel.trigger(.hideError)
-                        }))
+                        })
                 }
-            })
+            }
             .padding(UIConstants.contentInset)
-            .navigationTitle("(Un)Wrap token")
+            .navigationTitle(R.string.localizable.wrapTitle())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -193,35 +193,31 @@ struct WrapTokenView: View {
                             .resizable()
                             .frame(width: 21, height: 21)
                             .foregroundColor(R.color.textBase.color)
-
                     }
                 }
             }
             .edgesIgnoringSafeArea(.bottom)
             .baseBackground()
         }
-
     }
 
     private var buttonTitle: String {
         switch viewModel.operationType {
         case .wrap:
-            return "Wrap"
+            return R.string.localizable.wrapWrap()
         case .unwrap:
-            return "Unwrap all"
+            return R.string.localizable.wrapUnwrap()
         }
     }
 
     private var placeholder: String {
         switch viewModel.operationType {
         case .wrap:
-            return "Amount" //"Max \(viewModel.from.formatted())"
+            return R.string.localizable.wrapAmount() //"Max \(viewModel.from.formatted())"
         case .unwrap:
             return "\(viewModel.from.formatted())"
         }
     }
-
-
 }
 
 struct WrapTokenView_Previews: PreviewProvider {

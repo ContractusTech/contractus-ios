@@ -1007,7 +1007,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 372 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 377 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client
       ///
@@ -1021,6 +1021,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealStatusFinishedSubtitleWithChecker = Rswift.StringResource(key: "deal.status.finished.subtitle.with-checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: (Un)Wrap token
+      ///
+      /// Locales: en
+      static let wrapTitle = Rswift.StringResource(key: "wrap.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: -
       ///
       /// Locales: en
@@ -1125,6 +1129,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignFieldsAmount = Rswift.StringResource(key: "transactionSign.fields.amount", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Amount
+      ///
+      /// Locales: en
+      static let wrapAmount = Rswift.StringResource(key: "wrap.amount", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Amount of deal
       ///
       /// Locales: en
@@ -2157,6 +2165,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let menuSupportBy = Rswift.StringResource(key: "menu.support.by", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Swap
+      ///
+      /// Locales: en
+      static let wrapSwap = Rswift.StringResource(key: "wrap.swap", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Telegram
       ///
       /// Locales: en
@@ -2325,6 +2337,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let referralPrizeUnknown = Rswift.StringResource(key: "referral.prize.unknown", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Unwrap all
+      ///
+      /// Locales: en
+      static let wrapUnwrap = Rswift.StringResource(key: "wrap.unwrap", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Update
       ///
       /// Locales: en
@@ -2397,6 +2413,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealBondTitle = Rswift.StringResource(key: "newDeal.bond.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Wrap
+      ///
+      /// Locales: en
+      static let wrapWrap = Rswift.StringResource(key: "wrap.wrap", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Wrong %@ public key
       ///
       /// Locales: en
@@ -2547,6 +2567,21 @@ struct R: Rswift.Validatable {
 
         let format = NSLocalizedString("deal.status.finished.subtitle.with-checker", bundle: bundle, comment: "")
         return String(format: format, locale: locale, value1, value2, value3, value4)
+      }
+
+      /// en translation: (Un)Wrap token
+      ///
+      /// Locales: en
+      static func wrapTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("wrap.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "wrap.title"
+        }
+
+        return NSLocalizedString("wrap.title", bundle: bundle, comment: "")
       }
 
       /// en translation: -
@@ -2945,6 +2980,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.fields.amount", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Amount
+      ///
+      /// Locales: en
+      static func wrapAmount(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("wrap.amount", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "wrap.amount"
+        }
+
+        return NSLocalizedString("wrap.amount", bundle: bundle, comment: "")
       }
 
       /// en translation: Amount of deal
@@ -6831,6 +6881,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("menu.support.by", bundle: bundle, comment: "")
       }
 
+      /// en translation: Swap
+      ///
+      /// Locales: en
+      static func wrapSwap(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("wrap.swap", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "wrap.swap"
+        }
+
+        return NSLocalizedString("wrap.swap", bundle: bundle, comment: "")
+      }
+
       /// en translation: Telegram
       ///
       /// Locales: en
@@ -7463,6 +7528,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("referral.prize.unknown", bundle: bundle, comment: "")
       }
 
+      /// en translation: Unwrap all
+      ///
+      /// Locales: en
+      static func wrapUnwrap(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("wrap.unwrap", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "wrap.unwrap"
+        }
+
+        return NSLocalizedString("wrap.unwrap", bundle: bundle, comment: "")
+      }
+
       /// en translation: Update
       ///
       /// Locales: en
@@ -7733,6 +7813,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("newDeal.bond.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Wrap
+      ///
+      /// Locales: en
+      static func wrapWrap(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("wrap.wrap", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "wrap.wrap"
+        }
+
+        return NSLocalizedString("wrap.wrap", bundle: bundle, comment: "")
       }
 
       /// en translation: Wrong %@ public key
