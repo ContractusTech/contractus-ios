@@ -8,7 +8,7 @@
 import SwiftUI
 
 fileprivate enum Constants {
-    static let emptyImage = Image("onboarding_empty")
+    static let emptyImage = Image("Onboarding_empty")
 }
 
 struct OnboardingPageView: View {
@@ -61,15 +61,16 @@ struct OnboardingPageView: View {
             }
 
             Text(page.title ?? "")
-                .font(AppConfig.isSmallScreen ? .title.weight(.semibold) : .largeTitle.weight(.semibold))
+                .font(AppConfig.isSmallScreen ? .title.weight(.semibold) : .largeTitle.weight(.medium))
+                .tracking(-1.1)
                 .multilineTextAlignment(.center)
-                .padding(.bottom, 10)
+                .padding(.bottom, 12)
 
             Text(LocalizedStringKey(page.description ?? ""))
                 .font(AppConfig.isSmallScreen ? .callout : .body)
                 .tint(R.color.blue.color)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, AppConfig.isSmallScreen ? 30 : 50)
+                .padding(.horizontal, AppConfig.isSmallScreen ? 30 : 42)
             
             Spacer()
         }

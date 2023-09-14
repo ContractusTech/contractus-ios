@@ -881,7 +881,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 15 images.
+  /// This `R.image` struct is generated, and contains static references to 19 images.
   struct image {
     /// Image `ContractusLogo`.
     static let contractusLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "ContractusLogo")
@@ -889,6 +889,16 @@ struct R: Rswift.Validatable {
     static let logo = Rswift.ImageResource(bundle: R.hostingBundle, name: "Logo")
     /// Image `NONE-CoinLogo`.
     static let noneCoinLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "NONE-CoinLogo")
+    /// Image `Onboarding_1`.
+    static let onboarding_1 = Rswift.ImageResource(bundle: R.hostingBundle, name: "Onboarding_1")
+    /// Image `Onboarding_2`.
+    static let onboarding_2 = Rswift.ImageResource(bundle: R.hostingBundle, name: "Onboarding_2")
+    /// Image `Onboarding_3`.
+    static let onboarding_3 = Rswift.ImageResource(bundle: R.hostingBundle, name: "Onboarding_3")
+    /// Image `Onboarding_4`.
+    static let onboarding_4 = Rswift.ImageResource(bundle: R.hostingBundle, name: "Onboarding_4")
+    /// Image `Onboarding_empty`.
+    static let onboarding_empty = Rswift.ImageResource(bundle: R.hostingBundle, name: "Onboarding_empty")
     /// Image `Plus`.
     static let plus = Rswift.ImageResource(bundle: R.hostingBundle, name: "Plus")
     /// Image `SOL-CoinLogo`.
@@ -909,8 +919,6 @@ struct R: Rswift.Validatable {
     static let iconDealClient = Rswift.ImageResource(bundle: R.hostingBundle, name: "iconDealClient")
     /// Image `iconDealExecutor`.
     static let iconDealExecutor = Rswift.ImageResource(bundle: R.hostingBundle, name: "iconDealExecutor")
-    /// Image `page1`.
-    static let page1 = Rswift.ImageResource(bundle: R.hostingBundle, name: "page1")
     /// Image `solana`.
     static let solana = Rswift.ImageResource(bundle: R.hostingBundle, name: "solana")
 
@@ -932,6 +940,41 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "NONE-CoinLogo", bundle: ..., traitCollection: ...)`
     static func noneCoinLogo(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.noneCoinLogo, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "Onboarding_1", bundle: ..., traitCollection: ...)`
+    static func onboarding_1(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.onboarding_1, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "Onboarding_2", bundle: ..., traitCollection: ...)`
+    static func onboarding_2(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.onboarding_2, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "Onboarding_3", bundle: ..., traitCollection: ...)`
+    static func onboarding_3(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.onboarding_3, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "Onboarding_4", bundle: ..., traitCollection: ...)`
+    static func onboarding_4(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.onboarding_4, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "Onboarding_empty", bundle: ..., traitCollection: ...)`
+    static func onboarding_empty(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.onboarding_empty, compatibleWith: traitCollection)
     }
     #endif
 
@@ -1002,13 +1045,6 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "iconDealExecutor", bundle: ..., traitCollection: ...)`
     static func iconDealExecutor(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.iconDealExecutor, compatibleWith: traitCollection)
-    }
-    #endif
-
-    #if os(iOS) || os(tvOS)
-    /// `UIImage(named: "page1", bundle: ..., traitCollection: ...)`
-    static func page1(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
-      return UIKit.UIImage(resource: R.image.page1, compatibleWith: traitCollection)
     }
     #endif
 
