@@ -63,14 +63,18 @@ struct OnboardingView: View {
             close()
         case .next:
             if hasNext {
-                selectedPage = selectedPage + 1
+                withAnimation {
+                    selectedPage += 1
+                }
             } else {
                 close()
             }
         case .accept:
             viewModel.trigger(.accept)
             if hasNext {
-                selectedPage = selectedPage + 1
+                withAnimation {
+                    selectedPage += 1
+                }
             } else {
                 close()
             }
