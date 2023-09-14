@@ -409,3 +409,9 @@
 "promocode.enter" = "Enter promo";
 "promocode.apply" = "Apply";
 "promocode.not.found" = "Promocode not found";
+
+"wrap.title" = "(Un)Wrap token";
+"wrap.swap" = "Swap";
+"wrap.wrap" = "Wrap";
+"wrap.unwrap" = "Unwrap all";
+"wrap.amount" = "Amount";
