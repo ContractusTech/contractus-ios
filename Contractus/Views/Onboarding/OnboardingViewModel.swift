@@ -53,15 +53,24 @@ struct OnboardingState {
 }
 
 final class OnboardingViewModel: ViewModel {
+
+    enum ContentType {
+        case onboarding
+        case changelog
+        case all
+    }
     
     @Published private(set) var state: OnboardingState
 
     private var onboardingService: OnboardingService?
+    private let contentType: ContentType
 
     init(
+        contentType: ContentType,
         state: OnboardingState,
         onboardingService: OnboardingService?
     ) {
+        self.contentType = contentType
         self.state = state
         self.onboardingService = onboardingService
         
@@ -83,13 +92,13 @@ final class OnboardingViewModel: ViewModel {
         var onboardingPages = onboarding.pages
         var changelogPages: [OnboardingChangelogPage] = []
 
-        if onboardingService.needShowChangelog() {
+        if (contentType == .changelog || contentType == .all) && onboardingService.needShowChangelog() {
             changelogPages = onboarding.changelog.pages
 
             onboardingService.setShownChangelog()
         }
 
-        if onboardingService.needShowOnboarding() {
+        if (contentType == .onboarding || contentType == .all) && onboardingService.needShowOnboarding() {
             state.pages = onboardingPages.map {
                 OnboardingPageModel(
                     imageName: $0.imageName,

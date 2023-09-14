@@ -85,6 +85,7 @@ struct OnboardingView: View {
 struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         OnboardingView(viewModel: AnyViewModel<OnboardingState, OnboardingInput>(OnboardingViewModel(
+            contentType: .all,
             state: OnboardingState(state: .none, errorState: .none),
             onboardingService: ServiceFactory.shared.makeOnboardingService()))
         ) {}

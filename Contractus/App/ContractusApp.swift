@@ -115,8 +115,8 @@ struct ContractusApp: App {
                         rootViewModel.trigger(.savedAccount(account))
                     })
                     .transition(AnyTransition.asymmetric(
-                        insertion: .move(edge: .trailing),
-                        removal: .move(edge: .leading))
+                        insertion: .opacity,
+                        removal: .opacity)
                     )
                 case .hasAccount(let account):
                     MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(

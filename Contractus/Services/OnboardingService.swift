@@ -18,6 +18,8 @@ protocol OnboardingService {
 
 final class OnboardingServiceImpl: OnboardingService {
 
+    static let shared: OnboardingService = OnboardingServiceImpl()
+
     private let decoder = JSONDecoder()
 
     var content: Onboadring?
@@ -41,18 +43,12 @@ final class OnboardingServiceImpl: OnboardingService {
     }
     
     func needShowOnboarding() -> Bool {
-        // TODO: - Remove, need for test
-        return true
-        
         guard let content = content else { return false }
 
         return !FlagsStorage.shared.onboardingPresented
     }
 
     func needShowChangelog() -> Bool {
-        // TODO: - Remove, need for test
-        return true
-
         guard let content = content else { return false }
 
         let id = FlagsStorage.shared.changelogId

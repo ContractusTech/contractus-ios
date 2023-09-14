@@ -27,6 +27,7 @@ struct EnterView: View {
 
     @State private var selectedView: NavigateViewType? = .none
     @State private var blockchain: Blockchain = .solana
+    @State private var showOnboarding: Bool = false
 
     var completion: (CommonAccount) -> Void
 
@@ -139,6 +140,20 @@ struct EnterView: View {
             })
             .onAppear{
                 viewModel.trigger(.setBlockchain(blockchain))
+
+                if ServiceFactory.shared.makeOnboardingService().needShowOnboarding() {
+                    showOnboarding = true
+                }
+                
+            }
+            .fullScreenCover(isPresented: $showOnboarding) {
+                OnboardingView(viewModel: AnyViewModel<OnboardingState, OnboardingInput>(OnboardingViewModel(
+                    contentType: .onboarding,
+                    state: OnboardingState(state: .none, errorState: .none),
+                    onboardingService: ServiceFactory.shared.makeOnboardingService()))
+                ) {
+                    showOnboarding.toggle()
+                }
             }
             .baseBackground()
             .navigationBarTitleDisplayMode(.inline)

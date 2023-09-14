@@ -30,6 +30,6 @@ final class ServiceFactory {
     }
     
     func makeOnboardingService() -> OnboardingService {
-        OnboardingServiceImpl()
+        OnboardingServiceImpl.shared
     }
 }
