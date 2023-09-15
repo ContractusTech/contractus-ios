@@ -43,12 +43,13 @@ struct MainView: View {
 
     @StateObject var viewModel: AnyViewModel<MainState, MainInput>
     var logoutCompletion: () -> Void
-    @State var selectedDeal: Deal?
-    @State var sheetType: SheetType? = .none
-    @State var dealsType: MainViewModel.State.DealType = .all
-    @State var transactionSignType: TransactionSignType?
+    
+    @State private var selectedDeal: Deal?
+    @State private var sheetType: SheetType? = .none
+    @State private var dealsType: MainViewModel.State.DealType = .all
+    @State private var transactionSignType: TransactionSignType?
     @State private var topUpState: ResizableSheetState = .hidden
-
+    @State private var showChangelog: Bool = false
 
     @State private var showDealFilter: Bool = false
     
@@ -305,6 +306,17 @@ struct MainView: View {
                         }
                     }
                 })
+                .fullScreenCover(isPresented: $showChangelog) {
+                    let service = ServiceFactory.shared.makeOnboardingService()
+                    OnboardingView(viewModel: AnyViewModel<OnboardingState, OnboardingInput>(OnboardingViewModel(
+                        contentType: .changelog,
+                        state: OnboardingState(state: .none, errorState: .none),
+                        onboardingService: service))
+                    ) {
+                        showChangelog.toggle()
+                        EventService.shared.send(event: ExtendedAnalyticsEvent.changelogClose(service.changelogId()))
+                    }
+                }
                 .navigationDestination(for: $selectedDeal) { deal in
                     dealView(deal: deal)
                 }
@@ -364,6 +376,11 @@ struct MainView: View {
             .onAppear{
                 EventService.shared.send(event: DefaultAnalyticsEvent.mainOpen)
                 load()
+                let service = ServiceFactory.shared.makeOnboardingService()
+                if service.needShowChangelog() {
+                    showChangelog = true
+                    EventService.shared.send(event: ExtendedAnalyticsEvent.changelogOpen(service.changelogId()))
+                }
             }
         }
     }

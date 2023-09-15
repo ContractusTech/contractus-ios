@@ -115,8 +115,8 @@ struct ContractusApp: App {
                         rootViewModel.trigger(.savedAccount(account))
                     })
                     .transition(AnyTransition.asymmetric(
-                        insertion: .move(edge: .trailing),
-                        removal: .move(edge: .leading))
+                        insertion: .opacity,
+                        removal: .opacity)
                     )
                 case .hasAccount(let account):
                     MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(
@@ -260,6 +260,8 @@ fileprivate func appearanceSetup() {
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: color]
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = color
     }
+    UIPageControl.appearance().currentPageIndicatorTintColor = R.color.accentColor()
+    UIPageControl.appearance().pageIndicatorTintColor = R.color.baseSeparator()
 }
 
 

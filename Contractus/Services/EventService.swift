@@ -71,6 +71,10 @@ enum DefaultAnalyticsEvent: String {
     case referralApplyCodeTap = "referral_apply_code_tap"                   /// Нажатие на "Применить код" на форме ввода
     case referralApplyCodeSuccess = "referral_apply_code_success"           /// Если успешно применен код
     case referralApplyCodeError = "referral_apply_code_error"               /// Ошибка при отправке кода
+    case onboardingOpen = "onboarding_open"                                 /// Открыие онбординга
+    case onboardingСlose = "onboarding_close"                               /// Закрытие онбординга
+    case changelogOpen = "changelog_open"                                   /// Открыие лога изменений
+    case changelogСlose = "changelog_close"                                 /// Закрытие лога изменений
 }
 
 extension DefaultAnalyticsEvent: AnalyticsEvent {
@@ -87,7 +91,9 @@ enum ExtendedAnalyticsEvent {
          dealContractorUpdateTap(ContractorType),
          backupAccountTap(Bool),
          deleteAccountTap(Bool),
-         referralApplyCodeError(String)
+         referralApplyCodeError(String),
+         changelogOpen(Int),
+         changelogClose(Int)
 }
 
 extension ExtendedAnalyticsEvent: AnalyticsEvent {
@@ -111,6 +117,10 @@ extension ExtendedAnalyticsEvent: AnalyticsEvent {
             return DefaultAnalyticsEvent.deleteAccountTap.rawValue
         case .referralApplyCodeError(_):
             return DefaultAnalyticsEvent.referralApplyCodeError.rawValue
+        case .changelogOpen(_):
+            return DefaultAnalyticsEvent.changelogOpen.rawValue
+        case .changelogClose(_):
+            return DefaultAnalyticsEvent.changelogСlose.rawValue
         }
     }
     
@@ -134,6 +144,10 @@ extension ExtendedAnalyticsEvent: AnalyticsEvent {
             return ["delete_backup": deleteBackup]
         case .referralApplyCodeError(let message):
             return ["message": message]
+        case .changelogOpen(let id):
+            return ["id": id]
+        case .changelogClose(let id):
+            return ["id": id]
         }
     }
 }
