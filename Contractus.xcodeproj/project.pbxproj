@@ -329,9 +329,9 @@
 		6DFED9322930F1EE00AF727A /* ImpactGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpactGenerator.swift; sourceTree = "<group>"; };
 		6DFED934293207D200AF727A /* QRCodeScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerViewModel.swift; sourceTree = "<group>"; };
 		6DFED938293262F300AF727A /* SharablePublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharablePublicKey.swift; sourceTree = "<group>"; };
+		6DFF40BA2A9A144B0042AE78 /* String+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ex.swift"; sourceTree = "<group>"; };
 		FE10B56B2A966F5900AA5EA8 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		FE10B56D2A96715200AA5EA8 /* OnboardingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageView.swift; sourceTree = "<group>"; };
-		6DFF40BA2A9A144B0042AE78 /* String+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ex.swift"; sourceTree = "<group>"; };
 		FE1D8DDD2A31115A003D97BC /* BorderDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderDivider.swift; sourceTree = "<group>"; };
 		FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAccountView.swift; sourceTree = "<group>"; };
 		FE1FB90E2A9E072F00203F38 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
@@ -1360,7 +1360,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1400,7 +1400,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
