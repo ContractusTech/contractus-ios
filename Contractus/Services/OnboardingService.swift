@@ -11,6 +11,7 @@ protocol OnboardingService {
     var content: Onboadring? { get }
     func needShowOnboarding() -> Bool
     func needShowChangelog() -> Bool
+    func changelogId() -> Int
     func setShowOnboarding()
     func setShownChangelog()
     func needShow() -> Bool
@@ -53,6 +54,11 @@ final class OnboardingServiceImpl: OnboardingService {
 
         let id = FlagsStorage.shared.changelogId
         return id < content.onboarding.changelog.id
+    }
+    
+    func changelogId() -> Int {
+        guard let content = content else { return 0 }
+        return content.onboarding.changelog.id
     }
 
     private func load() -> Onboadring? {

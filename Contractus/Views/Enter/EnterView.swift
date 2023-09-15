@@ -143,8 +143,8 @@ struct EnterView: View {
 
                 if ServiceFactory.shared.makeOnboardingService().needShowOnboarding() {
                     showOnboarding = true
+                    EventService.shared.send(event: DefaultAnalyticsEvent.onboardingOpen)
                 }
-                
             }
             .fullScreenCover(isPresented: $showOnboarding) {
                 OnboardingView(viewModel: AnyViewModel<OnboardingState, OnboardingInput>(OnboardingViewModel(
@@ -153,6 +153,7 @@ struct EnterView: View {
                     onboardingService: ServiceFactory.shared.makeOnboardingService()))
                 ) {
                     showOnboarding.toggle()
+                    EventService.shared.send(event: DefaultAnalyticsEvent.onboardingСlose)
                 }
             }
             .baseBackground()

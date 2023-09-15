@@ -20,6 +20,19 @@ struct OnboardingChangelogPage: Codable, Hashable {
     let title: String?
     let description: String?
     let needAccept: Bool
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.imageName = try container.decodeIfPresent(String.self, forKey: .imageName)
+        self.imageUrl = try container.decodeIfPresent(String.self, forKey: .imageUrl)
+        self.title = try container.decodeIfPresent(String.self, forKey: .title)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        if let needAccept = try container.decodeIfPresent(Bool.self, forKey: .needAccept) {
+            self.needAccept = needAccept
+        } else {
+            self.needAccept = false
+        }
+    }
 }
 
 struct OnboardingChangelog: Codable, Hashable {

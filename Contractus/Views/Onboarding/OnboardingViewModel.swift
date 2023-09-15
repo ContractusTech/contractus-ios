@@ -89,7 +89,7 @@ final class OnboardingViewModel: ViewModel {
     func loadOnboarding() {
         guard let onboardingService = onboardingService, let onboarding = onboardingService.content?.onboarding else { return }
         
-        var onboardingPages = onboarding.pages
+        let onboardingPages = onboarding.pages
         var changelogPages: [OnboardingChangelogPage] = []
 
         if (contentType == .changelog || contentType == .all) && onboardingService.needShowChangelog() {

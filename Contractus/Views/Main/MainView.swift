@@ -307,12 +307,14 @@ struct MainView: View {
                     }
                 })
                 .fullScreenCover(isPresented: $showChangelog) {
+                    let service = ServiceFactory.shared.makeOnboardingService()
                     OnboardingView(viewModel: AnyViewModel<OnboardingState, OnboardingInput>(OnboardingViewModel(
                         contentType: .changelog,
                         state: OnboardingState(state: .none, errorState: .none),
-                        onboardingService: ServiceFactory.shared.makeOnboardingService()))
+                        onboardingService: service))
                     ) {
                         showChangelog.toggle()
+                        EventService.shared.send(event: ExtendedAnalyticsEvent.changelogClose(service.changelogId()))
                     }
                 }
                 .navigationDestination(for: $selectedDeal) { deal in
@@ -374,8 +376,10 @@ struct MainView: View {
             .onAppear{
                 EventService.shared.send(event: DefaultAnalyticsEvent.mainOpen)
                 load()
-                if ServiceFactory.shared.makeOnboardingService().needShowChangelog() {
+                let service = ServiceFactory.shared.makeOnboardingService()
+                if service.needShowChangelog() {
                     showChangelog = true
+                    EventService.shared.send(event: ExtendedAnalyticsEvent.changelogOpen(service.changelogId()))
                 }
             }
         }
