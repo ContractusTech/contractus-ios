@@ -14,7 +14,6 @@ protocol OnboardingService {
     func changelogId() -> Int
     func setShowOnboarding()
     func setShownChangelog()
-    func needShow() -> Bool
 }
 
 final class OnboardingServiceImpl: OnboardingService {
@@ -27,10 +26,6 @@ final class OnboardingServiceImpl: OnboardingService {
 
     init() {
         content = load()
-    }
-
-    func needShow() -> Bool {
-        needShowChangelog() || needShowOnboarding()
     }
 
     func setShowOnboarding() {
