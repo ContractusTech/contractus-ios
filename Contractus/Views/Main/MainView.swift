@@ -122,8 +122,6 @@ struct MainView: View {
                                     EventService.shared.send(event: DefaultAnalyticsEvent.mainNewDealTap)
                                     sheetType = .newDeal
                                 }
-
-
                         }
                         .padding(EdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8))
 
