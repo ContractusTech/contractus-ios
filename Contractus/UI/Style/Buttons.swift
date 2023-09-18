@@ -25,7 +25,7 @@ struct PrimaryLargeButton: ButtonStyle {
                 .foregroundColor(isEnabled ? R.color.buttonTextPrimary.color : R.color.buttonTextPrimary.color.opacity(DISABLE_OPACITY))
                 .clipShape(RoundedRectangle(cornerRadius: 24))
                 .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-                .animation(.easeInOut(duration: 0.03))
+                .animation(.easeInOut(duration: 0.03), value: configuration.isPressed)
                //  .opacity(isEnabled ? 1.0 : DISABLE_OPACITY)
         }
     }
@@ -48,7 +48,7 @@ struct SecondaryLargeButton: ButtonStyle {
 //                .overlay(RoundedRectangle(cornerRadius: 24)
 //                    .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1.2))
                 .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-                .animation(.easeInOut(duration: 0.03))
+                .animation(.easeInOut(duration: 0.03), value: configuration.isPressed)
                 .cornerRadius(24)
                 // .opacity(isEnabled ? 1 : DISABLE_OPACITY)
         }
@@ -72,7 +72,7 @@ struct SecondaryMediumButton: ButtonStyle {
                 .overlay(RoundedRectangle(cornerRadius: 24)
                     .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1.2))
                 .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-                .animation(.easeInOut(duration: 0.03))
+                .animation(.easeInOut(duration: 0.03), value: configuration.isPressed)
                 // .opacity(isEnabled ? 1 : DISABLE_OPACITY)
         }
     }
@@ -97,7 +97,7 @@ struct RoundedSecondaryMediumButton: ButtonStyle {
                 .overlay(RoundedRectangle(cornerRadius: 24)
                     .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1.4))
                 .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-                .animation(.easeInOut(duration: 0.03))
+                .animation(.easeInOut(duration: 0.03), value: configuration.isPressed)
                 // .opacity(isEnabled ? 1 : DISABLE_OPACITY)
         }
     }
@@ -119,7 +119,7 @@ struct PrimaryMediumButton: ButtonStyle {
                 .foregroundColor(isEnabled ? R.color.buttonTextPrimary.color : R.color.buttonTextPrimary.color.opacity(DISABLE_OPACITY))
                 .clipShape(RoundedRectangle(cornerRadius: 24))
                 .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-                .animation(.easeInOut(duration: 0.03))
+                .animation(.easeInOut(duration: 0.03), value: configuration.isPressed)
                 // .opacity(isEnabled ? 1 : DISABLE_OPACITY)
         }
     }
