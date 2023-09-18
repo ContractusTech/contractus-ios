@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ContractusAPI
+import netfox
 
 fileprivate enum Constants {
     static let checkmarkImage = Image(systemName: "checkmark")
@@ -20,12 +21,14 @@ struct ServerSelectView: View {
     #endif
     @State var selectedItem: ServerType?
 
+    @State var enableLogs: Bool = NFX.sharedInstance().isStarted()
+
     @State private var confirmAlert: Bool = false
 
     var body: some View {
         Form {
-            List {
-                ForEach(items, id: \.self.title) { item in
+            Section(header: Text("Server"), footer: Text("When you tap it, the application will close")) {
+                ForEach(items, id: \.title) { item in
                     HStack(spacing: 12) {
                         Text(item.title)
                         Spacer()
@@ -43,6 +46,30 @@ struct ServerSelectView: View {
                     }
                 }
             }
+            Section(header: Text("Request Logs")) {
+                HStack(spacing: 12) {
+                    Toggle(isOn: $enableLogs) {
+                        Text("Enabled")
+                    }
+                }
+
+                HStack(spacing: 12) {
+                    Text("View logs")
+                    Spacer()
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    NFX.sharedInstance().show()
+                }
+            }
+        }
+        .onChange(of: enableLogs) { newValue in
+            if newValue {
+                NFX.sharedInstance().start()
+            } else {
+                NFX.sharedInstance().stop()
+            }
+
         }
         .baseBackground()
         .navigationTitle("Server")

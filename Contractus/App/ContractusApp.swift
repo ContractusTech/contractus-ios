@@ -242,7 +242,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         case .local, .developer:
             NFX.sharedInstance().start()
         default:
-            break
+            #if DEBUG
+            NFX.sharedInstance().start()
+            #endif
         }
 
         FirebaseApp.configure()
