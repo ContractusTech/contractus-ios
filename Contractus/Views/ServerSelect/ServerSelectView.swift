@@ -14,11 +14,11 @@ fileprivate enum Constants {
 }
 
 struct ServerSelectView: View {
-    #if DEBUG
+#if DEBUG
     @State private var items: [ServerType] =  [.developer(), .production(), .local()]
-    #else
+#else
     @State private var items: [ServerType] =  [.developer(), .production()]
-    #endif
+#endif
     @State var selectedItem: ServerType?
 
     @State var enableLogs: Bool = NFX.sharedInstance().isStarted()
@@ -60,6 +60,24 @@ struct ServerSelectView: View {
                 .contentShape(Rectangle())
                 .onTapGesture {
                     NFX.sharedInstance().show()
+                }
+            }
+
+            Section(header: Text("Info")) {
+                ForEach(AppManagerImpl.shared.debugInfo(), id: \.self) { item in
+                    HStack {
+                        Text(item)
+                            .font(.callout)
+                        Spacer()
+                        Button {
+                            UIPasteboard.general.string = item
+                            ImpactGenerator.light()
+                        } label: {
+                            Text("Copy")
+                                .tint(.blue)
+                        }
+                    }
+
                 }
             }
         }
