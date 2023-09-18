@@ -1,6 +1,7 @@
 import Foundation
 import ContractusAPI
 import DeviceCheck
+import FirebaseCrashlytics
 
 final class ServiceClient {
     static let shared = ServiceClient(client: .init(
@@ -112,6 +113,7 @@ final class AppManagerImpl: AppManager {
                 let message = try await verifyDeviceToken(deviceToken: deviceToken, identifier: idService.identifier)
                 try authStorage.saveMessageForSign(message.message, date: message.expiredAt)
             } catch(let error) {
+                Crashlytics.crashlytics().record(error: error)
                 if error.asAFError?.responseCode == 423 {
                     authStorage.clear()
                 }
