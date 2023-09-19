@@ -34,13 +34,6 @@ struct MainView: View {
         case newDeal, menu, qrScan, sharePublicKey, wrap(from: Amount, to: Amount), webView(URL), topUp(URL)
     }
 
-    var resizableSheetCenter: ResizableSheetCenter? {
-        guard let windowScene = (UIApplication.shared.connectedScenes.first as? UIWindowScene) else {
-            return nil
-        }
-        return ResizableSheetCenter.resolve(for: windowScene)
-    }
-
     @StateObject var viewModel: AnyViewModel<MainState, MainInput>
     var logoutCompletion: () -> Void
     
@@ -369,7 +362,6 @@ struct MainView: View {
                 .baseBackground()
                 .edgesIgnoringSafeArea(.bottom)
             }
-            .environment(\.resizableSheetCenter, resizableSheetCenter ?? PreviewResizableSheetCenter.shared)
             .navigationViewStyle(StackNavigationViewStyle())
             .onAppear{
                 EventService.shared.send(event: DefaultAnalyticsEvent.mainOpen)
