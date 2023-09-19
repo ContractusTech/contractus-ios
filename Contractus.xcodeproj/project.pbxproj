@@ -150,6 +150,7 @@
 		FE0F36802A552C2D00EEC595 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = FE0F367F2A552C2D00EEC595 /* Shimmer */; };
 		FE1D8DDE2A31115A003D97BC /* BorderDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D8DDD2A31115A003D97BC /* BorderDivider.swift */; };
 		FE1E3DD429D3597E009B0E57 /* AboutAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */; };
+		FE2B96C92AB9EA5D00971114 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FE2B96C82AB9EA5D00971114 /* FirebaseMessaging */; };
 		FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */; };
 		FE54313D29D36D8800EEF906 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE54313C29D36D8800EEF906 /* AccountsView.swift */; };
 		FE5F427429AF22FA00A1E506 /* netfox in Frameworks */ = {isa = PBXBuildFile; productRef = FE5F427329AF22FA00A1E506 /* netfox */; };
@@ -352,6 +353,7 @@
 				6D0DA7622930A6960024EF30 /* CodeScanner in Frameworks */,
 				6DB5F8B6294D762300AE612A /* JGProgressHUD in Frameworks */,
 				6D6EE39E289FBEBA00635E60 /* QRCode in Frameworks */,
+				FE2B96C92AB9EA5D00971114 /* FirebaseMessaging in Frameworks */,
 				6D8EFD9328D8EB5B0064F5DA /* SolanaSwift in Frameworks */,
 				6DC558742A7A18A60054F2FC /* FirebaseRemoteConfig in Frameworks */,
 				6DC558722A7A18A60054F2FC /* FirebasePerformance in Frameworks */,
@@ -862,6 +864,7 @@
 				6DC5586F2A7A18A60054F2FC /* FirebaseCrashlytics */,
 				6DC558712A7A18A60054F2FC /* FirebasePerformance */,
 				6DC558732A7A18A60054F2FC /* FirebaseRemoteConfig */,
+				FE2B96C82AB9EA5D00971114 /* FirebaseMessaging */,
 			);
 			productName = Contractus;
 			productReference = 6D97AEED288D196200EB61D0 /* Contractus.app */;
@@ -1692,6 +1695,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
 			productName = Shimmer;
+		};
+		FE2B96C82AB9EA5D00971114 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 		FE5F427329AF22FA00A1E506 /* netfox */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -62,6 +62,9 @@ final class MainViewModel: ViewModel {
         self.dealsAPIService = dealsAPIService
         self.resourcesAPIService = resourcesAPIService
         self.accountStorage = accountStorage
+        Task { @MainActor in
+            await getAuthStatus()
+        }
     }
 
     func trigger(_ input: MainInput, after: AfterTrigger? = nil) {
@@ -194,6 +197,29 @@ final class MainViewModel: ViewModel {
                     continues.resume(returning: tokens)
                 }
             })
+        }
+    }
+    
+    private func getAuthStatus() async {
+        let status = await UNUserNotificationCenter.current().notificationSettings()
+        switch status.authorizationStatus {
+        case .authorized, .provisional, .ephemeral:
+            break
+        default:
+            Task {
+                await self.requestNotificationPermission()
+            }
+        }
+    }
+
+    private func requestNotificationPermission() async {
+        do {
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            try await UNUserNotificationCenter.current().requestAuthorization(options: authOptions)
+            
+            await UIApplication.shared.registerForRemoteNotifications()
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }
