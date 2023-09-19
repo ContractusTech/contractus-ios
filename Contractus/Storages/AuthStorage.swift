@@ -25,7 +25,6 @@ final class KeychainAuthStorage: AuthStorage {
 
     func saveMessageForSign(_ message: String, date: Date) throws {
         try keychain.set(message, key: Keys.authMessage.rawValue)
-        debugPrint(formatter.string(from: date))
         try keychain.set(formatter.string(from: date), key: Keys.expired.rawValue)
     }
 
@@ -39,6 +38,7 @@ final class KeychainAuthStorage: AuthStorage {
 
     func clear() {
         try? keychain.remove(Keys.authMessage.rawValue)
+        try? keychain.remove(Keys.expired.rawValue)
     }
 
     private func expiredDate() -> Date? {
