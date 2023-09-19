@@ -80,6 +80,17 @@ struct ServerSelectView: View {
 
                 }
             }
+            #if DEBUG
+            Section(header: Text("Actions")) {
+                Button {
+                    AppManagerImpl.shared.debugClearAuth()
+                    confirmAlert.toggle()
+                } label: {
+                    Text("Clear auth")
+                        .tint(.blue)
+                }
+            }
+            #endif
         }
         .onChange(of: enableLogs) { newValue in
             if newValue {
@@ -98,7 +109,7 @@ struct ServerSelectView: View {
         .alert(isPresented: $confirmAlert) {
             Alert(
                 title: Text("Warning"),
-                message: Text("Application will be closed to apply new server settings, you must start it again manually"),
+                message: Text("Application will be closed to apply new settings, you must start it again manually"),
                 dismissButton: .default(Text("OK, Undestand"), action: {
                     exit(0)
                 })

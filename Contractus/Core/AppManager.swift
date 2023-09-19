@@ -121,7 +121,6 @@ final class AppManagerImpl: AppManager {
             }
         }
 
-
         guard let account = accountStorage.getCurrentAccount() else {
             throw AppManagerError.noCurrentAccount
         }
@@ -140,6 +139,11 @@ final class AppManagerImpl: AppManager {
             "DeviceInfo: \n\(UIDevice.current.systemName), \(UIDevice.current.model), \(UIDevice.current.systemVersion)"
 
         ]
+    }
+
+    /// Debug method
+    func debugClearAuth() {
+        authStorage.clear()
     }
 
     private func buildHeader(for account: CommonAccount, identifier: String, message: String, expiredAt: Date) throws -> ContractusAPI.AuthorizationHeader {
