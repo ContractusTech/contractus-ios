@@ -99,6 +99,13 @@ struct ContractusApp: App {
         }
     }
 
+    var resizableSheetCenter: ResizableSheetCenter? {
+        guard let windowScene = (UIApplication.shared.connectedScenes.first as? UIWindowScene) else {
+            return nil
+        }
+        return ResizableSheetCenter.resolve(for: windowScene)
+    }
+
     var body: some Scene {
         WindowGroup {
             Group {
@@ -131,6 +138,7 @@ struct ContractusApp: App {
                         insertion: .move(edge: .trailing),
                         removal: .move(edge: .leading))
                     )
+                    .environment(\.resizableSheetCenter, resizableSheetCenter)
                     .onChange(of: rootViewModel.state.transactionState, perform: { txState in
                         switch txState {
                         case .needSign:
