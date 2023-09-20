@@ -260,22 +260,23 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-
+#if DEBUG
         if let messageID = userInfo[gcmMessageIDKey] {
             print("Message ID: \(messageID)")
         }
 
         print(userInfo)
-
+#endif
         completionHandler(UIBackgroundFetchResult.newData)
     }
 }
 
 extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        
+#if DEBUG
         let deviceToken:[String: String] = ["token": fcmToken ?? ""]
-        print("Device token: ", deviceToken) // This token can be used for testing notifications on FCM
+        print("Device token: ", deviceToken)
+#endif
     }
 }
 
@@ -287,13 +288,13 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
-        
+#if DEBUG
         if let messageID = userInfo[gcmMessageIDKey] {
             print("Message ID: \(messageID)")
         }
         
         print(userInfo)
-        
+#endif
         completionHandler([[.banner, .badge, .sound]])
     }
     
@@ -309,13 +310,13 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
-        
+#if DEBUG
         if let messageID = userInfo[gcmMessageIDKey] {
             print("Message ID from userNotificationCenter didReceive: \(messageID)")
         }
         
         print(userInfo)
-        
+#endif
         completionHandler()
     }
 }
