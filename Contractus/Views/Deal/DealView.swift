@@ -149,7 +149,7 @@ struct DealView: View {
                                             }
                                         }
                                         Spacer()
-                                        if !viewModel.state.ownerIsClient && viewModel.state.isYouExecutor {
+                                        if !viewModel.state.ownerIsClient && viewModel.state.isYouExecutor && viewModel.state.canEditDeal{
                                             CButton(title: viewModel.state.clientPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
                                                 EventService.shared.send(event: ExtendedAnalyticsEvent.dealContractorTap(.client))
                                                 activeModalType = .editContractor(viewModel.state.deal.contractorPublicKey)
