@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Introspect
 
 fileprivate enum Constants {
     static let contactIcon = Image(systemName: "person.fill.badge.plus")

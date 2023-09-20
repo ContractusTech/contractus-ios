@@ -7,7 +7,6 @@
 
 import SwiftUI
 import ContractusAPI
-import Introspect
 
 fileprivate enum Constants {
     static let closeImage = Image(systemName: "xmark")
@@ -40,6 +39,7 @@ struct TextEditorView: View {
     @State var content: String = ""
     @State var mode: Mode = .view
     @State private var alertType: AlertType?
+    @FocusState var isInputActive: Bool
 
     var body: some View {
         NavigationView {
@@ -49,22 +49,22 @@ struct TextEditorView: View {
                     switch mode {
                     case .edit:
                         ZStack(alignment: .topLeading) {
-
                             TextEditor(text: $content)
                                 .disabled(false)
                                 .setBackground(color: R.color.textFieldBackground.color)
                                 .cornerRadius(20)
                                 .padding(6)
-
-                                .introspectTextView { tv in
-                                    tv.becomeFirstResponder()
-                                }
+                                .focused($isInputActive)
                                 .onTapGesture {}
                                 .onLongPressGesture(
-                                    pressing: { isPressed in if isPressed { self.endEditing() } },
-                                    perform: {}
-                                )
-
+                                    pressing: { isPressed in
+                                        if isPressed {
+                                            self.endEditing()
+                                        }
+                                    }) {}
+                                .onAppear {
+                                    isInputActive = true
+                                }
 
                             if content.isEmpty {
                                 Text(R.string.localizable.dealTextEditorEditorPlaceholder())
