@@ -488,7 +488,11 @@ struct DealView: View {
                                             if let deadline = viewModel.state.deal.deadline {
                                                 Text(deadline.asDateFormatted())
                                                     .font(.title)
-                                                    .foregroundColor(deadline > Date() ? R.color.textBase.color : R.color.redText.color)
+                                                    .foregroundColor(
+                                                        deadline > Date() || [.finished, .canceled, .revoked].contains(viewModel.state.deal.status)
+                                                        ? R.color.textBase.color
+                                                        : R.color.redText.color
+                                                    )
                                             } else {
                                                 Text(R.string.localizable.commonEmpty())
                                                     .font(.title)
