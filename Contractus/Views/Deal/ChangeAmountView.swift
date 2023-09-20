@@ -7,7 +7,6 @@
 
 import SwiftUI
 import ContractusAPI
-import Introspect
 import Combine
 
 extension Currency: Hashable {
@@ -30,7 +29,7 @@ struct ChangeAmountView: View {
     @State private var token: ContractusAPI.Token
     @State private var showInfo: Bool = false
     @State var holderMode: Bool = false
-
+    @FocusState var isInputActive: Bool
 
     let amountPublisher = PassthroughSubject<String, Never>()
     private let availableTokens: [ContractusAPI.Token]
@@ -63,10 +62,20 @@ struct ChangeAmountView: View {
                             .pickerStyle(.menu)
                             Divider().frame(height: 30)
                             TextField(R.string.localizable.changeAmountAmount(), text: $amountString)
-                                .introspectTextField { tf in
-                                    tf.becomeFirstResponder()
-                                }
                                 .textFieldStyle(LargeTextFieldStyle())
+                                .keyboardType(.decimalPad)
+                                .focused($isInputActive)
+                                .toolbar {
+                                    ToolbarItemGroup(placement: .keyboard) {
+                                        Spacer()
+                                        Button(R.string.localizable.commonDone()) {
+                                            isInputActive = false
+                                        }.font(.body.weight(.medium))
+                                    }
+                                }
+                                .onAppear {
+                                    isInputActive = true
+                                }
                         }
                         .background(R.color.textFieldBackground.color)
                         .cornerRadius(12)

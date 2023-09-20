@@ -137,7 +137,6 @@
 		6DD28E292A1DF3B10093E553 /* DeadlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E282A1DF3B10093E553 /* DeadlineView.swift */; };
 		6DD28E2C2A1DF4190093E553 /* DeadlineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E2B2A1DF4190093E553 /* DeadlineViewModel.swift */; };
 		6DDA818028C065C80022E005 /* ModalSheet+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDA817F28C065C80022E005 /* ModalSheet+Ex.swift */; };
-		6DDA818328C0D3E10022E005 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 6DDA818228C0D3E10022E005 /* Introspect */; };
 		6DDA818528C0D6070022E005 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDA818428C0D6070022E005 /* TextField.swift */; };
 		6DEEDFF429F8E6CD00216D44 /* BackupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEEDFF329F8E6CD00216D44 /* BackupStorage.swift */; };
 		6DF6ADC32994EAA300A50598 /* SharedSecretService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF6ADC22994EAA300A50598 /* SharedSecretService.swift */; };
@@ -367,7 +366,6 @@
 				6DC558742A7A18A60054F2FC /* FirebaseRemoteConfig in Frameworks */,
 				6DC558722A7A18A60054F2FC /* FirebasePerformance in Frameworks */,
 				6DAA5E772898BDFA00BA1965 /* CryptoSwift in Frameworks */,
-				6DDA818328C0D3E10022E005 /* Introspect in Frameworks */,
 				6DB9C3DA2A555F1B0011C817 /* ContractusAPI in Frameworks */,
 				6DB547F928B9E87C003D2A8A /* ResizableSheet in Frameworks */,
 				6DC558702A7A18A60054F2FC /* FirebaseCrashlytics in Frameworks */,
@@ -873,7 +871,6 @@
 				6DAA5E762898BDFA00BA1965 /* CryptoSwift */,
 				6D6EE39D289FBEBA00635E60 /* QRCode */,
 				6DB547F828B9E87C003D2A8A /* ResizableSheet */,
-				6DDA818228C0D3E10022E005 /* Introspect */,
 				6D8EFD8928D898B50064F5DA /* ShamirSecretSharing */,
 				6D8EFD9228D8EB5B0064F5DA /* SolanaSwift */,
 				6D530DB928E2302E006F52C6 /* SwiftUIPullToRefresh */,
@@ -1710,11 +1707,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseRemoteConfig;
-		};
-		6DDA818228C0D3E10022E005 /* Introspect */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DDA818128C0D3E10022E005 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
-			productName = Introspect;
 		};
 		FE0F367F2A552C2D00EEC595 /* Shimmer */ = {
 			isa = XCSwiftPackageProductDependency;
