@@ -59,6 +59,7 @@ struct ChangeAmountView: View {
                                         .font(.body.weight(.semibold))
                                 }
                             }
+                            .disabled(viewModel.amountType == .checker)
                             .pickerStyle(.menu)
                             Divider().frame(height: 30)
                             TextField(R.string.localizable.changeAmountAmount(), text: $amountString)

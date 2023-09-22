@@ -85,19 +85,23 @@ final class MainViewModel: ViewModel {
                 state.dealsState = .loaded
                 return
             }
+            // TODO: - Refactor, need parallel requests
             Task { @MainActor in
+                var state = self.state
                 self.tokens = (try? await loadTokens()) ?? []
-                self.state.availableTokens = self.tokens.filter({ $0.address != nil })
+                state.availableTokens = self.tokens.filter({ $0.address != nil })
                 let accountInfo = try? await loadAccountInfo()
-                self.state.balance = accountInfo?.balance
-                self.state.statistics = accountInfo?.statistics ?? []
-            }
-            Task { @MainActor in
+                state.balance = accountInfo?.balance
+                state.statistics = accountInfo?.statistics ?? []
+
                 let deals = try? await self.loadDeals(type: type)
-                self.state.deals = deals ?? []
-                self.state.dealsState = .loaded
+                state.deals = deals ?? []
+                state.dealsState = .loaded
+
+                self.state = state
                 after?()
             }
+
         case .loadDeals(let type):
             Task { @MainActor in
                 let deals = try? await self.loadDeals(type: type)
