@@ -129,7 +129,7 @@ struct DealState {
     }
 
     var showResult: Bool {
-        deal.status == .started
+        deal.status == .started || deal.status == .finished || deal.status == .canceled
     }
     
     var canEditDeal: Bool {
