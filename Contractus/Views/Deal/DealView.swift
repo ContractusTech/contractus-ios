@@ -318,10 +318,12 @@ struct DealView: View {
                                     }
                                     .padding(.bottom, 10)
                                 } else {
-                                    Text(R.string.localizable.dealTextEarningNotSet())
-                                        .font(.footnote)
-                                        .foregroundColor(R.color.redText.color)
-                                        .padding(.bottom, 10)
+                                    if viewModel.state.isOwnerDeal {
+                                        Text(R.string.localizable.dealTextEarningNotSet())
+                                            .font(.footnote)
+                                            .foregroundColor(R.color.redText.color)
+                                            .padding(.bottom, 10)
+                                    }
                                 }
 
                                 if viewModel.state.isYouChecker {
