@@ -160,6 +160,7 @@
 		FE8D85202A8B883B001DE59F /* PromocodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8D851F2A8B883B001DE59F /* PromocodeView.swift */; };
 		FE9623732A94C4610075929B /* TopUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9623722A94C4600075929B /* TopUpViewModel.swift */; };
 		FEA450862A9E6CDF00A83D09 /* Onboarding.json in Resources */ = {isa = PBXBuildFile; fileRef = FEA450852A9E6CDF00A83D09 /* Onboarding.json */; };
+		FEBC6EDE2ABDD51A001947E1 /* TokenSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBC6EDD2ABDD51A001947E1 /* TokenSelectView.swift */; };
 		FECA2C482A9E2E2D00A7E152 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECA2C472A9E2E2D00A7E152 /* OnboardingViewModel.swift */; };
 		FECCE4FE2AAE049900B869FA /* ReferralAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECCE4FD2AAE049900B869FA /* ReferralAccountsView.swift */; };
 		FECDCC5D2A87F21800047A95 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECDCC5C2A87F21800047A95 /* EventService.swift */; };
@@ -341,6 +342,7 @@
 		FE8D851F2A8B883B001DE59F /* PromocodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromocodeView.swift; sourceTree = "<group>"; };
 		FE9623722A94C4600075929B /* TopUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopUpViewModel.swift; sourceTree = "<group>"; };
 		FEA450852A9E6CDF00A83D09 /* Onboarding.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Onboarding.json; sourceTree = "<group>"; };
+		FEBC6EDD2ABDD51A001947E1 /* TokenSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenSelectView.swift; sourceTree = "<group>"; };
 		FECA2C472A9E2E2D00A7E152 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		FECCE4FD2AAE049900B869FA /* ReferralAccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralAccountsView.swift; sourceTree = "<group>"; };
 		FECDCC5C2A87F21800047A95 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
@@ -466,6 +468,7 @@
 				6D2E0AF128AE9833002BA683 /* DealViewModel.swift */,
 				6D5A65A628E3F5110081533C /* ChangeAmountViewModel.swift */,
 				6D3AF95F28E83C4600660AEC /* ImportSecretKeyView.swift */,
+				FEBC6EDD2ABDD51A001947E1 /* TokenSelectView.swift */,
 			);
 			path = Deal;
 			sourceTree = "<group>";
@@ -1049,6 +1052,7 @@
 				6D0DA75B292FA9A60024EF30 /* NavigationStackModifier.swift in Sources */,
 				6D6EE395289F9EFE00635E60 /* ImagePickerView.swift in Sources */,
 				6DBCA4912891162F00F918B6 /* ContentMask.swift in Sources */,
+				FEBC6EDE2ABDD51A001947E1 /* TokenSelectView.swift in Sources */,
 				6D3AA48D292EB78300596061 /* MenuViewModel.swift in Sources */,
 				6DB9C3D52A552D7B0011C817 /* AppManager.swift in Sources */,
 				6D44B5622A0FA42F008C561D /* FlagsStorage.swift in Sources */,

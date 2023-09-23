@@ -27,11 +27,11 @@ enum Mock {
         return ContractusAPI.Transaction(id: "123", type: .wrapSOL, status: .processing, transaction: "123123123", initializerPublicKey: account.publicKey, ownerSignature: nil, contractorSignature: nil, signature: "123123123123123123", checkerSignature: nil)
     }()
 
-    static let tokenList: [ContractusAPI.Token] = [Self.tokenSOL, Self.tokenWSOL]
+    static let tokenList: [ContractusAPI.Token] = [Self.tokenSOL, Self.tokenWSOL, Self.tokenCTUS]
 
-    static let tokenSOL = Token(code: "SOL", native: true, decimals: 9, serviced: false)
-    static let tokenWSOL = Token(code: "WSOL", native: false, decimals: 9, serviced: false)
-    static let tokenCTUS = Token(code: "CTUS", native: false, decimals: 9, serviced: true)
+    static let tokenSOL = Token(code: "SOL", name: "Solana", native: true, decimals: 9, serviced: false)
+    static let tokenWSOL = Token(code: "WSOL", name: "WSolana", native: false, decimals: 9, serviced: false)
+    static let tokenCTUS = Token(code: "CTUS", name: "Contractus", native: false, decimals: 9, serviced: true, holderMode: true)
 
     static let privateKeyUInt8 = Array<UInt8>(repeating: 0, count: 32)
     static let privateKeyData: Data = Data(privateKeyUInt8)

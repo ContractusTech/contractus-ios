@@ -16,6 +16,8 @@ public struct Token: Codable {
     public let native: Bool
     public let decimals: Int
     public let serviced: Bool
+    public let logoURL: URL?
+    public let holderMode: Bool
 
     enum CodingKeys: CodingKey {
         case code
@@ -24,6 +26,8 @@ public struct Token: Codable {
         case native
         case decimals
         case serviced
+        case logoURL
+        case holderMode
     }
 
     private enum RequestCodingKeys: CodingKey {
@@ -31,13 +35,15 @@ public struct Token: Codable {
         case address
     }
 
-    public init(code: String, name: String? = nil, address: String? = nil, native: Bool, decimals: Int, serviced: Bool) {
+    public init(code: String, name: String? = nil, address: String? = nil, native: Bool, decimals: Int, serviced: Bool, logoURL: URL? = nil, holderMode: Bool = false) {
         self.code = code
         self.name = name
         self.address = address
         self.native = native
         self.decimals = decimals
         self.serviced = serviced
+        self.logoURL = logoURL
+        self.holderMode = holderMode
     }
 
     public init(from decoder: Decoder) throws {
@@ -49,7 +55,9 @@ public struct Token: Codable {
         self.native = try container.decode(Bool.self, forKey: Token.CodingKeys.native)
         self.decimals = try container.decode(Int.self, forKey: Token.CodingKeys.decimals)
         self.serviced = (try? container.decode(Bool.self, forKey: Token.CodingKeys.serviced)) ?? false
-
+        let logoURLString = try container.decodeIfPresent(String.self, forKey: .logoURL) ?? ""
+        self.logoURL = URL(string: logoURLString)
+        self.holderMode = (try? container.decode(Bool.self, forKey: Token.CodingKeys.holderMode)) ?? false
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -322,6 +322,9 @@
 "changeAmount.bond.executor.you" = "Bond of executor (you)";
 "changeAmount.bond.executor" = "Bond of executor";
 
+"selectToken.title" = "Select token";
+"selectToken.search" = "Search";
+
 "addContractor.title.contractor" = "Add partner";
 "addContractor.title.checker" = "Add checker";
 "addContractor.subtitle.contractor" = "Account must be %@ blockchain";

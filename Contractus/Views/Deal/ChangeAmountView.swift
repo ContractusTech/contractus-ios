@@ -18,6 +18,7 @@ extension Currency: Hashable {
 fileprivate enum Constants {
     static let closeImage = Image(systemName: "xmark")
     static let infoImage = Image(systemName: "info.circle.fill")
+    static let listImage = Image(systemName: "list.bullet")
 }
 
 struct ChangeAmountView: View {
@@ -28,6 +29,7 @@ struct ChangeAmountView: View {
     @State private var amountString: String = ""
     @State private var token: ContractusAPI.Token
     @State private var showInfo: Bool = false
+    @State private var showSelectToken: Bool = false
     @State var holderMode: Bool = false
     @FocusState var isInputActive: Bool
 
@@ -52,16 +54,7 @@ struct ChangeAmountView: View {
             ZStack(alignment: .bottomLeading) {
                 ScrollView {
                     VStack(spacing: 16) {
-                        HStack {
-                            Picker("", selection: $token) {
-                                ForEach(availableTokens, id: \.self) {
-                                    Text($0.code)
-                                        .font(.body.weight(.semibold))
-                                }
-                            }
-                            .disabled(viewModel.amountType == .checker)
-                            .pickerStyle(.menu)
-                            Divider().frame(height: 30)
+                        HStack(spacing: 0) {
                             TextField(R.string.localizable.changeAmountAmount(), text: $amountString)
                                 .textFieldStyle(LargeTextFieldStyle())
                                 .keyboardType(.decimalPad)
@@ -77,6 +70,19 @@ struct ChangeAmountView: View {
                                 .onAppear {
                                     isInputActive = true
                                 }
+                            Divider().frame(height: 30)
+                            Button{
+                                showSelectToken = true
+                            } label: {
+                                HStack {
+                                    Text(token.code)
+                                        .font(.body.weight(.regular))
+                                        .foregroundColor(R.color.secondaryText.color)
+                                    Constants.listImage
+                                }
+                                .padding(.horizontal, 16)
+                            }
+                            .disabled(viewModel.amountType == .checker)
                         }
                         .background(R.color.textFieldBackground.color)
                         .cornerRadius(12)
@@ -409,18 +415,23 @@ struct ChangeAmountView: View {
             .onChange(of: holderMode, perform: { newValue in
                 viewModel.trigger(.changeholderMode(newValue))
             })
-            .sheet(isPresented: $showInfo, content: {
+            .sheet(isPresented: $showInfo) {
                 NavigationView {
                     WebView(url: AppConfig.holderModeURL)
                         .edgesIgnoringSafeArea(.bottom)
                         .navigationBarItems(
                             trailing: Button(R.string.localizable.commonClose(), action: {
                                 showInfo = false
-                        }))
+                            })
+                        )
                         .navigationTitle(R.string.localizable.commonInfo())
                         .navigationBarTitleDisplayMode(.inline)
-                }.baseBackground()
-            })
+                }
+                .baseBackground()
+            }
+            .sheet(isPresented: $showSelectToken) {
+                TokenSelectView(availableTokens: availableTokens, selectedToken: $token)
+            }
             .toolbar{
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
