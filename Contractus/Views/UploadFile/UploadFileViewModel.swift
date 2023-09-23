@@ -254,13 +254,14 @@ fileprivate extension UploadFileViewModel {
                 meta: meta,
                 updatedAt: self.startEditContent,
                 force: force), completion: { result in
-                switch result {
-                case .success(let meta):
-                    promise(.success(meta))
-                case .failure(let error):
-                    promise(.failure(error))
-                }
-            })
+                    switch result {
+                    case .success(let meta):
+                        promise(.success(meta))
+                        self.startEditContent = Date()
+                    case .failure(let error):
+                        promise(.failure(error))
+                    }
+                })
         }
     }
 }
