@@ -226,10 +226,8 @@ final class DealViewModel: ViewModel {
         self.filesAPIService = filesAPIService
         self.transactionSignService = transactionSignService
         self.secretStorage = secretStorage
-        Task {
-            await self.updateActions()
-        }
 
+        self.trigger(.update(nil))        
         self.checkAvailableDecrypt()
     }
 
