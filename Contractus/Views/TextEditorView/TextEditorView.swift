@@ -12,7 +12,6 @@ fileprivate enum Constants {
     static let closeImage = Image(systemName: "xmark")
 }
 
-
 struct TextEditorView: View {
 
     enum AlertType: Identifiable {
@@ -45,7 +44,6 @@ struct TextEditorView: View {
         NavigationView {
             HStack {
                 ZStack(alignment: .topLeading) {
-
                     switch mode {
                     case .edit:
                         ZStack(alignment: .topLeading) {
@@ -77,22 +75,23 @@ struct TextEditorView: View {
                         .background(R.color.textFieldBackground.color)
                         .cornerRadius(20)
 
-
                         Spacer()
                     case .view:
-                        TextEditor(text: $content)
-                            .disabled(true)
+                        ScrollView {
+                            HStack(spacing: 0) {
+                                Text(content)
+                                Spacer()
+                                    .background(Color.yellow)
+                            }
                             .setBackground(color: R.color.mainBackground.color)
-                            .cornerRadius(12)
-                            .padding(6)
-                        if content.isEmpty {
-                            Text(R.string.localizable.dealTextEditorViewPlaceholder())
-                                .padding(EdgeInsets(top: 14, leading: 12, bottom: 0, trailing: 5))
-                                .foregroundColor(R.color.secondaryText.color)
+                            .padding(EdgeInsets(top: 14, leading: 11, bottom: 0, trailing: 5))
+                            if content.isEmpty {
+                                Text(R.string.localizable.dealTextEditorViewPlaceholder())
+                                    .padding(EdgeInsets(top: 14, leading: 12, bottom: 0, trailing: 5))
+                                    .foregroundColor(R.color.secondaryText.color)
+                            }
                         }
-
-                        Spacer()
-
+                        .padding(.bottom, 6)
                     }
                 }
                 .overlay(
