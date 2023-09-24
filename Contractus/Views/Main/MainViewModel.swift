@@ -23,7 +23,7 @@ struct MainState {
 
     enum DealType: Identifiable, CaseIterable {
         var id: String { "\(self)" }
-        case all, isExecutor, isClient, isChecker
+        case all, isExecutor, isClient, isChecker, isWorking, isDone, isCanceled
     }
 
     enum DealsState {
@@ -131,7 +131,7 @@ final class MainViewModel: ViewModel {
         try await withCheckedThrowingContinuation { continues in
 
             var types: Set<ContractusAPI.DealsService.FilterByRole>
-            let statuses: Set<ContractusAPI.DealsService.FilterByStatus> = .init(arrayLiteral: .new, .started, .starting, .finishing, .finished, .canceling, .revoked, .canceled)
+            var statuses: Set<ContractusAPI.DealsService.FilterByStatus> = .init(arrayLiteral: .new, .started, .starting, .finishing, .finished, .canceling, .revoked, .canceled)
             switch type {
             case .isChecker:
                 types = .init(arrayLiteral: .isChecker)
@@ -139,6 +139,15 @@ final class MainViewModel: ViewModel {
                 types = .init(arrayLiteral: .isClient)
             case .isExecutor:
                 types = .init(arrayLiteral: .isExecutor)
+            case .isWorking:
+                types = .init()
+                statuses = .init(arrayLiteral: .started)
+            case .isDone:
+                types = .init()
+                statuses = .init(arrayLiteral: .finished)
+            case .isCanceled:
+                types = .init()
+                statuses = .init(arrayLiteral: .canceled, .revoked)
             case .all:
                 types = .init()
             }

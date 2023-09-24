@@ -417,6 +417,12 @@ struct MainView: View {
             return "As client"
         case .isExecutor:
             return "For execute"
+        case .isWorking:
+            return "Working"
+        case .isDone:
+            return "Done"
+        case .isCanceled:
+            return "Canceled"
         }
     }
 
