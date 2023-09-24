@@ -20,7 +20,6 @@ struct ChangeAmountView: View {
 
     @StateObject var viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>
     @State private var amountString: String = ""
-    @State private var token: ContractusAPI.Token
     @State private var showInfo: Bool = false
     @State private var showSelectToken: Bool = false
     @State var holderMode: Bool = false
@@ -34,7 +33,10 @@ struct ChangeAmountView: View {
         didChange: @escaping (Amount, AmountValueType, Bool) -> Void
     ) {
         self._amountString = State(initialValue: viewModel.state.amount.formatted())
-        self._token = State(initialValue: viewModel.state.amount.token)
+        if viewModel.tier == .holder {
+            self._holderMode = .init(initialValue: viewModel.deal.allowHolderMode ?? false || viewModel.amount.token.holderMode)
+        }
+
         self._viewModel = StateObject(wrappedValue: viewModel)
         self.didChange = didChange
     }
@@ -113,7 +115,7 @@ struct ChangeAmountView: View {
                                     Spacer()
                                     
                                     Toggle(isOn: $holderMode) {}
-                                        .disabled(viewModel.state.tier == .basic)
+                                        .disabled(viewModel.state.tier == .basic || viewModel.state.amount.token.holderMode)
                                 }
                                 
                                 BorderDivider(
@@ -131,7 +133,7 @@ struct ChangeAmountView: View {
                                                 .multilineTextAlignment(.leading)
                                         }
                                         Spacer()
-                                        if viewModel.state.allowHolderMode {
+                                        if holderMode {
                                             Label(text: R.string.localizable.changeAmountFeeFree(), type: .primary)
                                         } else {
                                             if viewModel.state.feePercent == 0 && viewModel.state.state != .loading {
@@ -400,15 +402,14 @@ struct ChangeAmountView: View {
                     presentationMode.wrappedValue.dismiss()
                 }
             })
-            .onChange(of: token, perform: { newToken in
-                viewModel.trigger(.changeToken(newToken))
-            })
+
             .onReceive(amountPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main), perform: { amountText in
-                viewModel.trigger(.changeAmount(amountText, token))
+                viewModel.trigger(.changeAmount(amountText))
             })
             .onChange(of: holderMode, perform: { newValue in
                 viewModel.trigger(.changeholderMode(newValue))
             })
+
             .sheet(isPresented: $showInfo) {
                 NavigationView {
                     WebView(url: AppConfig.holderModeURL)
@@ -425,14 +426,6 @@ struct ChangeAmountView: View {
             }
             .sheet(isPresented: $showSelectToken) {
                 selectTokenView()
-            }
-            .onChange(of: token) { newToken in
-                if viewModel.state.tier == .holder && newToken.holderMode {
-                    self.holderMode = newToken.holderMode
-                } else {
-                    self.holderMode = false
-                }
-
             }
             .toolbar{
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -453,14 +446,14 @@ struct ChangeAmountView: View {
             .edgesIgnoringSafeArea(.bottom)
         }
         .onAppear {
-            if let allowHolderMode = viewModel.state.deal.allowHolderMode, viewModel.state.tier == .holder {
-                self.holderMode = allowHolderMode
-            } else {
-                self.holderMode = false
-            }
-
-            viewModel.trigger(.changeholderMode(self.holderMode))
-            viewModel.trigger(.changeAmount(amountString, token))
+//            if let allowHolderMode = viewModel.state.deal.allowHolderMode, viewModel.state.tier == .holder {
+//                self.holderMode = allowHolderMode
+//            } else {
+//                self.holderMode = false
+//            }
+//
+//            viewModel.trigger(.changeholderMode(self.holderMode))
+//            viewModel.trigger(.changeAmount(amountString, token))
         }
     }
 
@@ -543,6 +536,7 @@ struct ChangeAmountView: View {
                     break
                 case .single(let token):
                     viewModel.trigger(.changeToken(token))
+                    holderMode = token.holderMode
                     showSelectToken.toggle()
                 }
             }
