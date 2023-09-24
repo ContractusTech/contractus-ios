@@ -69,7 +69,6 @@ struct DealView: View {
     @EnvironmentObject var hudCoordinator: JGProgressHUDCoordinator
 
     @StateObject var viewModel: AnyViewModel<DealState, DealInput>
-    let availableTokens: [ContractusAPI.Token]
     var callback: () -> Void
 
     @State private var activeModalType: ActiveModalType?
@@ -868,7 +867,6 @@ struct DealView: View {
                             tier: viewModel.state.tier
                         )
                     ),
-                    availableTokens: availableTokens,
                     didChange: { newAmount, typeAmount, allowHolderMode in
                         switch typeAmount {
                         case .deal:
@@ -895,7 +893,6 @@ struct DealView: View {
                             tier: viewModel.state.tier
                         )
                     ),
-                    availableTokens: availableTokens,
                     didChange: { newAmount, typeAmount, allowHolderMode in
                         switch typeAmount {
                         case .deal:
@@ -1715,7 +1712,6 @@ struct DealView_Previews: PreviewProvider {
                 DealViewModel(
                     state: DealState(
                         account: Mock.account,
-                        availableTokens: Mock.tokenList,
                         tier: .basic,
                         deal: Mock.deal,
                         isSignedByPartners: true
@@ -1723,8 +1719,7 @@ struct DealView_Previews: PreviewProvider {
                     dealService: nil,
                     transactionSignService: nil,
                     filesAPIService: nil,
-                    secretStorage: nil)),
-                     availableTokens: [Mock.tokenSOL, Mock.tokenWSOL]
+                    secretStorage: nil))
             ) {
 
             }

@@ -1,10 +1,3 @@
-//
-//  ChangeAmountView.swift
-//  Contractus
-//
-//  Created by Simon Hudishkin on 17.08.2022.
-//
-
 import SwiftUI
 import ContractusAPI
 import Combine
@@ -34,18 +27,15 @@ struct ChangeAmountView: View {
     @FocusState var isInputActive: Bool
 
     let amountPublisher = PassthroughSubject<String, Never>()
-    private let availableTokens: [ContractusAPI.Token]
     private var didChange: (Amount, AmountValueType, Bool) -> Void
 
     init(
         viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>,
-        availableTokens: [ContractusAPI.Token],
         didChange: @escaping (Amount, AmountValueType, Bool) -> Void
     ) {
         self._amountString = State(initialValue: viewModel.state.amount.formatted())
         self._token = State(initialValue: viewModel.state.amount.token)
         self._viewModel = StateObject(wrappedValue: viewModel)
-        self.availableTokens = availableTokens
         self.didChange = didChange
     }
 
@@ -75,7 +65,7 @@ struct ChangeAmountView: View {
                                 showSelectToken = true
                             } label: {
                                 HStack {
-                                    Text(token.code)
+                                    Text(viewModel.state.amount.token.code)
                                         .font(.body.weight(.regular))
                                         .foregroundColor(R.color.secondaryText.color)
                                     Constants.listImage
@@ -141,27 +131,31 @@ struct ChangeAmountView: View {
                                                 .multilineTextAlignment(.leading)
                                         }
                                         Spacer()
-                                        if viewModel.state.feePercent == 0 && viewModel.state.state != .loading {
-                                            if viewModel.state.noAmount {
-                                                Text("➖")
-                                                    .font(.body)
-                                                    .fontWeight(.medium)
-                                                    .foregroundColor(R.color.secondaryText.color)
-                                                    .multilineTextAlignment(.leading)
-                                            } else {
-                                                Label(text: R.string.localizable.changeAmountFeeFree(), type: .primary)
-                                            }
+                                        if viewModel.state.allowHolderMode {
+                                            Label(text: R.string.localizable.changeAmountFeeFree(), type: .primary)
                                         } else {
-                                            if !viewModel.state.feeFormatted.isEmpty  {
-                                                Text(viewModel.state.feeFormatted)
-                                                    .font(.body)
-                                                    .fontWeight(.medium)
-                                                    .foregroundColor(R.color.textBase.color)
-                                                    .multilineTextAlignment(.leading)
+                                            if viewModel.state.feePercent == 0 && viewModel.state.state != .loading {
+                                                if viewModel.state.noAmount {
+                                                    Text("➖")
+                                                        .font(.body)
+                                                        .fontWeight(.medium)
+                                                        .foregroundColor(R.color.secondaryText.color)
+                                                        .multilineTextAlignment(.leading)
+                                                } else {
+                                                    Label(text: R.string.localizable.changeAmountFeeFree(), type: .primary)
+                                                }
                                             } else {
-                                                RoundedRectangle(cornerRadius: 16)
-                                                    .fill(R.color.thirdBackground.color)
-                                                    .frame(width: 42, height: 19)
+                                                if !viewModel.state.feeFormatted.isEmpty  {
+                                                    Text(viewModel.state.feeFormatted)
+                                                        .font(.body)
+                                                        .fontWeight(.medium)
+                                                        .foregroundColor(R.color.textBase.color)
+                                                        .multilineTextAlignment(.leading)
+                                                } else {
+                                                    RoundedRectangle(cornerRadius: 16)
+                                                        .fill(R.color.thirdBackground.color)
+                                                        .frame(width: 42, height: 19)
+                                                }
                                             }
                                         }
                                     }
@@ -187,7 +181,7 @@ struct ChangeAmountView: View {
                                     .stroke(R.color.textFieldBorder.color, lineWidth: 1)
                             )
 
-                            if !viewModel.state.checkerIsYou {
+                            if viewModel.state.checkerIsYou || viewModel.state.clientIsYou {
                                 HStack {
                                     VStack {
                                         Text(R.string.localizable.changeAmountVerificationAmount())
@@ -430,14 +424,15 @@ struct ChangeAmountView: View {
                 .baseBackground()
             }
             .sheet(isPresented: $showSelectToken) {
-                TokenSelectView(
-                    availableTokens: availableTokens,
-                    selectedToken: $token,
-                    allowHolderMode: viewModel.state.tier == .holder
-                )
+                selectTokenView()
             }
             .onChange(of: token) { newToken in
-                self.holderMode = newToken.holderMode
+                if viewModel.state.tier == .holder && newToken.holderMode {
+                    self.holderMode = newToken.holderMode
+                } else {
+                    self.holderMode = false
+                }
+
             }
             .toolbar{
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -458,10 +453,13 @@ struct ChangeAmountView: View {
             .edgesIgnoringSafeArea(.bottom)
         }
         .onAppear {
-            if let allowHolderMode = viewModel.state.deal.allowHolderMode {
+            if let allowHolderMode = viewModel.state.deal.allowHolderMode, viewModel.state.tier == .holder {
                 self.holderMode = allowHolderMode
-                viewModel.trigger(.changeholderMode(allowHolderMode))
+            } else {
+                self.holderMode = false
             }
+
+            viewModel.trigger(.changeholderMode(self.holderMode))
             viewModel.trigger(.changeAmount(amountString, token))
         }
     }
@@ -531,13 +529,31 @@ struct ChangeAmountView: View {
             }
         }
     }
+
+    @ViewBuilder
+    func selectTokenView() -> some View {
+        TokenSelectView(viewModel: .init(TokenSelectViewModel(
+            allowHolderMode: false,
+            mode: .single,
+            tier: viewModel.state.tier,
+            selectedTokens: [viewModel.state.amount.token],
+            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService()))) { result in
+                switch result {
+                case .many, .none:
+                    break
+                case .single(let token):
+                    viewModel.trigger(.changeToken(token))
+                    showSelectToken.toggle()
+                }
+            }
+    }
 }
 
 struct ChangeAmountView_Previews: PreviewProvider {
     static var previews: some View {
         ChangeAmountView(
             viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>(ChangeAmountViewModel(
-                deal: Mock.deal, account: Mock.account, amountType: .checker, dealService: nil, tier: .basic)), availableTokens: Mock.tokenList) { _, _, _  in
+                deal: Mock.deal, account: Mock.account, amountType: .checker, dealService: nil, tier: .basic))) { _, _, _  in
 
                 }
     }

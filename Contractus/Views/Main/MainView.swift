@@ -378,12 +378,11 @@ struct MainView: View {
     @ViewBuilder
     func dealView(deal: Deal) -> some View {
         DealView(viewModel: AnyViewModel<DealState, DealInput>(DealViewModel(
-            state: DealState(account: viewModel.account, availableTokens: viewModel.availableTokens, tier: viewModel.balance?.tier ?? .basic, deal: deal),
+            state: DealState(account: viewModel.account, tier: viewModel.balance?.tier ?? .basic, deal: deal),
             dealService: try? APIServiceFactory.shared.makeDealsService(),
             transactionSignService: ServiceFactory.shared.makeTransactionSign(),
             filesAPIService: try? APIServiceFactory.shared.makeFileService(),
-            secretStorage: SharedSecretStorageImpl())),
-                 availableTokens: viewModel.availableTokens) {
+            secretStorage: SharedSecretStorageImpl()))) {
                 viewModel.trigger(.load(dealsType))
             }
     }

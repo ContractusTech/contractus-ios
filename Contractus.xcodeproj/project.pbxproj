@@ -31,6 +31,7 @@
 		6D44B5602A0E0B20008C561D /* BlockchainExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B55F2A0E0B20008C561D /* BlockchainExplorer.swift */; };
 		6D44B5622A0FA42F008C561D /* FlagsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B5612A0FA42F008C561D /* FlagsStorage.swift */; };
 		6D44B5642A0FAB37008C561D /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B5632A0FAB37008C561D /* StatisticsView.swift */; };
+		6D4C860F2AC010E900B9CEAE /* TokenSelectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4C860E2AC010E900B9CEAE /* TokenSelectViewModel.swift */; };
 		6D4D99F32A5601A1007668B0 /* IdentifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4D99F22A5601A1007668B0 /* IdentifierService.swift */; };
 		6D4DCB2C28AC8DC200EE86C0 /* ChangeAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DCB2B28AC8DC200EE86C0 /* ChangeAmountView.swift */; };
 		6D4FAB4F293B084800076743 /* TextEditor+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4FAB4E293B084800076743 /* TextEditor+Ex.swift */; };
@@ -225,6 +226,7 @@
 		6D44B55F2A0E0B20008C561D /* BlockchainExplorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainExplorer.swift; sourceTree = "<group>"; };
 		6D44B5612A0FA42F008C561D /* FlagsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagsStorage.swift; sourceTree = "<group>"; };
 		6D44B5632A0FAB37008C561D /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		6D4C860E2AC010E900B9CEAE /* TokenSelectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenSelectViewModel.swift; sourceTree = "<group>"; };
 		6D4D99F22A5601A1007668B0 /* IdentifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifierService.swift; sourceTree = "<group>"; };
 		6D4DCB2B28AC8DC200EE86C0 /* ChangeAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeAmountView.swift; sourceTree = "<group>"; };
 		6D4FAB4E293B084800076743 /* TextEditor+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextEditor+Ex.swift"; sourceTree = "<group>"; };
@@ -429,6 +431,15 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
+		6D4C860D2AC010BF00B9CEAE /* TokenSelect */ = {
+			isa = PBXGroup;
+			children = (
+				FEBC6EDD2ABDD51A001947E1 /* TokenSelectView.swift */,
+				6D4C860E2AC010E900B9CEAE /* TokenSelectViewModel.swift */,
+			);
+			path = TokenSelect;
+			sourceTree = "<group>";
+		};
 		6D590104289383D600EC318E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -468,7 +479,6 @@
 				6D2E0AF128AE9833002BA683 /* DealViewModel.swift */,
 				6D5A65A628E3F5110081533C /* ChangeAmountViewModel.swift */,
 				6D3AF95F28E83C4600660AEC /* ImportSecretKeyView.swift */,
-				FEBC6EDD2ABDD51A001947E1 /* TokenSelectView.swift */,
 			);
 			path = Deal;
 			sourceTree = "<group>";
@@ -495,6 +505,7 @@
 		6D75F2ED288EA99E0092D182 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6D4C860D2AC010BF00B9CEAE /* TokenSelect */,
 				6D8EFD8628D88F570064F5DA /* AddContractor */,
 				6DF9CBF529F9530B004B95F4 /* Accounts */,
 				6D6EE383289C677500635E60 /* Common */,
@@ -1099,6 +1110,7 @@
 				6DD28E292A1DF3B10093E553 /* DeadlineView.swift in Sources */,
 				6DAA5E792898BE1B00BA1965 /* Crypto.swift in Sources */,
 				6DB5F8B8294D7B2D00AE612A /* JGProgressHUD+Ex.swift in Sources */,
+				6D4C860F2AC010E900B9CEAE /* TokenSelectViewModel.swift in Sources */,
 				6D8EFD8828D88F760064F5DA /* AddContractorViewModel.swift in Sources */,
 				6D74736129655EA800A5F6E7 /* TransactionSignViewModel.swift in Sources */,
 				6DDA818028C065C80022E005 /* ModalSheet+Ex.swift in Sources */,

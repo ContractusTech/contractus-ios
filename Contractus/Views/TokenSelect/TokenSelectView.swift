@@ -1,10 +1,3 @@
-//
-//  TokenSelectView.swift
-//  Contractus
-//
-//  Created by VITALIY FADEYEV on 22.09.2023.
-//
-
 import SwiftUI
 import ContractusAPI
 
@@ -15,12 +8,18 @@ fileprivate enum Constants {
 }
 
 struct TokenSelectView: View {
-    @Environment(\.dismiss) var dismiss
+
+    enum ViewResult {
+        case single(ContractusAPI.Token)
+        case many([ContractusAPI.Token])
+        case none
+    }
+
+    @StateObject var viewModel: AnyViewModel<TokenSelectViewModel.State, TokenSelectViewModel.Input>
     
-    @State var searchString: String = ""
-    var availableTokens: [ContractusAPI.Token]
-    @Binding var selectedToken: ContractusAPI.Token
-    var allowHolderMode: Bool
+    @State private var searchString: String = ""
+
+    var action: (ViewResult) -> Void
 
     var body: some View {
         NavigationView {
@@ -30,9 +29,9 @@ struct TokenSelectView: View {
                     .padding(.horizontal, 14)
                 ScrollView {
                     VStack(spacing: 0) {
-                        ForEach(availableTokensFiltered(), id: \.self) { token in
+                        ForEach(viewModel.state.tokens, id: \.self) { token in
                             tokenItem(token: token)
-                            if token != availableTokens.last {
+                            if token != viewModel.state.tokens.last {
                                 Divider().foregroundColor(R.color.buttonBorderSecondary.color)
                             }
                         }
@@ -49,7 +48,17 @@ struct TokenSelectView: View {
             .edgesIgnoringSafeArea(.bottom)
             .navigationBarItems(
                 leading: Button {
-                    dismiss()
+                    switch viewModel.state.mode {
+                    case .many:
+                        action(.many(viewModel.state.selectedTokens))
+                    case .single:
+                        if let token = viewModel.state.selectedTokens.first {
+                            action(.single(token))
+                        } else {
+                            action(.none)
+                        }
+                        
+                    }
                 } label: {
                     Constants.closeImage
                         .resizable()
@@ -57,9 +66,22 @@ struct TokenSelectView: View {
                         .foregroundColor(R.color.textBase.color)
                 }
             )
-            .navigationTitle(R.string.localizable.selectTokenTitle())
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
+            .onChange(of: searchString, perform: { newText in
+                viewModel.trigger(.search(newText))
+            })
+            .onAppear {
+                viewModel.trigger(.load)
+            }
         }
+    }
+
+    var title: String {
+        if viewModel.mode == .single {
+            return R.string.localizable.selectTokenTitle()
+        }
+        return "\(R.string.localizable.selectTokenTitle()) (\(viewModel.state.selectedTokens.count)"
     }
 
     @ViewBuilder
@@ -73,8 +95,10 @@ struct TokenSelectView: View {
                         .frame(width: 24, height: 24)
                         .cornerRadius(8)
                 } placeholder: {
-                    ProgressView()
+                    Rectangle()
+                        .fill(R.color.fourthBackground.color)
                         .frame(width: 24, height: 24)
+                        .cornerRadius(8)
                 }
             }
             VStack(alignment: .leading, spacing: 2) {
@@ -87,7 +111,7 @@ struct TokenSelectView: View {
                         if token.holderMode {
                             Constants.crownImage
                                 .imageScale(.small)
-                                .foregroundColor(R.color.labelBackgroundDefault.color)
+                                .foregroundColor(R.color.secondaryText.color)
                         }
                     }
                 }
@@ -100,7 +124,7 @@ struct TokenSelectView: View {
             Spacer()
 
             Group {
-                if token.code == selectedToken.code {
+                if viewModel.state.isSelected(token) {
                     ZStack {
                         Constants.checkmarkImage
                             .imageScale(.small)
@@ -112,11 +136,7 @@ struct TokenSelectView: View {
                 } else {
                     ZStack {}
                         .frame(width: 24,  height: 24)
-                        .background(
-                            !token.holderMode || (token.holderMode && allowHolderMode)
-                            ? Color.clear
-                            : R.color.thirdBackground.color.opacity(0.2)
-                        )
+                        .background(R.color.thirdBackground.color)
                         .cornerRadius(7)
                         .overlay(
                             RoundedRectangle(
@@ -128,34 +148,32 @@ struct TokenSelectView: View {
                 }
             }
             .contentShape(Rectangle())
-            .onTapGesture {
-                if !token.holderMode || (token.holderMode && allowHolderMode) {
-                    selectedToken = token
-                    dismiss()
-                }
-            }
+
         }
         .padding(.leading, 19)
         .padding(.trailing, 25)
+        .opacity((viewModel.state.allowHolderMode || !token.holderMode || (token.holderMode && viewModel.state.tier == .holder)) ? 1.0 : 0.4)
+        .onTapGesture {
+            guard viewModel.state.allowHolderMode || !token.holderMode || (token.holderMode && viewModel.state.tier == .holder) else { return }
+
+            if viewModel.state.isSelected(token) {
+                viewModel.trigger(.deselect(token))
+            } else {
+                viewModel.trigger(.select(token))
+                if viewModel.state.mode == .single, let token = viewModel.state.selectedTokens.first {
+                    action(.single(token))
+                }
+            }
+
+        }
     }
     
-    func availableTokensFiltered() -> [ContractusAPI.Token] {
-        if searchString.isEmpty {
-            return availableTokens
-        }
-        return availableTokens.filter({
-            ($0.name ?? "").uppercased().contains(searchString.uppercased()) ||
-            $0.code.uppercased().contains(searchString.uppercased())
-        })
-    }
 }
 
 struct TokenSelectView_Previews: PreviewProvider {
     static var previews: some View {
-        TokenSelectView(
-            availableTokens: Mock.tokenList,
-            selectedToken: .constant(Mock.tokenSOL),
-            allowHolderMode: false
-        )
+        TokenSelectView(viewModel: .init(TokenSelectViewModel(allowHolderMode: false, mode: .many, tier: .holder, selectedTokens: [], resourcesAPIService: nil))) { _ in
+
+        }
     }
 }

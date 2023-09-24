@@ -1,10 +1,3 @@
-//
-//  ChangeAmountViewModel.swift
-//  Contractus
-//
-//  Created by Simon Hudishkin on 28.09.2022.
-//
-
 import Foundation
 import ContractusAPI
 import Combine
@@ -87,7 +80,7 @@ struct ChangeAmountState {
     }
 
     var checkerIsYou: Bool {
-        account.publicKey == deal.checkerPublicKey || deal.checkerPublicKey == nil
+        account.publicKey == deal.checkerPublicKey
     }
 
     var clientIsYou: Bool {
