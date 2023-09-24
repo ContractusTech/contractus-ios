@@ -11,7 +11,7 @@ import Alamofire
 public final class ResourcesService: BaseService {
 
     public func tokens(completion: @escaping (Swift.Result<[Token], APIClientError>) -> Void) {
-        self.request(path: .tokens, httpMethod: .get, data: Empty()) { (result: Swift.Result<[Token], APIClientError>) in
+        self.request(path: .tokens, httpMethod: .get, data: ["type": "full"]) { (result: Swift.Result<[Token], APIClientError>) in
             completion(result)
         }
     }

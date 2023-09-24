@@ -20,6 +20,7 @@ struct TokenSelectView: View {
     @State var searchString: String = ""
     var availableTokens: [ContractusAPI.Token]
     @Binding var selectedToken: ContractusAPI.Token
+    var allowHolderMode: Bool
 
     var body: some View {
         NavigationView {
@@ -111,6 +112,12 @@ struct TokenSelectView: View {
                 } else {
                     ZStack {}
                         .frame(width: 24,  height: 24)
+                        .background(
+                            !token.holderMode || (token.holderMode && allowHolderMode)
+                            ? Color.clear
+                            : R.color.thirdBackground.color.opacity(0.2)
+                        )
+                        .cornerRadius(7)
                         .overlay(
                             RoundedRectangle(
                                 cornerRadius: 7,
@@ -122,8 +129,10 @@ struct TokenSelectView: View {
             }
             .contentShape(Rectangle())
             .onTapGesture {
-                selectedToken = token
-                dismiss()
+                if !token.holderMode || (token.holderMode && allowHolderMode) {
+                    selectedToken = token
+                    dismiss()
+                }
             }
         }
         .padding(.leading, 19)
@@ -145,7 +154,8 @@ struct TokenSelectView_Previews: PreviewProvider {
     static var previews: some View {
         TokenSelectView(
             availableTokens: Mock.tokenList,
-            selectedToken: .constant(Mock.tokenCTUS)
+            selectedToken: .constant(Mock.tokenSOL),
+            allowHolderMode: false
         )
     }
 }

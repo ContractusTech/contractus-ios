@@ -1724,7 +1724,8 @@ struct DealView_Previews: PreviewProvider {
                     transactionSignService: nil,
                     filesAPIService: nil,
                     secretStorage: nil)),
-                     availableTokens: [Mock.tokenSOL, Mock.tokenWSOL]) {
+                     availableTokens: [Mock.tokenSOL, Mock.tokenWSOL]
+            ) {
 
             }
         }

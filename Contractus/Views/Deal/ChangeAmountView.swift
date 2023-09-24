@@ -430,7 +430,14 @@ struct ChangeAmountView: View {
                 .baseBackground()
             }
             .sheet(isPresented: $showSelectToken) {
-                TokenSelectView(availableTokens: availableTokens, selectedToken: $token)
+                TokenSelectView(
+                    availableTokens: availableTokens,
+                    selectedToken: $token,
+                    allowHolderMode: viewModel.state.tier == .holder
+                )
+            }
+            .onChange(of: token) { newToken in
+                self.holderMode = newToken.holderMode
             }
             .toolbar{
                 ToolbarItem(placement: .navigationBarLeading) {
