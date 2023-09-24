@@ -75,7 +75,12 @@ final class TokenSelectViewModel: ViewModel {
                 case .failure(let error):
                     continues.resume(throwing: error)
                 case .success(let tokens):
-                    continues.resume(returning: tokens.filter { $0.address != nil } )
+                    if self.state.mode == .single {
+                        continues.resume(returning: tokens.filter { $0.address != nil } )
+                    } else {
+                        continues.resume(returning: tokens)
+                    }
+
                 }
             })
         }

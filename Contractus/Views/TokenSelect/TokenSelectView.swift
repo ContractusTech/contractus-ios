@@ -43,6 +43,7 @@ struct TokenSelectView: View {
                             .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     )
                 }
+                .padding(.bottom, 32)
             }
             .baseBackground()
             .edgesIgnoringSafeArea(.bottom)
@@ -57,13 +58,21 @@ struct TokenSelectView: View {
                         } else {
                             action(.none)
                         }
-                        
                     }
                 } label: {
                     Constants.closeImage
                         .resizable()
                         .frame(width: 21, height: 21)
                         .foregroundColor(R.color.textBase.color)
+                },
+                trailing: Button {
+                    action(.many(viewModel.state.selectedTokens))
+                } label: {
+                    if viewModel.mode == .many {
+                        Text(R.string.localizable.commonSave())
+                    } else {
+                        EmptyView()
+                    }
                 }
             )
             .navigationTitle(title)
@@ -81,7 +90,7 @@ struct TokenSelectView: View {
         if viewModel.mode == .single {
             return R.string.localizable.selectTokenTitle()
         }
-        return "\(R.string.localizable.selectTokenTitle()) (\(viewModel.state.selectedTokens.count)"
+        return "\(R.string.localizable.selectTokenTitle()) (\(viewModel.state.selectedTokens.count))"
     }
 
     @ViewBuilder

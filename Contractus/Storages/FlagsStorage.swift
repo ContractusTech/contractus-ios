@@ -1,12 +1,4 @@
-//
-//  FlagsStorage.swift
-//  Contractus
-//
-//  Created by Simon Hudishkin on 13.05.2023.
-//
-
 import Foundation
-
 
 final class FlagsStorage {
 

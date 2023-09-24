@@ -17,6 +17,7 @@ enum MainInput {
     case load(MainState.DealType)
     case loadDeals(MainState.DealType)
     case executeScanResult(ScanResult)
+    case saveTokenSettings([ContractusAPI.Token])
 }
 
 struct MainState {
@@ -35,7 +36,6 @@ struct MainState {
     var balance: Balance?
     var deals: [ContractusAPI.Deal] = []
     var dealsState: DealsState = .loading
-    var availableTokens: [ContractusAPI.Token] = []
 }
 
 final class MainViewModel: ViewModel {
@@ -66,10 +66,18 @@ final class MainViewModel: ViewModel {
 
     func trigger(_ input: MainInput, after: AfterTrigger? = nil) {
         switch input {
+        case .saveTokenSettings(let tokens):
+            UtilsStorage.shared.saveTokenSettings(tokens: tokens)
+            self.tokens = tokens
+            Task { @MainActor in
+                let accountInfo = try? await loadAccountInfo()
+                self.state.balance = accountInfo?.balance
+                self.state.statistics = accountInfo?.statistics ?? []
+            }
+
         case .preload:
             Task { @MainActor in
-                self.tokens = (try? await loadTokens()) ?? []
-                self.state.availableTokens = self.tokens.filter({ $0.address != nil })
+                self.tokens = await getTokens()
                 let accountInfo = try? await loadAccountInfo()
                 self.state.balance = accountInfo?.balance
                 self.state.statistics = accountInfo?.statistics ?? []
@@ -88,8 +96,7 @@ final class MainViewModel: ViewModel {
             // TODO: - Refactor, need parallel requests
             Task { @MainActor in
                 var state = self.state
-                self.tokens = (try? await loadTokens()) ?? []
-                state.availableTokens = self.tokens.filter({ $0.address != nil })
+                self.tokens = await getTokens()
                 let accountInfo = try? await loadAccountInfo()
                 state.balance = accountInfo?.balance
                 state.statistics = accountInfo?.statistics ?? []
@@ -118,7 +125,6 @@ final class MainViewModel: ViewModel {
                 newState.account = account
                 newState.deals = []
                 newState.balance = nil
-                newState.availableTokens = []
                 state = newState
             }
             after?()
@@ -180,6 +186,18 @@ final class MainViewModel: ViewModel {
                 }
             })
         }
+    }
+
+    private func getTokens() async -> [ContractusAPI.Token] {
+        if let tokens = UtilsStorage.shared.getTokenSettings() {
+            return tokens
+        }
+
+        if let tokens = try? await loadTokens() {
+            UtilsStorage.shared.saveTokenSettings(tokens: tokens)
+            return tokens
+        }
+        return []
     }
 
     private func loadAccountInfo() async throws -> (statistics: [AccountStatistic], balance: Balance) {

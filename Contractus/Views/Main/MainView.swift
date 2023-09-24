@@ -31,7 +31,7 @@ fileprivate enum Constants {
 struct MainView: View {
 
     enum SheetType {
-        case newDeal, menu, qrScan, sharePublicKey, wrap(from: Amount, to: Amount), webView(URL), topUp(URL)
+        case newDeal, menu, qrScan, sharePublicKey, wrap(from: Amount, to: Amount), webView(URL), topUp(URL), tokenSettings
     }
 
     @StateObject var viewModel: AnyViewModel<MainState, MainInput>
@@ -43,7 +43,6 @@ struct MainView: View {
     @State private var transactionSignType: TransactionSignType?
     @State private var topUpState: ResizableSheetState = .hidden
     @State private var showChangelog: Bool = false
-
     @State private var showDealFilter: Bool = false
     
     var body: some View {
@@ -62,7 +61,9 @@ struct MainView: View {
                                 sheetType = .webView(AppConfig.ctusInfoURL)
                             }, swapAction: { fromAmount, toAmount in
                                 sheetType = .wrap(from: fromAmount, to: toAmount)
-                            })
+                            }) {
+                                sheetType = .tokenSettings
+                            }
 
                         if !viewModel.state.statistics.isEmpty {
                             StatisticsView(items: viewModel.state.statistics) { item in
@@ -222,6 +223,22 @@ struct MainView: View {
 
                 .sheet(item: $sheetType, content: { type in
                     switch type {
+                    case .tokenSettings:
+                        TokenSelectView(viewModel: .init(TokenSelectViewModel(
+                            allowHolderMode: true,
+                            mode: .many,
+                            tier: viewModel.state.balance?.tier ?? .basic,
+                            selectedTokens: [],
+                            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())
+                        )) { result in
+                            switch result {
+                            case .many(let tokens):
+                                viewModel.trigger(.saveTokenSettings(tokens))
+                            case .none, .single:
+                                break
+                            }
+                            sheetType = nil
+                        }
                     case .topUp(let url):
                         NavigationView {
                             WebView(url: url)
