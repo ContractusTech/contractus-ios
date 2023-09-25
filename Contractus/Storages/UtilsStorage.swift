@@ -16,17 +16,39 @@ final class UtilsStorage {
     func getTokenSettings() -> [ContractusAPI.Token]? {
         if
             let data = storage.data(forKey: Keys.tokenSettings.rawValue),
-            let settings = try? decoder.decode([ContractusAPI.Token].self, from: data) {
+            let settings = try? decoder.decode([StoreToken].self, from: data) {
 
-            return settings
+            return settings.map { $0.asToken }
         }
 
         return nil
     }
 
     func saveTokenSettings(tokens: [ContractusAPI.Token]) {
-        guard let data = try? encoder.encode(tokens) else { return }
+        guard let data = try? encoder.encode(tokens.map { $0.asInternalToken }) else { return }
         storage.set(data, forKey: Keys.tokenSettings.rawValue)
-        storage.synchronize()
+    }
+}
+
+fileprivate struct StoreToken: Codable {
+    let code: String
+    let name: String?
+    let address: String?
+    let native: Bool
+    let decimals: Int
+    let serviced: Bool
+    let logoURL: URL?
+    let holderMode: Bool
+}
+
+fileprivate extension StoreToken {
+    var asToken: ContractusAPI.Token {
+        .init(code: self.code, name: self.name, address: self.address, native: self.native, decimals: self.decimals, serviced: self.serviced, logoURL: self.logoURL, holderMode: self.holderMode)
+    }
+}
+
+fileprivate extension ContractusAPI.Token {
+    var asInternalToken: StoreToken {
+        .init(code: self.code, name: self.name, address: self.address, native: self.native, decimals: self.decimals, serviced: self.serviced, logoURL: self.logoURL, holderMode: self.holderMode)
     }
 }

@@ -161,12 +161,14 @@ struct TokenSelectView: View {
         }
         .padding(.leading, 19)
         .padding(.trailing, 25)
-        .opacity((viewModel.state.allowHolderMode || !token.holderMode || (token.holderMode && viewModel.state.tier == .holder)) ? 1.0 : 0.4)
+        .opacity(opacity(for: token))
         .onTapGesture {
             guard viewModel.state.allowHolderMode || !token.holderMode || (token.holderMode && viewModel.state.tier == .holder) else { return }
 
             if viewModel.state.isSelected(token) {
-                viewModel.trigger(.deselect(token))
+                if !viewModel.state.isDisableUnselect(token){
+                    viewModel.trigger(.deselect(token))
+                }
             } else {
                 viewModel.trigger(.select(token))
                 if viewModel.state.mode == .single, let token = viewModel.state.selectedTokens.first {
@@ -176,12 +178,20 @@ struct TokenSelectView: View {
 
         }
     }
+
+    func opacity(for token: ContractusAPI.Token) -> Double {
+        if (!viewModel.state.allowHolderMode && (token.holderMode && viewModel.state.tier != .holder)) || viewModel.state.isDisableUnselect(token) {
+            return 0.4
+        }
+
+        return 1.0
+    }
     
 }
 
 struct TokenSelectView_Previews: PreviewProvider {
     static var previews: some View {
-        TokenSelectView(viewModel: .init(TokenSelectViewModel(allowHolderMode: false, mode: .many, tier: .holder, selectedTokens: [], resourcesAPIService: nil))) { _ in
+        TokenSelectView(viewModel: .init(TokenSelectViewModel(allowHolderMode: false, mode: .many, tier: .holder, selectedTokens: [], disableUnselectTokens: [], resourcesAPIService: nil))) { _ in
 
         }
     }

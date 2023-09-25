@@ -13,7 +13,6 @@ import Combine
 enum MainInput {
     case updateAccount
     case preload
-    case loadBalance
     case load(MainState.DealType)
     case loadDeals(MainState.DealType)
     case executeScanResult(ScanResult)
@@ -36,6 +35,8 @@ struct MainState {
     var balance: Balance?
     var deals: [ContractusAPI.Deal] = []
     var dealsState: DealsState = .loading
+    var selectedTokens: [ContractusAPI.Token] = []
+    var disableUnselectTokens: [ContractusAPI.Token] = []
 }
 
 final class MainViewModel: ViewModel {
@@ -56,7 +57,7 @@ final class MainViewModel: ViewModel {
         dealsAPIService: ContractusAPI.DealsService?,
         resourcesAPIService: ContractusAPI.ResourcesService?)
     {
-        self.state = MainState(account: account)
+        self.state = MainState(account: account, selectedTokens: UtilsStorage.shared.getTokenSettings() ?? [])
 
         self.accountAPIService = accountAPIService
         self.dealsAPIService = dealsAPIService
@@ -68,24 +69,13 @@ final class MainViewModel: ViewModel {
         switch input {
         case .saveTokenSettings(let tokens):
             UtilsStorage.shared.saveTokenSettings(tokens: tokens)
-            self.tokens = tokens
-            Task { @MainActor in
-                let accountInfo = try? await loadAccountInfo()
-                self.state.balance = accountInfo?.balance
-                self.state.statistics = accountInfo?.statistics ?? []
+            Task {
+                try? await loadAccountInfo()
             }
 
         case .preload:
-            Task { @MainActor in
-                self.tokens = await getTokens()
-                let accountInfo = try? await loadAccountInfo()
-                self.state.balance = accountInfo?.balance
-                self.state.statistics = accountInfo?.statistics ?? []
-            }
-        case .loadBalance:
-            Task { @MainActor in
-                self.state.balance = try? await loadBalance()
-                after?()
+            Task {
+                try? await loadAccountInfo()
             }
         case .load(let type):
             state.dealsState = .loading
@@ -95,11 +85,9 @@ final class MainViewModel: ViewModel {
             }
             // TODO: - Refactor, need parallel requests
             Task { @MainActor in
+                try? await loadAccountInfo()
+
                 var state = self.state
-                self.tokens = await getTokens()
-                let accountInfo = try? await loadAccountInfo()
-                state.balance = accountInfo?.balance
-                state.statistics = accountInfo?.statistics ?? []
 
                 let deals = try? await self.loadDeals(type: type)
                 state.deals = deals ?? []
@@ -160,10 +148,10 @@ final class MainViewModel: ViewModel {
         }
     }
 
-    private func loadBalance() async throws -> Balance {
+    private func loadBalance(for tokens: [ContractusAPI.AccountService.Token]) async throws -> Balance {
         try await withCheckedThrowingContinuation { continues in
-            let request = ContractusAPI.AccountService.BalanceRequest(
-                tokens: self.tokens.map({ .init(code: $0.code, address: $0.address) }))
+
+            let request = ContractusAPI.AccountService.BalanceRequest(tokens: tokens)
             accountAPIService?.getBalance(request, completion: { result in
                 switch result {
                 case .failure(let error):
@@ -188,7 +176,7 @@ final class MainViewModel: ViewModel {
         }
     }
 
-    private func getTokens() async -> [ContractusAPI.Token] {
+    private func getTokenSettings() async -> [ContractusAPI.Token] {
         if let tokens = UtilsStorage.shared.getTokenSettings() {
             return tokens
         }
@@ -200,10 +188,28 @@ final class MainViewModel: ViewModel {
         return []
     }
 
-    private func loadAccountInfo() async throws -> (statistics: [AccountStatistic], balance: Balance) {
-        async let balance = loadBalance()
-        async let statistics = loadStatistics(currency: .defaultCurrency)
-        return try await (statistics, balance)
+    @MainActor
+    private func loadAccountInfo() async throws {
+        self.tokens = await getTokenSettings()
+
+        var state = self.state
+
+        switch state.account.blockchain {
+        case .solana:
+            // TODO: - Need refactor.
+            state.disableUnselectTokens = self.tokens.filter { $0.native || $0.code == "WSOL" }
+        }
+
+        async let balanceTask = loadBalance(for: tokens.map { .init(code: $0.code, address: $0.address) })
+        async let statisticsTask = loadStatistics(currency: .defaultCurrency)
+
+        let (statistics, balance) = try await (statisticsTask, balanceTask)
+        state.selectedTokens = self.tokens
+        state.balance = balance
+        state.statistics = statistics
+
+        self.state = state
+
     }
 
     private func loadStatistics(currency: Currency) async throws -> [ContractusAPI.AccountStatistic] {

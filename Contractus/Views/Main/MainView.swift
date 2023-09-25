@@ -228,7 +228,8 @@ struct MainView: View {
                             allowHolderMode: true,
                             mode: .many,
                             tier: viewModel.state.balance?.tier ?? .basic,
-                            selectedTokens: [],
+                            selectedTokens: viewModel.state.selectedTokens,
+                            disableUnselectTokens: viewModel.state.disableUnselectTokens,
                             resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())
                         )) { result in
                             switch result {

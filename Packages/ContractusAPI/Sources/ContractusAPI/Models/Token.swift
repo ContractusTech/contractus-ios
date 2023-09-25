@@ -50,8 +50,9 @@ public struct Token: Codable {
         let container = try decoder.container(keyedBy: Token.CodingKeys.self)
 
         self.code = try container.decode(String.self, forKey: Token.CodingKeys.code)
-        self.name = try? container.decodeIfPresent(String.self, forKey: Token.CodingKeys.name)
         self.address = try container.decodeIfPresent(String.self, forKey: Token.CodingKeys.address)
+
+        self.name = try? container.decodeIfPresent(String.self, forKey: Token.CodingKeys.name)
         self.native = try container.decode(Bool.self, forKey: Token.CodingKeys.native)
         self.decimals = try container.decode(Int.self, forKey: Token.CodingKeys.decimals)
         self.serviced = (try? container.decode(Bool.self, forKey: Token.CodingKeys.serviced)) ?? false
@@ -81,26 +82,15 @@ public extension Token {
     func formatShort(amount: BigUInt, withCode: Bool = false) -> String {
         AmountFormatter.formatShort(amount: amount, token: self, withCode: withCode)
     }
-//
-//    static func from(code: String, blockchain: Blockchain = .solana) -> Token {
-//        switch blockchain {
-//        case .solana:
-//            if let token = SolanaTokens.list.first(where: {$0.code == code}){
-//                return token
-//            }
-//            return SolanaTokens.unknown
-//        }
-//    }
-//
-//    static func from(address: String, blockchain: Blockchain = .solana) -> Token {
-//        switch blockchain {
-//        case .solana:
-//            if let token = SolanaTokens.list.first(where: {$0.address == address}){
-//                return token
-//            }
-//            return SolanaTokens.unknown
-//        }
-//    }
+
 }
 
-extension Token: Equatable, Hashable { }
+extension Token: Equatable, Hashable {
+    public static func == (lhs: Token, rhs: Token) -> Bool {
+        if lhs.address == nil || rhs.address == nil {
+            return lhs.code == rhs.code && lhs.native == rhs.native && lhs.decimals == rhs.decimals && lhs.name == rhs.name && lhs.serviced == rhs.serviced && lhs.logoURL == rhs.logoURL
+        }
+
+        return rhs.address == lhs.address
+    }
+}

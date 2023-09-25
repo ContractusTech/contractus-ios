@@ -14,9 +14,14 @@ extension TokenSelectViewModel {
         let tier: Balance.Tier
         var tokens: [ContractusAPI.Token] = []
         var selectedTokens: [ContractusAPI.Token]
+        var disableUnselectTokens: [ContractusAPI.Token] = []
 
         func isSelected(_ token: ContractusAPI.Token) -> Bool {
             selectedTokens.contains(token)
+        }
+
+        func isDisableUnselect(_ token: ContractusAPI.Token) -> Bool {
+            disableUnselectTokens.contains(token)
         }
     }
 
@@ -33,10 +38,22 @@ final class TokenSelectViewModel: ViewModel {
     private var store = Set<AnyCancellable>()
     private var tokens: [ContractusAPI.Token] = []
 
-    init(allowHolderMode: Bool, mode: Mode, tier: Balance.Tier, selectedTokens: [ContractusAPI.Token], resourcesAPIService: ContractusAPI.ResourcesService?) {
-        self.state = .init(allowHolderMode: allowHolderMode, mode: mode, tier: tier, selectedTokens: selectedTokens)
-        self.resourcesAPIService = resourcesAPIService
+    init(
+        allowHolderMode: Bool,
+        mode: Mode,
+        tier: Balance.Tier,
+        selectedTokens: [ContractusAPI.Token],
+        disableUnselectTokens: [ContractusAPI.Token],
+        resourcesAPIService: ContractusAPI.ResourcesService?
+    ) {
 
+        self.state = .init(
+            allowHolderMode: allowHolderMode,
+            mode: mode, tier: tier,
+            selectedTokens: selectedTokens,
+            disableUnselectTokens: disableUnselectTokens)
+
+        self.resourcesAPIService = resourcesAPIService
     }
 
     func trigger(_ input: Input, after: AfterTrigger? = nil) {
