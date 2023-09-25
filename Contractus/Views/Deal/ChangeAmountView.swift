@@ -175,7 +175,7 @@ struct ChangeAmountView: View {
                                     .stroke(R.color.textFieldBorder.color, lineWidth: 1)
                             )
 
-                            if viewModel.state.checkerIsYou || viewModel.state.clientIsYou {
+                            if viewModel.state.hasChecker && (viewModel.state.checkerIsYou || viewModel.state.clientIsYou) {
                                 HStack {
                                     VStack {
                                         Text(R.string.localizable.changeAmountVerificationAmount())
