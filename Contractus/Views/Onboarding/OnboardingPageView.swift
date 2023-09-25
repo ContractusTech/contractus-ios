@@ -23,7 +23,6 @@ struct OnboardingPageView: View {
                     Image(imageName)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .saturation(0.0)
                         .cornerRadius(20)
                         .padding(8)
                         .padding(.bottom, imagePadding)
@@ -33,7 +32,6 @@ struct OnboardingPageView: View {
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .saturation(0.0)
                             .cornerRadius(20)
                             .padding(8)
                             .padding(.bottom, imagePadding)
@@ -48,23 +46,22 @@ struct OnboardingPageView: View {
                     Constants.emptyImage
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .saturation(0.0)
                         .cornerRadius(20)
                         .padding(8)
                         .padding(.bottom, imagePadding)
                 }
 
-                if page.isChangelog {
-                    Label(text: R.string.localizable.commonChanges(), type: .primary, size: .large)
-                        .offset(x: -20, y: 20)
-                }
+//                if page.isChangelog {
+//                    Label(text: R.string.localizable.commonChanges(), type: .primary, size: .large)
+//                        .offset(x: -20, y: 20)
+//                }
             }
 
             Text(page.title ?? "")
                 .font(AppConfig.isSmallScreen ? .title.weight(.semibold) : .largeTitle.weight(.medium))
                 .tracking(-1.1)
                 .multilineTextAlignment(.center)
-                .padding(.bottom, 12)
+                .padding(.bottom, 18)
 
             Text(LocalizedStringKey(page.description ?? ""))
                 .font(AppConfig.isSmallScreen ? .callout : .body)
