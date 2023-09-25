@@ -173,9 +173,11 @@ struct TokenSelectView: View {
             if viewModel.state.isSelected(token) {
                 if !viewModel.state.isDisableUnselect(token){
                     viewModel.trigger(.deselect(token))
+                    ImpactGenerator.soft()
                 }
             } else {
                 viewModel.trigger(.select(token))
+                ImpactGenerator.soft()
                 if viewModel.state.mode == .single, let token = viewModel.state.selectedTokens.first {
                     action(.single(token))
                 }

@@ -435,12 +435,12 @@ struct ChangeAmountView: View {
                             .foregroundColor(R.color.textBase.color)
                     }
                 }
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button(R.string.localizable.commonDone()) {
-                        isInputActive = false
-                    }.font(.body.weight(.medium))
-                }
+//                ToolbarItemGroup(placement: .keyboard) {
+//                    Spacer()
+//                    Button(R.string.localizable.commonDone()) {
+//                        isInputActive = false
+//                    }.font(.body.weight(.medium))
+//                }
             }
             .padding()
             .navigationTitle(title)
