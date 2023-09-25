@@ -1,16 +1,9 @@
-//
-//  ChangeAmountViewModel.swift
-//  Contractus
-//
-//  Created by Simon Hudishkin on 28.09.2022.
-//
-
 import Foundation
 import ContractusAPI
 import Combine
 
 enum ChangeAmountInput {
-    case changeAmount(String, Token)
+    case changeAmount(String)
     case changeToken(Token)
     case changeholderMode(Bool)
     case update
@@ -87,7 +80,7 @@ struct ChangeAmountState {
     }
 
     var checkerIsYou: Bool {
-        account.publicKey == deal.checkerPublicKey || deal.checkerPublicKey == nil
+        account.publicKey == deal.checkerPublicKey
     }
 
     var clientIsYou: Bool {
@@ -139,15 +132,15 @@ final class ChangeAmountViewModel: ViewModel {
     func trigger(_ input: ChangeAmountInput, after: AfterTrigger? = nil) {
 
         switch input {
-        case .changeAmount(let amount, let token):
+        case .changeAmount(let amount):
             var amount = amount
             state.noAmount = false
             if amount.isEmpty {
                 amount = "0"
                 state.noAmount = true
             }
-            if Amount.isValid(amount, token: token) {
-                let newAmount = Amount(amount, token: token)
+            if Amount.isValid(amount, token: self.state.amount.token) {
+                let newAmount = Amount(amount, token: self.state.amount.token)
                 self.state.amount = newAmount
                 updateFee(amount: newAmount)
             } else {
@@ -156,6 +149,7 @@ final class ChangeAmountViewModel: ViewModel {
         case .changeToken(let token):
             let amount = self.state.amount.value
             let newAmount = Amount(amount, token: token)
+            self.state.allowHolderMode = token.holderMode
             self.state.amount = newAmount
             updateFee(amount: newAmount)
         case .changeholderMode(let holderMode):

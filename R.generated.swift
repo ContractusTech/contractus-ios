@@ -1060,7 +1060,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 381 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 383 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client
       ///
@@ -2102,6 +2102,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let uploadFileStateSaving = Rswift.StringResource(key: "uploadFile.state.saving", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Search
+      ///
+      /// Locales: en
+      static let selectTokenSearch = Rswift.StringResource(key: "selectToken.search", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Select
       ///
       /// Locales: en
@@ -2122,6 +2126,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let importWalletSelectBackupKeyTitle = Rswift.StringResource(key: "importWallet.selectBackupKey.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Select token
+      ///
+      /// Locales: en
+      static let selectTokenTitle = Rswift.StringResource(key: "selectToken.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Send it securely via Telegram Secret Chat or Signal to your partner or allow scan from your phone.
       ///
       /// Locales: en
@@ -6515,6 +6523,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("uploadFile.state.saving", bundle: bundle, comment: "")
       }
 
+      /// en translation: Search
+      ///
+      /// Locales: en
+      static func selectTokenSearch(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("selectToken.search", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "selectToken.search"
+        }
+
+        return NSLocalizedString("selectToken.search", bundle: bundle, comment: "")
+      }
+
       /// en translation: Select
       ///
       /// Locales: en
@@ -6588,6 +6611,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("importWallet.selectBackupKey.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Select token
+      ///
+      /// Locales: en
+      static func selectTokenTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("selectToken.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "selectToken.title"
+        }
+
+        return NSLocalizedString("selectToken.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Send it securely via Telegram Secret Chat or Signal to your partner or allow scan from your phone.

@@ -15,6 +15,7 @@ fileprivate enum Constants {
     static let swapImage = Image(systemName: "arrow.triangle.swap")
     static let infoImage = Image(systemName: "info.circle.fill")
     static let arrowUp = Image(systemName: "chevron.up")
+    static let settings = Image(systemName: "slider.horizontal.3")
 }
 
 struct BalanceViewModel {
@@ -83,6 +84,7 @@ struct BalanceView: View {
     var topUpAction: () -> Void
     var infoAction: () -> Void
     var swapAction: (Amount, Amount) -> Void
+    var settingsAction: () -> Void
 
     @State private var isTokensVisible = FlagsStorage.shared.mainTokensVisibility
 
@@ -208,10 +210,16 @@ struct BalanceView: View {
                         }
                     }
                     Spacer()
-                    // TODO: - Add settings button
 
+                    Button {
+                        settingsAction()
+                    } label: {
+                        Constants.settings
+                            .frame(width: 24, height: 24)
+                            .foregroundColor(R.color.buttonTextSecondary.color)
+                    }
                 }
-                .padding(EdgeInsets(top: 2, leading: 8, bottom: 0, trailing: 8))
+                .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
                 if isTokensVisible {
                     VStack(spacing: 4) {
 
@@ -375,11 +383,15 @@ struct BalanceView_Previews: PreviewProvider {
 
             } infoAction: { } swapAction: { _, _ in
 
+            } settingsAction: {
+
             }
 
             BalanceView(state: .empty) {
 
             } infoAction: { } swapAction: { _, _ in
+
+            } settingsAction: {
 
             }
         }
@@ -391,11 +403,15 @@ struct BalanceView_Previews: PreviewProvider {
 
             } infoAction: { } swapAction: { _, _ in
 
+            } settingsAction: {
+
             }
 
             BalanceView(state: .empty) {
 
             } infoAction: { } swapAction: { _, _ in
+
+            } settingsAction: {
 
             }
         }
