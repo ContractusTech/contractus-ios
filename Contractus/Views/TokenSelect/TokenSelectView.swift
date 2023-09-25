@@ -109,6 +109,11 @@ struct TokenSelectView: View {
                         .frame(width: 24, height: 24)
                         .cornerRadius(8)
                 }
+            } else {
+                Rectangle()
+                    .fill(R.color.fourthBackground.color)
+                    .frame(width: 24, height: 24)
+                    .cornerRadius(8)
             }
             VStack(alignment: .leading, spacing: 2) {
                 if let name = token.name {
