@@ -51,7 +51,7 @@ struct TokenSelectView: View {
                 leading: Button {
                     switch viewModel.state.mode {
                     case .many:
-                        action(.many(viewModel.state.selectedTokens))
+                        action(.none)
                     case .single:
                         if let token = viewModel.state.selectedTokens.first {
                             action(.single(token))
