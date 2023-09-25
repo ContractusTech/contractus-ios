@@ -26,9 +26,17 @@
                 "description": "You can make your deals without service commission at all, after activation of **Holder mode**."
             }
         ],
+
         "changelog": {
-            "id": 0,
-            "pages": []
+            "id": 1,
+            "pages": [
+                {
+                    "imageName": "Changelog_tokens",
+                    "imageUrl": null,
+                    "title": "More tokens",
+                    "description": "In Holder mode, you can create deals with more than 180 tokens."
+                }
+            ]
         }
     }
 }
