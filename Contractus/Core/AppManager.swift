@@ -119,12 +119,15 @@ final class AppManagerImpl: AppManager {
             }
         }
 
-
         guard let account = accountStorage.getCurrentAccount() else {
             throw AppManagerError.noCurrentAccount
         }
 
         setAccount(for: account)
+
+        accountStorage.getAccounts().forEach { account in
+            MessagingService.shared.subscribe(to: account.publicKey)
+        }
 
         if currentAccount == nil {
             throw AppManagerError.noCurrentAccount

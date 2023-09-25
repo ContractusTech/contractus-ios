@@ -44,6 +44,7 @@ final class AccountServiceImpl: AccountService {
 
     func save(_ account: CommonAccount) {
         storage.setCurrentAccount(account: account)
+        MessagingService.shared.subscribe(to: account.publicKey)
     }
 
     func getCurrentAccount() -> CommonAccount? {
