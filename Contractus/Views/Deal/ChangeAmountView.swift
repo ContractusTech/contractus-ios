@@ -51,14 +51,6 @@ struct ChangeAmountView: View {
                                 .textFieldStyle(LargeTextFieldStyle())
                                 .keyboardType(.decimalPad)
                                 .focused($isInputActive)
-                                .toolbar {
-                                    ToolbarItemGroup(placement: .keyboard) {
-                                        Spacer()
-                                        Button(R.string.localizable.commonDone()) {
-                                            isInputActive = false
-                                        }.font(.body.weight(.medium))
-                                    }
-                                }
                                 .onAppear {
                                     isInputActive = true
                                 }
@@ -372,7 +364,9 @@ struct ChangeAmountView: View {
                         }
                     }
                 }
-
+                .onAppear() {
+                    UIScrollView.appearance().keyboardDismissMode = .onDrag
+                }
                 VStack(spacing: 24) {
                     Text(R.string.localizable.changeAmountFeeDescription())
                         .multilineTextAlignment(.center)
@@ -427,7 +421,7 @@ struct ChangeAmountView: View {
             .sheet(isPresented: $showSelectToken) {
                 selectTokenView()
             }
-            .toolbar{
+            .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
                         presentationMode.wrappedValue.dismiss()
@@ -438,22 +432,18 @@ struct ChangeAmountView: View {
                             .foregroundColor(R.color.textBase.color)
                     }
                 }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button(R.string.localizable.commonDone()) {
+                        isInputActive = false
+                    }.font(.body.weight(.medium))
+                }
             }
             .padding()
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .baseBackground()
             .edgesIgnoringSafeArea(.bottom)
-        }
-        .onAppear {
-//            if let allowHolderMode = viewModel.state.deal.allowHolderMode, viewModel.state.tier == .holder {
-//                self.holderMode = allowHolderMode
-//            } else {
-//                self.holderMode = false
-//            }
-//
-//            viewModel.trigger(.changeholderMode(self.holderMode))
-//            viewModel.trigger(.changeAmount(amountString, token))
         }
     }
 
@@ -553,4 +543,3 @@ struct ChangeAmountView_Previews: PreviewProvider {
                 }
     }
 }
-
