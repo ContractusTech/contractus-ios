@@ -95,6 +95,10 @@ struct ChangeAmountState {
     var ownerIsClient: Bool {
         account.publicKey == deal.ownerPublicKey && deal.ownerRole == .client
     }
+
+    var hasChecker: Bool {
+        deal.completionCheckType == .checker
+    }
 }
 
 final class ChangeAmountViewModel: ViewModel {
