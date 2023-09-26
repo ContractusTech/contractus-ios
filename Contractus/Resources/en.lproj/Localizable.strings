@@ -321,6 +321,7 @@
 "changeAmount.bond.client" = "Bond of client";
 "changeAmount.bond.executor.you" = "Bond of executor (you)";
 "changeAmount.bond.executor" = "Bond of executor";
+"changeAmount.checker.warning" = "The token must equal the deal token. To change the token, go to the deal amount section.";
 
 "selectToken.title" = "Select token";
 "selectToken.search" = "Search";

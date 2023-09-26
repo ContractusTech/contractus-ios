@@ -1069,7 +1069,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 383 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 384 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client
       ///
@@ -2347,6 +2347,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealNoSecretKeyInformation = Rswift.StringResource(key: "deal.no-secret-key-information", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The token must equal the deal token. To change the token, go to the deal amount section.
+      ///
+      /// Locales: en
+      static let changeAmountCheckerWarning = Rswift.StringResource(key: "changeAmount.checker.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: This files will be available for viewing only to contract partners.
       ///
       /// Locales: en
@@ -7415,6 +7419,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.no-secret-key-information", bundle: bundle, comment: "")
+      }
+
+      /// en translation: The token must equal the deal token. To change the token, go to the deal amount section.
+      ///
+      /// Locales: en
+      static func changeAmountCheckerWarning(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("changeAmount.checker.warning", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "changeAmount.checker.warning"
+        }
+
+        return NSLocalizedString("changeAmount.checker.warning", bundle: bundle, comment: "")
       }
 
       /// en translation: This files will be available for viewing only to contract partners.

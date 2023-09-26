@@ -22,6 +22,7 @@ struct ChangeAmountView: View {
     @State private var amountString: String = ""
     @State private var showInfo: Bool = false
     @State private var showSelectToken: Bool = false
+    @State private var showCheckerAlert: Bool = false
     @State var holderMode: Bool = false
     @FocusState var isInputActive: Bool
 
@@ -56,7 +57,11 @@ struct ChangeAmountView: View {
                                 }
                             Divider().frame(height: 30)
                             Button{
-                                showSelectToken = true
+                                if viewModel.state.amountType == .checker {
+                                    showCheckerAlert = true
+                                } else {
+                                    showSelectToken = true
+                                }
                             } label: {
                                 HStack {
                                     Text(viewModel.state.amount.token.code)
@@ -66,7 +71,6 @@ struct ChangeAmountView: View {
                                 }
                                 .padding(.horizontal, 16)
                             }
-                            .disabled(viewModel.amountType == .checker)
                         }
                         .background(R.color.textFieldBackground.color)
                         .cornerRadius(12)
@@ -423,6 +427,12 @@ struct ChangeAmountView: View {
             }
             .sheet(isPresented: $showSelectToken) {
                 selectTokenView()
+            }
+            .alert(isPresented: $showCheckerAlert) {
+                Alert(
+                    title: Text(R.string.localizable.commonWarning()),
+                    message: Text(R.string.localizable.changeAmountCheckerWarning())
+                )
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
