@@ -67,7 +67,12 @@ struct ChangeAmountView: View {
                                     Text(viewModel.state.amount.token.code)
                                         .font(.body.weight(.regular))
                                         .foregroundColor(R.color.secondaryText.color)
-                                    Constants.listImage
+                                    if viewModel.state.amountType == .checker {
+                                        Constants.listImage.foregroundColor(R.color.secondaryText.color)
+                                    } else {
+                                        Constants.listImage
+                                    }
+
                                 }
                                 .padding(.horizontal, 16)
                             }
