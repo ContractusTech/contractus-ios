@@ -5,6 +5,10 @@ final class UtilsStorage {
 
     private enum Keys: String {
         case tokenSettings
+
+        var value: String {
+            return "\(self.rawValue)_\(AppConfig.serverType.networkTitle)"
+        }
     }
 
     static let shared = UtilsStorage()
@@ -15,7 +19,7 @@ final class UtilsStorage {
 
     func getTokenSettings() -> [ContractusAPI.Token]? {
         if
-            let data = storage.data(forKey: Keys.tokenSettings.rawValue),
+            let data = storage.data(forKey: Keys.tokenSettings.value),
             let settings = try? decoder.decode([StoreToken].self, from: data) {
 
             return settings.map { $0.asToken }
@@ -26,7 +30,7 @@ final class UtilsStorage {
 
     func saveTokenSettings(tokens: [ContractusAPI.Token]) {
         guard let data = try? encoder.encode(tokens.map { $0.asInternalToken }) else { return }
-        storage.set(data, forKey: Keys.tokenSettings.rawValue)
+        storage.set(data, forKey: Keys.tokenSettings.value)
     }
 }
 
