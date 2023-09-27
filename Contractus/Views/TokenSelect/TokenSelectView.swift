@@ -1,5 +1,8 @@
 import SwiftUI
 import ContractusAPI
+import NukeUI
+import Nuke
+import SVGKit
 
 fileprivate enum Constants {
     static let checkmarkImage = Image(systemName: "checkmark")
@@ -97,17 +100,28 @@ struct TokenSelectView: View {
     func tokenItem(token: ContractusAPI.Token) -> some View {
         HStack(spacing: 13) {
             if let logoURL = token.logoURL {
-                AsyncImage(url: logoURL) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 24, height: 24)
-                        .cornerRadius(8)
-                } placeholder: {
-                    Rectangle()
-                        .fill(R.color.fourthBackground.color)
-                        .frame(width: 24, height: 24)
-                        .cornerRadius(8)
+                if logoURL.absoluteString.hasSuffix(".svg") {
+                    SVGImageView(
+                        url: logoURL,
+                        size: CGSize(width: 24, height: 24)
+                    )
+                    .frame(width: 24, height: 24)
+                    .cornerRadius(8)
+                } else {
+                    LazyImage(url: logoURL) { state in
+                        if let image = state.image {
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 24, height: 24)
+                                .cornerRadius(8)
+                        } else {
+                            Rectangle()
+                                .fill(R.color.fourthBackground.color)
+                                .frame(width: 24, height: 24)
+                                .cornerRadius(8)
+                        }
+                    }
                 }
             } else {
                 Rectangle()
