@@ -42,6 +42,7 @@ struct MainView: View {
     @State private var dealsType: MainViewModel.State.DealType = .all
     @State private var transactionSignType: TransactionSignType?
     @State private var topUpState: ResizableSheetState = .hidden
+    @State private var holderModeState: ResizableSheetState = .hidden
     @State private var showChangelog: Bool = false
     @State private var showDealFilter: Bool = false
     
@@ -64,6 +65,10 @@ struct MainView: View {
                             }) {
                                 sheetType = .tokenSettings
                             }
+
+                        UnlockHolderButtonView() {
+                            holderModeState = .medium
+                        }
 
                         if !viewModel.state.statistics.isEmpty {
                             StatisticsView(items: viewModel.state.statistics) { item in
@@ -208,6 +213,21 @@ struct MainView: View {
                                 break;
                             }
                         }
+                    }
+                    .animation(.easeInOut.speed(1.2))
+                    .background { context in
+                        Color.black
+                            .opacity(context.state == .medium ? 0.5 : 0)
+                            .ignoresSafeArea()
+                            .onTapGesture(perform: {
+                                topUpState = .hidden
+                            })
+                    }
+                    .supportedState([.medium, .hidden])
+                })
+                .resizableSheet($holderModeState, id: "holderMode", builder: { builder in
+                    builder.content { context in
+                        UnlockHolderView()
                     }
                     .animation(.easeInOut.speed(1.2))
                     .background { context in
