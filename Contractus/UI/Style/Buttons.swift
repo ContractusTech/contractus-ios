@@ -125,3 +125,18 @@ struct PrimaryMediumButton: ButtonStyle {
     }
 }
 
+struct WideButton: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Btn(configuration: configuration)
+    }
+
+    struct Btn: View {
+        let configuration: ButtonStyle.Configuration
+        @Environment(\.isEnabled) private var isEnabled: Bool
+        var body: some View {
+            configuration.label
+                .scaleEffect(configuration.isPressed ? 0.99 : 1.0)
+                .animation(.easeInOut(duration: 0.03), value: configuration.isPressed)
+        }
+    }
+}

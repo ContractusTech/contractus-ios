@@ -881,7 +881,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 20 images.
+  /// This `R.image` struct is generated, and contains static references to 22 images.
   struct image {
     /// Image `Changelog_tokens`.
     static let changelog_tokens = Rswift.ImageResource(bundle: R.hostingBundle, name: "Changelog_tokens")
@@ -915,6 +915,10 @@ struct R: Rswift.Validatable {
     static let dealExecutor = Rswift.ImageResource(bundle: R.hostingBundle, name: "dealExecutor")
     /// Image `emptyDeals`.
     static let emptyDeals = Rswift.ImageResource(bundle: R.hostingBundle, name: "emptyDeals")
+    /// Image `holderBackground`.
+    static let holderBackground = Rswift.ImageResource(bundle: R.hostingBundle, name: "holderBackground")
+    /// Image `holderLogo`.
+    static let holderLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "holderLogo")
     /// Image `iconDealChecker`.
     static let iconDealChecker = Rswift.ImageResource(bundle: R.hostingBundle, name: "iconDealChecker")
     /// Image `iconDealClient`.
@@ -1033,6 +1037,20 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "emptyDeals", bundle: ..., traitCollection: ...)`
     static func emptyDeals(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.emptyDeals, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "holderBackground", bundle: ..., traitCollection: ...)`
+    static func holderBackground(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.holderBackground, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "holderLogo", bundle: ..., traitCollection: ...)`
+    static func holderLogo(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.holderLogo, compatibleWith: traitCollection)
     }
     #endif
 
