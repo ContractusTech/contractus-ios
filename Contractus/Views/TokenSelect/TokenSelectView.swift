@@ -122,6 +122,7 @@ struct TokenSelectView: View {
                                 .cornerRadius(8)
                         }
                     }
+                    .pipeline(ImagePipeline(configuration: .withDataCache))
                 }
             } else {
                 Rectangle()
