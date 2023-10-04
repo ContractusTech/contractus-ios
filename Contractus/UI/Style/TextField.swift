@@ -9,12 +9,20 @@ import SwiftUI
 
 struct LargeTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
-            configuration
-                .padding(16)
-                .background(R.color.textFieldBackground.color)
-                .cornerRadius(12)
-        }
+        configuration
+            .padding(16)
+            .background(R.color.textFieldBackground.color)
+            .cornerRadius(12)
+    }
     
 }
 
-
+struct SearchTextFieldStyle: TextFieldStyle {
+    func _body(configuration: TextField<Self._Label>) -> some View {
+        configuration
+            .multilineTextAlignment(TextAlignment.center)
+            .padding(9)
+            .background(R.color.textFieldBackground.color)
+            .cornerRadius(12)
+    }
+}

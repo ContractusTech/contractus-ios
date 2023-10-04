@@ -31,25 +31,18 @@ fileprivate enum Constants {
 struct MainView: View {
 
     enum SheetType {
-        case newDeal, menu, qrScan, sharePublicKey, wrap(from: Amount, to: Amount), webView(URL), topUp(URL)
-    }
-
-    var resizableSheetCenter: ResizableSheetCenter? {
-        guard let windowScene = (UIApplication.shared.connectedScenes.first as? UIWindowScene) else {
-            return nil
-        }
-        return ResizableSheetCenter.resolve(for: windowScene)
+        case newDeal, menu, qrScan, sharePublicKey, wrap(from: Amount, to: Amount), webView(URL), topUp(URL), tokenSettings
     }
 
     @StateObject var viewModel: AnyViewModel<MainState, MainInput>
     var logoutCompletion: () -> Void
-    @State var selectedDeal: Deal?
-    @State var sheetType: SheetType? = .none
-    @State var dealsType: MainViewModel.State.DealType = .all
-    @State var transactionSignType: TransactionSignType?
+    
+    @State private var selectedDeal: Deal?
+    @State private var sheetType: SheetType? = .none
+    @State private var dealsType: MainViewModel.State.DealType = .all
+    @State private var transactionSignType: TransactionSignType?
     @State private var topUpState: ResizableSheetState = .hidden
-
-
+    @State private var showChangelog: Bool = false
     @State private var showDealFilter: Bool = false
     
     var body: some View {
@@ -68,7 +61,9 @@ struct MainView: View {
                                 sheetType = .webView(AppConfig.ctusInfoURL)
                             }, swapAction: { fromAmount, toAmount in
                                 sheetType = .wrap(from: fromAmount, to: toAmount)
-                            })
+                            }) {
+                                sheetType = .tokenSettings
+                            }
 
                         if !viewModel.state.statistics.isEmpty {
                             StatisticsView(items: viewModel.state.statistics) { item in
@@ -121,8 +116,6 @@ struct MainView: View {
                                     EventService.shared.send(event: DefaultAnalyticsEvent.mainNewDealTap)
                                     sheetType = .newDeal
                                 }
-
-
                         }
                         .padding(EdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8))
 
@@ -230,6 +223,23 @@ struct MainView: View {
 
                 .sheet(item: $sheetType, content: { type in
                     switch type {
+                    case .tokenSettings:
+                        TokenSelectView(viewModel: .init(TokenSelectViewModel(
+                            allowHolderMode: true,
+                            mode: .many,
+                            tier: viewModel.state.balance?.tier ?? .basic,
+                            selectedTokens: viewModel.state.selectedTokens,
+                            disableUnselectTokens: viewModel.state.disableUnselectTokens,
+                            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())
+                        )) { result in
+                            switch result {
+                            case .many(let tokens):
+                                viewModel.trigger(.saveTokenSettings(tokens))
+                            case .none, .single:
+                                break
+                            }
+                            sheetType = nil
+                        }
                     case .topUp(let url):
                         NavigationView {
                             WebView(url: url)
@@ -305,6 +315,17 @@ struct MainView: View {
                         }
                     }
                 })
+                .fullScreenCover(isPresented: $showChangelog) {
+                    let service = ServiceFactory.shared.makeOnboardingService()
+                    OnboardingView(viewModel: AnyViewModel<OnboardingState, OnboardingInput>(OnboardingViewModel(
+                        contentType: .changelog,
+                        state: OnboardingState(state: .none, errorState: .none),
+                        onboardingService: service))
+                    ) {
+                        showChangelog.toggle()
+                        EventService.shared.send(event: ExtendedAnalyticsEvent.changelogClose(service.changelogId()))
+                    }
+                }
                 .navigationDestination(for: $selectedDeal) { deal in
                     dealView(deal: deal)
                 }
@@ -359,11 +380,15 @@ struct MainView: View {
                 .baseBackground()
                 .edgesIgnoringSafeArea(.bottom)
             }
-            .environment(\.resizableSheetCenter, resizableSheetCenter ?? PreviewResizableSheetCenter.shared)
             .navigationViewStyle(StackNavigationViewStyle())
             .onAppear{
                 EventService.shared.send(event: DefaultAnalyticsEvent.mainOpen)
                 load()
+                let service = ServiceFactory.shared.makeOnboardingService()
+                if service.needShowChangelog() {
+                    showChangelog = true
+                    EventService.shared.send(event: ExtendedAnalyticsEvent.changelogOpen(service.changelogId()))
+                }
             }
         }
     }
@@ -371,12 +396,11 @@ struct MainView: View {
     @ViewBuilder
     func dealView(deal: Deal) -> some View {
         DealView(viewModel: AnyViewModel<DealState, DealInput>(DealViewModel(
-            state: DealState(account: viewModel.account, availableTokens: viewModel.availableTokens, tier: viewModel.balance?.tier ?? .basic, deal: deal),
+            state: DealState(account: viewModel.account, tier: viewModel.balance?.tier ?? .basic, deal: deal),
             dealService: try? APIServiceFactory.shared.makeDealsService(),
             transactionSignService: ServiceFactory.shared.makeTransactionSign(),
             filesAPIService: try? APIServiceFactory.shared.makeFileService(),
-            secretStorage: SharedSecretStorageImpl())),
-                 availableTokens: viewModel.availableTokens) {
+            secretStorage: SharedSecretStorageImpl()))) {
                 viewModel.trigger(.load(dealsType))
             }
     }
@@ -410,6 +434,12 @@ struct MainView: View {
             return "As client"
         case .isExecutor:
             return "For execute"
+        case .isWorking:
+            return "Working"
+        case .isDone:
+            return "Done"
+        case .isCanceled:
+            return "Canceled"
         }
     }
 

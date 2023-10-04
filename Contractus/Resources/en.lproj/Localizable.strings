@@ -8,6 +8,7 @@
 
 "common.encrypted" = "Encrypted";
 "common.edit" = "Edit";
+"common.accept" = "Accept";
 "common.add" = "Add";
 "common.ok" = "Ok";
 "common.empty" = "Empty";
@@ -39,6 +40,7 @@
 "common.account" = "Account";
 "common.share" = "Share";
 "common.select" = "Select";
+"common.skip" = "Skip";
 "common.backup" = "Backup";
 "common.tokens" = "Tokens";
 "common.token" = "Token";
@@ -54,6 +56,8 @@
 "common.info" = "Info";
 "common.service-unavailable" = "Service unavailable";
 "common.all" = "All";
+"common.changes" = "Changes";
+"common.next" = "Next";
 "common.not-specified" = "Not specified";
 "common.email" = "Email";
 "common.telegram" = "Telegram";
@@ -317,6 +321,10 @@
 "changeAmount.bond.client" = "Bond of client";
 "changeAmount.bond.executor.you" = "Bond of executor (you)";
 "changeAmount.bond.executor" = "Bond of executor";
+"changeAmount.checker.warning" = "The token must equal the deal token. To change the token, go to the deal amount section.";
+
+"selectToken.title" = "Select token";
+"selectToken.search" = "Search";
 
 "addContractor.title.contractor" = "Add partner";
 "addContractor.title.checker" = "Add checker";

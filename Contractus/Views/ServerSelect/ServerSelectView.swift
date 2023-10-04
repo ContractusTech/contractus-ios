@@ -7,25 +7,28 @@
 
 import SwiftUI
 import ContractusAPI
+import netfox
 
 fileprivate enum Constants {
     static let checkmarkImage = Image(systemName: "checkmark")
 }
 
 struct ServerSelectView: View {
-    #if DEBUG
+#if DEBUG
     @State private var items: [ServerType] =  [.developer(), .production(), .local()]
-    #else
+#else
     @State private var items: [ServerType] =  [.developer(), .production()]
-    #endif
+#endif
     @State var selectedItem: ServerType?
+
+    @State var enableLogs: Bool = NFX.sharedInstance().isStarted()
 
     @State private var confirmAlert: Bool = false
 
     var body: some View {
         Form {
-            List {
-                ForEach(items, id: \.self.title) { item in
+            Section(header: Text("Server"), footer: Text("When you tap it, the application will close")) {
+                ForEach(items, id: \.title) { item in
                     HStack(spacing: 12) {
                         Text(item.title)
                         Spacer()
@@ -43,6 +46,59 @@ struct ServerSelectView: View {
                     }
                 }
             }
+            Section(header: Text("Request Logs")) {
+                HStack(spacing: 12) {
+                    Toggle(isOn: $enableLogs) {
+                        Text("Enabled")
+                    }
+                }
+
+                HStack(spacing: 12) {
+                    Text("View logs")
+                    Spacer()
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    NFX.sharedInstance().show()
+                }
+            }
+
+            Section(header: Text("Info")) {
+                ForEach(AppManagerImpl.shared.debugInfo(), id: \.self) { item in
+                    HStack {
+                        Text(item)
+                            .font(.callout)
+                        Spacer()
+                        Button {
+                            UIPasteboard.general.string = item
+                            ImpactGenerator.light()
+                        } label: {
+                            Text("Copy")
+                                .tint(.blue)
+                        }
+                    }
+
+                }
+            }
+            #if DEBUG
+            Section(header: Text("Actions")) {
+                Button {
+                    AppManagerImpl.shared.debugClearAuth()
+                    confirmAlert.toggle()
+                } label: {
+                    Text("Clear auth")
+                        .tint(.blue)
+                }
+            }
+            #endif
+        }
+        .onChange(of: enableLogs) { newValue in
+            if newValue {
+                NFX.sharedInstance().start()
+            } else {
+                NFX.sharedInstance().stop()
+            }
+
         }
         .baseBackground()
         .navigationTitle("Server")
@@ -53,7 +109,7 @@ struct ServerSelectView: View {
         .alert(isPresented: $confirmAlert) {
             Alert(
                 title: Text("Warning"),
-                message: Text("Application will be closed to apply new server settings, you must start it again manually"),
+                message: Text("Application will be closed to apply new settings, you must start it again manually"),
                 dismissButton: .default(Text("OK, Undestand"), action: {
                     exit(0)
                 })

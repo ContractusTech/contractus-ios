@@ -1,10 +1,3 @@
-//
-//  DealViewModel.swift
-//  Contractus
-//
-//  Created by Simon Hudishkin on 18.08.2022.
-//
-
 import Foundation
 import ContractusAPI
 import SolanaSwift
@@ -71,7 +64,6 @@ struct DealState {
     }
 
     let account: CommonAccount
-    let availableTokens: [ContractusAPI.Token]
     let tier: Balance.Tier
     var deal: ContractusAPI.Deal
     var shareDeal: ShareableDeal?
@@ -129,7 +121,7 @@ struct DealState {
     }
 
     var showResult: Bool {
-        deal.status == .started
+        deal.status == .started || deal.status == .finished || deal.status == .canceled
     }
     
     var canEditDeal: Bool {
@@ -226,10 +218,8 @@ final class DealViewModel: ViewModel {
         self.filesAPIService = filesAPIService
         self.transactionSignService = transactionSignService
         self.secretStorage = secretStorage
-        Task {
-            await self.updateActions()
-        }
 
+        self.trigger(.update(nil))        
         self.checkAvailableDecrypt()
     }
 

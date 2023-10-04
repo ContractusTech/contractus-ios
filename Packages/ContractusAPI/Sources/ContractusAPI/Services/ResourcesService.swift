@@ -10,8 +10,17 @@ import Alamofire
 
 public final class ResourcesService: BaseService {
 
-    public func tokens(completion: @escaping (Swift.Result<[Token], APIClientError>) -> Void) {
-        self.request(path: .tokens, httpMethod: .get, data: Empty()) { (result: Swift.Result<[Token], APIClientError>) in
+    public enum TokenListType {
+        case full, `default`
+    }
+    
+    public func tokens(type: TokenListType = .default, completion: @escaping (Swift.Result<[Token], APIClientError>) -> Void) {
+        var data = [String:String]()
+        if type == .full {
+            data = ["type": "full"]
+        }
+
+        self.request(path: .tokens, httpMethod: .get, data: data) { (result: Swift.Result<[Token], APIClientError>) in
             completion(result)
         }
     }

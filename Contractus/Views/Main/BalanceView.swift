@@ -8,12 +8,14 @@
 import SwiftUI
 import ContractusAPI
 import BigInt
+import Shimmer
 
 fileprivate enum Constants {
     static let noneCoinImage = Image("NONE-CoinLogo")
     static let swapImage = Image(systemName: "arrow.triangle.swap")
     static let infoImage = Image(systemName: "info.circle.fill")
     static let arrowUp = Image(systemName: "chevron.up")
+    static let settings = Image(systemName: "slider.horizontal.3")
 }
 
 struct BalanceViewModel {
@@ -82,6 +84,7 @@ struct BalanceView: View {
     var topUpAction: () -> Void
     var infoAction: () -> Void
     var swapAction: (Amount, Amount) -> Void
+    var settingsAction: () -> Void
 
     @State private var isTokensVisible = FlagsStorage.shared.mainTokensVisibility
 
@@ -97,14 +100,18 @@ struct BalanceView: View {
                             .cornerRadius(4)
                             .frame(width: 100, height: 13, alignment: .leading)
                             .padding(0)
+                            .shimmering()
+                        
                         Rectangle()
                             .fill(R.color.thirdBackground.color.opacity(0.4))
                             .cornerRadius(8)
                             .frame(width: 140, height: 29, alignment: .leading)
+                            .shimmering()
 
                         Rectangle()
                             .cornerRadius(8)
                             .frame(width: 0, height: 10, alignment: .leading)
+                            .shimmering()
 
                     case .loaded(let balance):
                         Text(R.string.localizable.balanceTitle())
@@ -127,8 +134,6 @@ struct BalanceView: View {
                         .resizable()
                         .frame(width: 24, height: 24, alignment: .center)
                         .foregroundColor(R.color.textBase.color)
-
-
                 }
                 .frame(width: 46, height: 46, alignment: .center)
                 .buttonStyle(RoundedSecondaryMediumButton())
@@ -145,11 +150,13 @@ struct BalanceView: View {
                                 .fill(R.color.mainBackground.color)
                                 .cornerRadius(8)
                                 .frame(width: 124, height: 16, alignment: .leading)
+                                .shimmering()
                             Spacer()
                             Rectangle()
                                 .fill(R.color.mainBackground.color)
                                 .cornerRadius(8)
                                 .frame(width: 80, height: 16, alignment: .leading)
+                                .shimmering()
                         }
                         .padding(EdgeInsets(top: 10, leading: 4, bottom: 10, trailing: 4))
                         Divider().foregroundColor(R.color.buttonBorderSecondary.color)
@@ -158,11 +165,13 @@ struct BalanceView: View {
                                 .fill(R.color.mainBackground.color)
                                 .cornerRadius(8)
                                 .frame(width: 124, height: 16, alignment: .leading)
+                                .shimmering()
                             Spacer()
                             Rectangle()
                                 .fill(R.color.mainBackground.color)
                                 .cornerRadius(8)
                                 .frame(width: 80, height: 16, alignment: .leading)
+                                .shimmering()
                         }
                         .padding(EdgeInsets(top: 10, leading: 4, bottom: 10, trailing: 4))
                     }
@@ -170,9 +179,9 @@ struct BalanceView: View {
                     .background(R.color.secondaryBackground.color)
                     .cornerRadius(16)
                     .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
-
                 }
                 .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
+
             case .loaded(let balance):
                 Divider()
                     .overlay(isTokensVisible ? R.color.mainBackground.color : R.color.buttonBorderSecondary.color)
@@ -201,10 +210,16 @@ struct BalanceView: View {
                         }
                     }
                     Spacer()
-                    // TODO: - Add settings button
 
+                    Button {
+                        settingsAction()
+                    } label: {
+                        Constants.settings
+                            .frame(width: 24, height: 24)
+                            .foregroundColor(R.color.buttonTextSecondary.color)
+                    }
                 }
-                .padding(EdgeInsets(top: 2, leading: 8, bottom: 0, trailing: 8))
+                .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
                 if isTokensVisible {
                     VStack(spacing: 4) {
 
@@ -368,11 +383,15 @@ struct BalanceView_Previews: PreviewProvider {
 
             } infoAction: { } swapAction: { _, _ in
 
+            } settingsAction: {
+
             }
 
             BalanceView(state: .empty) {
 
             } infoAction: { } swapAction: { _, _ in
+
+            } settingsAction: {
 
             }
         }
@@ -384,11 +403,15 @@ struct BalanceView_Previews: PreviewProvider {
 
             } infoAction: { } swapAction: { _, _ in
 
+            } settingsAction: {
+
             }
 
             BalanceView(state: .empty) {
 
             } infoAction: { } swapAction: { _, _ in
+
+            } settingsAction: {
 
             }
         }

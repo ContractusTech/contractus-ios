@@ -69,7 +69,6 @@ struct DealView: View {
     @EnvironmentObject var hudCoordinator: JGProgressHUDCoordinator
 
     @StateObject var viewModel: AnyViewModel<DealState, DealInput>
-    let availableTokens: [ContractusAPI.Token]
     var callback: () -> Void
 
     @State private var activeModalType: ActiveModalType?
@@ -149,7 +148,7 @@ struct DealView: View {
                                             }
                                         }
                                         Spacer()
-                                        if !viewModel.state.ownerIsClient && viewModel.state.isYouExecutor {
+                                        if !viewModel.state.ownerIsClient && viewModel.state.isYouExecutor && viewModel.state.canEditDeal{
                                             CButton(title: viewModel.state.clientPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEdit) {
                                                 EventService.shared.send(event: ExtendedAnalyticsEvent.dealContractorTap(.client))
                                                 activeModalType = .editContractor(viewModel.state.deal.contractorPublicKey)
@@ -318,10 +317,12 @@ struct DealView: View {
                                     }
                                     .padding(.bottom, 10)
                                 } else {
-                                    Text(R.string.localizable.dealTextEarningNotSet())
-                                        .font(.footnote)
-                                        .foregroundColor(R.color.redText.color)
-                                        .padding(.bottom, 10)
+                                    if viewModel.state.isOwnerDeal {
+                                        Text(R.string.localizable.dealTextEarningNotSet())
+                                            .font(.footnote)
+                                            .foregroundColor(R.color.redText.color)
+                                            .padding(.bottom, 10)
+                                    }
                                 }
 
                                 if viewModel.state.isYouChecker {
@@ -488,7 +489,11 @@ struct DealView: View {
                                             if let deadline = viewModel.state.deal.deadline {
                                                 Text(deadline.asDateFormatted())
                                                     .font(.title)
-                                                    .foregroundColor(deadline > Date() ? R.color.textBase.color : R.color.redText.color)
+                                                    .foregroundColor(
+                                                        deadline > Date() || [.finished, .canceled, .revoked].contains(viewModel.state.deal.status)
+                                                        ? R.color.textBase.color
+                                                        : R.color.redText.color
+                                                    )
                                             } else {
                                                 Text(R.string.localizable.commonEmpty())
                                                     .font(.title)
@@ -864,7 +869,6 @@ struct DealView: View {
                             tier: viewModel.state.tier
                         )
                     ),
-                    availableTokens: availableTokens,
                     didChange: { newAmount, typeAmount, allowHolderMode in
                         switch typeAmount {
                         case .deal:
@@ -891,7 +895,6 @@ struct DealView: View {
                             tier: viewModel.state.tier
                         )
                     ),
-                    availableTokens: availableTokens,
                     didChange: { newAmount, typeAmount, allowHolderMode in
                         switch typeAmount {
                         case .deal:
@@ -1711,7 +1714,6 @@ struct DealView_Previews: PreviewProvider {
                 DealViewModel(
                     state: DealState(
                         account: Mock.account,
-                        availableTokens: Mock.tokenList,
                         tier: .basic,
                         deal: Mock.deal,
                         isSignedByPartners: true
@@ -1719,8 +1721,8 @@ struct DealView_Previews: PreviewProvider {
                     dealService: nil,
                     transactionSignService: nil,
                     filesAPIService: nil,
-                    secretStorage: nil)),
-                     availableTokens: [Mock.tokenSOL, Mock.tokenWSOL]) {
+                    secretStorage: nil))
+            ) {
 
             }
         }

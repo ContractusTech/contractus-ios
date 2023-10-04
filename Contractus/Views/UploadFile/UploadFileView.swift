@@ -82,8 +82,6 @@ struct UploadFileView: View {
                         .offset(x: -12, y: 12)
                     }
                 }
-
-
             } else {
                 VStack(spacing: 12) {
                     HStack(spacing: 12) {

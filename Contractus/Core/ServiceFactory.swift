@@ -28,4 +28,8 @@ final class ServiceFactory {
     func makeIdService() -> IdentifierService {
         IdentifierService(authStorage: KeychainAuthStorage())
     }
+    
+    func makeOnboardingService() -> OnboardingService {
+        OnboardingServiceImpl.shared
+    }
 }

@@ -101,6 +101,13 @@ struct ContractusApp: App {
         }
     }
 
+    var resizableSheetCenter: ResizableSheetCenter? {
+        guard let windowScene = (UIApplication.shared.connectedScenes.first as? UIWindowScene) else {
+            return nil
+        }
+        return ResizableSheetCenter.resolve(for: windowScene)
+    }
+
     var body: some Scene {
         WindowGroup {
             Group {
@@ -117,8 +124,8 @@ struct ContractusApp: App {
                         rootViewModel.trigger(.savedAccount(account))
                     })
                     .transition(AnyTransition.asymmetric(
-                        insertion: .move(edge: .trailing),
-                        removal: .move(edge: .leading))
+                        insertion: .opacity,
+                        removal: .opacity)
                     )
                 case .hasAccount(let account):
                     MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(
@@ -133,6 +140,7 @@ struct ContractusApp: App {
                         insertion: .move(edge: .trailing),
                         removal: .move(edge: .leading))
                     )
+                    .environment(\.resizableSheetCenter, resizableSheetCenter)
                     .onChange(of: rootViewModel.state.transactionState, perform: { txState in
                         switch txState {
                         case .needSign:
@@ -246,7 +254,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         case .local, .developer:
             NFX.sharedInstance().start()
         default:
-            break
+            #if DEBUG
+            NFX.sharedInstance().start()
+            #endif
         }
 
         FirebaseApp.configure()
@@ -329,6 +339,8 @@ fileprivate func appearanceSetup() {
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: color]
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = color
     }
+    UIPageControl.appearance().currentPageIndicatorTintColor = R.color.accentColor()
+    UIPageControl.appearance().pageIndicatorTintColor = R.color.baseSeparator()
 }
 
 
