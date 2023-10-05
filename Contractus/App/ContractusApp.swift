@@ -265,6 +265,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         UNUserNotificationCenter.current().delegate = self
 
         EventService.shared.send(event: DefaultAnalyticsEvent.startApp)
+
+        application.registerForRemoteNotifications()
+
         return true
     }
     
@@ -277,6 +280,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         print(userInfo)
 #endif
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+        
         completionHandler(UIBackgroundFetchResult.newData)
     }
 }
@@ -287,6 +292,7 @@ extension AppDelegate: MessagingDelegate {
         let deviceToken:[String: String] = ["token": fcmToken ?? ""]
         print("Device token: ", deviceToken)
 #endif
+
     }
 }
 
@@ -305,6 +311,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         
         print(userInfo)
 #endif
+
         completionHandler([[.banner, .badge, .sound]])
     }
     
@@ -327,6 +334,8 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         
         print(userInfo)
 #endif
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+
         completionHandler()
     }
 }

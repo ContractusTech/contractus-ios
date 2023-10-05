@@ -13,6 +13,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>NSAppTransportSecurity</key>

@@ -127,10 +127,6 @@ final class AppManagerImpl: AppManager {
 
         setAccount(for: account)
 
-        accountStorage.getAccounts().forEach { account in
-            MessagingService.shared.subscribe(to: account.publicKey)
-        }
-
         if currentAccount == nil {
             throw AppManagerError.noCurrentAccount
         }
@@ -148,6 +144,13 @@ final class AppManagerImpl: AppManager {
     /// Debug method
     func debugClearAuth() {
         authStorage.clear()
+    }
+
+    func setupNotifications() {
+        accountStorage.getAccounts().forEach { account in
+            MessagingService.shared.subscribe(to: account.publicKey)
+        }
+
     }
 
     private func buildHeader(for account: CommonAccount, identifier: String, message: String, expiredAt: Date) throws -> ContractusAPI.AuthorizationHeader {

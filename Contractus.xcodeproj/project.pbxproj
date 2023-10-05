@@ -156,9 +156,9 @@
 		FE12456C2AC36089009FB048 /* SVGImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE12456B2AC36089009FB048 /* SVGImageView.swift */; };
 		FE1D8DDE2A31115A003D97BC /* BorderDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D8DDD2A31115A003D97BC /* BorderDivider.swift */; };
 		FE1E3DD429D3597E009B0E57 /* AboutAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */; };
-		FE2B96C92AB9EA5D00971114 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FE2B96C82AB9EA5D00971114 /* FirebaseMessaging */; };
 		FE1FB90F2A9E072F00203F38 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1FB90E2A9E072F00203F38 /* Onboarding.swift */; };
 		FE1FB9112A9E24CB00203F38 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1FB9102A9E24CB00203F38 /* OnboardingService.swift */; };
+		FE2B96C92AB9EA5D00971114 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FE2B96C82AB9EA5D00971114 /* FirebaseMessaging */; };
 		FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */; };
 		FE54313D29D36D8800EEF906 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE54313C29D36D8800EEF906 /* AccountsView.swift */; };
 		FE5F427429AF22FA00A1E506 /* netfox in Frameworks */ = {isa = PBXBuildFile; productRef = FE5F427329AF22FA00A1E506 /* netfox */; };
@@ -1772,11 +1772,6 @@
 			package = FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
 			productName = Shimmer;
 		};
-		FE2B96C82AB9EA5D00971114 /* FirebaseMessaging */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseMessaging;
-		};
 		FE1245662AC35AAC009FB048 /* NukeUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FE1245652AC35AAC009FB048 /* XCRemoteSwiftPackageReference "Nuke" */;
@@ -1786,6 +1781,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FE1245682AC35F86009FB048 /* XCRemoteSwiftPackageReference "SVGKit" */;
 			productName = SVGKit;
+		};
+		FE2B96C82AB9EA5D00971114 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 		FE5F427329AF22FA00A1E506 /* netfox */ = {
 			isa = XCSwiftPackageProductDependency;
