@@ -1069,7 +1069,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 384 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 385 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client
       ///
@@ -1159,6 +1159,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorTitlePartner = Rswift.StringResource(key: "addContractor.title.partner", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: After the update, all participants must re-sign the deal.
+      ///
+      /// Locales: en
+      static let dealEditWarning = Rswift.StringResource(key: "deal.edit.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: After this account checks the result of the contract, you get paid.
       ///
       /// Locales: en
@@ -2950,6 +2954,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("addContractor.title.partner", bundle: bundle, comment: "")
+      }
+
+      /// en translation: After the update, all participants must re-sign the deal.
+      ///
+      /// Locales: en
+      static func dealEditWarning(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.edit.warning", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.edit.warning"
+        }
+
+        return NSLocalizedString("deal.edit.warning", bundle: bundle, comment: "")
       }
 
       /// en translation: After this account checks the result of the contract, you get paid.
