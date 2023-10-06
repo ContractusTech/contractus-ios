@@ -1,9 +1,5 @@
-echo "Post build"
+echo "[Post build] Uploading Symbols To Firebase"
 
-if [ "$CI_WORKFLOW" = "TestFlight Release Build" ];
-then
-    echo "Uploading Symbols To Firebase"
-    # Add your path to the GoogleService-Info.plist & add in your app name.
-    # upload-symbols script can be copied from your firebase crashlytics frameowkr directory
-    ./upload-symbols -gsp ./../Contractus/Resources/GoogleService-Info.plist -p ios $CI_ARCHIVE_PATH/dSYMs/Contractus.app.dSYM
-fi
+./upload-symbols -gsp ./../Contractus/Resources/GoogleService-Info.plist -p ios $CI_ARCHIVE_PATH/dSYMs/Contractus.app.dSYM
+
+echo "Upload success"
