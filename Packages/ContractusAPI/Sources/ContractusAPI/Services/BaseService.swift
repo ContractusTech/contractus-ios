@@ -37,6 +37,8 @@ public enum ServicePath {
     case referral
     case createPromocode
     case applyPromocode
+    case calculate
+    case create
 
     var value: String {
         switch self {
@@ -96,6 +98,10 @@ public enum ServicePath {
             return "/referrals"
         case .topUp:
             return "/accounts/topup"
+        case .calculate:
+            return "/checkout/calculate"
+        case .create:
+            return "/checkout/create"
         }
     }
 }
