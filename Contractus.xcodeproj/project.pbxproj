@@ -153,6 +153,9 @@
 		FE10B56E2A96715200AA5EA8 /* OnboardingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE10B56D2A96715200AA5EA8 /* OnboardingPageView.swift */; };
 		FE12456E2AC4C1F2009FB048 /* UnlockHolderButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE12456D2AC4C1F2009FB048 /* UnlockHolderButtonView.swift */; };
 		FE1245702AC4DC92009FB048 /* UnlockHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE12456F2AC4DC92009FB048 /* UnlockHolderView.swift */; };
+		FE1245672AC35AAC009FB048 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = FE1245662AC35AAC009FB048 /* NukeUI */; };
+		FE12456A2AC35F86009FB048 /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE1245692AC35F86009FB048 /* SVGKit */; };
+		FE12456C2AC36089009FB048 /* SVGImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE12456B2AC36089009FB048 /* SVGImageView.swift */; };
 		FE1D8DDE2A31115A003D97BC /* BorderDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D8DDD2A31115A003D97BC /* BorderDivider.swift */; };
 		FE1E3DD429D3597E009B0E57 /* AboutAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */; };
 		FE1FB90F2A9E072F00203F38 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1FB90E2A9E072F00203F38 /* Onboarding.swift */; };
@@ -340,6 +343,7 @@
 		FE10B56D2A96715200AA5EA8 /* OnboardingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageView.swift; sourceTree = "<group>"; };
 		FE12456D2AC4C1F2009FB048 /* UnlockHolderButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockHolderButtonView.swift; sourceTree = "<group>"; };
 		FE12456F2AC4DC92009FB048 /* UnlockHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockHolderView.swift; sourceTree = "<group>"; };
+		FE12456B2AC36089009FB048 /* SVGImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGImageView.swift; sourceTree = "<group>"; };
 		FE1D8DDD2A31115A003D97BC /* BorderDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderDivider.swift; sourceTree = "<group>"; };
 		FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAccountView.swift; sourceTree = "<group>"; };
 		FE1FB90E2A9E072F00203F38 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
@@ -377,8 +381,10 @@
 				6DC558722A7A18A60054F2FC /* FirebasePerformance in Frameworks */,
 				6DAA5E772898BDFA00BA1965 /* CryptoSwift in Frameworks */,
 				6DB9C3DA2A555F1B0011C817 /* ContractusAPI in Frameworks */,
+				FE12456A2AC35F86009FB048 /* SVGKit in Frameworks */,
 				6DB547F928B9E87C003D2A8A /* ResizableSheet in Frameworks */,
 				6DC558702A7A18A60054F2FC /* FirebaseCrashlytics in Frameworks */,
+				FE1245672AC35AAC009FB048 /* NukeUI in Frameworks */,
 				FE0F36802A552C2D00EEC595 /* Shimmer in Frameworks */,
 				6D75F2E6288EA37E0092D182 /* KeychainAccess in Frameworks */,
 			);
@@ -658,6 +664,7 @@
 				6D320EB22992275A00B56758 /* RootSheet.swift */,
 				6DD28E242A1C85360093E553 /* BaseTopTextBlockView.swift */,
 				FE1D8DDD2A31115A003D97BC /* BorderDivider.swift */,
+				FE12456B2AC36089009FB048 /* SVGImageView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -906,6 +913,8 @@
 				6DC5586F2A7A18A60054F2FC /* FirebaseCrashlytics */,
 				6DC558712A7A18A60054F2FC /* FirebasePerformance */,
 				6DC558732A7A18A60054F2FC /* FirebaseRemoteConfig */,
+				FE1245662AC35AAC009FB048 /* NukeUI */,
+				FE1245692AC35F86009FB048 /* SVGKit */,
 			);
 			productName = Contractus;
 			productReference = 6D97AEED288D196200EB61D0 /* Contractus.app */;
@@ -993,6 +1002,8 @@
 				FE5F427229AF22FA00A1E506 /* XCRemoteSwiftPackageReference "netfox" */,
 				FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 				6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				FE1245652AC35AAC009FB048 /* XCRemoteSwiftPackageReference "Nuke" */,
+				FE1245682AC35F86009FB048 /* XCRemoteSwiftPackageReference "SVGKit" */,
 			);
 			productRefGroup = 6D97AEEE288D196200EB61D0 /* Products */;
 			projectDirPath = "";
@@ -1160,6 +1171,7 @@
 				6DAA5E7D2898C4AA00BA1965 /* APIServiceFactory.swift in Sources */,
 				FE1245702AC4DC92009FB048 /* UnlockHolderView.swift in Sources */,
 				6D4FAB53293CAF0A00076743 /* UIConstants.swift in Sources */,
+				FE12456C2AC36089009FB048 /* SVGImageView.swift in Sources */,
 				6DD28E2C2A1DF4190093E553 /* DeadlineViewModel.swift in Sources */,
 				6D3AF96228E83C8D00660AEC /* TextFieldView.swift in Sources */,
 				6DBF39DF28D4734B00952D8A /* SharedSecret.swift in Sources */,
@@ -1385,7 +1397,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1425,7 +1437,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1652,6 +1664,22 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		FE1245652AC35AAC009FB048 /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
+		FE1245682AC35F86009FB048 /* XCRemoteSwiftPackageReference "SVGKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SVGKit/SVGKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		FE5F427229AF22FA00A1E506 /* XCRemoteSwiftPackageReference "netfox" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kasketis/netfox";
@@ -1740,6 +1768,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
 			productName = Shimmer;
+		};
+		FE1245662AC35AAC009FB048 /* NukeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE1245652AC35AAC009FB048 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeUI;
+		};
+		FE1245692AC35F86009FB048 /* SVGKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE1245682AC35F86009FB048 /* XCRemoteSwiftPackageReference "SVGKit" */;
+			productName = SVGKit;
 		};
 		FE5F427329AF22FA00A1E506 /* netfox */ = {
 			isa = XCSwiftPackageProductDependency;
