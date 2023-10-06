@@ -44,7 +44,6 @@ struct MainView: View {
     @State private var topUpState: ResizableSheetState = .hidden
     @State private var holderModeState: ResizableSheetState = .hidden
     @State private var showChangelog: Bool = false
-    // TODO: - Finalize when test complete
     @State private var showBuyCtus: Bool = false
     @State private var showDealFilter: Bool = false
     
@@ -54,13 +53,6 @@ struct MainView: View {
             NavigationView {
                 ScrollView {
                     VStack {
-                        // TODO: - Remove when test complete
-                        Button {
-                            showBuyCtus.toggle()
-                        } label: {
-                            Text("Buy CTUS")
-                        }
-
                         BalanceView(
                             state: viewModel.state.balance != nil ? .loaded(.init(balance: viewModel.state.balance!)) : .empty,
                             topUpAction: {
@@ -76,7 +68,8 @@ struct MainView: View {
                             }
 
                         UnlockHolderButtonView() {
-                            holderModeState = .medium
+//                            holderModeState = .medium
+                            showBuyCtus.toggle()
                         }
 
                         if !viewModel.state.statistics.isEmpty {
@@ -355,7 +348,6 @@ struct MainView: View {
                         EventService.shared.send(event: ExtendedAnalyticsEvent.changelogClose(service.changelogId()))
                     }
                 }
-                // TODO: - Finalize when test complete
                 .fullScreenCover(isPresented: $showBuyCtus) {
                     let service = APIServiceFactory.shared.makeCheckoutService()
                     BuyTokensView(

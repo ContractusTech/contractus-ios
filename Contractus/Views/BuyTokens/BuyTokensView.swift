@@ -24,6 +24,7 @@ struct BuyTokensView: View {
     @StateObject var viewModel: AnyViewModel<BuyTokensState, BuyTokensInput>
     @State var alertType: AlertType?
     @State var amountValue: String = "10000"
+    @FocusState var amountFocused: Bool
     
     private let amountPublisher = PassthroughSubject<String, Never>()
 
@@ -37,6 +38,7 @@ struct BuyTokensView: View {
                         .foregroundColor(viewModel.state.canNotBuy ? R.color.redText.color : R.color.textBase.color)
                         .multilineTextAlignment(.center)
                         .keyboardType(.decimalPad)
+                        .focused($amountFocused)
                         .fixedSize(horizontal: amountValue.count < 12, vertical: false)
                         .onChange(of: amountValue) { newAmountValue in
                             if let amount = Double(newAmountValue.replacingOccurrences(of: ",", with: ".")) {
@@ -126,12 +128,14 @@ struct BuyTokensView: View {
                     }
                 }
             }
+            .onAppear {
+                amountFocused = true
+            }
             .onChange(of: viewModel.state.state) { state in
                 switch state {
                 case .openURL(let stringUrl):
                     guard let url = URL(string: stringUrl) else { return }
                     UIApplication.shared.open(url)
-//                    presentationMode.wrappedValue.dismiss()
                 default:
                     return
                 }
