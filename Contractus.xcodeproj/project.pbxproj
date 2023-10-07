@@ -156,11 +156,15 @@
 		FE1245672AC35AAC009FB048 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = FE1245662AC35AAC009FB048 /* NukeUI */; };
 		FE12456A2AC35F86009FB048 /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE1245692AC35F86009FB048 /* SVGKit */; };
 		FE12456C2AC36089009FB048 /* SVGImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE12456B2AC36089009FB048 /* SVGImageView.swift */; };
+		FE1245732AC589B0009FB048 /* BuyTokensView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1245722AC589B0009FB048 /* BuyTokensView.swift */; };
+		FE12456E2AC4C1F2009FB048 /* UnlockHolderButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE12456D2AC4C1F2009FB048 /* UnlockHolderButtonView.swift */; };
+		FE1245702AC4DC92009FB048 /* UnlockHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE12456F2AC4DC92009FB048 /* UnlockHolderView.swift */; };
 		FE1D8DDE2A31115A003D97BC /* BorderDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1D8DDD2A31115A003D97BC /* BorderDivider.swift */; };
 		FE1E3DD429D3597E009B0E57 /* AboutAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */; };
 		FE1FB90F2A9E072F00203F38 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1FB90E2A9E072F00203F38 /* Onboarding.swift */; };
 		FE1FB9112A9E24CB00203F38 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1FB9102A9E24CB00203F38 /* OnboardingService.swift */; };
 		FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */; };
+		FE52687A2AC58D4200E29003 /* BuyTokensViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5268792AC58D4200E29003 /* BuyTokensViewModel.swift */; };
 		FE54313D29D36D8800EEF906 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE54313C29D36D8800EEF906 /* AccountsView.swift */; };
 		FE5F427429AF22FA00A1E506 /* netfox in Frameworks */ = {isa = PBXBuildFile; productRef = FE5F427329AF22FA00A1E506 /* netfox */; };
 		FE8270472A8D4D730092970A /* ReferralViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8270462A8D4D730092970A /* ReferralViewModel.swift */; };
@@ -343,11 +347,15 @@
 		FE10B56B2A966F5900AA5EA8 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		FE10B56D2A96715200AA5EA8 /* OnboardingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageView.swift; sourceTree = "<group>"; };
 		FE12456B2AC36089009FB048 /* SVGImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGImageView.swift; sourceTree = "<group>"; };
+		FE1245722AC589B0009FB048 /* BuyTokensView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyTokensView.swift; sourceTree = "<group>"; };
+		FE12456D2AC4C1F2009FB048 /* UnlockHolderButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockHolderButtonView.swift; sourceTree = "<group>"; };
+		FE12456F2AC4DC92009FB048 /* UnlockHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockHolderView.swift; sourceTree = "<group>"; };
 		FE1D8DDD2A31115A003D97BC /* BorderDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderDivider.swift; sourceTree = "<group>"; };
 		FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAccountView.swift; sourceTree = "<group>"; };
 		FE1FB90E2A9E072F00203F38 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		FE1FB9102A9E24CB00203F38 /* OnboardingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingService.swift; sourceTree = "<group>"; };
 		FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectView.swift; sourceTree = "<group>"; };
+		FE5268792AC58D4200E29003 /* BuyTokensViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyTokensViewModel.swift; sourceTree = "<group>"; };
 		FE54313C29D36D8800EEF906 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
 		FE8270462A8D4D730092970A /* ReferralViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralViewModel.swift; sourceTree = "<group>"; };
 		FE8D851F2A8B883B001DE59F /* PromocodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromocodeView.swift; sourceTree = "<group>"; };
@@ -517,9 +525,9 @@
 		6D75F2ED288EA99E0092D182 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				6D4C860D2AC010BF00B9CEAE /* TokenSelect */,
 				6D8EFD8628D88F570064F5DA /* AddContractor */,
 				6DF9CBF529F9530B004B95F4 /* Accounts */,
+				FE1245712AC58959009FB048 /* BuyTokens */,
 				6D6EE383289C677500635E60 /* Common */,
 				6D6EE3A328A09DAF00635E60 /* Deal */,
 				6D75F2EE288EA9A70092D182 /* Enter */,
@@ -530,6 +538,7 @@
 				FECDCC5E2A8B409A00047A95 /* Referral */,
 				FE52628729AD3360004E0BCD /* ServerSelect */,
 				6D2E0AF728AF342D002BA683 /* TextEditorView */,
+				6D4C860D2AC010BF00B9CEAE /* TokenSelect */,
 				6D74735F29655E9000A5F6E7 /* TransactionSign */,
 				6D6EE38B289E25EA00635E60 /* UploadFile */,
 				6D0F7F41298B9FC900EC2C74 /* Wrap */,
@@ -698,6 +707,8 @@
 				6D44B5632A0FAB37008C561D /* StatisticsView.swift */,
 				6DC558642A76633C0054F2FC /* TopUpView.swift */,
 				FE9623722A94C4600075929B /* TopUpViewModel.swift */,
+				FE12456D2AC4C1F2009FB048 /* UnlockHolderButtonView.swift */,
+				FE12456F2AC4DC92009FB048 /* UnlockHolderView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -855,6 +866,15 @@
 				FECA2C472A9E2E2D00A7E152 /* OnboardingViewModel.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		FE1245712AC58959009FB048 /* BuyTokens */ = {
+			isa = PBXGroup;
+			children = (
+				FE1245722AC589B0009FB048 /* BuyTokensView.swift */,
+				FE5268792AC58D4200E29003 /* BuyTokensViewModel.swift */,
+			);
+			path = BuyTokens;
 			sourceTree = "<group>";
 		};
 		FE52628729AD3360004E0BCD /* ServerSelect */ = {
@@ -1084,6 +1104,7 @@
 				6D0DA75B292FA9A60024EF30 /* NavigationStackModifier.swift in Sources */,
 				6D6EE395289F9EFE00635E60 /* ImagePickerView.swift in Sources */,
 				6DBCA4912891162F00F918B6 /* ContentMask.swift in Sources */,
+				FE52687A2AC58D4200E29003 /* BuyTokensViewModel.swift in Sources */,
 				FEBC6EDE2ABDD51A001947E1 /* TokenSelectView.swift in Sources */,
 				6D3AA48D292EB78300596061 /* MenuViewModel.swift in Sources */,
 				6DB9C3D52A552D7B0011C817 /* AppManager.swift in Sources */,
@@ -1150,10 +1171,12 @@
 				6D3AA480292CAFB800596061 /* QuickLookView.swift in Sources */,
 				FE10B56C2A966F5900AA5EA8 /* OnboardingView.swift in Sources */,
 				6DB83CA92899FE5C006A4667 /* DealItemView.swift in Sources */,
+				FE1245732AC589B0009FB048 /* BuyTokensView.swift in Sources */,
 				6DC1C237291C34A20009FE96 /* URL+Ex.swift in Sources */,
 				6D7552942896BDEC0069935B /* BackupInformationView.swift in Sources */,
 				6DBFCE462A9F573D00999E85 /* Open.swift in Sources */,
 				6D75529A2897848B0069935B /* Mock.swift in Sources */,
+				FE12456E2AC4C1F2009FB048 /* UnlockHolderButtonView.swift in Sources */,
 				6DBF3A4328D81D2C00952D8A /* UIApplication+Ex.swift in Sources */,
 				6DFED935293207D200AF727A /* QRCodeScannerViewModel.swift in Sources */,
 				6D6EE3A728A0E20100635E60 /* Label.swift in Sources */,
@@ -1170,6 +1193,7 @@
 				6D4DCB2C28AC8DC200EE86C0 /* ChangeAmountView.swift in Sources */,
 				6D2E0AF628AF340C002BA683 /* TextEditorView.swift in Sources */,
 				6DAA5E7D2898C4AA00BA1965 /* APIServiceFactory.swift in Sources */,
+				FE1245702AC4DC92009FB048 /* UnlockHolderView.swift in Sources */,
 				6D4FAB53293CAF0A00076743 /* UIConstants.swift in Sources */,
 				FE12456C2AC36089009FB048 /* SVGImageView.swift in Sources */,
 				6DD28E2C2A1DF4190093E553 /* DeadlineViewModel.swift in Sources */,

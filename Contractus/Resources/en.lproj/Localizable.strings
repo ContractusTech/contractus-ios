@@ -425,3 +425,10 @@
 "wrap.wrap" = "Wrap";
 "wrap.unwrap" = "Unwrap all";
 "wrap.amount" = "Amount";
+
+"buyToken.title" = "Buy CTUS";
+"buyToken.ctus" = "CTUS";
+"buyToken.price" = "1 CTUS ≈ %@";
+"buyToken.not.enough" = "Not enough %@ CTUS for Holder Mode";
+"buyToken.hint" = "Supported more than 30 cryptocurrencies";
+"buyToken.pay.title" = "Pay%@";
