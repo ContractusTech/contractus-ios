@@ -245,7 +245,8 @@
 "deal.status.canceled.subtitle.with-checker" = "%@ was transferred to the account of the checker and the balance was returned to the client";
 "deal.status.revoked.subtitle" = "Owner canceled before signing by all parties of the contract";
 "deal.information.about-sign" = "To start the deal, fill in the amount, deadline, the %@ accounts of all parties involved in the deal, and the checker fee (if an checker is in your deal).";
-"deal.edit.warning" = "After the update, all participants must re-sign the deal.";
+"deal.edit.warning" = "Once the deal has been updated, all participants must re-sign the agreement.";
+"deal.edit.warning.title" = "Already signed";
 "deadline.title" = "Select deadline";
 "deadline.of.deal" = "Deadline of deal";
 "deadline.comment" = "You must complete the deal by this date or the deal will be stopped and funds will be refunded to all parties. The service fee is not refundable.";

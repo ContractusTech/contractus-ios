@@ -1069,7 +1069,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 385 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 386 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client
       ///
@@ -1159,10 +1159,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorTitlePartner = Rswift.StringResource(key: "addContractor.title.partner", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: After the update, all participants must re-sign the deal.
-      ///
-      /// Locales: en
-      static let dealEditWarning = Rswift.StringResource(key: "deal.edit.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: After this account checks the result of the contract, you get paid.
       ///
       /// Locales: en
@@ -1191,6 +1187,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealEncryptSubtitle = Rswift.StringResource(key: "newDeal.encrypt.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Already signed
+      ///
+      /// Locales: en
+      static let dealEditWarningTitle = Rswift.StringResource(key: "deal.edit.warning.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Amount
       ///
       /// Locales: en
@@ -1931,6 +1931,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignSubtitleUnsignedInitDeal = Rswift.StringResource(key: "transactionSign.subtitle.unsigned-init-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Once the deal has been updated, all participants must re-sign the agreement.
+      ///
+      /// Locales: en
+      static let dealEditWarning = Rswift.StringResource(key: "deal.edit.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Only client
       ///
       /// Locales: en
@@ -2956,21 +2960,6 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("addContractor.title.partner", bundle: bundle, comment: "")
       }
 
-      /// en translation: After the update, all participants must re-sign the deal.
-      ///
-      /// Locales: en
-      static func dealEditWarning(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("deal.edit.warning", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "deal.edit.warning"
-        }
-
-        return NSLocalizedString("deal.edit.warning", bundle: bundle, comment: "")
-      }
-
       /// en translation: After this account checks the result of the contract, you get paid.
       ///
       /// Locales: en
@@ -3074,6 +3063,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("newDeal.encrypt.subtitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Already signed
+      ///
+      /// Locales: en
+      static func dealEditWarningTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.edit.warning.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.edit.warning.title"
+        }
+
+        return NSLocalizedString("deal.edit.warning.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Amount
@@ -5861,6 +5865,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.subtitle.unsigned-init-deal", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Once the deal has been updated, all participants must re-sign the agreement.
+      ///
+      /// Locales: en
+      static func dealEditWarning(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.edit.warning", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.edit.warning"
+        }
+
+        return NSLocalizedString("deal.edit.warning", bundle: bundle, comment: "")
       }
 
       /// en translation: Only client

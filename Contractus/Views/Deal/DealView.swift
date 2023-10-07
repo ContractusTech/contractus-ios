@@ -1149,7 +1149,7 @@ struct DealView: View {
                 )
             case .confirmUpdateSignedDeal(let action):
                 return Alert(
-                    title: Text(R.string.localizable.commonAttention()),
+                    title: Text(R.string.localizable.dealEditWarningTitle()),
                     message: Text(R.string.localizable.dealEditWarning()),
                     primaryButton: .cancel(),
                     secondaryButton: .default(Text(R.string.localizable.commonEdit())) {
