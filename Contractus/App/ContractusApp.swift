@@ -6,6 +6,7 @@ import netfox
 import ContractusAPI
 import Combine
 import Firebase
+import AppsFlyerLib
 
 struct RootState {
     enum State {
@@ -258,7 +259,19 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         FirebaseApp.configure()
 
         EventService.shared.send(event: DefaultAnalyticsEvent.startApp)
+
+        if !Env.APPSFLYER_DEV_KEY.isEmpty && !Env.APPLE_APP_ID.isEmpty{
+            AppsFlyerLib.shared().appsFlyerDevKey = Env.APPSFLYER_DEV_KEY
+            AppsFlyerLib.shared().appleAppID = Env.APPLE_APP_ID
+        }
+
         return true
+    }
+
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        if !Env.APPSFLYER_DEV_KEY.isEmpty {
+            AppsFlyerLib.shared().start()
+        }
     }
 }
 

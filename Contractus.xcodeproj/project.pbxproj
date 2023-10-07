@@ -123,6 +123,8 @@
 		6DBFCE462A9F573D00999E85 /* Open.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFCE452A9F573D00999E85 /* Open.swift */; };
 		6DC1C235291BE6660009FE96 /* DocumentPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC1C234291BE6660009FE96 /* DocumentPickerView.swift */; };
 		6DC1C237291C34A20009FE96 /* URL+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC1C236291C34A20009FE96 /* URL+Ex.swift */; };
+		6DC218412ACF3D3E00EFC769 /* AppsFlyerLib in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC218402ACF3D3E00EFC769 /* AppsFlyerLib */; };
+		6DC218452ACFD6DE00EFC769 /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC218442ACFD6DE00EFC769 /* Env.swift */; };
 		6DC2C02528C98332005C9EBE /* TransactionSignService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC2C02428C98332005C9EBE /* TransactionSignService.swift */; };
 		6DC2C02728C99C0A005C9EBE /* ServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC2C02628C99C0A005C9EBE /* ServiceFactory.swift */; };
 		6DC558652A76633C0054F2FC /* TopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC558642A76633C0054F2FC /* TopUpView.swift */; };
@@ -316,6 +318,7 @@
 		6DBFCE452A9F573D00999E85 /* Open.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Open.swift; sourceTree = "<group>"; };
 		6DC1C234291BE6660009FE96 /* DocumentPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerView.swift; sourceTree = "<group>"; };
 		6DC1C236291C34A20009FE96 /* URL+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Ex.swift"; sourceTree = "<group>"; };
+		6DC218442ACFD6DE00EFC769 /* Env.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Env.swift; sourceTree = "<group>"; };
 		6DC2C02428C98332005C9EBE /* TransactionSignService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSignService.swift; sourceTree = "<group>"; };
 		6DC2C02628C99C0A005C9EBE /* ServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceFactory.swift; sourceTree = "<group>"; };
 		6DC558642A76633C0054F2FC /* TopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopUpView.swift; sourceTree = "<group>"; };
@@ -365,6 +368,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE5F427429AF22FA00A1E506 /* netfox in Frameworks */,
+				6DC218412ACF3D3E00EFC769 /* AppsFlyerLib in Frameworks */,
 				6DC5586E2A7A18A60054F2FC /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				6D8EFD8A28D898B50064F5DA /* ShamirSecretSharing in Frameworks */,
 				6D755290289662250069935B /* Rswift in Frameworks */,
@@ -639,6 +643,7 @@
 				6D97AEF0288D196200EB61D0 /* ContractusApp.swift */,
 				6DAA5E7F2898D33300BA1965 /* AppConfig.swift */,
 				6D9D6B3E29A73A8900E0930D /* ConfigStorage.swift */,
+				6DC218442ACFD6DE00EFC769 /* Env.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -909,6 +914,7 @@
 				6DC558732A7A18A60054F2FC /* FirebaseRemoteConfig */,
 				FE1245662AC35AAC009FB048 /* NukeUI */,
 				FE1245692AC35F86009FB048 /* SVGKit */,
+				6DC218402ACF3D3E00EFC769 /* AppsFlyerLib */,
 			);
 			productName = Contractus;
 			productReference = 6D97AEED288D196200EB61D0 /* Contractus.app */;
@@ -998,6 +1004,7 @@
 				6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				FE1245652AC35AAC009FB048 /* XCRemoteSwiftPackageReference "Nuke" */,
 				FE1245682AC35F86009FB048 /* XCRemoteSwiftPackageReference "SVGKit" */,
+				6DC2183F2ACF3D3E00EFC769 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */,
 			);
 			productRefGroup = 6D97AEEE288D196200EB61D0 /* Products */;
 			projectDirPath = "";
@@ -1137,6 +1144,7 @@
 				FE8D85202A8B883B001DE59F /* PromocodeView.swift in Sources */,
 				6D4FAB51293B384D00076743 /* KeyboardResponder.swift in Sources */,
 				6DDA818528C0D6070022E005 /* TextField.swift in Sources */,
+				6DC218452ACFD6DE00EFC769 /* Env.swift in Sources */,
 				6D3AA482292CF16300596061 /* SafariView.swift in Sources */,
 				6D8EFD9728D958AA0064F5DA /* CopyContentView.swift in Sources */,
 				6D3AA480292CAFB800596061 /* QuickLookView.swift in Sources */,
@@ -1389,7 +1397,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1429,7 +1437,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1632,6 +1640,14 @@
 				version = 2.2.0;
 			};
 		};
+		6DC2183F2ACF3D3E00EFC769 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppsFlyerSDK/AppsFlyerFramework";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 6.12.2;
+			};
+		};
 		6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -1735,6 +1751,11 @@
 		6DB9C3D92A555F1B0011C817 /* ContractusAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ContractusAPI;
+		};
+		6DC218402ACF3D3E00EFC769 /* AppsFlyerLib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC2183F2ACF3D3E00EFC769 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
+			productName = AppsFlyerLib;
 		};
 		6DC5586D2A7A18A60054F2FC /* FirebaseAnalyticsWithoutAdIdSupport */ = {
 			isa = XCSwiftPackageProductDependency;

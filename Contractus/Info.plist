@@ -9,5 +9,9 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>APPSFLYER_DEV_KEY</key>
+	<string></string>
+	<key>APPLE_APP_ID</key>
+	<string></string>
 </dict>
 </plist>
