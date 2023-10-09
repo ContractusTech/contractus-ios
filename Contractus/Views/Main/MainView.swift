@@ -68,8 +68,8 @@ struct MainView: View {
                             }
 
                         UnlockHolderButtonView() {
-//                            holderModeState = .medium
-                            showBuyCtus.toggle()
+                            holderModeState = .medium
+//                            showBuyCtus.toggle()
                         }
 
                         if !viewModel.state.statistics.isEmpty {
@@ -227,9 +227,26 @@ struct MainView: View {
                     }
                     .supportedState([.medium, .hidden])
                 })
-                .resizableSheet($holderModeState, id: "holderMode", builder: { builder in
+                .resizableSheet($holderModeState, id: "holderMode") { builder in
                     builder.content { context in
-                        UnlockHolderView()
+                        UnlockHolderView { type in
+                            switch type {
+                            case .buy:
+                                holderModeState = .hidden
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    showBuyCtus.toggle()
+                                }
+                            case .coinstore:
+                                holderModeState = .hidden
+                                openCoinstore()
+                            case .raydium:
+                                holderModeState = .hidden
+                                openRaydium()
+                            case .pancake:
+                                holderModeState = .hidden
+                                openPancake()
+                            }
+                        }
                     }
                     .animation(.easeInOut.speed(1.2))
                     .background { context in
@@ -241,7 +258,7 @@ struct MainView: View {
                             })
                     }
                     .supportedState([.medium, .hidden])
-                })
+                }
 
                 .sheet(item: $sheetType, content: { type in
                     switch type {

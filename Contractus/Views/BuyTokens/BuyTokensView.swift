@@ -111,6 +111,7 @@ struct BuyTokensView: View {
                 }
                 .padding(.bottom, 16)
             }
+//            .animation(nil)
             .padding(.horizontal, 18)
             .baseBackground()
             .navigationTitle(R.string.localizable.buyTokenTitle())
