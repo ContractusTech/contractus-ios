@@ -24,6 +24,7 @@ struct BuyTokensView: View {
     @StateObject var viewModel: AnyViewModel<BuyTokensState, BuyTokensInput>
     @State var alertType: AlertType?
     @State var amountValue: String = "10000"
+    @State var showContent: Bool = false
     @FocusState var amountFocused: Bool
     
     private let amountPublisher = PassthroughSubject<String, Never>()
@@ -31,62 +32,64 @@ struct BuyTokensView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                HStack(alignment: .firstTextBaseline, spacing: 10) {
-                    TextField("", text: $amountValue)
-                        .textFieldStyle(.plain)
-                        .font(.largeTitle.weight(.medium))
-                        .foregroundColor(viewModel.state.canNotBuy ? R.color.redText.color : R.color.textBase.color)
-                        .multilineTextAlignment(.center)
-                        .keyboardType(.decimalPad)
-                        .focused($amountFocused)
-                        .fixedSize(horizontal: amountValue.count < 12, vertical: false)
-                        .onChange(of: amountValue) { newAmountValue in
-                            if let amount = Double(newAmountValue.replacingOccurrences(of: ",", with: ".")) {
-                                viewModel.trigger(.setValue(amount))
-                            } else {
-                                viewModel.trigger(.setValue(0))
+                if showContent {
+                    HStack(alignment: .firstTextBaseline, spacing: 10) {
+                        TextField("", text: $amountValue)
+                            .textFieldStyle(.plain)
+                            .font(.largeTitle.weight(.medium))
+                            .foregroundColor(viewModel.state.canNotBuy ? R.color.redText.color : R.color.textBase.color)
+                            .multilineTextAlignment(.center)
+                            .keyboardType(.decimalPad)
+                            .focused($amountFocused)
+                            .fixedSize(horizontal: amountValue.count < 12, vertical: false)
+                            .onChange(of: amountValue) { newAmountValue in
+                                if let amount = Double(newAmountValue.replacingOccurrences(of: ",", with: ".")) {
+                                    viewModel.trigger(.setValue(amount))
+                                } else {
+                                    viewModel.trigger(.setValue(0))
+                                }
+                                amountPublisher.send(newAmountValue)
                             }
-                            amountPublisher.send(newAmountValue)
-                        }
-                        .onReceive(Just(amountValue)) { newValue in
-                            var filtered = newValue.filter { "0123456789,.".contains($0) }
-                            let components = filtered.replacingOccurrences(of: ",", with: ".").components(separatedBy: ".")
-                            if let fraction = components.last, components.count > 1, fraction.count > 5 {
-                                filtered = String(filtered.dropLast())
+                            .onReceive(Just(amountValue)) { newValue in
+                                var filtered = newValue.filter { "0123456789,.".contains($0) }
+                                let components = filtered.replacingOccurrences(of: ",", with: ".").components(separatedBy: ".")
+                                if let fraction = components.last, components.count > 1, fraction.count > 5 {
+                                    filtered = String(filtered.dropLast())
+                                }
+                                if filtered != newValue {
+                                    self.amountValue = filtered
+                                }
                             }
-                            if filtered != newValue {
-                                self.amountValue = filtered
+                            .onReceive(
+                                amountPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+                            ) { newAmountValue in
+                                viewModel.trigger(.calculate)
                             }
-                        }
-                        .onReceive(
-                            amountPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
-                        ) { newAmountValue in
-                            viewModel.trigger(.calculate)
-                        }
-                        .padding(.leading, 12)
+                            .padding(.leading, 12)
 
-                    Text(R.string.localizable.buyTokenCtus())
-                        .font(.largeTitle.weight(.medium))
+                        Text(R.string.localizable.buyTokenCtus())
+                            .font(.largeTitle.weight(.medium))
+                            .foregroundColor(R.color.secondaryText.color)
+                            .multilineTextAlignment(.leading)
+                            .padding(.bottom, 6)
+                            .padding(.trailing, 12)
+                            .fixedSize(horizontal: true, vertical: false)
+                    }
+                    .overlay(alignment: .bottom) {
+                        BorderDivider(
+                            color: R.color.baseSeparator.color,
+                            width: 2
+                        )
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.top, 45)
+                    .padding(.bottom, 16)
+
+                    Text(R.string.localizable.buyTokenPrice(viewModel.state.price))
+                        .font(.footnote.weight(.medium))
                         .foregroundColor(R.color.secondaryText.color)
-                        .multilineTextAlignment(.leading)
-                        .padding(.bottom, 6)
-                        .padding(.trailing, 12)
-                        .fixedSize(horizontal: true, vertical: false)
+                        .padding(.bottom, 8)
                 }
-                .overlay(alignment: .bottom) {
-                    BorderDivider(
-                        color: R.color.baseSeparator.color,
-                        width: 2
-                    )
-                }
-                .padding(.horizontal, 12)
-                .padding(.top, 45)
-                .padding(.bottom, 16)
-
-                Text(R.string.localizable.buyTokenPrice(viewModel.state.price))
-                    .font(.footnote.weight(.medium))
-                    .foregroundColor(R.color.secondaryText.color)
-                    .padding(.bottom, 8)
 
                 if viewModel.state.value < 10000 {
                     Text(R.string.localizable.buyTokenNotEnough((10000 - viewModel.state.value).clean))
@@ -111,7 +114,6 @@ struct BuyTokensView: View {
                 }
                 .padding(.bottom, 16)
             }
-//            .animation(nil)
             .padding(.horizontal, 18)
             .baseBackground()
             .navigationTitle(R.string.localizable.buyTokenTitle())
@@ -125,12 +127,15 @@ struct BuyTokensView: View {
                             .resizable()
                             .frame(width: 21, height: 21)
                             .foregroundColor(R.color.textBase.color)
-
                     }
                 }
             }
             .onAppear {
                 amountFocused = true
+                // fix unexpected animation with navigation view
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    showContent.toggle()
+                }
             }
             .onChange(of: viewModel.state.state) { state in
                 switch state {

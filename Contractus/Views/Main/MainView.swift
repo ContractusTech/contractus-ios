@@ -81,7 +81,6 @@ struct MainView: View {
 
                         UnlockHolderButtonView() {
                             holderModeState = .medium
-//                            showBuyCtus.toggle()
                         }
 
                         if !viewModel.state.statistics.isEmpty {
