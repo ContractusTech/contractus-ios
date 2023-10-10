@@ -41,8 +41,20 @@ struct MainView: View {
     @State private var sheetType: SheetType? = .none
     @State private var dealsType: MainViewModel.State.DealType = .all
     @State private var transactionSignType: TransactionSignType?
-    @State private var topUpState: ResizableSheetState = .hidden
-    @State private var holderModeState: ResizableSheetState = .hidden
+    @State private var topUpState: ResizableSheetState = .hidden {
+        didSet {
+            if topUpState == .hidden {
+                switchToMainWindow()
+            }
+        }
+    }
+    @State private var holderModeState: ResizableSheetState = .hidden {
+        didSet {
+            if holderModeState == .hidden {
+                switchToMainWindow()
+            }
+        }
+    }
     @State private var showChangelog: Bool = false
     @State private var showBuyCtus: Bool = false
     @State private var showDealFilter: Bool = false
@@ -216,7 +228,7 @@ struct MainView: View {
                             }
                         }
                     }
-                    .animation(.easeInOut.speed(1.2))
+                    .animation(.easeInOut)
                     .background { context in
                         Color.black
                             .opacity(context.state == .medium ? 0.5 : 0)
@@ -233,9 +245,7 @@ struct MainView: View {
                             switch type {
                             case .buy:
                                 holderModeState = .hidden
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    showBuyCtus.toggle()
-                                }
+                                showBuyCtus.toggle()
                             case .coinstore:
                                 holderModeState = .hidden
                                 openCoinstore()
@@ -248,13 +258,13 @@ struct MainView: View {
                             }
                         }
                     }
-                    .animation(.easeInOut.speed(1.2))
+                    .animation(.easeInOut)
                     .background { context in
                         Color.black
                             .opacity(context.state == .medium ? 0.5 : 0)
                             .ignoresSafeArea()
                             .onTapGesture(perform: {
-                                topUpState = .hidden
+                                holderModeState = .hidden
                             })
                     }
                     .supportedState([.medium, .hidden])

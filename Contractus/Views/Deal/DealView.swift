@@ -75,8 +75,20 @@ struct DealView: View {
     @State private var activeModalType: ActiveModalType?
     @State private var alertType: AlertType?
     @State private var actionsType: ActionsSheetType?
-    @State private var metaUploaderState: ResizableSheetState = .hidden
-    @State private var resultUploaderState: ResizableSheetState = .hidden
+    @State private var metaUploaderState: ResizableSheetState = .hidden {
+        didSet {
+            if metaUploaderState == .hidden {
+                switchToMainWindow()
+            }
+        }
+    }
+    @State private var resultUploaderState: ResizableSheetState = .hidden {
+        didSet {
+            if resultUploaderState == .hidden {
+                switchToMainWindow()
+            }
+        }
+    }
     @State private var showDeadlinePicker: Bool = false
 
     var body: some View {
