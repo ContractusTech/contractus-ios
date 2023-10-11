@@ -80,6 +80,7 @@ struct MainView: View {
                             }
 
                         UnlockHolderButtonView() {
+                            EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
                             holderModeState = .medium
                         }
 
@@ -243,6 +244,7 @@ struct MainView: View {
                         UnlockHolderView { type in
                             switch type {
                             case .buy:
+                                EventService.shared.send(event: DefaultAnalyticsEvent.buyformBuyTap)
                                 holderModeState = .hidden
                                 showBuyCtus.toggle()
                             case .coinstore:
