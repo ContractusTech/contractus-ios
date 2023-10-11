@@ -302,3 +302,12 @@ extension RootState: Equatable {
     }
 
 }
+
+// HOTFIX: - For ResizableSheet. Not display keyboard after set hidden state.
+func switchToMainWindow() {
+    UIApplication.shared.connectedScenes
+        .map { $0 as? UIWindowScene }
+        .compactMap { $0 }
+        .first?.windows
+        .first { !$0.isKeyWindow }?.makeKey()
+}

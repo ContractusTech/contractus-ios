@@ -7,21 +7,80 @@
 
 import SwiftUI
 
+fileprivate enum Constants {
+    static let arrowUp = Image(systemName: "arrow.up.right.square")
+}
+
 struct UnlockHolderView: View {
+
+    enum UnlockType {
+        case buy
+        case coinstore
+        case raydium
+        case pancake
+    }
+
+    var action: (UnlockType) -> Void
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("Unlock Holder Mode")
-                    .font(.title2)
+                Text(R.string.localizable.unlockHolderTitle())
+                    .font(.title.weight(.semibold))
+                    .foregroundColor(R.color.textBase.color)
+                Spacer()
+                R.image.holderCrown.image
             }
-            .padding(.bottom, 6)
-            .padding(.top, 6)
-            itemView(title: "Buy for SOL or USDC tokens", description: "", disabled: false, loading: false) {
+            .padding(.top, 12)
+
+            Text(R.string.localizable.unlockHolderSubtitle())
+                .font(.callout.weight(.medium))
+                .foregroundColor(R.color.secondaryText.color)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.trailing, 32)
+                .padding(.bottom, 15)
+
+            Text(R.string.localizable.unlockHolderMethods())
+                .font(.callout.weight(.medium))
+                .foregroundColor(R.color.textBase.color)
+                .padding(.trailing, 32)
+                .padding(.bottom, 6)
+
+            itemView(
+                title: R.string.localizable.unlockHolderBuyTitle(),
+                subtitle: "",
+                description: R.string.localizable.unlockHolderBuySubtitle(),
+                isUrl: false
+            ) {
+                action(.buy)
             }
 
-            itemView(title: "Buy on CEX or DEX", description: "", disabled: false, loading: false) {
-                
+            itemView(
+                title: R.string.localizable.unlockHolderCoinstoreTitle(),
+                subtitle: R.string.localizable.unlockHolderCoinstoreTitle1(),
+                description: "",
+                isUrl: true
+            ) {
+                action(.coinstore)
+            }
 
+            itemView(
+                title: R.string.localizable.unlockHolderRaydiumTitle(),
+                subtitle: R.string.localizable.unlockHolderRaydiumTitle1(),
+                description: "",
+                isUrl: true
+            ) {
+                action(.raydium)
+            }
+
+            itemView(
+                title: R.string.localizable.unlockHolderPancakeTitle(),
+                subtitle: R.string.localizable.unlockHolderPancakeTitle1(),
+                description: R.string.localizable.unlockHolderPancakeSubtitle(),
+                isUrl: true,
+                warn: true
+            ) {
+                action(.pancake)
             }
 
             Spacer()
@@ -30,42 +89,44 @@ struct UnlockHolderView: View {
     }
     
     @ViewBuilder
-    func itemView(title: String, description: String, disabled: Bool, loading: Bool, action: @escaping () -> Void) -> some View {
+    func itemView(title: String, subtitle: String, description: String, isUrl: Bool, warn: Bool = false, action: @escaping () -> Void) -> some View {
         Button {
             action()
         } label: {
-            HStack(alignment: .center) {
-
-                VStack(alignment: .leading, spacing: 6){
+            VStack(alignment: .leading, spacing: 6) {
+                HStack(spacing: 4) {
                     Text(title)
                         .font(.callout.weight(.semibold))
                         .foregroundColor(R.color.textBase.color)
-                    if !description.isEmpty {
-                        Text(description)
-                            .font(.caption)
-                            .foregroundColor(R.color.secondaryText.color)
+                    Text(subtitle)
+                        .font(.callout.weight(.semibold))
+                        .foregroundColor(R.color.secondaryText.color)
+                    Spacer()
+                    if isUrl {
+                        Constants.arrowUp
+                            .foregroundColor(R.color.fourthBackground.color)
                     }
                 }
-                Spacer()
-                if loading {
-                    ProgressView()
+                if !description.isEmpty {
+                    Text(description)
+                        .font(.caption)
+                        .foregroundColor(warn ? R.color.textWarn.color : R.color.secondaryText.color)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-
             }
-            .padding()
+            .padding(.vertical, description.isEmpty ? 21 : 16)
+            .padding(.horizontal, 16)
             .background(content: {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 15)
                     .stroke(R.color.baseSeparator.color, lineWidth: 1)
             })
-            .opacity(disabled ? 0.6 : 1.0)
         }
-        .disabled(disabled)
-
     }
 }
 
 struct UnlockHolderView_Previews: PreviewProvider {
     static var previews: some View {
-        UnlockHolderView()
+        UnlockHolderView() { _ in }
     }
 }
