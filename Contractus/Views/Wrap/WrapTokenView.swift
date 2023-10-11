@@ -167,6 +167,9 @@ struct WrapTokenView: View {
                     .font(.body.weight(.medium))
                 }
             }
+            .onAppear {
+                isInputActive = true
+            }
             .onChange(of: amount) { newValue in
                 viewModel.trigger(.update(newValue))
             }
