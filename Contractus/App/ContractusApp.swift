@@ -292,7 +292,6 @@ extension AppDelegate: MessagingDelegate {
         let deviceToken:[String: String] = ["token": fcmToken ?? ""]
         print("Device token: ", deviceToken)
 #endif
-
     }
 }
 
@@ -316,7 +315,8 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        
+        Messaging.messaging().apnsToken = deviceToken
+        AppManagerImpl.shared.setupNotifications()
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
