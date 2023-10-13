@@ -51,6 +51,7 @@ struct UploadFileView: View {
     @State private var sheetType: SheetType? = nil
     @State private var uploadFraction: Int?
     @State private var alertType: AlertType?
+    let openedDate = Date()
 
     var body: some View {
         VStack(spacing: 12) {
@@ -199,20 +200,20 @@ struct UploadFileView: View {
             case .camera:
                 ImagePickerView(sourceType: .camera) { image, path in
                     if let rawFile = RawFile.fromImage(image, path: path) {
-                        viewModel.trigger(.selected(rawFile))
+                        viewModel.trigger(.selected(rawFile, openedDate))
                     }
                 }
             case .selectImage:
                 ImagePickerView(sourceType: .photoLibrary) { image, path in
                     if let rawFile = RawFile.fromImage(image, path: path) {
-                        viewModel.trigger(.selected(rawFile))
+                        viewModel.trigger(.selected(rawFile, openedDate))
                     }
                 }
             case .importFile:
                 DocumentPickerView(types: ALLOW_FILE_TYPES) { data, url in
                     let mimeType = MimeType(url: url)
                     let file = RawFile(data: data, name: url.lastPathComponent, mimeType: mimeType.value)
-                    viewModel.trigger(.selected(file))
+                    viewModel.trigger(.selected(file, openedDate))
                 }
             }
         })

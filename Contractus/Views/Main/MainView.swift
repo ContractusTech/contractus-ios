@@ -79,9 +79,11 @@ struct MainView: View {
                                 sheetType = .tokenSettings
                             }
 
-                        UnlockHolderButtonView() {
-                            EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
-                            holderModeState = .medium
+                        if viewModel.state.balance != nil {
+                            UnlockHolderButtonView() {
+                                EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
+                                holderModeState = .medium
+                            }
                         }
 
                         if !viewModel.state.statistics.isEmpty {

@@ -12,7 +12,7 @@ import SwiftUI
 import Combine
 
 enum UploadFileInput {
-    case selected(RawFile), uploadAndUpdate, clear, updateForce
+    case selected(RawFile, Date), uploadAndUpdate, clear, updateForce
 }
 
 struct UploadFileResult: Equatable {
@@ -63,9 +63,10 @@ final class UploadFileViewModel: ViewModel {
     func trigger(_ input: UploadFileInput, after: AfterTrigger? = nil) {
 
         switch input {
-        case.selected(let file):
+        case.selected(let file, let openedDate):
             self.state.selectedFile = file
             self.state.state = secretKey.isEmpty ? .selectedNoKey : .selected
+            self.startEditContent = openedDate
         case .clear:
             self.state.selectedFile = nil
             self.state.state = .none
@@ -257,7 +258,6 @@ fileprivate extension UploadFileViewModel {
                     switch result {
                     case .success(let meta):
                         promise(.success(meta))
-                        self.startEditContent = Date()
                     case .failure(let error):
                         promise(.failure(error))
                     }
