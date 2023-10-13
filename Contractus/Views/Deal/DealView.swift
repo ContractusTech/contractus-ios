@@ -28,6 +28,7 @@ fileprivate enum Constants {
     static let lockFile = Image(systemName: "lock.doc.fill")
     static let doneStatusImage = Image(systemName: "checkmark.seal.fill")
     static let cancelStatusImage = Image(systemName: "exclamationmark.octagon.fill")
+    static let startedStatusImage = Image(systemName: "bolt.fill")
 }
 
 struct DealView: View {
@@ -131,9 +132,8 @@ struct DealView: View {
                         .cornerRadius(20)
                         .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                     }
-                    if viewModel.state.isDealEnded {
-                        dealStatusView()
-                    }
+                    dealStatusView()
+
                     VStack {
                         ZStack(alignment: .bottomLeading) {
                             VStack {
@@ -665,6 +665,19 @@ struct DealView: View {
                                     }
                                     .opacity(viewModel.state.editIsVisible ? 1 : 0)
                                     .animation(Animation.easeInOut(duration: 0.1), value: viewModel.state.editIsVisible)
+                                } else if viewModel.state.canViewDeal {
+                                    CButton(
+                                        title: R.string.localizable.commonView(),
+                                        style: .secondary,
+                                        size: .default,
+                                        isLoading: false,
+                                        isDisabled: false
+                                    ) {
+                                        EventService.shared.send(event: DefaultAnalyticsEvent.dealDescriptionTap)
+                                        viewDetailsText()
+                                    }
+                                    .opacity(viewModel.state.editIsVisible ? 1 : 0)
+                                    .animation(Animation.easeInOut(duration: 0.1), value: viewModel.state.editIsVisible)
                                 }
                             }
                             VStack(alignment: .leading) {
@@ -844,7 +857,7 @@ struct DealView: View {
                                                 FileItemView(
                                                     file: file,
                                                     decryptedName: viewModel.state.withEncryption ?  viewModel.state.decryptedFiles[file.md5]?.lastPathComponent : file.name,
-                                                    showDeleteButton: viewModel.state.canEditDeal
+                                                    showDeleteButton: viewModel.state.deal.status == .started && viewModel.state.isYouExecutor
                                                 ) { action in
                                                     switch action {
                                                     case .open:
@@ -1450,10 +1463,12 @@ struct DealView: View {
                             Constants.doneStatusImage
                                 .resizable()
                                 .frame(width: 24, height: 24)
+                                .aspectRatio(contentMode: .fit)
                                 .foregroundColor(R.color.baseGreen.color)
                         } else {
                             Constants.cancelStatusImage
                                 .resizable()
+                                .aspectRatio(contentMode: .fit)
                                 .frame(width: 24, height: 24)
                                 .foregroundColor(R.color.secondaryText.color)
                         }
@@ -1472,7 +1487,35 @@ struct DealView: View {
                 .cornerRadius(20)
                 .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
             }
-        case .unknown, .finishing, .canceling, .started, .starting, .new:
+        case .started:
+            VStack {
+                HStack {
+                    Spacer()
+                    VStack(spacing: 8) {
+                        Constants.startedStatusImage
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 24, height: 24)
+                            .foregroundColor(R.color.blue.color)
+                        Text(statusTitle(status: viewModel.state.deal.status))
+                            .font(.body.weight(.bold))
+                            .foregroundColor(R.color.textBase.color)
+                        Text(statusSubtitle(status: viewModel.state.deal.status))
+                            .font(.footnote)
+                            .foregroundColor(R.color.secondaryText.color)
+                            .multilineTextAlignment(.center)
+                    }
+                    Spacer()
+                }
+                .padding(14)
+                .background(R.color.secondaryBackground.color)
+                .cornerRadius(20)
+                .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+            }
+        case .finishing, .canceling, .starting:
+            EmptyView()
+
+        case .unknown, .new:
             EmptyView()
         }
     }
@@ -1481,10 +1524,26 @@ struct DealView: View {
         if status == .finished {
             return R.string.localizable.dealStatusFinishedTitle()
         }
+
+        if status == .started {
+            return R.string.localizable.dealStatusStartedTitle()
+        }
         return R.string.localizable.dealStatusCanceledTitle()
     }
 
     private func statusSubtitle(status: DealStatus) -> String {
+        if status == .started {
+            if viewModel.isYouExecutor {
+                return R.string.localizable.dealStatusStartedSubtitleExecutor(Date.fullRelativeDateFormatted(from: Date(), to: viewModel.deal.deadline))
+            }
+
+            if viewModel.isYouChecker {
+                return R.string.localizable.dealStatusStartedSubtitleChecker()
+            }
+
+            return R.string.localizable.dealStatusStartedSubtitleClient(Date.fullRelativeDateFormatted(from: Date(), to: viewModel.deal.deadline))
+
+        }
         if status == .revoked {
             return R.string.localizable.dealStatusRevokedSubtitle()
         }
@@ -1643,6 +1702,10 @@ struct DealView: View {
         } else {
             activeModalType = .editTextDealDetails
         }
+    }
+
+    private func viewDetailsText() {
+        activeModalType = .viewTextDealDetails
     }
 }
 
