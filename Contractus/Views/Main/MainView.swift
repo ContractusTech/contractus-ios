@@ -35,7 +35,6 @@ struct MainView: View {
     }
 
     @StateObject var viewModel: AnyViewModel<MainState, MainInput>
-    var selectedDealId: String?
     var logoutCompletion: () -> Void
     
     @State private var selectedDeal: Deal?
@@ -187,6 +186,10 @@ struct MainView: View {
                 })
                 .onChange(of: dealsType, perform: { newType in
                     viewModel.trigger(.load(newType))
+                })
+                .onChange(of: viewModel.state.pushDeal, perform: { delaForOpen in
+                    self.selectedDeal = delaForOpen
+                    viewModel.trigger(.dealOpened)
                 })
                 .confirmationDialog(Text(R.string.localizable.mainTitleFilter()), isPresented: $showDealFilter, actions: {
                     ForEach(MainViewModel.State.DealType.allCases, id: \.self) { type in
@@ -383,7 +386,6 @@ struct MainView: View {
             }
             .navigationViewStyle(StackNavigationViewStyle())
             .onAppear{
-                debugPrint("Messaging: OnAppear Open DEAL \(selectedDealId)")
                 EventService.shared.send(event: DefaultAnalyticsEvent.mainOpen)
                 load()
                 let service = ServiceFactory.shared.makeOnboardingService()
@@ -447,15 +449,7 @@ struct MainView: View {
 
     private func load() {
         viewModel.trigger(.preload)
-        viewModel.trigger(.load(dealsType)) {
-            if let selectedDealId = selectedDealId {
-                debugPrint("Messaging: DEALS LOADED")
-                if let deal = viewModel.deals.first(where: {$0.id == selectedDealId}) {
-                    debugPrint("Messaging: DEAL FOUND \(selectedDealId)")
-                    selectedDeal = deal
-                }
-            }
-        }
+        viewModel.trigger(.load(dealsType))
     }
 
     @ViewBuilder

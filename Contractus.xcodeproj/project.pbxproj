@@ -134,6 +134,7 @@
 		6DCA42C92A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 6DCA42C62A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh */; };
 		6DCA42CA2A8A5C6100C6E4D7 /* ci_post_clone.sh in Resources */ = {isa = PBXBuildFile; fileRef = 6DCA42C72A8A5C6100C6E4D7 /* ci_post_clone.sh */; };
 		6DCA42CB2A8A5C6100C6E4D7 /* ci_pre_xcodebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 6DCA42C82A8A5C6100C6E4D7 /* ci_pre_xcodebuild.sh */; };
+		6DCFD3AC2ADA70DB002160E2 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCFD3AB2ADA70DB002160E2 /* NotificationHandler.swift */; };
 		6DD28E252A1C85360093E553 /* BaseTopTextBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E242A1C85360093E553 /* BaseTopTextBlockView.swift */; };
 		6DD28E272A1C9C6A0093E553 /* Date+Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */; };
 		6DD28E292A1DF3B10093E553 /* DeadlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E282A1DF3B10093E553 /* DeadlineView.swift */; };
@@ -327,6 +328,7 @@
 		6DCA42C62A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		6DCA42C72A8A5C6100C6E4D7 /* ci_post_clone.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		6DCA42C82A8A5C6100C6E4D7 /* ci_pre_xcodebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = ci_pre_xcodebuild.sh; sourceTree = "<group>"; };
+		6DCFD3AB2ADA70DB002160E2 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
 		6DD28E242A1C85360093E553 /* BaseTopTextBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTopTextBlockView.swift; sourceTree = "<group>"; };
 		6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatter.swift"; sourceTree = "<group>"; };
 		6DD28E282A1DF3B10093E553 /* DeadlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadlineView.swift; sourceTree = "<group>"; };
@@ -734,6 +736,7 @@
 				6DAA5E7C2898C4AA00BA1965 /* APIServiceFactory.swift */,
 				6DC2C02628C99C0A005C9EBE /* ServiceFactory.swift */,
 				6DB9C3D42A552D7B0011C817 /* AppManager.swift */,
+				6DCFD3AB2ADA70DB002160E2 /* NotificationHandler.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1161,6 +1164,7 @@
 				6DBF3A4328D81D2C00952D8A /* UIApplication+Ex.swift in Sources */,
 				6DFED935293207D200AF727A /* QRCodeScannerViewModel.swift in Sources */,
 				6D6EE3A728A0E20100635E60 /* Label.swift in Sources */,
+				6DCFD3AC2ADA70DB002160E2 /* NotificationHandler.swift in Sources */,
 				6D755292289675C50069935B /* R+Ex.swift in Sources */,
 				6D6EE388289DB40A00635E60 /* BlockchainService.swift in Sources */,
 				6D4FAB4F293B084800076743 /* TextEditor+Ex.swift in Sources */,

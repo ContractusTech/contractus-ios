@@ -17,6 +17,7 @@ enum MainInput {
     case loadDeals(MainState.DealType)
     case executeScanResult(ScanResult)
     case saveTokenSettings([ContractusAPI.Token])
+    case dealOpened
 }
 
 struct MainState {
@@ -29,7 +30,7 @@ struct MainState {
     enum DealsState {
         case loading, loaded
     }
-
+    var pushDeal: Deal?
     var account: CommonAccount
     var statistics: [ContractusAPI.AccountStatistic] = []
     var balance: Balance?
@@ -43,6 +44,7 @@ final class MainViewModel: ViewModel {
 
     @Published private(set) var state: MainState
 
+    private var openDealNotification: NSObjectProtocol?
     private var resourcesAPIService: ContractusAPI.ResourcesService?
     private var accountAPIService: ContractusAPI.AccountService?
     private var dealsAPIService: ContractusAPI.DealsService?
@@ -66,10 +68,35 @@ final class MainViewModel: ViewModel {
         Task { @MainActor in
             await requestAuthorization()
         }
+
+        openDealNotification = NotificationCenter.default.addObserver(forName: NSNotification.openDeal, object: nil, queue: nil, using: {[weak self] notification in
+            guard let self = self, let params = notification.object as? NotificationHandler.OpenDealParams else { return }
+            var accountExist = false
+            if !params.recipients.contains(account.publicKey) {
+                for publicKey in params.recipients {
+                    guard let newAccount = AppManagerImpl.shared.getAccount(by: publicKey) else {
+                        continue
+                    }
+                    AppManagerImpl.shared.setAccount(for: newAccount)
+                    self.trigger(.updateAccount)
+                    accountExist = true
+                    break
+                }
+            } else {
+                accountExist = true
+            }
+
+            guard accountExist else { return }
+            Task { @MainActor in
+                self.state.pushDeal = try? await self.loadDeal(id: params.dealId)
+            }
+        })
     }
 
     func trigger(_ input: MainInput, after: AfterTrigger? = nil) {
         switch input {
+        case .dealOpened:
+            state.pushDeal = nil
         case .saveTokenSettings(let tokens):
             UtilsStorage.shared.saveTokenSettings(tokens: tokens)
             Task {
@@ -123,6 +150,20 @@ final class MainViewModel: ViewModel {
     }
 
     // MARK: - Private Methods
+
+    private func loadDeal(id: String) async throws -> Deal {
+        try await withCheckedThrowingContinuation { continues in
+
+            dealsAPIService?.getDeal(id: id, completion: { result in
+                switch result {
+                case .success(let deal):
+                    continues.resume(returning: deal)
+                case .failure(let error):
+                    continues.resume(throwing: error)
+                }
+            })
+        }
+    }
 
     private func loadDeals(type: MainState.DealType) async throws -> [Deal] {
         try await withCheckedThrowingContinuation { continues in
