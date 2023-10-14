@@ -11,7 +11,7 @@ import UserNotifications
 
 struct RootState {
     enum State {
-        case hasAccount(CommonAccount), noAccount, loading, error(Error)
+        case hasAccount(CommonAccount), noAccount, loading, error(Error), openDeal(CommonAccount, String)
     }
 
     enum TransactionState: Equatable {
@@ -22,7 +22,7 @@ struct RootState {
 }
 
 enum RootInput {
-    case savedAccount(CommonAccount), logout, signTx(TransactionSignType), cancelTx, reload
+    case savedAccount(CommonAccount), logout, signTx(TransactionSignType), cancelTx, reload, openDeal(String)
 }
 
 final class RootViewModel: ViewModel {
@@ -57,6 +57,10 @@ final class RootViewModel: ViewModel {
             state.state = .loading
             // appManager.clearAccount()
             reload()
+        case .openDeal(let dealId):
+            state.state = .openDeal(self.appManager.currentAccount, dealId)
+            debugPrint("Messaging: Trigger Open DEAL \(dealId)")
+
         }
     }
 
@@ -108,6 +112,9 @@ struct ContractusApp: App {
         return ResizableSheetCenter.resolve(for: windowScene)
     }
 
+    let pub = NotificationCenter.default
+        .publisher(for: NSNotification.openDeal)
+
     var body: some Scene {
         WindowGroup {
             Group {
@@ -128,36 +135,49 @@ struct ContractusApp: App {
                         removal: .opacity)
                     )
                 case .hasAccount(let account):
-                    MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(
-                        account: account,
-                        accountStorage: ServiceFactory.shared.makeAccountStorage(),
-                        accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
-                        dealsAPIService: try? APIServiceFactory.shared.makeDealsService(),
-                        resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())), logoutCompletion: {
-                            rootViewModel.trigger(.logout)
-                        })
-                    .transition(AnyTransition.asymmetric(
-                        insertion: .move(edge: .trailing),
-                        removal: .move(edge: .leading))
-                    )
-                    .environment(\.resizableSheetCenter, resizableSheetCenter)
-                    .onChange(of: rootViewModel.state.transactionState, perform: { txState in
-                        switch txState {
-                        case .needSign:
-                            showTxSheet = true
-                        case .none:
-                            showTxSheet = false
-                        }
-                    })
-                    .rootSheet(isPresented: $showTxSheet, onDismiss: nil, content: {
-                        signView(account: account)
-                    })
+                    mainView(account: account)
+                case .openDeal(let account, let dealId):
+                    mainView(account: account, dealId: dealId)
                 }
             }
             .navigationBarColor()
             .animation(.default, value: rootViewModel.state)
             .background(R.color.mainBackground.color)
+            .onReceive(pub) { obj in
+                if let dealId = obj.object as? String  {
+                    rootViewModel.trigger(.openDeal(dealId))
+                    debugPrint("Messaging: recieved publisher Open DEAL \(dealId)")
+                }
+            }
         }
+    }
+
+    @ViewBuilder
+    func mainView(account: CommonAccount, dealId: String? = nil) -> some View {
+        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(
+            account: account,
+            accountStorage: ServiceFactory.shared.makeAccountStorage(),
+            accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
+            dealsAPIService: try? APIServiceFactory.shared.makeDealsService(),
+            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())), selectedDealId: dealId, logoutCompletion: {
+                rootViewModel.trigger(.logout)
+            })
+        .transition(AnyTransition.asymmetric(
+            insertion: .move(edge: .trailing),
+            removal: .move(edge: .leading))
+        )
+        .environment(\.resizableSheetCenter, resizableSheetCenter)
+        .onChange(of: rootViewModel.state.transactionState, perform: { txState in
+            switch txState {
+            case .needSign:
+                showTxSheet = true
+            case .none:
+                showTxSheet = false
+            }
+        })
+        .rootSheet(isPresented: $showTxSheet, onDismiss: nil, content: {
+            signView(account: account)
+        })
     }
 
     @ViewBuilder
@@ -225,10 +245,6 @@ struct ContractusApp: App {
             .background(R.color.secondaryBackground.color)
             .cornerRadius(20)
         }
-
-
-
-
     }
 }
 
@@ -271,7 +287,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
     
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+    func application(_ application: UIApplication, 
+                     didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
 #if DEBUG
         if let messageID = userInfo[gcmMessageIDKey] {
@@ -296,7 +313,7 @@ extension AppDelegate: MessagingDelegate {
 }
 
 @available(iOS 10, *)
-extension AppDelegate : UNUserNotificationCenterDelegate {
+extension AppDelegate: UNUserNotificationCenterDelegate {
     
     // Receive displayed notifications for iOS 10 devices.
     func userNotificationCenter(_ center: UNUserNotificationCenter,
@@ -334,6 +351,14 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         
         print(userInfo)
 #endif
+        if let deal_id = userInfo["deal_id"] {
+            NotificationCenter.default.post(
+                name: NSNotification.openDeal,
+                object: deal_id,
+                userInfo: nil
+            )
+        }
+        
         Messaging.messaging().appDidReceiveMessage(userInfo)
 
         completionHandler()
