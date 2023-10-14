@@ -187,9 +187,22 @@ struct MainView: View {
                 .onChange(of: dealsType, perform: { newType in
                     viewModel.trigger(.load(newType))
                 })
-                .onChange(of: viewModel.state.pushDeal, perform: { delaForOpen in
-                    self.selectedDeal = delaForOpen
-                    viewModel.trigger(.dealOpened)
+                .onChange(of: viewModel.state.pushDeal, perform: { dealForOpen in
+                    if let dealForOpen = dealForOpen {
+                        sheetType = nil
+                        topUpState = .hidden
+                        if self.selectedDeal != nil {
+                            self.selectedDeal = nil
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                self.selectedDeal = dealForOpen
+                            }
+                        } else {
+                            self.selectedDeal = dealForOpen
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            viewModel.trigger(.dealOpened)
+                        }
+                    }
                 })
                 .confirmationDialog(Text(R.string.localizable.mainTitleFilter()), isPresented: $showDealFilter, actions: {
                     ForEach(MainViewModel.State.DealType.allCases, id: \.self) { type in
