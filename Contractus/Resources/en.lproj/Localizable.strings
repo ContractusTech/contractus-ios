@@ -232,23 +232,23 @@
 "deal.description-command.first-sign" = "Sign the contract, when all parties (client, executor and checker if need) to the contract sign it it will start to be executed automatically.";
 "deal.description-command.cant-sign" = "To sign the contract, you need to specify the contractor and the cost";
 "deal.description-command.cancel-sign" = "You can cancel your signature before your partner signs the contract. The work of the contract will begin when the partner signs.";
-"deal.description-command.stop-deal" = "You can stop the contract all funds will be refunded.";
+"deal.description-command.stop-deal" = "You can cancel the deal all funds will be refunded.";
 "deal.description-command.finish-deal" = "If all the work is done as specified in the contract you can complete the contract, the contractor will receive payment. The checker will receive a commission for services.";
 "deal.description-command.revoke-deal" = "You can cancel the deal before it starts.";
 "deal.delete.alert.button" = "Yes, delete";
 "deal.delete.alert.message" = "You want delete file?";
 "deal.status.finished.title" = "Deal is finished";
 "deal.status.canceled.title" = "Deal is canceled";
-"deal.status.started.title" = "Deal in work";
+"deal.status.started.title" = "In work";
 "deal.status.finished.subtitle" = "%@ was transferred to the account of the executor %@";
 "deal.status.started.subtitle.executor" = "You need to fulfill the conditions of the deal. The customer can cancel the deal after %@.";
 "deal.status.started.subtitle.checker" = "The contractor has begun to fulfill the terms of the deal. Keep an eye on the outcome of the contract, when everything is done you need to finalize the deal.";
-"deal.status.started.subtitle.client" = "The Contractor has begun to fulfill the terms of the deal. If the conditions are not met, you can cancel the deal after %@.";
+"deal.status.started.subtitle.client" = "The contractor has begun to fulfill the deal. If the conditions are not met, you can cancel the deal after %@.";
 "deal.status.finished.subtitle.with-checker" = "%@ was transferred to the account of the executor %@ and %@ to the account of the checker %@.";
 "deal.status.canceled.subtitle" = "The funds were returned to the client";
 "deal.status.canceled.subtitle.with-checker" = "%@ was transferred to the account of the checker and the balance was returned to the client.";
 "deal.status.revoked.subtitle" = "Owner canceled before signing by all parties of the contract";
-"deal.information.about-sign" = "To start the deal, fill in the amount, deadline, the %@ accounts of all parties involved in the deal, and the checker fee (if an checker is in your deal).";
+"deal.information.about-sign" = "To start the deal, fill in the amount, deadline, the %@ accounts of all parties involved in the deal, and the checker fee (if a checker is in your deal).";
 "deal.edit.warning" = "Once the deal has been updated, all participants must re-sign the agreement.";
 "deal.edit.warning.title" = "Already signed";
 "deadline.title" = "Select deadline";
@@ -380,7 +380,7 @@
 "transactionSign.subtitle.holder-mode" = "For the period of the deal will be lock 10k CTUS";
 
 "transaction.type.init-deal" = "Start of the deal";
-"transaction.type.finish-deal" = "Complete the deal";
+"transaction.type.finish-deal" = "Finish the deal";
 "transaction.type.cancel-deal" = "Cancel the deal";
 "transaction.type.wrap-sol" = "SOL ➞ wSOL";
 "transaction.type.unwrap-wsol" = "wSOL ➞ SOL";
@@ -402,6 +402,8 @@
 "topup.subtitle.cards" = "Buy cryptocurrency, USDT, USDC, SOL, etc";
 "topup.subtitle.crypto" = "Deposit from another account";
 "topup.subtitle.load" = "Obtain loan funds for the deal";
+"topup.title.buy-ctus" = "Buy CTUS Token";
+"topup.subtitle.buy-ctus" = "Supported more than 30 cryptocurrencies";
 
 "referral.title" = "Referral Program";
 "referral.promocode.title" = "Your promo code";
@@ -438,8 +440,8 @@
 "buyToken.pay.title" = "Pay%@";
 
 "unlockHolder.title" = "Holder Mode";
-"unlockHolder.subtitle" = "Allows you to make transactions without fees and unlock tokens to pay for deals";
-"unlockHolder.methods" = "Methods to get CTUS token";
+"unlockHolder.subtitle" = "Allows you to create deals without fees and and to unlock all other SPL tokens to pay for deals.";
+"unlockHolder.methods" = "Ways to get CTUS token";
 "unlockHolder.buy.title" = "Buy with cryptocurrencies";
 "unlockHolder.buy.subtitle" = "Supported more than 30 cryptocurrencies";
 "unlockHolder.coinstore.title" = "Coinstore";
@@ -449,3 +451,5 @@
 "unlockHolder.pancake.title" = "PancakeSwap";
 "unlockHolder.pancake.title.1" = "DEX";
 "unlockHolder.pancake.subtitle" = "Need to migrate tokens from the Binance blockchain to Solana using the Portal bridge";
+"unlockHolder.main-button.title" = "Unlock Holder Mode";
+"unlockHolder.main-button.subtitle" = "Buy 10k CTUS token";
