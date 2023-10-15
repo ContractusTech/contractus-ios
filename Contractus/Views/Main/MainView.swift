@@ -79,7 +79,7 @@ struct MainView: View {
                                 sheetType = .tokenSettings
                             }
 
-                        if viewModel.state.balance != nil {
+                        if viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
                             UnlockHolderButtonView() {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
                                 holderModeState = .medium
@@ -227,6 +227,9 @@ struct MainView: View {
                                 topUpState = .hidden
                             case .loan:
                                 break;
+                            case .buyCTUS:
+                                topUpState = .hidden
+                                holderModeState = .medium
                             }
                         }
                     }
@@ -428,7 +431,7 @@ struct MainView: View {
                             Constants.menuImage
                         }
                     }
-
+                    #if DEBUG
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button {
                             EventService.shared.send(event: DefaultAnalyticsEvent.mainQRscannerTap)
@@ -437,6 +440,7 @@ struct MainView: View {
                             Constants.scanQRImage
                         }
                     }
+                    #endif
                 }
                 .baseBackground()
                 .edgesIgnoringSafeArea(.bottom)
