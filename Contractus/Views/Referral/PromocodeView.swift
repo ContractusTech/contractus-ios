@@ -45,6 +45,11 @@ struct PromocodeView: View {
                         .multilineTextAlignment(.center)
                         .opacity(value.isEmpty ? 0 : 1)
                         .animation(Animation.easeInOut(duration: 0.2), value: value.isEmpty)
+                } else {
+                    Text(R.string.localizable.commonError())
+                        .font(.footnote.weight(.semibold))
+                        .padding(.top, 20)
+                        .opacity(0)
                 }
                 
                 Spacer()
