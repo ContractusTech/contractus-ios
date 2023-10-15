@@ -185,15 +185,13 @@ struct MenuView: View {
             .navigationTitle(R.string.localizable.menuTitle())
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarLeading) {
-                    if isiOSAppOnMac() {
-                        Button {
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            Constants.closeImage
-                                .resizable()
-                                .frame(width: 21, height: 21)
-                                .foregroundColor(R.color.textBase.color)
-                        }
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Constants.closeImage
+                            .resizable()
+                            .frame(width: 21, height: 21)
+                            .foregroundColor(R.color.textBase.color)
                     }
                 }
             }
