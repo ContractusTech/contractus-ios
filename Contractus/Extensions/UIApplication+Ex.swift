@@ -26,5 +26,28 @@ extension UIApplication {
         currentKeyWindow?.rootViewController
     }
 
+    static func closeAllModal(completion: @escaping () -> Void) {
+        DispatchQueue.main.async {
+            var controllers: [UIViewController] = []
+            var nestedController: UIViewController? = UIApplication.shared.rootViewController?.presentedViewController
+            while(nestedController != nil) {
+                controllers.append(nestedController!)
+                nestedController = nestedController?.presentedViewController
+            }
+
+            let group = DispatchGroup()
+            for vc in controllers.reversed() {
+                group.enter()
+                vc.dismiss(animated: true) {
+                    group.leave()
+                }
+            }
+
+            group.notify(queue: .main) {
+                completion()
+            }
+        }
+    }
+
 }
 

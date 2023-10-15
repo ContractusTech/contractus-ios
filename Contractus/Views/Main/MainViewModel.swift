@@ -57,7 +57,8 @@ final class MainViewModel: ViewModel {
         accountStorage: AccountStorage,
         accountAPIService: ContractusAPI.AccountService?,
         dealsAPIService: ContractusAPI.DealsService?,
-        resourcesAPIService: ContractusAPI.ResourcesService?)
+        resourcesAPIService: ContractusAPI.ResourcesService?,
+        notification: NotificationHandler.NotificationType? = nil)
     {
         self.state = MainState(account: account, selectedTokens: UtilsStorage.shared.getTokenSettings() ?? [])
 
@@ -69,27 +70,14 @@ final class MainViewModel: ViewModel {
             await requestAuthorization()
         }
 
+        if let notification = notification {
+            handleNotification(notification)
+        }
+
         openDealNotification = NotificationCenter.default.addObserver(forName: NSNotification.openDeal, object: nil, queue: nil, using: {[weak self] notification in
             guard let self = self, let params = notification.object as? NotificationHandler.OpenDealParams else { return }
-            var accountExist = false
-            if !params.recipients.contains(account.publicKey) {
-                for publicKey in params.recipients {
-                    guard let newAccount = AppManagerImpl.shared.getAccount(by: publicKey) else {
-                        continue
-                    }
-                    AppManagerImpl.shared.setAccount(for: newAccount)
-                    self.trigger(.updateAccount)
-                    accountExist = true
-                    break
-                }
-            } else {
-                accountExist = true
-            }
 
-            guard accountExist else { return }
-            Task { @MainActor in
-                self.state.pushDeal = try? await self.loadDeal(id: params.dealId)
-            }
+            self.handleNotification(.open(params))
         })
     }
 
@@ -287,5 +275,35 @@ final class MainViewModel: ViewModel {
             _ = try? await UNUserNotificationCenter.current()
                 .requestAuthorization(options: [.alert, .badge, .sound])
         }
+    }
+
+    private func handleNotification(_ notification: NotificationHandler.NotificationType) {
+
+        switch notification {
+        case .open(let params):
+            var accountExist = false
+            if !params.recipients.contains(self.state.account.publicKey) {
+                for publicKey in params.recipients {
+                    guard let newAccount = AppManagerImpl.shared.getAccount(by: publicKey) else {
+                        continue
+                    }
+                    AppManagerImpl.shared.setAccount(for: newAccount)
+                    self.trigger(.updateAccount)
+                    self.trigger(.preload)
+                    self.trigger(.load(.all))
+                    
+                    accountExist = true
+                    break
+                }
+            } else {
+                accountExist = true
+            }
+
+            guard accountExist else { return }
+            Task { @MainActor in
+                self.state.pushDeal = try? await self.loadDeal(id: params.dealId)
+            }
+        }
+
     }
 }

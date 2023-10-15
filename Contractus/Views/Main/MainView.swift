@@ -188,18 +188,19 @@ struct MainView: View {
                     viewModel.trigger(.load(newType))
                 })
                 .onChange(of: viewModel.state.pushDeal, perform: { dealForOpen in
-                    if let dealForOpen = dealForOpen {
+                    guard let dealForOpen = dealForOpen else { return }
+                    UIApplication.closeAllModal {
                         sheetType = nil
                         topUpState = .hidden
+
                         if self.selectedDeal != nil {
                             self.selectedDeal = nil
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                 self.selectedDeal = dealForOpen
+                                viewModel.trigger(.dealOpened)
                             }
                         } else {
                             self.selectedDeal = dealForOpen
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             viewModel.trigger(.dealOpened)
                         }
                     }

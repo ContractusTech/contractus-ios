@@ -10,8 +10,9 @@ import FirebaseMessaging
 import UserNotifications
 
 struct RootState {
+
     enum State {
-        case hasAccount(CommonAccount), noAccount, loading, error(Error)
+        case hasAccount(CommonAccount, notification: NotificationHandler.NotificationType? = nil), noAccount, loading, error(Error)
     }
 
     enum TransactionState: Equatable {
@@ -69,7 +70,7 @@ final class RootViewModel: ViewModel {
             guard let self = self else { return }
             do {
                 try await self.appManager.sync()
-                self.state.state = .hasAccount(self.appManager.currentAccount)
+                self.state.state = .hasAccount(self.appManager.currentAccount, notification: NotificationHandler.notification)
             } catch AppManagerImpl.AppManagerError.noCurrentAccount {
                 self.state.state = .noAccount
                 AppManagerImpl.shared.clearAccount()
@@ -127,8 +128,8 @@ struct ContractusApp: App {
                         insertion: .opacity,
                         removal: .opacity)
                     )
-                case .hasAccount(let account):
-                    mainView(account: account)
+                case .hasAccount(let account, let notification):
+                    mainView(account: account, notification: notification)
                 }
             }
             .navigationBarColor()
@@ -138,13 +139,14 @@ struct ContractusApp: App {
     }
 
     @ViewBuilder
-    func mainView(account: CommonAccount) -> some View {
+    func mainView(account: CommonAccount, notification: NotificationHandler.NotificationType?) -> some View {
         MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(
             account: account,
             accountStorage: ServiceFactory.shared.makeAccountStorage(),
             accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
             dealsAPIService: try? APIServiceFactory.shared.makeDealsService(),
-            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())), logoutCompletion: {
+            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService(),
+            notification: notification)), logoutCompletion: {
                 rootViewModel.trigger(.logout)
             })
         .transition(AnyTransition.asymmetric(
@@ -269,6 +271,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         application.registerForRemoteNotifications()
 
+        let remoteNotification = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification]
+        if let remoteNotification = remoteNotification as? [AnyHashable: Any] {
+            NotificationHandler.handler(notification: remoteNotification)
+        }
+
         return true
     }
     
@@ -282,6 +289,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         print(userInfo)
 #endif
+
         Messaging.messaging().appDidReceiveMessage(userInfo)
         
         completionHandler(UIBackgroundFetchResult.newData)
@@ -360,8 +368,8 @@ fileprivate func appearanceSetup() {
 extension RootState: Equatable {
 
     static func == (lhs: RootState, rhs: RootState) -> Bool {
-        if case .hasAccount(let account1) = lhs.state, case .hasAccount(let account2) = rhs.state {
-            return account1.publicKey == account2.publicKey
+        if case .hasAccount(let account1, let notification1) = lhs.state, case .hasAccount(let account2, let notification2) = rhs.state {
+            return account1.publicKey == account2.publicKey && notification1 == notification2
         }
 
         if case .noAccount = lhs.state, case .noAccount = rhs.state {
