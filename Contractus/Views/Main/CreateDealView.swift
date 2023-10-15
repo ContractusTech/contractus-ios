@@ -215,6 +215,7 @@ struct CreateDealView: View {
                                 VStack {
                                     ForEach(types, id: \.self) { type in
                                         Button {
+                                            ImpactGenerator.light()
                                             performanceBondType = type
                                         } label: {
                                             HStack {
