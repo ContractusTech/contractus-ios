@@ -400,3 +400,10 @@ func switchToMainWindow() {
         .first?.windows
         .first { !$0.isKeyWindow }?.makeKey()
 }
+
+func isiOSAppOnMac() -> Bool {
+    if #available(iOS 14.0, *) {
+        return ProcessInfo.processInfo.isiOSAppOnMac
+    }
+    return false
+}

@@ -17,6 +17,7 @@ fileprivate enum Constants {
     static let faqIcon = Image(systemName: "questionmark.circle")
     static let supportIcon = Image(systemName: "lifepreserver")
     static let giftIcon = Image(systemName: "giftcard")
+    static let closeImage = Image(systemName: "xmark")
 }
 
 struct MenuItemView<Destination>: View where Destination: View {
@@ -81,6 +82,8 @@ struct MenuSectionView: View {
 }
 
 struct MenuView: View {
+
+    @Environment(\.presentationMode) var presentationMode
 
     enum ActionType {
         case logout, changeAccount
@@ -180,6 +183,18 @@ struct MenuView: View {
             })
             .baseBackground()
             .navigationTitle(R.string.localizable.menuTitle())
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Constants.closeImage
+                            .resizable()
+                            .frame(width: 21, height: 21)
+                            .foregroundColor(R.color.textBase.color)
+                    }
+                }
+            }
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 EventService.shared.send(event: DefaultAnalyticsEvent.settingsOpen)
