@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "AppsFlyerLib",
+        "repositoryURL": "https://github.com/AppsFlyerSDK/AppsFlyerFramework",
+        "state": {
+          "branch": null,
+          "revision": "0d8359239a349db4ac2aba8efe2ad8835fc799b5",
+          "version": "6.12.2"
+        }
+      },
+      {
         "package": "Base58Swift",
         "repositoryURL": "https://github.com/keefertaylor/Base58Swift.git",
         "state": {
