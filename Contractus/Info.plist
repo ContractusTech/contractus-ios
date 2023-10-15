@@ -28,5 +28,9 @@
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
+	<key>APPSFLYER_DEV_KEY</key>
+	<string></string>
+	<key>APPLE_APP_ID</key>
+	<string></string>
 </dict>
 </plist>

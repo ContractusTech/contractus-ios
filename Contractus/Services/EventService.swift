@@ -75,6 +75,8 @@ enum DefaultAnalyticsEvent: String {
     case onboardingСlose = "onboarding_close"                               /// Закрытие онбординга
     case changelogOpen = "changelog_open"                                   /// Открыие лога изменений
     case changelogСlose = "changelog_close"                                 /// Закрытие лога изменений
+    case buyformOpen = "buyform_open"                                       /// Открытие формы покупки токенов
+    case buyformBuyTap = "buyform_buy_tap"                                  /// Нажатие на кнопку покупки
 }
 
 extension DefaultAnalyticsEvent: AnalyticsEvent {

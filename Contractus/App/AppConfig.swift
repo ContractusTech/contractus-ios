@@ -53,4 +53,10 @@ enum AppConfig {
     static let terms: URL = URL(string: "https://files.contractus.tech/Contractus-Terms.pdf")!
     
     static let policy: URL = URL(string: "https://files.contractus.tech/Contractus-PrivacyPolicy.pdf")!
+    
+    static let coinstoreUrl: URL = URL(string: "https://www.coinstore.com/#/spot/CTUSUSDT")!
+    
+    static let radiumUrl: URL = URL(string: "https://raydium.io/swap/?inputCurrency=Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB&outputCurrency=4yeK2cCyxNNz28fVqEbkLYNCb1T9qPadsuJWeZ44Evcq&fixed=in")!
+    
+    static let pancakeUrl: URL = URL(string: "https://pancakeswap.finance/swap?inputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c&outputCurrency=0x3a7BEa5d56bBcDC599827444786C370CF4D62DfA")!
 }

@@ -33,4 +33,16 @@ extension Date {
         formatter.unitsStyle = .full
         return formatter.localizedString(for: self, relativeTo: Date())
     }
+
+    static func fullRelativeDateFormatted(from: Date?, to: Date?) -> String {
+        guard let from = from, let to = to else { return "" }
+        let dcf: DateComponentsFormatter = DateComponentsFormatter()
+        dcf.includesApproximationPhrase = false
+        dcf.includesTimeRemainingPhrase = false
+        dcf.allowsFractionalUnits = false
+        dcf.maximumUnitCount = 2
+        dcf.unitsStyle = .full
+        dcf.allowedUnits = [.second, .minute, .hour, .day, .month, .year]
+        return dcf.string(from: from, to: to) ?? ""
+    }
 }

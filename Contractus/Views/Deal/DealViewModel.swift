@@ -128,6 +128,10 @@ struct DealState {
         deal.status == .new
     }
 
+    var canViewDeal: Bool {
+        deal.status != .new
+    }
+
     var isDealEnded: Bool {
         deal.status == .canceled || deal.status == .finished || deal.status == .revoked
     }

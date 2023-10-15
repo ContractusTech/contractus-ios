@@ -41,8 +41,22 @@ struct MainView: View {
     @State private var sheetType: SheetType? = .none
     @State private var dealsType: MainViewModel.State.DealType = .all
     @State private var transactionSignType: TransactionSignType?
-    @State private var topUpState: ResizableSheetState = .hidden
+    @State private var topUpState: ResizableSheetState = .hidden {
+        didSet {
+            if topUpState == .hidden {
+                switchToMainWindow()
+            }
+        }
+    }
+    @State private var holderModeState: ResizableSheetState = .hidden {
+        didSet {
+            if holderModeState == .hidden {
+                switchToMainWindow()
+            }
+        }
+    }
     @State private var showChangelog: Bool = false
+    @State private var showBuyCtus: Bool = false
     @State private var showDealFilter: Bool = false
     
     var body: some View {
@@ -64,6 +78,13 @@ struct MainView: View {
                             }) {
                                 sheetType = .tokenSettings
                             }
+
+                        if viewModel.state.balance != nil {
+                            UnlockHolderButtonView() {
+                                EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
+                                holderModeState = .medium
+                            }
+                        }
 
                         if !viewModel.state.statistics.isEmpty {
                             StatisticsView(items: viewModel.state.statistics) { item in
@@ -227,7 +248,7 @@ struct MainView: View {
                             }
                         }
                     }
-                    .animation(.easeInOut.speed(1.2))
+                    .animation(.easeInOut)
                     .background { context in
                         Color.black
                             .opacity(context.state == .medium ? 0.5 : 0)
@@ -238,6 +259,37 @@ struct MainView: View {
                     }
                     .supportedState([.medium, .hidden])
                 })
+                .resizableSheet($holderModeState, id: "holderMode") { builder in
+                    builder.content { context in
+                        UnlockHolderView { type in
+                            switch type {
+                            case .buy:
+                                EventService.shared.send(event: DefaultAnalyticsEvent.buyformBuyTap)
+                                holderModeState = .hidden
+                                showBuyCtus.toggle()
+                            case .coinstore:
+                                holderModeState = .hidden
+                                openCoinstore()
+                            case .raydium:
+                                holderModeState = .hidden
+                                openRaydium()
+                            case .pancake:
+                                holderModeState = .hidden
+                                openPancake()
+                            }
+                        }
+                    }
+                    .animation(.easeInOut)
+                    .background { context in
+                        Color.black
+                            .opacity(context.state == .medium ? 0.5 : 0)
+                            .ignoresSafeArea()
+                            .onTapGesture(perform: {
+                                holderModeState = .hidden
+                            })
+                    }
+                    .supportedState([.medium, .hidden])
+                }
 
                 .sheet(item: $sheetType, content: { type in
                     switch type {
@@ -343,6 +395,15 @@ struct MainView: View {
                         showChangelog.toggle()
                         EventService.shared.send(event: ExtendedAnalyticsEvent.changelogClose(service.changelogId()))
                     }
+                }
+                .fullScreenCover(isPresented: $showBuyCtus) {
+                    let service = APIServiceFactory.shared.makeCheckoutService()
+                    BuyTokensView(
+                        viewModel: AnyViewModel<BuyTokensState, BuyTokensInput>(BuyTokensViewModel(
+                            account: viewModel.state.account,
+                            checkoutService: service)
+                        )
+                    )
                 }
                 .navigationDestination(for: $selectedDeal) { deal in
                     dealView(deal: deal)

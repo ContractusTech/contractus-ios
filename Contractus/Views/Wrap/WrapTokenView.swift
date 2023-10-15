@@ -32,114 +32,107 @@ struct WrapTokenView: View {
 
     var body: some View {
         NavigationView {
-            ZStack(alignment: .bottom) {
-                ScrollView {
-                    VStack(spacing: 12) {
-                        ZStack(alignment: .trailing) {
-                            TextField(placeholder, text: $amount)
-                                .keyboardType(.decimalPad)
-                                .focused($isInputActive)
-                                .padding(12)
-                                .background(R.color.textFieldBackground.color)
-                                .cornerRadius(20)
-                                .font(.largeTitle.weight(.regular))
-                                .multilineTextAlignment(.center)
-                                .disabled(viewModel.operationType == .unwrap)
-                                .opacity(viewModel.operationType == .unwrap ? 0.8 : 1.0)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .inset(by: 0.5)
-                                        .stroke(R.color.textFieldBorder.color, lineWidth: 1)
-                                )
-                                .toolbar {
-                                    ToolbarItemGroup(placement: .keyboard) {
-                                        Spacer()
-                                        Button(R.string.localizable.commonDone()) {
-                                            isInputActive = false
-                                        }.font(.body.weight(.medium))
-                                    }
-                                }
-
-                            HStack {
-                                Button {
-                                    amount = viewModel.from.formatted()
-                                } label: {
-                                    Text(R.string.localizable.commonAll())
-                                        .font(.footnote.weight(.medium))
-                                        .padding(8)
-                                        .foregroundColor(R.color.textBase.color)
-                                        .cornerRadius(10)
-                                        .overlay {
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .inset(by: 0.5)
-                                                .stroke(R.color.baseSeparator.color, lineWidth: 1)
-                                        }
-                                }
-                            }
-                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 16))
-                            .opacity(viewModel.allowAll ? 1.0 : 0)
-                        }
-
-                        HStack {
-                            HStack {
-                                Spacer()
-                                VStack(spacing: 6) {
-                                    Text(viewModel.from.token.code)
-                                        .foregroundColor(R.color.textBase.color)
-                                        .font(.title3.weight(.semibold))
-
-                                    Text(viewModel.from.formatted())
-                                        .foregroundColor(R.color.secondaryText.color)
-                                        .font(.footnote.weight(.medium))
-                                }
-                                Spacer()
-                            }
-                            HStack {
-                                Spacer()
-                                ZStack {
-                                    Circle()
-                                        .stroke(R.color.baseSeparator.color, lineWidth: 1)
-                                        .frame(width: 28, height: 28)
-                                    Constants.arrowDownImage.foregroundColor(R.color.secondaryText.color)
-                                }
-                                .frame(width: 28, height: 28)
-                                Spacer()
-                            }
-                            HStack {
-                                Spacer()
-                                VStack(spacing: 6) {
-                                    Text(viewModel.to.token.code)
-                                        .foregroundColor(R.color.textBase.color)
-                                        .font(.title3.weight(.semibold))
-                                    Text(viewModel.to.formatted())
-                                        .foregroundColor(R.color.secondaryText.color)
-                                        .font(.footnote.weight(.medium))
-                                }
-                                Spacer()
-                            }
-                        }
-                        .padding(16)
-                        .overlay {
+            VStack(spacing: 12) {
+                ZStack(alignment: .trailing) {
+                    TextField(placeholder, text: $amount)
+                        .keyboardType(.decimalPad)
+                        .focused($isInputActive)
+                        .padding(12)
+                        .background(R.color.textFieldBackground.color)
+                        .cornerRadius(20)
+                        .font(.largeTitle.weight(.regular))
+                        .multilineTextAlignment(.center)
+                        .disabled(viewModel.operationType == .unwrap)
+                        .opacity(viewModel.operationType == .unwrap ? 0.8 : 1.0)
+                        .overlay(
                             RoundedRectangle(cornerRadius: 20)
                                 .inset(by: 0.5)
-                                .stroke(R.color.baseSeparator.color, lineWidth: 1)
-                        }
-
+                                .stroke(R.color.textFieldBorder.color, lineWidth: 1)
+                        )
+                    HStack {
                         Button {
-                            viewModel.trigger(.swap)
-                            amount = viewModel.state.operationType == .unwrap ? viewModel.state.from.formatted() : ""
+                            amount = viewModel.from.formatted()
                         } label: {
-                            HStack(spacing: 8) {
-                                Constants.swapImage
-                                    .resizable()
-                                    .frame(width: 12, height: 12)
-                                    .foregroundColor(R.color.textBase.color)
-                                Text(R.string.localizable.wrapSwap())
-                                    .foregroundColor(R.color.textBase.color)
-                            }
+                            Text(R.string.localizable.commonAll())
+                                .font(.footnote.weight(.medium))
+                                .padding(8)
+                                .foregroundColor(R.color.textBase.color)
+                                .cornerRadius(10)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .inset(by: 0.5)
+                                        .stroke(R.color.baseSeparator.color, lineWidth: 1)
+                                }
                         }
                     }
+                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 16))
+                    .opacity(viewModel.allowAll ? 1.0 : 0)
                 }
+                .padding(.top, 16)
+
+                HStack {
+                    HStack {
+                        Spacer()
+                        VStack(spacing: 6) {
+                            Text(viewModel.from.token.code)
+                                .foregroundColor(R.color.textBase.color)
+                                .font(.title3.weight(.semibold))
+                            
+                            Text(viewModel.from.formatted())
+                                .foregroundColor(R.color.secondaryText.color)
+                                .font(.footnote.weight(.medium))
+                        }
+                        Spacer()
+                    }
+                    HStack {
+                        Spacer()
+                        ZStack {
+                            Circle()
+                                .stroke(R.color.baseSeparator.color, lineWidth: 1)
+                                .frame(width: 28, height: 28)
+                            Constants.arrowDownImage.foregroundColor(R.color.secondaryText.color)
+                        }
+                        .frame(width: 28, height: 28)
+                        Spacer()
+                    }
+                    HStack {
+                        Spacer()
+                        VStack(spacing: 6) {
+                            Text(viewModel.to.token.code)
+                                .foregroundColor(R.color.textBase.color)
+                                .font(.title3.weight(.semibold))
+                            Text(viewModel.to.formatted())
+                                .foregroundColor(R.color.secondaryText.color)
+                                .font(.footnote.weight(.medium))
+                        }
+                        Spacer()
+                    }
+                }
+                .padding(16)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 20)
+                        .inset(by: 0.5)
+                        .stroke(R.color.baseSeparator.color, lineWidth: 1)
+                }
+                
+                Button {
+                    viewModel.trigger(.swap)
+                    amount = viewModel.state.operationType == .unwrap ? viewModel.state.from.formatted() : ""
+                } label: {
+                    HStack(spacing: 8) {
+                        Constants.swapImage
+                            .resizable()
+                            .frame(width: 12, height: 12)
+                            .foregroundColor(R.color.textBase.color)
+                        Text(R.string.localizable.wrapSwap())
+                            .foregroundColor(R.color.textBase.color)
+                    }
+                }
+                Spacer()
+                    .onTapGesture {
+                        isInputActive = false
+                    }
+
                 CButton(
                     title: buttonTitle,
                     style: .primary,
@@ -149,9 +142,33 @@ struct WrapTokenView: View {
                 ) {
                     viewModel.trigger(.send(amount))
                 }
+                .padding(.bottom, 16)
             }
-            .onAppear() {
-                UIScrollView.appearance().keyboardDismissMode = .onDrag
+            .padding(.horizontal, 18)
+            .baseBackground()
+            .navigationTitle(R.string.localizable.wrapTitle())
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Constants.closeImage
+                            .resizable()
+                            .frame(width: 21, height: 21)
+                            .foregroundColor(R.color.textBase.color)
+                    }
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button(R.string.localizable.commonDone()) {
+                        isInputActive = false
+                    }
+                    .font(.body.weight(.medium))
+                }
+            }
+            .onAppear {
+                isInputActive = true
             }
             .onChange(of: amount) { newValue in
                 viewModel.trigger(.update(newValue))
@@ -164,7 +181,6 @@ struct WrapTokenView: View {
                         if afterSign {
                             presentationMode.wrappedValue.dismiss()
                         }
-
                     }.interactiveDismiss(canDismissSheet: false)
                 } else {
                     EmptyView()
@@ -192,23 +208,6 @@ struct WrapTokenView: View {
                         })
                 }
             }
-            .padding(UIConstants.contentInset)
-            .navigationTitle(R.string.localizable.wrapTitle())
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        Constants.closeImage
-                            .resizable()
-                            .frame(width: 21, height: 21)
-                            .foregroundColor(R.color.textBase.color)
-                    }
-                }
-            }
-            .edgesIgnoringSafeArea(.bottom)
-            .baseBackground()
         }
     }
 
