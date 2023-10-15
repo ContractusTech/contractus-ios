@@ -79,7 +79,7 @@ struct MainView: View {
                                 sheetType = .tokenSettings
                             }
 
-                        if viewModel.state.balance != nil {
+                        if viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
                             UnlockHolderButtonView() {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
                                 holderModeState = .medium
@@ -208,6 +208,24 @@ struct MainView: View {
                 .onChange(of: dealsType, perform: { newType in
                     viewModel.trigger(.load(newType))
                 })
+                .onChange(of: viewModel.state.pushDeal, perform: { dealForOpen in
+                    guard let dealForOpen = dealForOpen else { return }
+                    UIApplication.closeAllModal {
+                        sheetType = nil
+                        topUpState = .hidden
+
+                        if self.selectedDeal != nil {
+                            self.selectedDeal = nil
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                self.selectedDeal = dealForOpen
+                                viewModel.trigger(.dealOpened)
+                            }
+                        } else {
+                            self.selectedDeal = dealForOpen
+                            viewModel.trigger(.dealOpened)
+                        }
+                    }
+                })
                 .confirmationDialog(Text(R.string.localizable.mainTitleFilter()), isPresented: $showDealFilter, actions: {
                     ForEach(MainViewModel.State.DealType.allCases, id: \.self) { type in
                         Button(dealTitle(type: type), role: .none) {
@@ -227,6 +245,9 @@ struct MainView: View {
                                 topUpState = .hidden
                             case .loan:
                                 break;
+                            case .buyCTUS:
+                                topUpState = .hidden
+                                holderModeState = .medium
                             }
                         }
                     }
@@ -428,7 +449,7 @@ struct MainView: View {
                             Constants.menuImage
                         }
                     }
-
+                    #if DEBUG
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button {
                             EventService.shared.send(event: DefaultAnalyticsEvent.mainQRscannerTap)
@@ -437,6 +458,7 @@ struct MainView: View {
                             Constants.scanQRImage
                         }
                     }
+                    #endif
                 }
                 .baseBackground()
                 .edgesIgnoringSafeArea(.bottom)

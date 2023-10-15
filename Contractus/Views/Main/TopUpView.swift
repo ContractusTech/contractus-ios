@@ -5,6 +5,7 @@ fileprivate enum Constants {
     static let cardImage = Image(systemName: "creditcard")
     static let depositImage = Image(systemName: "arrow.down.to.line")
     static let loanImage = Image(systemName: "percent")
+    static let holderImage = Image(systemName: "crown.fill")
 }
 
 struct TopUpView: View {
@@ -16,6 +17,7 @@ struct TopUpView: View {
         case crypto
         case loan
         case fiat(URL)
+        case buyCTUS
     }
 
     @StateObject var viewModel: AnyViewModel<TopUpViewModel.State, TopUpViewModel.Inputs> = .init(TopUpViewModel(accountService: try? APIServiceFactory.shared.makeAccountService()))
@@ -39,6 +41,10 @@ struct TopUpView: View {
             itemView(image: Constants.cardImage, title: R.string.localizable.topupTitleCards(), description: R.string.localizable.topupSubtitleCards(), disabled: viewModel.state.disabled, loading: viewModel.state.state == .loadingMethods) {
                 viewModel.trigger(.getMethods)
 
+            }
+
+            itemView(image: Constants.holderImage, title: R.string.localizable.topupTitleBuyCtus(), description: R.string.localizable.topupSubtitleBuyCtus(), disabled: false, loading: false) {
+                action(.buyCTUS)
             }
 
             itemView(image: Constants.loanImage, title: R.string.localizable.topupTitleLoad(), description: R.string.localizable.topupSubtitleLoad(), disabled: true, loading: false) {
@@ -82,6 +88,7 @@ struct TopUpView: View {
     @ViewBuilder
     func itemView(image: Image, title: String, description: String, disabled: Bool, loading: Bool, action: @escaping () -> Void) -> some View {
         Button {
+            ImpactGenerator.light()
             action()
         } label: {
             HStack(alignment: .center) {

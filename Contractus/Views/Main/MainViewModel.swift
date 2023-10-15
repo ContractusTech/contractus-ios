@@ -17,6 +17,7 @@ enum MainInput {
     case loadDeals(MainState.DealType)
     case executeScanResult(ScanResult)
     case saveTokenSettings([ContractusAPI.Token])
+    case dealOpened
 }
 
 struct MainState {
@@ -29,7 +30,7 @@ struct MainState {
     enum DealsState {
         case loading, loaded
     }
-
+    var pushDeal: Deal?
     var account: CommonAccount
     var statistics: [ContractusAPI.AccountStatistic] = []
     var balance: Balance?
@@ -43,6 +44,7 @@ final class MainViewModel: ViewModel {
 
     @Published private(set) var state: MainState
 
+    private var openDealNotification: NSObjectProtocol?
     private var resourcesAPIService: ContractusAPI.ResourcesService?
     private var accountAPIService: ContractusAPI.AccountService?
     private var dealsAPIService: ContractusAPI.DealsService?
@@ -55,7 +57,8 @@ final class MainViewModel: ViewModel {
         accountStorage: AccountStorage,
         accountAPIService: ContractusAPI.AccountService?,
         dealsAPIService: ContractusAPI.DealsService?,
-        resourcesAPIService: ContractusAPI.ResourcesService?)
+        resourcesAPIService: ContractusAPI.ResourcesService?,
+        notification: NotificationHandler.NotificationType? = nil)
     {
         self.state = MainState(account: account, selectedTokens: UtilsStorage.shared.getTokenSettings() ?? [])
 
@@ -63,10 +66,25 @@ final class MainViewModel: ViewModel {
         self.dealsAPIService = dealsAPIService
         self.resourcesAPIService = resourcesAPIService
         self.accountStorage = accountStorage
+        Task { @MainActor in
+            await requestAuthorization()
+        }
+
+        if let notification = notification {
+            handleNotification(notification)
+        }
+
+        openDealNotification = NotificationCenter.default.addObserver(forName: NSNotification.openDeal, object: nil, queue: nil, using: {[weak self] notification in
+            guard let self = self, let params = notification.object as? NotificationHandler.OpenDealParams else { return }
+
+            self.handleNotification(.open(params))
+        })
     }
 
     func trigger(_ input: MainInput, after: AfterTrigger? = nil) {
         switch input {
+        case .dealOpened:
+            state.pushDeal = nil
         case .saveTokenSettings(let tokens):
             UtilsStorage.shared.saveTokenSettings(tokens: tokens)
             Task {
@@ -120,6 +138,20 @@ final class MainViewModel: ViewModel {
     }
 
     // MARK: - Private Methods
+
+    private func loadDeal(id: String) async throws -> Deal {
+        try await withCheckedThrowingContinuation { continues in
+
+            dealsAPIService?.getDeal(id: id, completion: { result in
+                switch result {
+                case .success(let deal):
+                    continues.resume(returning: deal)
+                case .failure(let error):
+                    continues.resume(throwing: error)
+                }
+            })
+        }
+    }
 
     private func loadDeals(type: MainState.DealType) async throws -> [Deal] {
         try await withCheckedThrowingContinuation { continues in
@@ -232,5 +264,46 @@ final class MainViewModel: ViewModel {
                 }
             })
         }
+    }
+    
+    private func requestAuthorization() async {
+        let status = await UNUserNotificationCenter.current().notificationSettings()
+        switch status.authorizationStatus {
+        case .authorized, .provisional, .ephemeral:
+            break
+        default:
+            _ = try? await UNUserNotificationCenter.current()
+                .requestAuthorization(options: [.alert, .badge, .sound])
+        }
+    }
+
+    private func handleNotification(_ notification: NotificationHandler.NotificationType) {
+
+        switch notification {
+        case .open(let params):
+            var accountExist = false
+            if !params.recipients.contains(self.state.account.publicKey) {
+                for publicKey in params.recipients {
+                    guard let newAccount = AppManagerImpl.shared.getAccount(by: publicKey) else {
+                        continue
+                    }
+                    AppManagerImpl.shared.setAccount(for: newAccount)
+                    self.trigger(.updateAccount)
+                    self.trigger(.preload)
+                    self.trigger(.load(.all))
+                    
+                    accountExist = true
+                    break
+                }
+            } else {
+                accountExist = true
+            }
+
+            guard accountExist else { return }
+            Task { @MainActor in
+                self.state.pushDeal = try? await self.loadDeal(id: params.dealId)
+            }
+        }
+
     }
 }

@@ -1386,7 +1386,7 @@ struct DealView: View {
                             }
                             Text(R.string.localizable.dealDescriptionCommandStopDeal())
                                 .font(.footnote)
-                                .foregroundColor(R.color.yellow.color)
+                                .foregroundColor(R.color.redText.color)
                         }
                     case .finishDeal:
                         VStack(spacing: 8) {

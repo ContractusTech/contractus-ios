@@ -21,6 +21,7 @@ protocol AppManager: AnyObject {
 
     func sync() async throws
     func setAccount(for account: CommonAccount)
+    func getAccount(by publicKey: String) -> CommonAccount?
     func clearAccount()
     func debugInfo() -> [String]
 }
@@ -93,6 +94,10 @@ final class AppManagerImpl: AppManager {
         accountStorage.setCurrentAccount(account: account)
     }
 
+    func getAccount(by publicKey: String) -> CommonAccount? {
+        accountStorage.getAccounts().first(where: {$0.publicKey == publicKey})
+    }
+
     func clearAccount() {
         ServiceClient.shared.client.updateHeader(authorizationHeader: nil)
         accountStorage.clearCurrentAccount()
@@ -144,6 +149,13 @@ final class AppManagerImpl: AppManager {
     /// Debug method
     func debugClearAuth() {
         authStorage.clear()
+    }
+
+    func setupNotifications() {
+        accountStorage.getAccounts().forEach { account in
+            MessagingService.shared.subscribe(to: account.publicKey)
+        }
+
     }
 
     private func buildHeader(for account: CommonAccount, identifier: String, message: String, expiredAt: Date) throws -> ContractusAPI.AuthorizationHeader {
@@ -200,6 +212,7 @@ final class AppManagerImpl: AppManager {
 
 class MockAppManager: AppManager {
 
+
     var invalidDeviceHandler: ((Error) -> Void)?
     var currentAccount: CommonAccount!
 
@@ -207,6 +220,10 @@ class MockAppManager: AppManager {
 
     func setAccount(for account: CommonAccount) {
         currentAccount = account
+    }
+
+    func getAccount(by publicKey: String) -> CommonAccount? {
+        nil
     }
 
     func clearAccount() {

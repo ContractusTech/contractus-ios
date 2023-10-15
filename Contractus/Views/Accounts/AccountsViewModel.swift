@@ -63,6 +63,7 @@ final class AccountsViewModel: ViewModel {
             if fromBackup {
                 try? backupStorage.removePrivateKey(account.privateKey.toBase58(), blockchain: account.blockchain)
             }
+            MessagingService.shared.unsubscribe(from: account.publicKey)
             accountStorage.removeAccount(by: account.publicKey)
             state.accounts = state.accounts.filter {$0.account.publicKey != account.publicKey }
             if state.accounts.isEmpty {

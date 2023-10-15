@@ -1,10 +1,3 @@
-//
-//  UnlockHolderView.swift
-//  Contractus
-//
-//  Created by VITALIY FADEYEV on 28.09.2023.
-//
-
 import SwiftUI
 
 struct UnlockHolderButtonView: View {
@@ -21,10 +14,10 @@ struct UnlockHolderButtonView: View {
                     R.image.holderLogo.image
                         .padding(16)
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Unlock Holder Mode")
+                        Text(R.string.localizable.unlockHolderMainButtonTitle())
                             .font(.body.weight(.semibold))
                             .foregroundColor(.white)
-                        Text("Get 10k CTUS token")
+                        Text(R.string.localizable.unlockHolderMainButtonSubtitle())
                             .font(.footnote.weight(.regular))
                             .foregroundColor(.white)
                     }

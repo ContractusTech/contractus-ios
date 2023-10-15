@@ -835,6 +835,13 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
+  /// This `R.entitlements` struct is generated, and contains static references to 1 properties.
+  struct entitlements {
+    static let apsEnvironment = infoPlistString(path: [], key: "aps-environment") ?? "development"
+
+    fileprivate init() {}
+  }
+
   /// This `R.file` struct is generated, and contains static references to 5 files.
   struct file {
     /// Resource file `GoogleService-Info.plist`.
@@ -1096,7 +1103,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 408 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 412 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client.
       ///
@@ -1218,7 +1225,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealEncryptSubtitle = Rswift.StringResource(key: "newDeal.encrypt.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Allows you to make transactions without fees and unlock tokens to pay for deals
+      /// en translation: Allows you to create deals without fees and and to unlock all other SPL tokens to pay for deals.
       ///
       /// Locales: en
       static let unlockHolderSubtitle = Rswift.StringResource(key: "unlockHolder.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
@@ -1338,10 +1345,18 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealBondBoth = Rswift.StringResource(key: "newDeal.bond.both", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Buy 10k CTUS token
+      ///
+      /// Locales: en
+      static let unlockHolderMainButtonSubtitle = Rswift.StringResource(key: "unlockHolder.main-button.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Buy CTUS
       ///
       /// Locales: en
       static let buyTokenTitle = Rswift.StringResource(key: "buyToken.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Buy CTUS Token
+      ///
+      /// Locales: en
+      static let topupTitleBuyCtus = Rswift.StringResource(key: "topup.title.buy-ctus", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Buy cryptocurrency, USDT, USDC, SOL, etc
       ///
       /// Locales: en
@@ -1490,10 +1505,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let unlockHolderCoinstoreTitle = Rswift.StringResource(key: "unlockHolder.coinstore.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Complete the deal
-      ///
-      /// Locales: en
-      static let transactionTypeFinishDeal = Rswift.StringResource(key: "transaction.type.finish-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Completed
       ///
       /// Locales: en
@@ -1578,10 +1589,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonDeal = Rswift.StringResource(key: "common.deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Deal in work
-      ///
-      /// Locales: en
-      static let dealStatusStartedTitle = Rswift.StringResource(key: "deal.status.started.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Deal is canceled
       ///
       /// Locales: en
@@ -1818,6 +1825,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealFinish = Rswift.StringResource(key: "deal.finish", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Finish the deal
+      ///
+      /// Locales: en
+      static let transactionTypeFinishDeal = Rswift.StringResource(key: "transaction.type.finish-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: For client
       ///
       /// Locales: en
@@ -1914,6 +1925,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealStatusStarted = Rswift.StringResource(key: "deal.status.started", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: In work
+      ///
+      /// Locales: en
+      static let dealStatusStartedTitle = Rswift.StringResource(key: "deal.status.started.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Info
       ///
       /// Locales: en
@@ -1926,10 +1941,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let mainStatisticsLocked = Rswift.StringResource(key: "main.statistics.locked", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Methods to get CTUS token
-      ///
-      /// Locales: en
-      static let unlockHolderMethods = Rswift.StringResource(key: "unlockHolder.methods", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Need to migrate tokens from the Binance blockchain to Solana using the Portal bridge
       ///
       /// Locales: en
@@ -2361,6 +2372,10 @@ struct R: Rswift.Validatable {
       /// en translation: Supported more than 30 cryptocurrencies
       ///
       /// Locales: en
+      static let topupSubtitleBuyCtus = Rswift.StringResource(key: "topup.subtitle.buy-ctus", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Supported more than 30 cryptocurrencies
+      ///
+      /// Locales: en
       static let unlockHolderBuySubtitle = Rswift.StringResource(key: "unlockHolder.buy.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Swap
       ///
@@ -2374,10 +2389,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextText = Rswift.StringResource(key: "deal.text.text", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: The Contractor has begun to fulfill the terms of the deal. If the conditions are not met, you can cancel the deal after %@.
-      ///
-      /// Locales: en
-      static let dealStatusStartedSubtitleClient = Rswift.StringResource(key: "deal.status.started.subtitle.client", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The account that pays you for the work you do
       ///
       /// Locales: en
@@ -2402,6 +2413,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextEditorMessageForceUpdate = Rswift.StringResource(key: "deal.textEditor.message-force-update", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The contractor has begun to fulfill the deal. If the conditions are not met, you can cancel the deal after %@.
+      ///
+      /// Locales: en
+      static let dealStatusStartedSubtitleClient = Rswift.StringResource(key: "deal.status.started.subtitle.client", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The contractor has begun to fulfill the terms of the deal. Keep an eye on the outcome of the contract, when everything is done you need to finalize the deal.
       ///
       /// Locales: en
@@ -2502,7 +2517,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealDescriptionCommandCantSign = Rswift.StringResource(key: "deal.description-command.cant-sign", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: To start the deal, fill in the amount, deadline, the %@ accounts of all parties involved in the deal, and the checker fee (if an checker is in your deal).
+      /// en translation: To start the deal, fill in the amount, deadline, the %@ accounts of all parties involved in the deal, and the checker fee (if a checker is in your deal).
       ///
       /// Locales: en
       static let dealInformationAboutSign = Rswift.StringResource(key: "deal.information.about-sign", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
@@ -2542,6 +2557,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignFieldsType = Rswift.StringResource(key: "transactionSign.fields.type", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Unlock Holder Mode
+      ///
+      /// Locales: en
+      static let unlockHolderMainButtonTitle = Rswift.StringResource(key: "unlockHolder.main-button.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Unsupported prize, update the app
       ///
       /// Locales: en
@@ -2614,6 +2633,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let qrCodeWarning = Rswift.StringResource(key: "qrCode.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Ways to get CTUS token
+      ///
+      /// Locales: en
+      static let unlockHolderMethods = Rswift.StringResource(key: "unlockHolder.methods", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Welcome to
       ///
       /// Locales: en
@@ -2650,6 +2673,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonYou = Rswift.StringResource(key: "common.you", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: You can cancel the deal all funds will be refunded.
+      ///
+      /// Locales: en
+      static let dealDescriptionCommandStopDeal = Rswift.StringResource(key: "deal.description-command.stop-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: You can cancel the deal before it starts.
       ///
       /// Locales: en
@@ -2658,10 +2685,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealDescriptionCommandCancelSign = Rswift.StringResource(key: "deal.description-command.cancel-sign", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: You can stop the contract all funds will be refunded.
-      ///
-      /// Locales: en
-      static let dealDescriptionCommandStopDeal = Rswift.StringResource(key: "deal.description-command.stop-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: You can't restore from backup private key after delete account.
       ///
       /// Locales: en
@@ -3197,7 +3220,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("newDeal.encrypt.subtitle", bundle: bundle, comment: "")
       }
 
-      /// en translation: Allows you to make transactions without fees and unlock tokens to pay for deals
+      /// en translation: Allows you to create deals without fees and and to unlock all other SPL tokens to pay for deals.
       ///
       /// Locales: en
       static func unlockHolderSubtitle(preferredLanguages: [String]? = nil) -> String {
@@ -3647,6 +3670,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("newDeal.bond.both", bundle: bundle, comment: "")
       }
 
+      /// en translation: Buy 10k CTUS token
+      ///
+      /// Locales: en
+      static func unlockHolderMainButtonSubtitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("unlockHolder.main-button.subtitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "unlockHolder.main-button.subtitle"
+        }
+
+        return NSLocalizedString("unlockHolder.main-button.subtitle", bundle: bundle, comment: "")
+      }
+
       /// en translation: Buy CTUS
       ///
       /// Locales: en
@@ -3660,6 +3698,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("buyToken.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Buy CTUS Token
+      ///
+      /// Locales: en
+      static func topupTitleBuyCtus(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("topup.title.buy-ctus", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "topup.title.buy-ctus"
+        }
+
+        return NSLocalizedString("topup.title.buy-ctus", bundle: bundle, comment: "")
       }
 
       /// en translation: Buy cryptocurrency, USDT, USDC, SOL, etc
@@ -4221,21 +4274,6 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("unlockHolder.coinstore.title", bundle: bundle, comment: "")
       }
 
-      /// en translation: Complete the deal
-      ///
-      /// Locales: en
-      static func transactionTypeFinishDeal(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("transaction.type.finish-deal", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "transaction.type.finish-deal"
-        }
-
-        return NSLocalizedString("transaction.type.finish-deal", bundle: bundle, comment: "")
-      }
-
       /// en translation: Completed
       ///
       /// Locales: en
@@ -4551,21 +4589,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.deal", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Deal in work
-      ///
-      /// Locales: en
-      static func dealStatusStartedTitle(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("deal.status.started.title", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "deal.status.started.title"
-        }
-
-        return NSLocalizedString("deal.status.started.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Deal is canceled
@@ -5457,6 +5480,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.finish", bundle: bundle, comment: "")
       }
 
+      /// en translation: Finish the deal
+      ///
+      /// Locales: en
+      static func transactionTypeFinishDeal(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transaction.type.finish-deal", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transaction.type.finish-deal"
+        }
+
+        return NSLocalizedString("transaction.type.finish-deal", bundle: bundle, comment: "")
+      }
+
       /// en translation: For client
       ///
       /// Locales: en
@@ -5819,6 +5857,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.status.started", bundle: bundle, comment: "")
       }
 
+      /// en translation: In work
+      ///
+      /// Locales: en
+      static func dealStatusStartedTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.started.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.started.title"
+        }
+
+        return NSLocalizedString("deal.status.started.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Info
       ///
       /// Locales: en
@@ -5862,21 +5915,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("main.statistics.locked", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Methods to get CTUS token
-      ///
-      /// Locales: en
-      static func unlockHolderMethods(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("unlockHolder.methods", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "unlockHolder.methods"
-        }
-
-        return NSLocalizedString("unlockHolder.methods", bundle: bundle, comment: "")
       }
 
       /// en translation: Need to migrate tokens from the Binance blockchain to Solana using the Portal bridge
@@ -7493,6 +7531,21 @@ struct R: Rswift.Validatable {
       /// en translation: Supported more than 30 cryptocurrencies
       ///
       /// Locales: en
+      static func topupSubtitleBuyCtus(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("topup.subtitle.buy-ctus", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "topup.subtitle.buy-ctus"
+        }
+
+        return NSLocalizedString("topup.subtitle.buy-ctus", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Supported more than 30 cryptocurrencies
+      ///
+      /// Locales: en
       static func unlockHolderBuySubtitle(preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
           return NSLocalizedString("unlockHolder.buy.subtitle", bundle: hostingBundle, comment: "")
@@ -7548,23 +7601,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.text.text", bundle: bundle, comment: "")
-      }
-
-      /// en translation: The Contractor has begun to fulfill the terms of the deal. If the conditions are not met, you can cancel the deal after %@.
-      ///
-      /// Locales: en
-      static func dealStatusStartedSubtitleClient(_ value1: String, preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          let format = NSLocalizedString("deal.status.started.subtitle.client", bundle: hostingBundle, comment: "")
-          return String(format: format, locale: applicationLocale, value1)
-        }
-
-        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "deal.status.started.subtitle.client"
-        }
-
-        let format = NSLocalizedString("deal.status.started.subtitle.client", bundle: bundle, comment: "")
-        return String(format: format, locale: locale, value1)
       }
 
       /// en translation: The account that pays you for the work you do
@@ -7655,6 +7691,23 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.textEditor.message-force-update", bundle: bundle, comment: "")
+      }
+
+      /// en translation: The contractor has begun to fulfill the deal. If the conditions are not met, you can cancel the deal after %@.
+      ///
+      /// Locales: en
+      static func dealStatusStartedSubtitleClient(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("deal.status.started.subtitle.client", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.started.subtitle.client"
+        }
+
+        let format = NSLocalizedString("deal.status.started.subtitle.client", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
       }
 
       /// en translation: The contractor has begun to fulfill the terms of the deal. Keep an eye on the outcome of the contract, when everything is done you need to finalize the deal.
@@ -8032,7 +8085,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.description-command.cant-sign", bundle: bundle, comment: "")
       }
 
-      /// en translation: To start the deal, fill in the amount, deadline, the %@ accounts of all parties involved in the deal, and the checker fee (if an checker is in your deal).
+      /// en translation: To start the deal, fill in the amount, deadline, the %@ accounts of all parties involved in the deal, and the checker fee (if a checker is in your deal).
       ///
       /// Locales: en
       static func dealInformationAboutSign(_ value1: String, preferredLanguages: [String]? = nil) -> String {
@@ -8182,6 +8235,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.fields.type", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Unlock Holder Mode
+      ///
+      /// Locales: en
+      static func unlockHolderMainButtonTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("unlockHolder.main-button.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "unlockHolder.main-button.title"
+        }
+
+        return NSLocalizedString("unlockHolder.main-button.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Unsupported prize, update the app
@@ -8456,6 +8524,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("qrCode.warning", bundle: bundle, comment: "")
       }
 
+      /// en translation: Ways to get CTUS token
+      ///
+      /// Locales: en
+      static func unlockHolderMethods(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("unlockHolder.methods", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "unlockHolder.methods"
+        }
+
+        return NSLocalizedString("unlockHolder.methods", bundle: bundle, comment: "")
+      }
+
       /// en translation: Welcome to
       ///
       /// Locales: en
@@ -8593,6 +8676,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.you", bundle: bundle, comment: "")
       }
 
+      /// en translation: You can cancel the deal all funds will be refunded.
+      ///
+      /// Locales: en
+      static func dealDescriptionCommandStopDeal(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.description-command.stop-deal", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.description-command.stop-deal"
+        }
+
+        return NSLocalizedString("deal.description-command.stop-deal", bundle: bundle, comment: "")
+      }
+
       /// en translation: You can cancel the deal before it starts.
       ///
       /// Locales: en
@@ -8621,21 +8719,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.description-command.cancel-sign", bundle: bundle, comment: "")
-      }
-
-      /// en translation: You can stop the contract all funds will be refunded.
-      ///
-      /// Locales: en
-      static func dealDescriptionCommandStopDeal(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("deal.description-command.stop-deal", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "deal.description-command.stop-deal"
-        }
-
-        return NSLocalizedString("deal.description-command.stop-deal", bundle: bundle, comment: "")
       }
 
       /// en translation: You can't restore from backup private key after delete account.
