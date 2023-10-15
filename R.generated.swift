@@ -1589,10 +1589,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonDeal = Rswift.StringResource(key: "common.deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Deal in work
-      ///
-      /// Locales: en
-      static let dealStatusStartedTitle = Rswift.StringResource(key: "deal.status.started.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Deal is canceled
       ///
       /// Locales: en
@@ -1929,6 +1925,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealStatusStarted = Rswift.StringResource(key: "deal.status.started", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: In work
+      ///
+      /// Locales: en
+      static let dealStatusStartedTitle = Rswift.StringResource(key: "deal.status.started.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Info
       ///
       /// Locales: en
@@ -2389,10 +2389,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextText = Rswift.StringResource(key: "deal.text.text", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: The Contractor has begun to fulfill the terms of the deal. If the conditions are not met, you can cancel the deal after %@.
-      ///
-      /// Locales: en
-      static let dealStatusStartedSubtitleClient = Rswift.StringResource(key: "deal.status.started.subtitle.client", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The account that pays you for the work you do
       ///
       /// Locales: en
@@ -2417,6 +2413,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextEditorMessageForceUpdate = Rswift.StringResource(key: "deal.textEditor.message-force-update", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The contractor has begun to fulfill the deal. If the conditions are not met, you can cancel the deal after %@.
+      ///
+      /// Locales: en
+      static let dealStatusStartedSubtitleClient = Rswift.StringResource(key: "deal.status.started.subtitle.client", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The contractor has begun to fulfill the terms of the deal. Keep an eye on the outcome of the contract, when everything is done you need to finalize the deal.
       ///
       /// Locales: en
@@ -4591,21 +4591,6 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.deal", bundle: bundle, comment: "")
       }
 
-      /// en translation: Deal in work
-      ///
-      /// Locales: en
-      static func dealStatusStartedTitle(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("deal.status.started.title", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "deal.status.started.title"
-        }
-
-        return NSLocalizedString("deal.status.started.title", bundle: bundle, comment: "")
-      }
-
       /// en translation: Deal is canceled
       ///
       /// Locales: en
@@ -5870,6 +5855,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.status.started", bundle: bundle, comment: "")
+      }
+
+      /// en translation: In work
+      ///
+      /// Locales: en
+      static func dealStatusStartedTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.started.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.started.title"
+        }
+
+        return NSLocalizedString("deal.status.started.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Info
@@ -7603,23 +7603,6 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.text.text", bundle: bundle, comment: "")
       }
 
-      /// en translation: The Contractor has begun to fulfill the terms of the deal. If the conditions are not met, you can cancel the deal after %@.
-      ///
-      /// Locales: en
-      static func dealStatusStartedSubtitleClient(_ value1: String, preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          let format = NSLocalizedString("deal.status.started.subtitle.client", bundle: hostingBundle, comment: "")
-          return String(format: format, locale: applicationLocale, value1)
-        }
-
-        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "deal.status.started.subtitle.client"
-        }
-
-        let format = NSLocalizedString("deal.status.started.subtitle.client", bundle: bundle, comment: "")
-        return String(format: format, locale: locale, value1)
-      }
-
       /// en translation: The account that pays you for the work you do
       ///
       /// Locales: en
@@ -7708,6 +7691,23 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.textEditor.message-force-update", bundle: bundle, comment: "")
+      }
+
+      /// en translation: The contractor has begun to fulfill the deal. If the conditions are not met, you can cancel the deal after %@.
+      ///
+      /// Locales: en
+      static func dealStatusStartedSubtitleClient(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("deal.status.started.subtitle.client", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.started.subtitle.client"
+        }
+
+        let format = NSLocalizedString("deal.status.started.subtitle.client", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
       }
 
       /// en translation: The contractor has begun to fulfill the terms of the deal. Keep an eye on the outcome of the contract, when everything is done you need to finalize the deal.
