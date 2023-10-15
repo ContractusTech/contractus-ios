@@ -88,6 +88,7 @@ struct TopUpView: View {
     @ViewBuilder
     func itemView(image: Image, title: String, description: String, disabled: Bool, loading: Bool, action: @escaping () -> Void) -> some View {
         Button {
+            ImpactGenerator.light()
             action()
         } label: {
             HStack(alignment: .center) {

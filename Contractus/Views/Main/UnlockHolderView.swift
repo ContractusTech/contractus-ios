@@ -91,6 +91,7 @@ struct UnlockHolderView: View {
     @ViewBuilder
     func itemView(title: String, subtitle: String, description: String, isUrl: Bool, warn: Bool = false, action: @escaping () -> Void) -> some View {
         Button {
+            ImpactGenerator.light()
             action()
         } label: {
             VStack(alignment: .leading, spacing: 6) {

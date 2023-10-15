@@ -141,6 +141,7 @@ struct BuyTokensView: View {
                 switch state {
                 case .openURL(let stringUrl):
                     guard let url = URL(string: stringUrl) else { return }
+                    ImpactGenerator.success()
                     UIApplication.shared.open(url)
                 default:
                     return
