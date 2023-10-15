@@ -354,10 +354,10 @@ final class TransactionSignViewModel: ViewModel {
                 value: tx.amountFormatted ?? "",
                 titleDescription: nil,
                 valueDescription: nil))
-            if let fee = tx.feeFormatted {
+            if let feeFormatted = tx.feeFormatted {
                 fields.append(.init(
                     title: R.string.localizable.transactionSignFieldsFee(),
-                    value: tx.feeFormatted ?? "",
+                    value: feeFormatted,
                     titleDescription: nil,
                     valueDescription: nil))
             }

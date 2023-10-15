@@ -79,7 +79,7 @@ struct AccountsView: View {
 //                    MenuSectionView(height: 16)
 //                }
                 
-                ForEach(viewModel.state.accounts, id: \.self) { item in
+                ForEach(viewModel.state.accounts, id: \.account.publicKey) { item in
                     HStack(spacing: 8) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(ContentMask.mask(from: item.account.publicKey))

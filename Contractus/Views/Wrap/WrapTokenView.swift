@@ -51,7 +51,7 @@ struct WrapTokenView: View {
                         )
                     HStack {
                         Button {
-                            amount = viewModel.from.formatted()
+                            amount = viewModel.from.valueFormatted
                         } label: {
                             Text(R.string.localizable.commonAll())
                                 .font(.footnote.weight(.medium))
@@ -78,7 +78,7 @@ struct WrapTokenView: View {
                                 .foregroundColor(R.color.textBase.color)
                                 .font(.title3.weight(.semibold))
                             
-                            Text(viewModel.from.formatted())
+                            Text(viewModel.from.valueFormatted)
                                 .foregroundColor(R.color.secondaryText.color)
                                 .font(.footnote.weight(.medium))
                         }
@@ -101,7 +101,7 @@ struct WrapTokenView: View {
                             Text(viewModel.to.token.code)
                                 .foregroundColor(R.color.textBase.color)
                                 .font(.title3.weight(.semibold))
-                            Text(viewModel.to.formatted())
+                            Text(viewModel.to.valueFormatted)
                                 .foregroundColor(R.color.secondaryText.color)
                                 .font(.footnote.weight(.medium))
                         }
@@ -117,7 +117,7 @@ struct WrapTokenView: View {
                 
                 Button {
                     viewModel.trigger(.swap)
-                    amount = viewModel.state.operationType == .unwrap ? viewModel.state.from.formatted() : ""
+                    amount = viewModel.state.operationType == .unwrap ? viewModel.state.from.valueFormatted : ""
                 } label: {
                     HStack(spacing: 8) {
                         Constants.swapImage
@@ -223,9 +223,9 @@ struct WrapTokenView: View {
     private var placeholder: String {
         switch viewModel.operationType {
         case .wrap:
-            return R.string.localizable.wrapAmount() //"Max \(viewModel.from.formatted())"
+            return R.string.localizable.wrapAmount() //"Max \(viewModel.from.valueFormatted)"
         case .unwrap:
-            return "\(viewModel.from.formatted())"
+            return "\(viewModel.from.valueFormatted)"
         }
     }
 }

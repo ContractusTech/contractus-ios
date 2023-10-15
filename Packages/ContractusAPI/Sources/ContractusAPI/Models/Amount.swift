@@ -37,29 +37,37 @@ public struct Amount: Equatable {
 
     public let value: BigUInt
     public let token: Token
+    public let valueFormatted: String
+    public let valueFormattedWithCode: String
 
     public init(_ value: BigUInt, token: Token) {
         self.value = value
         self.token = token
+        self.valueFormatted = Self.formatted(value: self.value, decimals: token.decimals, code: nil)
+        self.valueFormattedWithCode = Self.formatted(value: self.value, decimals: token.decimals, code: token.code)
     }
 
     public init(_ value: String, token: Token) {
         self.value = AmountFormatter.format(string: value, token: token) ?? BigUInt(0)
         self.token = token
+        self.valueFormatted = Self.formatted(value: self.value, decimals: token.decimals, code: nil)
+        self.valueFormattedWithCode = Self.formatted(value: self.value, decimals: token.decimals, code: token.code)
     }
 
     public init(_ value: UInt64, token: Token) {
         self.value = BigUInt(value)
         self.token = token
-    }
-
-    public func formatted(withCode: Bool = false) -> String {
-        AmountFormatter.format(amount: value, decimal: token.decimals, code: withCode ? token.code : nil)
+        self.valueFormatted = Self.formatted(value: self.value, decimals: token.decimals, code: nil)
+        self.valueFormattedWithCode = Self.formatted(value: self.value, decimals: token.decimals, code: token.code)
     }
 
     public static func isValid(_ value: String, token: Token) -> Bool {
         guard AmountFormatter.format(string: value, token: token) != nil else { return false }
         return true
+    }
+
+    public static func formatted(value: BigUInt, decimals: Int, code: String?) -> String {
+        AmountFormatter.format(amount: value, decimal: decimals, code: code)
     }
 }
 
@@ -80,5 +88,7 @@ extension Amount: Codable {
         let value = try container.decode(String.self, forKey: .value)
         self.value = BigUInt(stringLiteral: value)
         self.token = try container.decode(Token.self, forKey: .token)
+        self.valueFormatted = Self.formatted(value: self.value, decimals: token.decimals, code: nil)
+        self.valueFormattedWithCode = Self.formatted(value: self.value, decimals: token.decimals, code: token.code)
     }
 }

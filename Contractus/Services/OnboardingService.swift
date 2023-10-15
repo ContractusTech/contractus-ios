@@ -39,7 +39,7 @@ final class OnboardingServiceImpl: OnboardingService {
     }
     
     func needShowOnboarding() -> Bool {
-        guard let content = content else { return false }
+        guard let _ = content else { return false }
 
         return !FlagsStorage.shared.onboardingPresented
     }

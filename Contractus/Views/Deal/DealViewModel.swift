@@ -446,7 +446,7 @@ final class DealViewModel: ViewModel {
         if state.isOwnerDeal {
             decryptKey()
         } else {
-            guard let key = state.deal.encryptedSecretKey else {
+            guard let _ = state.deal.encryptedSecretKey else {
                 self.state.canEdit = true
                 self.checkLocalFiles()
                 return
