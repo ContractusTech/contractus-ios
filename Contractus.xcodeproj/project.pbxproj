@@ -136,6 +136,7 @@
 		6DCA42C92A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 6DCA42C62A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh */; };
 		6DCA42CA2A8A5C6100C6E4D7 /* ci_post_clone.sh in Resources */ = {isa = PBXBuildFile; fileRef = 6DCA42C72A8A5C6100C6E4D7 /* ci_post_clone.sh */; };
 		6DCA42CB2A8A5C6100C6E4D7 /* ci_pre_xcodebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 6DCA42C82A8A5C6100C6E4D7 /* ci_pre_xcodebuild.sh */; };
+		6DCFD3AC2ADA70DB002160E2 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCFD3AB2ADA70DB002160E2 /* NotificationHandler.swift */; };
 		6DD28E252A1C85360093E553 /* BaseTopTextBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E242A1C85360093E553 /* BaseTopTextBlockView.swift */; };
 		6DD28E272A1C9C6A0093E553 /* Date+Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */; };
 		6DD28E292A1DF3B10093E553 /* DeadlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E282A1DF3B10093E553 /* DeadlineView.swift */; };
@@ -163,13 +164,16 @@
 		FE1E3DD429D3597E009B0E57 /* AboutAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1E3DD329D3597E009B0E57 /* AboutAccountView.swift */; };
 		FE1FB90F2A9E072F00203F38 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1FB90E2A9E072F00203F38 /* Onboarding.swift */; };
 		FE1FB9112A9E24CB00203F38 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1FB9102A9E24CB00203F38 /* OnboardingService.swift */; };
+		FE2B96C92AB9EA5D00971114 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FE2B96C82AB9EA5D00971114 /* FirebaseMessaging */; };
 		FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */; };
 		FE52687A2AC58D4200E29003 /* BuyTokensViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5268792AC58D4200E29003 /* BuyTokensViewModel.swift */; };
 		FE54313D29D36D8800EEF906 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE54313C29D36D8800EEF906 /* AccountsView.swift */; };
 		FE5F427429AF22FA00A1E506 /* netfox in Frameworks */ = {isa = PBXBuildFile; productRef = FE5F427329AF22FA00A1E506 /* netfox */; };
+		FE7852942AC1673100CC8C19 /* MessagingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7852932AC1673100CC8C19 /* MessagingService.swift */; };
 		FE8270472A8D4D730092970A /* ReferralViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8270462A8D4D730092970A /* ReferralViewModel.swift */; };
 		FE8D85202A8B883B001DE59F /* PromocodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8D851F2A8B883B001DE59F /* PromocodeView.swift */; };
 		FE9623732A94C4610075929B /* TopUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9623722A94C4600075929B /* TopUpViewModel.swift */; };
+		FE99CE002AD95E3A00A391CA /* NSNotification+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE99CDFF2AD95E3A00A391CA /* NSNotification+Ex.swift */; };
 		FEA450862A9E6CDF00A83D09 /* Onboarding.json in Resources */ = {isa = PBXBuildFile; fileRef = FEA450852A9E6CDF00A83D09 /* Onboarding.json */; };
 		FEAF213D2AD684FF00FC9C64 /* Spacer+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEAF213C2AD684FF00FC9C64 /* Spacer+Ex.swift */; };
 		FEBC6EDE2ABDD51A001947E1 /* TokenSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBC6EDD2ABDD51A001947E1 /* TokenSelectView.swift */; };
@@ -273,6 +277,7 @@
 		6D7552992897848B0069935B /* Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
 		6D75529B28978C450069935B /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		6D75F2EF288EA9C70092D182 /* EnterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterView.swift; sourceTree = "<group>"; };
+		6D7D1FAA2AB3621200D550AA /* Contractus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Contractus.entitlements; sourceTree = "<group>"; };
 		6D7EE71628E9D3070016369C /* ImportPrivateKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportPrivateKeyView.swift; sourceTree = "<group>"; };
 		6D7EE71828E9D4D60016369C /* MultilineTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextFieldView.swift; sourceTree = "<group>"; };
 		6D8EFD8428D88ED10064F5DA /* AddContractorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContractorView.swift; sourceTree = "<group>"; };
@@ -331,6 +336,7 @@
 		6DCA42C62A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = ci_post_xcodebuild.sh; sourceTree = "<group>"; };
 		6DCA42C72A8A5C6100C6E4D7 /* ci_post_clone.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		6DCA42C82A8A5C6100C6E4D7 /* ci_pre_xcodebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = ci_pre_xcodebuild.sh; sourceTree = "<group>"; };
+		6DCFD3AB2ADA70DB002160E2 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
 		6DD28E242A1C85360093E553 /* BaseTopTextBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTopTextBlockView.swift; sourceTree = "<group>"; };
 		6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatter.swift"; sourceTree = "<group>"; };
 		6DD28E282A1DF3B10093E553 /* DeadlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadlineView.swift; sourceTree = "<group>"; };
@@ -358,9 +364,11 @@
 		FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectView.swift; sourceTree = "<group>"; };
 		FE5268792AC58D4200E29003 /* BuyTokensViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyTokensViewModel.swift; sourceTree = "<group>"; };
 		FE54313C29D36D8800EEF906 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
+		FE7852932AC1673100CC8C19 /* MessagingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingService.swift; sourceTree = "<group>"; };
 		FE8270462A8D4D730092970A /* ReferralViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferralViewModel.swift; sourceTree = "<group>"; };
 		FE8D851F2A8B883B001DE59F /* PromocodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromocodeView.swift; sourceTree = "<group>"; };
 		FE9623722A94C4600075929B /* TopUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopUpViewModel.swift; sourceTree = "<group>"; };
+		FE99CDFF2AD95E3A00A391CA /* NSNotification+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNotification+Ex.swift"; sourceTree = "<group>"; };
 		FEA450852A9E6CDF00A83D09 /* Onboarding.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Onboarding.json; sourceTree = "<group>"; };
 		FEAF213C2AD684FF00FC9C64 /* Spacer+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spacer+Ex.swift"; sourceTree = "<group>"; };
 		FEBC6EDD2ABDD51A001947E1 /* TokenSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenSelectView.swift; sourceTree = "<group>"; };
@@ -386,6 +394,7 @@
 				6D0DA7622930A6960024EF30 /* CodeScanner in Frameworks */,
 				6DB5F8B6294D762300AE612A /* JGProgressHUD in Frameworks */,
 				6D6EE39E289FBEBA00635E60 /* QRCode in Frameworks */,
+				FE2B96C92AB9EA5D00971114 /* FirebaseMessaging in Frameworks */,
 				6D8EFD9328D8EB5B0064F5DA /* SolanaSwift in Frameworks */,
 				6DC558742A7A18A60054F2FC /* FirebaseRemoteConfig in Frameworks */,
 				6DC558722A7A18A60054F2FC /* FirebasePerformance in Frameworks */,
@@ -605,6 +614,7 @@
 		6D97AEEF288D196200EB61D0 /* Contractus */ = {
 			isa = PBXGroup;
 			children = (
+				6D7D1FAA2AB3621200D550AA /* Contractus.entitlements */,
 				6DAA5E7E2898D32600BA1965 /* App */,
 				6D5901082893887E00EC318E /* Info.plist */,
 				6DBCA48E2891161200F918B6 /* Utils */,
@@ -689,6 +699,7 @@
 				FECDCC5C2A87F21800047A95 /* EventService.swift */,
 				6D6EE3A128A0517700635E60 /* FilesService.swift */,
 				6D4D99F22A5601A1007668B0 /* IdentifierService.swift */,
+				FE7852932AC1673100CC8C19 /* MessagingService.swift */,
 				FE1FB9102A9E24CB00203F38 /* OnboardingService.swift */,
 				6DF6ADC22994EAA300A50598 /* SharedSecretService.swift */,
 				6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */,
@@ -743,6 +754,7 @@
 				6DAA5E7C2898C4AA00BA1965 /* APIServiceFactory.swift */,
 				6DC2C02628C99C0A005C9EBE /* ServiceFactory.swift */,
 				6DB9C3D42A552D7B0011C817 /* AppManager.swift */,
+				6DCFD3AB2ADA70DB002160E2 /* NotificationHandler.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -788,6 +800,7 @@
 				6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */,
 				6DFF40BA2A9A144B0042AE78 /* String+Ex.swift */,
 				6DBFCE452A9F573D00999E85 /* Open.swift */,
+				FE99CDFF2AD95E3A00A391CA /* NSNotification+Ex.swift */,
 				FEAF213C2AD684FF00FC9C64 /* Spacer+Ex.swift */,
 			);
 			path = Extensions;
@@ -935,6 +948,7 @@
 				6DC5586F2A7A18A60054F2FC /* FirebaseCrashlytics */,
 				6DC558712A7A18A60054F2FC /* FirebasePerformance */,
 				6DC558732A7A18A60054F2FC /* FirebaseRemoteConfig */,
+				FE2B96C82AB9EA5D00971114 /* FirebaseMessaging */,
 				FE1245662AC35AAC009FB048 /* NukeUI */,
 				FE1245692AC35F86009FB048 /* SVGKit */,
 				6DC218402ACF3D3E00EFC769 /* AppsFlyerLib */,
@@ -1152,6 +1166,7 @@
 				6D8EFD9528D8F3B20064F5DA /* ShareContentView.swift in Sources */,
 				6DA41D6B28EE995300D67FBD /* LazyView.swift in Sources */,
 				6D6EE3AC28A0F05300635E60 /* View+Custom.swift in Sources */,
+				FE7852942AC1673100CC8C19 /* MessagingService.swift in Sources */,
 				6DD28E292A1DF3B10093E553 /* DeadlineView.swift in Sources */,
 				6DAA5E792898BE1B00BA1965 /* Crypto.swift in Sources */,
 				6DB5F8B8294D7B2D00AE612A /* JGProgressHUD+Ex.swift in Sources */,
@@ -1183,6 +1198,7 @@
 				6DBF3A4328D81D2C00952D8A /* UIApplication+Ex.swift in Sources */,
 				6DFED935293207D200AF727A /* QRCodeScannerViewModel.swift in Sources */,
 				6D6EE3A728A0E20100635E60 /* Label.swift in Sources */,
+				6DCFD3AC2ADA70DB002160E2 /* NotificationHandler.swift in Sources */,
 				6D755292289675C50069935B /* R+Ex.swift in Sources */,
 				6D6EE388289DB40A00635E60 /* BlockchainService.swift in Sources */,
 				6D4FAB4F293B084800076743 /* TextEditor+Ex.swift in Sources */,
@@ -1221,6 +1237,7 @@
 				FECE864B29ADCA1B003144CF /* Array+Ex.swift in Sources */,
 				6DB9C3D72A5532760011C817 /* AuthStorage.swift in Sources */,
 				6D1DF1A42922EC7400B112FC /* CButtons.swift in Sources */,
+				FE99CE002AD95E3A00A391CA /* NSNotification+Ex.swift in Sources */,
 				6D8EFDA328E0528A0064F5DA /* FiatCurrency.swift in Sources */,
 				6DFF40BB2A9A144B0042AE78 /* String+Ex.swift in Sources */,
 				6DBCA47E2890E36700F918B6 /* Buttons.swift in Sources */,
@@ -1403,6 +1420,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Contractus/Contractus.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1443,6 +1461,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Contractus/Contractus.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1819,6 +1838,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FE1245682AC35F86009FB048 /* XCRemoteSwiftPackageReference "SVGKit" */;
 			productName = SVGKit;
+		};
+		FE2B96C82AB9EA5D00971114 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 		FE5F427329AF22FA00A1E506 /* netfox */ = {
 			isa = XCSwiftPackageProductDependency;

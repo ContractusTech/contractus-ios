@@ -6,11 +6,14 @@ import netfox
 import ContractusAPI
 import Combine
 import Firebase
+import FirebaseMessaging
+import UserNotifications
 import AppsFlyerLib
 
 struct RootState {
+
     enum State {
-        case hasAccount(CommonAccount), noAccount, loading, error(Error)
+        case hasAccount(CommonAccount, notification: NotificationHandler.NotificationType? = nil), noAccount, loading, error(Error)
     }
 
     enum TransactionState: Equatable {
@@ -68,7 +71,7 @@ final class RootViewModel: ViewModel {
             guard let self = self else { return }
             do {
                 try await self.appManager.sync()
-                self.state.state = .hasAccount(self.appManager.currentAccount)
+                self.state.state = .hasAccount(self.appManager.currentAccount, notification: NotificationHandler.notification)
             } catch AppManagerImpl.AppManagerError.noCurrentAccount {
                 self.state.state = .noAccount
                 AppManagerImpl.shared.clearAccount()
@@ -126,37 +129,43 @@ struct ContractusApp: App {
                         insertion: .opacity,
                         removal: .opacity)
                     )
-                case .hasAccount(let account):
-                    MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(
-                        account: account,
-                        accountStorage: ServiceFactory.shared.makeAccountStorage(),
-                        accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
-                        dealsAPIService: try? APIServiceFactory.shared.makeDealsService(),
-                        resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())), logoutCompletion: {
-                            rootViewModel.trigger(.logout)
-                        })
-                    .transition(AnyTransition.asymmetric(
-                        insertion: .move(edge: .trailing),
-                        removal: .move(edge: .leading))
-                    )
-                    .environment(\.resizableSheetCenter, resizableSheetCenter)
-                    .onChange(of: rootViewModel.state.transactionState, perform: { txState in
-                        switch txState {
-                        case .needSign:
-                            showTxSheet = true
-                        case .none:
-                            showTxSheet = false
-                        }
-                    })
-                    .rootSheet(isPresented: $showTxSheet, onDismiss: nil, content: {
-                        signView(account: account)
-                    })
+                case .hasAccount(let account, let notification):
+                    mainView(account: account, notification: notification)
                 }
             }
             .navigationBarColor()
             .animation(.default, value: rootViewModel.state)
             .background(R.color.mainBackground.color)
         }
+    }
+
+    @ViewBuilder
+    func mainView(account: CommonAccount, notification: NotificationHandler.NotificationType?) -> some View {
+        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(
+            account: account,
+            accountStorage: ServiceFactory.shared.makeAccountStorage(),
+            accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
+            dealsAPIService: try? APIServiceFactory.shared.makeDealsService(),
+            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService(),
+            notification: notification)), logoutCompletion: {
+                rootViewModel.trigger(.logout)
+            })
+        .transition(AnyTransition.asymmetric(
+            insertion: .move(edge: .trailing),
+            removal: .move(edge: .leading))
+        )
+        .environment(\.resizableSheetCenter, resizableSheetCenter)
+        .onChange(of: rootViewModel.state.transactionState, perform: { txState in
+            switch txState {
+            case .needSign:
+                showTxSheet = true
+            case .none:
+                showTxSheet = false
+            }
+        })
+        .rootSheet(isPresented: $showTxSheet, onDismiss: nil, content: {
+            signView(account: account)
+        })
     }
 
     @ViewBuilder
@@ -224,10 +233,6 @@ struct ContractusApp: App {
             .background(R.color.secondaryBackground.color)
             .cornerRadius(20)
         }
-
-
-
-
     }
 }
 
@@ -244,6 +249,8 @@ fileprivate extension Error {
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
+    let gcmMessageIDKey = "gcm.message_id"
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         appearanceSetup()
 
@@ -258,11 +265,21 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         FirebaseApp.configure()
 
+        Messaging.messaging().delegate = self
+        UNUserNotificationCenter.current().delegate = self
+
         EventService.shared.send(event: DefaultAnalyticsEvent.startApp)
 
-        if !Env.APPSFLYER_DEV_KEY.isEmpty && !Env.APPLE_APP_ID.isEmpty{
+        if !Env.APPSFLYER_DEV_KEY.isEmpty && !Env.APPLE_APP_ID.isEmpty {
             AppsFlyerLib.shared().appsFlyerDevKey = Env.APPSFLYER_DEV_KEY
             AppsFlyerLib.shared().appleAppID = Env.APPLE_APP_ID
+        }
+
+        application.registerForRemoteNotifications()
+
+        let remoteNotification = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification]
+        if let remoteNotification = remoteNotification as? [AnyHashable: Any] {
+            NotificationHandler.handler(notification: remoteNotification)
         }
 
         return true
@@ -272,6 +289,78 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         if !Env.APPSFLYER_DEV_KEY.isEmpty {
             AppsFlyerLib.shared().start()
         }
+    }
+
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+#if DEBUG
+        if let messageID = userInfo[gcmMessageIDKey] {
+            print("Message ID: \(messageID)")
+        }
+
+        print(userInfo)
+#endif
+
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+
+        completionHandler(UIBackgroundFetchResult.newData)
+    }
+}
+
+extension AppDelegate: MessagingDelegate {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+#if DEBUG
+        let deviceToken:[String: String] = ["token": fcmToken ?? ""]
+        print("Device token: ", deviceToken)
+#endif
+    }
+}
+
+@available(iOS 10, *)
+extension AppDelegate: UNUserNotificationCenterDelegate {
+
+    // Receive displayed notifications for iOS 10 devices.
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let userInfo = notification.request.content.userInfo
+#if DEBUG
+        if let messageID = userInfo[gcmMessageIDKey] {
+            print("Message ID: \(messageID)")
+        }
+
+        print(userInfo)
+#endif
+
+        completionHandler([[.banner, .badge, .sound]])
+    }
+
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+        AppManagerImpl.shared.setupNotifications()
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+#if DEBUG
+        if let messageID = userInfo[gcmMessageIDKey] {
+            print("Message ID from userNotificationCenter didReceive: \(messageID)")
+        }
+
+        print(userInfo)
+#endif
+        NotificationHandler.handler(notification: userInfo)
+
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+
+        completionHandler()
     }
 }
 
@@ -291,8 +380,8 @@ fileprivate func appearanceSetup() {
 extension RootState: Equatable {
 
     static func == (lhs: RootState, rhs: RootState) -> Bool {
-        if case .hasAccount(let account1) = lhs.state, case .hasAccount(let account2) = rhs.state {
-            return account1.publicKey == account2.publicKey
+        if case .hasAccount(let account1, let notification1) = lhs.state, case .hasAccount(let account2, let notification2) = rhs.state {
+            return account1.publicKey == account2.publicKey && notification1 == notification2
         }
 
         if case .noAccount = lhs.state, case .noAccount = rhs.state {
