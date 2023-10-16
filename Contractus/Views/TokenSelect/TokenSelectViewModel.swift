@@ -35,7 +35,6 @@ final class TokenSelectViewModel: ViewModel {
     @Published private(set) var state: State
 
     private var resourcesAPIService: ContractusAPI.ResourcesService?
-    private var store = Set<AnyCancellable>()
     private var tokens: [ContractusAPI.Token] = []
 
     init(

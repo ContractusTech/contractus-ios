@@ -97,14 +97,14 @@ struct BalanceView: View {
                     switch state {
                     case .empty:
                         Rectangle()
-                            .fill(R.color.thirdBackground.color.opacity(0.4))
+                            .fill(R.color.thirdBackground.color)
                             .cornerRadius(4)
                             .frame(width: 100, height: 13, alignment: .leading)
                             .padding(0)
                             .shimmering()
                         
                         Rectangle()
-                            .fill(R.color.thirdBackground.color.opacity(0.4))
+                            .fill(R.color.thirdBackground.color)
                             .cornerRadius(8)
                             .frame(width: 140, height: 29, alignment: .leading)
                             .shimmering()
@@ -344,8 +344,6 @@ struct BalanceView: View {
                             .padding(0)
                             .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
 
-                        } else {
-                            EmptyView()
                         }
                     }
                     .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))

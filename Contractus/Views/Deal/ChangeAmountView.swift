@@ -5,6 +5,8 @@ import Combine
 extension Currency: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(code)
+        hasher.combine(name)
+        hasher.combine(decimals)
     }
 }
 
