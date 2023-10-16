@@ -17,6 +17,8 @@ public struct Balance: Decodable {
     public struct TokenInfo: Decodable {
 
         public let price: Double
+        public let priceFormatted: String
+        public let priceFormattedWithCode: String
         public let currency: Currency
         public let amount: Amount
 
@@ -24,6 +26,8 @@ public struct Balance: Decodable {
             self.price = price
             self.currency = currency
             self.amount = amount
+            self.priceFormatted = currency.format(double: price, withCode: false) ?? ""
+            self.priceFormattedWithCode = currency.format(double: price, withCode: true) ?? ""
         }
 
         enum CodingKeys: CodingKey {
@@ -39,6 +43,9 @@ public struct Balance: Decodable {
             let currency = try container.decode(String.self, forKey: Balance.TokenInfo.CodingKeys.currency)
             self.currency = .from(code: currency)
             self.amount = try container.decode(Amount.self, forKey: Balance.TokenInfo.CodingKeys.amount)
+
+            self.priceFormatted = self.currency.format(double: price, withCode: false) ?? ""
+            self.priceFormattedWithCode = self.currency.format(double: price, withCode: true) ?? ""
 
         }
     }

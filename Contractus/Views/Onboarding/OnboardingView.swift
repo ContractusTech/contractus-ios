@@ -16,7 +16,7 @@ struct OnboardingView: View {
     var body: some View {
         VStack(spacing: 0) {
             TabView(selection: $selectedPage) {
-                ForEach(viewModel.state.pages, id: \.self) { page in
+                ForEach(viewModel.state.pages, id: \.id) { page in
                     OnboardingPageView(page: page)
                         .tag(viewModel.state.pages.firstIndex(of: page)!)
                         .contentShape(Rectangle())

@@ -156,7 +156,7 @@ extension ReferralProgram.Prize {
             type: self.type,
             title: self.name(),
             subtitle: self.count > 0 && self.allowViewAccounts ? "\(count) \(R.string.localizable.referralPrizeTimes())" : nil,
-            amount: self.count > 0 ? self.amount.formatted(withCode: true) : self.price.formatted(withCode: true),
+            amount: self.count > 0 ? self.amount.valueFormattedWithCode : self.price.valueFormattedWithCode,
             applied: applied
         )
     }

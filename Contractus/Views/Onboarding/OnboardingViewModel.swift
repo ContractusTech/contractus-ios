@@ -15,7 +15,8 @@ enum OnboardingPageButton {
     case next, close, accept
 }
 
-struct OnboardingPageModel: Hashable {
+struct OnboardingPageModel: Hashable, Identifiable {
+    let id = UUID().uuidString
     let imageName: String?
     let imageUrl: String?
     let title: String?

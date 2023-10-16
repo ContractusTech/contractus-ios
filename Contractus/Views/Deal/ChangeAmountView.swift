@@ -5,6 +5,8 @@ import Combine
 extension Currency: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(code)
+        hasher.combine(name)
+        hasher.combine(decimals)
     }
 }
 
@@ -33,7 +35,7 @@ struct ChangeAmountView: View {
         viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>,
         didChange: @escaping (Amount, AmountValueType, Bool) -> Void
     ) {
-        self._amountString = State(initialValue: viewModel.state.amount.formatted())
+        self._amountString = State(initialValue: viewModel.state.amount.valueFormatted)
         if viewModel.tier == .holder {
             self._holderMode = .init(initialValue: viewModel.deal.allowHolderMode ?? false || viewModel.amount.token.holderMode)
         }
@@ -196,7 +198,7 @@ struct ChangeAmountView: View {
                                         Spacer()
                                         if viewModel.state.state != .loading  {
                                             if !(viewModel.state.deal.checkerAmount?.isZero ?? true) {
-                                                Text(viewModel.state.checkerAmount.formatted(withCode: true))
+                                                Text(viewModel.state.checkerAmount.valueFormattedWithCode)
                                                     .font(.body)
                                                     .fontWeight(.semibold)
                                                     .foregroundColor(viewModel.state.amountType == .checker ? R.color.textBase.color : R.color.secondaryText.color)
@@ -227,7 +229,7 @@ struct ChangeAmountView: View {
                                     
                                     Spacer()
                                     if viewModel.state.state != .loading  {
-                                        Text(viewModel.state.totalAmount.formatted(withCode: true))
+                                        Text(viewModel.state.totalAmount.valueFormattedWithCode)
                                             .font(.body)
                                             .fontWeight(.bold)
                                             .foregroundColor(R.color.textBase.color)
@@ -250,7 +252,7 @@ struct ChangeAmountView: View {
                                         
                                         Spacer()
                                         
-                                        Text(viewModel.state.dealAmount.formatted(withCode: true))
+                                        Text(viewModel.state.dealAmount.valueFormattedWithCode)
                                             .font(.body)
                                             .fontWeight(.bold)
                                             .foregroundColor(R.color.secondaryText.color)
@@ -354,7 +356,7 @@ struct ChangeAmountView: View {
                                     
                                     Spacer()
                                     if viewModel.state.state != .loading  {
-                                        Text(viewModel.state.totalAmount.formatted(withCode: true))
+                                        Text(viewModel.state.totalAmount.valueFormattedWithCode)
                                             .font(.body)
                                             .fontWeight(.bold)
                                             .foregroundColor(R.color.textBase.color)

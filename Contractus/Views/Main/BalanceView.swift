@@ -69,8 +69,9 @@ struct BalanceView: View {
         }
 
         var id: String {
-            self.amount.token.code
+            self.amount.token.address ?? self.amount.token.code
         }
+
         let amount: Amount
         var logo: Image {
             guard let image = UIImage(named: "\(self.amount.token.code)-CoinLogo") else {
@@ -96,14 +97,14 @@ struct BalanceView: View {
                     switch state {
                     case .empty:
                         Rectangle()
-                            .fill(R.color.thirdBackground.color.opacity(0.4))
+                            .fill(R.color.thirdBackground.color)
                             .cornerRadius(4)
                             .frame(width: 100, height: 13, alignment: .leading)
                             .padding(0)
                             .shimmering()
                         
                         Rectangle()
-                            .fill(R.color.thirdBackground.color.opacity(0.4))
+                            .fill(R.color.thirdBackground.color)
                             .cornerRadius(8)
                             .frame(width: 140, height: 29, alignment: .leading)
                             .shimmering()
@@ -231,8 +232,8 @@ struct BalanceView: View {
                                         .foregroundColor(R.color.textBase.color)
 
 
-                                    if token.price > 0, let price = token.currency.format(double: token.price, withCode: false) {
-                                        Text(price)
+                                    if token.price > 0 {
+                                        Text(token.priceFormattedWithCode)
                                             .font(.footnote.weight(.semibold))
                                             .textCase(.uppercase)
                                             .foregroundColor(R.color.secondaryText.color)
@@ -248,7 +249,7 @@ struct BalanceView: View {
                                                 .aspectRatio(contentMode: .fit)
                                                 .foregroundColor(R.color.secondaryText.color)
                                         }
-                                        Text(token.amount.formatted())
+                                        Text(token.amount.valueFormatted)
                                             .font(.footnote.weight(.semibold))
                                             .foregroundColor(R.color.textBase.color)
                                     }
@@ -265,23 +266,21 @@ struct BalanceView: View {
                         if !balance.wrap.tokens.isEmpty {
                             ZStack(alignment: .center) {
                                 VStack(alignment: .leading, spacing: 0) {
-                                    ForEach(balance.wrap.tokens) { token in
+                                    ForEach(balance.wrap.tokens, id: \.id) { token in
                                         HStack(alignment: .center, spacing: 4) {
                                             Text(token.amount.token.code)
                                                 .font(.footnote.weight(.semibold))
                                                 .textCase(.uppercase)
                                                 .foregroundColor(R.color.textBase.color)
-                                            if token.price > 0,
-                                               let price = token.currency.format(double: token.price, withCode: false)
-                                            {
-                                                Text(price)
+                                            if token.price > 0 {
+                                                Text(token.priceFormattedWithCode)
                                                     .font(.footnote.weight(.semibold))
                                                     .textCase(.uppercase)
                                                     .foregroundColor(R.color.secondaryText.color)
                                             }
 
                                             Spacer()
-                                            Text(token.amount.formatted())
+                                            Text(token.amount.valueFormatted)
                                                 .font(.footnote.weight(.semibold))
                                                 .textCase(.uppercase)
                                                 .foregroundColor(R.color.textBase.color)
@@ -320,19 +319,19 @@ struct BalanceView: View {
 
                         if !balance.tokens.isEmpty {
                             VStack(alignment: .leading, spacing: 0) {
-                                ForEach(balance.tokens) { token in
+                                ForEach(balance.tokens, id: \.id) { token in
                                     HStack(alignment: .center, spacing: 4){
                                         Text(token.amount.token.code)
                                             .font(.footnote.weight(.semibold))
                                             .foregroundColor(R.color.textBase.color)
-                                        if token.price > 0, let price = token.currency.format(double: token.price, withCode: false) {
-                                            Text(price)
+                                        if token.price > 0 {
+                                            Text(token.priceFormattedWithCode)
                                                 .font(.footnote.weight(.semibold))
                                                 .textCase(.uppercase)
                                                 .foregroundColor(R.color.secondaryText.color)
                                         }
                                         Spacer()
-                                        Text(token.amount.formatted())
+                                        Text(token.amount.valueFormatted)
                                             .font(.footnote.weight(.semibold))
                                             .foregroundColor(R.color.textBase.color)
                                     }
@@ -345,8 +344,6 @@ struct BalanceView: View {
                             .padding(0)
                             .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
 
-                        } else {
-                            EmptyView()
                         }
                     }
                     .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
@@ -365,7 +362,7 @@ struct BalanceView: View {
 
 extension Amount: Identifiable {
     public var id: String {
-        self.token.code
+        self.token.address ?? self.token.code
     }
 }
 

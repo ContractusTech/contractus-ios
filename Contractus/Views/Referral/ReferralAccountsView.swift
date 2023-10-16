@@ -14,7 +14,7 @@ struct ReferralAccountsView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 2) {
-                    ForEach(viewModel.state.accounts, id: \.self) { item in
+                    ForEach(viewModel.state.accounts, id: \.publicKey) { item in
                         VStack(alignment: .leading, spacing: 2) {
                             HStack {
                                 Text(ContentMask.mask(from: item.publicKey))

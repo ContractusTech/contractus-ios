@@ -64,7 +64,7 @@ struct TextFieldView: View {
             QRCodeScannerView(configuration: .onlyScanner, blockchain: blockchain) { result in
                 isPresentedQRScan.toggle()
                 switch result {
-                case .deal(let deal):
+                case .deal:
                     // TODO: -
                     break
                 case .publicKey(let pk):

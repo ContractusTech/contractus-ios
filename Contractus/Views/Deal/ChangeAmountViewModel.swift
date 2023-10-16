@@ -206,7 +206,7 @@ final class ChangeAmountViewModel: ViewModel {
                 var newState = self.state
                 newState.feePercent = fee.percent
                 newState.feeAmount = fee.feeAmount
-                newState.feeFormatted = fee.feeAmount.formatted(withCode: true)
+                newState.feeFormatted = fee.feeAmount.valueFormattedWithCode
                 let fiatCurrency = fee.fiatCurrency.format(double: fee.fiatFee, withCode: true)
                 newState.fiatFeeFormatted = fiatCurrency ?? "" // fiatCurrency != nil ? "\(fiatCurrency!) (\(fee.percent.formatAsPercent())%)" : ""
                 newState.state = .none
