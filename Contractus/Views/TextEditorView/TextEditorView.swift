@@ -72,17 +72,16 @@ struct TextEditorView: View {
                     case .view:
                         ScrollView {
                             HStack(spacing: 0) {
-                                Text(content)
+                                if content.isEmpty {
+                                    Text(R.string.localizable.dealTextEditorViewPlaceholder())
+                                        .foregroundColor(R.color.secondaryText.color)
+                                } else {
+                                    Text(content)
+                                }
                                 Spacer()
-                                    .background(Color.yellow)
                             }
                             .setBackground(color: R.color.mainBackground.color)
                             .padding(EdgeInsets(top: 14, leading: 11, bottom: 0, trailing: 5))
-                            if content.isEmpty {
-                                Text(R.string.localizable.dealTextEditorViewPlaceholder())
-                                    .padding(EdgeInsets(top: 14, leading: 12, bottom: 0, trailing: 5))
-                                    .foregroundColor(R.color.secondaryText.color)
-                            }
                         }
                         .padding(.bottom, 6)
                     }
