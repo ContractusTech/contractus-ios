@@ -53,13 +53,6 @@ struct TextEditorView: View {
                                 .cornerRadius(20)
                                 .padding(6)
                                 .focused($isInputActive)
-                                .onTapGesture {}
-                                .onLongPressGesture(
-                                    pressing: { isPressed in
-                                        if isPressed {
-                                            self.endEditing()
-                                        }
-                                    }) {}
                                 .onAppear {
                                     isInputActive = true
                                 }

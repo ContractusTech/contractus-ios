@@ -91,6 +91,7 @@ struct DealView: View {
         }
     }
     @State private var showDeadlinePicker: Bool = false
+    @State private var gradient: [Color] = [.clear]
 
     var body: some View {
         ScrollView {
@@ -683,12 +684,25 @@ struct DealView: View {
                             VStack(alignment: .leading) {
                                 if let content = viewModel.state.deal.meta?.content {
                                     HStack {
-                                        Text(viewModel.state.withEncryption
-                                             ? ContentMask.maskAll(content.text)
-                                             : content.text.fromBase64() ?? "")
+                                        TruncableText(
+                                            text: Text(viewModel.state.withEncryption
+                                                       ? ContentMask.maskAll(content.text)
+                                                       : content.text.fromBase64() ?? "")
+                                                  .font(.footnote),
+                                            lineLimit: 5,
+                                            isTruncatedUpdate: { isTruncated in
+                                                if isTruncated {
+                                                    gradient = [.clear, .clear, .clear, .white]
+                                                } else {
+                                                    gradient = [.clear]
+                                                }
+                                            }
+                                        )
+                                        .overlay {
+                                            LinearGradient(colors: gradient, startPoint: .top, endPoint: .bottom)
+                                        }
                                         Spacer()
                                     }
-                                    
                                 } else {
                                     HStack {
                                         Text(viewModel.state.withEncryption ? R.string.localizable.dealHintEncryptContent() : R.string.localizable.dealHintNoEncryptContent())
