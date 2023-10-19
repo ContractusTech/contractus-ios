@@ -91,7 +91,8 @@ struct DealView: View {
         }
     }
     @State private var showDeadlinePicker: Bool = false
-    @State private var gradient: [Color] = [.clear]
+    @State private var gradientDetails: [Color] = [.clear]
+    @State private var gradientResults: [Color] = [.clear]
 
     var body: some View {
         ScrollView {
@@ -692,14 +693,14 @@ struct DealView: View {
                                             lineLimit: 5,
                                             isTruncatedUpdate: { isTruncated in
                                                 if isTruncated {
-                                                    gradient = [.clear, .clear, .clear, .white]
+                                                    gradientDetails = [.clear, .clear, .clear, .white]
                                                 } else {
-                                                    gradient = [.clear]
+                                                    gradientDetails = [.clear]
                                                 }
                                             }
                                         )
                                         .overlay {
-                                            LinearGradient(colors: gradient, startPoint: .top, endPoint: .bottom)
+                                            LinearGradient(colors: gradientDetails, startPoint: .top, endPoint: .bottom)
                                         }
                                         Spacer()
                                     }
@@ -821,12 +822,25 @@ struct DealView: View {
                                 VStack(alignment: .leading) {
                                     if let result = viewModel.state.deal.result?.content {
                                         HStack {
-                                            Text(viewModel.state.withEncryption
-                                                 ? ContentMask.maskAll(result.text)
-                                                 : result.text.fromBase64() ?? "")
+                                            TruncableText(
+                                                text: Text(viewModel.state.withEncryption
+                                                           ? ContentMask.maskAll(result.text)
+                                                           : result.text.fromBase64() ?? "")
+                                                      .font(.footnote),
+                                                lineLimit: 5,
+                                                isTruncatedUpdate: { isTruncated in
+                                                    if isTruncated {
+                                                        gradientResults = [.clear, .clear, .clear, .white]
+                                                    } else {
+                                                        gradientResults = [.clear]
+                                                    }
+                                                }
+                                            )
+                                            .overlay {
+                                                LinearGradient(colors: gradientResults, startPoint: .top, endPoint: .bottom)
+                                            }
                                             Spacer()
                                         }
-                                        
                                     } else {
                                         HStack {
                                             Text(viewModel.state.withEncryption ? R.string.localizable.dealHintEncryptContent() : R.string.localizable.dealHintNoEncryptContent())

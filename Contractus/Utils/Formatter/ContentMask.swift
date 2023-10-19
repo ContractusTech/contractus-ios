@@ -18,17 +18,17 @@ struct ContentMask {
         }
         let firstPart = string.prefix(visibleCount)
         let lastPart = string.suffix(visibleCount)
-        return "\(firstPart)٭٭٭\(lastPart)"
+        return "\(firstPart)***\(lastPart)"
     }
 
     static func maskAll(_ string: String?) -> String {
         guard let string = string else {
             return ""
         }
-        return String(repeating: "٭", count: string.count)
+        return String(repeating: "*", count: string.count)
     }
 
     static func maskContent(_ length: Int = 10) -> String {
-        return String(repeating: "٭", count: length)
+        return String(repeating: "*", count: length)
     }
 }
