@@ -48,8 +48,8 @@ struct UnlockHolderView: View {
 
             itemView(
                 title: R.string.localizable.unlockHolderBuyTitle(),
-                subtitle: "",
-                description: R.string.localizable.unlockHolderBuySubtitle(),
+                subtitle: R.string.localizable.unlockHolderBuyTitle1(),
+                description: "",
                 isUrl: false
             ) {
                 action(.buy)

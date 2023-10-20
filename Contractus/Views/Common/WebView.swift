@@ -9,9 +9,23 @@ import WebKit
 import SwiftUI
 
 struct WebView: UIViewRepresentable {
-    let webView = WKWebView()
-    let loadingIndicator = UIActivityIndicatorView(style: .medium)
-    var url: URL
+    private let webView = WKWebView()
+    private let loadingIndicator = UIActivityIndicatorView(style: .medium)
+    private var request: URLRequest
+    private var failUrl: URL?
+    private var successUrl: URL?
+    private var closeHandler: ((Bool) -> Void)?
+
+    init(url: URL) {
+        self.request = .init(url: url)
+    }
+
+    init(request: URLRequest, successUrl: URL? = nil, failUrl: URL? = nil, closeHandler: @escaping (Bool) -> Void) {
+        self.request = request
+        self.successUrl = successUrl
+        self.failUrl = failUrl
+        self.closeHandler = closeHandler
+    }
 
     func makeUIView(context: Context) -> WKWebView {
         self.webView.navigationDelegate = context.coordinator
@@ -28,7 +42,6 @@ struct WebView: UIViewRepresentable {
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        let request = URLRequest(url: url)
         webView.load(request)
     }
     
@@ -45,6 +58,23 @@ struct WebView: UIViewRepresentable {
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             self.parent.loadingIndicator.stopAnimating()
+        }
+
+        func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            if navigationAction.navigationType == .other {
+                if parent.failUrl == navigationAction.request.url {
+                    parent.closeHandler?(false)
+                    decisionHandler(.cancel)
+                    return
+                }
+
+                if parent.successUrl == navigationAction.request.url {
+                    parent.closeHandler?(true)
+                    decisionHandler(.cancel)
+                    return
+                }
+            }
+            decisionHandler(.allow)
         }
     }
 }
