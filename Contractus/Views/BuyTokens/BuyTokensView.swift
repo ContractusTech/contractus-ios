@@ -13,10 +13,16 @@ fileprivate enum Constants {
 }
 
 struct BuyTokensView: View {
+    enum SheetType: Identifiable {
+        var id: String { "\(self)" }
+        case payment(BuyTokensState.PaymentRequest)
+    }
 
     enum AlertType: Identifiable {
         var id: String { "\(self)" }
         case error(String)
+        case successPayment
+        case failPayment
     }
 
     @Environment(\.presentationMode) private var presentationMode
@@ -25,8 +31,9 @@ struct BuyTokensView: View {
     @State var alertType: AlertType?
     @State var amountValue: String = "10000"
     @State var showContent: Bool = false
+    @State var sheetType: SheetType? = nil
     @FocusState var amountFocused: Bool
-    
+
     private let amountPublisher = PassthroughSubject<String, Never>()
 
     var body: some View {
@@ -98,11 +105,18 @@ struct BuyTokensView: View {
                 }
                 Spacer()
 
-                Text(R.string.localizable.buyTokenHint())
-                    .font(.footnote.weight(.medium))
-                    .foregroundColor(R.color.secondaryText.color.opacity(0.5))
-                    .padding(.bottom, 12)
+                HStack(alignment: .center) {
+                    Text(R.string.localizable.commonPoweredBy())
+                        .font(.footnote.weight(.medium))
+                        .foregroundColor(R.color.secondaryText.color)
 
+                    R.image.advcash.image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 14)
+                        .padding(.bottom, 2)
+
+                }.padding()
                 CButton(
                     title: R.string.localizable.buyTokenPayTitle(viewModel.state.pay),
                     style: .primary,
@@ -113,6 +127,30 @@ struct BuyTokensView: View {
                     viewModel.trigger(.create)
                 }
                 .padding(.bottom, 16)
+            }
+            .fullScreenCover(item: $sheetType) { type in
+                switch type {
+                case .payment(let request):
+                    NavigationView {
+                        WebView(
+                            request: request.asURLRequest(),
+                            successUrl: request.successUrl,
+                            failUrl: request.failUrl,
+                            closeHandler: { isSuccess in
+                                alertType = isSuccess ? .successPayment : .failPayment
+                                sheetType = nil
+                        })
+                        .edgesIgnoringSafeArea(.bottom)
+                        .navigationBarItems(
+                            trailing: Button(R.string.localizable.commonClose(), action: {
+                                sheetType = nil
+                            })
+                        )
+                        .navigationTitle(R.string.localizable.commonPayment())
+                        .navigationBarTitleDisplayMode(.inline)
+                    }
+                    .baseBackground()
+                }
             }
             .padding(.horizontal, 18)
             .baseBackground()
@@ -139,6 +177,9 @@ struct BuyTokensView: View {
             }
             .onChange(of: viewModel.state.state) { state in
                 switch state {
+                case .openPayment(let request):
+                    ImpactGenerator.success()
+                    sheetType = .payment(request)
                 case .openURL(let stringUrl):
                     guard let url = URL(string: stringUrl) else { return }
                     ImpactGenerator.success()
@@ -161,6 +202,22 @@ struct BuyTokensView: View {
                     Alert(
                         title: Text(R.string.localizable.commonError()),
                         message: Text(message),
+                        dismissButton: .default(Text(R.string.localizable.commonOk())) {
+                            viewModel.trigger(.resetError)
+                        }
+                    )
+                case .successPayment:
+                    Alert(
+                        title: Text(R.string.localizable.buyTokenTitleSuccessPayment()),
+                        message: Text(R.string.localizable.buyTokenTextSuccessPayment()),
+                        dismissButton: .default(Text(R.string.localizable.commonOk())) {
+                            viewModel.trigger(.resetError)
+                        }
+                    )
+                case .failPayment:
+                    Alert(
+                        title: Text(R.string.localizable.buyTokenTitleErrorPayment()),
+                        message: Text(R.string.localizable.buyTokenTextErrorPayment()),
                         dismissButton: .default(Text(R.string.localizable.commonOk())) {
                             viewModel.trigger(.resetError)
                         }

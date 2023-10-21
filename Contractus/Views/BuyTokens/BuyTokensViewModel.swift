@@ -6,6 +6,8 @@
 //
 
 import ContractusAPI
+import Foundation
+import Alamofire
 
 enum BuyTokensInput {
     case resetError, setValue(Double), calculate, create
@@ -17,15 +19,26 @@ struct BuyTokensState {
     }
     
     enum State: Equatable {
-        case loading, loaded, openURL(String)
+        case loading, loaded, openURL(String), openPayment(PaymentRequest)
     }
-    
+
+    struct PaymentRequest: Equatable {
+        let paymentUrl: URL
+        let method: String
+
+        let successUrl: URL?
+        let failUrl: URL?
+        let params: [String: String]
+    }
+
     var account: CommonAccount
     var state: State
     var errorState: ErrorState?
     var value: Double = 10000.00
     var calculate: CalculateResult?
-    
+
+    var requestType: CheckoutService.CreateUrlRequest.CheckoutType
+
     var price: String {
         if let calculate = calculate {
             return "\(calculate.fiatCurrency) \(calculate.tokenPrice.formatted())"
@@ -60,7 +73,8 @@ final class BuyTokensViewModel: ViewModel {
         self.checkoutService = checkoutService
         self.state = .init(
             account: account,
-            state: .loading
+            state: .loading,
+            requestType: .advcash
         )
         
         self.trigger(.calculate) {}
@@ -90,6 +104,7 @@ final class BuyTokensViewModel: ViewModel {
         case .create:
             self.state.state = .loading
             let data = CheckoutService.CreateUrlRequest(
+                type: .advcash,
                 amount: state.value,
                 blockchain: "solana",
                 publicKey: state.account.publicKey
@@ -97,7 +112,18 @@ final class BuyTokensViewModel: ViewModel {
             Task { @MainActor in
                 do {
                     let response = try await create(data: data)
-                    self.state.state = .openURL(response.paymentUrl)
+                    switch state.requestType {
+                    case .nowpayments:
+                        self.state.state = .openURL(response.paymentUrl)
+                    case .advcash:
+                        if let paymentData = try? BuyTokensState.PaymentRequest(by: response) {
+                            self.state.state = .openPayment(paymentData)
+                        } else {
+                            self.state.state = .loaded
+                            self.state.errorState = .error(R.string.localizable.commonError())
+                        }
+                    }
+
                 } catch {
                     self.state.state = .loaded
                     self.state.errorState = .error(error.localizedDescription)
@@ -120,5 +146,31 @@ final class BuyTokensViewModel: ViewModel {
                 continuation.resume(with: result)
             }
         }
+    }
+}
+
+extension BuyTokensState.PaymentRequest {
+
+    enum PaymentRequestError: Error {
+        case paymentUrlNotFound
+    }
+
+    init(by result: CreateUrlResult) throws {
+        guard let url =  URL(string: result.paymentUrl) else {
+            throw PaymentRequestError.paymentUrlNotFound
+        }
+        self.paymentUrl = url
+        self.successUrl = URL(string: result.successUrl ?? "")
+        self.failUrl = URL(string: result.failUrl ?? "")
+        self.params = result.params ?? [:]
+        self.method = result.method ?? "POST"
+    }
+
+    func asURLRequest() -> URLRequest {
+        var request = URLRequest(url: self.paymentUrl)
+        request.httpMethod = self.method
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
+        request.httpBody = try? URLEncodedFormEncoder().encode(self.params).data(using: .utf8)
+        return request
     }
 }

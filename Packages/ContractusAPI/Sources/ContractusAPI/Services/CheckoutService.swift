@@ -8,18 +8,25 @@ public final class CheckoutService: BaseService {
         public let currencies: [String]
         public let amount: Double
         
-        public init(amount: Double) {
-            self.currencies = []
+        public init(amount: Double, currencies: [String] = []) {
+            self.currencies = currencies
             self.amount = amount
         }
     }
     
     public struct CreateUrlRequest: Encodable {
+        public enum CheckoutType: String, Encodable {
+            case nowpayments
+            case advcash
+        }
+
         public let amount: Double
         public let blockchain: String
         public let publicKey: String
-        
-        public init(amount: Double, blockchain: String, publicKey: String) {
+        public let type: CheckoutType
+
+        public init(type: CheckoutType, amount: Double, blockchain: String, publicKey: String) {
+            self.type = type
             self.amount = amount
             self.blockchain = blockchain
             self.publicKey = publicKey

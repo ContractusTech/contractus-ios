@@ -888,8 +888,10 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 23 images.
+  /// This `R.image` struct is generated, and contains static references to 24 images.
   struct image {
+    /// Image `Advcash`.
+    static let advcash = Rswift.ImageResource(bundle: R.hostingBundle, name: "Advcash")
     /// Image `Changelog_tokens`.
     static let changelog_tokens = Rswift.ImageResource(bundle: R.hostingBundle, name: "Changelog_tokens")
     /// Image `ContractusLogo`.
@@ -936,6 +938,13 @@ struct R: Rswift.Validatable {
     static let iconDealExecutor = Rswift.ImageResource(bundle: R.hostingBundle, name: "iconDealExecutor")
     /// Image `solana`.
     static let solana = Rswift.ImageResource(bundle: R.hostingBundle, name: "solana")
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "Advcash", bundle: ..., traitCollection: ...)`
+    static func advcash(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.advcash, compatibleWith: traitCollection)
+    }
+    #endif
 
     #if os(iOS) || os(tvOS)
     /// `UIImage(named: "Changelog_tokens", bundle: ..., traitCollection: ...)`
@@ -1103,7 +1112,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 412 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 419 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client.
       ///
@@ -1345,6 +1354,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealBondBoth = Rswift.StringResource(key: "newDeal.bond.both", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Buy
+      ///
+      /// Locales: en
+      static let unlockHolderBuyTitle = Rswift.StringResource(key: "unlockHolder.buy.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Buy 10k CTUS token
       ///
       /// Locales: en
@@ -1361,10 +1374,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let topupSubtitleCards = Rswift.StringResource(key: "topup.subtitle.cards", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Buy with cryptocurrencies
-      ///
-      /// Locales: en
-      static let unlockHolderBuyTitle = Rswift.StringResource(key: "unlockHolder.buy.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: By cards
       ///
       /// Locales: en
@@ -1645,6 +1654,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextDetails = Rswift.StringResource(key: "deal.text.details", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Direct
+      ///
+      /// Locales: en
+      static let unlockHolderBuyTitle1 = Rswift.StringResource(key: "unlockHolder.buy.title.1", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Documents
       ///
       /// Locales: en
@@ -2089,6 +2102,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let buyTokenPayTitle = Rswift.StringResource(key: "buyToken.pay.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Payment
+      ///
+      /// Locales: en
+      static let commonPayment = Rswift.StringResource(key: "common.payment", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Payment Error
+      ///
+      /// Locales: en
+      static let buyTokenTitleErrorPayment = Rswift.StringResource(key: "buyToken.title.error-payment", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Pending signature
       ///
       /// Locales: en
@@ -2109,6 +2130,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsDeleteAlertSubtitle = Rswift.StringResource(key: "accounts.delete.alert.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Powered by
+      ///
+      /// Locales: en
+      static let commonPoweredBy = Rswift.StringResource(key: "common.powered-by", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Powered by %@
       ///
       /// Locales: en
@@ -2341,6 +2366,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonSkip = Rswift.StringResource(key: "common.skip", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Something went wrong. Try again later.
+      ///
+      /// Locales: en
+      static let buyTokenTextErrorPayment = Rswift.StringResource(key: "buyToken.text.error-payment", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Start of the deal
       ///
       /// Locales: en
@@ -2353,6 +2382,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignFieldsStatus = Rswift.StringResource(key: "transactionSign.fields.status", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Success Payment
+      ///
+      /// Locales: en
+      static let buyTokenTitleSuccessPayment = Rswift.StringResource(key: "buyToken.title.success-payment", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Success upload
       ///
       /// Locales: en
@@ -2637,6 +2670,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let unlockHolderMethods = Rswift.StringResource(key: "unlockHolder.methods", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: We've already sent tokens to your account.
+      ///
+      /// Locales: en
+      static let buyTokenTextSuccessPayment = Rswift.StringResource(key: "buyToken.text.success-payment", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Welcome to
       ///
       /// Locales: en
@@ -3670,6 +3707,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("newDeal.bond.both", bundle: bundle, comment: "")
       }
 
+      /// en translation: Buy
+      ///
+      /// Locales: en
+      static func unlockHolderBuyTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("unlockHolder.buy.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "unlockHolder.buy.title"
+        }
+
+        return NSLocalizedString("unlockHolder.buy.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Buy 10k CTUS token
       ///
       /// Locales: en
@@ -3728,21 +3780,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("topup.subtitle.cards", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Buy with cryptocurrencies
-      ///
-      /// Locales: en
-      static func unlockHolderBuyTitle(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("unlockHolder.buy.title", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "unlockHolder.buy.title"
-        }
-
-        return NSLocalizedString("unlockHolder.buy.title", bundle: bundle, comment: "")
       }
 
       /// en translation: By cards
@@ -4799,6 +4836,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.text.details", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Direct
+      ///
+      /// Locales: en
+      static func unlockHolderBuyTitle1(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("unlockHolder.buy.title.1", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "unlockHolder.buy.title.1"
+        }
+
+        return NSLocalizedString("unlockHolder.buy.title.1", bundle: bundle, comment: "")
       }
 
       /// en translation: Documents
@@ -6476,6 +6528,36 @@ struct R: Rswift.Validatable {
         return String(format: format, locale: locale, value1)
       }
 
+      /// en translation: Payment
+      ///
+      /// Locales: en
+      static func commonPayment(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.payment", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.payment"
+        }
+
+        return NSLocalizedString("common.payment", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Payment Error
+      ///
+      /// Locales: en
+      static func buyTokenTitleErrorPayment(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("buyToken.title.error-payment", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "buyToken.title.error-payment"
+        }
+
+        return NSLocalizedString("buyToken.title.error-payment", bundle: bundle, comment: "")
+      }
+
       /// en translation: Pending signature
       ///
       /// Locales: en
@@ -6549,6 +6631,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.delete.alert.subtitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Powered by
+      ///
+      /// Locales: en
+      static func commonPoweredBy(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.powered-by", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.powered-by"
+        }
+
+        return NSLocalizedString("common.powered-by", bundle: bundle, comment: "")
       }
 
       /// en translation: Powered by %@
@@ -7423,6 +7520,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.skip", bundle: bundle, comment: "")
       }
 
+      /// en translation: Something went wrong. Try again later.
+      ///
+      /// Locales: en
+      static func buyTokenTextErrorPayment(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("buyToken.text.error-payment", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "buyToken.text.error-payment"
+        }
+
+        return NSLocalizedString("buyToken.text.error-payment", bundle: bundle, comment: "")
+      }
+
       /// en translation: Start of the deal
       ///
       /// Locales: en
@@ -7466,6 +7578,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.fields.status", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Success Payment
+      ///
+      /// Locales: en
+      static func buyTokenTitleSuccessPayment(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("buyToken.title.success-payment", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "buyToken.title.success-payment"
+        }
+
+        return NSLocalizedString("buyToken.title.success-payment", bundle: bundle, comment: "")
       }
 
       /// en translation: Success upload
@@ -8537,6 +8664,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("unlockHolder.methods", bundle: bundle, comment: "")
+      }
+
+      /// en translation: We've already sent tokens to your account.
+      ///
+      /// Locales: en
+      static func buyTokenTextSuccessPayment(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("buyToken.text.success-payment", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "buyToken.text.success-payment"
+        }
+
+        return NSLocalizedString("buyToken.text.success-payment", bundle: bundle, comment: "")
       }
 
       /// en translation: Welcome to
