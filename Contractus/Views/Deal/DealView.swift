@@ -693,7 +693,7 @@ struct DealView: View {
                                             lineLimit: 5,
                                             isTruncatedUpdate: { isTruncated in
                                                 if isTruncated {
-                                                    gradientDetails = [.clear, .clear, .clear, .white]
+                                                    gradientDetails = [.clear, .clear, .clear, R.color.secondaryBackground.color]
                                                 } else {
                                                     gradientDetails = [.clear]
                                                 }
@@ -830,7 +830,7 @@ struct DealView: View {
                                                 lineLimit: 5,
                                                 isTruncatedUpdate: { isTruncated in
                                                     if isTruncated {
-                                                        gradientResults = [.clear, .clear, .clear, .white]
+                                                        gradientResults = [.clear, .clear, .clear, R.color.secondaryBackground.color]
                                                     } else {
                                                         gradientResults = [.clear]
                                                     }
