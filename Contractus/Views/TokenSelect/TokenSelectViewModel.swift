@@ -5,7 +5,7 @@ import Combine
 extension TokenSelectViewModel {
 
     enum Mode {
-        case single, many
+        case single, many, select
     }
 
     struct State {
@@ -76,7 +76,7 @@ final class TokenSelectViewModel: ViewModel {
             switch state.mode {
             case .many:
                 self.state.selectedTokens.append(token)
-            case .single:
+            case .single, .select:
                 self.state.selectedTokens = [token]
             }
         case .deselect(let token):

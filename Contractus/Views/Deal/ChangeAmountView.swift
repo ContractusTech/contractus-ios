@@ -535,22 +535,24 @@ struct ChangeAmountView: View {
 
     @ViewBuilder
     func selectTokenView() -> some View {
-        TokenSelectView(viewModel: .init(TokenSelectViewModel(
-            allowHolderMode: false,
-            mode: .single,
-            tier: viewModel.state.tier,
-            selectedTokens: [viewModel.state.amount.token],
-            disableUnselectTokens: [],
-            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService()))) { result in
-                switch result {
-                case .many, .none:
-                    break
-                case .single(let token):
-                    viewModel.trigger(.changeToken(token))
-                    holderMode = token.holderMode
-                    showSelectToken.toggle()
+        NavigationView {
+            TokenSelectView(viewModel: .init(TokenSelectViewModel(
+                allowHolderMode: false,
+                mode: .single,
+                tier: viewModel.state.tier,
+                selectedTokens: [viewModel.state.amount.token],
+                disableUnselectTokens: [],
+                resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService()))) { result in
+                    switch result {
+                    case .many, .close, .none:
+                        break
+                    case .single(let token):
+                        viewModel.trigger(.changeToken(token))
+                        holderMode = token.holderMode
+                        showSelectToken.toggle()
+                    }
                 }
-            }
+        }
     }
 }
 

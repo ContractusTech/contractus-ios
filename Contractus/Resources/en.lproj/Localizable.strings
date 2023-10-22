@@ -453,3 +453,6 @@
 "unlockHolder.pancake.subtitle" = "Need to migrate tokens from the Binance blockchain to Solana using the Portal bridge";
 "unlockHolder.main-button.title" = "Unlock Holder Mode";
 "unlockHolder.main-button.subtitle" = "Buy 10k CTUS token";
+
+"sendTokens.recipient" = "Recipient";
+"sendTokens.send.title" = "Send %@";

@@ -58,7 +58,8 @@ struct MainView: View {
     @State private var showChangelog: Bool = false
     @State private var showBuyCtus: Bool = false
     @State private var showDealFilter: Bool = false
-    
+    @State private var showSendTokens: Bool = false
+
     var body: some View {
 
         JGProgressHUDPresenter(userInteractionOnHUD: true) {
@@ -77,14 +78,16 @@ struct MainView: View {
                                 sheetType = .wrap(from: fromAmount, to: toAmount)
                             }) {
                                 sheetType = .tokenSettings
+                            } sendAction: {
+                                showSendTokens.toggle()
                             }
 
-                        if viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
+//                        if viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
                             UnlockHolderButtonView() {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
                                 holderModeState = .medium
                             }
-                        }
+//                        }
 
                         if !viewModel.state.statistics.isEmpty {
                             StatisticsView(items: viewModel.state.statistics) { item in
@@ -297,21 +300,23 @@ struct MainView: View {
                 .sheet(item: $sheetType, content: { type in
                     switch type {
                     case .tokenSettings:
-                        TokenSelectView(viewModel: .init(TokenSelectViewModel(
-                            allowHolderMode: true,
-                            mode: .many,
-                            tier: viewModel.state.balance?.tier ?? .basic,
-                            selectedTokens: viewModel.state.selectedTokens,
-                            disableUnselectTokens: viewModel.state.disableUnselectTokens,
-                            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())
-                        )) { result in
-                            switch result {
-                            case .many(let tokens):
-                                viewModel.trigger(.saveTokenSettings(tokens))
-                            case .none, .single:
-                                break
+                        NavigationView {
+                            TokenSelectView(viewModel: .init(TokenSelectViewModel(
+                                allowHolderMode: true,
+                                mode: .many,
+                                tier: viewModel.state.balance?.tier ?? .basic,
+                                selectedTokens: viewModel.state.selectedTokens,
+                                disableUnselectTokens: viewModel.state.disableUnselectTokens,
+                                resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())
+                            )) { result in
+                                switch result {
+                                case .many(let tokens):
+                                    viewModel.trigger(.saveTokenSettings(tokens))
+                                case .none, .single, .close:
+                                    break
+                                }
+                                sheetType = nil
                             }
-                            sheetType = nil
                         }
                     case .topUp(let url):
                         NavigationView {
@@ -407,6 +412,11 @@ struct MainView: View {
                             checkoutService: service)
                         )
                     )
+                }
+                .fullScreenCover(isPresented: $showSendTokens) {
+                    SendTokensView(viewModel: .init(SendTokensViewModel(
+                        accountAPIService: try? APIServiceFactory.shared.makeAccountService()
+                    )))
                 }
                 .navigationDestination(for: $selectedDeal) { deal in
                     dealView(deal: deal)

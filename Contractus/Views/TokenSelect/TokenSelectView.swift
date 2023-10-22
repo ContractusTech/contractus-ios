@@ -15,6 +15,7 @@ struct TokenSelectView: View {
     enum ViewResult {
         case single(ContractusAPI.Token)
         case many([ContractusAPI.Token])
+        case close
         case none
     }
 
@@ -25,67 +26,67 @@ struct TokenSelectView: View {
     var action: (ViewResult) -> Void
 
     var body: some View {
-        NavigationView {
-            VStack {
-                TextField(R.string.localizable.selectTokenSearch(), text: $searchString)
-                    .textFieldStyle(SearchTextFieldStyle())
-                    .padding(.horizontal, 14)
-                ScrollView {
-                    VStack(spacing: 0) {
-                        ForEach(viewModel.state.tokens, id: \.self) { token in
-                            tokenItem(token: token)
-                            if token != viewModel.state.tokens.last {
-                                Divider().foregroundColor(R.color.buttonBorderSecondary.color)
-                            }
+        VStack {
+            TextField(R.string.localizable.selectTokenSearch(), text: $searchString)
+                .textFieldStyle(SearchTextFieldStyle())
+                .padding(.horizontal, 14)
+            ScrollView {
+                VStack(spacing: 0) {
+                    ForEach(viewModel.state.tokens, id: \.self) { token in
+                        tokenItem(token: token)
+                        if token != viewModel.state.tokens.last {
+                            Divider().foregroundColor(R.color.buttonBorderSecondary.color)
                         }
                     }
-                    .background(
-                        Color(R.color.secondaryBackground()!)
-                            .clipped()
-                            .cornerRadius(20)
-                            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
-                    )
                 }
-                .padding(.bottom, 32)
+                .background(
+                    Color(R.color.secondaryBackground()!)
+                        .clipped()
+                        .cornerRadius(20)
+                        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+                )
             }
-            .baseBackground()
-            .edgesIgnoringSafeArea(.bottom)
-            .navigationBarItems(
-                leading: Button {
-                    switch viewModel.state.mode {
-                    case .many:
-                        action(.none)
-                    case .single:
-                        if let token = viewModel.state.selectedTokens.first {
-                            action(.single(token))
-                        } else {
-                            action(.none)
-                        }
-                    }
-                } label: {
-                    Constants.closeImage
-                        .resizable()
-                        .frame(width: 21, height: 21)
-                        .foregroundColor(R.color.textBase.color)
-                },
-                trailing: Button {
-                    action(.many(viewModel.state.selectedTokens))
-                } label: {
-                    if viewModel.mode == .many {
-                        Text(R.string.localizable.commonSave())
+            .padding(.bottom, 32)
+        }
+        .baseBackground()
+        .edgesIgnoringSafeArea(.bottom)
+        .navigationBarItems(
+            leading: Button {
+                switch viewModel.state.mode {
+                case .many:
+                    action(.none)
+                case .single:
+                    if let token = viewModel.state.selectedTokens.first {
+                        action(.single(token))
                     } else {
-                        EmptyView()
+                        action(.none)
                     }
+                case .select:
+                    action(.close)
                 }
-            )
-            .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
-            .onChange(of: searchString, perform: { newText in
-                viewModel.trigger(.search(newText))
-            })
-            .onAppear {
-                viewModel.trigger(.load)
+            } label: {
+                Constants.closeImage
+                    .resizable()
+                    .frame(width: 21, height: 21)
+                    .foregroundColor(R.color.textBase.color)
+            },
+            trailing: Button {
+                action(.many(viewModel.state.selectedTokens))
+            } label: {
+                if viewModel.mode == .many {
+                    Text(R.string.localizable.commonSave())
+                } else {
+                    EmptyView()
+                }
             }
+        )
+        .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.inline)
+        .onChange(of: searchString, perform: { newText in
+            viewModel.trigger(.search(newText))
+        })
+        .onAppear {
+            viewModel.trigger(.load)
         }
     }
 
@@ -137,7 +138,7 @@ struct TokenSelectView: View {
                             .font(.body)
                             .foregroundColor(R.color.textBase.color)
 
-                        if token.holderMode {
+                        if token.holderMode && viewModel.mode != .select {
                             Constants.crownImage
                                 .imageScale(.small)
                                 .foregroundColor(R.color.secondaryText.color)
@@ -152,33 +153,35 @@ struct TokenSelectView: View {
 
             Spacer()
 
-            Group {
-                if viewModel.state.isSelected(token) {
-                    ZStack {
-                        Constants.checkmarkImage
-                            .imageScale(.small)
-                            .foregroundColor(R.color.accentColor.color)
-                    }
-                    .frame(width: 24, height: 24)
-                    .background(R.color.fourthBackground.color)
-                    .cornerRadius(7)
-                } else {
-                    ZStack {}
-                        .frame(width: 24,  height: 24)
-                        .background(R.color.thirdBackground.color)
+            if viewModel.mode != .select {
+                Group {
+                    if viewModel.state.isSelected(token) {
+                        ZStack {
+                            Constants.checkmarkImage
+                                .imageScale(.small)
+                                .foregroundColor(R.color.accentColor.color)
+                        }
+                        .frame(width: 24, height: 24)
+                        .background(R.color.fourthBackground.color)
                         .cornerRadius(7)
-                        .overlay(
-                            RoundedRectangle(
-                                cornerRadius: 7,
-                                style: .continuous
+                    } else {
+                        ZStack {}
+                            .frame(width: 24,  height: 24)
+                            .background(R.color.thirdBackground.color)
+                            .cornerRadius(7)
+                            .overlay(
+                                RoundedRectangle(
+                                    cornerRadius: 7,
+                                    style: .continuous
+                                )
+                                .stroke(R.color.fourthBackground.color, lineWidth: 1)
                             )
-                            .stroke(R.color.fourthBackground.color, lineWidth: 1)
-                        )
+                    }
                 }
+                .contentShape(Rectangle())
             }
-            .contentShape(Rectangle())
-
         }
+        .contentShape(Rectangle())
         .padding(.leading, 19)
         .padding(.trailing, 25)
         .opacity(opacity(for: token))
@@ -193,7 +196,7 @@ struct TokenSelectView: View {
             } else {
                 viewModel.trigger(.select(token))
                 ImpactGenerator.soft()
-                if viewModel.state.mode == .single, let token = viewModel.state.selectedTokens.first {
+                if viewModel.state.mode == .single || viewModel.state.mode == .select, let token = viewModel.state.selectedTokens.first {
                     action(.single(token))
                 }
             }
@@ -213,8 +216,10 @@ struct TokenSelectView: View {
 
 struct TokenSelectView_Previews: PreviewProvider {
     static var previews: some View {
-        TokenSelectView(viewModel: .init(TokenSelectViewModel(allowHolderMode: false, mode: .many, tier: .holder, selectedTokens: [], disableUnselectTokens: [], resourcesAPIService: nil))) { _ in
-
+        NavigationView {
+            TokenSelectView(viewModel: .init(TokenSelectViewModel(allowHolderMode: false, mode: .select, tier: .holder, selectedTokens: [], disableUnselectTokens: [], resourcesAPIService: nil))) { _ in
+                
+            }
         }
     }
 }

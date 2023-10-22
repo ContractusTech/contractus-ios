@@ -24,4 +24,14 @@ extension String {
             return Image(systemName: "doc")
         }
     }
+
+    var digits: String {
+        return components(separatedBy: CharacterSet.decimalDigits.inverted)
+            .joined()
+    }
+    
+    var decimal: String {
+        let decimals = Set("0123456789.,")
+        return String(self.filter{ decimals.contains($0) })
+    }
 }

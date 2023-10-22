@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Combine
+//import Combine
 
 fileprivate enum Constants {
     static let closeImage = Image(systemName: "xmark")
@@ -25,65 +25,75 @@ struct BuyTokensView: View {
     @State var alertType: AlertType?
     @State var amountValue: String = "10000"
     @State var showContent: Bool = false
-    @FocusState var amountFocused: Bool
+//    @FocusState var amountFocused: Bool
     
-    private let amountPublisher = PassthroughSubject<String, Never>()
+//    private let amountPublisher = PassthroughSubject<String, Never>()
 
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 if showContent {
-                    HStack(alignment: .firstTextBaseline, spacing: 10) {
-                        TextField("", text: $amountValue)
-                            .textFieldStyle(.plain)
-                            .font(.largeTitle.weight(.medium))
-                            .foregroundColor(viewModel.state.canNotBuy ? R.color.redText.color : R.color.textBase.color)
-                            .multilineTextAlignment(.center)
-                            .keyboardType(.decimalPad)
-                            .focused($amountFocused)
-                            .fixedSize(horizontal: amountValue.count < 12, vertical: false)
-                            .onChange(of: amountValue) { newAmountValue in
-                                if let amount = Double(newAmountValue.replacingOccurrences(of: ",", with: ".")) {
-                                    viewModel.trigger(.setValue(amount))
-                                } else {
-                                    viewModel.trigger(.setValue(0))
-                                }
-                                amountPublisher.send(newAmountValue)
-                            }
-                            .onReceive(Just(amountValue)) { newValue in
-                                var filtered = newValue.filter { "0123456789,.".contains($0) }
-                                let components = filtered.replacingOccurrences(of: ",", with: ".").components(separatedBy: ".")
-                                if let fraction = components.last, components.count > 1, fraction.count > 5 {
-                                    filtered = String(filtered.dropLast())
-                                }
-                                if filtered != newValue {
-                                    self.amountValue = filtered
-                                }
-                            }
-                            .onReceive(
-                                amountPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
-                            ) { newAmountValue in
-                                viewModel.trigger(.calculate)
-                            }
-                            .padding(.leading, 12)
-
-                        Text(R.string.localizable.buyTokenCtus())
-                            .font(.largeTitle.weight(.medium))
-                            .foregroundColor(R.color.secondaryText.color)
-                            .multilineTextAlignment(.leading)
-                            .padding(.bottom, 6)
-                            .padding(.trailing, 12)
-                            .fixedSize(horizontal: true, vertical: false)
-                    }
-                    .overlay(alignment: .bottom) {
-                        BorderDivider(
-                            color: R.color.baseSeparator.color,
-                            width: 2
-                        )
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.top, 45)
-                    .padding(.bottom, 16)
+                    AmountFieldView(
+                        amountValue: $amountValue, 
+                        color: viewModel.state.canNotBuy ? R.color.redText.color : R.color.textBase.color,
+                        setValue: { value in
+                            viewModel.trigger(.setValue(value))
+                        },
+                        calculate: {
+                            viewModel.trigger(.calculate)
+                        }
+                    )
+//                    HStack(alignment: .firstTextBaseline, spacing: 10) {
+//                        TextField("", text: $amountValue)
+//                            .textFieldStyle(.plain)
+//                            .font(.largeTitle.weight(.medium))
+//                            .foregroundColor(viewModel.state.canNotBuy ? R.color.redText.color : R.color.textBase.color)
+//                            .multilineTextAlignment(.center)
+//                            .keyboardType(.decimalPad)
+//                            .focused($amountFocused)
+//                            .fixedSize(horizontal: amountValue.count < 12, vertical: false)
+//                            .onChange(of: amountValue) { newAmountValue in
+//                                if let amount = Double(newAmountValue.replacingOccurrences(of: ",", with: ".")) {
+//                                    viewModel.trigger(.setValue(amount))
+//                                } else {
+//                                    viewModel.trigger(.setValue(0))
+//                                }
+//                                amountPublisher.send(newAmountValue)
+//                            }
+//                            .onReceive(Just(amountValue)) { newValue in
+//                                var filtered = newValue.filter { "0123456789,.".contains($0) }
+//                                let components = filtered.replacingOccurrences(of: ",", with: ".").components(separatedBy: ".")
+//                                if let fraction = components.last, components.count > 1, fraction.count > 5 {
+//                                    filtered = String(filtered.dropLast())
+//                                }
+//                                if filtered != newValue {
+//                                    self.amountValue = filtered
+//                                }
+//                            }
+//                            .onReceive(
+//                                amountPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+//                            ) { newAmountValue in
+//                                viewModel.trigger(.calculate)
+//                            }
+//                            .padding(.leading, 12)
+//
+//                        Text(R.string.localizable.buyTokenCtus())
+//                            .font(.largeTitle.weight(.medium))
+//                            .foregroundColor(R.color.secondaryText.color)
+//                            .multilineTextAlignment(.leading)
+//                            .padding(.bottom, 6)
+//                            .padding(.trailing, 12)
+//                            .fixedSize(horizontal: true, vertical: false)
+//                    }
+//                    .overlay(alignment: .bottom) {
+//                        BorderDivider(
+//                            color: R.color.baseSeparator.color,
+//                            width: 2
+//                        )
+//                    }
+//                    .padding(.horizontal, 12)
+//                    .padding(.top, 45)
+//                    .padding(.bottom, 16)
 
                     Text(R.string.localizable.buyTokenPrice(viewModel.state.price))
                         .font(.footnote.weight(.medium))
@@ -131,7 +141,7 @@ struct BuyTokensView: View {
                 }
             }
             .onAppear {
-                amountFocused = true
+//                amountFocused = true
                 // fix unexpected animation with navigation view
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     showContent.toggle()
