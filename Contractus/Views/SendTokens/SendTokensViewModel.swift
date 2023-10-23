@@ -10,9 +10,22 @@ struct StepsState {
 extension SendTokensViewModel {
 
     struct State {
+
+        enum State: Equatable {
+            case ready, loading
+        }
+
+        enum ErrorState: Equatable {
+            case error(String)
+        }
+
+        let account: CommonAccount
         var tokens: [ContractusAPI.Token] = []
         var stepsState = StepsState()
         var balance: Balance?
+        var transactionSignType: TransactionSignType?
+        var errorState: ErrorState?
+        var state: Self.State = .ready
 
         var currency: String {
             let token = balance?.tokens.filter({ $0.amount.token.code == stepsState.selectedToken?.code}).first
@@ -35,7 +48,7 @@ extension SendTokensViewModel {
     }
 
     enum Input {
-        case setState(StepsState), getBalance
+        case setState(StepsState), getBalance, send, hideError
     }
 }
 
@@ -43,14 +56,16 @@ final class SendTokensViewModel: ViewModel {
     
     @Published private(set) var state: State
     private var accountAPIService: ContractusAPI.AccountService?
-    
+    private var transactionsService: ContractusAPI.TransactionsService?
+
     init(
-        accountAPIService: ContractusAPI.AccountService?
+        state: SendTokensViewModel.State,
+        accountAPIService: ContractusAPI.AccountService?,
+        transactionsService: ContractusAPI.TransactionsService?
     ) {
         self.accountAPIService = accountAPIService
-        
-        self.state = .init(
-        )
+        self.transactionsService = transactionsService
+        self.state = state
     }
     
     func trigger(_ input: Input, after: AfterTrigger? = nil) {
@@ -65,7 +80,32 @@ final class SendTokensViewModel: ViewModel {
                     state.balance = try await balanceTask
                 }
             }
-            
+        case .send:
+            guard let token = state.stepsState.selectedToken else {
+                return
+            }
+            guard let amount = AmountFormatter.format(string: state.stepsState.amount, token: token) else {
+                return
+            }
+            let transferData = ContractusAPI.TransactionsService.TransferTransaction(
+                value: amount,
+                token: .init(code: token.code, address: token.address),
+                recipient: state.stepsState.recipient
+            )
+            state.state = .loading
+            Task { @MainActor in
+                do {
+                    let tx = try await transfer(data: transferData)
+                    state.transactionSignType = .byTransaction(tx)
+                    after?()
+                } catch {
+                    state.errorState = .error(error.readableDescription)
+                }
+                state.state = .ready
+            }
+        case .hideError:
+            state.errorState = nil
+
         }
     }
     
@@ -82,5 +122,13 @@ final class SendTokensViewModel: ViewModel {
                 }
             })
         }
+    }
+    
+    func transfer(data: ContractusAPI.TransactionsService.TransferTransaction) async throws -> Transaction {
+        try await withCheckedThrowingContinuation({ continuation in
+            transactionsService?.transfer(data, completion: { result in
+                continuation.resume(with: result)
+            })
+        })
     }
 }

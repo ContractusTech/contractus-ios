@@ -80,9 +80,6 @@ struct SelectRecipientView: View {
                     .foregroundColor(R.color.textBase.color)
             }
         )
-//        .onChange(of: viewModel.state.currentStep) { newValue in
-//            self.currentStep = newValue
-//        }
     }
 
     var title: String {

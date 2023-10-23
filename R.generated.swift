@@ -1121,8 +1121,12 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 421 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 423 localization keys.
     struct localizable {
+      /// en translation: 
+      ///
+      /// Locales: en
+      static let transactionSignSubtitleTransfer = Rswift.StringResource(key: "transactionSign.subtitle.transfer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client.
       ///
       /// Locales: en
@@ -2303,6 +2307,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let referralPromocodeSubtitle = Rswift.StringResource(key: "referral.promocode.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Send tokens
+      ///
+      /// Locales: en
+      static let transactionTypeTransfer = Rswift.StringResource(key: "transaction.type.transfer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Service Fee
       ///
       /// Locales: en
@@ -2807,6 +2815,21 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionTypeUnwrapWsol = Rswift.StringResource(key: "transaction.type.unwrap-wsol", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+
+      /// en translation: 
+      ///
+      /// Locales: en
+      static func transactionSignSubtitleTransfer(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.subtitle.transfer", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.subtitle.transfer"
+        }
+
+        return NSLocalizedString("transactionSign.subtitle.transfer", bundle: bundle, comment: "")
+      }
 
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client.
       ///
@@ -7267,6 +7290,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("referral.promocode.subtitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Send tokens
+      ///
+      /// Locales: en
+      static func transactionTypeTransfer(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transaction.type.transfer", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transaction.type.transfer"
+        }
+
+        return NSLocalizedString("transaction.type.transfer", bundle: bundle, comment: "")
       }
 
       /// en translation: Service Fee

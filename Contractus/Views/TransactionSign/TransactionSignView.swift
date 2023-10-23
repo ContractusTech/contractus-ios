@@ -468,6 +468,8 @@ struct TransactionSignView: View {
             return R.string.localizable.transactionSignSubtitleUnwrap()
         case .wrapSOL:
             return R.string.localizable.transactionSignSubtitleWrap()
+        case .transfer:
+            return R.string.localizable.transactionSignSubtitleTransfer()
         case .none:
             return ""
         }

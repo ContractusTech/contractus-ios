@@ -376,6 +376,7 @@
 "transactionSign.subtitle.cancel-deal" = "The client's funds will be refunded and the deal will canceled";
 "transactionSign.subtitle.unwrap" = "And your token will be unwraped\ninto SOL (native token)";
 "transactionSign.subtitle.wrap" = "And your native token will be wraped";
+"transactionSign.subtitle.transfer" = "";
 "transactionSign.subtitle.processing" = "Processing...";
 "transactionSign.subtitle.error" = "Try again";
 "transactionSign.subtitle.finished" = "Transaction completed successfully";
@@ -386,6 +387,7 @@
 "transaction.type.cancel-deal" = "Cancel the deal";
 "transaction.type.wrap-sol" = "SOL ➞ wSOL";
 "transaction.type.unwrap-wsol" = "wSOL ➞ SOL";
+"transaction.type.transfer" = "Send tokens";
 
 "aboutAccount.delete.remove-backup-title" = "Delete from iCloud backup";
 "aboutAccount.delete.remove-backup-subtitle" = "You can't restore from backup private key after delete account.";

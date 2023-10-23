@@ -413,9 +413,13 @@ struct MainView: View {
                         )
                     )
                 }
-                .fullScreenCover(isPresented: $showSendTokens) {
+                .fullScreenCover(isPresented: $showSendTokens, onDismiss: {
+                    viewModel.trigger(.load(dealsType))
+                }) {
                     SendTokensView(viewModel: .init(SendTokensViewModel(
-                        accountAPIService: try? APIServiceFactory.shared.makeAccountService()
+                        state: .init(account: viewModel.account),
+                        accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
+                        transactionsService: try? APIServiceFactory.shared.makeTransactionsService()
                     )))
                 }
                 .navigationDestination(for: $selectedDeal) { deal in

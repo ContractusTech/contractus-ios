@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import BigInt
 
 public final class TransactionsService: BaseService {
 
@@ -35,6 +36,31 @@ public final class TransactionsService: BaseService {
             self.take = take
             self.types = types
             self.statuses = statuses
+        }
+    }
+    
+    public struct TransferTransaction: Codable {
+        public let value: BigUInt
+        public let token: AccountService.Token
+        public let recipient: String
+        
+        public init(value: BigUInt, token: AccountService.Token, recipient: String) {
+            self.value = value
+            self.token = token
+            self.recipient = recipient
+        }
+        
+        enum CodingKeys: CodingKey {
+            case value
+            case token
+            case recipient
+        }
+
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(value.description, forKey: .value)
+            try container.encode(token, forKey: .token)
+            try container.encode(recipient, forKey: .recipient)
         }
     }
 
@@ -71,6 +97,18 @@ public final class TransactionsService: BaseService {
 
     public func signUnwrapAll(_ request: SignedWrapTransaction, completion: @escaping (Swift.Result<Transaction, APIClientError>) -> Void) {
         self.request(path: .signUnwrap, httpMethod: .post, data: request) { (result: Result<Transaction, APIClientError>) in
+            completion(result)
+        }
+    }
+    
+    public func transfer(_ request: TransferTransaction, completion: @escaping (Swift.Result<Transaction, APIClientError>) -> Void) {
+        self.request(path: .transfer, httpMethod: .post, data: request) { (result: Result<Transaction, APIClientError>) in
+            completion(result)
+        }
+    }
+
+    public func transferSign(_ request: SignedWrapTransaction, completion: @escaping (Swift.Result<Transaction, APIClientError>) -> Void) {
+        self.request(path: .transferSign, httpMethod: .post, data: request) { (result: Result<Transaction, APIClientError>) in
             completion(result)
         }
     }

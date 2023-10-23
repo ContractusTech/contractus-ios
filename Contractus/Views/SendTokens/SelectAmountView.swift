@@ -77,17 +77,19 @@ struct SelectAmountView: View {
             )
             .padding(.bottom, 24)
             .padding(.horizontal, 58)
-            CButton(title: R.string.localizable.commonNext(), style: .primary, size: .large, isLoading: false, action: {
-                viewModel.trigger(.setState({
-                    var newStepsState = viewModel.state.stepsState
-                    newStepsState.amount = amountValue
-                    return newStepsState
-                }()))
-            })
-        }
-        .onAppear {
-            amountValue = stepsState.amount
-            viewModel.trigger(.getBalance)
+            CButton(
+                title: R.string.localizable.commonNext(),
+                style: .primary,
+                size: .large,
+                isLoading: viewModel.state.state == .loading,
+                action: {
+                    viewModel.trigger(.setState({
+                        var newStepsState = viewModel.state.stepsState
+                        newStepsState.amount = reversed ? cost.decimal : amountValue 
+                        return newStepsState
+                    }()))
+                    viewModel.trigger(.send)
+                })
         }
         .padding(.horizontal, 16)
         .padding(.top, 20)
@@ -106,6 +108,10 @@ struct SelectAmountView: View {
                     .foregroundColor(R.color.textBase.color)
             }
         )
+        .onAppear {
+            amountValue = stepsState.amount
+            viewModel.trigger(.getBalance)
+        }
     }
 
     var title: String {

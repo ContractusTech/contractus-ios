@@ -307,7 +307,7 @@ public struct CancelDeal: Codable {
 }
 
 public enum TransactionType: String, Codable {
-    case dealInit = "DEAL_INIT", dealFinish = "DEAL_FINISH", dealCancel = "DEAL_CANCELED", wrapSOL = "WRAP_SOL", unwrapAllSOL = "UNWRAP_ALL_SOL"
+    case dealInit = "DEAL_INIT", dealFinish = "DEAL_FINISH", dealCancel = "DEAL_CANCELED", wrapSOL = "WRAP_SOL", unwrapAllSOL = "UNWRAP_ALL_SOL", transfer = "TRANSFER"
 }
 
 public enum AmountFeeType: String, Codable {
