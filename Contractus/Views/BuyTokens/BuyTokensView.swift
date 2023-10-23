@@ -13,10 +13,16 @@ fileprivate enum Constants {
 }
 
 struct BuyTokensView: View {
+    enum SheetType: Identifiable {
+        var id: String { "\(self)" }
+        case payment(BuyTokensState.PaymentRequest)
+    }
 
     enum AlertType: Identifiable {
         var id: String { "\(self)" }
         case error(String)
+        case successPayment
+        case failPayment
     }
 
     @Environment(\.presentationMode) private var presentationMode
@@ -25,9 +31,7 @@ struct BuyTokensView: View {
     @State var alertType: AlertType?
     @State var amountValue: String = "10000"
     @State var showContent: Bool = false
-//    @FocusState var amountFocused: Bool
-    
-//    private let amountPublisher = PassthroughSubject<String, Never>()
+    @State var sheetType: SheetType? = nil
 
     var body: some View {
         NavigationView {
@@ -43,57 +47,6 @@ struct BuyTokensView: View {
                             viewModel.trigger(.calculate)
                         }
                     )
-//                    HStack(alignment: .firstTextBaseline, spacing: 10) {
-//                        TextField("", text: $amountValue)
-//                            .textFieldStyle(.plain)
-//                            .font(.largeTitle.weight(.medium))
-//                            .foregroundColor(viewModel.state.canNotBuy ? R.color.redText.color : R.color.textBase.color)
-//                            .multilineTextAlignment(.center)
-//                            .keyboardType(.decimalPad)
-//                            .focused($amountFocused)
-//                            .fixedSize(horizontal: amountValue.count < 12, vertical: false)
-//                            .onChange(of: amountValue) { newAmountValue in
-//                                if let amount = Double(newAmountValue.replacingOccurrences(of: ",", with: ".")) {
-//                                    viewModel.trigger(.setValue(amount))
-//                                } else {
-//                                    viewModel.trigger(.setValue(0))
-//                                }
-//                                amountPublisher.send(newAmountValue)
-//                            }
-//                            .onReceive(Just(amountValue)) { newValue in
-//                                var filtered = newValue.filter { "0123456789,.".contains($0) }
-//                                let components = filtered.replacingOccurrences(of: ",", with: ".").components(separatedBy: ".")
-//                                if let fraction = components.last, components.count > 1, fraction.count > 5 {
-//                                    filtered = String(filtered.dropLast())
-//                                }
-//                                if filtered != newValue {
-//                                    self.amountValue = filtered
-//                                }
-//                            }
-//                            .onReceive(
-//                                amountPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
-//                            ) { newAmountValue in
-//                                viewModel.trigger(.calculate)
-//                            }
-//                            .padding(.leading, 12)
-//
-//                        Text(R.string.localizable.buyTokenCtus())
-//                            .font(.largeTitle.weight(.medium))
-//                            .foregroundColor(R.color.secondaryText.color)
-//                            .multilineTextAlignment(.leading)
-//                            .padding(.bottom, 6)
-//                            .padding(.trailing, 12)
-//                            .fixedSize(horizontal: true, vertical: false)
-//                    }
-//                    .overlay(alignment: .bottom) {
-//                        BorderDivider(
-//                            color: R.color.baseSeparator.color,
-//                            width: 2
-//                        )
-//                    }
-//                    .padding(.horizontal, 12)
-//                    .padding(.top, 45)
-//                    .padding(.bottom, 16)
 
                     Text(R.string.localizable.buyTokenPrice(viewModel.state.price))
                         .font(.footnote.weight(.medium))
@@ -108,11 +61,18 @@ struct BuyTokensView: View {
                 }
                 Spacer()
 
-                Text(R.string.localizable.buyTokenHint())
-                    .font(.footnote.weight(.medium))
-                    .foregroundColor(R.color.secondaryText.color.opacity(0.5))
-                    .padding(.bottom, 12)
+                HStack(alignment: .center) {
+                    Text(R.string.localizable.commonPoweredBy())
+                        .font(.footnote.weight(.medium))
+                        .foregroundColor(R.color.secondaryText.color)
 
+                    R.image.advcash.image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 14)
+                        .padding(.bottom, 2)
+
+                }.padding()
                 CButton(
                     title: R.string.localizable.buyTokenPayTitle(viewModel.state.pay),
                     style: .primary,
@@ -123,6 +83,30 @@ struct BuyTokensView: View {
                     viewModel.trigger(.create)
                 }
                 .padding(.bottom, 16)
+            }
+            .fullScreenCover(item: $sheetType) { type in
+                switch type {
+                case .payment(let request):
+                    NavigationView {
+                        WebView(
+                            request: request.asURLRequest(),
+                            successUrl: request.successUrl,
+                            failUrl: request.failUrl,
+                            closeHandler: { isSuccess in
+                                alertType = isSuccess ? .successPayment : .failPayment
+                                sheetType = nil
+                        })
+                        .edgesIgnoringSafeArea(.bottom)
+                        .navigationBarItems(
+                            trailing: Button(R.string.localizable.commonClose(), action: {
+                                sheetType = nil
+                            })
+                        )
+                        .navigationTitle(R.string.localizable.commonPayment())
+                        .navigationBarTitleDisplayMode(.inline)
+                    }
+                    .baseBackground()
+                }
             }
             .padding(.horizontal, 18)
             .baseBackground()
@@ -149,6 +133,9 @@ struct BuyTokensView: View {
             }
             .onChange(of: viewModel.state.state) { state in
                 switch state {
+                case .openPayment(let request):
+                    ImpactGenerator.success()
+                    sheetType = .payment(request)
                 case .openURL(let stringUrl):
                     guard let url = URL(string: stringUrl) else { return }
                     ImpactGenerator.success()
@@ -171,6 +158,22 @@ struct BuyTokensView: View {
                     Alert(
                         title: Text(R.string.localizable.commonError()),
                         message: Text(message),
+                        dismissButton: .default(Text(R.string.localizable.commonOk())) {
+                            viewModel.trigger(.resetError)
+                        }
+                    )
+                case .successPayment:
+                    Alert(
+                        title: Text(R.string.localizable.buyTokenTitleSuccessPayment()),
+                        message: Text(R.string.localizable.buyTokenTextSuccessPayment()),
+                        dismissButton: .default(Text(R.string.localizable.commonOk())) {
+                            viewModel.trigger(.resetError)
+                        }
+                    )
+                case .failPayment:
+                    Alert(
+                        title: Text(R.string.localizable.buyTokenTitleErrorPayment()),
+                        message: Text(R.string.localizable.buyTokenTextErrorPayment()),
                         dismissButton: .default(Text(R.string.localizable.commonOk())) {
                             viewModel.trigger(.resetError)
                         }

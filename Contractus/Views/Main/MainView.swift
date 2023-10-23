@@ -82,12 +82,12 @@ struct MainView: View {
                                 showSendTokens.toggle()
                             }
 
-//                        if viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
+                        if viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
                             UnlockHolderButtonView() {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
                                 holderModeState = .medium
                             }
-//                        }
+                        }
 
                         if !viewModel.state.statistics.isEmpty {
                             StatisticsView(items: viewModel.state.statistics) { item in

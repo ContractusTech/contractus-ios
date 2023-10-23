@@ -61,6 +61,8 @@
 "common.not-specified" = "Not specified";
 "common.email" = "Email";
 "common.telegram" = "Telegram";
+"common.powered-by" = "Powered by";
+"common.payment" = "Payment";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
@@ -438,11 +440,16 @@
 "buyToken.not.enough" = "Not enough %@ CTUS for Holder Mode";
 "buyToken.hint" = "Supported more than 30 cryptocurrencies";
 "buyToken.pay.title" = "Pay%@";
+"buyToken.title.success-payment" = "Success Payment";
+"buyToken.text.success-payment" = "We've already sent tokens to your account.";
+"buyToken.title.error-payment" = "Payment Error";
+"buyToken.text.error-payment" = "Something went wrong. Try again later.";
 
 "unlockHolder.title" = "Holder Mode";
 "unlockHolder.subtitle" = "Allows you to create deals without fees and and to unlock all other SPL tokens to pay for deals.";
 "unlockHolder.methods" = "Ways to get CTUS token";
-"unlockHolder.buy.title" = "Buy with cryptocurrencies";
+"unlockHolder.buy.title" = "Buy";
+"unlockHolder.buy.title.1" = "Direct";
 "unlockHolder.buy.subtitle" = "Supported more than 30 cryptocurrencies";
 "unlockHolder.coinstore.title" = "Coinstore";
 "unlockHolder.coinstore.title.1" = "CEX";
