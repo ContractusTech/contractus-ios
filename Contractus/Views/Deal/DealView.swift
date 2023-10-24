@@ -49,12 +49,14 @@ struct DealView: View {
         case executorActions
         case checkerActions
     }
-
-    enum ActiveModalType: Equatable {
+    enum ActiveFullScreenType: Equatable {
         case viewTextDealDetails
         case editTextDealDetails
         case viewTextDealResult
         case editTextDealResult
+    }
+
+    enum ActiveModalType: Equatable {
         case editContractor(String?)
         case editChecker(String?)
         case changeAmount
@@ -74,6 +76,7 @@ struct DealView: View {
     var callback: () -> Void
 
     @State private var activeModalType: ActiveModalType?
+    @State private var activeFullScreenType: ActiveFullScreenType?
     @State private var alertType: AlertType?
     @State private var actionsType: ActionsSheetType?
     @State private var metaUploaderState: ResizableSheetState = .hidden {
@@ -683,7 +686,7 @@ struct DealView: View {
                                 }
                             }
                             VStack(alignment: .leading) {
-                                if let content = viewModel.state.deal.meta?.content {
+                                if let content = viewModel.state.deal.meta?.content, !content.text.isEmpty {
                                     HStack {
                                         TruncableText(
                                             text: Text(viewModel.state.withEncryption
@@ -811,16 +814,16 @@ struct DealView: View {
                                     if viewModel.state.canSendResult {
                                         CButton(title: (viewModel.state.deal.result?.contentIsEmpty ?? true) ? R.string.localizable.commonAdd() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false) {
                                             EventService.shared.send(event: DefaultAnalyticsEvent.dealResultTap)
-                                            activeModalType = .editTextDealResult
+                                            activeFullScreenType = .editTextDealResult
                                         }
                                     } else {
                                         CButton(title: R.string.localizable.commonView(), style: .secondary, size: .default, isLoading: false) {
-                                            activeModalType = .viewTextDealResult
+                                            activeFullScreenType = .viewTextDealResult
                                         }
                                     }
                                 }
                                 VStack(alignment: .leading) {
-                                    if let result = viewModel.state.deal.result?.content {
+                                    if let result = viewModel.state.deal.result?.content, !result.text.isEmpty {
                                         HStack {
                                             TruncableText(
                                                 text: Text(viewModel.state.withEncryption
@@ -950,6 +953,52 @@ struct DealView: View {
             }
             .supportedState([.medium])
         })
+        .fullScreenCover(item: $activeFullScreenType, onDismiss: {
+            viewModel.trigger(.sheetClose)
+        }, content: { type in
+            switch type {
+            case .editTextDealDetails, .viewTextDealDetails:
+                TextEditorView(
+                    allowEdit: type == .editTextDealDetails,
+                    mode: type == .editTextDealDetails ? .edit : .view,
+                    viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
+                        dealId: viewModel.state.deal.id,
+                        content: viewModel.state.deal.meta ?? .init(files: []),
+                        contentType: .metadata,
+                        secretKey: viewModel.state.decryptedKey,
+                        dealService: try? APIServiceFactory.shared.makeDealsService())),
+                    action: { result in
+                        switch result {
+                        case .close:
+                            activeFullScreenType = nil
+                        case .success(let meta):
+                            viewModel.trigger(.updateContent(meta, .metadata)) {
+                                self.callback()
+                            }
+                        }
+                    })
+            case .editTextDealResult, .viewTextDealResult:
+                TextEditorView(
+                    allowEdit: type == .editTextDealResult,
+                    mode: type == .editTextDealResult ? .edit : .view,
+                    viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
+                        dealId: viewModel.state.deal.id,
+                        content: viewModel.state.deal.result ?? .init(files: []),
+                        contentType: .result,
+                        secretKey: viewModel.state.decryptedKey,
+                        dealService: try? APIServiceFactory.shared.makeDealsService())),
+                    action: { result in
+                        switch result {
+                        case .close:
+                            activeFullScreenType = nil
+                        case .success(let meta):
+                            viewModel.trigger(.updateContent(meta, .result)) {
+                                self.callback()
+                            }
+                        }
+                    })
+            }
+        })
         .sheet(item: $activeModalType, onDismiss: {
             viewModel.trigger(.sheetClose)
         }) { type in
@@ -967,46 +1016,7 @@ struct DealView: View {
                     viewModel.trigger(.saveKey(result))
                     activeModalType = nil
                 }
-            case .editTextDealDetails, .viewTextDealDetails:
-                TextEditorView(
-                    allowEdit: type == .editTextDealDetails,
-                    viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
-                        dealId: viewModel.state.deal.id,
-                        content: viewModel.state.deal.meta ?? .init(files: []),
-                        contentType: .metadata,
-                        secretKey: viewModel.state.decryptedKey,
-                        dealService: try? APIServiceFactory.shared.makeDealsService())),
-                    action: { result in
-                        switch result {
-                        case .close:
-                            activeModalType = nil
-                        case .success(let meta):
-                            viewModel.trigger(.updateContent(meta, .metadata)) {
-                                self.callback()
-                            }
-                        }
-                    })
-                .interactiveDismiss(canDismissSheet: false)
-            case .editTextDealResult, .viewTextDealResult:
-                TextEditorView(
-                    allowEdit: type == .editTextDealResult,
-                    viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
-                        dealId: viewModel.state.deal.id,
-                        content: viewModel.state.deal.result ?? .init(files: []),
-                        contentType: .result,
-                        secretKey: viewModel.state.decryptedKey,
-                        dealService: try? APIServiceFactory.shared.makeDealsService())),
-                    action: { result in
-                        switch result {
-                        case .close:
-                            activeModalType = nil
-                        case .success(let meta):
-                            viewModel.trigger(.updateContent(meta, .result)) {
-                                self.callback()
-                            }
-                        }
-                    })
-                .interactiveDismiss(canDismissSheet: false)
+
             case .changeAmount, .changeCheckerAmount:
                 ChangeAmountView(
                     viewModel: AnyViewModel<ChangeAmountState, ChangeAmountInput>(
@@ -1726,14 +1736,14 @@ struct DealView: View {
     
     private func editDetailsText() {
         if self.viewModel.isYouChecker && !self.viewModel.state.isOwnerDeal {
-            activeModalType = .viewTextDealDetails
+            activeFullScreenType = .viewTextDealDetails
         } else {
-            activeModalType = .editTextDealDetails
+            activeFullScreenType = .editTextDealDetails
         }
     }
 
     private func viewDetailsText() {
-        activeModalType = .viewTextDealDetails
+        activeFullScreenType = .viewTextDealDetails
     }
 }
 
@@ -1921,6 +1931,12 @@ struct FileItemView: View {
 
 
 extension DealView.ActiveModalType: Identifiable {
+    var id: String {
+        return "\(self)"
+    }
+}
+
+extension DealView.ActiveFullScreenType: Identifiable {
     var id: String {
         return "\(self)"
     }

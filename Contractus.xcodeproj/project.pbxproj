@@ -142,6 +142,11 @@
 		6DD28E272A1C9C6A0093E553 /* Date+Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */; };
 		6DD28E292A1DF3B10093E553 /* DeadlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E282A1DF3B10093E553 /* DeadlineView.swift */; };
 		6DD28E2C2A1DF4190093E553 /* DeadlineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD28E2B2A1DF4190093E553 /* DeadlineViewModel.swift */; };
+		6DD314022AE412960033D37A /* UndoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD314012AE412960033D37A /* UndoProvider.swift */; };
+		6DD314052AE52B400033D37A /* TextGenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD314042AE52B400033D37A /* TextGenView.swift */; };
+		6DD314072AE557690033D37A /* TextGenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD314062AE557690033D37A /* TextGenViewModel.swift */; };
+		6DD314092AE5C2A70033D37A /* MultilineText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD314082AE5C2A70033D37A /* MultilineText.swift */; };
+		6DD3140B2AE68FB40033D37A /* UndoTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD3140A2AE68FB40033D37A /* UndoTextView.swift */; };
 		6DDA818028C065C80022E005 /* ModalSheet+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDA817F28C065C80022E005 /* ModalSheet+Ex.swift */; };
 		6DDA818528C0D6070022E005 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDA818428C0D6070022E005 /* TextField.swift */; };
 		6DEEDFF429F8E6CD00216D44 /* BackupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEEDFF329F8E6CD00216D44 /* BackupStorage.swift */; };
@@ -344,6 +349,11 @@
 		6DD28E262A1C9C6A0093E553 /* Date+Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatter.swift"; sourceTree = "<group>"; };
 		6DD28E282A1DF3B10093E553 /* DeadlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadlineView.swift; sourceTree = "<group>"; };
 		6DD28E2B2A1DF4190093E553 /* DeadlineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadlineViewModel.swift; sourceTree = "<group>"; };
+		6DD314012AE412960033D37A /* UndoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoProvider.swift; sourceTree = "<group>"; };
+		6DD314042AE52B400033D37A /* TextGenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextGenView.swift; sourceTree = "<group>"; };
+		6DD314062AE557690033D37A /* TextGenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextGenViewModel.swift; sourceTree = "<group>"; };
+		6DD314082AE5C2A70033D37A /* MultilineText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineText.swift; sourceTree = "<group>"; };
+		6DD3140A2AE68FB40033D37A /* UndoTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoTextView.swift; sourceTree = "<group>"; };
 		6DDA817F28C065C80022E005 /* ModalSheet+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModalSheet+Ex.swift"; sourceTree = "<group>"; };
 		6DDA818428C0D6070022E005 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		6DEEDFF329F8E6CD00216D44 /* BackupStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupStorage.swift; sourceTree = "<group>"; };
@@ -540,6 +550,7 @@
 		6D75F2ED288EA99E0092D182 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6DD314032AE52B210033D37A /* Gen */,
 				6D8EFD8628D88F570064F5DA /* AddContractor */,
 				6DF9CBF529F9530B004B95F4 /* Accounts */,
 				FE1245712AC58959009FB048 /* BuyTokens */,
@@ -692,6 +703,8 @@
 				FE1D8DDD2A31115A003D97BC /* BorderDivider.swift */,
 				FE12456B2AC36089009FB048 /* SVGImageView.swift */,
 				FE48B0F42ADFB33800885610 /* TruncableText.swift */,
+				6DD314082AE5C2A70033D37A /* MultilineText.swift */,
+				6DD3140A2AE68FB40033D37A /* UndoTextView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -837,6 +850,7 @@
 				6DFED9322930F1EE00AF727A /* ImpactGenerator.swift */,
 				6D6E60D729EE57BB008AB833 /* PollService.swift */,
 				6D44B55F2A0E0B20008C561D /* BlockchainExplorer.swift */,
+				6DD314012AE412960033D37A /* UndoProvider.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -868,6 +882,15 @@
 				6DD28E2B2A1DF4190093E553 /* DeadlineViewModel.swift */,
 			);
 			path = Deadline;
+			sourceTree = "<group>";
+		};
+		6DD314032AE52B210033D37A /* Gen */ = {
+			isa = PBXGroup;
+			children = (
+				6DD314042AE52B400033D37A /* TextGenView.swift */,
+				6DD314062AE557690033D37A /* TextGenViewModel.swift */,
+			);
+			path = Gen;
 			sourceTree = "<group>";
 		};
 		6DF9CBF529F9530B004B95F4 /* Accounts */ = {
@@ -1144,6 +1167,7 @@
 				6D8EFD8528D88ED10064F5DA /* AddContractorView.swift in Sources */,
 				6D0F7F45298C20C800EC2C74 /* WrapTokenViewModel.swift in Sources */,
 				6DFED9332930F1EE00AF727A /* ImpactGenerator.swift in Sources */,
+				6DD314052AE52B400033D37A /* TextGenView.swift in Sources */,
 				FEE467E62A1C0F010046938F /* UIImage+Ex.swift in Sources */,
 				6D8EFDA128E044A80064F5DA /* SharedSecretStorage.swift in Sources */,
 				6DEEDFF429F8E6CD00216D44 /* BackupStorage.swift in Sources */,
@@ -1175,6 +1199,7 @@
 				6D6EE3AC28A0F05300635E60 /* View+Custom.swift in Sources */,
 				FE7852942AC1673100CC8C19 /* MessagingService.swift in Sources */,
 				6DD28E292A1DF3B10093E553 /* DeadlineView.swift in Sources */,
+				6DD314092AE5C2A70033D37A /* MultilineText.swift in Sources */,
 				6DAA5E792898BE1B00BA1965 /* Crypto.swift in Sources */,
 				6DB5F8B8294D7B2D00AE612A /* JGProgressHUD+Ex.swift in Sources */,
 				6D4C860F2AC010E900B9CEAE /* TokenSelectViewModel.swift in Sources */,
@@ -1201,6 +1226,7 @@
 				6D7552942896BDEC0069935B /* BackupInformationView.swift in Sources */,
 				6DBFCE462A9F573D00999E85 /* Open.swift in Sources */,
 				6D75529A2897848B0069935B /* Mock.swift in Sources */,
+				6DD3140B2AE68FB40033D37A /* UndoTextView.swift in Sources */,
 				FE12456E2AC4C1F2009FB048 /* UnlockHolderButtonView.swift in Sources */,
 				6DBF3A4328D81D2C00952D8A /* UIApplication+Ex.swift in Sources */,
 				6DFED935293207D200AF727A /* QRCodeScannerViewModel.swift in Sources */,
@@ -1215,6 +1241,7 @@
 				6D6EE3A528A09DBF00635E60 /* DealView.swift in Sources */,
 				6DC2C02528C98332005C9EBE /* TransactionSignService.swift in Sources */,
 				6D6EE3A228A0517700635E60 /* FilesService.swift in Sources */,
+				6DD314072AE557690033D37A /* TextGenViewModel.swift in Sources */,
 				6D6EE385289C679D00635E60 /* QRCodeView.swift in Sources */,
 				6D8EFD8D28D8D72D0064F5DA /* AccountValidator.swift in Sources */,
 				6D4DCB2C28AC8DC200EE86C0 /* ChangeAmountView.swift in Sources */,
@@ -1260,6 +1287,7 @@
 				6D75528D289627260069935B /* MockStorages.swift in Sources */,
 				6D530DBC28E23780006F52C6 /* CreateDealView.swift in Sources */,
 				6DF9CBF729F95726004B95F4 /* AccountsViewModel.swift in Sources */,
+				6DD314022AE412960033D37A /* UndoProvider.swift in Sources */,
 				6D755298289777210069935B /* MainViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

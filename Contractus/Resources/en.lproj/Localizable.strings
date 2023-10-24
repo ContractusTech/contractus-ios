@@ -256,6 +256,8 @@
 "deadline.title" = "Select deadline";
 "deadline.of.deal" = "Deadline of deal";
 "deadline.comment" = "You must complete the deal by this date or the deal will be stopped and funds will be refunded to all parties. The service fee is not refundable.";
+"deal.confirm-close.title" = "Confirm";
+"deal.confirm-close.message" = "Do you want to close the editor?";
 
 "newDeal.title" = "New deal";
 "newDeal.subtitle" = "Choose your role";
@@ -460,3 +462,11 @@
 "unlockHolder.pancake.subtitle" = "Need to migrate tokens from the Binance blockchain to Solana using the Portal bridge";
 "unlockHolder.main-button.title" = "Unlock Holder Mode";
 "unlockHolder.main-button.subtitle" = "Buy 10k CTUS token";
+
+"aiGen.title" = "AI Gen";
+"aiGen.prompts" = "Prompts";
+"aiGen.generate" = "Generate";
+"aiGen.use-it" = "Use it";
+"aiGen.placeholder" = "Create contract text ...";
+"aiGen.paste" = "Paste in deal";
+"aiGen.result.title" = "Result";

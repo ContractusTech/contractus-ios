@@ -10,6 +10,8 @@ import ContractusAPI
 
 fileprivate enum Constants {
     static let closeImage = Image(systemName: "xmark")
+    static let backwardImage = Image(systemName: "arrow.uturn.backward")
+    static let forwardImage = Image(systemName: "arrow.uturn.forward")
 }
 
 struct TextEditorView: View {
@@ -18,7 +20,7 @@ struct TextEditorView: View {
         var id: String {
             return "\(self)"
         }
-        case error(String), needConfirmForceUpdate
+        case error(String), needConfirmForceUpdate, confirmClose
     }
     
     enum Mode {
@@ -32,12 +34,13 @@ struct TextEditorView: View {
     @Environment(\.presentationMode) var presentationMode
 
     let allowEdit: Bool
+    @State var mode: Mode
     @StateObject var viewModel: AnyViewModel<TextEditorState, TextEditorInput>
     var action: (ActionResult) -> Void
 
     @State var content: String = ""
-    @State var mode: Mode = .view
     @State private var alertType: AlertType?
+    @State private var undoManager: UndoManager?
     @FocusState var isInputActive: Bool
 
     var body: some View {
@@ -47,15 +50,15 @@ struct TextEditorView: View {
                     switch mode {
                     case .edit:
                         ZStack(alignment: .topLeading) {
-                            TextEditor(text: $content)
+                            UndoTextView(content: $content, undoManager: $undoManager)
                                 .disabled(false)
                                 .setBackground(color: R.color.textFieldBackground.color)
-                                .cornerRadius(20)
                                 .padding(6)
                                 .focused($isInputActive)
                                 .onAppear {
                                     isInputActive = true
                                 }
+                                .padding(.bottom, 42)
 
                             if content.isEmpty {
                                 Text(R.string.localizable.dealTextEditorEditorPlaceholder())
@@ -64,10 +67,8 @@ struct TextEditorView: View {
                                     .allowsHitTesting(false)
                             }
                         }
-
                         .background(R.color.textFieldBackground.color)
                         .cornerRadius(20)
-
                         Spacer()
                     case .view:
                         ScrollView {
@@ -75,6 +76,7 @@ struct TextEditorView: View {
                                 if content.isEmpty {
                                     Text(R.string.localizable.dealTextEditorViewPlaceholder())
                                         .foregroundColor(R.color.secondaryText.color)
+                                        .font(.body)
                                 } else {
                                     Text(content)
                                 }
@@ -90,8 +92,15 @@ struct TextEditorView: View {
                     RoundedRectangle(cornerRadius: 20)
                         .inset(by: 0.5)
                         .stroke(R.color.textFieldBorder.color, lineWidth: mode != .view ? 1 : 0))
+                .overlay(alignment: .bottom) {
+                    if mode == .edit {
+                        controlsView()
+                    } else {
+                        EmptyView()
+                    }
+                }
             }
-            .padding()
+            .padding(8)
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(R.string.localizable.dealViewContractText())
             .navigationViewStyle(StackNavigationViewStyle())
@@ -134,12 +143,15 @@ struct TextEditorView: View {
                     }
                 }
 
-
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
                         switch mode {
                         case .edit:
-                            action(.close) // TODO: - Добавить alert, "Вы уверены..."
+                            if (undoManager?.canRedo ?? false || undoManager?.canUndo ?? false) {
+                                alertType = .confirmClose
+                            } else {
+                                action(.close)
+                            }
                         case .view:
                             action(.close)
                         }
@@ -157,6 +169,16 @@ struct TextEditorView: View {
         .edgesIgnoringSafeArea(.bottom)
         .alert(item: $alertType, content: { type in
             switch type {
+            case .confirmClose:
+                return Alert(
+                    title: Text(R.string.localizable.dealConfirmCloseTitle()),
+                    message:  Text(R.string.localizable.dealConfirmCloseMessage()),
+                    primaryButton: Alert.Button.default(Text(R.string.localizable.commonClose())) {
+                        action(.close)
+                    },
+                    secondaryButton: Alert.Button.cancel {
+
+                    })
             case .error(let message):
                 return Alert(
                     title: Text(R.string.localizable.commonError()),
@@ -207,11 +229,67 @@ struct TextEditorView: View {
         }
 
     }
+
+    @ViewBuilder
+    func controlsView() -> some View {
+        VStack(spacing: 0) {
+            Rectangle()
+                .frame(height: 1)
+                .foregroundColor(R.color.textFieldBorder.color)
+            HStack(spacing: 12) {
+                Button {
+                    undoManager?.undo()
+                } label: {
+                    Constants.backwardImage
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 16, height: 16)
+                        .padding(10)
+                        .foregroundColor(R.color.accentColor.color)
+                }
+                .disabled((undoManager?.canUndo ?? false) ? false : true)
+                .opacity((undoManager?.canUndo ?? false) ? 1.0 : 0.3)
+
+                Button {
+                    undoManager?.redo()
+                } label: {
+                    Constants.forwardImage
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 16, height: 16)
+                        .padding(10)
+                        .foregroundColor(R.color.accentColor.color)
+                }
+                .disabled((undoManager?.canRedo ?? false) ? false : true)
+                .opacity((undoManager?.canRedo ?? false) ? 1.0 : 0.3)
+                Spacer()
+
+                NavigationLink {
+                    TextGenView { genText in
+                        self.content = genText
+                    }
+                } label: {
+                    Text(R.string.localizable.aiGenTitle())
+                        .font(.footnote)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 4)
+                        .background(R.color.buttonBackgroundPrimary.color)
+                        .foregroundColor(R.color.buttonTextPrimary.color)
+                        .cornerRadius(15)
+                }
+            }
+            .padding(EdgeInsets(top: 0, leading: 6, bottom: 2, trailing: 8))
+        }
+    }
 }
 
 struct TextViewerView_Previews: PreviewProvider {
     static var previews: some View {
-        TextEditorView(allowEdit: true, viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(dealId: Mock.deal.id, content: Mock.deal.meta ?? .init(files: []), contentType: .metadata, secretKey: Mock.account.privateKey, dealService: nil))) { result in
+        TextEditorView(
+            allowEdit: true,
+            mode: .edit,
+            viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(dealId: Mock.deal.id, content: Mock.deal.meta ?? .init(files: []), contentType: .metadata, secretKey: Mock.account.privateKey, dealService: nil))
+        ) { result in
 
         }
     }

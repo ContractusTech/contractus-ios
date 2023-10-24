@@ -1112,7 +1112,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 419 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 428 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client.
       ///
@@ -1138,6 +1138,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let buyTokenPrice = Rswift.StringResource(key: "buyToken.price", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: AI Gen
+      ///
+      /// Locales: en
+      static let aiGenTitle = Rswift.StringResource(key: "aiGen.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: About tiers
       ///
       /// Locales: en
@@ -1529,6 +1533,10 @@ struct R: Rswift.Validatable {
       /// en translation: Confirm
       ///
       /// Locales: en
+      static let dealConfirmCloseTitle = Rswift.StringResource(key: "deal.confirm-close.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Confirm
+      ///
+      /// Locales: en
       static let transactionSignTitleConfirm = Rswift.StringResource(key: "transactionSign.title.confirm", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Content
       ///
@@ -1562,6 +1570,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let enterAddAccountSubtitle = Rswift.StringResource(key: "enter.add-account.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Create contract text ...
+      ///
+      /// Locales: en
+      static let aiGenPlaceholder = Rswift.StringResource(key: "aiGen.placeholder", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Create new
       ///
       /// Locales: en
@@ -1658,6 +1670,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let unlockHolderBuyTitle1 = Rswift.StringResource(key: "unlockHolder.buy.title.1", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Do you want to close the editor?
+      ///
+      /// Locales: en
+      static let dealConfirmCloseMessage = Rswift.StringResource(key: "deal.confirm-close.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Documents
       ///
       /// Locales: en
@@ -1882,6 +1898,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let uploadFileButtonSelectGallery = Rswift.StringResource(key: "uploadFile.button.select-gallery", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Generate
+      ///
+      /// Locales: en
+      static let aiGenGenerate = Rswift.StringResource(key: "aiGen.generate", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Get a loan (soon)
       ///
       /// Locales: en
@@ -2098,6 +2118,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonPaste = Rswift.StringResource(key: "common.paste", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Paste in deal
+      ///
+      /// Locales: en
+      static let aiGenPaste = Rswift.StringResource(key: "aiGen.paste", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Pay%@
       ///
       /// Locales: en
@@ -2182,6 +2206,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let promocodeNotFound = Rswift.StringResource(key: "promocode.not.found", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Prompts
+      ///
+      /// Locales: en
+      static let aiGenPrompts = Rswift.StringResource(key: "aiGen.prompts", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Public key
       ///
       /// Locales: en
@@ -2214,6 +2242,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let referralPromocodeRequest = Rswift.StringResource(key: "referral.promocode.request", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Result
+      ///
+      /// Locales: en
+      static let aiGenResultTitle = Rswift.StringResource(key: "aiGen.result.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Results
       ///
       /// Locales: en
@@ -2626,6 +2658,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealBondExecutorSubtitle = Rswift.StringResource(key: "deal.bond.executor.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Use it
+      ///
+      /// Locales: en
+      static let aiGenUseIt = Rswift.StringResource(key: "aiGen.use-it", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Used to top up account or added to a deal by partners
       ///
       /// Locales: en
@@ -2887,6 +2923,21 @@ struct R: Rswift.Validatable {
 
         let format = NSLocalizedString("buyToken.price", bundle: bundle, comment: "")
         return String(format: format, locale: locale, value1)
+      }
+
+      /// en translation: AI Gen
+      ///
+      /// Locales: en
+      static func aiGenTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aiGen.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aiGen.title"
+        }
+
+        return NSLocalizedString("aiGen.title", bundle: bundle, comment: "")
       }
 
       /// en translation: About tiers
@@ -4359,6 +4410,21 @@ struct R: Rswift.Validatable {
       /// en translation: Confirm
       ///
       /// Locales: en
+      static func dealConfirmCloseTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.confirm-close.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.confirm-close.title"
+        }
+
+        return NSLocalizedString("deal.confirm-close.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Confirm
+      ///
+      /// Locales: en
       static func transactionSignTitleConfirm(preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
           return NSLocalizedString("transactionSign.title.confirm", bundle: hostingBundle, comment: "")
@@ -4491,6 +4557,21 @@ struct R: Rswift.Validatable {
 
         let format = NSLocalizedString("enter.add-account.subtitle", bundle: bundle, comment: "")
         return String(format: format, locale: locale, value1)
+      }
+
+      /// en translation: Create contract text ...
+      ///
+      /// Locales: en
+      static func aiGenPlaceholder(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aiGen.placeholder", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aiGen.placeholder"
+        }
+
+        return NSLocalizedString("aiGen.placeholder", bundle: bundle, comment: "")
       }
 
       /// en translation: Create new
@@ -4851,6 +4932,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("unlockHolder.buy.title.1", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Do you want to close the editor?
+      ///
+      /// Locales: en
+      static func dealConfirmCloseMessage(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.confirm-close.message", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.confirm-close.message"
+        }
+
+        return NSLocalizedString("deal.confirm-close.message", bundle: bundle, comment: "")
       }
 
       /// en translation: Documents
@@ -5699,6 +5795,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("uploadFile.button.select-gallery", bundle: bundle, comment: "")
       }
 
+      /// en translation: Generate
+      ///
+      /// Locales: en
+      static func aiGenGenerate(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aiGen.generate", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aiGen.generate"
+        }
+
+        return NSLocalizedString("aiGen.generate", bundle: bundle, comment: "")
+      }
+
       /// en translation: Get a loan (soon)
       ///
       /// Locales: en
@@ -6511,6 +6622,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.paste", bundle: bundle, comment: "")
       }
 
+      /// en translation: Paste in deal
+      ///
+      /// Locales: en
+      static func aiGenPaste(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aiGen.paste", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aiGen.paste"
+        }
+
+        return NSLocalizedString("aiGen.paste", bundle: bundle, comment: "")
+      }
+
       /// en translation: Pay%@
       ///
       /// Locales: en
@@ -6830,6 +6956,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("promocode.not.found", bundle: bundle, comment: "")
       }
 
+      /// en translation: Prompts
+      ///
+      /// Locales: en
+      static func aiGenPrompts(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aiGen.prompts", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aiGen.prompts"
+        }
+
+        return NSLocalizedString("aiGen.prompts", bundle: bundle, comment: "")
+      }
+
       /// en translation: Public key
       ///
       /// Locales: en
@@ -6948,6 +7089,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("referral.promocode.request", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Result
+      ///
+      /// Locales: en
+      static func aiGenResultTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aiGen.result.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aiGen.result.title"
+        }
+
+        return NSLocalizedString("aiGen.result.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Results
@@ -8499,6 +8655,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.bond.executor.subtitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Use it
+      ///
+      /// Locales: en
+      static func aiGenUseIt(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aiGen.use-it", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aiGen.use-it"
+        }
+
+        return NSLocalizedString("aiGen.use-it", bundle: bundle, comment: "")
       }
 
       /// en translation: Used to top up account or added to a deal by partners

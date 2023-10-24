@@ -1,10 +1,3 @@
-//
-//  AccountsService.swift
-//  
-//
-//  Created by Simon Hudishkin on 24.07.2022.
-//
-
 import Foundation
 import Alamofire
 import BigInt
