@@ -467,3 +467,4 @@
 "sendTokens.send.title" = "Send %@";
 "sendTokens.balance.title" = "Balance";
 "sendTokens.max.title" = "Max";
+"sendTokens.not.enough.funds" = "Not enough funds";

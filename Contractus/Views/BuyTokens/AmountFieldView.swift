@@ -1,10 +1,3 @@
-//
-//  AmountFieldView.swift
-//  Contractus
-//
-//  Created by VITALIY FADEYEV on 19.10.2023.
-//
-
 import SwiftUI
 import Combine
 

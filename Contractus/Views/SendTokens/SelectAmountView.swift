@@ -1,10 +1,3 @@
-//
-//  SelectAmountView.swift
-//  Contractus
-//
-//  Created by VITALIY FADEYEV on 19.10.2023.
-//
-
 import SwiftUI
 import ContractusAPI
 
@@ -51,13 +44,18 @@ struct SelectAmountView: View {
             }
             VStack {
                 HStack {
-                    if !viewModel.state.convertedFormatted.isEmpty {
-
-                        Text("≈ \(viewModel.state.convertedFormatted)")
+                    if let maxAmount = viewModel.state.tokenInfo?.amount.valueFormatted.double, maxAmount < viewModel.state.amount.double {
+                        Text(R.string.localizable.sendTokensNotEnoughFunds())
                             .font(.footnote.weight(.medium))
-                            .foregroundColor(R.color.secondaryText.color)
+                            .foregroundColor(R.color.redText.color)
                             .padding(.bottom, 8)
-
+                    } else {
+                        if !viewModel.state.convertedFormatted.isEmpty {
+                            Text("≈ \(viewModel.state.convertedFormatted)")
+                                .font(.footnote.weight(.medium))
+                                .foregroundColor(R.color.secondaryText.color)
+                                .padding(.bottom, 8)
+                        }
                     }
                 }
                 .frame(height: 24)
