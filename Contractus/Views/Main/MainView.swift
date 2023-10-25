@@ -200,7 +200,7 @@ struct MainView: View {
                         }
                     }
                 }.refreshableCompat(loadingViewBackgroundColor: .clear, onRefresh: { done in
-                    viewModel.trigger(.load(dealsType)) {
+                    viewModel.trigger(.load(dealsType, silent: true)) {
                         done()
                     }
                 }, progress: { state in
@@ -306,7 +306,8 @@ struct MainView: View {
                                 mode: .many,
                                 tier: viewModel.state.balance?.tier ?? .basic,
                                 selectedTokens: viewModel.state.selectedTokens,
-                                disableUnselectTokens: viewModel.state.disableUnselectTokens,
+                                disableUnselectTokens: viewModel.state.disableUnselectTokens, 
+                                balance: viewModel.state.balance,
                                 resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())
                             )) { result in
                                 switch result {
@@ -414,10 +415,10 @@ struct MainView: View {
                     )
                 }
                 .fullScreenCover(isPresented: $showSendTokens, onDismiss: {
-                    viewModel.trigger(.load(dealsType))
+                    viewModel.trigger(.load(dealsType, silent: true))
                 }) {
                     SendTokensView(viewModel: .init(SendTokensViewModel(
-                        state: .init(account: viewModel.account),
+                        state: .init(account: viewModel.account, currency: viewModel.state.currency, balance: viewModel.state.balance),
                         accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
                         transactionsService: try? APIServiceFactory.shared.makeTransactionsService()
                     )))

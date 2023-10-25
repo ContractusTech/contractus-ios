@@ -32,7 +32,7 @@ struct TokenSelectView: View {
                 .padding(.horizontal, 14)
             ScrollView {
                 VStack(spacing: 0) {
-                    ForEach(viewModel.state.tokens, id: \.self) { token in
+                    ForEach(viewModel.state.tokens, id: \.id) { token in
                         tokenItem(token: token)
                         if token != viewModel.state.tokens.last {
                             Divider().foregroundColor(R.color.buttonBorderSecondary.color)
@@ -91,10 +91,12 @@ struct TokenSelectView: View {
     }
 
     var title: String {
-        if viewModel.mode == .single {
+        switch viewModel.mode {
+        case .single, .select:
             return R.string.localizable.selectTokenTitle()
+        case .many:
+            return "\(R.string.localizable.selectTokenTitle()) (\(viewModel.state.selectedTokens.count))"
         }
-        return "\(R.string.localizable.selectTokenTitle()) (\(viewModel.state.selectedTokens.count))"
     }
 
     @ViewBuilder
@@ -145,9 +147,16 @@ struct TokenSelectView: View {
                         }
                     }
                 }
-                Text(token.code)
-                    .font(.footnote)
-                    .foregroundColor(R.color.secondaryText.color)
+                if let price = viewModel.state.balances[token.code] {
+                    Text(price)
+                        .font(.footnote)
+                        .foregroundColor(R.color.secondaryText.color)
+                } else {
+                    Text(token.code)
+                        .font(.footnote)
+                        .foregroundColor(R.color.secondaryText.color)
+                }
+
             }
             .padding(.vertical, 16)
 
@@ -217,8 +226,8 @@ struct TokenSelectView: View {
 struct TokenSelectView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            TokenSelectView(viewModel: .init(TokenSelectViewModel(allowHolderMode: false, mode: .select, tier: .holder, selectedTokens: [], disableUnselectTokens: [], resourcesAPIService: nil))) { _ in
-                
+            TokenSelectView(viewModel: .init(TokenSelectViewModel(allowHolderMode: false, mode: .select, tier: .holder, selectedTokens: [], disableUnselectTokens: [], balance: nil, resourcesAPIService: nil))) { _ in
+
             }
         }
     }

@@ -15,22 +15,20 @@ struct SelectRecipientView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var viewModel: AnyViewModel<SendTokensViewModel.State, SendTokensViewModel.Input>
 
-    var stepsState: StepsState
-    
     @State var publicKey: String = ""
     @State var nextStep: Bool = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             Text(R.string.localizable.sendTokensRecipient())
-                .font(.subheadline)
+                .font(.footnote.weight(.semibold))
                 .textCase(.uppercase)
                 .foregroundColor(R.color.secondaryText.color)
 
             TextFieldView(
                 placeholder: R.string.localizable.commonPublicKey(), 
                 blockchain: .solana,
-                value: stepsState.recipient,
+                value: viewModel.state.recipient,
                 changeValue: { newValue in
                     publicKey = newValue
                 }, onQRTap: {
@@ -43,7 +41,7 @@ struct SelectRecipientView: View {
                 isActive: $nextStep,
                 destination: {
                     SelectAmountView(
-                        stepsState: viewModel.state.stepsState
+                        amountValue: viewModel.state.amount
                     )
                     .environmentObject(viewModel)
                 },
@@ -52,16 +50,12 @@ struct SelectRecipientView: View {
                 }
             )
             CButton(title: R.string.localizable.commonNext(), style: .primary, size: .large, isLoading: false, action: {
-                viewModel.trigger(.setState({
-                    var newStepsState = viewModel.state.stepsState
-                    newStepsState.recipient = publicKey
-                    return newStepsState
-                }()))
+                viewModel.trigger(.setRecipient(publicKey))
                 nextStep.toggle()
             })
         }
         .onAppear {
-            publicKey = stepsState.recipient
+            publicKey = viewModel.state.recipient
         }
         .padding(.horizontal, 16)
         .padding(.top, 20)
@@ -83,12 +77,10 @@ struct SelectRecipientView: View {
     }
 
     var title: String {
-        return R.string.localizable.sendTokensSendTitle(stepsState.selectedToken?.code ?? "")
+        return R.string.localizable.sendTokensSendTitle(viewModel.state.selectedToken?.code ?? "")
     }
 }
 
 #Preview {
-    SelectRecipientView(
-        stepsState: StepsState()
-    )
+    SelectRecipientView()
 }

@@ -542,6 +542,7 @@ struct ChangeAmountView: View {
                 tier: viewModel.state.tier,
                 selectedTokens: [viewModel.state.amount.token],
                 disableUnselectTokens: [],
+                balance: nil,
                 resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService()))) { result in
                     switch result {
                     case .many, .close, .none:

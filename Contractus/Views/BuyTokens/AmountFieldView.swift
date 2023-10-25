@@ -11,9 +11,11 @@ import Combine
 struct AmountFieldView: View {
     @Binding var amountValue: String
     var color: Color
-    var currency: String?
-    var setValue: (Double) -> Void
-    var calculate: (() -> Void)?
+    var currencyCode: String
+    var maxDigits: Int = 5
+    var didChange: (String) -> Void
+    var didFinish: (() -> Void)?
+    var filter: ((String) -> String)? = nil
 
     @State private var amountPublisher = PassthroughSubject<String, Never>()
     @FocusState var amountFocused: Bool
@@ -28,32 +30,24 @@ struct AmountFieldView: View {
                 .keyboardType(.decimalPad)
                 .focused($amountFocused)
                 .fixedSize(horizontal: amountValue.count < 12, vertical: false)
-                .onChange(of: amountValue) { newAmountValue in
-                    if let amount = Double(newAmountValue.replacingOccurrences(of: ",", with: ".")) {
-                        setValue(amount)
-                    } else {
-                        setValue(0)
-                    }
-                    amountPublisher.send(newAmountValue)
+                .onChange(of: amountValue) { newAmount in
+                    didChange(newAmount)
+                    amountPublisher.send(newAmount)
                 }
                 .onReceive(Just(amountValue)) { newValue in
-                    var filtered = newValue.filter { "0123456789,.".contains($0) }
-                    let components = filtered.replacingOccurrences(of: ",", with: ".").components(separatedBy: ".")
-                    if let fraction = components.last, components.count > 1, fraction.count > 5 {
-                        filtered = String(filtered.dropLast())
-                    }
-                    if filtered != newValue {
-                        self.amountValue = filtered
+                    let filteredValue = filter?(newValue) ?? newValue
+                    if filteredValue != newValue {
+                        self.amountValue = filteredValue
                     }
                 }
                 .onReceive(
                     amountPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
                 ) { newAmountValue in
-                    calculate?()
+                    didFinish?()
                 }
                 .padding(.leading, 12)
 
-            Text(currency ?? R.string.localizable.buyTokenCtus())
+            Text(currencyCode)
                 .font(.largeTitle.weight(.medium))
                 .foregroundColor(R.color.secondaryText.color)
                 .multilineTextAlignment(.leading)
@@ -80,7 +74,8 @@ struct AmountFieldView: View {
     AmountFieldView(
         amountValue: .constant("10000"),
         color: .black,
-        setValue: { _ in
+        currencyCode: "CTUS",
+        didChange: { _ in
             
         }
     )

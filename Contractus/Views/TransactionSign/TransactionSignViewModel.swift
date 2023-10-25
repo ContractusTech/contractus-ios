@@ -342,7 +342,6 @@ final class TransactionSignViewModel: ViewModel {
             return fields
         case .transfer:
             return fields
-
         }
     }
 
@@ -355,7 +354,8 @@ final class TransactionSignViewModel: ViewModel {
                 valueDescription: nil),
         ]
 
-        if tx.type == .wrapSOL {
+        switch tx.type {
+        case .transfer:
             fields.append(.init(
                 title: R.string.localizable.transactionSignFieldsAmount(),
                 value: tx.amountFormatted ?? "",
@@ -368,9 +368,23 @@ final class TransactionSignViewModel: ViewModel {
                     titleDescription: nil,
                     valueDescription: nil))
             }
-        }
+        case .wrapSOL,.unwrapAllSOL:
+            fields.append(.init(
+                title: R.string.localizable.transactionSignFieldsAmount(),
+                value: tx.amountFormatted ?? "",
+                titleDescription: nil,
+                valueDescription: nil))
+            if let feeFormatted = tx.feeFormatted {
+                fields.append(.init(
+                    title: R.string.localizable.transactionSignFieldsFee(),
+                    value: feeFormatted,
+                    titleDescription: nil,
+                    valueDescription: nil))
+            }
 
-        if tx.type == .dealInit {
+        case .dealCancel, .dealFinish:
+            break
+        case .dealInit:
             if let fee = tx.feeFormatted {
                 fields.append(.init(
                     title: R.string.localizable.transactionSignFieldsServiceFee(),

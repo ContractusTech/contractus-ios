@@ -34,4 +34,18 @@ extension String {
         let decimals = Set("0123456789.,")
         return String(self.filter{ decimals.contains($0) })
     }
+
+    var double: Double {
+        let value = self.decimal.replacingOccurrences(of: ",", with: ".")
+        return Double(value) ?? 0.0
+    }
+
+    func filterAmount(decimals: Int) -> String {
+        var filtered = self.decimal
+        let components = filtered.replacingOccurrences(of: ",", with: ".").components(separatedBy: ".")
+        if let fraction = components.last, components.count > 1, fraction.count > decimals {
+            filtered = String(filtered.dropLast())
+        }
+        return filtered
+    }
 }

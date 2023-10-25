@@ -26,9 +26,7 @@ struct SendTokensView: View {
                 NavigationLink(
                     isActive: $nextStep,
                     destination: {
-                        SelectRecipientView(
-                            stepsState: viewModel.state.stepsState
-                        )
+                        SelectRecipientView()
                         .environmentObject(viewModel)
                     },
                     label: {
@@ -42,15 +40,12 @@ struct SendTokensView: View {
                     tier: .holder,
                     selectedTokens: [],
                     disableUnselectTokens: [],
+                    balance: viewModel.state.balance,
                     resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())
                 )) { result in
                     switch result {
                     case .single(let token):
-                        viewModel.trigger(.setState({
-                            var newStepsState = viewModel.state.stepsState
-                            newStepsState.selectedToken = token
-                            return newStepsState
-                        }()))
+                        viewModel.trigger(.selectToken(token))
                         nextStep.toggle()
                     case .close:
                         presentationMode.wrappedValue.dismiss()
@@ -102,7 +97,7 @@ struct SendTokensView: View {
 #Preview {
     SendTokensView(
         viewModel: .init(SendTokensViewModel(
-            state: .init(account: Mock.account),
+            state: .init(account: Mock.account, currency: .USD),
             accountAPIService: nil,
             transactionsService: nil
         ))

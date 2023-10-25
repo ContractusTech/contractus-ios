@@ -1,12 +1,4 @@
-//
-//  BuyTokensView.swift
-//  Contractus
-//
-//  Created by VITALIY FADEYEV on 28.09.2023.
-//
-
 import SwiftUI
-//import Combine
 
 fileprivate enum Constants {
     static let closeImage = Image(systemName: "xmark")
@@ -40,11 +32,14 @@ struct BuyTokensView: View {
                     AmountFieldView(
                         amountValue: $amountValue, 
                         color: viewModel.state.canNotBuy ? R.color.redText.color : R.color.textBase.color,
-                        setValue: { value in
+                        currencyCode: R.string.localizable.buyTokenCtus(),
+                        didChange: { value in
                             viewModel.trigger(.setValue(value))
                         },
-                        calculate: {
+                        didFinish: {
                             viewModel.trigger(.calculate)
+                        }, filter: { value in
+                            return value.filterAmount(decimals: 5)
                         }
                     )
 

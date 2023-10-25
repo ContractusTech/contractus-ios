@@ -1121,7 +1121,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 423 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 425 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -1335,6 +1335,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let backupInformationBackupICloudTitle = Rswift.StringResource(key: "backupInformation.backup.iCloudTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Balance
+      ///
+      /// Locales: en
+      static let sendTokensBalanceTitle = Rswift.StringResource(key: "sendTokens.balance.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Base64
       ///
       /// Locales: en
@@ -1967,6 +1971,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let mainStatisticsLocked = Rswift.StringResource(key: "main.statistics.locked", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Max
+      ///
+      /// Locales: en
+      static let sendTokensMaxTitle = Rswift.StringResource(key: "sendTokens.max.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Need to migrate tokens from the Binance blockchain to Solana using the Portal bridge
       ///
       /// Locales: en
@@ -2307,10 +2315,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let referralPromocodeSubtitle = Rswift.StringResource(key: "referral.promocode.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Send tokens
-      ///
-      /// Locales: en
-      static let transactionTypeTransfer = Rswift.StringResource(key: "transaction.type.transfer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Service Fee
       ///
       /// Locales: en
@@ -2607,6 +2611,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignButtonsError = Rswift.StringResource(key: "transactionSign.buttons.error", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Transfer
+      ///
+      /// Locales: en
+      static let transactionTypeTransfer = Rswift.StringResource(key: "transaction.type.transfer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Try again
       ///
       /// Locales: en
@@ -3625,6 +3633,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("backupInformation.backup.iCloudTitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Balance
+      ///
+      /// Locales: en
+      static func sendTokensBalanceTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("sendTokens.balance.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "sendTokens.balance.title"
+        }
+
+        return NSLocalizedString("sendTokens.balance.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Base64
@@ -6009,6 +6032,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("main.statistics.locked", bundle: bundle, comment: "")
       }
 
+      /// en translation: Max
+      ///
+      /// Locales: en
+      static func sendTokensMaxTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("sendTokens.max.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "sendTokens.max.title"
+        }
+
+        return NSLocalizedString("sendTokens.max.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Need to migrate tokens from the Binance blockchain to Solana using the Portal bridge
       ///
       /// Locales: en
@@ -7292,21 +7330,6 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("referral.promocode.subtitle", bundle: bundle, comment: "")
       }
 
-      /// en translation: Send tokens
-      ///
-      /// Locales: en
-      static func transactionTypeTransfer(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("transaction.type.transfer", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "transaction.type.transfer"
-        }
-
-        return NSLocalizedString("transaction.type.transfer", bundle: bundle, comment: "")
-      }
-
       /// en translation: Service Fee
       ///
       /// Locales: en
@@ -8419,6 +8442,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.buttons.error", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Transfer
+      ///
+      /// Locales: en
+      static func transactionTypeTransfer(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transaction.type.transfer", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transaction.type.transfer"
+        }
+
+        return NSLocalizedString("transaction.type.transfer", bundle: bundle, comment: "")
       }
 
       /// en translation: Try again

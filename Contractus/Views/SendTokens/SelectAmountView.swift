@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ContractusAPI
 
 fileprivate enum Constants {
     static let arrows = Image(systemName: "arrow.left.arrow.right.circle.fill")
@@ -16,11 +17,7 @@ struct SelectAmountView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var viewModel: AnyViewModel<SendTokensViewModel.State, SendTokensViewModel.Input>
 
-    var stepsState: StepsState
-
     @State var amountValue: String = ""
-    @State var cost: String = ""
-    @State var reversed: Bool = false
 
     var body: some View {
         VStack(spacing: 5) {
@@ -30,19 +27,20 @@ struct SelectAmountView: View {
                     AmountFieldView(
                         amountValue: $amountValue,
                         color: R.color.textBase.color,
-                        currency: reversed ? viewModel.state.currency : viewModel.state.stepsState.selectedToken?.code,
-                        setValue: { newValue in
-                            cost = reversed ? viewModel.state.getCostReversed(amount: newValue) : viewModel.state.getCost(amount: newValue)
+                        currencyCode: viewModel.state.reversed ? viewModel.state.currency.code : viewModel.state.selectedToken?.code ?? R.string.localizable.buyTokenCtus(),
+                        didChange: { newAmount in
+                            viewModel.trigger(.setAmount(newAmount))
                         },
-                        calculate: {
+                        didFinish: {
+                        }) { value in
+                            return value.filterAmount(decimals: viewModel.state.selectedToken?.decimals ?? 5)
                         }
-                    )
                     Spacer()
                 }
 
                 Button(action: {
-                    reversed.toggle()
-                    amountValue = cost.decimal
+                    viewModel.trigger(.swap)
+                    amountValue = viewModel.state.amount
                 }, label: {
                     Constants.arrows
                         .imageScale(.large)
@@ -51,19 +49,61 @@ struct SelectAmountView: View {
                 .padding(.top, 25)
                 .padding(.trailing, 10)
             }
-            
-            Text(cost)
-                .font(.footnote.weight(.medium))
-                .foregroundColor(R.color.secondaryText.color)
-                .padding(.bottom, 8)
+            VStack {
+                HStack {
+                    if !viewModel.state.convertedFormatted.isEmpty {
 
+                        Text("≈ \(viewModel.state.convertedFormatted)")
+                            .font(.footnote.weight(.medium))
+                            .foregroundColor(R.color.secondaryText.color)
+                            .padding(.bottom, 8)
+
+                    }
+                }
+                .frame(height: 24)
+
+                if let maxAmount = viewModel.state.tokenInfo?.amount.valueFormattedWithCode {
+                    HStack {
+                        Text(R.string.localizable.sendTokensBalanceTitle())
+                            .font(.footnote.weight(.medium))
+                            .foregroundColor(R.color.textBase.color)
+                        Spacer()
+                        Text(maxAmount)
+                            .font(.footnote.weight(.medium))
+                            .foregroundColor(R.color.secondaryText.color)
+
+                        Button(action: {
+                            viewModel.trigger(.setMaxAmount)
+                            amountValue = viewModel.state.amount
+                        }, label: {
+                            Text(R.string.localizable.sendTokensMaxTitle())
+                                .font(.footnote.weight(.medium))
+                                .padding(.vertical, 4)
+                                .padding(.horizontal, 12)
+                                .background(R.color.buttonBorderSecondary.color)
+                                .cornerRadius(14)
+                        })
+
+                    }
+                    .padding(.leading, 16)
+                    .padding(.trailing, 6)
+                    .padding(.vertical, 6)
+                    .background(RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .stroke(lineWidth: 1)
+                        .fill(R.color.baseSeparator.color)
+                    )
+                    .padding(.bottom, 24)
+                    .padding(.horizontal, 42)
+                }
+            }
             Spacer()
+
             HStack {
                 Text(R.string.localizable.sendTokensRecipient())
                     .font(.footnote.weight(.medium))
                     .foregroundColor(R.color.textBase.color)
                 Spacer()
-                Text(ContentMask.mask(from: stepsState.recipient))
+                Text(ContentMask.mask(from: viewModel.state.recipient))
                     .font(.footnote.weight(.medium))
                     .foregroundColor(R.color.secondaryText.color)
             }
@@ -76,18 +116,13 @@ struct SelectAmountView: View {
                 .shadow(color: .black.opacity(0.15), radius: 1, x: 0, y: 2)
             )
             .padding(.bottom, 24)
-            .padding(.horizontal, 58)
+            .padding(.horizontal, 42)
             CButton(
                 title: R.string.localizable.commonNext(),
                 style: .primary,
                 size: .large,
                 isLoading: viewModel.state.state == .loading,
                 action: {
-                    viewModel.trigger(.setState({
-                        var newStepsState = viewModel.state.stepsState
-                        newStepsState.amount = reversed ? cost.decimal : amountValue 
-                        return newStepsState
-                    }()))
                     viewModel.trigger(.send)
                 })
         }
@@ -109,16 +144,15 @@ struct SelectAmountView: View {
             }
         )
         .onAppear {
-            amountValue = stepsState.amount
-            viewModel.trigger(.getBalance)
+            amountValue = viewModel.state.amount
         }
     }
 
     var title: String {
-        return R.string.localizable.sendTokensSendTitle(stepsState.selectedToken?.code ?? "")
+        return R.string.localizable.sendTokensSendTitle(viewModel.state.selectedToken?.code ?? "")
     }
 }
 
 #Preview {
-    SelectAmountView(stepsState: StepsState())
+    SelectAmountView()
 }

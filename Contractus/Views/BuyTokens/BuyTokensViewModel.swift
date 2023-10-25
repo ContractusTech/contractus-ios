@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 
 enum BuyTokensInput {
-    case resetError, setValue(Double), calculate, create
+    case resetError, setValue(String), calculate, create
 }
 
 struct BuyTokensState {
@@ -85,7 +85,7 @@ final class BuyTokensViewModel: ViewModel {
         case .resetError:
             self.state.errorState = nil
         case .setValue(let value):
-            self.state.value = value
+            self.state.value = value.double
         case .calculate:
             let data = CheckoutService.CalculateRequest(amount: state.value)
             self.state.state = .loading
@@ -106,7 +106,7 @@ final class BuyTokensViewModel: ViewModel {
             let data = CheckoutService.CreateUrlRequest(
                 type: .advcash,
                 amount: state.value,
-                blockchain: "solana",
+                blockchain: state.account.blockchain.rawValue,
                 publicKey: state.account.publicKey
             )
             Task { @MainActor in

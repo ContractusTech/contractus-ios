@@ -139,6 +139,8 @@ struct BalanceView: View {
                 }
                 .frame(width: 42, height: 42, alignment: .center)
                 .buttonStyle(RoundedSecondaryMediumButton())
+                .disabled(isLoading)
+                .opacity(isLoading ? 0.4 : 1.0)
 
                 Button {
                     topUpAction()
@@ -151,6 +153,8 @@ struct BalanceView: View {
                 }
                 .frame(width: 42, height: 42, alignment: .center)
                 .buttonStyle(RoundedSecondaryMediumButton())
+                .disabled(isLoading)
+                .opacity(isLoading ? 0.4 : 1.0)
             }
             .padding(EdgeInsets(top: 4, leading: 8, bottom: 0, trailing: 12))
 
@@ -369,6 +373,15 @@ struct BalanceView: View {
                     .overlay(isTokensVisible ? R.color.mainBackground.color : R.color.buttonBorderSecondary.color)
             }
 
+        }
+    }
+
+    var isLoading: Bool {
+        switch state {
+        case .empty:
+            return true
+        case .loaded(let balanceViewModel):
+            return false
         }
     }
 }

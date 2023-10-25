@@ -387,7 +387,7 @@
 "transaction.type.cancel-deal" = "Cancel the deal";
 "transaction.type.wrap-sol" = "SOL ➞ wSOL";
 "transaction.type.unwrap-wsol" = "wSOL ➞ SOL";
-"transaction.type.transfer" = "Send tokens";
+"transaction.type.transfer" = "Transfer";
 
 "aboutAccount.delete.remove-backup-title" = "Delete from iCloud backup";
 "aboutAccount.delete.remove-backup-subtitle" = "You can't restore from backup private key after delete account.";
@@ -465,3 +465,5 @@
 
 "sendTokens.recipient" = "Recipient";
 "sendTokens.send.title" = "Send %@";
+"sendTokens.balance.title" = "Balance";
+"sendTokens.max.title" = "Max";
