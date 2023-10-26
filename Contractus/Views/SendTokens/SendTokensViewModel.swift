@@ -36,6 +36,13 @@ extension SendTokensViewModel {
         var convertedAmount: String = ""
         var convertedFormatted: String = ""
         var reversed: Bool = false
+        var notEnough: Bool {
+            if let maxAmount = tokenInfo?.amount.valueFormatted.double, maxAmount < amount.double {
+                return true
+            } else {
+                return false
+            }
+        }
     }
 
     enum Input {

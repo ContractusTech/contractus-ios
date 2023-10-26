@@ -3,6 +3,7 @@ import ContractusAPI
 import NukeUI
 import Nuke
 import SVGKit
+import Shimmer
 
 fileprivate enum Constants {
     static let checkmarkImage = Image(systemName: "checkmark")
@@ -32,10 +33,17 @@ struct TokenSelectView: View {
                 .padding(.horizontal, 14)
             ScrollView {
                 VStack(spacing: 0) {
-                    ForEach(viewModel.state.tokens, id: \.id) { token in
-                        tokenItem(token: token)
-                        if token != viewModel.state.tokens.last {
-                            Divider().foregroundColor(R.color.buttonBorderSecondary.color)
+                    if viewModel.state.state == .loading {
+                        ForEach(1...6, id: \.self) { _ in
+                            tokenItem(token: Mock.tokenEmpty, loading: true)
+                                .shimmering()
+                        }
+                    } else {
+                        ForEach(viewModel.state.tokens, id: \.id) { token in
+                            tokenItem(token: token)
+                            if token != viewModel.state.tokens.last {
+                                Divider().foregroundColor(R.color.buttonBorderSecondary.color)
+                            }
                         }
                     }
                 }
@@ -100,7 +108,7 @@ struct TokenSelectView: View {
     }
 
     @ViewBuilder
-    func tokenItem(token: ContractusAPI.Token) -> some View {
+    func tokenItem(token: ContractusAPI.Token, loading: Bool = false) -> some View {
         HStack(spacing: 13) {
             if let logoURL = token.logoURL {
                 if logoURL.absoluteString.hasSuffix(".svg") {
@@ -136,10 +144,16 @@ struct TokenSelectView: View {
             VStack(alignment: .leading, spacing: 2) {
                 if let name = token.name {
                     HStack {
-                        Text(name)
-                            .font(.body)
-                            .foregroundColor(R.color.textBase.color)
-
+                        if loading {
+                            Rectangle()
+                                .fill(R.color.fourthBackground.color)
+                                .frame(width: 100, height: 18)
+                                .cornerRadius(8)
+                        } else {
+                            Text(name)
+                                .font(.body)
+                                .foregroundColor(R.color.textBase.color)
+                        }
                         if token.holderMode && viewModel.mode != .select {
                             Constants.crownImage
                                 .imageScale(.small)
@@ -147,14 +161,21 @@ struct TokenSelectView: View {
                         }
                     }
                 }
-                if let price = viewModel.state.balances[token.code] {
-                    Text(price)
-                        .font(.footnote)
-                        .foregroundColor(R.color.secondaryText.color)
+                if loading {
+                    Rectangle()
+                        .fill(R.color.fourthBackground.color)
+                        .frame(width: 200, height: 18)
+                        .cornerRadius(8)
                 } else {
-                    Text(token.code)
-                        .font(.footnote)
-                        .foregroundColor(R.color.secondaryText.color)
+                    if let price = viewModel.state.balances[token.code] {
+                        Text(price)
+                            .font(.footnote)
+                            .foregroundColor(R.color.secondaryText.color)
+                    } else {
+                        Text(token.code)
+                            .font(.footnote)
+                            .foregroundColor(R.color.secondaryText.color)
+                    }
                 }
 
             }

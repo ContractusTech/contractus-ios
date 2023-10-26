@@ -44,7 +44,7 @@ struct SelectAmountView: View {
             }
             VStack {
                 HStack {
-                    if let maxAmount = viewModel.state.tokenInfo?.amount.valueFormatted.double, maxAmount < viewModel.state.amount.double {
+                    if viewModel.state.notEnough {
                         Text(R.string.localizable.sendTokensNotEnoughFunds())
                             .font(.footnote.weight(.medium))
                             .foregroundColor(R.color.redText.color)
@@ -120,6 +120,7 @@ struct SelectAmountView: View {
                 style: .primary,
                 size: .large,
                 isLoading: viewModel.state.state == .loading,
+                isDisabled: viewModel.state.notEnough,
                 action: {
                     viewModel.trigger(.send)
                 })
