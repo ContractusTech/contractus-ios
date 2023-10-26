@@ -1678,7 +1678,7 @@ struct DealView: View {
             hud.indicatorView = JGProgressHUDPieIndicatorView()
             hud.progress = Float(progress)
             hud.cancelPressedAction = {
-                ImpactGenerator.soft()
+                ImpactGenerator.light()
                 viewModel.trigger(.cancelDownload)
                 hud.dismiss()
             }

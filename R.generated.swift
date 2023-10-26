@@ -1219,6 +1219,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorTitlePartner = Rswift.StringResource(key: "addContractor.title.partner", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Advcash
+      ///
+      /// Locales: en
+      static let unlockHolderBuyTitle1 = Rswift.StringResource(key: "unlockHolder.buy.title.1", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: After this account checks the result of the contract, you get paid.
       ///
       /// Locales: en
@@ -1671,10 +1675,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextDetails = Rswift.StringResource(key: "deal.text.details", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Direct
-      ///
-      /// Locales: en
-      static let unlockHolderBuyTitle1 = Rswift.StringResource(key: "unlockHolder.buy.title.1", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Documents
       ///
       /// Locales: en
@@ -3202,6 +3202,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("addContractor.title.partner", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Advcash
+      ///
+      /// Locales: en
+      static func unlockHolderBuyTitle1(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("unlockHolder.buy.title.1", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "unlockHolder.buy.title.1"
+        }
+
+        return NSLocalizedString("unlockHolder.buy.title.1", bundle: bundle, comment: "")
       }
 
       /// en translation: After this account checks the result of the contract, you get paid.
@@ -4903,21 +4918,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.text.details", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Direct
-      ///
-      /// Locales: en
-      static func unlockHolderBuyTitle1(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("unlockHolder.buy.title.1", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "unlockHolder.buy.title.1"
-        }
-
-        return NSLocalizedString("unlockHolder.buy.title.1", bundle: bundle, comment: "")
       }
 
       /// en translation: Documents

@@ -10,7 +10,7 @@ extension TokenSelectViewModel {
     
     struct State {
         enum State: Equatable  {
-            case loading, loaded
+            case none, loading, loaded
         }
 
         let allowHolderMode: Bool
@@ -20,7 +20,7 @@ extension TokenSelectViewModel {
         var selectedTokens: [ContractusAPI.Token]
         var disableUnselectTokens: [ContractusAPI.Token] = []
         var balances: [String: String] = [:]
-        var state: State = .loaded
+        var state: State = .none
 
         func isSelected(_ token: ContractusAPI.Token) -> Bool {
             selectedTokens.contains(token)
@@ -69,7 +69,9 @@ final class TokenSelectViewModel: ViewModel {
 
         switch input {
         case .load:
-            state.state = .loading
+            if state.state == .none {
+                state.state = .loading
+            }
             Task {
                 let tokens = (try? await loadTokens()) ?? []
                 let balances = Dictionary(uniqueKeysWithValues: (self.balance?.tokens ?? []).filter{ $0.amount.value > 0 }.map{ ($0.amount.token.code, $0.amount.valueFormattedWithCode) } )

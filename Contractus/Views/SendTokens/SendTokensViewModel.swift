@@ -37,7 +37,7 @@ extension SendTokensViewModel {
         var convertedFormatted: String = ""
         var reversed: Bool = false
         var notEnough: Bool {
-            if let maxAmount = tokenInfo?.amount.valueFormatted.double, maxAmount < amount.double {
+            if let maxAmount = tokenInfo?.amount.valueFormatted.double, ((maxAmount < amount.double && maxAmount > 0) || maxAmount == 0)  {
                 return true
             } else {
                 return false
@@ -84,6 +84,7 @@ final class SendTokensViewModel: ViewModel {
             state.recipient = recipient
         case .selectToken(let token):
             state.selectedToken = token
+            clearAmount()
             Task { @MainActor in
                 if let selectedToken = self.state.selectedToken {
                     if let tokenInfo = state.balance?.tokens.first(where: { item in
@@ -213,5 +214,12 @@ final class SendTokensViewModel: ViewModel {
             return "\((amount / price).formatted()) \(symbol)".trimmingCharacters(in: .whitespacesAndNewlines)
         }
         return "\((amount / price).formatted())".trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private func clearAmount() {
+        self.state.amount = ""
+        self.state.amountFormatted = ""
+        self.state.convertedAmount = ""
+        self.state.convertedFormatted = ""
     }
 }

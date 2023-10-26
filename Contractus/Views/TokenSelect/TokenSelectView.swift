@@ -218,19 +218,24 @@ struct TokenSelectView: View {
         .onTapGesture {
             guard viewModel.state.allowHolderMode || !token.holderMode || (token.holderMode && viewModel.state.tier == .holder) else { return }
 
-            if viewModel.state.isSelected(token) {
-                if !viewModel.state.isDisableUnselect(token){
-                    viewModel.trigger(.deselect(token))
-                    ImpactGenerator.soft()
+            ImpactGenerator.light()
+            switch viewModel.state.mode {
+            case .many:
+                if viewModel.state.isSelected(token) {
+                    if !viewModel.state.isDisableUnselect(token){
+                        viewModel.trigger(.deselect(token))
+                    }
+                } else {
+                    viewModel.trigger(.select(token))
                 }
-            } else {
+            case .single:
                 viewModel.trigger(.select(token))
-                ImpactGenerator.soft()
-                if viewModel.state.mode == .single || viewModel.state.mode == .select, let token = viewModel.state.selectedTokens.first {
-                    action(.single(token))
-                }
-            }
+                action(.single(token))
+            case .select:
+                viewModel.trigger(.select(token))
+                action(.single(token))
 
+            }
         }
     }
 
