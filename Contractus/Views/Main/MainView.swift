@@ -8,8 +8,7 @@
 import SwiftUI
 import SolanaSwift
 import ResizableSheet
-import SwiftUIPullToRefresh
-import ContractusAPI 
+import ContractusAPI
 
 fileprivate enum Constants {
     static let closeImage = Image(systemName: "xmark")
@@ -201,13 +200,12 @@ struct MainView: View {
                             .padding(50)
                         }
                     }
-                }.refreshableCompat(loadingViewBackgroundColor: .clear, onRefresh: { done in
-                    viewModel.trigger(.load(dealsType, silent: true)) {
-                        done()
-                    }
-                }, progress: { state in
-                    RefreshActivityIndicator(isAnimating: state == .loading) {
-                        $0.hidesWhenStopped = false
+                }
+                .refreshable(action: {
+                    await withCheckedContinuation { continuation in
+                        viewModel.trigger(.load(dealsType, silent: true)) {
+                            continuation.resume()
+                        }
                     }
                 })
                 .onChange(of: dealsType, perform: { newType in
