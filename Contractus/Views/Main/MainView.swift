@@ -71,14 +71,16 @@ struct MainView: View {
                             topUpAction: {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.mainTopupTap)
                                 topUpState = .medium
-                                ImpactGenerator.soft()
+                                ImpactGenerator.light()
                             }, infoAction: {
                                 sheetType = .webView(AppConfig.ctusInfoURL)
                             }, swapAction: { fromAmount, toAmount in
+                                ImpactGenerator.light()
                                 sheetType = .wrap(from: fromAmount, to: toAmount)
                             }) {
                                 sheetType = .tokenSettings
                             } sendAction: {
+                                ImpactGenerator.light()
                                 showSendTokens.toggle()
                             }
 

@@ -83,7 +83,7 @@ struct DealRoleView: View {
             }
 
         }.onTapGesture {
-            ImpactGenerator.soft()
+            ImpactGenerator.light()
             action(type)
         }
     }
