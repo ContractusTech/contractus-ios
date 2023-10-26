@@ -86,6 +86,7 @@ struct BalanceView: View {
     var infoAction: () -> Void
     var swapAction: (Amount, Amount) -> Void
     var settingsAction: () -> Void
+    var sendAction: () -> Void
 
     @State private var isTokensVisible = FlagsStorage.shared.mainTokensVisibility
 
@@ -128,6 +129,20 @@ struct BalanceView: View {
                 Spacer()
 
                 Button {
+                    sendAction()
+                } label: {
+                    R.image.send.image
+                        .renderingMode(.template)
+                        .resizable()
+                        .frame(width: 24, height: 24, alignment: .center)
+                        .foregroundColor(R.color.textBase.color)
+                }
+                .frame(width: 42, height: 42, alignment: .center)
+                .buttonStyle(RoundedSecondaryMediumButton())
+                .disabled(isLoading)
+                .opacity(isLoading ? 0.4 : 1.0)
+
+                Button {
                     topUpAction()
                 } label: {
                     R.image.plus.image
@@ -136,10 +151,12 @@ struct BalanceView: View {
                         .frame(width: 24, height: 24, alignment: .center)
                         .foregroundColor(R.color.textBase.color)
                 }
-                .frame(width: 46, height: 46, alignment: .center)
+                .frame(width: 42, height: 42, alignment: .center)
                 .buttonStyle(RoundedSecondaryMediumButton())
+                .disabled(isLoading)
+                .opacity(isLoading ? 0.4 : 1.0)
             }
-            .padding(EdgeInsets(top: 4, leading: 8, bottom: 0, trailing: 8))
+            .padding(EdgeInsets(top: 4, leading: 8, bottom: 0, trailing: 12))
 
             // MARK: - Coins
             switch state {
@@ -358,6 +375,15 @@ struct BalanceView: View {
 
         }
     }
+
+    var isLoading: Bool {
+        switch state {
+        case .empty:
+            return true
+        case .loaded(let balanceViewModel):
+            return false
+        }
+    }
 }
 
 extension Amount: Identifiable {
@@ -378,9 +404,13 @@ struct BalanceView_Previews: PreviewProvider {
         VStack {
             BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"], tier: .basic)))) {
 
-            } infoAction: { } swapAction: { _, _ in
+            } infoAction: { 
+                
+            } swapAction: { _, _ in
 
             } settingsAction: {
+
+            } sendAction: {
 
             }
 
@@ -389,6 +419,8 @@ struct BalanceView_Previews: PreviewProvider {
             } infoAction: { } swapAction: { _, _ in
 
             } settingsAction: {
+
+            } sendAction: {
 
             }
         }
@@ -402,6 +434,8 @@ struct BalanceView_Previews: PreviewProvider {
 
             } settingsAction: {
 
+            } sendAction: {
+
             }
 
             BalanceView(state: .empty) {
@@ -409,6 +443,8 @@ struct BalanceView_Previews: PreviewProvider {
             } infoAction: { } swapAction: { _, _ in
 
             } settingsAction: {
+
+            } sendAction: {
 
             }
         }

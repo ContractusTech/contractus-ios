@@ -29,6 +29,7 @@ enum Mock {
 
     static let tokenList: [ContractusAPI.Token] = [Self.tokenSOL, Self.tokenWSOL, Self.tokenCTUS]
 
+    static let tokenEmpty = Token(code: "", name: "", native: true, decimals: 9, serviced: false)
     static let tokenSOL = Token(code: "SOL", name: "Solana", native: true, decimals: 9, serviced: false)
     static let tokenWSOL = Token(code: "WSOL", name: "WSolana", native: false, decimals: 9, serviced: false)
     static let tokenCTUS = Token(code: "CTUS", name: "Contractus", native: false, decimals: 9, serviced: true, holderMode: true)

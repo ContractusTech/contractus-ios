@@ -90,12 +90,12 @@ struct RoundedSecondaryMediumButton: ButtonStyle {
         var body: some View {
             configuration.label
                 .font(.body)
-                .padding(12)
+                .padding(9)
                 .foregroundColor(isEnabled ? R.color.buttonTextSecondary.color : R.color.buttonTextSecondary.color.opacity(DISABLE_OPACITY))
-                .clipShape(RoundedRectangle(cornerRadius: 50))
+                .clipShape(RoundedRectangle(cornerRadius: 42))
 
-                .overlay(RoundedRectangle(cornerRadius: 24)
-                    .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1.4))
+                .overlay(RoundedRectangle(cornerRadius: 21)
+                    .stroke(R.color.buttonBackgroundPrimary.color, lineWidth: 1.5))
                 .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
                 .animation(.easeInOut(duration: 0.03), value: configuration.isPressed)
                 // .opacity(isEnabled ? 1 : DISABLE_OPACITY)

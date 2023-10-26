@@ -888,7 +888,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 24 images.
+  /// This `R.image` struct is generated, and contains static references to 25 images.
   struct image {
     /// Image `Advcash`.
     static let advcash = Rswift.ImageResource(bundle: R.hostingBundle, name: "Advcash")
@@ -914,6 +914,8 @@ struct R: Rswift.Validatable {
     static let plus = Rswift.ImageResource(bundle: R.hostingBundle, name: "Plus")
     /// Image `SOL-CoinLogo`.
     static let solCoinLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "SOL-CoinLogo")
+    /// Image `Send`.
+    static let send = Rswift.ImageResource(bundle: R.hostingBundle, name: "Send")
     /// Image `USDC-CoinLogo`.
     static let usdcCoinLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "USDC-CoinLogo")
     /// Image `addAccount`.
@@ -1024,6 +1026,13 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "Send", bundle: ..., traitCollection: ...)`
+    static func send(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.send, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIImage(named: "USDC-CoinLogo", bundle: ..., traitCollection: ...)`
     static func usdcCoinLogo(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.usdcCoinLogo, compatibleWith: traitCollection)
@@ -1112,8 +1121,12 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 419 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 426 localization keys.
     struct localizable {
+      /// en translation: 
+      ///
+      /// Locales: en
+      static let transactionSignSubtitleTransfer = Rswift.StringResource(key: "transactionSign.subtitle.transfer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client.
       ///
       /// Locales: en
@@ -1322,6 +1335,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let backupInformationBackupICloudTitle = Rswift.StringResource(key: "backupInformation.backup.iCloudTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Balance
+      ///
+      /// Locales: en
+      static let sendTokensBalanceTitle = Rswift.StringResource(key: "sendTokens.balance.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Base64
       ///
       /// Locales: en
@@ -1954,6 +1971,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let mainStatisticsLocked = Rswift.StringResource(key: "main.statistics.locked", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Max
+      ///
+      /// Locales: en
+      static let sendTokensMaxTitle = Rswift.StringResource(key: "sendTokens.max.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Need to migrate tokens from the Binance blockchain to Solana using the Portal bridge
       ///
       /// Locales: en
@@ -2002,6 +2023,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let buyTokenNotEnough = Rswift.StringResource(key: "buyToken.not.enough", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Not enough funds
+      ///
+      /// Locales: en
+      static let sendTokensNotEnoughFunds = Rswift.StringResource(key: "sendTokens.not.enough.funds", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Not specified
       ///
       /// Locales: en
@@ -2194,6 +2219,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let unlockHolderRaydiumTitle = Rswift.StringResource(key: "unlockHolder.raydium.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Recipient
+      ///
+      /// Locales: en
+      static let sendTokensRecipient = Rswift.StringResource(key: "sendTokens.recipient", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Referral Program
       ///
       /// Locales: en
@@ -2278,6 +2307,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let selectTokenTitle = Rswift.StringResource(key: "selectToken.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Send %@
+      ///
+      /// Locales: en
+      static let sendTokensSendTitle = Rswift.StringResource(key: "sendTokens.send.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Send it securely via Telegram Secret Chat or Signal to your partner or allow scan from your phone.
       ///
       /// Locales: en
@@ -2582,6 +2615,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignButtonsError = Rswift.StringResource(key: "transactionSign.buttons.error", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Transfer
+      ///
+      /// Locales: en
+      static let transactionTypeTransfer = Rswift.StringResource(key: "transaction.type.transfer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Try again
       ///
       /// Locales: en
@@ -2790,6 +2827,21 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionTypeUnwrapWsol = Rswift.StringResource(key: "transaction.type.unwrap-wsol", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+
+      /// en translation: 
+      ///
+      /// Locales: en
+      static func transactionSignSubtitleTransfer(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.subtitle.transfer", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.subtitle.transfer"
+        }
+
+        return NSLocalizedString("transactionSign.subtitle.transfer", bundle: bundle, comment: "")
+      }
 
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client.
       ///
@@ -3585,6 +3637,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("backupInformation.backup.iCloudTitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Balance
+      ///
+      /// Locales: en
+      static func sendTokensBalanceTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("sendTokens.balance.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "sendTokens.balance.title"
+        }
+
+        return NSLocalizedString("sendTokens.balance.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Base64
@@ -5969,6 +6036,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("main.statistics.locked", bundle: bundle, comment: "")
       }
 
+      /// en translation: Max
+      ///
+      /// Locales: en
+      static func sendTokensMaxTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("sendTokens.max.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "sendTokens.max.title"
+        }
+
+        return NSLocalizedString("sendTokens.max.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Need to migrate tokens from the Binance blockchain to Solana using the Portal bridge
       ///
       /// Locales: en
@@ -6149,6 +6231,21 @@ struct R: Rswift.Validatable {
 
         let format = NSLocalizedString("buyToken.not.enough", bundle: bundle, comment: "")
         return String(format: format, locale: locale, value1)
+      }
+
+      /// en translation: Not enough funds
+      ///
+      /// Locales: en
+      static func sendTokensNotEnoughFunds(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("sendTokens.not.enough.funds", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "sendTokens.not.enough.funds"
+        }
+
+        return NSLocalizedString("sendTokens.not.enough.funds", bundle: bundle, comment: "")
       }
 
       /// en translation: Not specified
@@ -6875,6 +6972,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("unlockHolder.raydium.title", bundle: bundle, comment: "")
       }
 
+      /// en translation: Recipient
+      ///
+      /// Locales: en
+      static func sendTokensRecipient(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("sendTokens.recipient", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "sendTokens.recipient"
+        }
+
+        return NSLocalizedString("sendTokens.recipient", bundle: bundle, comment: "")
+      }
+
       /// en translation: Referral Program
       ///
       /// Locales: en
@@ -7188,6 +7300,23 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("selectToken.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Send %@
+      ///
+      /// Locales: en
+      static func sendTokensSendTitle(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("sendTokens.send.title", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "sendTokens.send.title"
+        }
+
+        let format = NSLocalizedString("sendTokens.send.title", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
       }
 
       /// en translation: Send it securely via Telegram Secret Chat or Signal to your partner or allow scan from your phone.
@@ -8332,6 +8461,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.buttons.error", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Transfer
+      ///
+      /// Locales: en
+      static func transactionTypeTransfer(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transaction.type.transfer", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transaction.type.transfer"
+        }
+
+        return NSLocalizedString("transaction.type.transfer", bundle: bundle, comment: "")
       }
 
       /// en translation: Try again
