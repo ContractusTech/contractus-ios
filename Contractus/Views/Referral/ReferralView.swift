@@ -56,7 +56,7 @@ struct ReferralView: View {
                                     
                                     Button {
                                         copiedNotification = true
-                                        ImpactGenerator.soft()
+                                        ImpactGenerator.light()
                                         UIPasteboard.general.string = promocode
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
                                             copiedNotification = false

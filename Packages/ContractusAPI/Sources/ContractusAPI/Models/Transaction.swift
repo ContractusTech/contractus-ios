@@ -132,7 +132,7 @@ public struct Transaction: Decodable, Equatable {
         }
 
         switch type {
-        case .wrapSOL, .unwrapAllSOL:
+        case .wrapSOL, .unwrapAllSOL, .transfer:
             return AmountFormatter.format(amount: fee, token: token)
         case .dealCancel, .dealInit, .dealFinish:
             return nil

@@ -378,6 +378,7 @@
 "transactionSign.subtitle.cancel-deal" = "The client's funds will be refunded and the deal will canceled";
 "transactionSign.subtitle.unwrap" = "And your token will be unwraped\ninto SOL (native token)";
 "transactionSign.subtitle.wrap" = "And your native token will be wraped";
+"transactionSign.subtitle.transfer" = "";
 "transactionSign.subtitle.processing" = "Processing...";
 "transactionSign.subtitle.error" = "Try again";
 "transactionSign.subtitle.finished" = "Transaction completed successfully";
@@ -388,6 +389,7 @@
 "transaction.type.cancel-deal" = "Cancel the deal";
 "transaction.type.wrap-sol" = "SOL ➞ wSOL";
 "transaction.type.unwrap-wsol" = "wSOL ➞ SOL";
+"transaction.type.transfer" = "Transfer";
 
 "aboutAccount.delete.remove-backup-title" = "Delete from iCloud backup";
 "aboutAccount.delete.remove-backup-subtitle" = "You can't restore from backup private key after delete account.";
@@ -451,7 +453,7 @@
 "unlockHolder.subtitle" = "Allows you to create deals without fees and and to unlock all other SPL tokens to pay for deals.";
 "unlockHolder.methods" = "Ways to get CTUS token";
 "unlockHolder.buy.title" = "Buy";
-"unlockHolder.buy.title.1" = "Direct";
+"unlockHolder.buy.title.1" = "Advcash";
 "unlockHolder.buy.subtitle" = "Supported more than 30 cryptocurrencies";
 "unlockHolder.coinstore.title" = "Coinstore";
 "unlockHolder.coinstore.title.1" = "CEX";
@@ -472,3 +474,9 @@
 "aiGen.result.title" = "Result";
 "aiGen.alert.title" = "Not available";
 "aiGen.alert.message" = "To use AI Gen you must have holder mode.";
+
+"sendTokens.recipient" = "Recipient";
+"sendTokens.send.title" = "Send %@";
+"sendTokens.balance.title" = "Balance";
+"sendTokens.max.title" = "Max";
+"sendTokens.not.enough.funds" = "Not enough funds";

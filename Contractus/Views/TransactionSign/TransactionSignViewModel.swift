@@ -277,6 +277,10 @@ final class TransactionSignViewModel: ViewModel {
                     transactionsService?.signUnwrapAll(.init(id: tx.id, transaction: message, signature: signature), completion: { result in
                         continuation.resume(with: result)
                     })
+                case .transfer:
+                    transactionsService?.transferSign(.init(id: tx.id, transaction: message, signature: signature), completion: {result in
+                        continuation.resume(with: result)
+                    })
                 case .dealFinish, .dealInit, .dealCancel:
                     continuation.resume(throwing: TransactionSignError.transactionIsNull)
                 }
@@ -336,6 +340,8 @@ final class TransactionSignViewModel: ViewModel {
             return fields
         case .unwrapAllSOL:
             return fields
+        case .transfer:
+            return fields
         }
     }
 
@@ -348,7 +354,8 @@ final class TransactionSignViewModel: ViewModel {
                 valueDescription: nil),
         ]
 
-        if tx.type == .wrapSOL {
+        switch tx.type {
+        case .transfer:
             fields.append(.init(
                 title: R.string.localizable.transactionSignFieldsAmount(),
                 value: tx.amountFormatted ?? "",
@@ -361,9 +368,23 @@ final class TransactionSignViewModel: ViewModel {
                     titleDescription: nil,
                     valueDescription: nil))
             }
-        }
+        case .wrapSOL,.unwrapAllSOL:
+            fields.append(.init(
+                title: R.string.localizable.transactionSignFieldsAmount(),
+                value: tx.amountFormatted ?? "",
+                titleDescription: nil,
+                valueDescription: nil))
+            if let feeFormatted = tx.feeFormatted {
+                fields.append(.init(
+                    title: R.string.localizable.transactionSignFieldsFee(),
+                    value: feeFormatted,
+                    titleDescription: nil,
+                    valueDescription: nil))
+            }
 
-        if tx.type == .dealInit {
+        case .dealCancel, .dealFinish:
+            break
+        case .dealInit:
             if let fee = tx.feeFormatted {
                 fields.append(.init(
                     title: R.string.localizable.transactionSignFieldsServiceFee(),
@@ -391,6 +412,7 @@ private extension ContractusAPI.TransactionType {
         case .dealCancel: return R.string.localizable.transactionTypeCancelDeal()
         case .dealFinish: return R.string.localizable.transactionTypeFinishDeal()
         case .unwrapAllSOL: return R.string.localizable.transactionTypeUnwrapWsol()
+        case .transfer: return R.string.localizable.transactionTypeTransfer()
         }
     }
 }

@@ -34,6 +34,8 @@ public enum ServicePath {
     case signWrap
     case unwrap
     case signUnwrap
+    case transfer
+    case transferSign
     case referral
     case createPromocode
     case applyPromocode
@@ -54,6 +56,10 @@ public enum ServicePath {
             return "/tx/unwrap-all"
         case .signUnwrap:
             return "/tx/unwrap-all/sign"
+        case .transfer:
+            return "tx/transfer"
+        case .transferSign:
+            return "tx/transfer/sign"
         case .transactions:
             return "/tx"
         case .transaction(let id):

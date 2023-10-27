@@ -172,6 +172,11 @@
 		FE1FB9112A9E24CB00203F38 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1FB9102A9E24CB00203F38 /* OnboardingService.swift */; };
 		FE2B96C92AB9EA5D00971114 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FE2B96C82AB9EA5D00971114 /* FirebaseMessaging */; };
 		FE48B0F52ADFB33800885610 /* TruncableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE48B0F42ADFB33800885610 /* TruncableText.swift */; };
+		FE48B0F82AE15F8800885610 /* SendTokensView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE48B0F72AE15F8800885610 /* SendTokensView.swift */; };
+		FE48B0FA2AE1602600885610 /* SendTokensViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE48B0F92AE1602600885610 /* SendTokensViewModel.swift */; };
+		FE48B0FC2AE1700B00885610 /* SelectRecipientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE48B0FB2AE1700B00885610 /* SelectRecipientView.swift */; };
+		FE48B0FE2AE1767700885610 /* SelectAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE48B0FD2AE1767700885610 /* SelectAmountView.swift */; };
+		FE48B1002AE178BB00885610 /* AmountFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE48B0FF2AE178BB00885610 /* AmountFieldView.swift */; };
 		FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */; };
 		FE52687A2AC58D4200E29003 /* BuyTokensViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5268792AC58D4200E29003 /* BuyTokensViewModel.swift */; };
 		FE54313D29D36D8800EEF906 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE54313C29D36D8800EEF906 /* AccountsView.swift */; };
@@ -375,6 +380,11 @@
 		FE1FB90E2A9E072F00203F38 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		FE1FB9102A9E24CB00203F38 /* OnboardingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingService.swift; sourceTree = "<group>"; };
 		FE48B0F42ADFB33800885610 /* TruncableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruncableText.swift; sourceTree = "<group>"; };
+		FE48B0F72AE15F8800885610 /* SendTokensView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTokensView.swift; sourceTree = "<group>"; };
+		FE48B0F92AE1602600885610 /* SendTokensViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTokensViewModel.swift; sourceTree = "<group>"; };
+		FE48B0FB2AE1700B00885610 /* SelectRecipientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRecipientView.swift; sourceTree = "<group>"; };
+		FE48B0FD2AE1767700885610 /* SelectAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAmountView.swift; sourceTree = "<group>"; };
+		FE48B0FF2AE178BB00885610 /* AmountFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountFieldView.swift; sourceTree = "<group>"; };
 		FE52628529AD2BF3004E0BCD /* ServerSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectView.swift; sourceTree = "<group>"; };
 		FE5268792AC58D4200E29003 /* BuyTokensViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyTokensViewModel.swift; sourceTree = "<group>"; };
 		FE54313C29D36D8800EEF906 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
@@ -562,6 +572,7 @@
 				FE10B56A2A966F3C00AA5EA8 /* Onboarding */,
 				6D0DA7632930A7040024EF30 /* QRCodeScanner */,
 				FECDCC5E2A8B409A00047A95 /* Referral */,
+				FE48B0F62AE14CA300885610 /* SendTokens */,
 				FE52628729AD3360004E0BCD /* ServerSelect */,
 				6D2E0AF728AF342D002BA683 /* TextEditorView */,
 				6D4C860D2AC010BF00B9CEAE /* TokenSelect */,
@@ -918,8 +929,20 @@
 			children = (
 				FE1245722AC589B0009FB048 /* BuyTokensView.swift */,
 				FE5268792AC58D4200E29003 /* BuyTokensViewModel.swift */,
+				FE48B0FF2AE178BB00885610 /* AmountFieldView.swift */,
 			);
 			path = BuyTokens;
+			sourceTree = "<group>";
+		};
+		FE48B0F62AE14CA300885610 /* SendTokens */ = {
+			isa = PBXGroup;
+			children = (
+				FE48B0F72AE15F8800885610 /* SendTokensView.swift */,
+				FE48B0F92AE1602600885610 /* SendTokensViewModel.swift */,
+				FE48B0FB2AE1700B00885610 /* SelectRecipientView.swift */,
+				FE48B0FD2AE1767700885610 /* SelectAmountView.swift */,
+			);
+			path = SendTokens;
 			sourceTree = "<group>";
 		};
 		FE52628729AD3360004E0BCD /* ServerSelect */ = {
@@ -1181,6 +1204,7 @@
 				6D320EB32992275A00B56758 /* RootSheet.swift in Sources */,
 				6D2E0AF928AF3473002BA683 /* TextEditorViewModel.swift in Sources */,
 				6D74735E2962E18C00A5F6E7 /* TransactionSignView.swift in Sources */,
+				FE48B1002AE178BB00885610 /* AmountFieldView.swift in Sources */,
 				FE10B56E2A96715200AA5EA8 /* OnboardingPageView.swift in Sources */,
 				6D3AA486292D3A2500596061 /* Data+Ex.swift in Sources */,
 				6D530DBE28E2AD82006F52C6 /* CreateDealViewModel.swift in Sources */,
@@ -1259,12 +1283,15 @@
 				6DAA5E802898D33300BA1965 /* AppConfig.swift in Sources */,
 				6D75F2F0288EA9C70092D182 /* EnterView.swift in Sources */,
 				FECDCC602A8B415F00047A95 /* ReferralView.swift in Sources */,
+				FE48B0FE2AE1767700885610 /* SelectAmountView.swift in Sources */,
 				6D6EE38D289E25FF00635E60 /* UploadFileView.swift in Sources */,
 				6D4D99F32A5601A1007668B0 /* IdentifierService.swift in Sources */,
 				FE52628629AD2BF3004E0BCD /* ServerSelectView.swift in Sources */,
 				6DC558652A76633C0054F2FC /* TopUpView.swift in Sources */,
 				6DAA5E7B2898C25500BA1965 /* RandomStrings.swift in Sources */,
 				6DC2C02728C99C0A005C9EBE /* ServiceFactory.swift in Sources */,
+				FE48B0FC2AE1700B00885610 /* SelectRecipientView.swift in Sources */,
+				FE48B0F82AE15F8800885610 /* SendTokensView.swift in Sources */,
 				6DD28E272A1C9C6A0093E553 /* Date+Formatter.swift in Sources */,
 				6D6EE393289E770500635E60 /* MimeType.swift in Sources */,
 				6DBCA45E288F1EAF00F918B6 /* AccountStorage.swift in Sources */,
@@ -1288,6 +1315,7 @@
 				6D530DBC28E23780006F52C6 /* CreateDealView.swift in Sources */,
 				6DF9CBF729F95726004B95F4 /* AccountsViewModel.swift in Sources */,
 				6DD314022AE412960033D37A /* UndoProvider.swift in Sources */,
+				FE48B0FA2AE1602600885610 /* SendTokensViewModel.swift in Sources */,
 				6D755298289777210069935B /* MainViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -58,7 +58,8 @@ struct MainView: View {
     @State private var showChangelog: Bool = false
     @State private var showBuyCtus: Bool = false
     @State private var showDealFilter: Bool = false
-    
+    @State private var showSendTokens: Bool = false
+
     var body: some View {
 
         JGProgressHUDPresenter(userInteractionOnHUD: true) {
@@ -70,13 +71,17 @@ struct MainView: View {
                             topUpAction: {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.mainTopupTap)
                                 topUpState = .medium
-                                ImpactGenerator.soft()
+                                ImpactGenerator.light()
                             }, infoAction: {
                                 sheetType = .webView(AppConfig.ctusInfoURL)
                             }, swapAction: { fromAmount, toAmount in
+                                ImpactGenerator.light()
                                 sheetType = .wrap(from: fromAmount, to: toAmount)
                             }) {
                                 sheetType = .tokenSettings
+                            } sendAction: {
+                                ImpactGenerator.light()
+                                showSendTokens.toggle()
                             }
 
                         if viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
@@ -197,7 +202,7 @@ struct MainView: View {
                         }
                     }
                 }.refreshableCompat(loadingViewBackgroundColor: .clear, onRefresh: { done in
-                    viewModel.trigger(.load(dealsType)) {
+                    viewModel.trigger(.load(dealsType, silent: true)) {
                         done()
                     }
                 }, progress: { state in
@@ -297,21 +302,24 @@ struct MainView: View {
                 .sheet(item: $sheetType, content: { type in
                     switch type {
                     case .tokenSettings:
-                        TokenSelectView(viewModel: .init(TokenSelectViewModel(
-                            allowHolderMode: true,
-                            mode: .many,
-                            tier: viewModel.state.balance?.tier ?? .basic,
-                            selectedTokens: viewModel.state.selectedTokens,
-                            disableUnselectTokens: viewModel.state.disableUnselectTokens,
-                            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())
-                        )) { result in
-                            switch result {
-                            case .many(let tokens):
-                                viewModel.trigger(.saveTokenSettings(tokens))
-                            case .none, .single:
-                                break
+                        NavigationView {
+                            TokenSelectView(viewModel: .init(TokenSelectViewModel(
+                                allowHolderMode: true,
+                                mode: .many,
+                                tier: viewModel.state.balance?.tier ?? .basic,
+                                selectedTokens: viewModel.state.selectedTokens,
+                                disableUnselectTokens: viewModel.state.disableUnselectTokens, 
+                                balance: viewModel.state.balance,
+                                resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())
+                            )) { result in
+                                switch result {
+                                case .many(let tokens):
+                                    viewModel.trigger(.saveTokenSettings(tokens))
+                                case .none, .single, .close:
+                                    break
+                                }
+                                sheetType = nil
                             }
-                            sheetType = nil
                         }
                     case .topUp(let url):
                         NavigationView {
@@ -407,6 +415,15 @@ struct MainView: View {
                             checkoutService: service)
                         )
                     )
+                }
+                .fullScreenCover(isPresented: $showSendTokens, onDismiss: {
+                    viewModel.trigger(.load(dealsType, silent: true))
+                }) {
+                    SendTokensView(viewModel: .init(SendTokensViewModel(
+                        state: .init(account: viewModel.account, currency: viewModel.state.currency, balance: viewModel.state.balance),
+                        accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
+                        transactionsService: try? APIServiceFactory.shared.makeTransactionsService()
+                    )))
                 }
                 .navigationDestination(for: $selectedDeal) { deal in
                     dealView(deal: deal)

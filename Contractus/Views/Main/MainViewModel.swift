@@ -13,7 +13,7 @@ import Combine
 enum MainInput {
     case updateAccount
     case preload
-    case load(MainState.DealType)
+    case load(MainState.DealType, silent: Bool = false)
     case loadDeals(MainState.DealType)
     case executeScanResult(ScanResult)
     case saveTokenSettings([ContractusAPI.Token])
@@ -32,6 +32,7 @@ struct MainState {
     }
     var pushDeal: Deal?
     var account: CommonAccount
+    var currency: Currency = .defaultCurrency
     var statistics: [ContractusAPI.AccountStatistic] = []
     var balance: Balance?
     var deals: [ContractusAPI.Deal] = []
@@ -95,8 +96,11 @@ final class MainViewModel: ViewModel {
             Task {
                 try? await loadAccountInfo()
             }
-        case .load(let type):
-            state.dealsState = .loading
+        case .load(let type, let silent):
+            if !silent {
+                state.dealsState = .loading
+            }
+
             guard dealsAPIService != nil else {
                 state.dealsState = .loaded
                 return

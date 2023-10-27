@@ -5,16 +5,22 @@ import Combine
 extension TokenSelectViewModel {
 
     enum Mode {
-        case single, many
+        case single, many, select
     }
-
+    
     struct State {
+        enum State: Equatable  {
+            case none, loading, loaded
+        }
+
         let allowHolderMode: Bool
         let mode: Mode
         let tier: Balance.Tier
         var tokens: [ContractusAPI.Token] = []
         var selectedTokens: [ContractusAPI.Token]
         var disableUnselectTokens: [ContractusAPI.Token] = []
+        var balances: [String: String] = [:]
+        var state: State = .none
 
         func isSelected(_ token: ContractusAPI.Token) -> Bool {
             selectedTokens.contains(token)
@@ -36,6 +42,7 @@ final class TokenSelectViewModel: ViewModel {
 
     private var resourcesAPIService: ContractusAPI.ResourcesService?
     private var tokens: [ContractusAPI.Token] = []
+    private var balance: Balance?
 
     init(
         allowHolderMode: Bool,
@@ -43,6 +50,7 @@ final class TokenSelectViewModel: ViewModel {
         tier: Balance.Tier,
         selectedTokens: [ContractusAPI.Token],
         disableUnselectTokens: [ContractusAPI.Token],
+        balance: Balance?,
         resourcesAPIService: ContractusAPI.ResourcesService?
     ) {
 
@@ -52,6 +60,8 @@ final class TokenSelectViewModel: ViewModel {
             selectedTokens: selectedTokens,
             disableUnselectTokens: disableUnselectTokens)
 
+        self.balance = balance
+        
         self.resourcesAPIService = resourcesAPIService
     }
 
@@ -59,9 +69,21 @@ final class TokenSelectViewModel: ViewModel {
 
         switch input {
         case .load:
-            Task { @MainActor in
-                self.tokens = (try? await loadTokens()) ?? []
-                self.state.tokens = self.tokens
+            if state.state == .none {
+                state.state = .loading
+            }
+            Task {
+                let tokens = (try? await loadTokens()) ?? []
+                let balances = Dictionary(uniqueKeysWithValues: (self.balance?.tokens ?? []).filter{ $0.amount.value > 0 }.map{ ($0.amount.token.code, $0.amount.valueFormattedWithCode) } )
+
+                await MainActor.run { [tokens, balances] in
+                    var state = self.state
+                    state.balances = balances
+                    state.tokens = tokens
+                    state.state = .loaded
+                    self.tokens = tokens
+                    self.state = state
+                }
             }
         case .search(let text):
             if text.isEmpty {
@@ -76,7 +98,7 @@ final class TokenSelectViewModel: ViewModel {
             switch state.mode {
             case .many:
                 self.state.selectedTokens.append(token)
-            case .single:
+            case .single, .select:
                 self.state.selectedTokens = [token]
             }
         case .deselect(let token):

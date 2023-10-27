@@ -34,7 +34,7 @@ struct FieldCopyButton: View {
     var body: some View {
         Button {
             copiedNotification = true
-            ImpactGenerator.soft()
+            ImpactGenerator.light()
             UIPasteboard.general.string = content
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
                 copiedNotification = false
@@ -468,6 +468,8 @@ struct TransactionSignView: View {
             return R.string.localizable.transactionSignSubtitleUnwrap()
         case .wrapSOL:
             return R.string.localizable.transactionSignSubtitleWrap()
+        case .transfer:
+            return R.string.localizable.transactionSignSubtitleTransfer()
         case .none:
             return ""
         }
