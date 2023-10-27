@@ -37,7 +37,6 @@
 		6D4FAB4F293B084800076743 /* TextEditor+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4FAB4E293B084800076743 /* TextEditor+Ex.swift */; };
 		6D4FAB51293B384D00076743 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4FAB50293B384D00076743 /* KeyboardResponder.swift */; };
 		6D4FAB53293CAF0A00076743 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4FAB52293CAF0A00076743 /* UIConstants.swift */; };
-		6D530DBA28E2302E006F52C6 /* SwiftUIPullToRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 6D530DB928E2302E006F52C6 /* SwiftUIPullToRefresh */; };
 		6D530DBC28E23780006F52C6 /* CreateDealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D530DBB28E23780006F52C6 /* CreateDealView.swift */; };
 		6D530DBE28E2AD82006F52C6 /* CreateDealViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D530DBD28E2AD82006F52C6 /* CreateDealViewModel.swift */; };
 		6D5900FA2892340400EC318E /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5900F92892340400EC318E /* R.generated.swift */; };
@@ -414,7 +413,6 @@
 				6DC5586E2A7A18A60054F2FC /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				6D8EFD8A28D898B50064F5DA /* ShamirSecretSharing in Frameworks */,
 				6D755290289662250069935B /* Rswift in Frameworks */,
-				6D530DBA28E2302E006F52C6 /* SwiftUIPullToRefresh in Frameworks */,
 				6D0DA7622930A6960024EF30 /* CodeScanner in Frameworks */,
 				6DB5F8B6294D762300AE612A /* JGProgressHUD in Frameworks */,
 				6D6EE39E289FBEBA00635E60 /* QRCode in Frameworks */,
@@ -990,7 +988,6 @@
 				6DB547F828B9E87C003D2A8A /* ResizableSheet */,
 				6D8EFD8928D898B50064F5DA /* ShamirSecretSharing */,
 				6D8EFD9228D8EB5B0064F5DA /* SolanaSwift */,
-				6D530DB928E2302E006F52C6 /* SwiftUIPullToRefresh */,
 				6D0DA7612930A6960024EF30 /* CodeScanner */,
 				6DB5F8B5294D762300AE612A /* JGProgressHUD */,
 				FE5F427329AF22FA00A1E506 /* netfox */,
@@ -1814,11 +1811,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6D0DA7602930A6960024EF30 /* XCRemoteSwiftPackageReference "CodeScanner" */;
 			productName = CodeScanner;
-		};
-		6D530DB928E2302E006F52C6 /* SwiftUIPullToRefresh */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6D530DB828E2302E006F52C6 /* XCRemoteSwiftPackageReference "swiftui-pull-to-refresh" */;
-			productName = SwiftUIPullToRefresh;
 		};
 		6D6EE39D289FBEBA00635E60 /* QRCode */ = {
 			isa = XCSwiftPackageProductDependency;

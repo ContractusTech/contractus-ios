@@ -11,7 +11,6 @@ import ContractusAPI
 import ResizableSheet
 import SafariServices
 import BigInt
-import SwiftUIPullToRefresh
 import Shimmer
 
 fileprivate enum Constants {
@@ -99,13 +98,10 @@ struct DealView: View {
 
     var body: some View {
         ScrollView {
-
-
             // MARK: - Loading view
             if viewModel.currentMainActions.isEmpty {
                 LoadingDealView()
             } else {
-
                 VStack {
                     // MARK: - No secret key
                     if viewModel.state.state == .none && !viewModel.state.canEdit {
@@ -864,7 +860,7 @@ struct DealView: View {
                             VStack {
                                 HStack {
                                     Text(R.string.localizable.dealTextFiles())
-                                            .font(.title3.weight(.regular))
+                                        .font(.title3.weight(.regular))
                                     Spacer()
                                     if viewModel.state.canSendResult {
                                         CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false) {
@@ -920,13 +916,12 @@ struct DealView: View {
                 }
             }
         }
-        .refreshableCompat(loadingViewBackgroundColor: .clear, onRefresh: { done in
-            viewModel.trigger(.update(nil)) {
-                done()
-            }
-        }, progress: { state in
-            RefreshActivityIndicator(isAnimating: state == .loading) {
-                $0.hidesWhenStopped = false
+        .shimmering(active: viewModel.currentMainActions.isEmpty)
+        .refreshable(action: {
+            await withCheckedContinuation { continuation in
+                viewModel.trigger(.update(nil)) {
+                    continuation.resume()
+                }
             }
         })
         .resizableSheet($metaUploaderState, id: "metaUploader", builder: { builder in
@@ -1772,7 +1767,6 @@ struct LoadingDealView: View {
                             }
                         }
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
-                        .shimmering()
 
                         Divider().foregroundColor(R.color.baseSeparator.color).padding(EdgeInsets(top: 0, leading: -20, bottom: 0, trailing: -20))
                         
@@ -1793,7 +1787,6 @@ struct LoadingDealView: View {
                             Spacer()
                         }
                         .padding(EdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0))
-                        .shimmering()
                     }
                     .padding(14)
                     .background(R.color.secondaryBackground.color)
@@ -1816,7 +1809,6 @@ struct LoadingDealView: View {
                             Spacer()
                         }
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 6, trailing: 0))
-                        .shimmering()
 
                         Text(R.string.localizable.dealHintAboutExecutor())
                             .font(.footnote)
