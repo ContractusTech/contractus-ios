@@ -1112,7 +1112,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 428 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 430 localization keys.
     struct localizable {
       /// en translation: %@ was transferred to the account of the checker and the balance was returned to the client.
       ///
@@ -1718,6 +1718,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextEditorModeEditor = Rswift.StringResource(key: "deal.textEditor.mode.editor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Edit in deal
+      ///
+      /// Locales: en
+      static let aiGenContinue = Rswift.StringResource(key: "aiGen.continue", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Email
       ///
       /// Locales: en
@@ -2018,6 +2022,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealBondShortNobody = Rswift.StringResource(key: "newDeal.bond.short.nobody", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Not available
+      ///
+      /// Locales: en
+      static let aiGenAlertTitle = Rswift.StringResource(key: "aiGen.alert.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Not enough %@ CTUS for Holder Mode
       ///
       /// Locales: en
@@ -2118,10 +2126,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonPaste = Rswift.StringResource(key: "common.paste", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Paste in deal
-      ///
-      /// Locales: en
-      static let aiGenPaste = Rswift.StringResource(key: "aiGen.paste", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Pay%@
       ///
       /// Locales: en
@@ -2586,6 +2590,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealInformationAboutSign = Rswift.StringResource(key: "deal.information.about-sign", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: To use AI Gen you must have holder mode.
+      ///
+      /// Locales: en
+      static let aiGenAlertMessage = Rswift.StringResource(key: "aiGen.alert.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Token
       ///
       /// Locales: en
@@ -5114,6 +5122,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.textEditor.mode.editor", bundle: bundle, comment: "")
       }
 
+      /// en translation: Edit in deal
+      ///
+      /// Locales: en
+      static func aiGenContinue(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aiGen.continue", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aiGen.continue"
+        }
+
+        return NSLocalizedString("aiGen.continue", bundle: bundle, comment: "")
+      }
+
       /// en translation: Email
       ///
       /// Locales: en
@@ -6245,6 +6268,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("newDeal.bond.short.nobody", bundle: bundle, comment: "")
       }
 
+      /// en translation: Not available
+      ///
+      /// Locales: en
+      static func aiGenAlertTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aiGen.alert.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aiGen.alert.title"
+        }
+
+        return NSLocalizedString("aiGen.alert.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Not enough %@ CTUS for Holder Mode
       ///
       /// Locales: en
@@ -6620,21 +6658,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.paste", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Paste in deal
-      ///
-      /// Locales: en
-      static func aiGenPaste(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("aiGen.paste", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "aiGen.paste"
-        }
-
-        return NSLocalizedString("aiGen.paste", bundle: bundle, comment: "")
       }
 
       /// en translation: Pay%@
@@ -8383,6 +8406,21 @@ struct R: Rswift.Validatable {
 
         let format = NSLocalizedString("deal.information.about-sign", bundle: bundle, comment: "")
         return String(format: format, locale: locale, value1)
+      }
+
+      /// en translation: To use AI Gen you must have holder mode.
+      ///
+      /// Locales: en
+      static func aiGenAlertMessage(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aiGen.alert.message", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aiGen.alert.message"
+        }
+
+        return NSLocalizedString("aiGen.alert.message", bundle: bundle, comment: "")
       }
 
       /// en translation: Token

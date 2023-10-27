@@ -20,7 +20,7 @@ struct TextEditorView: View {
         var id: String {
             return "\(self)"
         }
-        case error(String), needConfirmForceUpdate, confirmClose
+        case error(String), needConfirmForceUpdate, confirmClose, needHolderMode
     }
     
     enum Mode {
@@ -185,6 +185,11 @@ struct TextEditorView: View {
                     message: Text(message), dismissButton: Alert.Button.default(Text(R.string.localizable.commonOk()), action: {
                         viewModel.trigger(.dismissError)
                     }))
+            case .needHolderMode:
+                return Alert(
+                    title: Text(R.string.localizable.aiGenAlertTitle()),
+                    message: Text(R.string.localizable.aiGenAlertMessage()),
+                    dismissButton: Alert.Button.default(Text(R.string.localizable.commonOk())))
             case .needConfirmForceUpdate:
                 return Alert(
                     title: Text(R.string.localizable.commonAttention()),
@@ -263,22 +268,36 @@ struct TextEditorView: View {
                 .disabled((undoManager?.canRedo ?? false) ? false : true)
                 .opacity((undoManager?.canRedo ?? false) ? 1.0 : 0.3)
                 Spacer()
-
-                NavigationLink {
-                    TextGenView { genText in
-                        self.content = genText
+                if viewModel.state.tier == .holder {
+                    NavigationLink {
+                        TextGenView { genText in
+                            self.content = genText
+                        }
+                    } label: {
+                        Text(R.string.localizable.aiGenTitle())
+                            .font(.footnote.weight(.semibold))
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 6)
+                            .background(R.color.buttonBackgroundPrimary.color)
+                            .foregroundColor(R.color.buttonTextPrimary.color)
+                            .cornerRadius(16)
                     }
-                } label: {
-                    Text(R.string.localizable.aiGenTitle())
-                        .font(.footnote)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 4)
-                        .background(R.color.buttonBackgroundPrimary.color)
-                        .foregroundColor(R.color.buttonTextPrimary.color)
-                        .cornerRadius(15)
+                } else {
+                    Button {
+                        alertType = .needHolderMode
+                    } label: {
+                        Text(R.string.localizable.aiGenTitle())
+                            .font(.footnote.weight(.semibold))
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 6)
+                            .background(R.color.buttonBackgroundPrimary.color)
+                            .foregroundColor(R.color.buttonTextPrimary.color)
+                            .cornerRadius(16)
+                    }
+
                 }
             }
-            .padding(EdgeInsets(top: 0, leading: 6, bottom: 2, trailing: 8))
+            .padding(EdgeInsets(top: 0, leading: 6, bottom: 2, trailing: 6))
         }
     }
 }
@@ -288,7 +307,15 @@ struct TextViewerView_Previews: PreviewProvider {
         TextEditorView(
             allowEdit: true,
             mode: .edit,
-            viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(dealId: Mock.deal.id, content: Mock.deal.meta ?? .init(files: []), contentType: .metadata, secretKey: Mock.account.privateKey, dealService: nil))
+            viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(dealId: Mock.deal.id, tier: .basic, content: Mock.deal.meta ?? .init(files: []), contentType: .metadata, secretKey: Mock.account.privateKey, dealService: nil))
+        ) { result in
+
+        }
+
+        TextEditorView(
+            allowEdit: true,
+            mode: .edit,
+            viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(dealId: Mock.deal.id, tier: .holder, content: Mock.deal.meta ?? .init(files: []), contentType: .metadata, secretKey: Mock.account.privateKey, dealService: nil))
         ) { result in
 
         }

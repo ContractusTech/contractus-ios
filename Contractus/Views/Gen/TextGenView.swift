@@ -49,11 +49,11 @@ struct TextGenView: View {
                         .stroke(R.color.textFieldBorder.color, lineWidth: 1))
 
                 HStack {
-
-                    CButton(title: R.string.localizable.aiGenPrompts(), icon: (showExamples ? Constants.arrowUp : Constants.arrowDown), style: .clear, size: .default, isLoading: false) {
-                        showExamples.toggle()
+                    if !viewModel.state.prompts.isEmpty {
+                        CButton(title: R.string.localizable.aiGenPrompts(), icon: (showExamples ? Constants.arrowUp : Constants.arrowDown), style: .clear, size: .default, isLoading: false) {
+                            showExamples.toggle()
+                        }
                     }
-                    
                     Spacer()
                     CButton(title: R.string.localizable.aiGenGenerate(), style: .primary, size: .default, isLoading: viewModel.state.loading) {
 
@@ -74,10 +74,7 @@ struct TextGenView: View {
                     }
                 }
             }
-
             Divider()
-
-
             if !viewModel.state.generatedText.isEmpty {
                 VStack {
                     HStack {
@@ -85,7 +82,7 @@ struct TextGenView: View {
                             .font(.title2.weight(.semibold))
                         Spacer()
 
-                        CButton(title: R.string.localizable.aiGenPaste(), icon: Constants.paste, style: .secondary, size: .default, isLoading: false) {
+                        CButton(title: R.string.localizable.aiGenContinue(), icon: Constants.paste, style: .secondary, size: .default, isLoading: false) {
                             callback(viewModel.state.generatedText)
                             presentationMode.wrappedValue.dismiss()
                         }
@@ -127,7 +124,6 @@ struct TextGenView: View {
         .padding(12)
         .background {
             ZStack {
-                RoundedRectangle(cornerRadius: 20).fill(R.color.secondaryText.color)
                 RoundedRectangle(cornerRadius: 20)
                     .stroke()
                     .fill(R.color.baseSeparator.color)

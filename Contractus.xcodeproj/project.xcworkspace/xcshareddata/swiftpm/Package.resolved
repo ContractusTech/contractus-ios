@@ -285,8 +285,8 @@
         "repositoryURL": "https://github.com/globulus/swiftui-pull-to-refresh",
         "state": {
           "branch": null,
-          "revision": "82937f911a588f892acbf7dc4129c38d09012501",
-          "version": "1.1.8"
+          "revision": "1852a4eb7e7a12a768c64b25b1bd905993ced4eb",
+          "version": "1.1.9"
         }
       },
       {
@@ -294,8 +294,8 @@
         "repositoryURL": "https://github.com/markiv/SwiftUI-Shimmer",
         "state": {
           "branch": null,
-          "revision": "17b66b0e7d94d2d3f220bbcb021b5026436f06c7",
-          "version": "1.3.0"
+          "revision": "1f3a620e4abe890d00008cb2af7023d810b433a7",
+          "version": "1.4.0"
         }
       },
       {

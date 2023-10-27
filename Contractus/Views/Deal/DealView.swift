@@ -963,6 +963,7 @@ struct DealView: View {
                     mode: type == .editTextDealDetails ? .edit : .view,
                     viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
                         dealId: viewModel.state.deal.id,
+                        tier: viewModel.state.tier,
                         content: viewModel.state.deal.meta ?? .init(files: []),
                         contentType: .metadata,
                         secretKey: viewModel.state.decryptedKey,
@@ -983,6 +984,7 @@ struct DealView: View {
                     mode: type == .editTextDealResult ? .edit : .view,
                     viewModel: AnyViewModel<TextEditorState, TextEditorInput>(TextEditorViewModel(
                         dealId: viewModel.state.deal.id,
+                        tier: viewModel.state.tier,
                         content: viewModel.state.deal.result ?? .init(files: []),
                         contentType: .result,
                         secretKey: viewModel.state.decryptedKey,

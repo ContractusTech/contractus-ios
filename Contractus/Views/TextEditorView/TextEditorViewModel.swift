@@ -26,6 +26,7 @@ struct TextEditorState {
         case decrypting, updating, none, decrypted(String), needConfirmForce, success
     }
     let dealId: String
+    let tier: Balance.Tier
     var content: DealMetadata
 
     var isDecrypted: Bool = false
@@ -44,9 +45,16 @@ final class TextEditorViewModel: ViewModel {
 
     private let secretKey: Data
 
-    internal init(dealId: String, content: DealMetadata, contentType: DealsService.ContentType, secretKey: Data, dealService: ContractusAPI.DealsService?) {
+    internal init(
+        dealId: String, 
+        tier: Balance.Tier,
+        content: DealMetadata,
+        contentType: DealsService.ContentType,
+        secretKey: Data,
+        dealService: ContractusAPI.DealsService?
+    ) {
         self.dealService = dealService
-        self.state = TextEditorState(dealId: dealId, content: content, contentType: contentType)
+        self.state = TextEditorState(dealId: dealId, tier: tier, content: content, contentType: contentType)
         self.secretKey = secretKey
         self.startEditContent = Date()
     }
