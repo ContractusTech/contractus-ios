@@ -470,7 +470,7 @@
 "aiGen.generate" = "Generate";
 "aiGen.use-it" = "Use it";
 "aiGen.placeholder" = "Create contract text ...";
-"aiGen.continue" = "Edit in deal";
+"aiGen.continue" = "Paste in deal";
 "aiGen.result.title" = "Result";
 "aiGen.alert.title" = "Not available";
 "aiGen.alert.message" = "To use AI Gen you must have holder mode.";

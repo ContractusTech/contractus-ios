@@ -10,8 +10,13 @@ final class TextGenViewModel: ViewModel {
     }
 
     struct State {
+
+        enum State {
+            case none, loading, loaded
+        }
+
         var prompts: [AIPrompt] = []
-        var loading: Bool = false
+        var state: State = .none
         var generatedText: String = ""
     }
 
@@ -31,12 +36,12 @@ final class TextGenViewModel: ViewModel {
     func trigger(_ input: Input, after: AfterTrigger?) {
         switch input {
         case .generate(let text):
-            state.loading = true
+            state.state = .loading
             Task { @MainActor in
 
                 let text = (try? await generate(text: text))?.generated ?? ""
                 state.generatedText = text
-                state.loading = false
+                state.state = .loaded
             }
         }
     }

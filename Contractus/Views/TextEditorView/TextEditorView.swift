@@ -40,7 +40,7 @@ struct TextEditorView: View {
 
     @State var content: String = ""
     @State private var alertType: AlertType?
-    @State private var undoManager: UndoManager?
+    @State var undoManager: UndoManager?
     @FocusState var isInputActive: Bool
 
     var body: some View {
@@ -203,7 +203,6 @@ struct TextEditorView: View {
             }
 
         })
-
         .onChange(of: viewModel.state.state, perform: { newState in
             switch newState {
             case .decrypted(let content):

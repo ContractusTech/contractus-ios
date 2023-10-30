@@ -1735,10 +1735,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextEditorModeEditor = Rswift.StringResource(key: "deal.textEditor.mode.editor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Edit in deal
-      ///
-      /// Locales: en
-      static let aiGenContinue = Rswift.StringResource(key: "aiGen.continue", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Email
       ///
       /// Locales: en
@@ -2151,6 +2147,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonPaste = Rswift.StringResource(key: "common.paste", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Paste in deal
+      ///
+      /// Locales: en
+      static let aiGenContinue = Rswift.StringResource(key: "aiGen.continue", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Pay%@
       ///
       /// Locales: en
@@ -5189,21 +5189,6 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.textEditor.mode.editor", bundle: bundle, comment: "")
       }
 
-      /// en translation: Edit in deal
-      ///
-      /// Locales: en
-      static func aiGenContinue(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("aiGen.continue", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "aiGen.continue"
-        }
-
-        return NSLocalizedString("aiGen.continue", bundle: bundle, comment: "")
-      }
-
       /// en translation: Email
       ///
       /// Locales: en
@@ -6755,6 +6740,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.paste", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Paste in deal
+      ///
+      /// Locales: en
+      static func aiGenContinue(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("aiGen.continue", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "aiGen.continue"
+        }
+
+        return NSLocalizedString("aiGen.continue", bundle: bundle, comment: "")
       }
 
       /// en translation: Pay%@

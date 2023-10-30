@@ -1082,7 +1082,6 @@
 				6DB547F728B9E87C003D2A8A /* XCRemoteSwiftPackageReference "ResizableSheet" */,
 				6DDA818128C0D3E10022E005 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				6D8EFD9128D8EB5B0064F5DA /* XCRemoteSwiftPackageReference "solana-swift" */,
-				6D530DB828E2302E006F52C6 /* XCRemoteSwiftPackageReference "swiftui-pull-to-refresh" */,
 				6D0DA7602930A6960024EF30 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				6DB5F8B4294D762300AE612A /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				FE5F427229AF22FA00A1E506 /* XCRemoteSwiftPackageReference "netfox" */,
@@ -1682,14 +1681,6 @@
 			requirement = {
 				kind = exactVersion;
 				version = 2.2.1;
-			};
-		};
-		6D530DB828E2302E006F52C6 /* XCRemoteSwiftPackageReference "swiftui-pull-to-refresh" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/globulus/swiftui-pull-to-refresh";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
 			};
 		};
 		6D6EE39C289FBEBA00635E60 /* XCRemoteSwiftPackageReference "QRCode" */ = {
