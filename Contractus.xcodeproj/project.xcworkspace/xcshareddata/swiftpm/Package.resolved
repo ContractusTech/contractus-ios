@@ -281,15 +281,6 @@
         }
       },
       {
-        "package": "SwiftUIPullToRefresh",
-        "repositoryURL": "https://github.com/globulus/swiftui-pull-to-refresh",
-        "state": {
-          "branch": null,
-          "revision": "1852a4eb7e7a12a768c64b25b1bd905993ced4eb",
-          "version": "1.1.9"
-        }
-      },
-      {
         "package": "SwiftUI-Shimmer",
         "repositoryURL": "https://github.com/markiv/SwiftUI-Shimmer",
         "state": {

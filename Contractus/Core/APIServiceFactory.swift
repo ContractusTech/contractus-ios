@@ -60,6 +60,10 @@ final class APIServiceFactory {
         return ContractusAPI.CheckoutService(client: ServiceClient.shared.client)
     }
 
+    func makeAIService() -> ContractusAPI.AIService {
+        return ContractusAPI.AIService(client: ServiceClient.shared.client)
+    }
+
     // MARK: - Private Methods
 
     private func checkAccount() throws {
