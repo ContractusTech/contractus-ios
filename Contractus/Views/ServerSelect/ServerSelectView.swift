@@ -104,7 +104,7 @@ struct ServerSelectView: View {
         .navigationTitle("Server")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            selectedItem = ConfigStorage.getServer(defaultServer: .developer())
+            selectedItem = AppConfig.serverType
         }
         .alert(isPresented: $confirmAlert) {
             Alert(
