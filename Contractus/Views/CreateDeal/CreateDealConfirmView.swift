@@ -16,6 +16,7 @@ fileprivate enum Constants {
 struct CreateDealConfirmItemView: View {
     var title: String
     var value: String
+    var showLock: Bool = true
 
     var body: some View {
         HStack(alignment: .center, spacing: 4) {
@@ -25,6 +26,7 @@ struct CreateDealConfirmItemView: View {
                 .foregroundColor(R.color.textBase.color)
                 .multilineTextAlignment(.leading)
             Constants.lockImage
+                .opacity(showLock ? 1 : 0)
             
             Spacer()
             
@@ -56,26 +58,36 @@ struct CreateDealConfirmView: View {
                     .multilineTextAlignment(.center)
                     .padding(.bottom, 26)
 
-               HStack(alignment: .center, spacing: 4) {
-                   Text(R.string.localizable.newDealConfirmDeadlineTitle())
-                       .font(.body)
-                       .fontWeight(.semibold)
-                       .foregroundColor(R.color.textBase.color)
-                       .multilineTextAlignment(.leading)
-                   Spacer()
+               VStack(spacing: 0) {
+                   if !viewModel.contractor.isEmpty {
+                       CreateDealConfirmItemView(
+                           title: viewModel.state.role == .client
+                           ? R.string.localizable.newDealExecutorAccount()
+                           : R.string.localizable.newDealClientAccount(),
+                           value: ContentMask.mask(from: viewModel.contractor),
+                           showLock: false
+                       )
+                       Divider()
+                   }
 
-                   Text(viewModel.state.deadline?.asDateFormatted() ?? "")
-                       .font(.body)
-                       .fontWeight(.medium)
-                       .foregroundColor(R.color.secondaryText.color)
-                       .multilineTextAlignment(.leading)
+                   if viewModel.checkType == .checker {
+                       CreateDealConfirmItemView(
+                           title: R.string.localizable.newDealCheckerAccount(),
+                           value: ContentMask.mask(from: viewModel.checker),
+                           showLock: false
+                       )
+                       Divider()
+                   }
+
+                   CreateDealConfirmItemView(
+                       title: R.string.localizable.newDealConfirmDeadlineTitle(),
+                       value: viewModel.state.deadline?.asDateFormatted() ?? "",
+                       showLock: false
+                   )
                }
-               .padding(.vertical, 20)
-               .padding(.horizontal, 16)
                .background(R.color.secondaryBackground.color)
                .cornerRadius(20)
                .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
-               .padding(.bottom, 6)
 
                VStack(spacing: 0) {
                    CreateDealConfirmItemView(
