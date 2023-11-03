@@ -95,11 +95,10 @@ struct DealRoleView: View {
 }
 
 struct CreateDealView: View {
-    enum AlertType: Identifiable {
-        var id: String { "\(self)" }
+    enum AlertType {
         case error(String)
     }
-    
+
     @Environment(\.presentationMode) var presentationMode
     
     @StateObject var viewModel: AnyViewModel<CreateDealState, CreateDealInput>
@@ -228,11 +227,61 @@ struct CreateDealView: View {
     }
     
     var title: String {
-        return "New deal"
+        return R.string.localizable.newDealTitle()
     }
     
     var stepTitle: String {
         return "Choose your role"
+    }
+}
+
+extension CreateDealView.AlertType: Identifiable {
+    var id: String {
+        switch self {
+        case .error:
+            return R.string.localizable.commonError()
+        }
+    }
+}
+
+extension PerformanceBondType {
+    var title: String {
+        switch self {
+        case .none:
+            return R.string.localizable.newDealBondNobody()
+        case .both:
+            return R.string.localizable.newDealBondBoth()
+        case .onlyClient:
+            return R.string.localizable.newDealBondClient()
+        case .onlyExecutor:
+            return R.string.localizable.newDealBondExecutor()
+        }
+    }
+    
+    var subtitle: String {
+        switch self {
+        case .none:
+            return R.string.localizable.newDealBondNobodyHint()
+        case .both:
+            return R.string.localizable.newDealBondBothHint()
+        case .onlyClient:
+            return R.string.localizable.newDealBondClientHint()
+        case .onlyExecutor:
+            return R.string.localizable.newDealBondExecutorHint()
+        }
+    }
+    
+    var shortTitle: String {
+        switch self {
+        case .none:
+            return R.string.localizable.newDealBondShortNobody()
+        case .both:
+            return R.string.localizable.newDealBondShortBoth()
+        case .onlyClient:
+            return R.string.localizable.newDealBondShortClient()
+        case .onlyExecutor:
+            return R.string.localizable.newDealBondShortExecutor()
+        }
     }
 }
 

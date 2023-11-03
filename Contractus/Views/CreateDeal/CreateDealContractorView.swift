@@ -61,7 +61,7 @@ struct CreateDealContractorView: View {
                 )
                 .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
 
-                Text("Must be account on the Solana blockchain")
+                Text(R.string.localizable.newDealSolanaAccount())
                     .font(.footnote)
                     .fontWeight(.medium)
                     .foregroundColor(R.color.secondaryText.color)
@@ -69,7 +69,7 @@ struct CreateDealContractorView: View {
 
                 Spacer()
                 
-                Text("You will be able to change after you create a deal")
+                Text(R.string.localizable.newDealAbleChangeHint())
                     .font(.footnote)
                     .fontWeight(.medium)
                     .foregroundColor(R.color.secondaryText.color)
@@ -126,19 +126,19 @@ struct CreateDealContractorView: View {
     }
     
     var title: String {
-        return "New deal"
+        return R.string.localizable.newDealTitle()
     }
 
     var stepTitle: String {
         return viewModel.state.role == .client
-        ? "Executor account"
-        : "Client account"
+        ? R.string.localizable.newDealExecutorAccount()
+        : R.string.localizable.newDealClientAccount()
     }
     
     var stepSubtitle: String {
         return viewModel.state.role == .client
-        ? "Provide a service or sell a product."
-        : "Order a service or buy a product"
+        ? R.string.localizable.newDealExecutorAccountSubtitle()
+        : R.string.localizable.newDealClientAccountSubtitle()
     }
 }
 

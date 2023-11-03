@@ -78,7 +78,7 @@ struct CreateDealAllowCheckerView: View {
 
                 Spacer()
                 
-                Text("You will not be able to add checker after\nyou create a deal")
+                Text(R.string.localizable.newDealNotAbleChangeHint())
                     .font(.footnote)
                     .foregroundColor(R.color.textWarn.color)
                     .multilineTextAlignment(.center)
@@ -127,15 +127,15 @@ struct CreateDealAllowCheckerView: View {
     }
     
     var title: String {
-        return "New deal"
+        return R.string.localizable.newDealTitle()
     }
 
     var stepTitle: String {
-        return "Do you have a third party to check the result of deal?"
+        return R.string.localizable.newDealCheckerTitle()
     }
     
     var stepSubtitle: String {
-        return "The checker decides whether to finalize the deal or cancel it"
+        return R.string.localizable.newDealCheckerSubtitle()
     }
 }
 

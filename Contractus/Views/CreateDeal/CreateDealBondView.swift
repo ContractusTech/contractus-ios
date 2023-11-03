@@ -110,7 +110,7 @@ struct CreateDealBondView: View {
 
                 Spacer()
                 
-                Text("You will be able to change after you create a deal")
+                Text(R.string.localizable.newDealAbleChangeHint())
                     .font(.footnote)
                     .fontWeight(.medium)
                     .foregroundColor(R.color.secondaryText.color)
@@ -163,15 +163,15 @@ struct CreateDealBondView: View {
     }
     
     var title: String {
-        return "New deal"
+        return R.string.localizable.newDealTitle()
     }
 
     var stepTitle: String {
-        return "Performance bond"
+        return R.string.localizable.newDealBondTitle()
     }
     
     var stepSubtitle: String {
-        return "If you want to protect against unilateral termination of the deal, you can put up collateral. "
+        return R.string.localizable.newDealBondSubtitle()
     }
 }
 

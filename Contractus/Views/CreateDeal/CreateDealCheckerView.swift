@@ -61,7 +61,7 @@ struct CreateDealCheckerView: View {
                 )
                 .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
 
-                Text("Must be account on the Solana blockchain")
+                Text(R.string.localizable.newDealSolanaAccount())
                     .font(.footnote)
                     .fontWeight(.medium)
                     .foregroundColor(R.color.secondaryText.color)
@@ -69,7 +69,7 @@ struct CreateDealCheckerView: View {
 
                 Spacer()
                 
-                Text("You will be able to change after you create a deal")
+                Text(R.string.localizable.newDealAbleChangeHint())
                     .font(.footnote)
                     .fontWeight(.medium)
                     .foregroundColor(R.color.secondaryText.color)
@@ -127,15 +127,15 @@ struct CreateDealCheckerView: View {
     }
     
     var title: String {
-        return "New deal"
+        return R.string.localizable.newDealTitle()
     }
 
     var stepTitle: String {
-        return "Checker account"
+        return R.string.localizable.newDealCheckerAccount()
     }
     
     var stepSubtitle: String {
-        return "The checker decides whether to finalize the deal or cancel it"
+        return R.string.localizable.newDealCheckerAccountSubtitle()
     }
 }
 

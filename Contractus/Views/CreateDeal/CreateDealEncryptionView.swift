@@ -50,7 +50,7 @@ struct CreateDealEncryptionView: View {
                                 
                 HStack {
                     Toggle(isOn: $enableEncryption.animation(.easeInOut(duration: 0.1))) {
-                        Text("Enable encryption")
+                        Text(R.string.localizable.newDealEncryptCaption())
                             .font(.body)
                             .fontWeight(.semibold)
                     }
@@ -66,7 +66,7 @@ struct CreateDealEncryptionView: View {
 
                 Spacer()
                 
-                Text("You will not be able to add checker after\nyou create a deal")
+                Text(R.string.localizable.newDealNotAbleChangeHint())
                     .font(.footnote)
                     .foregroundColor(R.color.textWarn.color)
                     .multilineTextAlignment(.center)
@@ -111,15 +111,15 @@ struct CreateDealEncryptionView: View {
     }
     
     var title: String {
-        return "New deal"
+        return R.string.localizable.newDealTitle()
     }
 
     var stepTitle: String {
-        return "Detail encryption"
+        return R.string.localizable.newDealEncryptTitle()
     }
     
     var stepSubtitle: String {
-        return "Deal description and files will be encrypted only deal participants can decrypt and view them."
+        return R.string.localizable.newDealEncryptSubtitle()
     }
 }
 

@@ -57,7 +57,7 @@ struct CreateDealConfirmView: View {
                     .padding(.bottom, 26)
 
                HStack(alignment: .center, spacing: 4) {
-                   Text("Deadline")
+                   Text(R.string.localizable.newDealConfirmDeadlineTitle())
                        .font(.body)
                        .fontWeight(.semibold)
                        .foregroundColor(R.color.textBase.color)
@@ -79,29 +79,35 @@ struct CreateDealConfirmView: View {
 
                VStack(spacing: 0) {
                    CreateDealConfirmItemView(
-                        title: "Your role",
-                        value: viewModel.state.role == .client ? "Client" : "Executor"
+                        title: R.string.localizable.newDealConfirmRoleTitle(),
+                        value: viewModel.state.role == .client
+                        ? R.string.localizable.dealTextClient()
+                        : R.string.localizable.dealTextExecutor()
                    )
                    
                    Divider()
 
                    CreateDealConfirmItemView(
-                       title: "Enable encryption",
-                       value: viewModel.state.encryption ?? false ? "On" : "Off"
+                       title: R.string.localizable.newDealConfirmEncryptionTitle(),
+                       value: viewModel.state.encryption
+                       ? R.string.localizable.commonOn()
+                       : R.string.localizable.commonOff()
                    )
                    
                    Divider()
 
                    CreateDealConfirmItemView(
-                       title: "Allow checker",
-                       value: viewModel.state.checkType == .checker ? "Yes" : "No"
+                       title: R.string.localizable.newDealConfirmCheckerTitle(),
+                       value: viewModel.state.checkType == .checker
+                       ? R.string.localizable.commonYes()
+                       : R.string.localizable.commonNo()
                    )
                    
                    if viewModel.state.checkType != .checker {
                        Divider()
 
                        CreateDealConfirmItemView(
-                        title: "Performance bond",
+                        title: R.string.localizable.dealPerformanceBond(),
                         value: viewModel.state.bondType?.shortTitle ?? ""
                        )
                    }
@@ -117,7 +123,7 @@ struct CreateDealConfirmView: View {
                        viewModel.state.role!,
                        viewModel.state.checkType == .checker,
                        viewModel.state.bondType ?? .none,
-                       viewModel.state.encryption ?? false
+                       viewModel.state.encryption
                    ))
                    viewModel.trigger(.createDeal)
                })
@@ -155,15 +161,15 @@ struct CreateDealConfirmView: View {
     }
     
     var title: String {
-        return "New deal"
+        return R.string.localizable.newDealTitle()
     }
 
     var stepTitle: String {
-        return "Confirmation"
+        return R.string.localizable.newDealConfirmTitle()
     }
     
     var stepSubtitle: String {
-        return "Deal description and files will be encrypted only deal participants can decrypt and view them."
+        return R.string.localizable.newDealConfirmSubtitle()
     }
 }
 

@@ -73,15 +73,15 @@ struct CreateDealDeadlineView: View {
                     .cornerRadius(20)
                     .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                 
-                Text("The deal can be terminated after 4 months")
+                Text(R.string.localizable.newDealDeadlineHint())
                     .font(.footnote)
                     .fontWeight(.medium)
-                    .foregroundColor(R.color.secondaryText.color)
+                    .foregroundColor(R.color.textBase .color)
                     .padding(.top, 6)
 
                 Spacer()
                 
-                Text("You will be able to change after you create a deal")
+                Text(R.string.localizable.newDealAbleChangeHint())
                     .font(.footnote)
                     .fontWeight(.medium)
                     .foregroundColor(R.color.secondaryText.color)
@@ -137,15 +137,15 @@ struct CreateDealDeadlineView: View {
     }
     
     var title: String {
-        return "New deal"
+        return R.string.localizable.newDealTitle()
     }
 
     var stepTitle: String {
-        return "Set the deadline"
+        return R.string.localizable.newDealDeadlineTitle()
     }
     
     var stepSubtitle: String {
-        return "If the deal is not completed before the deadline, the funds are returned to the client, the executor receives nothing"
+        return R.string.localizable.newDealDeadlineSubtitle()
     }
 }
 
