@@ -69,11 +69,8 @@ struct CreateDealAllowCheckerView: View {
                 }
                 .padding(16)
                 .background(content: {
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(R.color.textFieldBackground.color)
-                        .background(R.color.textFieldBackground.color)
-                        .cornerRadius(12)
-                        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(R.color.baseSeparator.color)
                 })
 
                 Spacer()
