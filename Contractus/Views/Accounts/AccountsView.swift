@@ -127,7 +127,7 @@ struct AccountsView: View {
                     .frame(height: 62)
                     .padding(.leading, 21)
                     .background(
-                        Color(R.color.secondaryBackground()!)
+                        R.color.secondaryBackground.color
                             .clipped()
                             .cornerRadius(20)
                             .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
@@ -150,7 +150,7 @@ struct AccountsView: View {
                     .frame(height: 62)
                     .padding(.horizontal, 16)
                     .background(
-                        Color(R.color.secondaryBackground()!)
+                        R.color.secondaryBackground.color
                             .clipped()
                             .cornerRadius(20)
                             .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
