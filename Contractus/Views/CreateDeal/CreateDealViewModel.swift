@@ -12,18 +12,34 @@ import SolanaSwift
 import UIKit
 
 enum CreateDealInput {
-    case createDealWithChecker(OwnerRole, Bool),
-         createDeal(OwnerRole, PerformanceBondType, Bool),
+    case setRole(OwnerRole),
+         setContractor(String),
+         setCheckType(CompletionCheckType),
+         setChecker(String),
+         setDeadline(Date),
+         setBondType(PerformanceBondType),
+         setEncryption(Bool),
+         createDeal,
          copy,
-         hideError
+         hideError,
+         close
 }
 
 struct CreateDealState {
     enum State: Equatable {
-        case none, creating, success, error(String)
+        case none, creating, success, error(String), close
     }
     var account: CommonAccount
     var state: State = .none
+    
+    var role: OwnerRole?
+    var contractor: String = ""
+    var checkType: CompletionCheckType = .none
+    var checker: String = ""
+    var deadline: Date?
+    var bondType: PerformanceBondType?
+    var encryption: Bool = true
+    
     var createdDeal: Deal?
     var shareable: Shareable?
 }
@@ -46,47 +62,64 @@ final class CreateDealViewModel: ViewModel {
 
     func trigger(_ input: CreateDealInput, after: AfterTrigger? = nil) {
         switch input {
-        case .createDealWithChecker(let role, let encrypt):
-            create(for: role, witchChecker: true, bondType: .none, encrypt: encrypt)
-        case .createDeal(let role, let bondType, let encrypt):
-            create(for: role, witchChecker: false, bondType: bondType, encrypt: encrypt)
+        case .createDeal:
+            create()
         case .copy:
             if let share = state.shareable?.shareContent {
                 UIPasteboard.general.string = share
             }
         case .hideError:
             self.state.state = .none
+        case .setRole(let role):
+            state.role = role
+        case .setContractor(let contractor):
+            state.contractor = contractor
+        case .setCheckType(let checkType):
+            state.checkType = checkType
+        case .setChecker(let checker):
+            state.checker = checker
+        case .setDeadline(let deadline):
+            state.deadline = deadline
+        case .setBondType(let bondType):
+            state.bondType = bondType
+        case .setEncryption(let encryption):
+            state.encryption = encryption
+        case .close:
+            state.state = .close
         }
     }
 
     // MARK: - Private Methods
 
-    private func create(for role: OwnerRole, witchChecker: Bool, bondType: PerformanceBondType, encrypt: Bool) {
+    private func create() {
 
         Task { @MainActor in
             guard let secret = try? await SharedSecretService.createSharedSecret(privateKey: state.account.privateKey) else {
                 return
             }
             self.state.state = .creating
-            let newDeal = encrypt
+            let newDeal = state.encryption
             ? NewDeal(
-                role: role,
+                role: state.role!,
                 encryptedSecretKey: secret.base64EncodedSecret,
                 secretKeyHash: secret.hashOriginalKey,
                 sharedKey: secret.serverSecret.base64EncodedString(),
-                performanceBondType: bondType,
-                completionCheckType: witchChecker ? .checker : .none
+                performanceBondType: state.bondType ?? .none,
+                completionCheckType: state.checkType,
+                contractorPublicKey: state.contractor.isEmpty ? nil : state.contractor,
+                checkerPublicKey: state.checker.isEmpty ? nil : state.checker,
+                deadline: state.deadline
             )
             : NewDeal(
-                role: role,
-                performanceBondType: bondType,
-                completionCheckType: witchChecker ? .checker : .none
+                role: state.role!,
+                performanceBondType: state.bondType ?? .none,
+                completionCheckType: state.checkType
             )
 
             do {
                 let deal = try await self.createDeal(deal: newDeal)
                 var newState = self.state
-                if encrypt {
+                if state.encryption {
                     newState.shareable = ShareableDeal(dealId: deal.id, secretBase64: secret.clientSecret.base64EncodedString())
                 }
                 newState.state = .success

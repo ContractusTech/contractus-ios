@@ -1,12 +1,6 @@
 import Foundation
 import ContractusAPI
 
-struct StepsState {
-    var selectedToken: ContractusAPI.Token?
-    var recipient: String = ""
-    var amount: String = ""
-}
-
 extension SendTokensViewModel {
 
     struct State {

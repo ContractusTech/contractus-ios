@@ -253,14 +253,30 @@ public struct NewDeal: Encodable {
     public let sharedKey: String?
     public let performanceBondType: PerformanceBondType
     public let completionCheckType: CompletionCheckType
+    public let contractorPublicKey: String?
+    public let checkerPublicKey: String?
+    public let deadline: Date?
 
-    public init(role: OwnerRole, encryptedSecretKey: String, secretKeyHash: String, sharedKey: String, performanceBondType: PerformanceBondType, completionCheckType: CompletionCheckType) {
+    public init(
+        role: OwnerRole,
+        encryptedSecretKey: String,
+        secretKeyHash: String,
+        sharedKey: String,
+        performanceBondType: PerformanceBondType,
+        completionCheckType: CompletionCheckType,
+        contractorPublicKey: String?,
+        checkerPublicKey: String?,
+        deadline: Date?
+    ) {
         self.role = role
         self.encryptedSecretKey = encryptedSecretKey
         self.secretKeyHash = secretKeyHash
         self.sharedKey = sharedKey
         self.performanceBondType = performanceBondType
         self.completionCheckType = completionCheckType
+        self.contractorPublicKey = contractorPublicKey
+        self.checkerPublicKey = checkerPublicKey
+        self.deadline = deadline
     }
 
     public init(role: OwnerRole, performanceBondType: PerformanceBondType, completionCheckType: CompletionCheckType) {
@@ -270,6 +286,9 @@ public struct NewDeal: Encodable {
         self.sharedKey = nil
         self.performanceBondType = performanceBondType
         self.completionCheckType = completionCheckType
+        self.contractorPublicKey = nil
+        self.checkerPublicKey = nil
+        self.deadline = nil
     }
 }
 
