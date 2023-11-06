@@ -19,15 +19,19 @@ struct CreateDealConfirmItemView: View {
     var showLock: Bool = true
 
     var body: some View {
-        HStack(alignment: .center, spacing: 4) {
+        HStack(alignment: .center, spacing: 8) {
             Text(title)
                 .font(.body)
                 .fontWeight(.semibold)
                 .foregroundColor(R.color.textBase.color)
                 .multilineTextAlignment(.leading)
             Constants.lockImage
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 12, height: 12)
                 .opacity(showLock ? 1 : 0)
-            
+                .foregroundColor(R.color.secondaryText.color)
+
             Spacer()
             
             Text(value)
