@@ -48,7 +48,7 @@ struct TokenSelectView: View {
                     }
                 }
                 .background(
-                    Color(R.color.secondaryBackground()!)
+                    R.color.secondaryBackground.color
                         .clipped()
                         .cornerRadius(20)
                         .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
