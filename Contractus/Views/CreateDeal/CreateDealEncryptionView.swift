@@ -66,7 +66,7 @@ struct CreateDealEncryptionView: View {
 
                 Spacer()
                 
-                Text(R.string.localizable.newDealNotAbleChangeHint())
+                Text(R.string.localizable.newDealNotAbleChangeEncryptionHint())
                     .font(.footnote)
                     .foregroundColor(R.color.textWarn.color)
                     .multilineTextAlignment(.center)

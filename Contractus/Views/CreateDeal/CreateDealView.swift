@@ -159,19 +159,24 @@ struct CreateDealView: View {
 
                     Spacer()
                     
-                    Text("You will not be able to change your role\nafter you create a deal")
+                    Text(R.string.localizable.newDealNotAbleChangeRoleHint())
                         .font(.footnote)
                         .foregroundColor(R.color.textWarn.color)
                         .multilineTextAlignment(.center)
                         .padding(.bottom, 10)
                     
-                    CButton(title: R.string.localizable.commonNext(), style: .primary, size: .large, isLoading: false, action: {
+                    CButton(
+                        title: R.string.localizable.commonNext(),
+                        style: .primary,
+                        size: .large,
+                        isLoading: false,
+                        isDisabled: selectedRole == nil,
+                        action: {
                         if let selectedRole = selectedRole {
                             viewModel.trigger(.setRole(selectedRole.role))
                             nextStep.toggle()
                         }
                     })
-                    
                 }
             }
             .padding(.horizontal, 18)
@@ -231,7 +236,7 @@ struct CreateDealView: View {
     }
     
     var stepTitle: String {
-        return "Choose your role"
+        return R.string.localizable.newDealRoleTitle()
     }
 }
 

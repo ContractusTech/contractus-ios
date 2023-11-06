@@ -1121,7 +1121,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 465 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 469 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -1507,6 +1507,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorSuccessAddedChecker = Rswift.StringResource(key: "addContractor.success-added.checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Choose your role
+      ///
+      /// Locales: en
+      static let newDealRoleTitle = Rswift.StringResource(key: "newDeal.role.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Choose your role
       ///
       /// Locales: en
@@ -2938,7 +2942,19 @@ struct R: Rswift.Validatable {
       /// en translation: You will not be able to add checker after you create a deal
       ///
       /// Locales: en
-      static let newDealNotAbleChangeHint = Rswift.StringResource(key: "newDeal.not.able.change.hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      static let newDealNotAbleChangeCheckerHint = Rswift.StringResource(key: "newDeal.not.able.change.checker.hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: You will not be able to change encryption after you create a deal
+      ///
+      /// Locales: en
+      static let newDealNotAbleChangeEncryptionHint = Rswift.StringResource(key: "newDeal.not.able.change.encryption.hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: You will not be able to change performance bond after you create a deal
+      ///
+      /// Locales: en
+      static let newDealNotAbleChangeBondHint = Rswift.StringResource(key: "newDeal.not.able.change.bond.hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: You will not be able to change your role after you create a deal
+      ///
+      /// Locales: en
+      static let newDealNotAbleChangeRoleHint = Rswift.StringResource(key: "newDeal.not.able.change.role.hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Your account must be specified in deal  or create own deal by tap on «New Deal»
       ///
       /// Locales: en
@@ -4440,6 +4456,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("addContractor.success-added.checker", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Choose your role
+      ///
+      /// Locales: en
+      static func newDealRoleTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("newDeal.role.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "newDeal.role.title"
+        }
+
+        return NSLocalizedString("newDeal.role.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Choose your role
@@ -9828,16 +9859,61 @@ struct R: Rswift.Validatable {
       /// en translation: You will not be able to add checker after you create a deal
       ///
       /// Locales: en
-      static func newDealNotAbleChangeHint(preferredLanguages: [String]? = nil) -> String {
+      static func newDealNotAbleChangeCheckerHint(preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("newDeal.not.able.change.hint", bundle: hostingBundle, comment: "")
+          return NSLocalizedString("newDeal.not.able.change.checker.hint", bundle: hostingBundle, comment: "")
         }
 
         guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "newDeal.not.able.change.hint"
+          return "newDeal.not.able.change.checker.hint"
         }
 
-        return NSLocalizedString("newDeal.not.able.change.hint", bundle: bundle, comment: "")
+        return NSLocalizedString("newDeal.not.able.change.checker.hint", bundle: bundle, comment: "")
+      }
+
+      /// en translation: You will not be able to change encryption after you create a deal
+      ///
+      /// Locales: en
+      static func newDealNotAbleChangeEncryptionHint(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("newDeal.not.able.change.encryption.hint", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "newDeal.not.able.change.encryption.hint"
+        }
+
+        return NSLocalizedString("newDeal.not.able.change.encryption.hint", bundle: bundle, comment: "")
+      }
+
+      /// en translation: You will not be able to change performance bond after you create a deal
+      ///
+      /// Locales: en
+      static func newDealNotAbleChangeBondHint(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("newDeal.not.able.change.bond.hint", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "newDeal.not.able.change.bond.hint"
+        }
+
+        return NSLocalizedString("newDeal.not.able.change.bond.hint", bundle: bundle, comment: "")
+      }
+
+      /// en translation: You will not be able to change your role after you create a deal
+      ///
+      /// Locales: en
+      static func newDealNotAbleChangeRoleHint(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("newDeal.not.able.change.role.hint", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "newDeal.not.able.change.role.hint"
+        }
+
+        return NSLocalizedString("newDeal.not.able.change.role.hint", bundle: bundle, comment: "")
       }
 
       /// en translation: Your account must be specified in deal  or create own deal by tap on «New Deal»

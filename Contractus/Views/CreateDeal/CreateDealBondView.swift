@@ -110,10 +110,10 @@ struct CreateDealBondView: View {
 
                 Spacer()
                 
-                Text(R.string.localizable.newDealAbleChangeHint())
+                Text(R.string.localizable.newDealNotAbleChangeBondHint())
                     .font(.footnote)
                     .fontWeight(.medium)
-                    .foregroundColor(R.color.secondaryText.color)
+                    .foregroundColor(R.color.textWarn.color)
                     .multilineTextAlignment(.center)
                     .padding(.bottom, 10)
                 
@@ -122,6 +122,7 @@ struct CreateDealBondView: View {
                     style: .primary,
                     size: .large,
                     isLoading: false,
+                    isDisabled: performanceBondType == nil,
                     action: {
                         if let performanceBondType = performanceBondType {
                             viewModel.trigger(.setBondType(performanceBondType))

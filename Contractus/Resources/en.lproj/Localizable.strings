@@ -286,8 +286,12 @@
 "newDeal.bond.short.both" = "Both";
 "newDeal.bond.short.client" = "Client";
 "newDeal.bond.short.executor" = "Executor";
+"newDeal.role.title" = "Choose your role";
+"newDeal.not.able.change.role.hint" = "You will not be able to change your role\nafter you create a deal";
 "newDeal.able.change.hint" = "You will be able to change after you create a deal";
-"newDeal.not.able.change.hint" = "You will not be able to add checker after\nyou create a deal";
+"newDeal.not.able.change.checker.hint" = "You will not be able to add checker after\nyou create a deal";
+"newDeal.not.able.change.bond.hint" = "You will not be able to change performance bond\nafter you create a deal";
+"newDeal.not.able.change.encryption.hint" = "You will not be able to change encryption\nafter you create a deal";
 "newDeal.solana.account" = "Must be account on the Solana blockchain";
 "newDeal.executor.account" = "Executor account";
 "newDeal.client.account" = "Client account";

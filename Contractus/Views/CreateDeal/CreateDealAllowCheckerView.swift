@@ -78,7 +78,7 @@ struct CreateDealAllowCheckerView: View {
 
                 Spacer()
                 
-                Text(R.string.localizable.newDealNotAbleChangeHint())
+                Text(R.string.localizable.newDealNotAbleChangeCheckerHint())
                     .font(.footnote)
                     .foregroundColor(R.color.textWarn.color)
                     .multilineTextAlignment(.center)

@@ -51,83 +51,84 @@ struct CreateDealConfirmView: View {
     var body: some View {
         ZStack {
            VStack(alignment: .center, spacing: 6) {
-                Text(stepTitle)
-                    .font(.title)
-                    .fontWeight(.semibold)
-                    .foregroundColor(R.color.textBase.color)
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, 26)
+               ScrollView {
+                   Text(stepTitle)
+                        .font(.title)
+                        .fontWeight(.semibold)
+                        .foregroundColor(R.color.textBase.color)
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom, 26)
 
-               VStack(spacing: 0) {
-                   if !viewModel.contractor.isEmpty {
+                   VStack(spacing: 0) {
+                       if !viewModel.contractor.isEmpty {
+                           CreateDealConfirmItemView(
+                            title: viewModel.state.role == .client
+                            ? R.string.localizable.newDealExecutorAccount()
+                            : R.string.localizable.newDealClientAccount(),
+                            value: ContentMask.mask(from: viewModel.contractor),
+                            showLock: false
+                           )
+                           Divider()
+                       }
+                       
+                       if viewModel.checkType == .checker {
+                           CreateDealConfirmItemView(
+                            title: R.string.localizable.newDealCheckerAccount(),
+                            value: ContentMask.mask(from: viewModel.checker),
+                            showLock: false
+                           )
+                           Divider()
+                       }
+                       
                        CreateDealConfirmItemView(
-                           title: viewModel.state.role == .client
-                           ? R.string.localizable.newDealExecutorAccount()
-                           : R.string.localizable.newDealClientAccount(),
-                           value: ContentMask.mask(from: viewModel.contractor),
-                           showLock: false
+                        title: R.string.localizable.newDealConfirmDeadlineTitle(),
+                        value: viewModel.state.deadline?.asDateFormatted() ?? "",
+                        showLock: false
                        )
-                       Divider()
                    }
-
-                   if viewModel.checkType == .checker {
+                   .background(R.color.secondaryBackground.color)
+                   .cornerRadius(20)
+                   .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+                   
+                   VStack(spacing: 0) {
                        CreateDealConfirmItemView(
-                           title: R.string.localizable.newDealCheckerAccount(),
-                           value: ContentMask.mask(from: viewModel.checker),
-                           showLock: false
-                       )
-                       Divider()
-                   }
-
-                   CreateDealConfirmItemView(
-                       title: R.string.localizable.newDealConfirmDeadlineTitle(),
-                       value: viewModel.state.deadline?.asDateFormatted() ?? "",
-                       showLock: false
-                   )
-               }
-               .background(R.color.secondaryBackground.color)
-               .cornerRadius(20)
-               .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
-
-               VStack(spacing: 0) {
-                   CreateDealConfirmItemView(
                         title: R.string.localizable.newDealConfirmRoleTitle(),
                         value: viewModel.state.role == .client
                         ? R.string.localizable.dealTextClient()
                         : R.string.localizable.dealTextExecutor()
-                   )
-                   
-                   Divider()
-
-                   CreateDealConfirmItemView(
-                       title: R.string.localizable.newDealConfirmEncryptionTitle(),
-                       value: viewModel.state.encryption
-                       ? R.string.localizable.commonOn()
-                       : R.string.localizable.commonOff()
-                   )
-                   
-                   Divider()
-
-                   CreateDealConfirmItemView(
-                       title: R.string.localizable.newDealConfirmCheckerTitle(),
-                       value: viewModel.state.checkType == .checker
-                       ? R.string.localizable.commonYes()
-                       : R.string.localizable.commonNo()
-                   )
-                   
-                   if viewModel.state.checkType != .checker {
-                       Divider()
-
-                       CreateDealConfirmItemView(
-                        title: R.string.localizable.dealPerformanceBond(),
-                        value: viewModel.state.bondType?.shortTitle ?? ""
                        )
+                       
+                       Divider()
+                       
+                       CreateDealConfirmItemView(
+                        title: R.string.localizable.newDealConfirmEncryptionTitle(),
+                        value: viewModel.state.encryption
+                        ? R.string.localizable.commonOn()
+                        : R.string.localizable.commonOff()
+                       )
+                       
+                       Divider()
+                       
+                       CreateDealConfirmItemView(
+                        title: R.string.localizable.newDealConfirmCheckerTitle(),
+                        value: viewModel.state.checkType == .checker
+                        ? R.string.localizable.commonYes()
+                        : R.string.localizable.commonNo()
+                       )
+                       
+                       if viewModel.state.checkType != .checker {
+                           Divider()
+                           
+                           CreateDealConfirmItemView(
+                            title: R.string.localizable.dealPerformanceBond(),
+                            value: viewModel.state.bondType?.shortTitle ?? ""
+                           )
+                       }
                    }
+                   .background(R.color.secondaryBackground.color)
+                   .cornerRadius(20)
+                   .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                }
-               .background(R.color.secondaryBackground.color)
-               .cornerRadius(20)
-               .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
-
                Spacer()
                
                CButton(title: R.string.localizable.commonCreate(), style: .primary, size: .large, isLoading: false, action: {
