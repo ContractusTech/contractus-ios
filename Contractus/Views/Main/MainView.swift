@@ -33,11 +33,16 @@ struct MainView: View {
         case newDeal, menu, qrScan, sharePublicKey, wrap(from: Amount, to: Amount), webView(URL), topUp(URL), tokenSettings
     }
 
+    enum AlertType {
+        case confirmOpenDeal(Deal)
+    }
+
     @StateObject var viewModel: AnyViewModel<MainState, MainInput>
     var logoutCompletion: () -> Void
     
     @State private var selectedDeal: Deal?
     @State private var sheetType: SheetType? = .none
+    @State private var alertType: AlertType? = .none
     @State private var dealsType: MainViewModel.State.DealType = .all
     @State private var transactionSignType: TransactionSignType?
     @State private var topUpState: ResizableSheetState = .hidden {
@@ -176,7 +181,7 @@ struct MainView: View {
                                 LazyVGrid(columns: Constants.columns, spacing: 4) {
                                     ForEach(viewModel.deals, id: \.id) { item in
                                         Button {
-                                            selectedDeal = item
+                                            viewModel.trigger(.selectDeal(deal: item))
                                             EventService.shared.send(event: DefaultAnalyticsEvent.mainDealTap)
                                         } label: {
                                             DealItemView(
@@ -211,21 +216,33 @@ struct MainView: View {
                 .onChange(of: dealsType, perform: { newType in
                     viewModel.trigger(.load(newType))
                 })
-                .onChange(of: viewModel.state.pushDeal, perform: { dealForOpen in
-                    guard let dealForOpen = dealForOpen else { return }
-                    UIApplication.closeAllModal {
-                        sheetType = nil
-                        topUpState = .hidden
+                .onChange(of: selectedDeal, perform: { selectedDeal in
+                    if selectedDeal == nil {
+                        viewModel.trigger(.selectDeal(deal: nil))
+                    }
+                })
+                .onChange(of: viewModel.state.selectedDeal, perform: { newSelectedDeal in
 
-                        if self.selectedDeal != nil {
-                            self.selectedDeal = nil
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    guard let dealForOpen = newSelectedDeal else {
+                        self.selectedDeal = nil
+                        return
+                    }
+                    switch sheetType {
+                    case .newDeal:
+                        self.viewModel.trigger(.selectDeal(deal: nil))
+                        self.alertType = .confirmOpenDeal(dealForOpen)
+                    default:
+                        UIApplication.closeAllModal {
+                            sheetType = nil
+                            topUpState = .hidden
+                            if self.selectedDeal != nil {
+                                self.selectedDeal = nil
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                    self.selectedDeal = dealForOpen
+                                }
+                            } else {
                                 self.selectedDeal = dealForOpen
-                                viewModel.trigger(.dealOpened)
                             }
-                        } else {
-                            self.selectedDeal = dealForOpen
-                            viewModel.trigger(.dealOpened)
                         }
                     }
                 })
@@ -357,10 +374,24 @@ struct MainView: View {
                                 account: viewModel.state.account,
                                 accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
                                 dealsAPIService: try? APIServiceFactory.shared.makeDealsService()))) { deal in
-                                    selectedDeal = deal
+                                    viewModel.trigger(.selectDeal(deal: deal))
                                     viewModel.trigger(.load(dealsType))
                                 }
                                 .interactiveDismiss(canDismissSheet: false)
+                                .alert(item: $alertType, content: { alertType in
+                                    switch alertType {
+                                    case .confirmOpenDeal(let deal):
+                                        Alert(
+                                            title: Text(R.string.localizable.commonConfirm()),
+                                            message: Text(R.string.localizable.newDealConfirmAlertMessage()),
+                                            primaryButton: .default(Text(R.string.localizable.commonYesOpen()), action: {
+                                                sheetType = nil
+                                                viewModel.trigger(.selectDeal(deal: deal))
+
+                                            }),
+                                            secondaryButton: .cancel())
+                                    }
+                                })
                     case .menu:
                         MenuView { action in
                             switch action {
@@ -375,6 +406,7 @@ struct MainView: View {
                         }
                     case .qrScan:
                         QRCodeScannerView(configuration: .scannerAndInput, blockchain: viewModel.state.account.blockchain) { result in
+                            sheetType = nil
                             viewModel.trigger(.executeScanResult(result))
                         }
                     case .sharePublicKey:
@@ -426,6 +458,7 @@ struct MainView: View {
                 .navigationDestination(for: $selectedDeal) { deal in
                     dealView(deal: deal)
                 }
+
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
@@ -464,16 +497,15 @@ struct MainView: View {
                             Constants.menuImage
                         }
                     }
-                    #if DEBUG
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button {
                             EventService.shared.send(event: DefaultAnalyticsEvent.mainQRscannerTap)
+
                             sheetType = .qrScan
                         } label: {
                             Constants.scanQRImage
                         }
                     }
-                    #endif
                 }
                 .baseBackground()
                 .edgesIgnoringSafeArea(.bottom)
@@ -525,19 +557,19 @@ struct MainView: View {
     private func dealTitle(type: MainViewModel.State.DealType) -> String {
         switch type {
         case .all:
-            return "Recent"
+            return R.string.localizable.mainItemTypeAll()
         case .isChecker:
-            return "For checking"
+            return R.string.localizable.mainItemTypeIsChecker()
         case .isClient:
-            return "As client"
+            return R.string.localizable.mainItemTypeIsClient()
         case .isExecutor:
-            return "For execute"
+            return R.string.localizable.mainItemTypeIsExecutor()
         case .isWorking:
-            return "Working"
+            return R.string.localizable.mainItemTypeIsWorking()
         case .isDone:
-            return "Done"
+            return R.string.localizable.mainItemTypeIsDone()
         case .isCanceled:
-            return "Canceled"
+            return R.string.localizable.mainItemTypeIsCanceled()
         }
     }
 
@@ -616,6 +648,12 @@ extension MainView.SheetType: Identifiable {
     }
 }
 
+extension MainView.AlertType: Identifiable {
+    var id: String {
+        return "\(self)"
+    }
+}
+
 // MARK: - Previews
 
 #if DEBUG
@@ -624,7 +662,7 @@ import ContractusAPI
 struct MainView_Previews: PreviewProvider {
 
     static var previews: some View {
-        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(account: Mock.account, accountStorage: MockAccountStorage(), accountAPIService: nil, dealsAPIService: nil, resourcesAPIService: nil))) {
+        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(account: Mock.account, accountStorage: MockAccountStorage(), accountAPIService: nil, dealsAPIService: nil, resourcesAPIService: nil, secretStorage: nil))) {
 
         }
     }

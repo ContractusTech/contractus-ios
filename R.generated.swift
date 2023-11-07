@@ -1121,7 +1121,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 469 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 482 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -1459,6 +1459,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealStatusCanceled = Rswift.StringResource(key: "deal.status.canceled", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Canceled
+      ///
+      /// Locales: en
+      static let mainItemTypeIsCanceled = Rswift.StringResource(key: "main.item-type.isCanceled", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Canceling
       ///
       /// Locales: en
@@ -1727,6 +1731,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealCheckerTitle = Rswift.StringResource(key: "newDeal.checker.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Do you want to close the deal creation form and open another deal?
+      ///
+      /// Locales: en
+      static let newDealConfirmAlertMessage = Rswift.StringResource(key: "newDeal.confirm.alert-message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Do you want to close the editor?
       ///
       /// Locales: en
@@ -1743,6 +1751,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealStatusFinished = Rswift.StringResource(key: "deal.status.finished", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Done
+      ///
+      /// Locales: en
+      static let mainItemTypeIsDone = Rswift.StringResource(key: "main.item-type.isDone", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Done
       ///
       /// Locales: en
@@ -1927,14 +1939,26 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionTypeFinishDeal = Rswift.StringResource(key: "transaction.type.finish-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: For checking
+      ///
+      /// Locales: en
+      static let mainItemTypeIsChecker = Rswift.StringResource(key: "main.item-type.isChecker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: For client
       ///
       /// Locales: en
       static let dealTextForClient = Rswift.StringResource(key: "deal.text.for.client", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: For client
+      ///
+      /// Locales: en
+      static let mainItemTypeIsClient = Rswift.StringResource(key: "main.item-type.isClient", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: For edit and sign contract partner must have this data.
       ///
       /// Locales: en
       static let shareSubtitleDefault = Rswift.StringResource(key: "share.subtitle.default", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: For execute
+      ///
+      /// Locales: en
+      static let mainItemTypeIsExecutor = Rswift.StringResource(key: "main.item-type.isExecutor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: For the period of the deal will be lock 10k CTUS
       ///
       /// Locales: en
@@ -2011,6 +2035,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealBondSubtitle = Rswift.StringResource(key: "newDeal.bond.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Immutable
+      ///
+      /// Locales: en
+      static let commonImmutable = Rswift.StringResource(key: "common.immutable", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Import
       ///
       /// Locales: en
@@ -2031,6 +2059,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealStatusStartedTitle = Rswift.StringResource(key: "deal.status.started.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: In work
+      ///
+      /// Locales: en
+      static let mainItemTypeIsWorking = Rswift.StringResource(key: "main.item-type.isWorking", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Info
       ///
       /// Locales: en
@@ -2327,6 +2359,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let unlockHolderRaydiumTitle = Rswift.StringResource(key: "unlockHolder.raydium.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Recent
+      ///
+      /// Locales: en
+      static let mainItemTypeAll = Rswift.StringResource(key: "main.item-type.all", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Recipient
       ///
       /// Locales: en
@@ -2643,6 +2679,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealStatusCanceledSubtitle = Rswift.StringResource(key: "deal.status.canceled.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The key is not suitable for the current deal.
+      ///
+      /// Locales: en
+      static let dealShareSecretKeyError = Rswift.StringResource(key: "deal.share.secret-key.error", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The partner has already signed the contract. The work of the contract will begin when you sign the contract.
       ///
       /// Locales: en
@@ -2679,6 +2719,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let changeAmountCheckerWarning = Rswift.StringResource(key: "changeAmount.checker.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The value is not supported. Check for correctness and try again.
+      ///
+      /// Locales: en
+      static let qrScannerError = Rswift.StringResource(key: "qrScanner.error", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: This files will be available for viewing only to contract partners.
       ///
       /// Locales: en
@@ -2751,6 +2795,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionTypeTransfer = Rswift.StringResource(key: "transaction.type.transfer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Try again
+      ///
+      /// Locales: en
+      static let commonTryAgain = Rswift.StringResource(key: "common.try-again", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Try again
       ///
       /// Locales: en
@@ -2883,6 +2931,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealDeleteAlertButton = Rswift.StringResource(key: "deal.delete.alert.button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Yes, open
+      ///
+      /// Locales: en
+      static let commonYesOpen = Rswift.StringResource(key: "common.yes-open", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: You
       ///
       /// Locales: en
@@ -4278,6 +4330,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.status.canceled", bundle: bundle, comment: "")
       }
 
+      /// en translation: Canceled
+      ///
+      /// Locales: en
+      static func mainItemTypeIsCanceled(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("main.item-type.isCanceled", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "main.item-type.isCanceled"
+        }
+
+        return NSLocalizedString("main.item-type.isCanceled", bundle: bundle, comment: "")
+      }
+
       /// en translation: Canceling
       ///
       /// Locales: en
@@ -5287,6 +5354,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("newDeal.checker.title", bundle: bundle, comment: "")
       }
 
+      /// en translation: Do you want to close the deal creation form and open another deal?
+      ///
+      /// Locales: en
+      static func newDealConfirmAlertMessage(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("newDeal.confirm.alert-message", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "newDeal.confirm.alert-message"
+        }
+
+        return NSLocalizedString("newDeal.confirm.alert-message", bundle: bundle, comment: "")
+      }
+
       /// en translation: Do you want to close the editor?
       ///
       /// Locales: en
@@ -5345,6 +5427,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.status.finished", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Done
+      ///
+      /// Locales: en
+      static func mainItemTypeIsDone(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("main.item-type.isDone", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "main.item-type.isDone"
+        }
+
+        return NSLocalizedString("main.item-type.isDone", bundle: bundle, comment: "")
       }
 
       /// en translation: Done
@@ -6041,6 +6138,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("transaction.type.finish-deal", bundle: bundle, comment: "")
       }
 
+      /// en translation: For checking
+      ///
+      /// Locales: en
+      static func mainItemTypeIsChecker(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("main.item-type.isChecker", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "main.item-type.isChecker"
+        }
+
+        return NSLocalizedString("main.item-type.isChecker", bundle: bundle, comment: "")
+      }
+
       /// en translation: For client
       ///
       /// Locales: en
@@ -6056,6 +6168,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.text.for.client", bundle: bundle, comment: "")
       }
 
+      /// en translation: For client
+      ///
+      /// Locales: en
+      static func mainItemTypeIsClient(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("main.item-type.isClient", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "main.item-type.isClient"
+        }
+
+        return NSLocalizedString("main.item-type.isClient", bundle: bundle, comment: "")
+      }
+
       /// en translation: For edit and sign contract partner must have this data.
       ///
       /// Locales: en
@@ -6069,6 +6196,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("share.subtitle.default", bundle: bundle, comment: "")
+      }
+
+      /// en translation: For execute
+      ///
+      /// Locales: en
+      static func mainItemTypeIsExecutor(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("main.item-type.isExecutor", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "main.item-type.isExecutor"
+        }
+
+        return NSLocalizedString("main.item-type.isExecutor", bundle: bundle, comment: "")
       }
 
       /// en translation: For the period of the deal will be lock 10k CTUS
@@ -6358,6 +6500,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("newDeal.bond.subtitle", bundle: bundle, comment: "")
       }
 
+      /// en translation: Immutable
+      ///
+      /// Locales: en
+      static func commonImmutable(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.immutable", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.immutable"
+        }
+
+        return NSLocalizedString("common.immutable", bundle: bundle, comment: "")
+      }
+
       /// en translation: Import
       ///
       /// Locales: en
@@ -6431,6 +6588,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.status.started.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: In work
+      ///
+      /// Locales: en
+      static func mainItemTypeIsWorking(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("main.item-type.isWorking", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "main.item-type.isWorking"
+        }
+
+        return NSLocalizedString("main.item-type.isWorking", bundle: bundle, comment: "")
       }
 
       /// en translation: Info
@@ -7547,6 +7719,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("unlockHolder.raydium.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Recent
+      ///
+      /// Locales: en
+      static func mainItemTypeAll(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("main.item-type.all", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "main.item-type.all"
+        }
+
+        return NSLocalizedString("main.item-type.all", bundle: bundle, comment: "")
       }
 
       /// en translation: Recipient
@@ -8738,6 +8925,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.status.canceled.subtitle", bundle: bundle, comment: "")
       }
 
+      /// en translation: The key is not suitable for the current deal.
+      ///
+      /// Locales: en
+      static func dealShareSecretKeyError(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.share.secret-key.error", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.share.secret-key.error"
+        }
+
+        return NSLocalizedString("deal.share.secret-key.error", bundle: bundle, comment: "")
+      }
+
       /// en translation: The partner has already signed the contract. The work of the contract will begin when you sign the contract.
       ///
       /// Locales: en
@@ -8871,6 +9073,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("changeAmount.checker.warning", bundle: bundle, comment: "")
+      }
+
+      /// en translation: The value is not supported. Check for correctness and try again.
+      ///
+      /// Locales: en
+      static func qrScannerError(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("qrScanner.error", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "qrScanner.error"
+        }
+
+        return NSLocalizedString("qrScanner.error", bundle: bundle, comment: "")
       }
 
       /// en translation: This files will be available for viewing only to contract partners.
@@ -9143,6 +9360,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transaction.type.transfer", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Try again
+      ///
+      /// Locales: en
+      static func commonTryAgain(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.try-again", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.try-again"
+        }
+
+        return NSLocalizedString("common.try-again", bundle: bundle, comment: "")
       }
 
       /// en translation: Try again
@@ -9642,6 +9874,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.delete.alert.button", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Yes, open
+      ///
+      /// Locales: en
+      static func commonYesOpen(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.yes-open", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.yes-open"
+        }
+
+        return NSLocalizedString("common.yes-open", bundle: bundle, comment: "")
       }
 
       /// en translation: You

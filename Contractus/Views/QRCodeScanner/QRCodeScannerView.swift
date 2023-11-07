@@ -21,6 +21,7 @@ struct QRCodeScannerView: View {
     @ObservedObject private var keyboard = KeyboardResponder(defaultHeight: UIConstants.contentInset.bottom)
     @StateObject private var viewModel: AnyViewModel<QRCodeScannerState, QRCodeScannerInput>
     @State private var value: String = ""
+    @State private var errorText: String = ""
 
     init(
         configuration: Configuration,
@@ -40,16 +41,30 @@ struct QRCodeScannerView: View {
             ZStack {
                 R.color.mainBackground.color
                 VStack(spacing: 12) {
-                    CodeScannerView(codeTypes: [.qr], simulatedData: "Contractus") { response in
-                        switch response {
-                        case .success(let result):
-                            value = result.string
-                        case .failure(let error):
-                            print(error.localizedDescription)
+                    if errorText.isEmpty {
+                        CodeScannerView(codeTypes: [.qr], simulatedData: "Contractus") { response in
+                            switch response {
+                            case .success(let result):
+                                viewModel.trigger(.parse(result.string))
+                            case .failure(let error):
+                                errorText = error.readableDescription
+                            }
                         }
+                        .frame(width: 320, height: 320)
+                        .cornerRadius(20)
+                    } else {
+
+                        ZStack(alignment: .center) {
+                            R.color.thirdBackground.color
+                            CButton(title: R.string.localizable.commonTryAgain(), style: .secondary, size: .default, isLoading: false) {
+                                errorText = ""
+                                viewModel.trigger(.clear)
+                            }
+                        }
+                        .frame(width: 320, height: 320)
+                        .cornerRadius(20)
                     }
-                    .frame(width: 320, height: 320)
-                    .cornerRadius(20)
+
 
                     if configuration == .scannerAndInput {
                         Text(R.string.localizable.qrScannerManual())
@@ -64,6 +79,13 @@ struct QRCodeScannerView: View {
                         }
                         .ignoresSafeArea(.keyboard, edges: .bottom)
                     }
+                    if !errorText.isEmpty {
+                        Text(errorText)
+                            .font(.callout)
+                            .foregroundColor(R.color.redText.color)
+                            .multilineTextAlignment(.center)
+                            .padding(8)
+                    }
                     Spacer()
                 }
                 .padding(UIConstants.contentInset)
@@ -73,14 +95,19 @@ struct QRCodeScannerView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationTitle(R.string.localizable.qrScannerTitle())
                 .onChange(of: value) { newValue in
+                    guard !newValue.isEmpty else { return }
                     viewModel.trigger(.parse(newValue))
                 }
                 .onChange(of: viewModel.state.state) { newState in
+                    self.errorText = ""
                     switch newState {
                     case .valid(let result):
                         callback?(result)
-                    default:
+                    case .invalidData:
+                        self.errorText = R.string.localizable.qrScannerError()
+                    case .none:
                         break
+
                     }
                 }
             }

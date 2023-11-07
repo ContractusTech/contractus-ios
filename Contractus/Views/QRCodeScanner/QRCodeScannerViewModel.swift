@@ -10,6 +10,7 @@ import ContractusAPI
 
 enum QRCodeScannerInput {
     case parse(String)
+    case clear
 }
 
 struct QRCodeScannerState {
@@ -40,6 +41,8 @@ final class QRCodeScannerViewModel: ViewModel {
 
     func trigger(_ input: QRCodeScannerInput, after: AfterTrigger?) {
         switch input {
+        case .clear:
+            state.state = .none
         case .parse(let string):
             guard !string.isEmpty else {
                 state.state = .none
@@ -57,11 +60,3 @@ final class QRCodeScannerViewModel: ViewModel {
     }
 }
 
-extension Blockchain {
-    func isValidPublicKey(string: String) -> Bool {
-        switch self {
-        case .solana:
-            return string.utf8.count >= 32
-        }
-    }
-}

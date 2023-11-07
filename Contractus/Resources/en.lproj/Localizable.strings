@@ -65,6 +65,9 @@
 "common.telegram" = "Telegram";
 "common.powered-by" = "Powered by";
 "common.payment" = "Payment";
+"common.immutable" = "Immutable";
+"common.yes-open" = "Yes, open";
+"common.try-again" = "Try again";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
@@ -135,6 +138,7 @@
 "qrScanner.title" = "QR Code scanner";
 "qrScanner.manual" = "or enter value manual";
 "qrScanner.placeholder" = "Enter value";
+"qrScanner.error" = "The value is not supported. Check for correctness and try again.";
 
 "uploadFile.button.select" = "Add file";
 "uploadFile.button.select-gallery" = "Gallery";
@@ -260,6 +264,7 @@
 "deadline.comment" = "You must complete the deal by this date or the deal will be stopped and funds will be refunded to all parties. The service fee is not refundable.";
 "deal.confirm-close.title" = "Confirm";
 "deal.confirm-close.message" = "Do you want to close the editor?";
+"deal.share.secret-key.error" = "The key is not suitable for the current deal.";
 
 "newDeal.title" = "New deal";
 "newDeal.subtitle" = "Choose your role";
@@ -313,6 +318,7 @@
 "newDeal.confirm.deadline.title" = "Deadline";
 "newDeal.confirm.encryption.title" = "Enable encryption";
 "newDeal.confirm.checker.title" = "Allow checker";
+"newDeal.confirm.alert-message" = "Do you want to close the deal creation form and open another deal?";
 
 "addContractor.title.enter-key" = "Enter public key";
 "addContractor.title.partner" = "Add partner";
@@ -338,6 +344,13 @@
 "main.empty.message" = "Your account must be specified in deal \nor create own deal by tap on «New Deal»";
 "main.about.tiers" = "About tiers";
 "main.title.filter" = "Filter";
+"main.item-type.all" = "Recent";
+"main.item-type.isChecker" = "For checking";
+"main.item-type.isClient" = "For client";
+"main.item-type.isExecutor" = "For execute";
+"main.item-type.isWorking" = "In work";
+"main.item-type.isDone" = "Done";
+"main.item-type.isCanceled" = "Canceled";
 
 "main.statistics.revenue-30" = "Revenue, 30d";
 "main.statistics.revenue-all" = "Revenue, all";
