@@ -9,6 +9,7 @@ struct UndoTextView: UIViewRepresentable {
         let uiTextView = UITextView()
         uiTextView.delegate = context.coordinator
         uiTextView.text = content
+        uiTextView.backgroundColor = .clear
         uiTextView.font = UIFont.preferredFont(forTextStyle: .body)
 
         DispatchQueue.main.async {
