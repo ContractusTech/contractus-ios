@@ -17,7 +17,7 @@ enum MainInput {
     case loadDeals(MainState.DealType)
     case executeScanResult(ScanResult)
     case saveTokenSettings([ContractusAPI.Token])
-    case selectDeal(deal: Deal?)
+    case selectDeal(deal: Deal?, isNew: Bool = false)
 }
 
 struct MainState {
@@ -31,6 +31,7 @@ struct MainState {
         case loading, loaded
     }
     var selectedDeal: Deal?
+    var selectedDealIsNew: Bool = false
     var account: CommonAccount
     var currency: Currency = .defaultCurrency
     var statistics: [ContractusAPI.AccountStatistic] = []
@@ -87,8 +88,12 @@ final class MainViewModel: ViewModel {
 
     func trigger(_ input: MainInput, after: AfterTrigger? = nil) {
         switch input {
-        case .selectDeal(let deal):
+        case .selectDeal(let deal, let isNew):
+            var state = state
+            state.selectedDealIsNew = isNew
             state.selectedDeal = deal
+            self.state = state
+
         case .saveTokenSettings(let tokens):
             UtilsStorage.shared.saveTokenSettings(tokens: tokens)
             Task {
@@ -134,31 +139,24 @@ final class MainViewModel: ViewModel {
             switch result {
             case .deal(let shareData):
                 Task { @MainActor in
-                    guard let deal = try? await loadDeal(id: shareData.id) else { return }
+
                     switch shareData.command {
                     case .shareDealSecret:
-                        guard
-                            let clientKeyData = Data(base64Encoded: shareData.secretBase64)
-                        else {
-                            return
-                        }
+                        guard let clientKeyData = Data(base64Encoded: shareData.secretBase64) else { return }
 
+                        try? self.secretStorage?.saveSharedSecret(for: shareData.id, sharedSecret: clientKeyData)
                         guard
+                            let deal = try? await loadDeal(id: shareData.id),
                             let serverKey = deal.sharedKey,
-                            let serverKeyData = Data(base64Encoded: serverKey)
-                        else {
-                            return
-                        }
+                            let serverKeyData = Data(base64Encoded: serverKey) else { return }
 
                         guard let secretData = try? await SharedSecretService.recover(serverSecret: serverKeyData, clientSecret: clientKeyData, hashOriginalKey: deal.secretKeyHash ?? "") else {
                             return
                         }
-                        try? self.secretStorage?.saveSharedSecret(for: deal.id, sharedSecret: clientKeyData)
+                        state.selectedDeal = deal
                     case .open:
                         break
                     }
-
-                    state.selectedDeal = deal
                 }
 
             case .publicKey:

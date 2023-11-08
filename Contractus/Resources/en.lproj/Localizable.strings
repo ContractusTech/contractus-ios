@@ -276,8 +276,8 @@
 "newDeal.subtitle.client" = "You want to order a service or buy a product.";
 "newDeal.subtitle.executor" = "You want to provide a service or sell a product.";
 "newDeal.created.top.title" = "Created";
-"newDeal.created.title" = "The secret key";
-"newDeal.created.subTitle" = "The partner need scan the QR code to start working on the contract.";
+"newDeal.created.title" = "New deal";
+"newDeal.created.subTitle" = "The partner need scan the QR-code to start working on the contract.";
 "newDeal.check.title" = "Allow checker";
 "newDeal.check.subtitle" = "The decision to complete the deal will be made by a third party.";
 "newDeal.bond.title" = "Performance bond";

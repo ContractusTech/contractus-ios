@@ -229,8 +229,12 @@ struct MainView: View {
                     }
                     switch sheetType {
                     case .newDeal:
-                        self.viewModel.trigger(.selectDeal(deal: nil))
-                        self.alertType = .confirmOpenDeal(dealForOpen)
+                        if !viewModel.state.selectedDealIsNew {
+                            self.viewModel.trigger(.selectDeal(deal: nil))
+                            self.alertType = .confirmOpenDeal(dealForOpen)
+                        } else {
+                            self.selectedDeal = dealForOpen
+                        }
                     default:
                         UIApplication.closeAllModal {
                             sheetType = nil
@@ -374,7 +378,7 @@ struct MainView: View {
                                 account: viewModel.state.account,
                                 accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
                                 dealsAPIService: try? APIServiceFactory.shared.makeDealsService()))) { deal in
-                                    viewModel.trigger(.selectDeal(deal: deal))
+                                    viewModel.trigger(.selectDeal(deal: deal, isNew: true))
                                     viewModel.trigger(.load(dealsType))
                                 }
                                 .interactiveDismiss(canDismissSheet: false)

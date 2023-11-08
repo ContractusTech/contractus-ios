@@ -135,7 +135,7 @@ struct CreateDealConfirmView: View {
                }
                Spacer()
                
-               CButton(title: R.string.localizable.commonCreate(), style: .primary, size: .large, isLoading: false, action: {
+               CButton(title: R.string.localizable.commonCreate(), style: .primary, size: .large, isLoading: viewModel.state.state == .creating, action: {
                    EventService.shared.send(event: ExtendedAnalyticsEvent.newDealCreateTap(
                        viewModel.state.role!,
                        viewModel.state.checkType == .checker,
