@@ -13,6 +13,7 @@ public struct ShareableDeal: Shareable, Equatable {
 
     public enum ShareableCommand: String, Equatable {
         case shareDealSecret = "sds"
+        case open = "op"
     }
 
     public enum ShareDealDataError: Error {

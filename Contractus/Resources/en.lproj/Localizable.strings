@@ -68,6 +68,7 @@
 "common.immutable" = "Immutable";
 "common.yes-open" = "Yes, open";
 "common.try-again" = "Try again";
+"common.show" = "Show";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
@@ -131,9 +132,10 @@
 "qrCode.warning" = "Warning!";
 "qrCode.warning.message" = "Send it securely via Telegram Secret Chat or Signal to your partner or allow scan from your phone.";
 
-"shareContent.title.secret-key" = "The secret key";
-"shareContent.subtitle.secret-key" = "The partner need scan the QR code to start working on the contract.";
+"shareContent.title.deal" = "The deal";
+"shareContent.subtitle.deal" = "The partner need scan the QR code to start working on the contract.";
 "shareContent.subtitle" = "Used to top up account or added to a deal by partners";
+"shareContent.sensitive-info" = "Contains sensitive data, do not let unauthorized persons scan the data.";
 
 "qrScanner.title" = "QR Code scanner";
 "qrScanner.manual" = "or enter value manual";
@@ -223,7 +225,8 @@
 "deal.buttons.finish-deal" = "Finish deal";
 "deal.finish" = "Finish deal";
 "deal.cancel" = "Cancel deal";
-"deal.share.secret" = "Share Secret";
+"deal.share.deal" = "Show deal QR-code";
+"deal.share.secret-key" = "Show secret key";
 "deal.executor.clear-account" = "Clear";
 "deal.executor.edit-account" = "Edit";
 "deal.executor.clear-account.message" = "Are you sure you want to clear account?";

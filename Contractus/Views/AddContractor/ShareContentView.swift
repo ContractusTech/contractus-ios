@@ -26,6 +26,7 @@ struct ShareContentView: View {
     private let dismissAction: () -> Void
     private let contentType: CopyContentView.ContentType
     private let informationType: TopTextBlockView.InformationType
+    @State private var showQR: Bool
 
     init(
         contentType: CopyContentView.ContentType = .publicKey,
@@ -47,6 +48,7 @@ struct ShareContentView: View {
         self.dismissAction = dismissAction
         self.contentType = contentType
         self.informationType = informationType
+        self._showQR = .init(initialValue: contentType != .privateKey)
     }
 
     var body: some View {
@@ -58,8 +60,17 @@ struct ShareContentView: View {
                         headerText: topTitle,
                         titleText: title,
                         subTitleText: subTitle ?? "")
+                    ZStack {
+                        QRCodeView(content: rawContent)
+                            .blur(radius: showQR ? 0 : 10)
 
-                    QRCodeView(content: rawContent)
+                        if !showQR {
+                            CButton(title: R.string.localizable.commonShow(), style: .secondary, size: .default, isLoading: false) {
+                                showQR = true
+                                ImpactGenerator.soft()
+                            }
+                        }
+                    }
 
                     Text(R.string.localizable.shareNote())
                         .multilineTextAlignment(.center)
@@ -71,6 +82,14 @@ struct ShareContentView: View {
                         UIPasteboard.general.string = value
                         copyAction(value)
                     }
+
+                    if contentType == .privateKey {
+                        Text(R.string.localizable.shareContentSensitiveInfo())
+                            .multilineTextAlignment(.center)
+                            .font(.footnote)
+                            .foregroundColor(R.color.redText.color)
+                            .padding(EdgeInsets(top: 16, leading: 0, bottom: 0, trailing: 0))
+                    }
                 }
             }
 
@@ -80,7 +99,6 @@ struct ShareContentView: View {
                 size: .large,
                 isLoading: false)
             {
-                // presentationMode.wrappedValue.dismiss()
                 dismissAction()
             }
 
@@ -106,7 +124,6 @@ struct ShareSecretView_Previews: PreviewProvider {
         } dismissAction: {
 
         }
-
     }
 }
 

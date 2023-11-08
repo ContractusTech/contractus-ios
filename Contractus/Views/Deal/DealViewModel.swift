@@ -135,7 +135,11 @@ struct DealState {
     var isDealEnded: Bool {
         deal.status == .canceled || deal.status == .finished || deal.status == .revoked
     }
-    
+
+    var hasSecretKey: Bool {
+        !(deal.encryptedSecretKey?.isEmpty ?? true)
+    }
+
     var editIsVisible: Bool = false
 
     var clientPublicKey: String {
@@ -476,6 +480,7 @@ final class DealViewModel: ViewModel {
     private func decryptKey() {
         guard let key = state.deal.encryptedSecretKey else {
             self.state.canEdit = true
+            self.state.shareDeal = ShareableDeal(dealId: self.state.deal.id, secretBase64: "", command: .open)
             return
         }
         Task { @MainActor in

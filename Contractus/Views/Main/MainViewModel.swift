@@ -135,24 +135,29 @@ final class MainViewModel: ViewModel {
             case .deal(let shareData):
                 Task { @MainActor in
                     guard let deal = try? await loadDeal(id: shareData.id) else { return }
-                    guard
-                        let clientKeyData = Data(base64Encoded: shareData.secretBase64) 
-                    else {
-                        return
+                    switch shareData.command {
+                    case .shareDealSecret:
+                        guard
+                            let clientKeyData = Data(base64Encoded: shareData.secretBase64)
+                        else {
+                            return
+                        }
+
+                        guard
+                            let serverKey = deal.sharedKey,
+                            let serverKeyData = Data(base64Encoded: serverKey)
+                        else {
+                            return
+                        }
+
+                        guard let secretData = try? await SharedSecretService.recover(serverSecret: serverKeyData, clientSecret: clientKeyData, hashOriginalKey: deal.secretKeyHash ?? "") else {
+                            return
+                        }
+                        try? self.secretStorage?.saveSharedSecret(for: deal.id, sharedSecret: clientKeyData)
+                    case .open:
+                        break
                     }
 
-                    guard
-                        let serverKey = deal.sharedKey,
-                        let serverKeyData = Data(base64Encoded: serverKey)
-                    else {
-                        return
-                    }
-
-                    guard let secretData = try? await SharedSecretService.recover(serverSecret: serverKeyData, clientSecret: clientKeyData, hashOriginalKey: deal.secretKeyHash ?? "") else {
-                        return
-                    }
-
-                    try? self.secretStorage?.saveSharedSecret(for: deal.id, sharedSecret: clientKeyData)
                     state.selectedDeal = deal
                 }
 

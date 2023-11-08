@@ -1121,7 +1121,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 482 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 485 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -1583,6 +1583,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealConfirmTitle = Rswift.StringResource(key: "newDeal.confirm.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Contains sensitive data, do not let unauthorized persons scan the data.
+      ///
+      /// Locales: en
+      static let shareContentSensitiveInfo = Rswift.StringResource(key: "shareContent.sensitive-info", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Content
       ///
       /// Locales: en
@@ -2499,14 +2503,22 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let qrCodeButtonShare = Rswift.StringResource(key: "qrCode.button.share", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Share Secret
-      ///
-      /// Locales: en
-      static let dealShareSecret = Rswift.StringResource(key: "deal.share.secret", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Share key
       ///
       /// Locales: en
       static let shareTitleDefault = Rswift.StringResource(key: "share.title.default", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Show
+      ///
+      /// Locales: en
+      static let commonShow = Rswift.StringResource(key: "common.show", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Show deal QR-code
+      ///
+      /// Locales: en
+      static let dealShareDeal = Rswift.StringResource(key: "deal.share.deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Show secret key
+      ///
+      /// Locales: en
+      static let dealShareSecretKey = Rswift.StringResource(key: "deal.share.secret-key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Sign
       ///
       /// Locales: en
@@ -2651,6 +2663,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignSubtitleFinishDeal = Rswift.StringResource(key: "transactionSign.subtitle.finish-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The deal
+      ///
+      /// Locales: en
+      static let shareContentTitleDeal = Rswift.StringResource(key: "shareContent.title.deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The deal can be terminated after 4 months
       ///
       /// Locales: en
@@ -2694,7 +2710,7 @@ struct R: Rswift.Validatable {
       /// en translation: The partner need scan the QR code to start working on the contract.
       ///
       /// Locales: en
-      static let shareContentSubtitleSecretKey = Rswift.StringResource(key: "shareContent.subtitle.secret-key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      static let shareContentSubtitleDeal = Rswift.StringResource(key: "shareContent.subtitle.deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The party to the deal must not be the same as the checker
       ///
       /// Locales: en
@@ -2707,10 +2723,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealCreatedTitle = Rswift.StringResource(key: "newDeal.created.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: The secret key
-      ///
-      /// Locales: en
-      static let shareContentTitleSecretKey = Rswift.StringResource(key: "shareContent.title.secret-key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The secret key is needed to view and decrypt/encrypt contract details.
       ///
       /// Locales: en
@@ -4795,6 +4807,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("newDeal.confirm.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Contains sensitive data, do not let unauthorized persons scan the data.
+      ///
+      /// Locales: en
+      static func shareContentSensitiveInfo(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("shareContent.sensitive-info", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "shareContent.sensitive-info"
+        }
+
+        return NSLocalizedString("shareContent.sensitive-info", bundle: bundle, comment: "")
       }
 
       /// en translation: Content
@@ -8248,21 +8275,6 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("qrCode.button.share", bundle: bundle, comment: "")
       }
 
-      /// en translation: Share Secret
-      ///
-      /// Locales: en
-      static func dealShareSecret(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("deal.share.secret", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "deal.share.secret"
-        }
-
-        return NSLocalizedString("deal.share.secret", bundle: bundle, comment: "")
-      }
-
       /// en translation: Share key
       ///
       /// Locales: en
@@ -8276,6 +8288,51 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("share.title.default", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Show
+      ///
+      /// Locales: en
+      static func commonShow(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.show", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.show"
+        }
+
+        return NSLocalizedString("common.show", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Show deal QR-code
+      ///
+      /// Locales: en
+      static func dealShareDeal(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.share.deal", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.share.deal"
+        }
+
+        return NSLocalizedString("deal.share.deal", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Show secret key
+      ///
+      /// Locales: en
+      static func dealShareSecretKey(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.share.secret-key", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.share.secret-key"
+        }
+
+        return NSLocalizedString("deal.share.secret-key", bundle: bundle, comment: "")
       }
 
       /// en translation: Sign
@@ -8820,6 +8877,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("transactionSign.subtitle.finish-deal", bundle: bundle, comment: "")
       }
 
+      /// en translation: The deal
+      ///
+      /// Locales: en
+      static func shareContentTitleDeal(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("shareContent.title.deal", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "shareContent.title.deal"
+        }
+
+        return NSLocalizedString("shareContent.title.deal", bundle: bundle, comment: "")
+      }
+
       /// en translation: The deal can be terminated after 4 months
       ///
       /// Locales: en
@@ -8973,16 +9045,16 @@ struct R: Rswift.Validatable {
       /// en translation: The partner need scan the QR code to start working on the contract.
       ///
       /// Locales: en
-      static func shareContentSubtitleSecretKey(preferredLanguages: [String]? = nil) -> String {
+      static func shareContentSubtitleDeal(preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("shareContent.subtitle.secret-key", bundle: hostingBundle, comment: "")
+          return NSLocalizedString("shareContent.subtitle.deal", bundle: hostingBundle, comment: "")
         }
 
         guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "shareContent.subtitle.secret-key"
+          return "shareContent.subtitle.deal"
         }
 
-        return NSLocalizedString("shareContent.subtitle.secret-key", bundle: bundle, comment: "")
+        return NSLocalizedString("shareContent.subtitle.deal", bundle: bundle, comment: "")
       }
 
       /// en translation: The party to the deal must not be the same as the checker
@@ -9028,21 +9100,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("newDeal.created.title", bundle: bundle, comment: "")
-      }
-
-      /// en translation: The secret key
-      ///
-      /// Locales: en
-      static func shareContentTitleSecretKey(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("shareContent.title.secret-key", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "shareContent.title.secret-key"
-        }
-
-        return NSLocalizedString("shareContent.title.secret-key", bundle: bundle, comment: "")
       }
 
       /// en translation: The secret key is needed to view and decrypt/encrypt contract details.
