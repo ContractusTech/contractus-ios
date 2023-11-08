@@ -135,7 +135,11 @@ struct DealState {
     var isDealEnded: Bool {
         deal.status == .canceled || deal.status == .finished || deal.status == .revoked
     }
-    
+
+    var hasSecretKey: Bool {
+        !(deal.encryptedSecretKey?.isEmpty ?? true)
+    }
+
     var editIsVisible: Bool = false
 
     var clientPublicKey: String {
@@ -264,6 +268,12 @@ final class DealViewModel: ViewModel {
                 break
             case .deal(let shareData):
                 guard shareData.command == .shareDealSecret else { return }
+
+                guard shareData.id == state.deal.id else {
+                    state.errorState = .error(R.string.localizable.dealShareSecretKeyError())
+                    return
+                }
+
                 Task { @MainActor in
                     guard
                         let clientKeyData = Data(base64Encoded: shareData.secretBase64),
@@ -470,6 +480,7 @@ final class DealViewModel: ViewModel {
     private func decryptKey() {
         guard let key = state.deal.encryptedSecretKey else {
             self.state.canEdit = true
+            self.state.shareDeal = ShareableDeal(dealId: self.state.deal.id, secretBase64: "", command: .open)
             return
         }
         Task { @MainActor in
@@ -635,12 +646,6 @@ final class DealViewModel: ViewModel {
             }
             return nil
         }
-
-//        do {
-//            try FileManager.default.createDirectory(atPath: folderURL.path, withIntermediateDirectories: true)
-//        } catch {
-//            debugPrint(error.localizedDescription)
-//        }
 
         do {
             try? FileManager.default.removeItem(at: fileURL)

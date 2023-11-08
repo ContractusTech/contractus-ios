@@ -65,6 +65,10 @@
 "common.telegram" = "Telegram";
 "common.powered-by" = "Powered by";
 "common.payment" = "Payment";
+"common.immutable" = "Immutable";
+"common.yes-open" = "Yes, open";
+"common.try-again" = "Try again";
+"common.show" = "Show";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
@@ -128,13 +132,15 @@
 "qrCode.warning" = "Warning!";
 "qrCode.warning.message" = "Send it securely via Telegram Secret Chat or Signal to your partner or allow scan from your phone.";
 
-"shareContent.title.secret-key" = "The secret key";
-"shareContent.subtitle.secret-key" = "The partner need scan the QR code to start working on the contract.";
+"shareContent.title.deal" = "The deal";
+"shareContent.subtitle.deal" = "The partner need scan the QR code to start working on the contract.";
 "shareContent.subtitle" = "Used to top up account or added to a deal by partners";
+"shareContent.sensitive-info" = "Contains sensitive data, do not let unauthorized persons scan the data.";
 
 "qrScanner.title" = "QR Code scanner";
 "qrScanner.manual" = "or enter value manual";
 "qrScanner.placeholder" = "Enter value";
+"qrScanner.error" = "The value is not supported. Check for correctness and try again.";
 
 "uploadFile.button.select" = "Add file";
 "uploadFile.button.select-gallery" = "Gallery";
@@ -219,7 +225,8 @@
 "deal.buttons.finish-deal" = "Finish deal";
 "deal.finish" = "Finish deal";
 "deal.cancel" = "Cancel deal";
-"deal.share.secret" = "Share Secret";
+"deal.share.deal" = "Show deal QR-code";
+"deal.share.secret-key" = "Show secret key";
 "deal.executor.clear-account" = "Clear";
 "deal.executor.edit-account" = "Edit";
 "deal.executor.clear-account.message" = "Are you sure you want to clear account?";
@@ -260,6 +267,7 @@
 "deadline.comment" = "You must complete the deal by this date or the deal will be stopped and funds will be refunded to all parties. The service fee is not refundable.";
 "deal.confirm-close.title" = "Confirm";
 "deal.confirm-close.message" = "Do you want to close the editor?";
+"deal.share.secret-key.error" = "The key is not suitable for the current deal.";
 
 "newDeal.title" = "New deal";
 "newDeal.subtitle" = "Choose your role";
@@ -268,8 +276,8 @@
 "newDeal.subtitle.client" = "You want to order a service or buy a product.";
 "newDeal.subtitle.executor" = "You want to provide a service or sell a product.";
 "newDeal.created.top.title" = "Created";
-"newDeal.created.title" = "The secret key";
-"newDeal.created.subTitle" = "The partner need scan the QR code to start working on the contract.";
+"newDeal.created.title" = "New deal";
+"newDeal.created.subTitle" = "The partner need scan the QR-code to start working on the contract.";
 "newDeal.check.title" = "Allow checker";
 "newDeal.check.subtitle" = "The decision to complete the deal will be made by a third party.";
 "newDeal.bond.title" = "Performance bond";
@@ -313,6 +321,7 @@
 "newDeal.confirm.deadline.title" = "Deadline";
 "newDeal.confirm.encryption.title" = "Enable encryption";
 "newDeal.confirm.checker.title" = "Allow checker";
+"newDeal.confirm.alert-message" = "Do you want to close the deal creation form and open another deal?";
 
 "addContractor.title.enter-key" = "Enter public key";
 "addContractor.title.partner" = "Add partner";
@@ -338,6 +347,13 @@
 "main.empty.message" = "Your account must be specified in deal \nor create own deal by tap on «New Deal»";
 "main.about.tiers" = "About tiers";
 "main.title.filter" = "Filter";
+"main.item-type.all" = "Recent";
+"main.item-type.isChecker" = "For checking";
+"main.item-type.isClient" = "For client";
+"main.item-type.isExecutor" = "For execute";
+"main.item-type.isWorking" = "In work";
+"main.item-type.isDone" = "Done";
+"main.item-type.isCanceled" = "Canceled";
 
 "main.statistics.revenue-30" = "Revenue, 30d";
 "main.statistics.revenue-all" = "Revenue, all";

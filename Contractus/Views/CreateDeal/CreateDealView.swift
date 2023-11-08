@@ -113,6 +113,7 @@ struct CreateDealView: View {
         NavigationView {
             ZStack {
                 NavigationLink(destination: LazyView(ShareContentView(
+                    contentType: .privateKey,
                     informationType: .success,
                     content: viewModel.state.shareable!,
                     topTitle: R.string.localizable.newDealCreatedTopTitle(),

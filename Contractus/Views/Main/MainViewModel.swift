@@ -17,7 +17,7 @@ enum MainInput {
     case loadDeals(MainState.DealType)
     case executeScanResult(ScanResult)
     case saveTokenSettings([ContractusAPI.Token])
-    case dealOpened
+    case selectDeal(deal: Deal?, isNew: Bool = false)
 }
 
 struct MainState {
@@ -30,7 +30,8 @@ struct MainState {
     enum DealsState {
         case loading, loaded
     }
-    var pushDeal: Deal?
+    var selectedDeal: Deal?
+    var selectedDealIsNew: Bool = false
     var account: CommonAccount
     var currency: Currency = .defaultCurrency
     var statistics: [ContractusAPI.AccountStatistic] = []
@@ -49,6 +50,7 @@ final class MainViewModel: ViewModel {
     private var resourcesAPIService: ContractusAPI.ResourcesService?
     private var accountAPIService: ContractusAPI.AccountService?
     private var dealsAPIService: ContractusAPI.DealsService?
+    private var secretStorage: SharedSecretStorage?
     private var accountStorage: AccountStorage
     private var store = Set<AnyCancellable>()
     private var tokens: [ContractusAPI.Token] = []
@@ -59,6 +61,7 @@ final class MainViewModel: ViewModel {
         accountAPIService: ContractusAPI.AccountService?,
         dealsAPIService: ContractusAPI.DealsService?,
         resourcesAPIService: ContractusAPI.ResourcesService?,
+        secretStorage: SharedSecretStorage?,
         notification: NotificationHandler.NotificationType? = nil)
     {
         self.state = MainState(account: account, selectedTokens: UtilsStorage.shared.getTokenSettings() ?? [])
@@ -67,6 +70,7 @@ final class MainViewModel: ViewModel {
         self.dealsAPIService = dealsAPIService
         self.resourcesAPIService = resourcesAPIService
         self.accountStorage = accountStorage
+        self.secretStorage = secretStorage
         Task { @MainActor in
             await requestAuthorization()
         }
@@ -84,8 +88,12 @@ final class MainViewModel: ViewModel {
 
     func trigger(_ input: MainInput, after: AfterTrigger? = nil) {
         switch input {
-        case .dealOpened:
-            state.pushDeal = nil
+        case .selectDeal(let deal, let isNew):
+            var state = state
+            state.selectedDealIsNew = isNew
+            state.selectedDeal = deal
+            self.state = state
+
         case .saveTokenSettings(let tokens):
             UtilsStorage.shared.saveTokenSettings(tokens: tokens)
             Task {
@@ -128,7 +136,32 @@ final class MainViewModel: ViewModel {
             }
 
         case .executeScanResult(let result):
-            debugPrint(result)
+            switch result {
+            case .deal(let shareData):
+                Task { @MainActor in
+
+                    switch shareData.command {
+                    case .shareDealSecret:
+                        guard let clientKeyData = Data(base64Encoded: shareData.secretBase64) else { return }
+
+                        try? self.secretStorage?.saveSharedSecret(for: shareData.id, sharedSecret: clientKeyData)
+                        guard
+                            let deal = try? await loadDeal(id: shareData.id),
+                            let serverKey = deal.sharedKey,
+                            let serverKeyData = Data(base64Encoded: serverKey) else { return }
+
+                        guard let secretData = try? await SharedSecretService.recover(serverSecret: serverKeyData, clientSecret: clientKeyData, hashOriginalKey: deal.secretKeyHash ?? "") else {
+                            return
+                        }
+                        state.selectedDeal = deal
+                    case .open:
+                        break
+                    }
+                }
+
+            case .publicKey:
+                break
+            }
         case .updateAccount:
             if let account = accountStorage.getCurrentAccount() {
                 var newState = state
@@ -305,7 +338,7 @@ final class MainViewModel: ViewModel {
 
             guard accountExist else { return }
             Task { @MainActor in
-                self.state.pushDeal = try? await self.loadDeal(id: params.dealId)
+                self.state.selectedDeal = try? await self.loadDeal(id: params.dealId)
             }
         }
 

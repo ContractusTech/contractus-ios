@@ -64,7 +64,7 @@ struct DealView: View {
         case changeOwnerBond
         case importSharedKey
         case filePreview(URL)
-        case shareSecret
+        case shareDeal
         case signTx(TransactionType)
     }
 
@@ -1114,15 +1114,15 @@ struct DealView: View {
                 QuickLookView(url: url) {
 
                 }
-            case .shareSecret:
+            case .shareDeal:
                 if let shareData = viewModel.state.shareDeal {
                     ShareContentView(
                         contentType: .privateKey,
                         informationType: .none,
                         content: shareData,
                         topTitle: R.string.localizable.commonShare(),
-                        title: R.string.localizable.shareContentTitleSecretKey(),
-                        subTitle: R.string.localizable.shareContentSubtitleSecretKey())
+                        title: R.string.localizable.shareContentTitleDeal(),
+                        subTitle: R.string.localizable.shareContentSubtitleDeal())
                     { _ in
                         // TODO: -
                     } dismissAction: {
@@ -1595,15 +1595,9 @@ struct DealView: View {
     private func actionSheetMenuButtons() -> [Alert.Button] {
         if viewModel.isOwnerDeal {
             return [
-                Alert.Button.default(Text(R.string.localizable.dealShareSecret())) {
-                    activeModalType = .shareSecret
+                Alert.Button.default(Text(viewModel.state.hasSecretKey ?  R.string.localizable.dealShareDeal() : R.string.localizable.dealShareSecretKey())) {
+                    activeModalType = .shareDeal
                 },
-//                Alert.Button.destructive(Text(R.string.localizable.dealCancel())) {
-//                    viewModel.trigger(.cancel) {
-//                        self.callback()
-//                        self.presentationMode.wrappedValue.dismiss()
-//                    }
-//                },
                 Alert.Button.cancel() {
 
                 }]
