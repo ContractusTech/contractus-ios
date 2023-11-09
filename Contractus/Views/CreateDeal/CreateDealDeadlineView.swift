@@ -73,7 +73,7 @@ struct CreateDealDeadlineView: View {
                     .cornerRadius(20)
                     .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                 
-                Text(R.string.localizable.newDealDeadlineHint())
+                Text(R.string.localizable.newDealDeadlineHint(Date.fullRelativeDateFormatted(from: .now, to: deadline)))
                     .font(.footnote)
                     .fontWeight(.medium)
                     .foregroundColor(R.color.textBase .color)
