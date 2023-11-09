@@ -2671,7 +2671,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let shareContentTitleDeal = Rswift.StringResource(key: "shareContent.title.deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: The deal can be terminated after 4 months
+      /// en translation: The deal can be canceled after %@
       ///
       /// Locales: en
       static let newDealDeadlineHint = Rswift.StringResource(key: "newDeal.deadline.hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
@@ -8907,19 +8907,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("shareContent.title.deal", bundle: bundle, comment: "")
       }
 
-      /// en translation: The deal can be terminated after 4 months
+      /// en translation: The deal can be canceled after %@
       ///
       /// Locales: en
-      static func newDealDeadlineHint(preferredLanguages: [String]? = nil) -> String {
+      static func newDealDeadlineHint(_ value1: String, preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("newDeal.deadline.hint", bundle: hostingBundle, comment: "")
+          let format = NSLocalizedString("newDeal.deadline.hint", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
         }
 
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
           return "newDeal.deadline.hint"
         }
 
-        return NSLocalizedString("newDeal.deadline.hint", bundle: bundle, comment: "")
+        let format = NSLocalizedString("newDeal.deadline.hint", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
       }
 
       /// en translation: The decision to complete the deal will be made by a third party.
