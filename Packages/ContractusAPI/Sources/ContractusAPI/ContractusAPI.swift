@@ -6,11 +6,14 @@ fileprivate let localAddress = "localhost"
 
 public enum Blockchain: String, CaseIterable, Hashable {
     case solana
+    case bsc
 
     public var title: String {
         switch self {
         case .solana:
             return "Solana"
+        case .bsc:
+            return "Binance Smart Chain"
         }
     }
 }
