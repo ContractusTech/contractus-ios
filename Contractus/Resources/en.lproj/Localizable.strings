@@ -311,7 +311,7 @@
 "newDeal.checker.account.subtitle" = "The checker decides whether to finalize the deal or cancel it";
 "newDeal.deadline.title" = "Set the deadline";
 "newDeal.deadline.subtitle" = "If the deal is not completed before the deadline, the funds are returned to the client, the executor receives nothing";
-"newDeal.deadline.hint" = "The deal can be terminated after 4 months";
+"newDeal.deadline.hint" = "The deal can be canceled after %@";
 "newDeal.encrypt.title" = "Detail encryption";
 "newDeal.encrypt.subtitle" = "Deal description and files will be encrypted only deal participants can decrypt and view them.";
 "newDeal.encrypt.caption" = "Enable encryption";
