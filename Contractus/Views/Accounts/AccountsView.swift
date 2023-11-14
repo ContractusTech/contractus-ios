@@ -83,7 +83,7 @@ struct AccountsView: View {
                     HStack(spacing: 8) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(ContentMask.mask(from: item.account.publicKey))
-                            Text(item.account.blockchain.rawValue.capitalized)
+                            Text(item.account.blockchain.longTitle)
                                 .font(.footnote)
                                 .foregroundColor(R.color.secondaryText.color)
                         }

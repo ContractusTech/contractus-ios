@@ -243,7 +243,7 @@ final class DealViewModel: ViewModel {
                     await updateActions()
 
                 } catch(let error) {
-                    state.errorState = .error(error.readableDescription)
+                    state.errorState = .error(error.localizedDescription)
                     state.state = .none
                 }
             }
@@ -402,7 +402,7 @@ final class DealViewModel: ViewModel {
                     switch result {
                     case .failure(let error):
                         debugPrint(error)
-                        self.state.errorState = .error(error.readableDescription)
+                        self.state.errorState = .error(error.localizedDescription)
                         self.state.state = .none
                     case .finished:
                         after?()

@@ -888,7 +888,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 25 images.
+  /// This `R.image` struct is generated, and contains static references to 26 images.
   struct image {
     /// Image `Advcash`.
     static let advcash = Rswift.ImageResource(bundle: R.hostingBundle, name: "Advcash")
@@ -920,6 +920,8 @@ struct R: Rswift.Validatable {
     static let usdcCoinLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "USDC-CoinLogo")
     /// Image `addAccount`.
     static let addAccount = Rswift.ImageResource(bundle: R.hostingBundle, name: "addAccount")
+    /// Image `bsc`.
+    static let bsc = Rswift.ImageResource(bundle: R.hostingBundle, name: "bsc")
     /// Image `dealClient`.
     static let dealClient = Rswift.ImageResource(bundle: R.hostingBundle, name: "dealClient")
     /// Image `dealExecutor`.
@@ -1047,6 +1049,13 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "bsc", bundle: ..., traitCollection: ...)`
+    static func bsc(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.bsc, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIImage(named: "dealClient", bundle: ..., traitCollection: ...)`
     static func dealClient(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.dealClient, compatibleWith: traitCollection)
@@ -1121,7 +1130,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 485 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 486 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -2447,6 +2456,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonSelectAction = Rswift.StringResource(key: "common.select-action", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Select blockchain
+      ///
+      /// Locales: en
+      static let commonSelectBlockchain = Rswift.StringResource(key: "common.select-blockchain", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Select deadline
       ///
       /// Locales: en
@@ -8061,6 +8074,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.select-action", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Select blockchain
+      ///
+      /// Locales: en
+      static func commonSelectBlockchain(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("common.select-blockchain", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "common.select-blockchain"
+        }
+
+        return NSLocalizedString("common.select-blockchain", bundle: bundle, comment: "")
       }
 
       /// en translation: Select deadline

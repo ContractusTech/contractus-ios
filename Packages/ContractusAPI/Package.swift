@@ -1,4 +1,4 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 5.7
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -14,7 +14,6 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.6.1")),
-        .package(name: "TweetNacl", url: "https://github.com/bitmark-inc/tweetnacl-swiftwrap.git", from: "1.0.2"),
         .package(url: "https://github.com/keefertaylor/Base58Swift.git", from: "2.1.0")
     ],
     targets: [
@@ -24,7 +23,6 @@ let package = Package(
             name: "ContractusAPI",
             dependencies: [
                 "Alamofire",
-                "TweetNacl",
                 "Base58Swift"
             ]),
         .testTarget(

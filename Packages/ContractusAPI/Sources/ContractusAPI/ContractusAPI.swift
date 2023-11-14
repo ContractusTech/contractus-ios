@@ -13,6 +13,15 @@ public enum Blockchain: String, CaseIterable, Hashable {
         case .solana:
             return "Solana"
         case .bsc:
+            return "BSC"
+        }
+    }
+
+    public var longTitle: String {
+        switch self {
+        case .solana:
+            return "Solana"
+        case .bsc:
             return "Binance Smart Chain"
         }
     }

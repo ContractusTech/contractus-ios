@@ -69,6 +69,7 @@
 "common.yes-open" = "Yes, open";
 "common.try-again" = "Try again";
 "common.show" = "Show";
+"common.select-blockchain" = "Select blockchain";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";

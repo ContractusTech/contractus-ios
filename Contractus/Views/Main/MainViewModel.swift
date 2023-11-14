@@ -276,6 +276,9 @@ final class MainViewModel: ViewModel {
         case .solana:
             // TODO: - Need refactor.
             state.disableUnselectTokens = self.tokens.filter { $0.native || $0.code == "WSOL" }
+        case .bsc:
+            // TODO: - Added filter
+            state.disableUnselectTokens = []
         }
 
         async let balanceTask = loadBalance(for: tokens.map { .init(code: $0.code, address: $0.address) })

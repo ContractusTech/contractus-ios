@@ -55,7 +55,7 @@ final class DeadlineViewModel: ViewModel {
                     state.deal = newDeal
                 } catch {
                     state.state = .none
-                    state.errorState = .error(error.readableDescription)
+                    state.errorState = .error(error.localizedDescription)
                 }
 
             }

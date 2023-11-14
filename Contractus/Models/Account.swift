@@ -10,6 +10,7 @@ import TweetNacl
 import Base58Swift
 import SolanaSwift
 import ContractusAPI
+import Web3Core
 
 struct CommonAccount: Codable, Hashable {
     let publicKeyData: Data

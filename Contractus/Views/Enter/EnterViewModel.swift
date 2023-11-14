@@ -61,10 +61,6 @@ final class EnterViewModel: ViewModel {
             state.errorState = nil
         case .importPrivateKey(let privateKey):
             guard let blockchain = state.blockchain else { return }
-//            if accountService.existAccount(privateKey) {
-//                state.errorState = .error("This account already added.")
-//                return
-//            }
             guard let account = try? accountService.restore(by: privateKey, blockchain: blockchain) else {
                 self.state.isValidImportedPrivateKey = false
                 self.state.account = nil
@@ -78,21 +74,6 @@ final class EnterViewModel: ViewModel {
                 return
             }
             self.state.account = account
-//        case .reqeustAccountInfo:
-//            guard let account = state.account, let header = try? AuthorizationHeaderBuilder.build(for: .solana, with: (publicKey: account.publicKey.base58EncodedString, privateKey: account.secretKey)) else { return }
-//
-//            apiClient = ContractusAPI.APIClient(server: AppConfig.serverType, authorizationHeader: header)
-//            accountAPIService = ContractusAPI.AccountService(client: apiClient!)
-//
-//            accountAPIService?.getAccount { result in
-//                switch result {
-//                case .success(let account):
-//                    debugPrint(account)
-//                case .failure(let error):
-//                    debugPrint(error)
-//                }
-//
-//            }
         case .copyPrivateKey, .copyForBackup:
             UIPasteboard.general.string = state.account?.privateKey.toBase58()
             /// Maybe for logs will be useful
@@ -107,7 +88,7 @@ final class EnterViewModel: ViewModel {
                     }
                     accountService.save(account)
                 }catch {
-                    state.errorState = .error(error.readableDescription)
+                    state.errorState = .error(error.localizedDescription)
                 }
 
         case .setBlockchain(let blockchain):

@@ -78,7 +78,7 @@ final class RootViewModel: ViewModel {
                 debugPrint(".noAccount")
             } catch {
                 self.state.state = .error(error)
-                debugPrint(error.readableDescription)
+                debugPrint(error.localizedDescription)
             }
         }
     }
@@ -201,7 +201,7 @@ struct ContractusApp: App {
                     .scaledToFit()
                     .frame(width: 48, height: 48)
                     .foregroundColor( error.isDeviceCheckError ? R.color.yellow.color : R.color.blue.color)
-                Text(error.readableDescription)
+                Text(error.localizedDescription)
 
                 HStack(spacing: 12) {
                     CButton(title: "Try again", style: .secondary, size: .default, isLoading: false) {

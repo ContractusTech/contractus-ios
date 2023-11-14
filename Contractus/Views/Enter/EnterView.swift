@@ -1,12 +1,10 @@
-//
-//  EnterView.swift
-//  Contractus
-//
-//  Created by Simon Hudishkin on 25.07.2022.
-//
-
 import SwiftUI
 import enum ContractusAPI.Blockchain
+
+fileprivate enum Constants {
+    static let solanaImage = R.image.solana.image
+    static let bscImage = R.image.bsc.image
+}
 
 struct EnterView: View {
 
@@ -26,7 +24,7 @@ struct EnterView: View {
     var viewType: EnterViewType = .enterApp
 
     @State private var selectedView: NavigateViewType? = .none
-    @State private var blockchain: Blockchain = .solana
+    @State private var blockchain: Blockchain = .bsc
     @State private var showOnboarding: Bool = false
 
     var completion: (CommonAccount) -> Void
@@ -56,7 +54,7 @@ struct EnterView: View {
                             TopTextBlockView(
                                 headerText: nil,
                                 titleText: R.string.localizable.enterAddAccountTitle(),
-                                subTitleText: R.string.localizable.enterAddAccountSubtitle(blockchain.rawValue.capitalized))
+                                subTitleText: R.string.localizable.enterAddAccountSubtitle(blockchain.longTitle))
 
                             R.image.addAccount.image
                                 .resizable()
@@ -69,35 +67,45 @@ struct EnterView: View {
                 }
 
                 VStack {
-                    /* TODO: - Solana by default, yet!
-                    VStack {
-                        Text("Blockchain")
-                            .font(.callout)
-                            .foregroundColor(R.color.secondaryText.color)
-
-                        Menu(blockchain.rawValue.capitalized) {
+                    Text(R.string.localizable.commonSelectBlockchain())
+                        .font(.headline)
+                        .foregroundColor(R.color.textBase.color)
+                        .fontWeight(.medium)
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom, 6)
+                    HStack {
+                        HStack {
                             ForEach(Blockchain.allCases, id: \.self) { item in
-                                Button(item.rawValue.capitalized) {
+                                Button {
                                     blockchain = item
+                                    ImpactGenerator.soft()
+                                } label: {
+                                    HStack {
+                                        item.image
+                                            .resizable()
+                                            .frame(width: 24, height: 24)
+                                            .aspectRatio(contentMode: .fit)
+
+                                        Text(item.title)
+                                            .font(.body.weight(.medium))
+                                            .foregroundColor(blockchain == item ? R.color.buttonTextPrimary.color : R.color.textBase.color)
+                                    }
+                                    .padding(.vertical, 8)
+                                    .padding(.horizontal, 16)
+                                    .background(blockchain == item ? R.color.accentColor.color : .clear)
+                                    .cornerRadius(20)
                                 }
                             }
                         }
-                        .padding(10)
-                        .background(R.color.buttonBackgroundSecondary.color.opacity(0.4))
-                        .cornerRadius(12)
+                        .padding(4)
+                        .background {
+                            RoundedRectangle(cornerRadius: 24)
+                                .stroke()
+                                .fill(R.color.baseSeparator.color)
+                        }
                     }
-                    .padding(.bottom, 24)
-                     */
+                    .padding()
 
-                    if viewType == .enterApp {
-                        Text(R.string.localizable.enterMessage(blockchain.rawValue.capitalized))
-                            .font(.headline)
-                            .foregroundColor(R.color.textBase.color)
-                            .fontWeight(.medium)
-                            .multilineTextAlignment(.center)
-                            .padding(.bottom, 12)
-
-                    }
                     NavigationLink(tag: NavigateViewType.createWallet, selection: $selectedView) {
                         CreateWalletView { account in
                             completion(account)
@@ -171,6 +179,17 @@ struct EnterView: View {
             }
         case .addAccount:
             content()
+        }
+    }
+}
+
+extension Blockchain {
+    var image: Image {
+        switch self {
+        case .bsc:
+            return Constants.bscImage
+        case .solana:
+            return Constants.solanaImage
         }
     }
 }
