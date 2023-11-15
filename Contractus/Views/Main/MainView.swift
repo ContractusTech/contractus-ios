@@ -288,21 +288,24 @@ struct MainView: View {
                 })
                 .resizableSheet($holderModeState, id: "holderMode") { builder in
                     builder.content { context in
-                        UnlockHolderView { type in
+                        UnlockHolderView(methods: viewModel.state.checkoutMethods) { type in
                             switch type {
                             case .buy:
                                 EventService.shared.send(event: DefaultAnalyticsEvent.buyformBuyTap)
                                 holderModeState = .hidden
                                 showBuyCtus.toggle()
+                                ImpactGenerator.soft()
                             case .coinstore:
                                 holderModeState = .hidden
                                 openCoinstore()
+                                ImpactGenerator.soft()
                             case .raydium:
                                 holderModeState = .hidden
                                 openRaydium()
                             case .pancake:
                                 holderModeState = .hidden
                                 openPancake()
+                                ImpactGenerator.soft()
                             }
                         }
                     }
@@ -666,7 +669,7 @@ import ContractusAPI
 struct MainView_Previews: PreviewProvider {
 
     static var previews: some View {
-        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(account: Mock.account, accountStorage: MockAccountStorage(), accountAPIService: nil, dealsAPIService: nil, resourcesAPIService: nil, secretStorage: nil))) {
+        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(account: Mock.account, accountStorage: MockAccountStorage(), accountAPIService: nil, dealsAPIService: nil, resourcesAPIService: nil, checkoutService: nil, secretStorage: nil))) {
 
         }
     }

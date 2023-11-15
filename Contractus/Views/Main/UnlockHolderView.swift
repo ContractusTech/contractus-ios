@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ContractusAPI
 
 fileprivate enum Constants {
     static let arrowUp = Image(systemName: "arrow.up.right.square")
@@ -20,6 +21,7 @@ struct UnlockHolderView: View {
         case pancake
     }
 
+    var methods: [CheckoutType]
     var action: (UnlockType) -> Void
 
     var body: some View {
@@ -46,22 +48,15 @@ struct UnlockHolderView: View {
                 .padding(.trailing, 32)
                 .padding(.bottom, 6)
 
-            itemView(
-                title: R.string.localizable.unlockHolderBuyTitle(),
-                subtitle: R.string.localizable.unlockHolderBuyTitle1(),
-                description: "",
-                isUrl: false
-            ) {
-                action(.buy)
-            }
-
-            itemView(
-                title: R.string.localizable.unlockHolderCoinstoreTitle(),
-                subtitle: R.string.localizable.unlockHolderCoinstoreTitle1(),
-                description: "",
-                isUrl: true
-            ) {
-                action(.coinstore)
+            if methods.contains(.advcash) {
+                itemView(
+                    title: R.string.localizable.unlockHolderBuyTitle(),
+                    subtitle: R.string.localizable.unlockHolderBuyTitle1(),
+                    description: "",
+                    isUrl: false
+                ) {
+                    action(.buy)
+                }
             }
 
             itemView(
@@ -74,11 +69,19 @@ struct UnlockHolderView: View {
             }
 
             itemView(
+                title: R.string.localizable.unlockHolderCoinstoreTitle(),
+                subtitle: R.string.localizable.unlockHolderCoinstoreTitle1(),
+                description: R.string.localizable.unlockHolderPancakeSubtitle(),
+                isUrl: true
+            ) {
+                action(.coinstore)
+            }
+
+            itemView(
                 title: R.string.localizable.unlockHolderPancakeTitle(),
                 subtitle: R.string.localizable.unlockHolderPancakeTitle1(),
                 description: R.string.localizable.unlockHolderPancakeSubtitle(),
-                isUrl: true,
-                warn: true
+                isUrl: true
             ) {
                 action(.pancake)
             }
@@ -105,7 +108,7 @@ struct UnlockHolderView: View {
                     Spacer()
                     if isUrl {
                         Constants.arrowUp
-                            .foregroundColor(R.color.fourthBackground.color)
+                            .foregroundColor(R.color.secondaryText.color)
                     }
                 }
                 if !description.isEmpty {
@@ -128,6 +131,6 @@ struct UnlockHolderView: View {
 
 struct UnlockHolderView_Previews: PreviewProvider {
     static var previews: some View {
-        UnlockHolderView() { _ in }
+        UnlockHolderView(methods: [.advcash]) { _ in }
     }
 }
