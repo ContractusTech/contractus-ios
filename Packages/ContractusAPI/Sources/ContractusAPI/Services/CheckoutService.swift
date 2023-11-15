@@ -39,6 +39,12 @@ public final class CheckoutService: BaseService {
         }
     }
 
+    public func available(completion: @escaping (Swift.Result<AvailableMethodsResult, APIClientError>) -> Void) {
+        self.request(path: .available, httpMethod: .get, data: Empty()) { (result: Result<AvailableMethodsResult, APIClientError>) in
+            completion(result)
+        }
+    }
+
     public func create(_ data: CreateUrlRequest, completion: @escaping (Swift.Result<CreateUrlResult, APIClientError>) -> Void) {
         self.request(path: .create, httpMethod: .post, data: data) { (result: Result<CreateUrlResult, APIClientError>) in
             completion(result)

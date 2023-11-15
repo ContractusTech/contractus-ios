@@ -147,6 +147,7 @@ struct ContractusApp: App {
             accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
             dealsAPIService: try? APIServiceFactory.shared.makeDealsService(),
             resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService(), 
+            checkoutService: APIServiceFactory.shared.makeCheckoutService(),
             secretStorage: SharedSecretStorageImpl(),
             notification: notification)), logoutCompletion: {
                 rootViewModel.trigger(.logout)

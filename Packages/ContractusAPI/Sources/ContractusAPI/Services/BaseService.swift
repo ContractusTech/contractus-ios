@@ -43,6 +43,7 @@ public enum ServicePath {
     case create
     case aiTextGenerate
     case aiPrompts
+    case available
 
     var value: String {
         switch self {
@@ -110,6 +111,8 @@ public enum ServicePath {
             return "/checkout/calculate"
         case .create:
             return "/checkout/create"
+        case .available:
+            return "/checkout/available"
         case .aiTextGenerate:
             return "/ai/text-generate"
         case .aiPrompts:
