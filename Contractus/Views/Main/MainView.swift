@@ -88,7 +88,7 @@ struct MainView: View {
                                 showSendTokens.toggle()
                             }
 
-                        if viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
+                        if viewModel.state.allowBuyToken && viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
                             UnlockHolderButtonView() {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
 
@@ -261,7 +261,7 @@ struct MainView: View {
                 })
                 .resizableSheet($topUpState, id: "topUp", builder: { builder in
                     builder.content { context in
-                        TopUpView { type in
+                        TopUpView(allowBuyToken: viewModel.state.allowBuyToken) { type in
                             switch type {
                             case .crypto:
                                 sheetType = .sharePublicKey
@@ -290,7 +290,7 @@ struct MainView: View {
                 })
                 .resizableSheet($holderModeState, id: "holderMode") { builder in
                     builder.content { context in
-                        UnlockHolderView(methods: viewModel.state.checkoutMethods) { type in
+                        UnlockHolderView { type in
                             switch type {
                             case .buy:
                                 EventService.shared.send(event: DefaultAnalyticsEvent.buyformBuyTap)
