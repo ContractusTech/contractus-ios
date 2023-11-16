@@ -34,6 +34,7 @@ struct MainState {
     var selectedDealIsNew: Bool = false
     var account: CommonAccount
     var checkoutMethods: [ContractusAPI.CheckoutType] = []
+    var allowBuyToken: Bool = false
     var currency: Currency = .defaultCurrency
     var statistics: [ContractusAPI.AccountStatistic] = []
     var balance: Balance?
@@ -291,6 +292,7 @@ final class MainViewModel: ViewModel {
         state.balance = balance
         state.statistics = statistics
         state.checkoutMethods = methods
+        state.allowBuyToken = methods.contains(.advcash)
 
         self.state = state
 

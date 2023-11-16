@@ -21,7 +21,6 @@ struct UnlockHolderView: View {
         case pancake
     }
 
-    var methods: [CheckoutType]
     var action: (UnlockType) -> Void
 
     var body: some View {
@@ -48,15 +47,13 @@ struct UnlockHolderView: View {
                 .padding(.trailing, 32)
                 .padding(.bottom, 6)
 
-            if methods.contains(.advcash) {
-                itemView(
-                    title: R.string.localizable.unlockHolderBuyTitle(),
-                    subtitle: R.string.localizable.unlockHolderBuyTitle1(),
-                    description: "",
-                    isUrl: false
-                ) {
-                    action(.buy)
-                }
+            itemView(
+                title: R.string.localizable.unlockHolderBuyTitle(),
+                subtitle: R.string.localizable.unlockHolderBuyTitle1(),
+                description: "",
+                isUrl: false
+            ) {
+                action(.buy)
             }
 
             itemView(
@@ -131,6 +128,6 @@ struct UnlockHolderView: View {
 
 struct UnlockHolderView_Previews: PreviewProvider {
     static var previews: some View {
-        UnlockHolderView(methods: [.advcash]) { _ in }
+        UnlockHolderView { _ in }
     }
 }
