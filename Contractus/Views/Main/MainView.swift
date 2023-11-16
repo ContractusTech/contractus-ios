@@ -91,7 +91,9 @@ struct MainView: View {
                         if viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
                             UnlockHolderButtonView() {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
-                                holderModeState = .medium
+
+                                holderModeState = .hidden
+                                showBuyCtus.toggle()
                             }
                         }
 
@@ -271,7 +273,7 @@ struct MainView: View {
                                 break;
                             case .buyCTUS:
                                 topUpState = .hidden
-                                holderModeState = .medium
+                                showBuyCtus.toggle()
                             }
                         }
                     }
