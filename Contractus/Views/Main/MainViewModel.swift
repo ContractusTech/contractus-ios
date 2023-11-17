@@ -64,7 +64,7 @@ final class MainViewModel: ViewModel {
         secretStorage: SharedSecretStorage?,
         notification: NotificationHandler.NotificationType? = nil)
     {
-        self.state = MainState(account: account, selectedTokens: UtilsStorage.shared.getTokenSettings() ?? [])
+        self.state = MainState(account: account, selectedTokens: UtilsStorage.shared.getTokenSettings(blockchain: account.blockchain) ?? [])
 
         self.accountAPIService = accountAPIService
         self.dealsAPIService = dealsAPIService
@@ -95,7 +95,7 @@ final class MainViewModel: ViewModel {
             self.state = state
 
         case .saveTokenSettings(let tokens):
-            UtilsStorage.shared.saveTokenSettings(tokens: tokens)
+            UtilsStorage.shared.saveTokenSettings(tokens: tokens, blockchain: self.state.account.blockchain)
             Task {
                 try? await loadAccountInfo()
             }
@@ -255,12 +255,12 @@ final class MainViewModel: ViewModel {
     }
 
     private func getTokenSettings() async -> [ContractusAPI.Token] {
-        if let tokens = UtilsStorage.shared.getTokenSettings() {
+        if let tokens = UtilsStorage.shared.getTokenSettings(blockchain: self.state.account.blockchain) {
             return tokens
         }
 
         if let tokens = try? await loadTokens() {
-            UtilsStorage.shared.saveTokenSettings(tokens: tokens)
+            UtilsStorage.shared.saveTokenSettings(tokens: tokens, blockchain: self.state.account.blockchain)
             return tokens
         }
         return []

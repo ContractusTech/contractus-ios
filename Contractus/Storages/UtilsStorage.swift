@@ -6,8 +6,8 @@ final class UtilsStorage {
     private enum Keys: String {
         case tokenSettings
 
-        var value: String {
-            return "\(self.rawValue)_\(AppConfig.serverType.networkTitle)"
+        func value(_ blockchain: Blockchain) -> String {
+            return "\(self.rawValue)-\(AppConfig.serverType.networkTitle)-\(blockchain.rawValue)"
         }
     }
 
@@ -17,9 +17,9 @@ final class UtilsStorage {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
 
-    func getTokenSettings() -> [ContractusAPI.Token]? {
+    func getTokenSettings(blockchain: Blockchain) -> [ContractusAPI.Token]? {
         if
-            let data = storage.data(forKey: Keys.tokenSettings.value),
+            let data = storage.data(forKey: Keys.tokenSettings.value(blockchain)),
             let settings = try? decoder.decode([StoreToken].self, from: data) {
 
             return settings.map { $0.asToken }
@@ -28,9 +28,9 @@ final class UtilsStorage {
         return nil
     }
 
-    func saveTokenSettings(tokens: [ContractusAPI.Token]) {
+    func saveTokenSettings(tokens: [ContractusAPI.Token], blockchain: Blockchain) {
         guard let data = try? encoder.encode(tokens.map { $0.asInternalToken }) else { return }
-        storage.set(data, forKey: Keys.tokenSettings.value)
+        storage.set(data, forKey: Keys.tokenSettings.value(blockchain))
     }
 }
 
