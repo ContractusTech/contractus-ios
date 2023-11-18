@@ -1386,6 +1386,10 @@ struct R: Rswift.Validatable {
       /// en translation: Buy
       ///
       /// Locales: en
+      static let topupTitleCards = Rswift.StringResource(key: "topup.title.cards", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Buy
+      ///
+      /// Locales: en
       static let unlockHolderBuyTitle = Rswift.StringResource(key: "unlockHolder.buy.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Buy 10k CTUS token
       ///
@@ -1399,18 +1403,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let topupTitleBuyCtus = Rswift.StringResource(key: "topup.title.buy-ctus", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Buy cryptocurrency, USDT, USDC, SOL, etc
-      ///
-      /// Locales: en
-      static let topupSubtitleCards = Rswift.StringResource(key: "topup.subtitle.cards", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: By cards
-      ///
-      /// Locales: en
-      static let topupTitleCards = Rswift.StringResource(key: "topup.title.cards", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: By crypto
-      ///
-      /// Locales: en
-      static let topupTitleCrypto = Rswift.StringResource(key: "topup.title.crypto", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: By pressed «Continue» you confirm that you have saved your private key
       ///
       /// Locales: en
@@ -1631,6 +1623,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealCreatedTopTitle = Rswift.StringResource(key: "newDeal.created.top.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Cryptocurrency by card, USDT, USDC, SOL, etc
+      ///
+      /// Locales: en
+      static let topupSubtitleCards = Rswift.StringResource(key: "topup.subtitle.cards", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Cryptocurrency from another account
+      ///
+      /// Locales: en
+      static let topupSubtitleCrypto = Rswift.StringResource(key: "topup.subtitle.crypto", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Currency
       ///
       /// Locales: en
@@ -1715,10 +1715,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let aboutAccountDeleteRemoveBackupTitle = Rswift.StringResource(key: "aboutAccount.delete.remove-backup-title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Deposit from another account
-      ///
-      /// Locales: en
-      static let topupSubtitleCrypto = Rswift.StringResource(key: "topup.subtitle.crypto", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Detail encryption
       ///
       /// Locales: en
@@ -2367,6 +2363,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let unlockHolderRaydiumTitle = Rswift.StringResource(key: "unlockHolder.raydium.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Receive
+      ///
+      /// Locales: en
+      static let topupTitleCrypto = Rswift.StringResource(key: "topup.title.crypto", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Receive cryptocurrency or add your account to a partner's deal
+      ///
+      /// Locales: en
+      static let shareContentSubtitle = Rswift.StringResource(key: "shareContent.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Recent
       ///
       /// Locales: en
@@ -2859,10 +2863,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let aiGenUseIt = Rswift.StringResource(key: "aiGen.use-it", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: Used to top up account or added to a deal by partners
-      ///
-      /// Locales: en
-      static let shareContentSubtitle = Rswift.StringResource(key: "shareContent.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Verifier
       ///
       /// Locales: en
@@ -4058,6 +4058,21 @@ struct R: Rswift.Validatable {
       /// en translation: Buy
       ///
       /// Locales: en
+      static func topupTitleCards(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("topup.title.cards", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "topup.title.cards"
+        }
+
+        return NSLocalizedString("topup.title.cards", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Buy
+      ///
+      /// Locales: en
       static func unlockHolderBuyTitle(preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
           return NSLocalizedString("unlockHolder.buy.title", bundle: hostingBundle, comment: "")
@@ -4113,51 +4128,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("topup.title.buy-ctus", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Buy cryptocurrency, USDT, USDC, SOL, etc
-      ///
-      /// Locales: en
-      static func topupSubtitleCards(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("topup.subtitle.cards", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "topup.subtitle.cards"
-        }
-
-        return NSLocalizedString("topup.subtitle.cards", bundle: bundle, comment: "")
-      }
-
-      /// en translation: By cards
-      ///
-      /// Locales: en
-      static func topupTitleCards(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("topup.title.cards", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "topup.title.cards"
-        }
-
-        return NSLocalizedString("topup.title.cards", bundle: bundle, comment: "")
-      }
-
-      /// en translation: By crypto
-      ///
-      /// Locales: en
-      static func topupTitleCrypto(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("topup.title.crypto", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "topup.title.crypto"
-        }
-
-        return NSLocalizedString("topup.title.crypto", bundle: bundle, comment: "")
       }
 
       /// en translation: By pressed «Continue» you confirm that you have saved your private key
@@ -4991,6 +4961,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("newDeal.created.top.title", bundle: bundle, comment: "")
       }
 
+      /// en translation: Cryptocurrency by card, USDT, USDC, SOL, etc
+      ///
+      /// Locales: en
+      static func topupSubtitleCards(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("topup.subtitle.cards", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "topup.subtitle.cards"
+        }
+
+        return NSLocalizedString("topup.subtitle.cards", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Cryptocurrency from another account
+      ///
+      /// Locales: en
+      static func topupSubtitleCrypto(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("topup.subtitle.crypto", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "topup.subtitle.crypto"
+        }
+
+        return NSLocalizedString("topup.subtitle.crypto", bundle: bundle, comment: "")
+      }
+
       /// en translation: Currency
       ///
       /// Locales: en
@@ -5304,21 +5304,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("aboutAccount.delete.remove-backup-title", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Deposit from another account
-      ///
-      /// Locales: en
-      static func topupSubtitleCrypto(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("topup.subtitle.crypto", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "topup.subtitle.crypto"
-        }
-
-        return NSLocalizedString("topup.subtitle.crypto", bundle: bundle, comment: "")
       }
 
       /// en translation: Detail encryption
@@ -7763,6 +7748,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("unlockHolder.raydium.title", bundle: bundle, comment: "")
       }
 
+      /// en translation: Receive
+      ///
+      /// Locales: en
+      static func topupTitleCrypto(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("topup.title.crypto", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "topup.title.crypto"
+        }
+
+        return NSLocalizedString("topup.title.crypto", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Receive cryptocurrency or add your account to a partner's deal
+      ///
+      /// Locales: en
+      static func shareContentSubtitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("shareContent.subtitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "shareContent.subtitle"
+        }
+
+        return NSLocalizedString("shareContent.subtitle", bundle: bundle, comment: "")
+      }
+
       /// en translation: Recent
       ///
       /// Locales: en
@@ -9616,21 +9631,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("aiGen.use-it", bundle: bundle, comment: "")
-      }
-
-      /// en translation: Used to top up account or added to a deal by partners
-      ///
-      /// Locales: en
-      static func shareContentSubtitle(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("shareContent.subtitle", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "shareContent.subtitle"
-        }
-
-        return NSLocalizedString("shareContent.subtitle", bundle: bundle, comment: "")
       }
 
       /// en translation: Verifier

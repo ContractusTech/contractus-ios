@@ -261,7 +261,10 @@ struct MainView: View {
                 })
                 .resizableSheet($topUpState, id: "topUp", builder: { builder in
                     builder.content { context in
-                        TopUpView(allowBuyToken: viewModel.state.allowBuyToken) { type in
+                        TopUpView(
+                            allowBuyToken: viewModel.state.allowBuyToken,
+                            allowDeposit: viewModel.state.allowDeposit
+                        ) { type in
                             switch type {
                             case .crypto:
                                 sheetType = .sharePublicKey
