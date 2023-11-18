@@ -26,12 +26,15 @@ public struct AvailableMethodsResult: Decodable {
 public enum CheckoutType: String, Decodable {
     case nowpayments
     case advcash
+    case transak
     case unknown
 
     public init?(rawValue: String) {
         switch rawValue {
         case Self.nowpayments.rawValue:
             self = .nowpayments
+        case Self.transak.rawValue:
+            self = .transak
         case Self.advcash.rawValue:
             self = .advcash
         default:

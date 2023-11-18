@@ -134,7 +134,7 @@
 
 "shareContent.title.deal" = "The deal";
 "shareContent.subtitle.deal" = "The partner need scan the QR code to start working on the contract.";
-"shareContent.subtitle" = "Used to top up account or added to a deal by partners";
+"shareContent.subtitle" = "Receive cryptocurrency or add your account to a partner's deal";
 "shareContent.sensitive-info" = "Contains sensitive data, do not let unauthorized persons scan the data.";
 
 "qrScanner.title" = "QR Code scanner";
@@ -450,11 +450,11 @@
 "error.download.file" = "Download file error";
 "error.decrypt.file" = "Decrypt file error";
 
-"topup.title.cards" = "By cards";
-"topup.title.crypto" = "By crypto";
+"topup.title.cards" = "Buy";
+"topup.title.crypto" = "Receive";
 "topup.title.load" = "Get a loan (soon)";
-"topup.subtitle.cards" = "Buy cryptocurrency, USDT, USDC, SOL, etc";
-"topup.subtitle.crypto" = "Deposit from another account";
+"topup.subtitle.cards" = "Cryptocurrency by card, USDT, USDC, SOL, etc";
+"topup.subtitle.crypto" = "Cryptocurrency from another account";
 "topup.subtitle.load" = "Obtain loan funds for the deal";
 "topup.title.buy-ctus" = "Buy CTUS Token";
 "topup.subtitle.buy-ctus" = "Supported more than 30 cryptocurrencies";

@@ -35,6 +35,7 @@ struct MainState {
     var account: CommonAccount
     var checkoutMethods: [ContractusAPI.CheckoutType] = []
     var allowBuyToken: Bool = false
+    var allowDeposit: Bool = false
     var currency: Currency = .defaultCurrency
     var statistics: [ContractusAPI.AccountStatistic] = []
     var balance: Balance?
@@ -293,9 +294,8 @@ final class MainViewModel: ViewModel {
         state.statistics = statistics
         state.checkoutMethods = methods
         state.allowBuyToken = methods.contains(.advcash)
-
+        state.allowDeposit = methods.contains(.transak)
         self.state = state
-
     }
 
     private func loadStatistics(currency: Currency) async throws -> [ContractusAPI.AccountStatistic] {
