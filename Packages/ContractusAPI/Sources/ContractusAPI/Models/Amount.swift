@@ -86,7 +86,7 @@ extension Amount: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let value = try container.decode(String.self, forKey: .value)
-        self.value = BigUInt(stringLiteral: value)
+        self.value = BigUInt(stringLiteral: value.isNumber ? value : "0")
         self.token = try container.decode(Token.self, forKey: .token)
         self.valueFormatted = Self.formatted(value: self.value, decimals: token.decimals, code: nil)
         self.valueFormattedWithCode = Self.formatted(value: self.value, decimals: token.decimals, code: token.code)
