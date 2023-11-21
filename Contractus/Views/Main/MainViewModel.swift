@@ -33,6 +33,9 @@ struct MainState {
     var selectedDeal: Deal?
     var selectedDealIsNew: Bool = false
     var account: CommonAccount
+    var checkoutMethods: [ContractusAPI.CheckoutType] = []
+    var allowBuyToken: Bool = false
+    var allowDeposit: Bool = false
     var currency: Currency = .defaultCurrency
     var statistics: [ContractusAPI.AccountStatistic] = []
     var balance: Balance?
@@ -50,6 +53,7 @@ final class MainViewModel: ViewModel {
     private var resourcesAPIService: ContractusAPI.ResourcesService?
     private var accountAPIService: ContractusAPI.AccountService?
     private var dealsAPIService: ContractusAPI.DealsService?
+    private var checkoutService: ContractusAPI.CheckoutService?
     private var secretStorage: SharedSecretStorage?
     private var accountStorage: AccountStorage
     private var store = Set<AnyCancellable>()
@@ -61,6 +65,7 @@ final class MainViewModel: ViewModel {
         accountAPIService: ContractusAPI.AccountService?,
         dealsAPIService: ContractusAPI.DealsService?,
         resourcesAPIService: ContractusAPI.ResourcesService?,
+        checkoutService: ContractusAPI.CheckoutService?,
         secretStorage: SharedSecretStorage?,
         notification: NotificationHandler.NotificationType? = nil)
     {
@@ -69,6 +74,7 @@ final class MainViewModel: ViewModel {
         self.accountAPIService = accountAPIService
         self.dealsAPIService = dealsAPIService
         self.resourcesAPIService = resourcesAPIService
+        self.checkoutService = checkoutService
         self.accountStorage = accountStorage
         self.secretStorage = secretStorage
         Task { @MainActor in
@@ -283,14 +289,16 @@ final class MainViewModel: ViewModel {
 
         async let balanceTask = loadBalance(for: tokens.map { .init(code: $0.code, address: $0.address) })
         async let statisticsTask = loadStatistics(currency: .defaultCurrency)
+        async let availableMethodsTask = loadAvailableMethods()
 
-        let (statistics, balance) = try await (statisticsTask, balanceTask)
+        let (statistics, balance, methods) = try await (statisticsTask, balanceTask, availableMethodsTask)
         state.selectedTokens = self.tokens
         state.balance = balance
         state.statistics = statistics
-
+        state.checkoutMethods = methods
+        state.allowBuyToken = methods.contains(.advcash)
+        state.allowDeposit = methods.contains(.transak)
         self.state = state
-
     }
 
     private func loadStatistics(currency: Currency) async throws -> [ContractusAPI.AccountStatistic] {
@@ -305,7 +313,20 @@ final class MainViewModel: ViewModel {
             })
         }
     }
-    
+
+    private func loadAvailableMethods() async throws -> [ContractusAPI.CheckoutType] {
+        try await withCheckedThrowingContinuation { continues in
+            checkoutService?.available(completion: { result in
+                switch result {
+                case .failure(let error):
+                    continues.resume(throwing: error)
+                case .success(let data):
+                    continues.resume(returning: data.methods)
+                }
+            })
+        }
+    }
+
     private func requestAuthorization() async {
         let status = await UNUserNotificationCenter.current().notificationSettings()
         switch status.authorizationStatus {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ContractusAPI
 
 fileprivate enum Constants {
     static let arrowUp = Image(systemName: "arrow.up.right.square")
@@ -56,15 +57,6 @@ struct UnlockHolderView: View {
             }
 
             itemView(
-                title: R.string.localizable.unlockHolderCoinstoreTitle(),
-                subtitle: R.string.localizable.unlockHolderCoinstoreTitle1(),
-                description: "",
-                isUrl: true
-            ) {
-                action(.coinstore)
-            }
-
-            itemView(
                 title: R.string.localizable.unlockHolderRaydiumTitle(),
                 subtitle: R.string.localizable.unlockHolderRaydiumTitle1(),
                 description: "",
@@ -74,11 +66,19 @@ struct UnlockHolderView: View {
             }
 
             itemView(
+                title: R.string.localizable.unlockHolderCoinstoreTitle(),
+                subtitle: R.string.localizable.unlockHolderCoinstoreTitle1(),
+                description: R.string.localizable.unlockHolderPancakeSubtitle(),
+                isUrl: true
+            ) {
+                action(.coinstore)
+            }
+
+            itemView(
                 title: R.string.localizable.unlockHolderPancakeTitle(),
                 subtitle: R.string.localizable.unlockHolderPancakeTitle1(),
                 description: R.string.localizable.unlockHolderPancakeSubtitle(),
-                isUrl: true,
-                warn: true
+                isUrl: true
             ) {
                 action(.pancake)
             }
@@ -105,7 +105,7 @@ struct UnlockHolderView: View {
                     Spacer()
                     if isUrl {
                         Constants.arrowUp
-                            .foregroundColor(R.color.fourthBackground.color)
+                            .foregroundColor(R.color.secondaryText.color)
                     }
                 }
                 if !description.isEmpty {
@@ -128,6 +128,6 @@ struct UnlockHolderView: View {
 
 struct UnlockHolderView_Previews: PreviewProvider {
     static var previews: some View {
-        UnlockHolderView() { _ in }
+        UnlockHolderView { _ in }
     }
 }

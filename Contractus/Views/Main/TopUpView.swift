@@ -24,6 +24,8 @@ struct TopUpView: View {
     
     @State private var alertType: AlertType?
 
+    var allowBuyToken: Bool
+    var allowDeposit: Bool
     var action: (TopUpType) -> Void
 
     var body: some View {
@@ -38,13 +40,17 @@ struct TopUpView: View {
                 action(.crypto)
             }
 
-            itemView(image: Constants.cardImage, title: R.string.localizable.topupTitleCards(), description: R.string.localizable.topupSubtitleCards(), disabled: viewModel.state.disabled, loading: viewModel.state.state == .loadingMethods) {
-                viewModel.trigger(.getMethods)
+            if allowDeposit {
+                itemView(image: Constants.cardImage, title: R.string.localizable.topupTitleCards(), description: R.string.localizable.topupSubtitleCards(), disabled: viewModel.state.disabled, loading: viewModel.state.state == .loadingMethods) {
+                    viewModel.trigger(.getMethods)
 
+                }
             }
 
-            itemView(image: Constants.holderImage, title: R.string.localizable.topupTitleBuyCtus(), description: R.string.localizable.topupSubtitleBuyCtus(), disabled: false, loading: false) {
-                action(.buyCTUS)
+            if allowBuyToken {
+                itemView(image: Constants.holderImage, title: R.string.localizable.topupTitleBuyCtus(), description: R.string.localizable.topupSubtitleBuyCtus(), disabled: false, loading: false) {
+                    action(.buyCTUS)
+                }
             }
 
             itemView(image: Constants.loanImage, title: R.string.localizable.topupTitleLoad(), description: R.string.localizable.topupSubtitleLoad(), disabled: true, loading: false) {
@@ -135,7 +141,7 @@ extension TopUpView.AlertType: Identifiable {
 
 struct TopUpView_Previews: PreviewProvider {
     static var previews: some View {
-        TopUpView { _ in
+        TopUpView(allowBuyToken: true, allowDeposit: true) { _ in
 
         }
     }

@@ -88,10 +88,12 @@ struct MainView: View {
                                 showSendTokens.toggle()
                             }
 
-                        if viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
+                        if viewModel.state.allowBuyToken && viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
                             UnlockHolderButtonView() {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
-                                holderModeState = .medium
+
+                                holderModeState = .hidden
+                                showBuyCtus.toggle()
                             }
                         }
 
@@ -259,7 +261,10 @@ struct MainView: View {
                 })
                 .resizableSheet($topUpState, id: "topUp", builder: { builder in
                     builder.content { context in
-                        TopUpView { type in
+                        TopUpView(
+                            allowBuyToken: viewModel.state.allowBuyToken,
+                            allowDeposit: viewModel.state.allowDeposit
+                        ) { type in
                             switch type {
                             case .crypto:
                                 sheetType = .sharePublicKey
@@ -271,7 +276,7 @@ struct MainView: View {
                                 break;
                             case .buyCTUS:
                                 topUpState = .hidden
-                                holderModeState = .medium
+                                showBuyCtus.toggle()
                             }
                         }
                     }
@@ -294,15 +299,18 @@ struct MainView: View {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.buyformBuyTap)
                                 holderModeState = .hidden
                                 showBuyCtus.toggle()
+                                ImpactGenerator.soft()
                             case .coinstore:
                                 holderModeState = .hidden
                                 openCoinstore()
+                                ImpactGenerator.soft()
                             case .raydium:
                                 holderModeState = .hidden
                                 openRaydium()
                             case .pancake:
                                 holderModeState = .hidden
                                 openPancake()
+                                ImpactGenerator.soft()
                             }
                         }
                     }
@@ -666,7 +674,7 @@ import ContractusAPI
 struct MainView_Previews: PreviewProvider {
 
     static var previews: some View {
-        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(account: Mock.account, accountStorage: MockAccountStorage(), accountAPIService: nil, dealsAPIService: nil, resourcesAPIService: nil, secretStorage: nil))) {
+        MainView(viewModel: AnyViewModel<MainState, MainInput>(MainViewModel(account: Mock.account, accountStorage: MockAccountStorage(), accountAPIService: nil, dealsAPIService: nil, resourcesAPIService: nil, checkoutService: nil, secretStorage: nil))) {
 
         }
     }
