@@ -842,12 +842,14 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.file` struct is generated, and contains static references to 5 files.
+  /// This `R.file` struct is generated, and contains static references to 6 files.
   struct file {
     /// Resource file `GoogleService-Info.plist`.
     static let googleServiceInfoPlist = Rswift.FileResource(bundle: R.hostingBundle, name: "GoogleService-Info", pathExtension: "plist")
     /// Resource file `Onboarding.json`.
     static let onboardingJson = Rswift.FileResource(bundle: R.hostingBundle, name: "Onboarding", pathExtension: "json")
+    /// Resource file `Wallet-Info.plist`.
+    static let walletInfoPlist = Rswift.FileResource(bundle: R.hostingBundle, name: "Wallet-Info", pathExtension: "plist")
     /// Resource file `ci_post_clone.sh`.
     static let ci_post_cloneSh = Rswift.FileResource(bundle: R.hostingBundle, name: "ci_post_clone", pathExtension: "sh")
     /// Resource file `ci_post_xcodebuild.sh`.
@@ -864,6 +866,12 @@ struct R: Rswift.Validatable {
     /// `bundle.url(forResource: "Onboarding", withExtension: "json")`
     static func onboardingJson(_: Void = ()) -> Foundation.URL? {
       let fileResource = R.file.onboardingJson
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+
+    /// `bundle.url(forResource: "Wallet-Info", withExtension: "plist")`
+    static func walletInfoPlist(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.walletInfoPlist
       return fileResource.bundle.url(forResource: fileResource)
     }
 

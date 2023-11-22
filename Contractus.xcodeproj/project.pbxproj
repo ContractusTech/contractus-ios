@@ -203,6 +203,7 @@
 		6D1922B62B0DBC0200EBE911 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D97AEF4288D196400EB61D0 /* Assets.xcassets */; };
 		6D1922B82B0DBC0200EBE911 /* QRCode in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6D1921DA2B0DBC0200EBE911 /* QRCode */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6D1922B92B0DBC0200EBE911 /* ShamirSecretSharing in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6D1921DE2B0DBC0200EBE911 /* ShamirSecretSharing */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		6D1922C02B0DF81B00EBE911 /* Wallet-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D1922BF2B0DF81B00EBE911 /* Wallet-Info.plist */; };
 		6D1DF1A42922EC7400B112FC /* CButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1DF1A32922EC7400B112FC /* CButtons.swift */; };
 		6D2E0AF228AE9833002BA683 /* DealViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E0AF128AE9833002BA683 /* DealViewModel.swift */; };
 		6D2E0AF628AF340C002BA683 /* TextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E0AF528AF340C002BA683 /* TextEditorView.swift */; };
@@ -444,8 +445,8 @@
 		6D0DA7642930A7250024EF30 /* QRCodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerView.swift; sourceTree = "<group>"; };
 		6D0F7F42298BEC7700EC2C74 /* WrapTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapTokenView.swift; sourceTree = "<group>"; };
 		6D0F7F44298C20C800EC2C74 /* WrapTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapTokenViewModel.swift; sourceTree = "<group>"; };
-		6D1922BD2B0DBC0200EBE911 /* Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		6D1922BE2B0DBC0300EBE911 /* Wallet-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Wallet-Info.plist"; path = "/Users/hudishkin/Projects/Contractus/Contractus-iOS/Wallet-Info.plist"; sourceTree = "<absolute>"; };
+		6D1922BD2B0DBC0200EBE911 /* Contractus-Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Contractus-Wallet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D1922BF2B0DF81B00EBE911 /* Wallet-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Wallet-Info.plist"; sourceTree = "<group>"; };
 		6D1DF1A32922EC7400B112FC /* CButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CButtons.swift; sourceTree = "<group>"; };
 		6D2E0AF128AE9833002BA683 /* DealViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealViewModel.swift; sourceTree = "<group>"; };
 		6D2E0AF528AF340C002BA683 /* TextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorView.swift; sourceTree = "<group>"; };
@@ -871,7 +872,6 @@
 				6D97AF0A288D196400EB61D0 /* ContractusUITests */,
 				6D97AEEE288D196200EB61D0 /* Products */,
 				6D590104289383D600EC318E /* Frameworks */,
-				6D1922BE2B0DBC0300EBE911 /* Wallet-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -881,7 +881,7 @@
 				6D97AEED288D196200EB61D0 /* Contractus.app */,
 				6D97AEFD288D196400EB61D0 /* ContractusTests.xctest */,
 				6D97AF07288D196400EB61D0 /* ContractusUITests.xctest */,
-				6D1922BD2B0DBC0200EBE911 /* Wallet.app */,
+				6D1922BD2B0DBC0200EBE911 /* Contractus-Wallet.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -892,6 +892,7 @@
 				6D7D1FAA2AB3621200D550AA /* Contractus.entitlements */,
 				6DAA5E7E2898D32600BA1965 /* App */,
 				6D5901082893887E00EC318E /* Info.plist */,
+				6D1922BF2B0DF81B00EBE911 /* Wallet-Info.plist */,
 				6DBCA48E2891161200F918B6 /* Utils */,
 				6DBCA48B28910A3300F918B6 /* Models */,
 				6DBCA4882890E6FF00F918B6 /* Extensions */,
@@ -1231,9 +1232,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6D1921D32B0DBC0200EBE911 /* Wallet */ = {
+		6D1921D32B0DBC0200EBE911 /* Contractus-Wallet */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6D1922BA2B0DBC0200EBE911 /* Build configuration list for PBXNativeTarget "Wallet" */;
+			buildConfigurationList = 6D1922BA2B0DBC0200EBE911 /* Build configuration list for PBXNativeTarget "Contractus-Wallet" */;
 			buildPhases = (
 				6D1921F62B0DBC0200EBE911 /* RSwift */,
 				6D1921F72B0DBC0200EBE911 /* Sources */,
@@ -1245,7 +1246,7 @@
 			);
 			dependencies = (
 			);
-			name = Wallet;
+			name = "Contractus-Wallet";
 			packageProductDependencies = (
 				6D1921D42B0DBC0200EBE911 /* KeychainAccess */,
 				6D1921D62B0DBC0200EBE911 /* Rswift */,
@@ -1269,7 +1270,7 @@
 				6D1921F42B0DBC0200EBE911 /* AppsFlyerLib */,
 			);
 			productName = Contractus;
-			productReference = 6D1922BD2B0DBC0200EBE911 /* Wallet.app */;
+			productReference = 6D1922BD2B0DBC0200EBE911 /* Contractus-Wallet.app */;
 			productType = "com.apple.product-type.application";
 		};
 		6D97AEEC288D196200EB61D0 /* Contractus */ = {
@@ -1403,7 +1404,7 @@
 			projectRoot = "";
 			targets = (
 				6D97AEEC288D196200EB61D0 /* Contractus */,
-				6D1921D32B0DBC0200EBE911 /* Wallet */,
+				6D1921D32B0DBC0200EBE911 /* Contractus-Wallet */,
 				6D97AEFC288D196400EB61D0 /* ContractusTests */,
 				6D97AF06288D196400EB61D0 /* ContractusUITests */,
 			);
@@ -1436,6 +1437,7 @@
 				6DC5586A2A7987320054F2FC /* GoogleService-Info.plist in Resources */,
 				6DBCA4832890E44200F918B6 /* Localizable.strings in Resources */,
 				6DCA42C92A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh in Resources */,
+				6D1922C02B0DF81B00EBE911 /* Wallet-Info.plist in Resources */,
 				6DCA42CA2A8A5C6100C6E4D7 /* ci_post_clone.sh in Resources */,
 				6D97AEF5288D196400EB61D0 /* Assets.xcassets in Resources */,
 			);
@@ -1892,11 +1894,11 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_NO_COMMON_BLOCKS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Wallet-Info.plist";
+				INFOPLIST_FILE = "Contractus/Wallet-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Safe Deals";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Contractus access to your camera to take photos and videos. Contractus does not attach content to deals without permission.  Also, the Camera is used to scan QR codes.";
-				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Allow Contractus access to your library. Contractus does not attach content to deals without permission.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow Contractus access to a media library to attach to your deals";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Safe Deals access to your camera to take photos and videos. Contractus does not attach content to deals without permission.  Also, the Camera is used to scan QR codes.";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Allow Safe Deals access to your library. Contractus does not attach content to deals without permission.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow Safe Deals access to a media library to attach to your deals";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1935,11 +1937,11 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_NO_COMMON_BLOCKS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Wallet-Info.plist";
+				INFOPLIST_FILE = "Contractus/Wallet-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Safe Deals";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Contractus access to your camera to take photos and videos. Contractus does not attach content to deals without permission.  Also, the Camera is used to scan QR codes.";
-				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Allow Contractus access to your library. Contractus does not attach content to deals without permission.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow Contractus access to a media library to attach to your deals";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Safe Deals access to your camera to take photos and videos. Contractus does not attach content to deals without permission.  Also, the Camera is used to scan QR codes.";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Allow Safe Deals access to your library. Contractus does not attach content to deals without permission.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow Safe Deals access to a media library to attach to your deals";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -2241,7 +2243,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6D1922BA2B0DBC0200EBE911 /* Build configuration list for PBXNativeTarget "Wallet" */ = {
+		6D1922BA2B0DBC0200EBE911 /* Build configuration list for PBXNativeTarget "Contractus-Wallet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6D1922BB2B0DBC0200EBE911 /* Debug */,

@@ -5,8 +5,15 @@ else
   	echo "GoogleService-Info.plist set successfully"
 fi
 
-cd ../Contractus/
+echo "Product: $CI_PRODUCT"
 
-plutil -replace APPLE_APP_ID -string $APPLE_APP_ID Info.plist
-plutil -replace APPSFLYER_DEV_KEY -string $APPSFLYER_DEV_KEY Info.plist
-# Put here
+cd ../Contractus/
+INFOPLIST_NAME = "Info.plist"
+if [ "$CI_PRODUCT" == "Wallet" ] then
+    INFOPLIST_NAME = "Wallet-Info.plist"
+fi
+
+echo "PLIST: $INFOPLIST_NAME"
+
+plutil -replace APPLE_APP_ID -string $APPLE_APP_ID $INFOPLIST_NAME
+plutil -replace APPSFLYER_DEV_KEY -string $APPSFLYER_DEV_KEY $INFOPLIST_NAME
