@@ -80,8 +80,9 @@ struct ServerSelectView: View {
 
                 }
             }
-            #if DEBUG
+
             Section(header: Text("Actions")) {
+#if DEBUG
                 Button {
                     AppManagerImpl.shared.debugClearAuth()
                     confirmAlert.toggle()
@@ -89,8 +90,15 @@ struct ServerSelectView: View {
                     Text("Clear auth")
                         .tint(.blue)
                 }
+#endif
+                Button {
+                    UtilsStorage.shared.debugClearSettings(blockchain: AppManagerImpl.shared.currentAccount.blockchain)
+                } label: {
+                    Text("Clear cache")
+                        .tint(.blue)
+                }
             }
-            #endif
+
         }
         .onChange(of: enableLogs) { newValue in
             if newValue {

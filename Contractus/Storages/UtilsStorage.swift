@@ -32,6 +32,10 @@ final class UtilsStorage {
         guard let data = try? encoder.encode(tokens.map { $0.asInternalToken }) else { return }
         storage.set(data, forKey: Keys.tokenSettings.value(blockchain))
     }
+
+    func debugClearSettings(blockchain: Blockchain) {
+        storage.removeObject(forKey: Keys.tokenSettings.value(blockchain))
+    }
 }
 
 fileprivate struct StoreToken: Codable {

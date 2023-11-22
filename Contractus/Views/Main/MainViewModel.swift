@@ -277,15 +277,7 @@ final class MainViewModel: ViewModel {
         self.tokens = await getTokenSettings()
 
         var state = self.state
-
-        switch state.account.blockchain {
-        case .solana:
-            // TODO: - Need refactor.
-            state.disableUnselectTokens = self.tokens.filter { $0.native || $0.code == "WSOL" }
-        case .bsc:
-            // TODO: - Added filter
-            state.disableUnselectTokens = []
-        }
+        state.disableUnselectTokens = self.tokens.filter { $0.native || $0.code == state.account.blockchain.wrapTokenCode }
 
         async let balanceTask = loadBalance(for: tokens.map { .init(code: $0.code, address: $0.address) })
         async let statisticsTask = loadStatistics(currency: .defaultCurrency)

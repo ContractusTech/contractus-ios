@@ -12,4 +12,13 @@ extension Blockchain {
             return true
         }
     }
+
+    var wrapTokenCode: String {
+        switch self {
+        case.bsc:
+            return "WBNB"
+        case .solana:
+            return "WSOL"
+        }
+    }
 }
