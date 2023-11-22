@@ -28,6 +28,7 @@
 "common.backup" = "Backup";
 "common.import" = "Import";
 "common.app-name" = "Contractus";
+"common.wallet" = "Wallet";
 "common.set" = "Set";
 "common.done" = "Done";
 "common.date" = "Date";

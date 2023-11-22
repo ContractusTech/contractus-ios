@@ -26,7 +26,6 @@ extension CommonAccount: Signer {
     func getPublicKey() -> String {
         switch blockchain {
         case .bsc:
-            let data = Utilities.privateToPublic(self.privateKey)
             return Utilities.privateToPublic(self.privateKey)?.toHexString() ?? ""
         case .solana:
             return self.publicKey

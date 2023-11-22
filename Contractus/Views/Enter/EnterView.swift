@@ -41,12 +41,24 @@ struct EnterView: View {
                                 .fontWeight(.semibold)
                                 .multilineTextAlignment(.center)
                                 .frame(maxWidth: .infinity, alignment: .center)
-                            Text(R.string.localizable.commonAppName())
-                                .font(.system(size: 41))
-                                .fontWeight(.semibold)
-                                .tracking(-1.1)
-                                .multilineTextAlignment(.center)
-                                .frame(maxWidth: .infinity, alignment: .center)
+                            VStack(alignment: .center, spacing: 0) {
+                                Text(R.string.localizable.commonAppName())
+                                    .font(.system(size: 41))
+                                    .fontWeight(.semibold)
+                                    .tracking(-1.1)
+                                    .multilineTextAlignment(.center)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                #if IS_WALLET
+                                Text(R.string.localizable.commonWallet())
+                                    .font(.body)
+                                    .fontWeight(.semibold)
+                                    .tracking(-0.8)
+                                    .multilineTextAlignment(.center)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .foregroundColor(R.color.secondaryText.color)
+                                #endif
+                            }
+
                         }
                         .padding(EdgeInsets(top: 104, leading: 20, bottom: 20, trailing: 20))
                     case .addAccount:
