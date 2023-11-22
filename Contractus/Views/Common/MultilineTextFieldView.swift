@@ -25,11 +25,23 @@ struct MultilineTextFieldView: View {
 
     @FocusState var isInputActive: Bool
 
-    var body: some View {
-        
+    @State var isSecured: Bool = true
+    var displayValue: Binding<String> {
+        .init { isSecured ? ContentMask.mask(from: value, visibleCount: 5, maskCount: 10) : value}
+        set: { (newValue, transaction) in
+            if isSecured {
+                value = value
+            } else {
+                value = newValue
+            }
+        }
+    }
 
+    var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            TextEditor(text: $value)
+            TextEditor(text: displayValue)
+                .disabled(isSecured)
+                .font(.system(size: 14, design: .monospaced))
                 .focused($isInputActive)
                 .setBackground(color: R.color.textFieldBackground.color)
                 .toolbar {
@@ -37,22 +49,21 @@ struct MultilineTextFieldView: View {
                         Spacer()
                         Button(R.string.localizable.commonDone()) {
                             isInputActive = false
-                        }.font(.body.weight(.medium))
+                        }
+                        .font(.body.weight(.medium))
                     }
-
-
                 }
                 .padding(.bottom, 24)
             HStack {
-//                Button {
-//
-//                } label: {
-//                    Constants.cancelSeeIcon
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                        .frame(width: 24, height: 24)
-//                        .foregroundColor(R.color.textBase.color)
-//                }
+                Button {
+                    isSecured.toggle()
+                } label: {
+                    seeIcon()
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(R.color.textBase.color)
+                }
                 Spacer()
 
                 Button {
@@ -64,7 +75,6 @@ struct MultilineTextFieldView: View {
                         .fontWeight(.medium)
                 }
             }
-
         }
         .frame(height: 130)
         .padding()
@@ -74,6 +84,14 @@ struct MultilineTextFieldView: View {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(R.color.textFieldBorder.color, lineWidth: 1)
         )
+    }
+    
+    func seeIcon() -> Image {
+        if self.isSecured {
+            Constants.seeIcon
+        } else {
+            Constants.cancelSeeIcon
+        }
     }
 }
 

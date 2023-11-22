@@ -9,7 +9,7 @@ import Foundation
 
 struct ContentMask {
 
-    static func mask(from string: String?, visibleCount: Int = 4) -> String {
+    static func mask(from string: String?, visibleCount: Int = 4, maskCount: Int = 3) -> String {
         if visibleCount <= 0 {
             return string ?? ""
         }
@@ -18,7 +18,8 @@ struct ContentMask {
         }
         let firstPart = string.prefix(visibleCount)
         let lastPart = string.suffix(visibleCount)
-        return "\(firstPart)***\(lastPart)"
+        let maskString = (String)(repeating: "*", count: maskCount)
+        return "\(firstPart)\(maskString)\(lastPart)"
     }
 
     static func maskAll(_ string: String?) -> String {
