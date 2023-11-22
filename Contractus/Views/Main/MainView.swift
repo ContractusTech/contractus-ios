@@ -74,8 +74,12 @@ struct MainView: View {
                             state: viewModel.state.balance != nil ? .loaded(.init(balance: viewModel.state.balance!)) : .empty,
                             topUpAction: {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.mainTopupTap)
+                                #if IS_WALLET
+                                sheetType = .sharePublicKey
+                                #else
                                 topUpState = .medium
-                                ImpactGenerator.light()
+                                #endif
+                                ImpactGenerator.soft()
                             }, infoAction: {
                                 sheetType = .webView(AppConfig.ctusInfoURL)
                             }, swapAction: { fromAmount, toAmount in
@@ -88,6 +92,7 @@ struct MainView: View {
                                 showSendTokens.toggle()
                             }
 
+                        #if !IS_WALLET
                         if viewModel.state.allowBuyToken && viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
                             UnlockHolderButtonView() {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
@@ -96,6 +101,7 @@ struct MainView: View {
                                 showBuyCtus.toggle()
                             }
                         }
+                        #endif
 
                         if !viewModel.state.statistics.isEmpty {
                             StatisticsView(items: viewModel.state.statistics) { item in
