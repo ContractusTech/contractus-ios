@@ -26,9 +26,10 @@ public struct SVGImageView: UIViewRepresentable {
             imageView.image.size = size
         } else {
             let url = self.url
-            DispatchQueue.global(qos: .userInitiated).async {
-                if let svgImage = SVGKImage(contentsOf: url) {
-                    cache.setObject(svgImage, forKey: url.absoluteString as NSString)
+            let task  = URLSession.shared.downloadTask(with: url) { (tempUrl, response, error) in
+                guard let tempUrl = tempUrl else { return }
+                if let svgImage = SVGKImage(contentsOf: tempUrl) {
+                    cache.setObject(svgImage, forKey: tempUrl.absoluteString as NSString)
                     DispatchQueue.main.async {
                         guard url == self.url else { return }
                         imageView.image = svgImage
@@ -37,6 +38,7 @@ public struct SVGImageView: UIViewRepresentable {
                     }
                 }
             }
+            task.resume()
         }
     }
 }
