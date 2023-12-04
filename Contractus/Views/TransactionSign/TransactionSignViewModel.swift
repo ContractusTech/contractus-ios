@@ -10,9 +10,9 @@ import ContractusAPI
 
 enum TransactionSignType: Equatable, Identifiable {
     var id: String { "\(self)" }
-    case byDeal(Deal, TransactionType)
+    case byDeal(Deal, ContractusAPI.TransactionType)
     case byTransactionId(String)
-    case byTransaction(Transaction)
+    case byTransaction(ContractusAPI.Transaction)
 }
 
 enum TransactionSignError: Error {
@@ -249,40 +249,48 @@ final class TransactionSignViewModel: ViewModel {
         switch state.type {
         case .byDeal(let deal, _):
             return try await withCheckedThrowingContinuation({ continuation in
-                guard let transaction = state.transaction else {
-                    continuation.resume(throwing: TransactionSignError.transactionIsNull)
-                    return
-                }
-                guard let (signature, message) = try? transactionSignService?.sign(txBase64: transaction.transaction, by: self.state.account.privateKey) else {
+                guard let transaction = state.transaction, let data = state.transaction?.getTransactionData() else {
                     continuation.resume(throwing: TransactionSignError.transactionIsNull)
                     return
                 }
 
-                dealService?.signTransaction(dealId: deal.id, type: transaction.type, data: .init(transaction: message, signature: signature), completion: { result in
+                guard let signature = try? transactionSignService?.sign(type: transaction.type, data: data, by: self.state.account) else {
+                    continuation.resume(throwing: TransactionSignError.transactionIsNull)
+                    return
+                }
+
+                dealService?.signTransaction(dealId: deal.id, type: transaction.type, data: .init(transaction: transaction.transaction, signature: signature.base64EncodedString()), completion: { result in
                     continuation.resume(with: result)
                 })
             })
         case .byTransaction(let tx):
             return try await withCheckedThrowingContinuation({ continuation in
-                guard let (signature, message) = try? transactionSignService?.sign(txBase64: tx.transaction, by: self.state.account.privateKey) else {
+
+                guard let data = tx.getTransactionData() else {
                     continuation.resume(throwing: TransactionSignError.transactionIsNull)
                     return
                 }
+                guard let signature = try? transactionSignService?.sign(type: tx.type, data: data, by: self.state.account) else {
+                    continuation.resume(throwing: TransactionSignError.transactionIsNull)
+                    return
+                }
+
                 switch tx.type {
-                case .wrapSOL:
-                    transactionsService?.signWrap(.init(id: tx.id, transaction: message, signature: signature), completion: { result in
+                case .wrapSOL, .wrap:
+                    transactionsService?.signWrap(.init(id: tx.id, transaction: tx.transaction, signature: signature.base64EncodedString()), completion: { result in
                         continuation.resume(with: result)
                     })
-                case .unwrapAllSOL:
-                    transactionsService?.signUnwrapAll(.init(id: tx.id, transaction: message, signature: signature), completion: { result in
+                case .unwrapAllSOL, .unwrap:
+                    transactionsService?.signUnwrapAll(.init(id: tx.id, transaction: tx.transaction, signature: signature.base64EncodedString()), completion: { result in
                         continuation.resume(with: result)
                     })
                 case .transfer:
-                    transactionsService?.transferSign(.init(id: tx.id, transaction: message, signature: signature), completion: {result in
+                    transactionsService?.transferSign(.init(id: tx.id, transaction: tx.transaction, signature: signature.base64EncodedString()), completion: {result in
                         continuation.resume(with: result)
                     })
                 case .dealFinish, .dealInit, .dealCancel:
                     continuation.resume(throwing: TransactionSignError.transactionIsNull)
+
                 }
             })
         case .byTransactionId(_):
@@ -336,9 +344,9 @@ final class TransactionSignViewModel: ViewModel {
             return fields
         case .dealCancel:
             return fields
-        case .wrapSOL:
+        case .wrapSOL, .wrap:
             return fields
-        case .unwrapAllSOL:
+        case .unwrapAllSOL, .unwrap:
             return fields
         case .transfer:
             return fields
@@ -368,7 +376,7 @@ final class TransactionSignViewModel: ViewModel {
                     titleDescription: nil,
                     valueDescription: nil))
             }
-        case .wrapSOL,.unwrapAllSOL:
+        case .wrapSOL,.unwrapAllSOL, .wrap, .unwrap:
             fields.append(.init(
                 title: R.string.localizable.transactionSignFieldsAmount(),
                 value: tx.amountFormatted ?? "",
@@ -407,12 +415,23 @@ final class TransactionSignViewModel: ViewModel {
 private extension ContractusAPI.TransactionType {
     var title: String {
         switch self {
-        case .wrapSOL: return R.string.localizable.transactionTypeWrapSol()
+        case .wrapSOL, .wrap: return R.string.localizable.transactionTypeWrapSol()
         case .dealInit: return R.string.localizable.transactionTypeInitDeal()
         case .dealCancel: return R.string.localizable.transactionTypeCancelDeal()
         case .dealFinish: return R.string.localizable.transactionTypeFinishDeal()
-        case .unwrapAllSOL: return R.string.localizable.transactionTypeUnwrapWsol()
+        case .unwrapAllSOL, .unwrap: return R.string.localizable.transactionTypeUnwrapWsol()
         case .transfer: return R.string.localizable.transactionTypeTransfer()
+        }
+    }
+}
+
+extension Transaction {
+    func getTransactionData() -> Data? {
+        switch blockchain {
+        case .bsc:
+            return Data(Array(hex: self.transaction))
+        case .solana:
+            return Data(base64Encoded: self.transaction)
         }
     }
 }

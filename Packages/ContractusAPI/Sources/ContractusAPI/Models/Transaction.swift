@@ -27,7 +27,7 @@ public struct Transaction: Decodable, Equatable {
     public let token: Token?
     public let fee: BigUInt?
     public let status: TransactionStatus
-
+    public let blockchain: Blockchain
     public let ownerSignature: String?
     public let contractorSignature: String?
     public let checkerSignature: String?
@@ -39,6 +39,7 @@ public struct Transaction: Decodable, Equatable {
         type: TransactionType,
         status: TransactionStatus,
         transaction: String,
+        blockchain: Blockchain,
         initializerPublicKey: String,
         amount: BigUInt? = nil,
         token: Token? = nil,
@@ -64,6 +65,7 @@ public struct Transaction: Decodable, Equatable {
         self.fee = fee
         self.signature = signature
         self.errorDetail = errorDetail
+        self.blockchain = blockchain
     }
 
     enum CodingKeys: CodingKey {
@@ -81,6 +83,7 @@ public struct Transaction: Decodable, Equatable {
         case signature
         case status
         case details
+        case blockchain
     }
 
     public init(from decoder: Decoder) throws {
@@ -88,6 +91,7 @@ public struct Transaction: Decodable, Equatable {
 
         self.id = try container.decode(String.self, forKey: Transaction.CodingKeys.id)
         self.type = try container.decode(TransactionType.self, forKey: Transaction.CodingKeys.type)
+        self.blockchain = try container.decode(Blockchain.self, forKey: Transaction.CodingKeys.blockchain)
         self.transaction = (try? container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.transaction)) ?? "" // TODO: - Fix this
         self.initializerPublicKey = try container.decode(String.self, forKey: Transaction.CodingKeys.initializerPublicKey)
         let amount = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.amount)
@@ -132,7 +136,7 @@ public struct Transaction: Decodable, Equatable {
         }
 
         switch type {
-        case .wrapSOL, .unwrapAllSOL, .transfer:
+        case .wrapSOL, .unwrapAllSOL, .transfer, .unwrap, .wrap:
             return AmountFormatter.format(amount: fee, token: token)
         case .dealCancel, .dealInit, .dealFinish:
             return nil

@@ -5,6 +5,18 @@ import Web3Core
 import Base58Swift
 
 extension CommonAccount: Signer {
+
+    // NOTE: For Solana function signMessage == sign
+    func signMessage(message: Data) throws -> Data {
+        switch blockchain {
+        case .solana:
+            return try sign(data: message)
+        case .bsc:
+            let hash = Utilities.hashPersonalMessage(message)!
+            return try sign(data: hash)
+        }
+    }
+    
     func sign(data: Data) throws -> Data {
         switch blockchain {
         case .solana:
@@ -12,15 +24,13 @@ extension CommonAccount: Signer {
                 message: data,
                 secretKey: privateKey)
         case .bsc:
-            let hash = Utilities.hashPersonalMessage(data)!
             let (compressedSignature, _) = SECP256K1.signForRecovery(
-                hash: hash,
+                hash: data,
                 privateKey: privateKey,
                 useExtraEntropy: false)
 
             guard let compressedSignature = compressedSignature else { throw SignerError.emptySignature }
             return compressedSignature
-
         }
     }
 

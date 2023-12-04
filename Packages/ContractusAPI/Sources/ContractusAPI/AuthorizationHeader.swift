@@ -29,7 +29,7 @@ public struct AuthorizationHeader {
 
 public struct AuthorizationHeaderBuilder {
     public static func build(for signer: Signer, message: String, identifier: String, expiredAt: Date) throws -> AuthorizationHeader {
-        let sign = try signer.sign(data: message.data(using: .utf8)!)
+        let sign = try signer.signMessage(message: message.data(using: .utf8)!)
         let encodedSign = signer.encodeSignature(sign)
         return try AuthorizationHeader(data: AuthorizationHeaderData(blockchain: signer.blockchain.rawValue, pubKey: signer.getPublicKey(), signature: encodedSign, identifier: identifier), expiredAt: expiredAt)
     }

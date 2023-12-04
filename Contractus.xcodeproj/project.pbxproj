@@ -32,7 +32,6 @@
 		6D1922092B0DBC0200EBE911 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3AF96328E83E1200660AEC /* QRScannerView.swift */; };
 		6D19220A2B0DBC0200EBE911 /* PollService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6E60D729EE57BB008AB833 /* PollService.swift */; };
 		6D19220B2B0DBC0200EBE911 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1FB9102A9E24CB00203F38 /* OnboardingService.swift */; };
-		6D19220C2B0DBC0200EBE911 /* SolanaBlochainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */; };
 		6D19220D2B0DBC0200EBE911 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBCA460288F213500F918B6 /* MainView.swift */; };
 		6D19220E2B0DBC0200EBE911 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE54313C29D36D8800EEF906 /* AccountsView.swift */; };
 		6D19220F2B0DBC0200EBE911 /* TopTextBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3AA487292DCB0700596061 /* TopTextBlockView.swift */; };
@@ -111,7 +110,6 @@
 		6D1922582B0DBC0200EBE911 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE3A628A0E20100635E60 /* Label.swift */; };
 		6D1922592B0DBC0200EBE911 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCFD3AB2ADA70DB002160E2 /* NotificationHandler.swift */; };
 		6D19225A2B0DBC0200EBE911 /* R+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D755291289675C50069935B /* R+Ex.swift */; };
-		6D19225B2B0DBC0200EBE911 /* BlockchainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE387289DB40A00635E60 /* BlockchainService.swift */; };
 		6D19225C2B0DBC0200EBE911 /* TextEditor+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4FAB4E293B084800076743 /* TextEditor+Ex.swift */; };
 		6D19225D2B0DBC0200EBE911 /* ConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D6B3E29A73A8900E0930D /* ConfigStorage.swift */; };
 		6D19225E2B0DBC0200EBE911 /* View+DebugPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBCA4892890E71000F918B6 /* View+DebugPrint.swift */; };
@@ -121,7 +119,7 @@
 		6D1922622B0DBC0200EBE911 /* FilesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE3A128A0517700635E60 /* FilesService.swift */; };
 		6D1922632B0DBC0200EBE911 /* TextGenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD314062AE557690033D37A /* TextGenViewModel.swift */; };
 		6D1922642B0DBC0200EBE911 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE384289C679D00635E60 /* QRCodeView.swift */; };
-		6D1922652B0DBC0200EBE911 /* AccountValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFD8C28D8D72D0064F5DA /* AccountValidator.swift */; };
+		6D1922652B0DBC0200EBE911 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		6D1922662B0DBC0200EBE911 /* ChangeAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DCB2B28AC8DC200EE86C0 /* ChangeAmountView.swift */; };
 		6D1922672B0DBC0200EBE911 /* TextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E0AF528AF340C002BA683 /* TextEditorView.swift */; };
 		6D1922682B0DBC0200EBE911 /* APIServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAA5E7C2898C4AA00BA1965 /* APIServiceFactory.swift */; };
@@ -238,8 +236,6 @@
 		6D6E60D429EE2F08008AB833 /* TransactionStatus+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6E60D329EE2F08008AB833 /* TransactionStatus+Ex.swift */; };
 		6D6E60D829EE57BB008AB833 /* PollService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6E60D729EE57BB008AB833 /* PollService.swift */; };
 		6D6EE385289C679D00635E60 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE384289C679D00635E60 /* QRCodeView.swift */; };
-		6D6EE388289DB40A00635E60 /* BlockchainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE387289DB40A00635E60 /* BlockchainService.swift */; };
-		6D6EE38A289DB43400635E60 /* SolanaBlochainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */; };
 		6D6EE38D289E25FF00635E60 /* UploadFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE38C289E25FF00635E60 /* UploadFileView.swift */; };
 		6D6EE38F289E260D00635E60 /* UploadFileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE38E289E260D00635E60 /* UploadFileViewModel.swift */; };
 		6D6EE391289E3AA000635E60 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE390289E3AA000635E60 /* File.swift */; };
@@ -483,8 +479,6 @@
 		6D6E60D329EE2F08008AB833 /* TransactionStatus+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionStatus+Ex.swift"; sourceTree = "<group>"; };
 		6D6E60D729EE57BB008AB833 /* PollService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollService.swift; sourceTree = "<group>"; };
 		6D6EE384289C679D00635E60 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
-		6D6EE387289DB40A00635E60 /* BlockchainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainService.swift; sourceTree = "<group>"; };
-		6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolanaBlochainService.swift; sourceTree = "<group>"; };
 		6D6EE38C289E25FF00635E60 /* UploadFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFileView.swift; sourceTree = "<group>"; };
 		6D6EE38E289E260D00635E60 /* UploadFileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFileViewModel.swift; sourceTree = "<group>"; };
 		6D6EE390289E3AA000635E60 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
@@ -982,14 +976,12 @@
 			isa = PBXGroup;
 			children = (
 				6DBCA45B288F076D00F918B6 /* AccountService.swift */,
-				6D6EE387289DB40A00635E60 /* BlockchainService.swift */,
 				FECDCC5C2A87F21800047A95 /* EventService.swift */,
 				6D6EE3A128A0517700635E60 /* FilesService.swift */,
 				6D4D99F22A5601A1007668B0 /* IdentifierService.swift */,
 				FE7852932AC1673100CC8C19 /* MessagingService.swift */,
 				FE1FB9102A9E24CB00203F38 /* OnboardingService.swift */,
 				6DF6ADC22994EAA300A50598 /* SharedSecretService.swift */,
-				6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */,
 				6DC2C02428C98332005C9EBE /* TransactionSignService.swift */,
 			);
 			path = Services;
@@ -1534,7 +1526,6 @@
 				6D1922092B0DBC0200EBE911 /* QRScannerView.swift in Sources */,
 				6D19220A2B0DBC0200EBE911 /* PollService.swift in Sources */,
 				6D19220B2B0DBC0200EBE911 /* OnboardingService.swift in Sources */,
-				6D19220C2B0DBC0200EBE911 /* SolanaBlochainService.swift in Sources */,
 				6D19220D2B0DBC0200EBE911 /* MainView.swift in Sources */,
 				6D19220E2B0DBC0200EBE911 /* AccountsView.swift in Sources */,
 				6D19220F2B0DBC0200EBE911 /* TopTextBlockView.swift in Sources */,
@@ -1613,7 +1604,6 @@
 				6D1922582B0DBC0200EBE911 /* Label.swift in Sources */,
 				6D1922592B0DBC0200EBE911 /* NotificationHandler.swift in Sources */,
 				6D19225A2B0DBC0200EBE911 /* R+Ex.swift in Sources */,
-				6D19225B2B0DBC0200EBE911 /* BlockchainService.swift in Sources */,
 				6D19225C2B0DBC0200EBE911 /* TextEditor+Ex.swift in Sources */,
 				6D19225D2B0DBC0200EBE911 /* ConfigStorage.swift in Sources */,
 				6D19225E2B0DBC0200EBE911 /* View+DebugPrint.swift in Sources */,
@@ -1623,7 +1613,7 @@
 				6D1922622B0DBC0200EBE911 /* FilesService.swift in Sources */,
 				6D1922632B0DBC0200EBE911 /* TextGenViewModel.swift in Sources */,
 				6D1922642B0DBC0200EBE911 /* QRCodeView.swift in Sources */,
-				6D1922652B0DBC0200EBE911 /* AccountValidator.swift in Sources */,
+				6D1922652B0DBC0200EBE911 /* (null) in Sources */,
 				6D1922662B0DBC0200EBE911 /* ChangeAmountView.swift in Sources */,
 				6D1922672B0DBC0200EBE911 /* TextEditorView.swift in Sources */,
 				6D1922682B0DBC0200EBE911 /* APIServiceFactory.swift in Sources */,
@@ -1702,7 +1692,6 @@
 				6D3AF96428E83E1200660AEC /* QRScannerView.swift in Sources */,
 				6D6E60D829EE57BB008AB833 /* PollService.swift in Sources */,
 				FE1FB9112A9E24CB00203F38 /* OnboardingService.swift in Sources */,
-				6D6EE38A289DB43400635E60 /* SolanaBlochainService.swift in Sources */,
 				6DBCA461288F213500F918B6 /* MainView.swift in Sources */,
 				FE54313D29D36D8800EEF906 /* AccountsView.swift in Sources */,
 				6D3AA488292DCB0700596061 /* TopTextBlockView.swift in Sources */,
@@ -1782,7 +1771,6 @@
 				6D6EE3A728A0E20100635E60 /* Label.swift in Sources */,
 				6DCFD3AC2ADA70DB002160E2 /* NotificationHandler.swift in Sources */,
 				6D755292289675C50069935B /* R+Ex.swift in Sources */,
-				6D6EE388289DB40A00635E60 /* BlockchainService.swift in Sources */,
 				6D4FAB4F293B084800076743 /* TextEditor+Ex.swift in Sources */,
 				6D9D6B3F29A73A8900E0930D /* ConfigStorage.swift in Sources */,
 				6DBCA48A2890E71000F918B6 /* View+DebugPrint.swift in Sources */,
@@ -2424,14 +2412,6 @@
 				minimumVersion = 6.12.2;
 			};
 		};
-		6D6EE39C289FBEBA00635E60 /* XCRemoteSwiftPackageReference "QRCode" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dagronf/QRCode.git";
-			requirement = {
-				kind = exactVersion;
-				version = 6.0.2;
-			};
-		};
 		6D75528E289662250069935B /* XCRemoteSwiftPackageReference "R.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mac-cain13/R.swift.Library";
@@ -2649,11 +2629,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6D1921F52B0DBC0200EBE911 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
 			productName = AppsFlyerLib;
-		};
-		6D6EE39D289FBEBA00635E60 /* QRCode */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6D6EE39C289FBEBA00635E60 /* XCRemoteSwiftPackageReference "QRCode" */;
-			productName = QRCode;
 		};
 		6D75528F289662250069935B /* Rswift */ = {
 			isa = XCSwiftPackageProductDependency;

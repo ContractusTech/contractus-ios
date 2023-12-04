@@ -8,14 +8,44 @@
 import Foundation
 import SolanaSwift
 import TweetNacl
+import Web3Core
+import ContractusAPI
 
 protocol TransactionSignService {
-    func sign(txBase64: String, by secretKey: Data) throws -> (signature: String, message: String)
-    func isSigned(txBase64: String, publicKey: Data) -> Bool
-    func isSigned(txBase64: String, publicKeys: [PublicKey]) -> [PublicKey]
+//    func sign(txBase64: String, by secretKey: Data) throws -> (signature: String, message: String)
+//    func isSigned(txBase64: String, publicKey: Data) -> Bool
+//    func isSigned(txBase64: String, publicKeys: [PublicKey]) -> [PublicKey]
+
+    func sign(type: ContractusAPI.TransactionType, data: Data, by signer: Signer) throws -> Data
 }
 
-final class SolanaTransactionSignServiceImpl: TransactionSignService {
+final class TransactionSignServiceImpl: TransactionSignService {
+    func sign(type: ContractusAPI.TransactionType, data: Data, by signer: ContractusAPI.Signer) throws -> Data {
+        switch type {
+        case .dealInit, .dealCancel, .dealFinish:
+            switch signer.blockchain {
+            case .bsc:
+                let signature = try signer.sign(data: data)
+                return signature
+            case .solana:
+                var tx = try Transaction.from(data: data)
+                try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
+                return try tx.serialize(requiredAllSignatures: false)
+            }
+        case .wrapSOL, .unwrapAllSOL, .unwrap, .wrap, .transfer:
+            switch signer.blockchain {
+            case .bsc:
+                fatalError("Need implementation")
+            case .solana:
+                var tx = try Transaction.from(data: data)
+                try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
+                return try tx.serialize(requiredAllSignatures: false)
+            }
+        }
+
+
+    }
+    
 
     enum TransactionSignServiceError: Error {
         case failed, transactionIsEmpty
@@ -65,3 +95,23 @@ final class SolanaTransactionSignServiceImpl: TransactionSignService {
         return tx?.signatures.first(where: {$0.publicKey == publicKey && $0.signature != nil}) != nil
     }
 }
+
+
+//class EVMSignerService {
+//    
+//    var signer: Signer
+//
+//    init(signer: Signer) {
+//        self.signer = signer
+//    }
+//
+//    func sigmMessage(types: [ABI.Element.InOut], values: [Any]) -> Data? {
+//        let message = ABIEncoder.encode(types: types, values: values)
+//        guard let message = message else { return nil }
+//        let messagePack = ABIEncoder.encode(types: [.dynamicBytes], values: [message])
+//        guard let messagePack = messagePack else { return nil }
+//        let messageHash = messagePack.sha3(.keccak256)
+//
+//        return try? signer.sign(data: messageHash)
+//    }
+//}

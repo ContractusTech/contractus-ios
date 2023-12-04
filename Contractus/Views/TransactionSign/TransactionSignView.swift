@@ -463,9 +463,9 @@ struct TransactionSignView: View {
             return R.string.localizable.transactionSignSubtitleFinishDeal()
         case .dealCancel:
             return R.string.localizable.transactionSignSubtitleCancelDeal()
-        case .unwrapAllSOL:
+        case .unwrapAllSOL, .unwrap:
             return R.string.localizable.transactionSignSubtitleUnwrap()
-        case .wrapSOL:
+        case .wrapSOL, .wrap:
             return R.string.localizable.transactionSignSubtitleWrap()
         case .transfer:
             return R.string.localizable.transactionSignSubtitleTransfer()
