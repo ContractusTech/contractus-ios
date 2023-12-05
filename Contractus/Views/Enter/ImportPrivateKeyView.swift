@@ -35,8 +35,6 @@ struct ImportPrivateKeyView: View {
 
                     VStack(alignment: .center, spacing: 24) {
                         MultilineTextFieldView(placeholder: R.string.localizable.importWalletPlaceholder(), value: $privateKey)
-
-
                         if viewModel.state.isValidImportedPrivateKey {
                             VStack(alignment: .leading, spacing: 6) {
                                 HStack {
