@@ -24,10 +24,10 @@ struct MultilineTextFieldView: View {
     @Binding var value: String
 
     @FocusState var isInputActive: Bool
+    @State var isSecured: Bool = false
 
-    @State var isSecured: Bool = true
     var displayValue: Binding<String> {
-        .init { isSecured ? ContentMask.mask(from: value, visibleCount: 5, maskCount: 10) : value}
+        .init { isSecured ? ContentMask.mask(from: value, visibleCount: 4, maskCount: 0) : value}
         set: { (newValue, transaction) in
             if isSecured {
                 value = value
@@ -43,7 +43,7 @@ struct MultilineTextFieldView: View {
                 .disabled(isSecured)
                 .font(.system(size: 14, design: .monospaced))
                 .focused($isInputActive)
-                .setBackground(color: R.color.textFieldBackground.color)
+                .setBackground(color: isSecured ? R.color.mainBackground.color : R.color.textFieldBackground.color)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
                         Spacer()
@@ -58,7 +58,7 @@ struct MultilineTextFieldView: View {
                 Button {
                     isSecured.toggle()
                 } label: {
-                    seeIcon()
+                    visibleIcon
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 24, height: 24)
@@ -67,7 +67,9 @@ struct MultilineTextFieldView: View {
                 Spacer()
 
                 Button {
-                    value = UIPasteboard.general.string ?? ""
+                    let pasteValue = UIPasteboard.general.string ?? ""
+                    value = pasteValue
+                    isSecured = !pasteValue.isEmpty
                 } label: {
                     Text(R.string.localizable.commonPaste())
                         .foregroundColor(R.color.textBase.color)
@@ -78,15 +80,15 @@ struct MultilineTextFieldView: View {
         }
         .frame(height: 130)
         .padding()
-        .background(R.color.textFieldBackground.color)
+        .background(isSecured ? R.color.mainBackground.color : R.color.textFieldBackground.color)
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
                 .stroke(R.color.textFieldBorder.color, lineWidth: 1)
         )
     }
-    
-    func seeIcon() -> Image {
+
+    var visibleIcon: Image {
         if self.isSecured {
             Constants.seeIcon
         } else {
