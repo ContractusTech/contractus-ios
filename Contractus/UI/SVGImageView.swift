@@ -1,7 +1,7 @@
 import SwiftUI
 import SVGKit
 
-let cache = NSCache<NSString, SVGKImage>()
+fileprivate let cache = NSCache<NSString, SVGKImage>()
 
 public struct SVGImageView: UIViewRepresentable {
     public let url: URL
@@ -26,17 +26,18 @@ public struct SVGImageView: UIViewRepresentable {
             imageView.image.size = size
         } else {
             let url = self.url
-            DispatchQueue.global(qos: .userInitiated).async {
-                if let svgImage = SVGKImage(contentsOf: url) {
+            let task  = URLSession.shared.downloadTask(with: url) { (tempUrl, response, error) in
+                guard let tempUrl = tempUrl, error == nil else { return }
+                if let svgImage = SVGKImage(contentsOf: tempUrl) {
                     cache.setObject(svgImage, forKey: url.absoluteString as NSString)
                     DispatchQueue.main.async {
-                        guard url == self.url else { return }
                         imageView.image = svgImage
                         imageView.backgroundColor = .clear
                         imageView.image.size = size
                     }
                 }
             }
+            task.resume()
         }
     }
 }
