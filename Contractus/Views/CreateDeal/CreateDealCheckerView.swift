@@ -50,7 +50,7 @@ struct CreateDealCheckerView: View {
                     .padding(.bottom, 26)
                                 
                 TextFieldView(
-                    placeholder: R.string.localizable.commonPublicKey(),
+                    placeholder: placeholder,
                     blockchain: .solana,
                     value: viewModel.state.checker,
                     changeValue: { newValue in
@@ -61,7 +61,7 @@ struct CreateDealCheckerView: View {
                 )
                 .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
 
-                Text(R.string.localizable.newDealSolanaAccount())
+                Text(R.string.localizable.addContractorTypeAccountInfo(viewModel.state.account.blockchain.longTitle))
                     .font(.footnote)
                     .fontWeight(.medium)
                     .foregroundColor(R.color.secondaryText.color)
@@ -136,6 +136,15 @@ struct CreateDealCheckerView: View {
     
     var stepSubtitle: String {
         return R.string.localizable.newDealCheckerAccountSubtitle()
+    }
+
+    var placeholder: String {
+        switch viewModel.state.account.blockchain {
+        case .bsc:
+            return R.string.localizable.commonAddress()
+        case .solana:
+            return R.string.localizable.commonPublicKey()
+        }
     }
 }
 

@@ -71,6 +71,7 @@
 "common.try-again" = "Try again";
 "common.show" = "Show";
 "common.select-blockchain" = "Select blockchain";
+"common.address" = "Address";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";

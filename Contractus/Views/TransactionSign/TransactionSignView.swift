@@ -213,10 +213,11 @@ struct TransactionSignView: View {
                                             Text(R.string.localizable.transactionSignFieldsTx())
                                                 .font(.body)
                                                 .foregroundColor(R.color.textBase.color)
-                                            Text(R.string.localizable.transactionSignFieldsBase64())
-                                                .font(.body)
-                                                .foregroundColor(R.color.secondaryText.color)
-
+                                            if viewModel.state.account.blockchain == .solana {
+                                                Text(R.string.localizable.transactionSignFieldsBase64())
+                                                    .font(.body)
+                                                    .foregroundColor(R.color.secondaryText.color)
+                                            }
                                             Spacer()
 
                                             Button {
