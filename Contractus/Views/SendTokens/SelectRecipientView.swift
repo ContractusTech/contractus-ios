@@ -24,11 +24,17 @@ struct SelectRecipientView: View {
                 value: viewModel.state.recipient,
                 changeValue: { newValue in
                     publicKey = newValue
+                    viewModel.trigger(.validateRecipient(newValue))
                 }, onQRTap: {
                     EventService.shared.send(event: DefaultAnalyticsEvent.dealContractorQrscannerTap)
                 }
             )
-
+            if !publicKey.isEmpty && !viewModel.isValidImportedPrivateKey {
+                Text(R.string.localizable.sendTokensInvalidRecipient())
+                    .font(.footnote.weight(.semibold))
+                    .foregroundColor(R.color.labelBackgroundError.color)
+                    .padding(.top, 8)
+            }
             Spacer()
             NavigationLink(
                 isActive: $nextStep,
@@ -42,10 +48,10 @@ struct SelectRecipientView: View {
                     EmptyView()
                 }
             )
-            CButton(title: R.string.localizable.commonNext(), style: .primary, size: .large, isLoading: false, action: {
+            CButton(title: R.string.localizable.commonNext(), style: .primary, size: .large, isLoading: false, isDisabled: !viewModel.isValidImportedPrivateKey) {
                 viewModel.trigger(.setRecipient(publicKey))
                 nextStep.toggle()
-            })
+            }
         }
         .onAppear {
             publicKey = viewModel.state.recipient
