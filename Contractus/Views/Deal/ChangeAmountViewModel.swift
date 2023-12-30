@@ -131,6 +131,7 @@ final class ChangeAmountViewModel: ViewModel {
             allowHolderMode: false
         )
         self.dealService = dealService
+        self.updateFee(amount: amount)
     }
 
     func trigger(_ input: ChangeAmountInput, after: AfterTrigger? = nil) {

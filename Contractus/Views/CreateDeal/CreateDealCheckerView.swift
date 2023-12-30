@@ -51,7 +51,7 @@ struct CreateDealCheckerView: View {
                                 
                 TextFieldView(
                     placeholder: placeholder,
-                    blockchain: .solana,
+                    blockchain: viewModel.state.account.blockchain,
                     value: viewModel.state.checker,
                     changeValue: { newValue in
                         checkerPublicKey = newValue

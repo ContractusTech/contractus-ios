@@ -251,9 +251,11 @@
 "deal.description-command.revoke-deal" = "You can cancel the deal before it starts.";
 "deal.delete.alert.button" = "Yes, delete";
 "deal.delete.alert.message" = "You want delete file?";
+"deal.status.expired.title" = "Deal is expired";
 "deal.status.finished.title" = "Deal is finished";
 "deal.status.canceled.title" = "Deal is canceled";
 "deal.status.started.title" = "In work";
+"deal.status.expired.subtitle" = "Cancel the deal to get your money back.";
 "deal.status.finished.subtitle" = "%@ was transferred to the account of the executor %@";
 "deal.status.started.subtitle.executor" = "You need to fulfill the conditions of the deal. The customer can cancel the deal after %@.";
 "deal.status.started.subtitle.checker" = "The contractor has begun to fulfill the terms of the deal. Keep an eye on the outcome of the contract, when everything is done you need to finalize the deal.";
@@ -402,6 +404,7 @@
 "transactionSign.fields.status" = "Status";
 "transactionSign.fields.type" = "Type";
 "transactionSign.fields.tx" = "Transaction";
+"transactionSign.fields.message" = "Message";
 "transactionSign.fields.base64" = "Base64";
 "transactionSign.fields.signature" = "Signature";
 "transactionSign.fields.holder-mode" = "Holder mode";

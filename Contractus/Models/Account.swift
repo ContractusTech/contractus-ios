@@ -19,6 +19,17 @@ struct CommonAccount: Codable, Hashable {
     let blockchain: Blockchain
 }
 
+extension CommonAccount {
+    func privateKeyEncoded() -> String {
+        switch blockchain {
+        case .solana:
+            return privateKey.toBase58()
+        case .bsc:
+            return privateKey.toHexString()
+        }
+    }
+}
+
 protocol WrappedAccount {
     var commonAccount: CommonAccount { get }
 }

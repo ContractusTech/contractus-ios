@@ -48,7 +48,7 @@ struct CreateWalletView: View {
                             titleText: "Your Safety",
                             largeTitleText: R.string.localizable.backupInformationTitle(),
                             informationText: R.string.localizable.backupInformationSubtitle(),
-                            privateKey: account.privateKey,
+                            privateKey: account.privateKeyEncoded(),
                             completion: {
                                 completion(account)
                             }).environmentObject(viewModel)

@@ -360,3 +360,5 @@ final class MainViewModel: ViewModel {
 
     }
 }
+
+extension Deal: Identifiable { }

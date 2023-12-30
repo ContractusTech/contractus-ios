@@ -896,7 +896,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 26 images.
+  /// This `R.image` struct is generated, and contains static references to 29 images.
   struct image {
     /// Image `Advcash`.
     static let advcash = Rswift.ImageResource(bundle: R.hostingBundle, name: "Advcash")
@@ -926,6 +926,8 @@ struct R: Rswift.Validatable {
     static let send = Rswift.ImageResource(bundle: R.hostingBundle, name: "Send")
     /// Image `USDC-CoinLogo`.
     static let usdcCoinLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "USDC-CoinLogo")
+    /// Image `account-circle-fill`.
+    static let accountCircleFill = Rswift.ImageResource(bundle: R.hostingBundle, name: "account-circle-fill")
     /// Image `addAccount`.
     static let addAccount = Rswift.ImageResource(bundle: R.hostingBundle, name: "addAccount")
     /// Image `bsc`.
@@ -942,6 +944,8 @@ struct R: Rswift.Validatable {
     static let holderCrown = Rswift.ImageResource(bundle: R.hostingBundle, name: "holderCrown")
     /// Image `holderLogo`.
     static let holderLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "holderLogo")
+    /// Image `home-fill`.
+    static let homeFill = Rswift.ImageResource(bundle: R.hostingBundle, name: "home-fill")
     /// Image `iconDealChecker`.
     static let iconDealChecker = Rswift.ImageResource(bundle: R.hostingBundle, name: "iconDealChecker")
     /// Image `iconDealClient`.
@@ -950,6 +954,8 @@ struct R: Rswift.Validatable {
     static let iconDealExecutor = Rswift.ImageResource(bundle: R.hostingBundle, name: "iconDealExecutor")
     /// Image `solana`.
     static let solana = Rswift.ImageResource(bundle: R.hostingBundle, name: "solana")
+    /// Image `team-fill`.
+    static let teamFill = Rswift.ImageResource(bundle: R.hostingBundle, name: "team-fill")
 
     #if os(iOS) || os(tvOS)
     /// `UIImage(named: "Advcash", bundle: ..., traitCollection: ...)`
@@ -1050,6 +1056,13 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "account-circle-fill", bundle: ..., traitCollection: ...)`
+    static func accountCircleFill(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.accountCircleFill, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIImage(named: "addAccount", bundle: ..., traitCollection: ...)`
     static func addAccount(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.addAccount, compatibleWith: traitCollection)
@@ -1106,6 +1119,13 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "home-fill", bundle: ..., traitCollection: ...)`
+    static func homeFill(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.homeFill, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
     /// `UIImage(named: "iconDealChecker", bundle: ..., traitCollection: ...)`
     static func iconDealChecker(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.iconDealChecker, compatibleWith: traitCollection)
@@ -1133,12 +1153,19 @@ struct R: Rswift.Validatable {
     }
     #endif
 
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "team-fill", bundle: ..., traitCollection: ...)`
+    static func teamFill(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.teamFill, compatibleWith: traitCollection)
+    }
+    #endif
+
     fileprivate init() {}
   }
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 488 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 491 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -1468,6 +1495,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionTypeCancelDeal = Rswift.StringResource(key: "transaction.type.cancel-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Cancel the deal to get your money back.
+      ///
+      /// Locales: en
+      static let dealStatusExpiredSubtitle = Rswift.StringResource(key: "deal.status.expired.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Canceled
       ///
       /// Locales: en
@@ -1696,6 +1727,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealStatusCanceledTitle = Rswift.StringResource(key: "deal.status.canceled.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Deal is expired
+      ///
+      /// Locales: en
+      static let dealStatusExpiredTitle = Rswift.StringResource(key: "deal.status.expired.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Deal is finished
       ///
       /// Locales: en
@@ -2108,6 +2143,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealBondClientHint = Rswift.StringResource(key: "newDeal.bond.client.hint", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Message
+      ///
+      /// Locales: en
+      static let transactionSignFieldsMessage = Rswift.StringResource(key: "transactionSign.fields.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Must be account on the Solana blockchain
       ///
       /// Locales: en
@@ -4341,6 +4380,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("transaction.type.cancel-deal", bundle: bundle, comment: "")
       }
 
+      /// en translation: Cancel the deal to get your money back.
+      ///
+      /// Locales: en
+      static func dealStatusExpiredSubtitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.expired.subtitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.expired.subtitle"
+        }
+
+        return NSLocalizedString("deal.status.expired.subtitle", bundle: bundle, comment: "")
+      }
+
       /// en translation: Canceled
       ///
       /// Locales: en
@@ -5198,6 +5252,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.status.canceled.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Deal is expired
+      ///
+      /// Locales: en
+      static func dealStatusExpiredTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("deal.status.expired.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "deal.status.expired.title"
+        }
+
+        return NSLocalizedString("deal.status.expired.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Deal is finished
@@ -6749,6 +6818,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("newDeal.bond.client.hint", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Message
+      ///
+      /// Locales: en
+      static func transactionSignFieldsMessage(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.fields.message", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.fields.message"
+        }
+
+        return NSLocalizedString("transactionSign.fields.message", bundle: bundle, comment: "")
       }
 
       /// en translation: Must be account on the Solana blockchain

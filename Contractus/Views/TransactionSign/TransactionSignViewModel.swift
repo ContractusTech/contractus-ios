@@ -259,7 +259,7 @@ final class TransactionSignViewModel: ViewModel {
                     return
                 }
 
-                dealService?.signTransaction(dealId: deal.id, type: transaction.type, data: .init(transaction: transaction.transaction, signature: signature.base64EncodedString()), completion: { result in
+                dealService?.signTransaction(dealId: deal.id, type: transaction.type, data: .init(transaction: transaction.transaction, signature: signature), completion: { result in
                     continuation.resume(with: result)
                 })
             })
@@ -277,15 +277,15 @@ final class TransactionSignViewModel: ViewModel {
 
                 switch tx.type {
                 case .wrapSOL, .wrap:
-                    transactionsService?.signWrap(.init(id: tx.id, transaction: tx.transaction, signature: signature.base64EncodedString()), completion: { result in
+                    transactionsService?.signWrap(.init(id: tx.id, transaction: tx.transaction, signature: signature), completion: { result in
                         continuation.resume(with: result)
                     })
                 case .unwrapAllSOL, .unwrap:
-                    transactionsService?.signUnwrapAll(.init(id: tx.id, transaction: tx.transaction, signature: signature.base64EncodedString()), completion: { result in
+                    transactionsService?.signUnwrapAll(.init(id: tx.id, transaction: tx.transaction, signature: signature), completion: { result in
                         continuation.resume(with: result)
                     })
                 case .transfer:
-                    transactionsService?.transferSign(.init(id: tx.id, transaction: tx.transaction, signature: signature.base64EncodedString()), completion: {result in
+                    transactionsService?.transferSign(.init(id: tx.id, transaction: tx.transaction, signature: signature), completion: {result in
                         continuation.resume(with: result)
                     })
                 case .dealFinish, .dealInit, .dealCancel:

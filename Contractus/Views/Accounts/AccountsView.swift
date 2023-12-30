@@ -81,11 +81,18 @@ struct AccountsView: View {
                 
                 ForEach(viewModel.state.accounts, id: \.account.publicKey) { item in
                     HStack(spacing: 8) {
-                        VStack(alignment: .leading, spacing: 2) {
+                        VStack(alignment: .leading, spacing: 4) {
                             Text(ContentMask.mask(from: item.account.publicKey))
-                            Text(item.account.blockchain.longTitle)
-                                .font(.footnote)
-                                .foregroundColor(R.color.secondaryText.color)
+                            HStack {
+                                item.account.blockchain.image
+                                    .resizable()
+                                    .frame(width: 12, height: 12)
+                                    .aspectRatio(contentMode: .fit)
+
+                                Text(item.account.blockchain.longTitle)
+                                    .font(.footnote)
+                                    .foregroundColor(R.color.secondaryText.color)
+                            }
                         }
                         Spacer()
                         if editMode?.wrappedValue == .active {
@@ -241,7 +248,7 @@ struct AccountsView: View {
         var largeTitle: String
         var informationType: TopTextBlockView.InformationType
         var informationText: String
-        var privateKey: Data
+        var privateKey: String
         var viewType: AboutAccountView.ViewType
         var account: CommonAccount
         switch type {
@@ -250,7 +257,7 @@ struct AccountsView: View {
             title = R.string.localizable.commonBackup()
             largeTitle =  R.string.localizable.accountsBackupTitle()
             informationText = R.string.localizable.accountsBackupSubtitle()
-            privateKey = item.account.privateKey
+            privateKey = item.account.privateKeyEncoded()
             viewType = .backup(existInBackup: item.existInBackup)
             account = item.account
 
@@ -259,7 +266,7 @@ struct AccountsView: View {
             title = R.string.localizable.commonAttention()
             largeTitle = R.string.localizable.accountsDeleteTitle()
             informationText = R.string.localizable.accountsDeleteSubtitle()
-            privateKey = item.account.privateKey
+            privateKey = item.account.privateKeyEncoded()
             viewType = .delete(existInBackup: item.existInBackup)
             account = item.account
         }

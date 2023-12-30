@@ -137,7 +137,12 @@ struct DealState {
     }
 
     var hasSecretKey: Bool {
-        !(deal.encryptedSecretKey?.isEmpty ?? true)
+        !(deal.encryptedSecretKey?.isEmpty ?? false)
+    }
+
+    var canEditResult: Bool {
+        guard deal.status == .started  else { return false }
+        return canEdit && executorPublicKey == account.publicKey
     }
 
     var editIsVisible: Bool = false

@@ -51,7 +51,7 @@ struct CreateDealContractorView: View {
                                 
                 TextFieldView(
                     placeholder: placeholder,
-                    blockchain: .solana,
+                    blockchain: viewModel.state.account.blockchain,
                     value: viewModel.state.contractor,
                     changeValue: { newValue in
                         contractorPublicKey = newValue

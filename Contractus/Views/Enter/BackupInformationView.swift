@@ -24,7 +24,7 @@ struct BackupInformationView: View {
     let titleText: String
     let largeTitleText: String
     let informationText: String
-    let privateKey: Data
+    let privateKey: String
 
     var completion: () -> Void
 
@@ -34,7 +34,7 @@ struct BackupInformationView: View {
                 VStack(alignment: .center, spacing: 24) {
                     BaseTopTextBlockView(titleText: largeTitleText, subTitleText: informationText)
 
-                    CopyContentView(content: privateKey.toBase58(), contentType: .privateKey) { _ in
+                    CopyContentView(content: privateKey, contentType: .privateKey) { _ in
                         viewModel.trigger(.copyForBackup)
                     }
 
@@ -108,7 +108,7 @@ struct BackupInformationView_Previews: PreviewProvider {
                 titleText: "import success",
                 largeTitleText: "Your safety",
                 informationText: "",
-                privateKey: Data(),
+                privateKey: "",
                 completion: {}).environmentObject(AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(), accountService: AccountServiceImpl(storage: MockAccountStorage()), backupStorage: BackupStorageMock())))
         }
         .preferredColorScheme(.dark)

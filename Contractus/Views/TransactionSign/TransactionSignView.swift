@@ -210,13 +210,18 @@ struct TransactionSignView: View {
                                 VStack(alignment: .leading) {
                                     VStack(alignment: .leading) {
                                         HStack {
-                                            Text(R.string.localizable.transactionSignFieldsTx())
-                                                .font(.body)
-                                                .foregroundColor(R.color.textBase.color)
+
                                             if viewModel.state.account.blockchain == .solana {
+                                                Text(R.string.localizable.transactionSignFieldsTx())
+                                                    .font(.body)
+                                                    .foregroundColor(R.color.textBase.color)
                                                 Text(R.string.localizable.transactionSignFieldsBase64())
                                                     .font(.body)
                                                     .foregroundColor(R.color.secondaryText.color)
+                                            } else {
+                                                Text(R.string.localizable.transactionSignFieldsMessage())
+                                                    .font(.body)
+                                                    .foregroundColor(R.color.textBase.color)
                                             }
                                             Spacer()
 

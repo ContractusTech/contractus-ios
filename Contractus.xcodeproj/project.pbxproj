@@ -203,6 +203,8 @@
 		6D1922B92B0DBC0200EBE911 /* ShamirSecretSharing in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6D1921DE2B0DBC0200EBE911 /* ShamirSecretSharing */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6D1922C02B0DF81B00EBE911 /* Wallet-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D1922BF2B0DF81B00EBE911 /* Wallet-Info.plist */; };
 		6D1DF1A42922EC7400B112FC /* CButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1DF1A32922EC7400B112FC /* CButtons.swift */; };
+		6D249D582B32D202007AA436 /* MigrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D249D572B32D202007AA436 /* MigrationManager.swift */; };
+		6D249D5B2B32D29D007AA436 /* MigrateTokenSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D249D5A2B32D29D007AA436 /* MigrateTokenSettings.swift */; };
 		6D2E0AF228AE9833002BA683 /* DealViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E0AF128AE9833002BA683 /* DealViewModel.swift */; };
 		6D2E0AF628AF340C002BA683 /* TextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E0AF528AF340C002BA683 /* TextEditorView.swift */; };
 		6D2E0AF928AF3473002BA683 /* TextEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E0AF828AF3473002BA683 /* TextEditorViewModel.swift */; };
@@ -445,6 +447,8 @@
 		6D1922BD2B0DBC0200EBE911 /* Contractus-Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Contractus-Wallet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D1922BF2B0DF81B00EBE911 /* Wallet-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Wallet-Info.plist"; sourceTree = "<group>"; };
 		6D1DF1A32922EC7400B112FC /* CButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CButtons.swift; sourceTree = "<group>"; };
+		6D249D572B32D202007AA436 /* MigrationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationManager.swift; sourceTree = "<group>"; };
+		6D249D5A2B32D29D007AA436 /* MigrateTokenSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrateTokenSettings.swift; sourceTree = "<group>"; };
 		6D2E0AF128AE9833002BA683 /* DealViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealViewModel.swift; sourceTree = "<group>"; };
 		6D2E0AF528AF340C002BA683 /* TextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorView.swift; sourceTree = "<group>"; };
 		6D2E0AF828AF3473002BA683 /* TextEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorViewModel.swift; sourceTree = "<group>"; };
@@ -713,6 +717,15 @@
 				6D0F7F44298C20C800EC2C74 /* WrapTokenViewModel.swift */,
 			);
 			path = Wrap;
+			sourceTree = "<group>";
+		};
+		6D249D562B32D1EC007AA436 /* Migrations */ = {
+			isa = PBXGroup;
+			children = (
+				6D249D572B32D202007AA436 /* MigrationManager.swift */,
+				6D249D5A2B32D29D007AA436 /* MigrateTokenSettings.swift */,
+			);
+			path = Migrations;
 			sourceTree = "<group>";
 		};
 		6D2E0AF728AF342D002BA683 /* TextEditorView */ = {
@@ -1101,6 +1114,7 @@
 		6DBCA48E2891161200F918B6 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				6D249D562B32D1EC007AA436 /* Migrations */,
 				6DBCA48F2891161C00F918B6 /* Formatter */,
 				6DAA5E782898BE1B00BA1965 /* Crypto.swift */,
 				6DAA5E7A2898C25500BA1965 /* RandomStrings.swift */,
@@ -1680,6 +1694,7 @@
 				FE8270472A8D4D730092970A /* ReferralViewModel.swift in Sources */,
 				6D44B5602A0E0B20008C561D /* BlockchainExplorer.swift in Sources */,
 				6D0DA75B292FA9A60024EF30 /* NavigationStackModifier.swift in Sources */,
+				6D249D582B32D202007AA436 /* MigrationManager.swift in Sources */,
 				6D6EE395289F9EFE00635E60 /* ImagePickerView.swift in Sources */,
 				FE287ED92AF3B7FD00C4EAF5 /* CreateDealEncryptionView.swift in Sources */,
 				6DBCA4912891162F00F918B6 /* ContentMask.swift in Sources */,
@@ -1712,6 +1727,7 @@
 				6D320EB32992275A00B56758 /* RootSheet.swift in Sources */,
 				6D2E0AF928AF3473002BA683 /* TextEditorViewModel.swift in Sources */,
 				6D74735E2962E18C00A5F6E7 /* TransactionSignView.swift in Sources */,
+				6D249D5B2B32D29D007AA436 /* MigrateTokenSettings.swift in Sources */,
 				FE48B1002AE178BB00885610 /* AmountFieldView.swift in Sources */,
 				FE10B56E2A96715200AA5EA8 /* OnboardingPageView.swift in Sources */,
 				6D3AA486292D3A2500596061 /* Data+Ex.swift in Sources */,
@@ -1908,7 +1924,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1951,7 +1967,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2109,7 +2125,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2152,7 +2168,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

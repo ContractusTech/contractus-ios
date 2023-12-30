@@ -39,7 +39,7 @@ struct MainView: View {
 
     @StateObject var viewModel: AnyViewModel<MainState, MainInput>
     var logoutCompletion: () -> Void
-    
+
     @State private var selectedDeal: Deal?
     @State private var sheetType: SheetType? = .none
     @State private var alertType: AlertType? = .none
@@ -67,18 +67,19 @@ struct MainView: View {
     var body: some View {
 
         JGProgressHUDPresenter(userInteractionOnHUD: true) {
-            NavigationView {
-                ScrollView {
+            //   NavigationView {
+            ZStack(alignment: .top) {
+                ScrollView(showsIndicators: false) {
                     VStack {
                         BalanceView(
                             state: viewModel.state.balance != nil ? .loaded(.init(balance: viewModel.state.balance!)) : .empty,
                             topUpAction: {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.mainTopupTap)
-                                #if IS_WALLET
+#if IS_WALLET
                                 sheetType = .sharePublicKey
-                                #else
+#else
                                 topUpState = .medium
-                                #endif
+#endif
                                 ImpactGenerator.soft()
                             }, infoAction: {
                                 sheetType = .webView(AppConfig.ctusInfoURL)
@@ -92,7 +93,7 @@ struct MainView: View {
                                 showSendTokens.toggle()
                             }
 
-                        #if !IS_WALLET
+#if !IS_WALLET
                         if viewModel.state.allowBuyToken && viewModel.state.balance != nil && viewModel.state.balance?.tier == .basic {
                             UnlockHolderButtonView() {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.buyformOpen)
@@ -101,7 +102,7 @@ struct MainView: View {
                                 showBuyCtus.toggle()
                             }
                         }
-                        #endif
+#endif
 
                         if !viewModel.state.statistics.isEmpty {
                             StatisticsView(items: viewModel.state.statistics) { item in
@@ -214,6 +215,7 @@ struct MainView: View {
                         }
                     }
                 }
+                .padding(.top, 42)
                 .refreshable(action: {
                     await withCheckedContinuation { continuation in
                         viewModel.trigger(.load(dealsType, silent: true)) {
@@ -221,314 +223,384 @@ struct MainView: View {
                         }
                     }
                 })
-                .onChange(of: dealsType, perform: { newType in
-                    viewModel.trigger(.load(newType))
-                })
-                .onChange(of: selectedDeal, perform: { selectedDeal in
-                    if selectedDeal == nil {
-                        viewModel.trigger(.selectDeal(deal: nil))
-                    }
-                })
-                .onChange(of: viewModel.state.selectedDeal, perform: { newSelectedDeal in
 
-                    guard let dealForOpen = newSelectedDeal else {
-                        self.selectedDeal = nil
-                        return
+                HStack {
+                    Button {
+                        EventService.shared.send(event: DefaultAnalyticsEvent.mainSettingsTap)
+                        sheetType = .menu
+                    } label: {
+                        Constants.menuImage
+                            .resizable()
+                            .frame(width: 21, height: 21)
+                            .aspectRatio(contentMode: .fit)
                     }
-                    switch sheetType {
-                    case .newDeal:
-                        if !viewModel.state.selectedDealIsNew {
-                            self.viewModel.trigger(.selectDeal(deal: nil))
-                            self.alertType = .confirmOpenDeal(dealForOpen)
+                    Spacer()
+                    Button {
+                        if let tier = viewModel.state.balance?.tier {
+                            EventService.shared.send(event: ExtendedAnalyticsEvent.mainTiersTap(tier))
+                        }
+                        sheetType = .webView(AppConfig.tiersInformationURL)
+                    } label: {
+                        VStack(alignment: .center, spacing: 3) {
+                            tierLabel(viewModel.state.balance?.tier)
+
+                            HStack(spacing: 4) {
+                                viewModel.state.account.blockchain.image
+                                    .resizable()
+                                    .frame(width: 12, height: 12)
+                                    .aspectRatio(contentMode: .fit)
+                                Text(ContentMask.mask(from: viewModel.state.account.publicKey))
+                                    .font(.caption2)
+                                    .foregroundColor(R.color.secondaryText.color)
+
+                                if AppConfig.serverType.isDevelop {
+                                    Text("•")
+                                        .font(.caption2)
+                                        .foregroundColor(R.color.secondaryText.color)
+                                    Text(AppConfig.serverType.networkTitle)
+                                        .font(.caption2)
+                                        .foregroundColor(R.color.textWarn.color)
+                                }
+                            }
+
+                        }
+                    }
+                    Spacer()
+                    Button {
+                        EventService.shared.send(event: DefaultAnalyticsEvent.mainQRscannerTap)
+
+                        sheetType = .qrScan
+                    } label: {
+                        Constants.scanQRImage
+                            .resizable()
+                            .frame(width: 21, height: 21)
+                            .aspectRatio(contentMode: .fit)
+                    }
+                }
+                .padding(.horizontal, 12)
+            }
+
+            .onChange(of: dealsType, perform: { newType in
+                viewModel.trigger(.load(newType))
+            })
+            .onChange(of: selectedDeal, perform: { selectedDeal in
+                if selectedDeal == nil {
+                    viewModel.trigger(.selectDeal(deal: nil))
+                }
+            })
+            .onChange(of: viewModel.state.selectedDeal, perform: { newSelectedDeal in
+
+                guard let dealForOpen = newSelectedDeal else {
+                    self.selectedDeal = nil
+                    return
+                }
+                switch sheetType {
+                case .newDeal:
+                    if !viewModel.state.selectedDealIsNew {
+                        self.viewModel.trigger(.selectDeal(deal: nil))
+                        self.alertType = .confirmOpenDeal(dealForOpen)
+                    } else {
+                        self.selectedDeal = dealForOpen
+                    }
+                default:
+                    UIApplication.closeAllModal {
+                        sheetType = nil
+                        topUpState = .hidden
+                        if self.selectedDeal != nil {
+                            self.selectedDeal = nil
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                self.selectedDeal = dealForOpen
+                            }
                         } else {
                             self.selectedDeal = dealForOpen
                         }
-                    default:
-                        UIApplication.closeAllModal {
-                            sheetType = nil
-                            topUpState = .hidden
-                            if self.selectedDeal != nil {
-                                self.selectedDeal = nil
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                    self.selectedDeal = dealForOpen
-                                }
-                            } else {
-                                self.selectedDeal = dealForOpen
-                            }
-                        }
                     }
-                })
-                .confirmationDialog(Text(R.string.localizable.mainTitleFilter()), isPresented: $showDealFilter, actions: {
-                    ForEach(MainViewModel.State.DealType.allCases, id: \.self) { type in
-                        Button(dealTitle(type: type), role: .none) {
-                            dealsType = type
-                        }
-                    }
-                })
-                .resizableSheet($topUpState, id: "topUp", builder: { builder in
-                    builder.content { context in
-                        TopUpView(
-                            allowBuyToken: viewModel.state.allowBuyToken,
-                            allowDeposit: viewModel.state.allowDeposit
-                        ) { type in
-                            switch type {
-                            case .crypto:
-                                sheetType = .sharePublicKey
-                                topUpState = .hidden
-                            case .fiat(let url):
-                                sheetType = .topUp(url)
-                                topUpState = .hidden
-                            case .loan:
-                                break;
-                            case .buyCTUS:
-                                topUpState = .hidden
-                                showBuyCtus.toggle()
-                            }
-                        }
-                    }
-                    .animation(.easeInOut)
-                    .background { context in
-                        Color.black
-                            .opacity(context.state == .medium ? 0.5 : 0)
-                            .ignoresSafeArea()
-                            .onTapGesture(perform: {
-                                topUpState = .hidden
-                            })
-                    }
-                    .supportedState([.medium, .hidden])
-                })
-                .resizableSheet($holderModeState, id: "holderMode") { builder in
-                    builder.content { context in
-                        UnlockHolderView { type in
-                            switch type {
-                            case .buy:
-                                EventService.shared.send(event: DefaultAnalyticsEvent.buyformBuyTap)
-                                holderModeState = .hidden
-                                showBuyCtus.toggle()
-                                ImpactGenerator.soft()
-                            case .coinstore:
-                                holderModeState = .hidden
-                                openCoinstore()
-                                ImpactGenerator.soft()
-                            case .raydium:
-                                holderModeState = .hidden
-                                openRaydium()
-                            case .pancake:
-                                holderModeState = .hidden
-                                openPancake()
-                                ImpactGenerator.soft()
-                            }
-                        }
-                    }
-                    .animation(.easeInOut)
-                    .background { context in
-                        Color.black
-                            .opacity(context.state == .medium ? 0.5 : 0)
-                            .ignoresSafeArea()
-                            .onTapGesture(perform: {
-                                holderModeState = .hidden
-                            })
-                    }
-                    .supportedState([.medium, .hidden])
                 }
+            })
+            .confirmationDialog(Text(R.string.localizable.mainTitleFilter()), isPresented: $showDealFilter, actions: {
+                ForEach(MainViewModel.State.DealType.allCases, id: \.self) { type in
+                    Button(dealTitle(type: type), role: .none) {
+                        dealsType = type
+                    }
+                }
+            })
+            .resizableSheet($topUpState, id: "topUp", builder: { builder in
+                builder.content { context in
+                    TopUpView(
+                        allowBuyToken: viewModel.state.allowBuyToken,
+                        allowDeposit: viewModel.state.allowDeposit
+                    ) { type in
+                        switch type {
+                        case .crypto:
+                            sheetType = .sharePublicKey
+                            topUpState = .hidden
+                        case .fiat(let url):
+                            sheetType = .topUp(url)
+                            topUpState = .hidden
+                        case .loan:
+                            break;
+                        case .buyCTUS:
+                            topUpState = .hidden
+                            showBuyCtus.toggle()
+                        }
+                    }
+                }
+                .animation(.easeInOut)
+                .background { context in
+                    Color.black
+                        .opacity(context.state == .medium ? 0.5 : 0)
+                        .ignoresSafeArea()
+                        .onTapGesture(perform: {
+                            topUpState = .hidden
+                        })
+                }
+                .supportedState([.medium, .hidden])
+            })
+            .resizableSheet($holderModeState, id: "holderMode") { builder in
+                builder.content { context in
+                    UnlockHolderView { type in
+                        switch type {
+                        case .buy:
+                            EventService.shared.send(event: DefaultAnalyticsEvent.buyformBuyTap)
+                            holderModeState = .hidden
+                            showBuyCtus.toggle()
+                            ImpactGenerator.soft()
+                        case .coinstore:
+                            holderModeState = .hidden
+                            openCoinstore()
+                            ImpactGenerator.soft()
+                        case .raydium:
+                            holderModeState = .hidden
+                            openRaydium()
+                        case .pancake:
+                            holderModeState = .hidden
+                            openPancake()
+                            ImpactGenerator.soft()
+                        }
+                    }
+                }
+                .animation(.easeInOut)
+                .background { context in
+                    Color.black
+                        .opacity(context.state == .medium ? 0.5 : 0)
+                        .ignoresSafeArea()
+                        .onTapGesture(perform: {
+                            holderModeState = .hidden
+                        })
+                }
+                .supportedState([.medium, .hidden])
+            }
 
-                .sheet(item: $sheetType, content: { type in
-                    switch type {
-                    case .tokenSettings:
-                        NavigationView {
-                            TokenSelectView(viewModel: .init(TokenSelectViewModel(
-                                allowHolderMode: true,
-                                mode: .many,
-                                tier: viewModel.state.balance?.tier ?? .basic,
-                                selectedTokens: viewModel.state.selectedTokens,
-                                disableUnselectTokens: viewModel.state.disableUnselectTokens, 
-                                balance: viewModel.state.balance,
-                                resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())
-                            )) { result in
-                                switch result {
-                                case .many(let tokens):
-                                    viewModel.trigger(.saveTokenSettings(tokens))
-                                case .none, .single, .close:
-                                    break
-                                }
-                                sheetType = nil
+            .sheet(item: $sheetType, content: { type in
+                switch type {
+                case .tokenSettings:
+                    NavigationView {
+                        TokenSelectView(viewModel: .init(TokenSelectViewModel(
+                            allowHolderMode: true,
+                            mode: .many,
+                            tier: viewModel.state.balance?.tier ?? .basic,
+                            selectedTokens: viewModel.state.selectedTokens,
+                            disableUnselectTokens: viewModel.state.disableUnselectTokens,
+                            balance: viewModel.state.balance,
+                            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService())
+                        )) { result in
+                            switch result {
+                            case .many(let tokens):
+                                viewModel.trigger(.saveTokenSettings(tokens))
+                            case .none, .single, .close:
+                                break
                             }
+                            sheetType = nil
                         }
-                    case .topUp(let url):
-                        NavigationView {
-                            WebView(url: url)
-                                .edgesIgnoringSafeArea(.bottom)
-                                .navigationBarItems(
-                                    trailing: Button(action: {
-                                        sheetType = nil
-                                    }, label: {
-                                        Constants.closeImage
-                                            .resizable()
-                                            .frame(width: 21, height: 21)
-                                            .foregroundColor(R.color.textBase.color)
-                                    }))
-                                .navigationTitle(R.string.localizable.commonTopUp())
-                                .navigationBarTitleDisplayMode(.inline)
-                        }
-                        .baseBackground()
-                        .interactiveDismiss(canDismissSheet: false)
-                    case .webView(let url):
-                        NavigationView {
-                            WebView(url: url)
-                                .edgesIgnoringSafeArea(.bottom)
-                                .navigationBarItems(
-                                    trailing: Button(R.string.localizable.commonClose(), action: {
+                    }
+                case .topUp(let url):
+                    NavigationView {
+                        WebView(url: url)
+                            .edgesIgnoringSafeArea(.bottom)
+                            .navigationBarItems(
+                                trailing: Button(action: {
+                                    sheetType = nil
+                                }, label: {
+                                    Constants.closeImage
+                                        .resizable()
+                                        .frame(width: 21, height: 21)
+                                        .foregroundColor(R.color.textBase.color)
+                                }))
+                            .navigationTitle(R.string.localizable.commonTopUp())
+                            .navigationBarTitleDisplayMode(.inline)
+                    }
+                    .baseBackground()
+                    .interactiveDismiss(canDismissSheet: false)
+                case .webView(let url):
+                    NavigationView {
+                        WebView(url: url)
+                            .edgesIgnoringSafeArea(.bottom)
+                            .navigationBarItems(
+                                trailing: Button(R.string.localizable.commonClose(), action: {
                                     sheetType = nil
                                 }))
-                                .navigationTitle(R.string.localizable.mainAboutTiers())
-                                .navigationBarTitleDisplayMode(.inline)
-                        }.baseBackground()
+                            .navigationTitle(R.string.localizable.mainAboutTiers())
+                            .navigationBarTitleDisplayMode(.inline)
+                    }.baseBackground()
 
-                    case .wrap(let from, let to):
-                        wrapView(amountNativeToken: from, amountWrapToken: to)
-                    case .newDeal:
-                        CreateDealView(
-                            viewModel: AnyViewModel<CreateDealState, CreateDealInput>(CreateDealViewModel(
-                                account: viewModel.state.account,
-                                accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
-                                dealsAPIService: try? APIServiceFactory.shared.makeDealsService()))) { deal in
-                                    viewModel.trigger(.selectDeal(deal: deal, isNew: true))
-                                    viewModel.trigger(.load(dealsType))
-                                }
-                                .interactiveDismiss(canDismissSheet: false)
-                                .alert(item: $alertType, content: { alertType in
-                                    switch alertType {
-                                    case .confirmOpenDeal(let deal):
-                                        Alert(
-                                            title: Text(R.string.localizable.commonConfirm()),
-                                            message: Text(R.string.localizable.newDealConfirmAlertMessage()),
-                                            primaryButton: .default(Text(R.string.localizable.commonYesOpen()), action: {
-                                                sheetType = nil
-                                                viewModel.trigger(.selectDeal(deal: deal))
-
-                                            }),
-                                            secondaryButton: .cancel())
-                                    }
-                                })
-                    case .menu:
-                        MenuView { action in
-                            switch action {
-                            case .changeAccount:
-                                viewModel.trigger(.updateAccount) {
-                                    load()
-                                }
-
-                            case .logout:
-                                logoutCompletion()
+                case .wrap(let from, let to):
+                    wrapView(amountNativeToken: from, amountWrapToken: to)
+                case .newDeal:
+                    CreateDealView(
+                        viewModel: AnyViewModel<CreateDealState, CreateDealInput>(CreateDealViewModel(
+                            account: viewModel.state.account,
+                            accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
+                            dealsAPIService: try? APIServiceFactory.shared.makeDealsService()))) { deal in
+                                viewModel.trigger(.selectDeal(deal: deal, isNew: true))
+                                viewModel.trigger(.load(dealsType))
                             }
+                            .interactiveDismiss(canDismissSheet: false)
+                            .alert(item: $alertType, content: { alertType in
+                                switch alertType {
+                                case .confirmOpenDeal(let deal):
+                                    Alert(
+                                        title: Text(R.string.localizable.commonConfirm()),
+                                        message: Text(R.string.localizable.newDealConfirmAlertMessage()),
+                                        primaryButton: .default(Text(R.string.localizable.commonYesOpen()), action: {
+                                            sheetType = nil
+                                            viewModel.trigger(.selectDeal(deal: deal))
+
+                                        }),
+                                        secondaryButton: .cancel())
+                                }
+                            })
+                case .menu:
+                    MenuView { action in
+                        switch action {
+                        case .changeAccount:
+                            viewModel.trigger(.updateAccount) {
+                                load()
+                            }
+
+                        case .logout:
+                            logoutCompletion()
                         }
-                    case .qrScan:
-                        QRCodeScannerView(configuration: .scannerAndInput, blockchain: viewModel.state.account.blockchain) { result in
-                            sheetType = nil
-                            viewModel.trigger(.executeScanResult(result))
-                        }
-                    case .sharePublicKey:
-                        // TODO: - Refactor
-                        if let shareData = try? SharablePublicKey(shareContent: viewModel.state.account.publicKey) {
-                            ShareContentView(
-                                content: shareData,
-                                topTitle: R.string.localizable.commonAccount(),
-                                title: R.string.localizable.commonYouAccount(),
-                                subTitle: R.string.localizable.shareContentSubtitle()) { _ in
+                    }
+                case .qrScan:
+                    QRCodeScannerView(configuration: .scannerAndInput, blockchain: viewModel.state.account.blockchain) { result in
+                        sheetType = nil
+                        viewModel.trigger(.executeScanResult(result))
+                    }
+                case .sharePublicKey:
+                    // TODO: - Refactor
+                    if let shareData = try? SharablePublicKey(shareContent: viewModel.state.account.publicKey) {
+                        ShareContentView(
+                            content: shareData,
+                            topTitle: R.string.localizable.commonAccount(),
+                            title: viewModel.state.account.blockchain == .solana ? R.string.localizable.commonYouAccount() : R.string.localizable.commonAddress(),
+                            subTitle: R.string.localizable.shareContentSubtitle()) { _ in
 
                             } dismissAction: {
                                 sheetType = .none
                             }
-                        } else {
-                            EmptyView()
-                        }
-                    }
-                })
-                .fullScreenCover(isPresented: $showChangelog) {
-                    let service = ServiceFactory.shared.makeOnboardingService()
-                    OnboardingView(viewModel: AnyViewModel<OnboardingState, OnboardingInput>(OnboardingViewModel(
-                        contentType: .changelog,
-                        state: OnboardingState(state: .none, errorState: .none),
-                        onboardingService: service))
-                    ) {
-                        showChangelog.toggle()
-                        EventService.shared.send(event: ExtendedAnalyticsEvent.changelogClose(service.changelogId()))
+                    } else {
+                        EmptyView()
                     }
                 }
-                .fullScreenCover(isPresented: $showBuyCtus) {
-                    let service = APIServiceFactory.shared.makeCheckoutService()
-                    BuyTokensView(
-                        viewModel: AnyViewModel<BuyTokensState, BuyTokensInput>(BuyTokensViewModel(
-                            account: viewModel.state.account,
-                            checkoutService: service)
-                        )
+            })
+            .fullScreenCover(isPresented: $showChangelog) {
+                let service = ServiceFactory.shared.makeOnboardingService()
+                OnboardingView(viewModel: AnyViewModel<OnboardingState, OnboardingInput>(OnboardingViewModel(
+                    contentType: .changelog,
+                    state: OnboardingState(state: .none, errorState: .none),
+                    onboardingService: service))
+                ) {
+                    showChangelog.toggle()
+                    EventService.shared.send(event: ExtendedAnalyticsEvent.changelogClose(service.changelogId()))
+                }
+            }
+            .fullScreenCover(isPresented: $showBuyCtus) {
+                let service = APIServiceFactory.shared.makeCheckoutService()
+                BuyTokensView(
+                    viewModel: AnyViewModel<BuyTokensState, BuyTokensInput>(BuyTokensViewModel(
+                        account: viewModel.state.account,
+                        checkoutService: service)
                     )
-                }
-                .fullScreenCover(isPresented: $showSendTokens, onDismiss: {
-                    viewModel.trigger(.load(dealsType, silent: true))
-                }) {
-                    SendTokensView(viewModel: .init(SendTokensViewModel(
-                        state: .init(account: viewModel.account, currency: viewModel.state.currency, balance: viewModel.state.balance),
-                        accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
-                        transactionsService: try? APIServiceFactory.shared.makeTransactionsService()
-                    )))
-                }
-                .navigationDestination(for: $selectedDeal) { deal in
+                )
+            }
+            .fullScreenCover(isPresented: $showSendTokens, onDismiss: {
+                viewModel.trigger(.load(dealsType, silent: true))
+            }) {
+                SendTokensView(viewModel: .init(SendTokensViewModel(
+                    state: .init(account: viewModel.account, currency: viewModel.state.currency, balance: viewModel.state.balance),
+                    accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
+                    transactionsService: try? APIServiceFactory.shared.makeTransactionsService()
+                )))
+            }
+            .fullScreenCover(item: $selectedDeal) {
+
+            } content: { deal in
+                NavigationView {
                     dealView(deal: deal)
                 }
 
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .principal) {
-                        Button {
-                            if let tier = viewModel.state.balance?.tier {
-                                EventService.shared.send(event: ExtendedAnalyticsEvent.mainTiersTap(tier))
-                            }
-                            sheetType = .webView(AppConfig.tiersInformationURL)
-                        } label: {
-                            VStack(alignment: .center, spacing: 3) {
-                                tierLabel(viewModel.state.balance?.tier)
-
-                                HStack(spacing: 2) {
-                                    Text(ContentMask.mask(from: viewModel.state.account.publicKey))
-                                        .font(.caption2)
-                                        .foregroundColor(R.color.secondaryText.color)
-
-                                    if AppConfig.serverType.isDevelop {
-                                        Text("•")
-                                            .font(.caption2)
-                                            .foregroundColor(R.color.secondaryText.color)
-                                        Text(AppConfig.serverType.networkTitle)
-                                            .font(.caption2)
-                                            .foregroundColor(R.color.textWarn.color)
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                    ToolbarItemGroup(placement: .navigationBarLeading) {
-                        Button {
-                            EventService.shared.send(event: DefaultAnalyticsEvent.mainSettingsTap)
-                            sheetType = .menu
-                        } label: {
-                            Constants.menuImage
-                        }
-                    }
-                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                        Button {
-                            EventService.shared.send(event: DefaultAnalyticsEvent.mainQRscannerTap)
-
-                            sheetType = .qrScan
-                        } label: {
-                            Constants.scanQRImage
-                        }
-                    }
-                }
-                .baseBackground()
-                .edgesIgnoringSafeArea(.bottom)
             }
-            .navigationViewStyle(StackNavigationViewStyle())
+
+            //                .navigationDestination(for: $selectedDeal) { deal in
+            //                    dealView(deal: deal)
+            //                }
+            //
+            //                .navigationBarTitleDisplayMode(.inline)
+            //                .toolbar {
+            //                    ToolbarItem(placement: .principal) {
+            //                        Button {
+            //                            if let tier = viewModel.state.balance?.tier {
+            //                                EventService.shared.send(event: ExtendedAnalyticsEvent.mainTiersTap(tier))
+            //                            }
+            //                            sheetType = .webView(AppConfig.tiersInformationURL)
+            //                        } label: {
+            //                            VStack(alignment: .center, spacing: 3) {
+            //                                tierLabel(viewModel.state.balance?.tier)
+            //
+            //                                HStack(spacing: 4) {
+            //                                    viewModel.state.account.blockchain.image
+            //                                        .resizable()
+            //                                        .frame(width: 12, height: 12)
+            //                                        .aspectRatio(contentMode: .fit)
+            //                                    Text(ContentMask.mask(from: viewModel.state.account.publicKey))
+            //                                        .font(.caption2)
+            //                                        .foregroundColor(R.color.secondaryText.color)
+            //
+            //                                    if AppConfig.serverType.isDevelop {
+            //                                        Text("•")
+            //                                            .font(.caption2)
+            //                                            .foregroundColor(R.color.secondaryText.color)
+            //                                        Text(AppConfig.serverType.networkTitle)
+            //                                            .font(.caption2)
+            //                                            .foregroundColor(R.color.textWarn.color)
+            //                                    }
+            //                                }
+            //
+            //                            }
+            //                        }
+            //                    }
+            //                    ToolbarItemGroup(placement: .navigationBarLeading) {
+            //                        Button {
+            //                            EventService.shared.send(event: DefaultAnalyticsEvent.mainSettingsTap)
+            //                            sheetType = .menu
+            //                        } label: {
+            //                            Constants.menuImage
+            //                        }
+            //                    }
+            //                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+            //                        Button {
+            //                            EventService.shared.send(event: DefaultAnalyticsEvent.mainQRscannerTap)
+            //
+            //                            sheetType = .qrScan
+            //                        } label: {
+            //                            Constants.scanQRImage
+            //                        }
+            //                    }
+            //                }
+            //                .baseBackground()
+            //                .edgesIgnoringSafeArea(.bottom)
+            //  }
+            //  .navigationViewStyle(StackNavigationViewStyle())
             .onAppear{
                 EventService.shared.send(event: DefaultAnalyticsEvent.mainOpen)
                 load()
@@ -559,7 +631,7 @@ struct MainView: View {
         WrapTokenView(viewModel: AnyViewModel<WrapTokenState, WrapTokenInput>(WrapTokenViewModel(state: .init(account: viewModel.account, amountNativeToken: amountNativeToken, amountWrapToken: amountWrapToken), transactionsService: (try? APIServiceFactory.shared.makeTransactionsService()))))
     }
 
-    private func dealRole(deal: Deal) -> DealItemView.DealRoleType {        
+    private func dealRole(deal: Deal) -> DealItemView.DealRoleType {
         if (deal.ownerRole == .client && deal.contractorPublicKey == viewModel.state.account.publicKey) ||
             (deal.ownerPublicKey == viewModel.state.account.publicKey && deal.ownerRole == .executor) {
             return .receive
