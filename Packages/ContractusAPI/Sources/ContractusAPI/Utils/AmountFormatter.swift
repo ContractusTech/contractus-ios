@@ -19,12 +19,12 @@ public enum AmountFormatter {
         formatter.allowsFloats = decimal > 0
         formatter.numberStyle = .currency
         formatter.roundingMode = .halfDown
-        formatter.maximumFractionDigits = decimal
+        formatter.maximumFractionDigits = min(decimal, 5)
         formatter.currencyCode = ""
         formatter.currencySymbol = ""
         formatter.locale = local
         let amount = Double(amount) / pow(Double(10), Double(decimal))
-        let formattedAmount = formatter.string(from: NSNumber(value: amount)) ?? ""
+        let formattedAmount = (formatter.string(from: NSNumber(value: amount)) ?? "").trimmingCharacters(in: .whitespaces)
         return "\(formattedAmount) \(code ?? "")".trimmingCharacters(in: .whitespaces)
     }
 
