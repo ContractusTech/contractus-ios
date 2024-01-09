@@ -22,12 +22,13 @@ enum MigrationManager {
 
     static func migrateIfNeeded() {
         
-        guard !migrationItems.isEmpty else {
+        let migrateItems = migrationItems.filter { $0.needMigrate }
+
+        guard !migrateItems.isEmpty else {
             debugPrint("[MigrationManager] - No migration")
             return
         }
 
-        let migrateItems = Self.migrationItems.filter { $0.needMigrate }
         for item in migrateItems  {
             item.migrate()
         }

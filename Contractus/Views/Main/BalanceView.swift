@@ -82,11 +82,13 @@ struct BalanceView: View {
     }
 
     var state: BalanceState = .empty
+    let allowTransfer: Bool
     var topUpAction: () -> Void
     var infoAction: () -> Void
     var swapAction: (Amount, Amount) -> Void
     var settingsAction: () -> Void
     var sendAction: () -> Void
+
 
     @State private var isTokensVisible = FlagsStorage.shared.mainTokensVisibility
 
@@ -127,7 +129,6 @@ struct BalanceView: View {
                 }
                 .padding(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
                 Spacer()
-
                 Button {
                     sendAction()
                 } label: {
@@ -139,8 +140,8 @@ struct BalanceView: View {
                 }
                 .frame(width: 42, height: 42, alignment: .center)
                 .buttonStyle(RoundedSecondaryMediumButton())
-                .disabled(isLoading)
-                .opacity(isLoading ? 0.4 : 1.0)
+                .disabled(isLoading || !allowTransfer)
+                .opacity(isLoading || !allowTransfer ? 0.4 : 1.0)
 
                 Button {
                     topUpAction()
@@ -402,7 +403,7 @@ struct BalanceView_Previews: PreviewProvider {
 
     static var previews: some View {
         VStack {
-            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"], tier: .basic)))) {
+            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"], tier: .basic))), allowTransfer: true) {
 
             } infoAction: { 
                 
@@ -414,7 +415,7 @@ struct BalanceView_Previews: PreviewProvider {
 
             }
 
-            BalanceView(state: .empty) {
+            BalanceView(state: .empty, allowTransfer: true) {
 
             } infoAction: { } swapAction: { _, _ in
 
@@ -428,7 +429,7 @@ struct BalanceView_Previews: PreviewProvider {
         .preferredColorScheme(.light)
 
         VStack {
-            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"], tier: .basic)))) {
+            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"], tier: .basic))), allowTransfer: true) {
 
             } infoAction: { } swapAction: { _, _ in
 
@@ -438,7 +439,7 @@ struct BalanceView_Previews: PreviewProvider {
 
             }
 
-            BalanceView(state: .empty) {
+            BalanceView(state: .empty, allowTransfer: false) {
 
             } infoAction: { } swapAction: { _, _ in
 
