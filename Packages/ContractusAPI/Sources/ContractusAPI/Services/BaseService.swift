@@ -11,6 +11,8 @@ import Alamofire
 public enum ServicePath {
     case verifyDevice
     case accounts
+    case approvalAmount(address: String)
+    case approveAmount
     case topUp
     case currentAccount
     case accountStatistics
@@ -117,6 +119,11 @@ public enum ServicePath {
             return "/ai/text-generate"
         case .aiPrompts:
             return "/ai/prompts"
+        case .approvalAmount(let address):
+            return "/tx/approval/\(address)"
+        case .approveAmount:
+            return "/tx/send"
+
         }
     }
 }

@@ -7,6 +7,8 @@
 
 import Foundation
 import ContractusAPI
+import web3swift
+import Web3Core
 
 enum TransactionSignType: Equatable, Identifiable {
     var id: String { "\(self)" }
@@ -23,6 +25,7 @@ enum TransactionSignInput {
     case sign
     case hideError
     case openExplorer
+    case approve
 }
 
 struct TransactionSignState {
@@ -31,7 +34,7 @@ struct TransactionSignState {
         case error(String)
     }
     enum State {
-        case loading, loaded, signing, signed
+        case loading, loaded, signing, signed, approving
     }
 
     struct InformationItem: Equatable, Identifiable {
@@ -49,13 +52,13 @@ struct TransactionSignState {
 
     let account: CommonAccount
     var state: State
+    var approveTx: ApprovalAmount?
     var errorState: ErrorState?
     var type: TransactionSignType
     var transaction: Transaction?
     var informationFields: [InformationItem]
     var allowSign: Bool = false
     var isOwnerDeal: Bool {
-
         switch type {
         case .byDeal(let deal, _):
             return deal.ownerPublicKey == account.publicKey
@@ -64,7 +67,9 @@ struct TransactionSignState {
         case .byTransaction(let tx):
             return tx.initializerPublicKey == account.publicKey
         }
-
+    }
+    var needApprove: Bool {
+        return self.approveTx?.needApproval ?? false
     }
 }
 
@@ -101,8 +106,14 @@ final class TransactionSignViewModel: ViewModel {
                 informationFields: Self.fieldsByDeal(deal, txType: txType, account: account))
             Task { @MainActor in
                 do {
+
                     let tx = try await getTx()
                     var newState = self.state
+
+                    if let address = tx?.token?.address, let checkApproveTx = try? await checkApprove(for: address) {
+                        newState.approveTx = checkApproveTx
+                    }
+
                     newState.transaction = tx
                     newState.state = .loaded
                     newState.allowSign = true
@@ -149,7 +160,7 @@ final class TransactionSignViewModel: ViewModel {
                     case .none:
                         break
                     }
-                    
+
                     if deal.performanceBondType != .none  && txType == .dealInit {
                         newState.informationFields.append(.init(
                             title: R.string.localizable.transactionSignFieldsBond(),
@@ -182,6 +193,24 @@ final class TransactionSignViewModel: ViewModel {
 
     func trigger(_ input: TransactionSignInput, after: AfterTrigger?) {
         switch input {
+        case .approve:
+            guard let tx = state.approveTx else { return }
+            self.state.state = .approving
+            Task { @MainActor in
+                do {
+                    try await self.sendApprove(tx: tx, signer: state.account)
+                    var newState = self.state
+                    newState.approveTx = nil
+                    newState.state = .loaded
+                    self.state = newState
+                    
+                } catch(let error) {
+                    var newState = self.state
+                    newState.state = .loaded
+                    newState.errorState = .error(error.localizedDescription)
+                    self.state = newState
+                }
+            }
         case .hideError:
             state.errorState = nil
         case .openExplorer:
@@ -189,6 +218,7 @@ final class TransactionSignViewModel: ViewModel {
             BlockchainExplorer.openExplorer(blockchain: state.account.blockchain, txSignature: signature)
         case .sign:
             self.state.state = .signing
+
             Task { @MainActor in
                 do {
                     let transaction = try await sign()
@@ -201,7 +231,6 @@ final class TransactionSignViewModel: ViewModel {
                     self.state = newState
                     pollTxService?.startPoll()
                 } catch {
-                    debugPrint(error.localizedDescription)
                     var newState = self.state
                     newState.state = .loaded
                     newState.errorState = .error(error.localizedDescription)
@@ -238,23 +267,69 @@ final class TransactionSignViewModel: ViewModel {
 
     private func getTx() async throws -> Transaction? {
         guard case .byDeal(let deal, let type) = state.type else { return nil }
-        return try await withCheckedThrowingContinuation({ continuation in
-            dealService?.getTransaction(dealId: deal.id,  silent: false, type: type, completion: { result in
+        return try await withCheckedThrowingContinuation({ [weak self] continuation in
+            self?.dealService?.getTransaction(dealId: deal.id,  silent: false, type: type, completion: { result in
                 continuation.resume(with: result)
             })
         })
     }
 
+    private func checkApprove(for tokenAddress: String) async throws -> ApprovalAmount? {
+        guard state.account.blockchain == .bsc else { return nil }
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
+            self?.transactionsService?.getApprovalAmountTransaction(for: tokenAddress, completion: { result in
+                switch result {
+                case .success(let result):
+                    continuation.resume(returning: result)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            })
+        }
+
+    }
+
+    private func sendApprove(tx: ApprovalAmount, signer: Signer) async throws {
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
+            do {
+                guard let unsignedTx = tx.rawTransaction else {
+                    continuation.resume(throwing: TransactionSignServiceError.transactionIsEmpty)
+                    return
+                }
+
+                let signature = try self?.transactionSignService?.sign(tx: unsignedTx, by: signer, type: .common)
+
+                guard let signature = signature else {
+                    continuation.resume(throwing: TransactionSignServiceError.failed)
+                    return
+                }
+
+                self?.transactionsService?.approveAmountTransaction(.init(rawTransaction: unsignedTx, signature: signature), completion: { result in
+                    switch result {
+                    case .success(let success):
+                        continuation.resume()
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                })
+            } catch(let error) {
+                continuation.resume(throwing: error)
+
+            }
+        }
+    }
+
+
     private func sign() async throws -> Transaction? {
         switch state.type {
         case .byDeal(let deal, _):
             return try await withCheckedThrowingContinuation({ continuation in
-                guard let transaction = state.transaction, let data = state.transaction?.getTransactionData() else {
+                guard let transaction = state.transaction else {
                     continuation.resume(throwing: TransactionSignError.transactionIsNull)
                     return
                 }
 
-                guard let signature = try? transactionSignService?.sign(type: transaction.type, data: data, by: self.state.account) else {
+                guard let signature = try? transactionSignService?.sign(tx: transaction, by: self.state.account, type: .byType(transaction.type)) else {
                     continuation.resume(throwing: TransactionSignError.transactionIsNull)
                     return
                 }
@@ -265,12 +340,7 @@ final class TransactionSignViewModel: ViewModel {
             })
         case .byTransaction(let tx):
             return try await withCheckedThrowingContinuation({ continuation in
-
-                guard let data = tx.getTransactionData() else {
-                    continuation.resume(throwing: TransactionSignError.transactionIsNull)
-                    return
-                }
-                guard let signature = try? transactionSignService?.sign(type: tx.type, data: data, by: self.state.account) else {
+                guard let signature = try? transactionSignService?.sign(tx: tx, by: self.state.account, type: .byType(tx.type)) else {
                     continuation.resume(throwing: TransactionSignError.transactionIsNull)
                     return
                 }
@@ -298,7 +368,7 @@ final class TransactionSignViewModel: ViewModel {
         }
     }
 
-    static private func fieldsByDeal(_ deal: Deal, txType: TransactionType, account: CommonAccount) -> [TransactionSignState.InformationItem] {
+    static private func fieldsByDeal(_ deal: Deal, txType: ContractusAPI.TransactionType, account: CommonAccount) -> [TransactionSignState.InformationItem] {
 
         var fields: [TransactionSignState.InformationItem] = [
             .init(
@@ -421,17 +491,6 @@ private extension ContractusAPI.TransactionType {
         case .dealFinish: return R.string.localizable.transactionTypeFinishDeal()
         case .unwrapAllSOL, .unwrap: return R.string.localizable.transactionTypeUnwrapWsol()
         case .transfer: return R.string.localizable.transactionTypeTransfer()
-        }
-    }
-}
-
-extension Transaction {
-    func getTransactionData() -> Data? {
-        switch blockchain {
-        case .bsc:
-            return Data(Array(hex: self.transaction))
-        case .solana:
-            return Data(base64Encoded: self.transaction)
         }
     }
 }

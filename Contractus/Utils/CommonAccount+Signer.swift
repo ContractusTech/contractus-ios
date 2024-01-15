@@ -3,6 +3,7 @@ import ContractusAPI
 import TweetNacl
 import Web3Core
 import Base58Swift
+import web3swift
 
 extension CommonAccount: Signer {
 
@@ -13,7 +14,13 @@ extension CommonAccount: Signer {
             return try sign(data: message)
         case .bsc:
             let hash = Utilities.hashPersonalMessage(message)!
-            return try sign(data: hash)
+            let (compressedSignature, _) = SECP256K1.signForRecovery(
+                hash: hash,
+                privateKey: privateKey,
+                useExtraEntropy: false)
+
+            guard let compressedSignature = compressedSignature else { throw SignerError.emptySignature }
+            return compressedSignature
         }
     }
     
@@ -24,6 +31,7 @@ extension CommonAccount: Signer {
                 message: data,
                 secretKey: privateKey)
         case .bsc:
+
             let (compressedSignature, _) = SECP256K1.signForRecovery(
                 hash: data,
                 privateKey: privateKey,

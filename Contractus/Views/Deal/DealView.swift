@@ -67,7 +67,7 @@ struct DealView: View {
         case importSharedKey
         case filePreview(URL)
         case shareDeal
-        case signTx(TransactionType)
+        case signTx(ContractusAPI.TransactionType)
     }
 
     @Environment(\.presentationMode) var presentationMode

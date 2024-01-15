@@ -396,6 +396,9 @@
 "addContractor.success-title.checker" = "Checker success added!";
 "addContractor.success-title.contractor" = "Partner success added!";
 
+"transactionSign.approve.title" = "Spending approval";
+"transactionSign.approve.text" = "You must authorize the contract to transfer funds before the deal begins.";
+"transactionSign.approve.button" = "Approve";
 "transactionSign.fields.service-fee" = "Service Fee";
 "transactionSign.fields.executor" = "Executor";
 "transactionSign.fields.amount" = "Amount";

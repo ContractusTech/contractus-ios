@@ -9,107 +9,111 @@ import Foundation
 import SolanaSwift
 import TweetNacl
 import Web3Core
+import BigInt
 import ContractusAPI
 
-protocol TransactionSignService {
-//    func sign(txBase64: String, by secretKey: Data) throws -> (signature: String, message: String)
-//    func isSigned(txBase64: String, publicKey: Data) -> Bool
-//    func isSigned(txBase64: String, publicKeys: [PublicKey]) -> [PublicKey]
+protocol TransactionDataDecodable {
+    func getTxData() throws -> Data
+}
 
-    func sign(type: ContractusAPI.TransactionType, data: Data, by signer: Signer) throws -> String
+enum TransactionSignServiceError: Error {
+    case failed, transactionIsEmpty, invalidTransaction, invalidParameters
+}
+
+enum TxSignType {
+    case byType(ContractusAPI.TransactionType)
+    case common
+}
+
+protocol TransactionSignService {
+    func sign(tx: TransactionDataDecodable, by signer: Signer, type: TxSignType) throws -> String
+//    func sign(data: Data, by signer: Signer, type: TxSignType) throws -> String
 }
 
 final class TransactionSignServiceImpl: TransactionSignService {
-    func sign(type: ContractusAPI.TransactionType, data: Data, by signer: ContractusAPI.Signer) throws -> String {
+
+    func sign(tx: TransactionDataDecodable, by signer: ContractusAPI.Signer, type: TxSignType) throws -> String {
+        let data = try tx.getTxData()
+        return try self.sign(data: data, by: signer, type: type)
+    }
+    
+    private func sign(data: Data, by signer: ContractusAPI.Signer, type: TxSignType) throws -> String {
         switch type {
-        case .dealInit, .dealCancel, .dealFinish:
+        case .byType(let type):
+            switch type {
+            case .dealInit, .dealCancel, .dealFinish:
+                switch signer.blockchain {
+                case .bsc:
+                    let signature = try signer.signMessage(message: data)
+                    return signature.toHexString().addHexPrefix()
+                case .solana:
+                    var tx = try Transaction.from(data: data)
+                    try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
+                    return try tx.serialize(requiredAllSignatures: false).base64EncodedString()
+                }
+            case .wrapSOL, .unwrapAllSOL, .unwrap, .wrap, .transfer:
+                switch signer.blockchain {
+                case .bsc:
+                    fatalError("Need implementation")
+                case .solana:
+                    var tx = try Transaction.from(data: data)
+                    try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
+                    return try tx.serialize(requiredAllSignatures: false).base64EncodedString()
+                }
+            }
+        case .common:
             switch signer.blockchain {
             case .bsc:
-                let signature = try signer.signMessage(message: data)
+                let signature = try signer.sign(data: data)
                 return signature.toHexString().addHexPrefix()
             case .solana:
                 var tx = try Transaction.from(data: data)
                 try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
                 return try tx.serialize(requiredAllSignatures: false).base64EncodedString()
             }
-        case .wrapSOL, .unwrapAllSOL, .unwrap, .wrap, .transfer:
-            switch signer.blockchain {
-            case .bsc:
-                fatalError("Need implementation")
-            case .solana:
-                var tx = try Transaction.from(data: data)
-                try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
-                return try tx.serialize(requiredAllSignatures: false).base64EncodedString()
-            }
         }
-    }
-    
-
-    enum TransactionSignServiceError: Error {
-        case failed, transactionIsEmpty
-    }
-
-    /// Return signed Transaction as Base64 string and Signature
-    func sign(txBase64: String, by secretKey: Data) throws -> (signature: String, message: String) {
-        guard !txBase64.isEmpty else {
-            throw TransactionSignServiceError.transactionIsEmpty
-        }
-        guard let account = try? KeyPair(secretKey: secretKey), let dataToSign = Data(base64Encoded: txBase64) else {
-            throw TransactionSignServiceError.failed
-        }
-
-        var tx = try Transaction.from(data: dataToSign)
-        do {
-            try tx.partialSign(signers: [account])
-        } catch {
-            debugPrint(error.localizedDescription)
-            throw error
-        }
-
-        guard let sign = tx.signatures.last(where: {$0.publicKey == account.publicKey}) else {
-            throw TransactionSignServiceError.failed
-        }
-        guard let signBase64 = sign.signature?.base64EncodedString() else {
-            throw TransactionSignServiceError.failed
-        }
-        return (signBase64, try tx.serialize(requiredAllSignatures: false).base64EncodedString())
-    }
-
-    func isSigned(txBase64: String, publicKey: Data) -> Bool {
-        guard let dataToSign = Data(base64Encoded: txBase64), let publicKey = try? PublicKey(data: publicKey) else { return false }
-        return _isSigned(txData: dataToSign, publicKey: publicKey)
-    }
-
-    func isSigned(txBase64: String, publicKeys: [PublicKey]) -> [PublicKey] {
-        guard let dataToSign = Data(base64Encoded: txBase64) else { return [] }
-        return publicKeys.compactMap { publicKey in
-            guard _isSigned(txData: dataToSign, publicKey: publicKey) else { return nil }
-            return publicKey
-        }
-    }
-
-    private func _isSigned(txData: Data, publicKey: PublicKey) -> Bool {
-        let tx = try? Transaction.from(data: txData)
-        return tx?.signatures.first(where: {$0.publicKey == publicKey && $0.signature != nil}) != nil
     }
 }
 
+extension ContractusAPI.Transaction: TransactionDataDecodable {
+    func getTxData() throws -> Data {
+        switch blockchain {
+        case .bsc:
+            return Data(Array(hex: self.transaction))
+        case .solana:
+            guard let data = Data(base64Encoded: self.transaction) else { throw TransactionSignServiceError.invalidTransaction }
+            return data
+        }
 
-//class EVMSignerService {
-//    
-//    var signer: Signer
-//
-//    init(signer: Signer) {
-//        self.signer = signer
-//    }
-//
-//    func sigmMessage(types: [ABI.Element.InOut], values: [Any]) -> Data? {
-//        let message = ABIEncoder.encode(types: types, values: values)
-//        guard let message = message else { return nil }
-//        let messagePack = ABIEncoder.encode(types: [.dynamicBytes], values: [message])
-//        guard let messagePack = messagePack else { return nil }
-//        let messageHash = messagePack.sha3(.keccak256)
-//
-//        return try? signer.sign(data: messageHash)
-//    }
-//}
+    }
+}
+
+extension ApprovalUnsignedTransaction: TransactionDataDecodable {
+    func getTxData() throws -> Data {
+        let data = Data(Array(hex: self.data))
+
+        guard
+            let to = EthereumAddress(self.to),
+            let nonce = BigUInt("\(self.nonce)"),
+            let chainID = BigUInt("\(self.chainId)"),
+            let gasLimit = BigUInt("\(self.gasLimit)"),
+            let maxFeePerGas = BigUInt(self.maxFeePerGas),
+            let maxPriorityFeePerGas = BigUInt(self.maxPriorityFeePerGas) 
+        else {
+            throw TransactionSignServiceError.invalidParameters
+        }
+
+        let tx = CodableTransaction(
+            type: .init(rawValue: self.type),
+            to: to,
+            nonce: nonce,
+            chainID: chainID,
+            data: data,
+            gasLimit: gasLimit,
+            maxFeePerGas: maxFeePerGas,
+            maxPriorityFeePerGas: maxPriorityFeePerGas
+        )
+        guard let hash = tx.hashForSignature() else { throw TransactionSignServiceError.invalidTransaction }
+        return hash
+    }
+}

@@ -1165,7 +1165,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 491 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 494 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -1363,6 +1363,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let referralBonusSubtitle = Rswift.StringResource(key: "referral.bonus.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Approve
+      ///
+      /// Locales: en
+      static let transactionSignApproveButton = Rswift.StringResource(key: "transactionSign.approve.button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Are you sure you want to cancel sign?
       ///
       /// Locales: en
@@ -2639,6 +2643,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let buyTokenTextErrorPayment = Rswift.StringResource(key: "buyToken.text.error-payment", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Spending approval
+      ///
+      /// Locales: en
+      static let transactionSignApproveTitle = Rswift.StringResource(key: "transactionSign.approve.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Start of the deal
       ///
       /// Locales: en
@@ -3039,6 +3047,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let accountsDeleteWarning = Rswift.StringResource(key: "accounts.delete.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: You must authorize the contract to transfer funds before the deal begins.
+      ///
+      /// Locales: en
+      static let transactionSignApproveText = Rswift.StringResource(key: "transactionSign.approve.text", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: You must complete the deal by this date or the deal will be stopped and funds will be refunded to all parties. The service fee is not refundable.
       ///
       /// Locales: en
@@ -3881,6 +3893,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("referral.bonus.subtitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Approve
+      ///
+      /// Locales: en
+      static func transactionSignApproveButton(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.approve.button", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.approve.button"
+        }
+
+        return NSLocalizedString("transactionSign.approve.button", bundle: bundle, comment: "")
       }
 
       /// en translation: Are you sure you want to cancel sign?
@@ -8688,6 +8715,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("buyToken.text.error-payment", bundle: bundle, comment: "")
       }
 
+      /// en translation: Spending approval
+      ///
+      /// Locales: en
+      static func transactionSignApproveTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.approve.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.approve.title"
+        }
+
+        return NSLocalizedString("transactionSign.approve.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Start of the deal
       ///
       /// Locales: en
@@ -10196,6 +10238,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("accounts.delete.warning", bundle: bundle, comment: "")
+      }
+
+      /// en translation: You must authorize the contract to transfer funds before the deal begins.
+      ///
+      /// Locales: en
+      static func transactionSignApproveText(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.approve.text", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.approve.text"
+        }
+
+        return NSLocalizedString("transactionSign.approve.text", bundle: bundle, comment: "")
       }
 
       /// en translation: You must complete the deal by this date or the deal will be stopped and funds will be refunded to all parties. The service fee is not refundable.

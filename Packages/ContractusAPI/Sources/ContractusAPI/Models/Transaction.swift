@@ -154,3 +154,55 @@ public struct SignedTransaction: Codable {
         self.signature = signature
     }
 }
+
+public struct ApprovalAmount: Codable {
+    public let rawTransaction: ApprovalUnsignedTransaction?
+    public let needApproval: Bool
+}
+
+public struct ApprovalUnsignedTransaction: Codable {
+    public let data: String
+    public let gasLimit: String
+//    public let gasPrice: String
+    public let chainId: String
+    public let to: String
+    public let nonce: Int
+    public let type: UInt
+    public let maxPriorityFeePerGas: String
+    public let maxFeePerGas: String
+
+    public init(data: String, gasLimit: String, chainId: String, to: String, nonce: Int, type: UInt, maxPriorityFeePerGas: String, maxFeePerGas: String) {
+        self.data = data
+        self.gasLimit = gasLimit
+//        self.gasPrice = gasPrice
+        self.chainId = chainId
+        self.to = to
+        self.nonce = nonce
+        self.type = type
+        self.maxPriorityFeePerGas = maxPriorityFeePerGas
+        self.maxFeePerGas = maxFeePerGas
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.data = try container.decode(String.self, forKey: .data)
+        self.gasLimit = try container.decode(String.self, forKey: .gasLimit)
+//        self.gasPrice = try container.decode(String.self, forKey: .gasPrice)
+        self.chainId = try container.decode(String.self, forKey: .chainId)
+        self.to = try container.decode(String.self, forKey: .to)
+        self.nonce = try container.decode(Int.self, forKey: .nonce)
+        self.type = try container.decode(UInt.self, forKey: .type)
+        self.maxPriorityFeePerGas = try container.decode(String.self, forKey: .maxPriorityFeePerGas)
+        self.maxFeePerGas = try container.decode(String.self, forKey: .maxFeePerGas)
+    }
+}
+
+public struct ApprovalSignedTransaction: Codable {
+    public let rawTransaction: ApprovalUnsignedTransaction
+    public let signature: String
+
+    public init(rawTransaction: ApprovalUnsignedTransaction, signature: String) {
+        self.rawTransaction = rawTransaction
+        self.signature = signature
+    }
+}

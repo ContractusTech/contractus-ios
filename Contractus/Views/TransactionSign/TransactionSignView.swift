@@ -12,9 +12,7 @@ import SwiftUI
 
 fileprivate enum Constants {
     static let successSignedImage = Image(systemName: "checkmark.circle.fill")
-
     static let successSignedShieldImage = Image(systemName: "checkmark.shield.fill")
-
     static let failTxImage = Image(systemName: "xmark.octagon.fill")
     static let shieldImage = Image(systemName: "exclamationmark.shield.fill")
     static let arrowDownImage = Image(systemName: "chevron.down")
@@ -56,6 +54,49 @@ struct FieldCopyButton: View {
             }
             .frame(width: 24, height: 24)
         }
+    }
+}
+
+struct ApproveView: View {
+
+    var isLoading: Bool
+    var action: () -> Void
+    var body: some View {
+
+        HStack(spacing: 1) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(R.string.localizable.transactionSignApproveTitle())
+                    .foregroundColor(R.color.textBase.color)
+                    .font(.body.weight(.semibold))
+                    .multilineTextAlignment(.leading)
+                Text(R.string.localizable.transactionSignApproveText())
+                    .font(.caption2)
+                    .foregroundColor(R.color.textBase.color)
+                    .multilineTextAlignment(.leading)
+            }
+            Spacer()
+            VStack {
+                CButton(
+                    title: R.string.localizable.transactionSignApproveButton(),
+                    style: .warn,
+                    size: .default,
+                    isLoading: isLoading) {
+                        action()
+                    }
+                // TODO: - Need calculate
+                Text("≈ 0.1 USD.")
+                    .font(.caption2)
+                    .foregroundColor(R.color.secondaryText.color)
+                    .multilineTextAlignment(.leading)
+
+            }
+        }
+        .padding()
+        .background {
+            RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.yellow.color)
+        }
+        .cornerRadius(20)
+        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
     }
 }
 
@@ -185,7 +226,14 @@ struct TransactionSignView: View {
                     }
                     .padding(.bottom, 0)
                     .padding(.top, 24)
+
                     VStack {
+                        if viewModel.state.needApprove {
+                            ApproveView(isLoading: viewModel.state.state == .approving) {
+                                viewModel.trigger(.approve)
+                            }
+                        }
+
                         VStack(alignment: .leading, spacing: 0) {
                             ForEach(viewModel.state.informationFields) { item in
                                 TransactionDetailFieldView(
@@ -313,7 +361,7 @@ struct TransactionSignView: View {
             switch newState {
             case .signed:
                 signedAction()
-            case .signing, .loaded, .loading:
+            case .signing, .loaded, .loading, .approving:
                 break
             }
         })
@@ -386,7 +434,7 @@ struct TransactionSignView: View {
     var signButton: some View {
         var icon: Image?
         let loading: Bool = viewModel.state.state == .signing || viewModel.state.transaction?.status == .processing
-        let isDisable = viewModel.state.state == .loading || viewModel.state.state == .signing || viewModel.state.state == .signed || !viewModel.state.allowSign || viewModel.state.transaction?.status == .error
+        let isDisable = viewModel.state.state == .loading || viewModel.state.state == .signing || viewModel.state.state == .signed || !viewModel.state.allowSign || viewModel.state.transaction?.status == .error || viewModel.state.needApprove
         var style: CButton.Style = .primary
 
         switch viewModel.state.transaction?.status {
@@ -434,7 +482,7 @@ struct TransactionSignView: View {
             return R.string.localizable.transactionSignButtonsSigning()
         case .loading:
             return R.string.localizable.transactionSignButtonsLoading()
-        case .loaded:
+        case .loaded, .approving:
             return R.string.localizable.transactionSignButtonsSign()
         }
     }
