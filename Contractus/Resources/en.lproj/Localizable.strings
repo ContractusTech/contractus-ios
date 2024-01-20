@@ -537,3 +537,7 @@
 "sendTokens.balance.title" = "Balance";
 "sendTokens.max.title" = "Max";
 "sendTokens.not.enough.funds" = "Not enough funds";
+
+"profile.title" = "Profile";
+
+"people.title" = "People";

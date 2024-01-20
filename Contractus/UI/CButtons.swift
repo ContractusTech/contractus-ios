@@ -66,15 +66,15 @@ struct CButton: View {
     }
 
     enum Size {
-        case `default`, large, small
+        case `default`, large, small, defaultWide, smallWide
 
         var edge: EdgeInsets {
             switch self {
             case .large:
                 return EdgeInsets(top: 15, leading: 26, bottom: 15, trailing: 26)
-            case .small:
+            case .small, .smallWide:
                 return EdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12)
-            case .default:
+            case .default, .defaultWide:
                 return EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
             }
         }
@@ -83,9 +83,9 @@ struct CButton: View {
             switch self {
             case .large:
                 return .callout.weight(.semibold)
-            case .small:
+            case .small, .smallWide:
                 return .footnote.weight(.semibold)
-            case .default:
+            case .default, .defaultWide:
                 return .callout.weight(.semibold)
             }
 
@@ -104,9 +104,9 @@ struct CButton: View {
 
     private var cornerRadius: CGFloat {
         switch size {
-        case .default:
+        case .default, .defaultWide:
             return roundedCorner ? 34 : 13
-        case .small:
+        case .small, .smallWide:
             return roundedCorner ? 34 : 8
         case .large:
             return roundedCorner ? 34 : 17
@@ -123,7 +123,7 @@ struct CButton: View {
             action()
         } label: {
             switch size {
-            case .`default`, .small:
+            case .`default`, .small, .defaultWide, .smallWide:
                 ZStack(alignment: .leading) {
                     if isLoading {
                         Circle()
@@ -143,6 +143,9 @@ struct CButton: View {
                             .padding(.bottom, title.isEmpty ? 4.7 : 0)
                     }
                     HStack {
+                        if [.defaultWide, .smallWide].contains(size)  {
+                            Spacer()
+                        }
                         if !isLoading, let icon = icon {
                             icon
                                 .resizable()
@@ -158,6 +161,10 @@ struct CButton: View {
                                 .font(size.font)
                                 .padding(.leading, (isLoading && !title.isEmpty) ? 20 : 0)
                         }
+                        if [.defaultWide, .smallWide].contains(size) {
+                            Spacer()
+                        }
+
                     }
 
                 }
@@ -225,65 +232,68 @@ struct CButton_Previews: PreviewProvider {
             VStack {
                 Group {
 
-                    CButton(title: "Text", style: .primary, size: .default, isLoading: false) { }
+                    CButton(title: "Text 1", style: .primary, size: .default, isLoading: false) { }
 
-                    CButton(title: "Text", style: .secondary, size: .default, isLoading: false) { }
+                    CButton(title: "Text 2", style: .secondary, size: .default, isLoading: false) { }
 
-                    CButton(title: "Text", style: .cancel, size: .default, isLoading: false) { }
+                    CButton(title: "Text 3", style: .cancel, size: .default, isLoading: false) { }
 
-                    CButton(title: "Text", style: .success, size: .large, isLoading: false, isDisabled: true) {}
+                    CButton(title: "Text 4", style: .success, size: .large, isLoading: false, isDisabled: true) {}
 
-                    CButton(title: "Text", icon: Image(systemName: "key.viewfinder"), style: .success, size: .large, isLoading: false, isDisabled: false) {}
+                    CButton(title: "Text 5", icon: Image(systemName: "key.viewfinder"), style: .success, size: .large, isLoading: false, isDisabled: false) {}
 
-                    CButton(title: "Text", style: .primary, size: .large, isLoading: false) {}
+                    CButton(title: "Text 6", style: .primary, size: .large, isLoading: false) {}
 
-                    CButton(title: "Text", style: .secondary, size: .large, isLoading: false) { }
+                    CButton(title: "Text 6.1", style: .primary, size: .defaultWide, isLoading: false) {}
+                    CButton(title: "Text 6.2", style: .primary, size: .smallWide, isLoading: false) {}
 
-                    CButton(title: "Text", style: .warn, size: .large, isLoading: false) { }
-                    CButton(title: "Text", style: .cancel, size: .small, isLoading: false) { }
-                    CButton(title: "Text", style: .secondary, size: .small, isLoading: false, roundedCorner: true) { }
+                    CButton(title: "Text 7", style: .secondary, size: .large, isLoading: false) { }
+
+                    CButton(title: "Text 8", style: .warn, size: .large, isLoading: false) { }
+                    CButton(title: "Text 9", style: .cancel, size: .small, isLoading: false) { }
+                    CButton(title: "Text 10", style: .secondary, size: .small, isLoading: false, roundedCorner: true) { }
 
                 }
                 Group {
 
                     HStack {
                         CButton(title: "", style: .primary, size: .default, isLoading: true) { }
-                        CButton(title: "Text", style: .primary, size: .default, isLoading: true) { }
+                        CButton(title: "Text 11", style: .primary, size: .default, isLoading: true) { }
                     }
 
-                    CButton(title: "Text", style: .secondary, size: .default, isLoading: true) { }
+                    CButton(title: "Text 12", style: .secondary, size: .default, isLoading: true) { }
 
-                    CButton(title: "Text", style: .primary, size: .large, isLoading: true) {}
+                    CButton(title: "Text 13", style: .primary, size: .large, isLoading: true) {}
 
-                    CButton(title: "Text", style: .secondary, size: .large, isLoading: true) { }
+                    CButton(title: "Text 14", style: .secondary, size: .large, isLoading: true) { }
 
-                    CButton(title: "Text", style: .warn, size: .large, isLoading: true) { }
+                    CButton(title: "Text 15", style: .warn, size: .large, isLoading: true) { }
 
-                    CButton(title: "Text", style: .cancel, size: .large, isLoading: true) { }
+                    CButton(title: "Text 16", style: .cancel, size: .large, isLoading: true) { }
                 }
                 Group {
 
                     HStack {
                         CButton(title: "", style: .primary, size: .default, isLoading: true, roundedCorner: true) { }
-                        CButton(title: "Text", style: .primary, size: .default, isLoading: true, roundedCorner: true) { }
+                        CButton(title: "Text 17", style: .primary, size: .default, isLoading: true, roundedCorner: true) { }
                     }
 
-                    CButton(title: "Text", style: .secondary, size: .default, isLoading: true, roundedCorner: true) { }
+                    CButton(title: "Text 18", style: .secondary, size: .default, isLoading: true, roundedCorner: true) { }
 
-                    CButton(title: "Text", style: .primary, size: .large, isLoading: true, roundedCorner: true) {}
+                    CButton(title: "Text 19", style: .primary, size: .large, isLoading: true, roundedCorner: true) {}
 
-                    CButton(title: "Text", style: .secondary, size: .large, isLoading: true, roundedCorner: true) { }
+                    CButton(title: "Text 20", style: .secondary, size: .large, isLoading: true, roundedCorner: true) { }
 
-                    CButton(title: "Text", style: .warn, size: .large, isLoading: true, roundedCorner: true) { }
+                    CButton(title: "Text 21", style: .warn, size: .large, isLoading: true, roundedCorner: true) { }
                 }
 
                 Group {
-                    CButton(title: "Text", icon: Image(systemName: "slider.vertical.3"), style: .warn, size: .large, isLoading: false, roundedCorner: false) { }
+                    CButton(title: "Text 22", icon: Image(systemName: "slider.vertical.3"), style: .warn, size: .large, isLoading: false, roundedCorner: false) { }
 
-                    CButton(title: "Text", icon: Image(systemName: "slider.vertical.3"), style: .secondary, size: .default, isLoading: false) { }
+                    CButton(title: "Text 23", icon: Image(systemName: "slider.vertical.3"), style: .secondary, size: .default, isLoading: false) { }
 
                     HStack {
-                        CButton(title: "Text", icon: Image(systemName: "slider.vertical.3"), style: .secondary, size: .default, isLoading: false) { }
+                        CButton(title: "Text 24", icon: Image(systemName: "slider.vertical.3"), style: .secondary, size: .default, isLoading: false) { }
                         
                         CButton(title: "", icon: Image(systemName: "arrow.down.to.line.compact"), style: .secondary, size: .default, isLoading: false) { }
                         CButton(title: "Change", style: .secondary, size: .default, isLoading: false) { }

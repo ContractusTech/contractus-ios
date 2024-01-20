@@ -22,18 +22,17 @@ struct RootState {
             return self.rawValue
         }
         case main
-//        case people
-//        case profile
+        case people
+        case profile
 
         var image: Image {
             switch self {
-
             case .main:
                 Constants.mainTabIcon
-//            case .people:
-//                Constants.peopleTabIcon
-//            case .profile:
-//                Constants.profileTabIcon
+            case .people:
+                Constants.peopleTabIcon
+            case .profile:
+                Constants.profileTabIcon
             }
         }
     }
@@ -239,6 +238,16 @@ struct ContractusApp: App {
     }
 
     @ViewBuilder
+    func peopleView() -> some View {
+        PeopleView(viewModel: .init(PeopleViewModel()))
+    }
+
+    @ViewBuilder
+    func profileView() -> some View {
+        ProfileView(viewModel: .init(ProfileViewModel(mode: .private)))
+    }
+    
+    @ViewBuilder
     func signView(account: CommonAccount) -> some View {
         if let transactionSignType = transactionSignType {
             TransactionSignView(account: account, type: transactionSignType) {
@@ -267,12 +276,12 @@ struct ContractusApp: App {
         case .main:
             mainView(account: account, notification: notification)
                 .tag(tab)
-//        case .people:
-//            EmptyView()
-//                .tag(tab)
-//        case .profile:
-//            EmptyView()
-//                .tag(tab)
+        case .people:
+            peopleView()
+                .tag(tab)
+        case .profile:
+            profileView()
+                .tag(tab)
         }
     }
 

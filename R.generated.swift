@@ -896,7 +896,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 29 images.
+  /// This `R.image` struct is generated, and contains static references to 30 images.
   struct image {
     /// Image `Advcash`.
     static let advcash = Rswift.ImageResource(bundle: R.hostingBundle, name: "Advcash")
@@ -920,6 +920,8 @@ struct R: Rswift.Validatable {
     static let onboarding_empty = Rswift.ImageResource(bundle: R.hostingBundle, name: "Onboarding_empty")
     /// Image `Plus`.
     static let plus = Rswift.ImageResource(bundle: R.hostingBundle, name: "Plus")
+    /// Image `ProfileOnboarding`.
+    static let profileOnboarding = Rswift.ImageResource(bundle: R.hostingBundle, name: "ProfileOnboarding")
     /// Image `SOL-CoinLogo`.
     static let solCoinLogo = Rswift.ImageResource(bundle: R.hostingBundle, name: "SOL-CoinLogo")
     /// Image `Send`.
@@ -1031,6 +1033,13 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "Plus", bundle: ..., traitCollection: ...)`
     static func plus(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.plus, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "ProfileOnboarding", bundle: ..., traitCollection: ...)`
+    static func profileOnboarding(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.profileOnboarding, compatibleWith: traitCollection)
     }
     #endif
 
@@ -1165,7 +1174,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 494 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 496 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -2335,6 +2344,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignStatusesNeedSign = Rswift.StringResource(key: "transactionSign.statuses.need-sign", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: People
+      ///
+      /// Locales: en
+      static let peopleTitle = Rswift.StringResource(key: "people.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Performance bond
       ///
       /// Locales: en
@@ -2395,6 +2408,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignSubtitleProcessing = Rswift.StringResource(key: "transactionSign.subtitle.processing", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Profile
+      ///
+      /// Locales: en
+      static let profileTitle = Rswift.StringResource(key: "profile.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Promocode
       ///
       /// Locales: en
@@ -7556,6 +7573,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("transactionSign.statuses.need-sign", bundle: bundle, comment: "")
       }
 
+      /// en translation: People
+      ///
+      /// Locales: en
+      static func peopleTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("people.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "people.title"
+        }
+
+        return NSLocalizedString("people.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Performance bond
       ///
       /// Locales: en
@@ -7781,6 +7813,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.subtitle.processing", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Profile
+      ///
+      /// Locales: en
+      static func profileTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("profile.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "profile.title"
+        }
+
+        return NSLocalizedString("profile.title", bundle: bundle, comment: "")
       }
 
       /// en translation: Promocode

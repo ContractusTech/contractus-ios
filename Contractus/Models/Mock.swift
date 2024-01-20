@@ -40,4 +40,5 @@ enum Mock {
     static let metadataFile = MetadataFile(md5: "123", url: URL(string: "http://ya.ru")!, name: "File Test", encrypted: false, size: 100000)
     static let metadataFileLock = MetadataFile(md5: "123", url: URL(string: "http://ya.ru")!, name: "File Test", encrypted: true, size: 100000)
     static let encryptedTextBase64 = "YMKC9mwc5X1MpnB919rRZA=="
+    static let avatar = "https://gravatar.com/avatar/64154ef3099086ebfd3e4cd7ebedcaad?s=200&d=wavatar&r=x"
 }
