@@ -106,35 +106,7 @@ struct DealView: View {
             } else {
                 VStack {
                     // MARK: - No secret key
-                    if viewModel.state.state == .none && !viewModel.state.canEdit {
-                        HStack(spacing: 1) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(R.string.localizable.dealNoSecretKey())
-                                    .foregroundColor(R.color.textBase.color)
-                                    .font(.body.weight(.semibold))
-                                    .multilineTextAlignment(.leading)
-                                Text(R.string.localizable.dealNoSecretKeyInformation())
-                                    .font(.footnote)
-                                    .foregroundColor(R.color.textBase.color)
-                                    .multilineTextAlignment(.leading)
-                            }
-                            Spacer()
-                            
-                            CButton(
-                                title: R.string.localizable.commonImport(),
-                                style: .warn,
-                                size: .default,
-                                isLoading: false) {
-                                    activeModalType = .importSharedKey
-                                }
-                        }
-                        .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
-                        .background {
-                            RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.yellow.color)
-                        }
-                        .cornerRadius(20)
-                        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
-                    }
+                    notFoundSecretKeyView()
                     dealStatusView()
 
                     VStack {
@@ -1541,6 +1513,40 @@ struct DealView: View {
             EmptyView()
         }
     }
+    @ViewBuilder
+    func notFoundSecretKeyView() -> some View {
+        if viewModel.state.state == .none && !viewModel.state.canEdit {
+            HStack(spacing: 1) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(R.string.localizable.dealNoSecretKey())
+                        .foregroundColor(R.color.textBase.color)
+                        .font(.body.weight(.semibold))
+                        .multilineTextAlignment(.leading)
+                    Text(R.string.localizable.dealNoSecretKeyInformation())
+                        .font(.footnote)
+                        .foregroundColor(R.color.textBase.color)
+                        .multilineTextAlignment(.leading)
+                }
+                Spacer()
+
+                CButton(
+                    title: R.string.localizable.commonImport(),
+                    style: .warn,
+                    size: .default,
+                    isLoading: false) {
+                        activeModalType = .importSharedKey
+                    }
+            }
+            .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
+            .background {
+                RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.yellow.color)
+            }
+            .cornerRadius(20)
+            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+        } else {
+            EmptyView()
+        }
+    }
 
     @ViewBuilder
     func dealStatusView() -> some View {
@@ -1577,7 +1583,7 @@ struct DealView: View {
     }
 
     private func statusTitle() -> String {
-        if let deadline = viewModel.state.deal.deadline, deadline < Date() {
+        if let deadline = viewModel.state.deal.deadline, deadline < Date() && viewModel.state.deal.status == .started {
             return R.string.localizable.dealStatusExpiredTitle()
         }
 
@@ -1592,7 +1598,7 @@ struct DealView: View {
     }
 
     private func statusSubtitle() -> String {
-        if let deadline = viewModel.state.deal.deadline, deadline < Date() {
+        if let deadline = viewModel.state.deal.deadline, deadline < Date() && viewModel.state.deal.status == .started {
             return R.string.localizable.dealStatusExpiredSubtitle()
         }
         if viewModel.state.deal.status == .started {
