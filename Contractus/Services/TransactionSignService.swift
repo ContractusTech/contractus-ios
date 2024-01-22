@@ -26,18 +26,18 @@ enum TxSignType {
 }
 
 protocol TransactionSignService {
-    func sign(tx: TransactionDataDecodable, by signer: Signer, type: TxSignType) throws -> String
+    func sign(tx: TransactionDataDecodable, by signer: Signer, type: TxSignType) throws -> SignedTransaction
 //    func sign(data: Data, by signer: Signer, type: TxSignType) throws -> String
 }
 
 final class TransactionSignServiceImpl: TransactionSignService {
 
-    func sign(tx: TransactionDataDecodable, by signer: ContractusAPI.Signer, type: TxSignType) throws -> String {
+    func sign(tx: TransactionDataDecodable, by signer: ContractusAPI.Signer, type: TxSignType) throws -> SignedTransaction {
         let data = try tx.getTxData()
         return try self.sign(data: data, by: signer, type: type)
     }
     
-    private func sign(data: Data, by signer: ContractusAPI.Signer, type: TxSignType) throws -> String {
+    private func sign(data: Data, by signer: ContractusAPI.Signer, type: TxSignType) throws -> SignedTransaction {
         switch type {
         case .byType(let type):
             switch type {
@@ -45,11 +45,14 @@ final class TransactionSignServiceImpl: TransactionSignService {
                 switch signer.blockchain {
                 case .bsc:
                     let signature = try signer.signMessage(message: data)
-                    return signature.toHexString().addHexPrefix()
+                    return .init(
+                        transaction: data.toHexString().addHexPrefix(),
+                        signature: signature.toHexString().addHexPrefix())
                 case .solana:
                     var tx = try Transaction.from(data: data)
                     try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
-                    return try tx.serialize(requiredAllSignatures: false).base64EncodedString()
+                    let signedTx = try tx.serialize(requiredAllSignatures: false).base64EncodedString()
+                    return .init(transaction: signedTx, signature: "")
                 }
             case .wrapSOL, .unwrapAllSOL, .unwrap, .wrap, .transfer:
                 switch signer.blockchain {
@@ -58,18 +61,23 @@ final class TransactionSignServiceImpl: TransactionSignService {
                 case .solana:
                     var tx = try Transaction.from(data: data)
                     try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
-                    return try tx.serialize(requiredAllSignatures: false).base64EncodedString()
+                    let signedTx = try tx.serialize(requiredAllSignatures: false).base64EncodedString()
+                    return .init(transaction: signedTx, signature: "")
                 }
             }
         case .common:
             switch signer.blockchain {
             case .bsc:
                 let signature = try signer.sign(data: data)
-                return signature.toHexString().addHexPrefix()
+                return .init(
+                    transaction: data.toHexString().addHexPrefix(),
+                    signature: signature.toHexString().addHexPrefix())
+
             case .solana:
                 var tx = try Transaction.from(data: data)
                 try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
-                return try tx.serialize(requiredAllSignatures: false).base64EncodedString()
+                let signedTx = try tx.serialize(requiredAllSignatures: false).base64EncodedString()
+                return .init(transaction: signedTx, signature: "")
             }
         }
     }

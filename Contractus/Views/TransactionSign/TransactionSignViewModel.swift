@@ -297,14 +297,14 @@ final class TransactionSignViewModel: ViewModel {
                     return
                 }
 
-                let signature = try self?.transactionSignService?.sign(tx: unsignedTx, by: signer, type: .common)
+                let signedTx = try self?.transactionSignService?.sign(tx: unsignedTx, by: signer, type: .common)
 
-                guard let signature = signature else {
+                guard let signedTx = signedTx else {
                     continuation.resume(throwing: TransactionSignServiceError.failed)
                     return
                 }
 
-                self?.transactionsService?.approveAmountTransaction(.init(rawTransaction: unsignedTx, signature: signature), completion: { result in
+                self?.transactionsService?.approveAmountTransaction(.init(rawTransaction: unsignedTx, signature: signedTx.signature), completion: { result in
                     switch result {
                     case .success(let success):
                         continuation.resume()
@@ -323,39 +323,40 @@ final class TransactionSignViewModel: ViewModel {
     private func sign() async throws -> Transaction? {
         switch state.type {
         case .byDeal(let deal, _):
-            return try await withCheckedThrowingContinuation({ continuation in
-                guard let transaction = state.transaction else {
+            return try await withCheckedThrowingContinuation({ [weak self] continuation in
+
+                guard let transaction = self?.state.transaction, let account = self?.state.account else {
                     continuation.resume(throwing: TransactionSignError.transactionIsNull)
                     return
                 }
 
-                guard let signature = try? transactionSignService?.sign(tx: transaction, by: self.state.account, type: .byType(transaction.type)) else {
+                guard let signedTx = try? self?.transactionSignService?.sign(tx: transaction, by: account, type: .byType(transaction.type)) else {
                     continuation.resume(throwing: TransactionSignError.transactionIsNull)
                     return
                 }
 
-                dealService?.signTransaction(dealId: deal.id, type: transaction.type, data: .init(transaction: transaction.transaction, signature: signature), completion: { result in
+                self?.dealService?.signTransaction(dealId: deal.id, type: transaction.type, data: signedTx, completion: { result in
                     continuation.resume(with: result)
                 })
             })
         case .byTransaction(let tx):
             return try await withCheckedThrowingContinuation({ continuation in
-                guard let signature = try? transactionSignService?.sign(tx: tx, by: self.state.account, type: .byType(tx.type)) else {
+                guard let signedTx = try? transactionSignService?.sign(tx: tx, by: self.state.account, type: .byType(tx.type)) else {
                     continuation.resume(throwing: TransactionSignError.transactionIsNull)
                     return
                 }
 
                 switch tx.type {
                 case .wrapSOL, .wrap:
-                    transactionsService?.signWrap(.init(id: tx.id, transaction: tx.transaction, signature: signature), completion: { result in
+                    transactionsService?.signWrap(.init(id: tx.id, transaction: signedTx.transaction, signature: signedTx.signature), completion: { result in
                         continuation.resume(with: result)
                     })
                 case .unwrapAllSOL, .unwrap:
-                    transactionsService?.signUnwrapAll(.init(id: tx.id, transaction: tx.transaction, signature: signature), completion: { result in
+                    transactionsService?.signUnwrapAll(.init(id: tx.id, transaction: signedTx.transaction, signature: signedTx.signature), completion: { result in
                         continuation.resume(with: result)
                     })
                 case .transfer:
-                    transactionsService?.transferSign(.init(id: tx.id, transaction: tx.transaction, signature: signature), completion: {result in
+                    transactionsService?.transferSign(.init(id: tx.id, transaction: signedTx.transaction, signature: signedTx.signature), completion: {result in
                         continuation.resume(with: result)
                     })
                 case .dealFinish, .dealInit, .dealCancel:
