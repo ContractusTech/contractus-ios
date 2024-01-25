@@ -93,5 +93,6 @@ struct PromocodeView: View {
 struct PromocodeView_Previews: PreviewProvider {
     static var previews: some View {
         PromocodeView()
+            .environmentObject(AnyViewModel<ReferralState, ReferralInput>(ReferralViewModel()))
     }
 }

@@ -52,6 +52,7 @@ struct ProfileView: View {
 
 struct AuthProfileView: View {
     @EnvironmentObject var viewModel: AnyViewModel<ProfileViewModel.State, ProfileViewModel.Input>
+    @State var editPresented: Bool = false
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -79,15 +80,14 @@ struct AuthProfileView: View {
                         
                     }
                     Spacer()
-                    Button(action: {
-                        
-                    }, label: {
-                        if viewModel.state.mode == .public {
-                            CButton(title: "", icon: Constants.addPerson, style: .secondary, size: .small, isLoading: false, roundedCorner: true) { }
-                        } else {
-                            CButton(title: "", icon: Constants.pencil, style: .secondary, size: .small, isLoading: false, roundedCorner: true) { }
+
+                    if viewModel.state.mode == .public {
+                        CButton(title: "", icon: Constants.addPerson, style: .secondary, size: .small, isLoading: false, roundedCorner: true) { }
+                    } else {
+                        CButton(title: "", icon: Constants.pencil, style: .secondary, size: .small, isLoading: false, roundedCorner: true) { 
+                            editPresented.toggle()
                         }
-                    })
+                    }
                 }
                 .padding(.bottom, 8)
 
@@ -282,6 +282,12 @@ struct AuthProfileView: View {
             .padding(18)
             .padding(.bottom, 50)
         }
+        .fullScreenCover(isPresented: $editPresented) {
+            NavigationView {
+                EditProfileView()
+            }
+        }
+
     }
 }
 
