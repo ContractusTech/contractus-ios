@@ -27,7 +27,6 @@ enum TxSignType {
 
 protocol TransactionSignService {
     func sign(tx: TransactionDataDecodable, by signer: Signer, type: TxSignType) throws -> SignedTransaction
-//    func sign(data: Data, by signer: Signer, type: TxSignType) throws -> String
 }
 
 final class TransactionSignServiceImpl: TransactionSignService {
@@ -51,8 +50,12 @@ final class TransactionSignServiceImpl: TransactionSignService {
                 case .solana:
                     var tx = try Transaction.from(data: data)
                     try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
-                    let signedTx = try tx.serialize(requiredAllSignatures: false).base64EncodedString()
-                    return .init(transaction: signedTx, signature: "")
+                    let publicKey = signer.getPublicKey()
+                    let signature = tx.signatures.first(where: { $0.publicKey.base58EncodedString == publicKey })?.signature?.base64EncodedString() ?? ""
+
+                    return .init(
+                        transaction: data.base64EncodedString(),
+                        signature: signature)
                 }
             case .wrapSOL, .unwrapAllSOL, .unwrap, .wrap, .transfer:
                 switch signer.blockchain {
@@ -61,8 +64,12 @@ final class TransactionSignServiceImpl: TransactionSignService {
                 case .solana:
                     var tx = try Transaction.from(data: data)
                     try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
-                    let signedTx = try tx.serialize(requiredAllSignatures: false).base64EncodedString()
-                    return .init(transaction: signedTx, signature: "")
+                    let publicKey = signer.getPublicKey()
+                    let signature = tx.signatures.first(where: { $0.publicKey.base58EncodedString == publicKey })?.signature?.base64EncodedString() ?? ""
+
+                    return .init(
+                        transaction: data.base64EncodedString(),
+                        signature: signature)
                 }
             }
         case .common:
@@ -75,9 +82,14 @@ final class TransactionSignServiceImpl: TransactionSignService {
 
             case .solana:
                 var tx = try Transaction.from(data: data)
+                var unsignedTx = tx
                 try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
-                let signedTx = try tx.serialize(requiredAllSignatures: false).base64EncodedString()
-                return .init(transaction: signedTx, signature: "")
+                let publicKey = signer.getPublicKey()
+                let signature = tx.signatures.first(where: { $0.publicKey.base58EncodedString == publicKey })?.signature?.base64EncodedString() ?? ""
+
+                return .init(
+                    transaction: data.base64EncodedString(),
+                    signature: signature)
             }
         }
     }

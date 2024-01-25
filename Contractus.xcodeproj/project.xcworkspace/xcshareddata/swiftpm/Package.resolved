@@ -228,10 +228,10 @@
     {
       "identity" : "solana-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/p2p-org/solana-swift",
+      "location" : "https://github.com/ContractusTech/solana-swift.git",
       "state" : {
-        "revision" : "ab9a29e291a2adb1f4dfecea09b9c516c9fba970",
-        "version" : "4.0.0"
+        "branch" : "main",
+        "revision" : "dd6cee5c7c1a27a5e3aadf212ec5ceb1365fcc26"
       }
     },
     {

@@ -6,10 +6,9 @@ extension Blockchain {
     func isValidPublicKey(string: String) -> Bool {
         switch self {
         case .solana:
-            return string.utf8.count == 32 && PublicKey.isOnCurve(publicKey: string) == 1
+            return string.utf8.count >= 32 && PublicKey.isOnCurve(publicKey: string) == 1
         case .bsc:
-            // TODO: - Added validate
-            return true
+            return EthereumAddress(string) != nil
         }
     }
 
