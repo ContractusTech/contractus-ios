@@ -18,7 +18,7 @@ struct MigrateTokenSettings: MigrationItem {
     func migrate() {
         guard let tokens = OldUtilsStorage.shared.getTokenSettings() else { return }
         guard let account = AppManagerImpl.shared.currentAccount else { return }
-        UtilsStorage.shared.saveTokenSettings(tokens: tokens, account: account)
+        UtilsStorage.shared.saveTokenSettings(tokens: tokens, for: account.publicKey, blockchain: account.blockchain)
         OldUtilsStorage.shared.clear()
     }
 
