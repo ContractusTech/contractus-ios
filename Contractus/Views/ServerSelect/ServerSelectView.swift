@@ -92,7 +92,7 @@ struct ServerSelectView: View {
                 }
 #endif
                 Button {
-                    UtilsStorage.shared.debugClearSettings(blockchain: AppManagerImpl.shared.currentAccount.blockchain)
+                    UtilsStorage.shared.debugClearSettings(account: AppManagerImpl.shared.currentAccount)
                 } label: {
                     Text("Clear cache")
                         .tint(.blue)
