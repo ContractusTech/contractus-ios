@@ -56,25 +56,31 @@ final class ReferralViewModel: ViewModel {
             accounts: []
         )
         
-        Task { @MainActor in
+        Task { [weak self] in
+            guard let self = self else { return }
             do {
-                let referral = try await getReferral()
-                var newState = self.state
-                newState.promocode = referral?.promocode
-                newState.prizes = (referral?.prizes ?? []).map { $0.toPrizeItem() }
-                if (referral?.prizes ?? []).contains(where: { $0.type == .applyPromocode && $0.applied}) {
-                    newState.state = .applied
-                } else {
-                    newState.state = .loaded
+                let referral = try await self.getReferral()
+                let prizes = (referral?.prizes ?? []).map { $0.toPrizeItem() }
+                let applyPromocode = (referral?.prizes ?? []).contains(where: { $0.type == .applyPromocode && $0.applied})
+                let accounts = (referral?.prizes ?? []).filter({ $0.type == .applyPromocodeReferrer}).first?.accounts ?? []
+                await MainActor.run {
+                    var newState = self.state
+                    newState.promocode = referral?.promocode
+                    newState.prizes = prizes
+                    newState.state = applyPromocode ? .applied : .loaded
+                    newState.allowApply = referral?.allowApply ?? true
+                    newState.accounts = accounts
+                    self.state = newState
                 }
-                newState.allowApply = referral?.allowApply ?? true
-                newState.accounts = (referral?.prizes ?? []).filter({ $0.type == .applyPromocodeReferrer}).first?.accounts ?? []
-                self.state = newState
+
             } catch {
-                var newState = self.state
-                newState.errorState = .error(error.localizedDescription)
-                newState.state = .loaded
-                self.state = newState
+                await MainActor.run {
+                    var newState = self.state
+                    newState.errorState = .error(error.localizedDescription)
+                    newState.state = .loaded
+                    self.state = newState
+                }
+
             }
         }
     }
@@ -171,6 +177,8 @@ extension ReferralProgram.Prize {
             return R.string.localizable.referralPrizeApplyRefferer()
         case .unknown:
             return R.string.localizable.referralPrizeUnknown()
+        case .firstDeal:
+            return "First deal"
         }
     }
 }

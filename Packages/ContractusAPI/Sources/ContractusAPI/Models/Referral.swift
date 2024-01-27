@@ -6,6 +6,7 @@ public struct ReferralProgram: Decodable {
         case signup = "SIGNUP",
              applyPromocode = "APPLY_PROMOCODE",
              applyPromocodeReferrer = "APPLY_PROMOCODE_REFERRER",
+             firstDeal = "FIRST_DEAL",
              unknown
         
         public init(from decoder: Decoder) throws {

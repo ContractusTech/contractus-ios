@@ -224,6 +224,7 @@
 		6D44B5602A0E0B20008C561D /* BlockchainExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B55F2A0E0B20008C561D /* BlockchainExplorer.swift */; };
 		6D44B5622A0FA42F008C561D /* FlagsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B5612A0FA42F008C561D /* FlagsStorage.swift */; };
 		6D44B5642A0FAB37008C561D /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B5632A0FAB37008C561D /* StatisticsView.swift */; };
+		6D4783532B65A47700F7B0F0 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = 6D4783522B65A47700F7B0F0 /* Shimmer */; };
 		6D4C860F2AC010E900B9CEAE /* TokenSelectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4C860E2AC010E900B9CEAE /* TokenSelectViewModel.swift */; };
 		6D4D99F32A5601A1007668B0 /* IdentifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4D99F22A5601A1007668B0 /* IdentifierService.swift */; };
 		6D4DCB2C28AC8DC200EE86C0 /* ChangeAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DCB2B28AC8DC200EE86C0 /* ChangeAmountView.swift */; };
@@ -349,7 +350,6 @@
 		6DFED935293207D200AF727A /* QRCodeScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED934293207D200AF727A /* QRCodeScannerViewModel.swift */; };
 		6DFED939293262F300AF727A /* SharablePublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED938293262F300AF727A /* SharablePublicKey.swift */; };
 		6DFF40BB2A9A144B0042AE78 /* String+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFF40BA2A9A144B0042AE78 /* String+Ex.swift */; };
-		FE0F36802A552C2D00EEC595 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = FE0F367F2A552C2D00EEC595 /* Shimmer */; };
 		FE10B56C2A966F5900AA5EA8 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE10B56B2A966F5900AA5EA8 /* OnboardingView.swift */; };
 		FE10B56E2A96715200AA5EA8 /* OnboardingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE10B56D2A96715200AA5EA8 /* OnboardingPageView.swift */; };
 		FE1245672AC35AAC009FB048 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = FE1245662AC35AAC009FB048 /* NukeUI */; };
@@ -671,6 +671,7 @@
 				FE2B96C92AB9EA5D00971114 /* FirebaseMessaging in Frameworks */,
 				6DC558742A7A18A60054F2FC /* FirebaseRemoteConfig in Frameworks */,
 				6D88EEF32B0203F70031F50B /* web3swift in Frameworks */,
+				6D4783532B65A47700F7B0F0 /* Shimmer in Frameworks */,
 				6DC558722A7A18A60054F2FC /* FirebasePerformance in Frameworks */,
 				6D88EEF92B0204670031F50B /* web3swift in Frameworks */,
 				6DAA5E772898BDFA00BA1965 /* CryptoSwift in Frameworks */,
@@ -680,7 +681,6 @@
 				6DB547F928B9E87C003D2A8A /* ResizableSheet in Frameworks */,
 				6DC558702A7A18A60054F2FC /* FirebaseCrashlytics in Frameworks */,
 				FE1245672AC35AAC009FB048 /* NukeUI in Frameworks */,
-				FE0F36802A552C2D00EEC595 /* Shimmer in Frameworks */,
 				6D8885462AFFA4AF006EB291 /* QRCodeStatic in Frameworks */,
 				6D75F2E6288EA37E0092D182 /* KeychainAccess in Frameworks */,
 			);
@@ -1313,7 +1313,6 @@
 				6D0DA7612930A6960024EF30 /* CodeScanner */,
 				6DB5F8B5294D762300AE612A /* JGProgressHUD */,
 				FE5F427329AF22FA00A1E506 /* netfox */,
-				FE0F367F2A552C2D00EEC595 /* Shimmer */,
 				6DB9C3D92A555F1B0011C817 /* ContractusAPI */,
 				6DC5586D2A7A18A60054F2FC /* FirebaseAnalyticsWithoutAdIdSupport */,
 				6DC5586F2A7A18A60054F2FC /* FirebaseCrashlytics */,
@@ -1329,6 +1328,7 @@
 				6D88EEF82B0204670031F50B /* web3swift */,
 				6DDAAB072B616EAC00B21E87 /* SolanaSwift */,
 				6DDAAB0A2B62C16400B21E87 /* SolanaSwift */,
+				6D4783522B65A47700F7B0F0 /* Shimmer */,
 			);
 			productName = Contractus;
 			productReference = 6D97AEED288D196200EB61D0 /* Contractus.app */;
@@ -1411,13 +1411,13 @@
 				6D0DA7602930A6960024EF30 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				6DB5F8B4294D762300AE612A /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				FE5F427229AF22FA00A1E506 /* XCRemoteSwiftPackageReference "netfox" */,
-				FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 				6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				FE1245652AC35AAC009FB048 /* XCRemoteSwiftPackageReference "Nuke" */,
 				FE1245682AC35F86009FB048 /* XCRemoteSwiftPackageReference "SVGKit" */,
 				6DC2183F2ACF3D3E00EFC769 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */,
 				6D8885442AFFA4AF006EB291 /* XCRemoteSwiftPackageReference "QRCode" */,
 				6DDAAB092B62C16400B21E87 /* XCRemoteSwiftPackageReference "solana-swift" */,
+				6D4783512B65A47700F7B0F0 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 			);
 			productRefGroup = 6D97AEEE288D196200EB61D0 /* Products */;
 			projectDirPath = "";
@@ -2431,6 +2431,14 @@
 				minimumVersion = 6.12.2;
 			};
 		};
+		6D4783512B65A47700F7B0F0 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.1;
+			};
+		};
 		6D75528E289662250069935B /* XCRemoteSwiftPackageReference "R.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mac-cain13/R.swift.Library";
@@ -2509,14 +2517,6 @@
 			requirement = {
 				branch = main;
 				kind = branch;
-			};
-		};
-		FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
 			};
 		};
 		FE1245652AC35AAC009FB048 /* XCRemoteSwiftPackageReference "Nuke" */ = {
@@ -2649,6 +2649,11 @@
 			package = 6D1921F52B0DBC0200EBE911 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
 			productName = AppsFlyerLib;
 		};
+		6D4783522B65A47700F7B0F0 /* Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D4783512B65A47700F7B0F0 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
+			productName = Shimmer;
+		};
 		6D75528F289662250069935B /* Rswift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6D75528E289662250069935B /* XCRemoteSwiftPackageReference "R.swift" */;
@@ -2732,11 +2737,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6DDAAB092B62C16400B21E87 /* XCRemoteSwiftPackageReference "solana-swift" */;
 			productName = SolanaSwift;
-		};
-		FE0F367F2A552C2D00EEC595 /* Shimmer */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
-			productName = Shimmer;
 		};
 		FE1245662AC35AAC009FB048 /* NukeUI */ = {
 			isa = XCSwiftPackageProductDependency;
