@@ -552,7 +552,7 @@ struct TransactionSignView: View {
 struct SignConfirmView_Previews: PreviewProvider {
 
     static var previews: some View {
-        TransactionSignView(account: Mock.account, type: .byDeal(Mock.deal, .dealFinish)) {
+        TransactionSignView(account: Mock.account, type: .byDeal(Mock.deal, .dealInit)) {
 
         } closeAction: { _ in
             
