@@ -400,7 +400,9 @@
 "transactionSign.approve.text" = "You must authorize the contract to transfer funds before the deal begins.";
 "transactionSign.approve.button" = "Approve";
 "transactionSign.fields.service-fee" = "Service Fee";
+"transactionSign.fields.client" = "Client";
 "transactionSign.fields.executor" = "Executor";
+"transactionSign.fields.checker" = "Checker";
 "transactionSign.fields.amount" = "Amount";
 "transactionSign.fields.verifier-fee" = "Checker fee";
 "transactionSign.fields.fee" = "Fee";

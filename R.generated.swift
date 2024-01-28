@@ -1165,7 +1165,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 494 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 496 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -1543,6 +1543,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealTextChecker = Rswift.StringResource(key: "deal.text.checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Checker
+      ///
+      /// Locales: en
+      static let transactionSignFieldsChecker = Rswift.StringResource(key: "transactionSign.fields.checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Checker account
       ///
       /// Locales: en
@@ -1583,6 +1587,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let newDealTitleClient = Rswift.StringResource(key: "newDeal.title.client", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Client
+      ///
+      /// Locales: en
+      static let transactionSignFieldsClient = Rswift.StringResource(key: "transactionSign.fields.client", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Client %@
       ///
       /// Locales: en
@@ -4572,6 +4580,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("deal.text.checker", bundle: bundle, comment: "")
       }
 
+      /// en translation: Checker
+      ///
+      /// Locales: en
+      static func transactionSignFieldsChecker(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.fields.checker", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.fields.checker"
+        }
+
+        return NSLocalizedString("transactionSign.fields.checker", bundle: bundle, comment: "")
+      }
+
       /// en translation: Checker account
       ///
       /// Locales: en
@@ -4720,6 +4743,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("newDeal.title.client", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Client
+      ///
+      /// Locales: en
+      static func transactionSignFieldsClient(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.fields.client", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.fields.client"
+        }
+
+        return NSLocalizedString("transactionSign.fields.client", bundle: bundle, comment: "")
       }
 
       /// en translation: Client %@

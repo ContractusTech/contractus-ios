@@ -387,19 +387,49 @@ final class TransactionSignViewModel: ViewModel {
                 valueDescription: nil))
             if deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey {
                 fields.insert(.init(
-                    title: R.string.localizable.transactionSignFieldsExecutor(),
+                    title: R.string.localizable.transactionSignFieldsClient(),
                     value: ContentMask.mask(from: deal.ownerPublicKey),
                     titleDescription: nil,
                     valueDescription: nil
                 ), at: 0)
-            } else {
                 if let contractorPublicKey = deal.contractorPublicKey {
                     fields.insert(.init(
                         title: R.string.localizable.transactionSignFieldsExecutor(),
                         value:  ContentMask.mask(from: contractorPublicKey),
                         titleDescription: nil,
                         valueDescription: nil
-                    ), at: 0)
+                    ), at: 1)
+                }
+                if let checkerPublicKey = deal.checkerPublicKey {
+                    fields.insert(.init(
+                        title: R.string.localizable.transactionSignFieldsChecker(),
+                        value:  ContentMask.mask(from: checkerPublicKey),
+                        titleDescription: nil,
+                        valueDescription: nil
+                    ), at: 2)
+                }
+            } else {
+                fields.insert(.init(
+                    title: R.string.localizable.transactionSignFieldsClient(),
+                    value: ContentMask.mask(from: deal.ownerPublicKey),
+                    titleDescription: nil,
+                    valueDescription: nil
+                ), at: 0)
+                if let contractorPublicKey = deal.contractorPublicKey {
+                    fields.insert(.init(
+                        title: R.string.localizable.transactionSignFieldsExecutor(),
+                        value:  ContentMask.mask(from: contractorPublicKey),
+                        titleDescription: nil,
+                        valueDescription: nil
+                    ), at: 1)
+                }
+                if let checkerPublicKey = deal.checkerPublicKey {
+                    fields.insert(.init(
+                        title: R.string.localizable.transactionSignFieldsChecker(),
+                        value:  ContentMask.mask(from: checkerPublicKey),
+                        titleDescription: nil,
+                        valueDescription: nil
+                    ), at: 2)
                 }
             }
             if let checkerAmount = deal.checkerAmount {
