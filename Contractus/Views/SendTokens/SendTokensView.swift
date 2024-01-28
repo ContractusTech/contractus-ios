@@ -92,7 +92,8 @@ struct SendTokensView: View {
         viewModel: .init(SendTokensViewModel(
             state: .init(account: Mock.account, currency: .USD),
             accountAPIService: nil,
-            transactionsService: nil
+            transactionsService: nil,
+            accountService: AccountServiceImpl(storage: ServiceFactory.shared.makeAccountStorage())
         ))
     )
 }

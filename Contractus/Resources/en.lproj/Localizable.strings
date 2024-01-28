@@ -90,6 +90,7 @@
 "importWallet.subtitle" = "Existing account you want to use for deals";
 "importWallet.placeholder" = "Enter private key";
 "importWallet.publicKey" = "Your public key";
+"importWallet.invalid.key" = "Invalid, please check private key";
 "importWallet.success.title" = "Import successful";
 "importWallet.success.label" = "You safety";
 "importWallet.success.description" = "Save your private key to secure store so you don't lose access to your account";
@@ -525,6 +526,7 @@
 "aiGen.alert.message" = "To use AI Gen you must have holder mode.";
 
 "sendTokens.recipient" = "Recipient";
+"sendTokens.invalid.recipient" = "Invalid recipient";
 "sendTokens.send.title" = "Send %@";
 "sendTokens.balance.title" = "Balance";
 "sendTokens.max.title" = "Max";

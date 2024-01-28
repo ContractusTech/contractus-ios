@@ -470,7 +470,7 @@ struct MainView: View {
                     SendTokensView(viewModel: .init(SendTokensViewModel(
                         state: .init(account: viewModel.account, currency: viewModel.state.currency, balance: viewModel.state.balance),
                         accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
-                        transactionsService: try? APIServiceFactory.shared.makeTransactionsService()
+                        transactionsService: try? APIServiceFactory.shared.makeTransactionsService(), accountService: AccountServiceImpl(storage: ServiceFactory.shared.makeAccountStorage())
                     )))
                 }
                 .navigationDestination(for: $selectedDeal) { deal in
