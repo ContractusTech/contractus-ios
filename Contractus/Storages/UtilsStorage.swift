@@ -6,8 +6,8 @@ final class UtilsStorage {
     private enum Keys: String {
         case tokenSettings
 
-        func value(_ blockchain: Blockchain) -> String {
-            return "\(self.rawValue)-\(AppConfig.serverType.networkTitle)-\(blockchain.rawValue)"
+        func value(_ account: String, _ blockchain: Blockchain) -> String {
+            return "\(self.rawValue)-\(AppConfig.serverType.networkTitle)-\(account)-\(blockchain.rawValue)"
         }
     }
 
@@ -17,9 +17,9 @@ final class UtilsStorage {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
 
-    func getTokenSettings(blockchain: Blockchain) -> [ContractusAPI.Token]? {
+    func getTokenSettings(for account: String, blockchain: Blockchain) -> [ContractusAPI.Token]? {
         if
-            let data = storage.data(forKey: Keys.tokenSettings.value(blockchain)),
+            let data = storage.data(forKey: Keys.tokenSettings.value(account, blockchain)),
             let settings = try? decoder.decode([StoreToken].self, from: data) {
 
             return settings.map { $0.asToken }
@@ -28,13 +28,13 @@ final class UtilsStorage {
         return nil
     }
 
-    func saveTokenSettings(tokens: [ContractusAPI.Token], blockchain: Blockchain) {
+    func saveTokenSettings(tokens: [ContractusAPI.Token], for account: String, blockchain: Blockchain) {
         guard let data = try? encoder.encode(tokens.map { $0.asInternalToken }) else { return }
-        storage.set(data, forKey: Keys.tokenSettings.value(blockchain))
+        storage.set(data, forKey: Keys.tokenSettings.value(account, blockchain))
     }
 
-    func debugClearSettings(blockchain: Blockchain) {
-        storage.removeObject(forKey: Keys.tokenSettings.value(blockchain))
+    func debugClearSettings(for account: String, blockchain: Blockchain) {
+        storage.removeObject(forKey: Keys.tokenSettings.value(account, blockchain))
     }
 }
 
