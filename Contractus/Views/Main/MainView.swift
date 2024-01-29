@@ -1,10 +1,3 @@
-//
-//  MainView.swift
-//  Contractus
-//
-//  Created by Simon Hudishkin on 26.07.2022.
-//
-
 import SwiftUI
 import SolanaSwift
 import ResizableSheet
@@ -65,9 +58,7 @@ struct MainView: View {
     @State private var showSendTokens: Bool = false
 
     var body: some View {
-
         JGProgressHUDPresenter(userInteractionOnHUD: true) {
-            //   NavigationView {
             ZStack(alignment: .top) {
                 ScrollView(showsIndicators: false) {
                     VStack {
@@ -337,8 +328,8 @@ struct MainView: View {
                         case .fiat(let url):
                             sheetType = .topUp(url)
                             topUpState = .hidden
-//                        case .loan:
-//                            break;
+                            //                        case .loan:
+                            //                            break;
                         case .buyCTUS:
                             topUpState = .hidden
                             showBuyCtus.toggle()
@@ -529,7 +520,8 @@ struct MainView: View {
                 SendTokensView(viewModel: .init(SendTokensViewModel(
                     state: .init(account: viewModel.account, currency: viewModel.state.currency, balance: viewModel.state.balance),
                     accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
-                    transactionsService: try? APIServiceFactory.shared.makeTransactionsService()
+                    transactionsService: try? APIServiceFactory.shared.makeTransactionsService(), 
+                    accountService: AccountServiceImpl(storage: ServiceFactory.shared.makeAccountStorage())
                 )))
             }
             .fullScreenCover(item: $selectedDeal) {
@@ -540,74 +532,13 @@ struct MainView: View {
                 }
 
             }
-
-            //                .navigationDestination(for: $selectedDeal) { deal in
-            //                    dealView(deal: deal)
-            //                }
-            //
-            //                .navigationBarTitleDisplayMode(.inline)
-            //                .toolbar {
-            //                    ToolbarItem(placement: .principal) {
-            //                        Button {
-            //                            if let tier = viewModel.state.balance?.tier {
-            //                                EventService.shared.send(event: ExtendedAnalyticsEvent.mainTiersTap(tier))
-            //                            }
-            //                            sheetType = .webView(AppConfig.tiersInformationURL)
-            //                        } label: {
-            //                            VStack(alignment: .center, spacing: 3) {
-            //                                tierLabel(viewModel.state.balance?.tier)
-            //
-            //                                HStack(spacing: 4) {
-            //                                    viewModel.state.account.blockchain.image
-            //                                        .resizable()
-            //                                        .frame(width: 12, height: 12)
-            //                                        .aspectRatio(contentMode: .fit)
-            //                                    Text(ContentMask.mask(from: viewModel.state.account.publicKey))
-            //                                        .font(.caption2)
-            //                                        .foregroundColor(R.color.secondaryText.color)
-            //
-            //                                    if AppConfig.serverType.isDevelop {
-            //                                        Text("•")
-            //                                            .font(.caption2)
-            //                                            .foregroundColor(R.color.secondaryText.color)
-            //                                        Text(AppConfig.serverType.networkTitle)
-            //                                            .font(.caption2)
-            //                                            .foregroundColor(R.color.textWarn.color)
-            //                                    }
-            //                                }
-            //
-            //                            }
-            //                        }
-            //                    }
-            //                    ToolbarItemGroup(placement: .navigationBarLeading) {
-            //                        Button {
-            //                            EventService.shared.send(event: DefaultAnalyticsEvent.mainSettingsTap)
-            //                            sheetType = .menu
-            //                        } label: {
-            //                            Constants.menuImage
-            //                        }
-            //                    }
-            //                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-            //                        Button {
-            //                            EventService.shared.send(event: DefaultAnalyticsEvent.mainQRscannerTap)
-            //
-            //                            sheetType = .qrScan
-            //                        } label: {
-            //                            Constants.scanQRImage
-            //                        }
-            //                    }
-            //                }
-            //                .baseBackground()
-            //                .edgesIgnoringSafeArea(.bottom)
-            //  }
-            //  .navigationViewStyle(StackNavigationViewStyle())
             .onAppear{
                 EventService.shared.send(event: DefaultAnalyticsEvent.mainOpen)
                 load()
                 let service = ServiceFactory.shared.makeOnboardingService()
                 if service.needShowChangelog() {
                     showChangelog = true
-                    
+
                     EventService.shared.send(event: ExtendedAnalyticsEvent.changelogOpen(service.changelogId()))
                 }
             }

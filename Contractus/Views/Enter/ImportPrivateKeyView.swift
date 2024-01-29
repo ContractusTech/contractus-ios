@@ -35,7 +35,7 @@ struct ImportPrivateKeyView: View {
 
                     VStack(alignment: .center, spacing: 24) {
                         MultilineTextFieldView(placeholder: R.string.localizable.importWalletPlaceholder(), value: $privateKey)
-                        if viewModel.state.isValidImportedPrivateKey {
+                        if !privateKey.isEmpty {
                             VStack(alignment: .leading, spacing: 6) {
                                 HStack {
                                     Text(R.string.localizable.importWalletPublicKey())
@@ -44,12 +44,21 @@ struct ImportPrivateKeyView: View {
                                         .foregroundColor(R.color.secondaryText.color)
                                     Spacer()
                                 }
-                                HStack {
-                                    Text(ContentMask.mask(from: viewModel.state.account?.publicKey))
-                                        .font(.body)
-                                    Spacer()
-                                }
+                                if viewModel.state.isValidImportedPrivateKey {
+                                    HStack {
+                                        Text(ContentMask.mask(from: viewModel.state.account?.publicKey))
+                                            .font(.body)
+                                        Spacer()
+                                    }
+                                } else {
+                                    HStack {
+                                        Text(R.string.localizable.importWalletInvalidKey())
+                                            .font(.footnote)
+                                            .foregroundColor(R.color.labelBackgroundError.color)
+                                        Spacer()
+                                    }
 
+                                }
                             }
                         }
                         if viewModel.state.hasBackupKeys {
