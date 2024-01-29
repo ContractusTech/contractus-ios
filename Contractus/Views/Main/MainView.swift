@@ -337,8 +337,8 @@ struct MainView: View {
                         case .fiat(let url):
                             sheetType = .topUp(url)
                             topUpState = .hidden
-                        case .loan:
-                            break;
+//                        case .loan:
+//                            break;
                         case .buyCTUS:
                             topUpState = .hidden
                             showBuyCtus.toggle()

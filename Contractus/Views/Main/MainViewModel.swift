@@ -156,7 +156,7 @@ final class MainViewModel: ViewModel {
                             let serverKey = deal.sharedKey,
                             let serverKeyData = Data(base64Encoded: serverKey) else { return }
 
-                        guard let secretData = try? await SharedSecretService.recover(serverSecret: serverKeyData, clientSecret: clientKeyData, hashOriginalKey: deal.secretKeyHash ?? "") else {
+                        guard let _ = try? await SharedSecretService.recover(serverSecret: serverKeyData, clientSecret: clientKeyData, hashOriginalKey: deal.secretKeyHash ?? "") else {
                             return
                         }
                         state.selectedDeal = deal

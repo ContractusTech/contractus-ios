@@ -306,7 +306,7 @@ final class TransactionSignViewModel: ViewModel {
 
                 self?.transactionsService?.approveAmountTransaction(.init(rawTransaction: unsignedTx, signature: signedTx.signature), completion: { result in
                     switch result {
-                    case .success(let success):
+                    case .success:
                         continuation.resume()
                     case .failure(let error):
                         continuation.resume(throwing: error)

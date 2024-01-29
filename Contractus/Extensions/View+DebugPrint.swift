@@ -9,7 +9,7 @@ import SwiftUI
 
 extension View {
     func DebugPrint(_ print: Any?) -> some View {
-        debugPrint(print)
+        debugPrint(print ?? "")
         return EmptyView()
     }
 }

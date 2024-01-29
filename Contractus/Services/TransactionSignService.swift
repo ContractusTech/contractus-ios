@@ -82,7 +82,6 @@ final class TransactionSignServiceImpl: TransactionSignService {
 
             case .solana:
                 var tx = try Transaction.from(data: data)
-                var unsignedTx = tx
                 try tx.partialSign(signers: [.init(secretKey: signer.privateKey)])
                 let publicKey = signer.getPublicKey()
                 let signature = tx.signatures.first(where: { $0.publicKey.base58EncodedString == publicKey })?.signature?.base64EncodedString() ?? ""
