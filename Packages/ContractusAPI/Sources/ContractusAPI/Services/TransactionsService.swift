@@ -113,8 +113,8 @@ public final class TransactionsService: BaseService {
         }
     }
 
-    public func getApprovalAmountTransaction(for tokenAddress: String, completion: @escaping (Swift.Result<ApprovalAmount, APIClientError>) -> Void) {
-        self.request(path: .approvalAmount(address: tokenAddress), httpMethod: .get, data: Empty()) { (result: Result<ApprovalAmount, APIClientError>) in
+    public func getApprovalAmountTransaction(for tokenAddress: String?, completion: @escaping (Swift.Result<ApprovalAmount, APIClientError>) -> Void) {
+        self.request(path: .approvalAmount(address: tokenAddress ?? "service"), httpMethod: .get, data: Empty()) { (result: Result<ApprovalAmount, APIClientError>) in
             completion(result)
         }
     }

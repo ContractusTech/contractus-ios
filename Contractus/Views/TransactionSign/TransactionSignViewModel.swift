@@ -53,6 +53,7 @@ struct TransactionSignState {
     let account: CommonAccount
     var state: State
     var approveTx: ApprovalAmount?
+    var holderModeApproveTx: ApprovalAmount?
     var errorState: ErrorState?
     var type: TransactionSignType
     var transaction: Transaction?
@@ -69,7 +70,7 @@ struct TransactionSignState {
         }
     }
     var needApprove: Bool {
-        return self.approveTx?.needApproval ?? false
+        return self.approveTx?.needApproval ?? false || self.holderModeApproveTx?.needApproval ?? false
     }
 }
 
@@ -112,6 +113,10 @@ final class TransactionSignViewModel: ViewModel {
 
                     if let address = tx?.token?.address, let checkApproveTx = try? await checkApprove(for: address) {
                         newState.approveTx = checkApproveTx
+                    }
+
+                    if deal.allowHolderMode ?? false  {
+                        newState.holderModeApproveTx = try? await checkApprove(for: nil)
                     }
 
                     newState.transaction = tx
@@ -194,11 +199,18 @@ final class TransactionSignViewModel: ViewModel {
     func trigger(_ input: TransactionSignInput, after: AfterTrigger?) {
         switch input {
         case .approve:
-            guard let tx = state.approveTx else { return }
+            guard state.needApprove else { return }
             self.state.state = .approving
             Task { @MainActor in
                 do {
-                    try await self.sendApprove(tx: tx, signer: state.account)
+                    if let tx = state.approveTx, tx.needApproval {
+                        try await self.sendApprove(tx: tx, signer: state.account)
+                    }
+
+                    if let holderModeTx = state.holderModeApproveTx, holderModeTx.needApproval {
+                        try await self.sendApprove(tx: holderModeTx, signer: state.account)
+                    }
+
                     var newState = self.state
                     newState.approveTx = nil
                     newState.state = .loaded
@@ -274,7 +286,7 @@ final class TransactionSignViewModel: ViewModel {
         })
     }
 
-    private func checkApprove(for tokenAddress: String) async throws -> ApprovalAmount? {
+    private func checkApprove(for tokenAddress: String?) async throws -> ApprovalAmount? {
         guard state.account.blockchain == .bsc else { return nil }
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             self?.transactionsService?.getApprovalAmountTransaction(for: tokenAddress, completion: { result in
