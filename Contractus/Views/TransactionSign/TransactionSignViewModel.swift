@@ -122,7 +122,7 @@ final class TransactionSignViewModel: ViewModel {
                         if let fee = tx.fee, txType == .dealInit {
                             newState.informationFields.append(.init(
                                 title: R.string.localizable.transactionSignFieldsFee(),
-                                value: deal.token.format(amount: fee, withCode: true),
+                                value: deal.allowHolderMode ?? false ? R.string.localizable.transactionSignFieldsFreeFee() : deal.token.format(amount: fee, withCode: true),
                                 titleDescription: nil,
                                 valueDescription: nil
                             ))
