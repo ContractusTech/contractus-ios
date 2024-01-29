@@ -38,12 +38,10 @@ struct DocumentPickerView: UIViewControllerRepresentable {
 
         func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
             guard let selectedFile: URL = urls.first else { return }
-            
+            defer { selectedFile.stopAccessingSecurityScopedResource() }
+
             if selectedFile.startAccessingSecurityScopedResource(), let data = try? Data(contentsOf: selectedFile) {
                 parent.action?(data, selectedFile)
-                defer { selectedFile.stopAccessingSecurityScopedResource() }
-            } else {
-
             }
         }
 

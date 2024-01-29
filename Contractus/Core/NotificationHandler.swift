@@ -17,7 +17,9 @@ enum NotificationHandler {
         if let dealId = notification["deal_id"] as? String,
            let recipients = notification["recipients"] as? String
         {
-            var params = OpenDealParams(recipients: recipients.split(separator: ",").map { String($0) }, dealId: dealId)
+            let params = OpenDealParams(
+                recipients: recipients.split(separator: ",").map { String($0) },
+                dealId: dealId)
 
             Self.notification = NotificationType.open(params)
 

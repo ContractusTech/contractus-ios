@@ -1165,7 +1165,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 496 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 498 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -2135,6 +2135,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonInfo = Rswift.StringResource(key: "common.info", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Invalid recipient
+      ///
+      /// Locales: en
+      static let sendTokensInvalidRecipient = Rswift.StringResource(key: "sendTokens.invalid.recipient", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Invalid, please check private key
+      ///
+      /// Locales: en
+      static let importWalletInvalidKey = Rswift.StringResource(key: "importWallet.invalid.key", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Loading...
       ///
       /// Locales: en
@@ -6808,6 +6816,36 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.info", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Invalid recipient
+      ///
+      /// Locales: en
+      static func sendTokensInvalidRecipient(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("sendTokens.invalid.recipient", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "sendTokens.invalid.recipient"
+        }
+
+        return NSLocalizedString("sendTokens.invalid.recipient", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Invalid, please check private key
+      ///
+      /// Locales: en
+      static func importWalletInvalidKey(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("importWallet.invalid.key", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "importWallet.invalid.key"
+        }
+
+        return NSLocalizedString("importWallet.invalid.key", bundle: bundle, comment: "")
       }
 
       /// en translation: Loading...

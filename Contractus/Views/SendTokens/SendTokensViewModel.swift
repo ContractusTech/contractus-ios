@@ -37,10 +37,12 @@ extension SendTokensViewModel {
                 return false
             }
         }
+        var blockchain: Blockchain = .solana
+        var isValidImportedPrivateKey: Bool = false
     }
 
     enum Input {
-        case selectToken(Token), setRecipient(String), setAmount(String), swap, send, hideError, setMaxAmount
+        case selectToken(Token), setRecipient(String), setAmount(String), swap, send, hideError, setMaxAmount, validateRecipient(String)
     }
 }
 
@@ -49,14 +51,17 @@ final class SendTokensViewModel: ViewModel {
     @Published private(set) var state: State
     private var accountAPIService: ContractusAPI.AccountService?
     private var transactionsService: ContractusAPI.TransactionsService?
+    private let accountService: AccountService
 
     init(
         state: SendTokensViewModel.State,
         accountAPIService: ContractusAPI.AccountService?,
-        transactionsService: ContractusAPI.TransactionsService?
+        transactionsService: ContractusAPI.TransactionsService?,
+        accountService: AccountService
     ) {
         self.accountAPIService = accountAPIService
         self.transactionsService = transactionsService
+        self.accountService = accountService
         self.state = state
     }
 
@@ -76,6 +81,13 @@ final class SendTokensViewModel: ViewModel {
             updateAmount(amount: amount)
         case .setRecipient(let recipient):
             state.recipient = recipient
+        case .validateRecipient(let recipient):
+            guard let account = try? accountService.restore(by: recipient, blockchain: state.blockchain) else {
+                self.state.isValidImportedPrivateKey = false
+                return
+            }
+            self.state.isValidImportedPrivateKey = true
+
         case .selectToken(let token):
             state.selectedToken = token
             clearAmount()

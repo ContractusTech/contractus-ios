@@ -381,7 +381,7 @@ struct BalanceView: View {
         switch state {
         case .empty:
             return true
-        case .loaded(let balanceViewModel):
+        case .loaded:
             return false
         }
     }
