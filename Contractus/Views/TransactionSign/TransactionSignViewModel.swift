@@ -117,12 +117,13 @@ final class TransactionSignViewModel: ViewModel {
                     let tx = try await getTx()
                     var newState = self.state
 
-                    if tx?.type == .dealInit {
+                    if isNeedApprove(for: deal, txType: txType, account: account) {
                         if let address = tx?.token?.address, let checkApproveTx = try? await checkApprove(for: address) {
                             newState.approveTx = checkApproveTx
                         }
-
-                        if deal.allowHolderMode ?? false  {
+                        let alreadyRequest = tx?.token?.serviced ?? false
+                        if !alreadyRequest && deal.allowHolderMode ?? false  
+                            || ((deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey) || (deal.ownerRole == .executor && deal.contractorPublicKey == account.publicKey)) {
                             newState.holderModeApproveTx = try? await checkApprove(for: nil)
                         }
                     }
@@ -347,6 +348,21 @@ final class TransactionSignViewModel: ViewModel {
                 self?.state.errorState = .approveError
                 self?.pollServicedApproveTxService?.endPoll()
             }
+        }
+    }
+
+    private func isNeedApprove(for deal: ContractusAPI.Deal, txType: ContractusAPI.TransactionType, account: CommonAccount) -> Bool {
+        guard txType == .dealInit else { return false }
+
+        switch deal.performanceBondType {
+        case .both:
+            return deal.ownerPublicKey == account.publicKey || deal.contractorPublicKey == account.publicKey
+        case .onlyClient, .none:
+            return (deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey)
+            || (deal.ownerRole == .executor && deal.contractorPublicKey == account.publicKey)
+        case .onlyExecutor:
+            return (deal.ownerRole == .executor && deal.ownerPublicKey == account.publicKey)
+            || (deal.ownerRole == .client && deal.contractorPublicKey == account.publicKey)
         }
     }
 
