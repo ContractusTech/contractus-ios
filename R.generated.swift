@@ -1165,7 +1165,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 498 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 499 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -1367,6 +1367,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let transactionSignApproveButton = Rswift.StringResource(key: "transactionSign.approve.button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Approve transaction error.
+      ///
+      /// Locales: en
+      static let transactionSignApproveErrorMessage = Rswift.StringResource(key: "transactionSign.approve.errorMessage", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Are you sure you want to cancel sign?
       ///
       /// Locales: en
@@ -3924,6 +3928,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("transactionSign.approve.button", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Approve transaction error.
+      ///
+      /// Locales: en
+      static func transactionSignApproveErrorMessage(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.approve.errorMessage", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.approve.errorMessage"
+        }
+
+        return NSLocalizedString("transactionSign.approve.errorMessage", bundle: bundle, comment: "")
       }
 
       /// en translation: Are you sure you want to cancel sign?

@@ -400,6 +400,7 @@
 "transactionSign.approve.title" = "Spending approval";
 "transactionSign.approve.text" = "You must authorize the contract to transfer funds before the deal begins.";
 "transactionSign.approve.button" = "Approve";
+"transactionSign.approve.errorMessage" = "Approve transaction error.";
 "transactionSign.fields.service-fee" = "Service Fee";
 "transactionSign.fields.client" = "Client";
 "transactionSign.fields.executor" = "Executor";

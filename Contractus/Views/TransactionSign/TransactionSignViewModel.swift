@@ -17,10 +17,6 @@ enum TransactionSignType: Equatable, Identifiable {
     case byTransaction(ContractusAPI.Transaction)
 }
 
-enum TransactionSignError: Error {
-    case transactionIsNull
-}
-
 enum TransactionSignInput {
     case sign
     case hideError
@@ -32,7 +28,9 @@ struct TransactionSignState {
 
     enum ErrorState: Equatable {
         case error(String)
+        case approveError
     }
+
     enum State {
         case loading, loaded, signing, signed, approving
     }
@@ -57,6 +55,7 @@ struct TransactionSignState {
     var errorState: ErrorState?
     var type: TransactionSignType
     var transaction: Transaction?
+    var approveStatus: TransactionStatus?
     var informationFields: [InformationItem]
     var allowSign: Bool = false
     var isOwnerDeal: Bool {
@@ -76,9 +75,16 @@ struct TransactionSignState {
 
 final class TransactionSignViewModel: ViewModel {
 
+    enum TransactionError: Error {
+        case transactionIsNull
+        case approveError
+    }
+
     @Published private(set) var state: TransactionSignState
 
     private var pollTxService: PollService<Transaction>?
+    private var pollApproveTxService: PollService<ExternalTransaction>?
+    private var pollServicedApproveTxService: PollService<ExternalTransaction>?
     private var dealService: ContractusAPI.DealsService?
     private var accountService: ContractusAPI.AccountService?
     private var transactionSignService: TransactionSignService?
@@ -111,12 +117,14 @@ final class TransactionSignViewModel: ViewModel {
                     let tx = try await getTx()
                     var newState = self.state
 
-                    if let address = tx?.token?.address, let checkApproveTx = try? await checkApprove(for: address) {
-                        newState.approveTx = checkApproveTx
-                    }
+                    if tx?.type == .dealInit {
+                        if let address = tx?.token?.address, let checkApproveTx = try? await checkApprove(for: address) {
+                            newState.approveTx = checkApproveTx
+                        }
 
-                    if deal.allowHolderMode ?? false  {
-                        newState.holderModeApproveTx = try? await checkApprove(for: nil)
+                        if deal.allowHolderMode ?? false  {
+                            newState.holderModeApproveTx = try? await checkApprove(for: nil)
+                        }
                     }
 
                     newState.transaction = tx
@@ -194,6 +202,8 @@ final class TransactionSignViewModel: ViewModel {
 
     deinit {
         pollTxService?.endPoll()
+        pollApproveTxService?.endPoll()
+        pollServicedApproveTxService?.endPoll()
     }
 
     func trigger(_ input: TransactionSignInput, after: AfterTrigger?) {
@@ -203,13 +213,7 @@ final class TransactionSignViewModel: ViewModel {
             self.state.state = .approving
             Task { @MainActor in
                 do {
-                    if let tx = state.approveTx, tx.needApproval {
-                        try await self.sendApprove(tx: tx, signer: state.account)
-                    }
-
-                    if let holderModeTx = state.holderModeApproveTx, holderModeTx.needApproval {
-                        try await self.sendApprove(tx: holderModeTx, signer: state.account)
-                    }
+                    try await approveIfNeeded()
 
                     var newState = self.state
                     newState.approveTx = nil
@@ -252,15 +256,30 @@ final class TransactionSignViewModel: ViewModel {
         }
     }
 
+    private func approveIfNeeded() async throws {
+        if let tx = state.approveTx, tx.needApproval {
+            let result = try await self.sendApprove(tx: tx, signer: state.account)
+            if let signature = result.data?.signature {
+                initPollApproveTxService(signature: signature)
+            }
+        }
+
+        if let holderModeTx = state.holderModeApproveTx, holderModeTx.needApproval {
+            let result = try await self.sendApprove(tx: holderModeTx, signer: state.account)
+            if let signature = result.data?.signature {
+                initPollServicedApproveTxService(signature: signature)
+            }
+        }
+    }
+
     private func initPollTxService(id: String) -> Void {
         guard let transactionsService = self.transactionsService else { return }
-        self.pollTxService = .init(request: { callback in
-            transactionsService.getTransaction(id: id) { [weak self] result in
+        self.pollTxService = .init(request: { [weak self] callback in
+            transactionsService.getTransaction(id: id) { result in
                 switch result {
                 case .success(let tx):
                     callback(tx)
-                case .failure(let error):
-                    debugPrint(error)
+                case .failure:
                     self?.pollTxService?.endPoll()
                 }
             }
@@ -273,6 +292,60 @@ final class TransactionSignViewModel: ViewModel {
             } else if tx?.status == .error {
                 ImpactGenerator.error()
                 self?.pollTxService?.endPoll()
+            }
+        }
+    }
+
+    private func initPollApproveTxService(signature: String) -> Void {
+        guard let transactionsService = self.transactionsService else { return }
+        self.pollApproveTxService = .init(request: { [weak self] callback in
+            transactionsService.getExternalTransaction(signature) { result in
+                switch result {
+                case .success(let tx):
+                    callback(tx)
+                case .failure:
+                    self?.pollApproveTxService?.endPoll()
+                }
+            }
+        })
+        self.pollApproveTxService?.handler = {[weak self] tx in
+            self?.state.approveStatus = tx?.status
+            if tx?.status == .finished {
+                DispatchQueue.main.async {
+                    self?.state.approveTx = nil
+                }
+                self?.pollApproveTxService?.endPoll()
+            } else if tx?.status == .error {
+                ImpactGenerator.error()
+                self?.state.errorState = .approveError
+                self?.pollApproveTxService?.endPoll()
+            }
+        }
+    }
+
+    private func initPollServicedApproveTxService(signature: String) -> Void {
+        guard let transactionsService = self.transactionsService else { return }
+        self.pollServicedApproveTxService = .init(request: { [weak self] callback in
+            transactionsService.getExternalTransaction(signature) { result in
+                switch result {
+                case .success(let tx):
+                    callback(tx)
+                case .failure:
+                    self?.pollServicedApproveTxService?.endPoll()
+                }
+            }
+        })
+        self.pollApproveTxService?.handler = {[weak self] tx in
+            self?.state.approveStatus = tx?.status
+            if tx?.status == .finished {
+                DispatchQueue.main.async {
+                    self?.state.holderModeApproveTx = nil
+                }
+                self?.pollServicedApproveTxService?.endPoll()
+            } else if tx?.status == .error {
+                ImpactGenerator.error()
+                self?.state.errorState = .approveError
+                self?.pollServicedApproveTxService?.endPoll()
             }
         }
     }
@@ -298,10 +371,9 @@ final class TransactionSignViewModel: ViewModel {
                 }
             })
         }
-
     }
 
-    private func sendApprove(tx: ApprovalAmount, signer: Signer) async throws {
+    private func sendApprove(tx: ApprovalAmount, signer: Signer) async throws -> TransactionResult {
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             do {
                 guard let unsignedTx = tx.rawTransaction else {
@@ -318,8 +390,8 @@ final class TransactionSignViewModel: ViewModel {
 
                 self?.transactionsService?.approveAmountTransaction(.init(rawTransaction: unsignedTx, signature: signedTx.signature), completion: { result in
                     switch result {
-                    case .success:
-                        continuation.resume()
+                    case .success(let result):
+                        continuation.resume(returning: result)
                     case .failure(let error):
                         continuation.resume(throwing: error)
                     }
@@ -338,12 +410,12 @@ final class TransactionSignViewModel: ViewModel {
             return try await withCheckedThrowingContinuation({ [weak self] continuation in
 
                 guard let transaction = self?.state.transaction, let account = self?.state.account else {
-                    continuation.resume(throwing: TransactionSignError.transactionIsNull)
+                    continuation.resume(throwing: TransactionError.transactionIsNull)
                     return
                 }
 
                 guard let signedTx = try? self?.transactionSignService?.sign(tx: transaction, by: account, type: .byType(transaction.type)) else {
-                    continuation.resume(throwing: TransactionSignError.transactionIsNull)
+                    continuation.resume(throwing: TransactionError.transactionIsNull)
                     return
                 }
 
@@ -354,7 +426,7 @@ final class TransactionSignViewModel: ViewModel {
         case .byTransaction(let tx):
             return try await withCheckedThrowingContinuation({ continuation in
                 guard let signedTx = try? transactionSignService?.sign(tx: tx, by: self.state.account, type: .byType(tx.type)) else {
-                    continuation.resume(throwing: TransactionSignError.transactionIsNull)
+                    continuation.resume(throwing: TransactionError.transactionIsNull)
                     return
                 }
 
@@ -372,7 +444,7 @@ final class TransactionSignViewModel: ViewModel {
                         continuation.resume(with: result)
                     })
                 case .dealFinish, .dealInit, .dealCancel:
-                    continuation.resume(throwing: TransactionSignError.transactionIsNull)
+                    continuation.resume(throwing: TransactionError.transactionIsNull)
 
                 }
             })

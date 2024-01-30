@@ -206,3 +206,18 @@ public struct ApprovalSignedTransaction: Codable {
         self.signature = signature
     }
 }
+
+public struct ExternalTransaction: Decodable {
+    public let status: TransactionStatus
+}
+
+public struct TransactionResult: Decodable {
+
+    public struct Data: Decodable {
+        public let blockchain: Blockchain
+        public let signature: String
+    }
+
+    public let success: Bool
+    public var data: Data?
+}

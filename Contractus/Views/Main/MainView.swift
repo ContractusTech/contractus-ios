@@ -63,7 +63,7 @@ struct MainView: View {
                 ScrollView(showsIndicators: false) {
                     VStack {
                         BalanceView(
-                            state: viewModel.state.balance != nil ? .loaded(.init(balance: viewModel.state.balance!)) : .empty, allowTransfer: viewModel.state.account.blockchain == .solana,
+                            state: viewModel.state.balance != nil ? .loaded(.init(balance: viewModel.state.balance!, allowWrap: viewModel.state.account.blockchain == .solana)) : .empty, allowTransfer: viewModel.state.account.blockchain == .solana,
                             topUpAction: {
                                 EventService.shared.send(event: DefaultAnalyticsEvent.mainTopupTap)
 #if IS_WALLET

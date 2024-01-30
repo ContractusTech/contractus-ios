@@ -13,6 +13,7 @@ public enum ServicePath {
     case accounts
     case approvalAmount(address: String)
     case approveAmount
+    case checkExternalTx(signature: String)
     case topUp
     case currentAccount
     case accountStatistics
@@ -67,6 +68,8 @@ public enum ServicePath {
             return "/tx"
         case .transaction(let id):
             return "/tx/\(id)"
+        case .checkExternalTx(let signature):
+            return "/tx/external/\(signature)"
         case .accounts:
             return "/accounts"
         case .currentAccount:

@@ -119,8 +119,14 @@ public final class TransactionsService: BaseService {
         }
     }
 
-    public func approveAmountTransaction(_ tx: ApprovalSignedTransaction, completion: @escaping (Swift.Result<Success, APIClientError>) -> Void) {
-        self.request(path: .approveAmount, httpMethod: .post, data: tx) { (result: Result<Success, APIClientError>) in
+    public func approveAmountTransaction(_ tx: ApprovalSignedTransaction, completion: @escaping (Swift.Result<TransactionResult, APIClientError>) -> Void) {
+        self.request(path: .approveAmount, httpMethod: .post, data: tx) { (result: Result<TransactionResult, APIClientError>) in
+            completion(result)
+        }
+    }
+
+    public func getExternalTransaction(_ signature: String, completion: @escaping (Swift.Result<ExternalTransaction, APIClientError>) -> Void) {
+        self.request(path: .checkExternalTx(signature: signature), httpMethod: .get, data: Empty()) { (result: Result<ExternalTransaction, APIClientError>) in
             completion(result)
         }
     }

@@ -353,6 +353,8 @@ struct TransactionSignView: View {
             switch errorState {
             case .error(let errorMessage):
                 self.alertType = .error(errorMessage)
+            case .approveError:
+                self.alertType = .error(R.string.localizable.transactionSignApproveErrorMessage())
             case .none:
                 self.alertType = nil
             }
