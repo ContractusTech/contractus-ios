@@ -117,9 +117,9 @@ final class ChangeAmountViewModel: ViewModel {
         case .checker:
             amount = Amount(deal.checkerAmount ?? 0, token: deal.token)
         case .ownerBond:
-            amount = Amount(deal.ownerBondAmount ?? 0, token: deal.token)
+            amount = Amount(deal.ownerBondAmount ?? 0, token: deal.ownerBondToken ?? deal.token)
         case .contractorBond:
-            amount = Amount(deal.contractorBondAmount ?? 0, token: deal.token)
+            amount = Amount(deal.contractorBondAmount ?? 0, token: deal.contractorBondToken ?? deal.token)
         }
         self.state = .init(
             deal: deal,
