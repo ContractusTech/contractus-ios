@@ -37,7 +37,7 @@ struct ChangeAmountView: View {
     ) {
         self._amountString = State(initialValue: viewModel.state.amount.valueFormatted)
         if viewModel.tier == .holder {
-            self._holderMode = .init(initialValue: viewModel.deal.allowHolderMode ?? false || viewModel.amount.token.holderMode)
+            self._holderMode = .init(initialValue: viewModel.state.allowHolderMode)
         }
 
         self._viewModel = StateObject(wrappedValue: viewModel)
