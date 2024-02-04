@@ -31,6 +31,7 @@ public enum ServicePath {
     case deal(String)
     case dealAction(String)
     case participant(String)
+    case checkFunds(String)
     case balance
     case dealFee(dealId: String)
     case wrap
@@ -80,6 +81,8 @@ public enum ServicePath {
             return "/deals"
         case .deal(let id):
             return "/deals/\(id)"
+        case .checkFunds(let id):
+            return "/deals/\(id)/check-funds"
         case .dealAction(let id):
             return "/deals/\(id)/actions"
         case .dealMetadata(let id):
@@ -126,7 +129,6 @@ public enum ServicePath {
             return "/tx/approval/\(address)"
         case .approveAmount:
             return "/tx/send"
-
         }
     }
 }

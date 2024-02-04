@@ -10,6 +10,7 @@ import SwiftUI
 fileprivate enum Constants {
     static let backImage = Image(systemName: "chevron.left")
     static let closeImage = Image(systemName: "xmark")
+    static let defaultDeadlinePerion = 30
 }
 
 struct CreateDealDeadlineView: View {
@@ -19,7 +20,7 @@ struct CreateDealDeadlineView: View {
     
     @State var nextStep: Bool = false
     @State var encryptionStep: Bool = false
-    @State private var deadline: Date = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+    @State private var deadline: Date = Calendar.current.date(byAdding: .day, value: Constants.defaultDeadlinePerion, to: Date())!
 
     var allowDates: PartialRangeFrom<Date> {
         Calendar.current.date(byAdding: .day, value: 1, to: Date())!...

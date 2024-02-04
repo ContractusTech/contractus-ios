@@ -100,6 +100,31 @@ struct ApproveView: View {
     }
 }
 
+struct NeedFundsView: View {
+    let tokens: String
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(R.string.localizable.transactionSignNeedFundsTitle())
+                    .foregroundColor(R.color.redText.color)
+                    .font(.body.weight(.semibold))
+                    .multilineTextAlignment(.leading)
+                Text(R.string.localizable.transactionSignNeedFundsText(tokens))
+                    .font(.caption2)
+                    .foregroundColor(R.color.redText.color)
+                    .multilineTextAlignment(.leading)
+            }
+            Spacer()
+        }
+        .padding()
+        .background {
+            RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.labelBackgroundError.color)
+        }
+        .cornerRadius(20)
+    }
+}
+
 struct TransactionDetailFieldView: View {
 
     enum FieldButton: Identifiable {
@@ -228,6 +253,10 @@ struct TransactionSignView: View {
                     .padding(.top, 24)
 
                     VStack {
+                        if viewModel.state.needFunds {
+                            NeedFundsView(tokens: viewModel.state.needFundsTokens)
+                        }
+
                         if viewModel.state.needApprove {
                             ApproveView(isLoading: viewModel.state.state == .approving) {
                                 viewModel.trigger(.approve)

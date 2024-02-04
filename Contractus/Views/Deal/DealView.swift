@@ -1485,7 +1485,7 @@ struct DealView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 24, height: 24)
-                .foregroundColor(R.color.secondaryText.color)
+                .foregroundColor(R.color.baseGreen.color)
         case .canceled, .revoked:
             Constants.cancelStatusImage
                 .resizable()
@@ -1498,13 +1498,13 @@ struct DealView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 24, height: 24)
-                    .foregroundColor(R.color.redText.color)
+                    .foregroundColor(R.color.yellow.color)
             } else {
                 Constants.startedStatusImage
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 24, height: 24)
-                    .foregroundColor(R.color.secondaryText.color)
+                    .foregroundColor(R.color.blue.color)
             }
         case .finishing, .canceling, .starting:
             EmptyView()

@@ -1165,7 +1165,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 499 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 501 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -2139,6 +2139,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonInfo = Rswift.StringResource(key: "common.info", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Insufficient funds
+      ///
+      /// Locales: en
+      static let transactionSignNeedFundsTitle = Rswift.StringResource(key: "transactionSign.needFunds.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Invalid recipient
       ///
       /// Locales: en
@@ -2863,6 +2867,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let dealDescriptionCommandCantSign = Rswift.StringResource(key: "deal.description-command.cant-sign", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: To sign the deal, please, top up your balance of token(s) %@.
+      ///
+      /// Locales: en
+      static let transactionSignNeedFundsText = Rswift.StringResource(key: "transactionSign.needFunds.text", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: To start the deal, fill in the amount, deadline, the %@ accounts of all parties involved in the deal, and the checker fee (if a checker is in your deal).
       ///
       /// Locales: en
@@ -6837,6 +6845,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("common.info", bundle: bundle, comment: "")
       }
 
+      /// en translation: Insufficient funds
+      ///
+      /// Locales: en
+      static func transactionSignNeedFundsTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.needFunds.title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.needFunds.title"
+        }
+
+        return NSLocalizedString("transactionSign.needFunds.title", bundle: bundle, comment: "")
+      }
+
       /// en translation: Invalid recipient
       ///
       /// Locales: en
@@ -9562,6 +9585,23 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("deal.description-command.cant-sign", bundle: bundle, comment: "")
+      }
+
+      /// en translation: To sign the deal, please, top up your balance of token(s) %@.
+      ///
+      /// Locales: en
+      static func transactionSignNeedFundsText(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("transactionSign.needFunds.text", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.needFunds.text"
+        }
+
+        let format = NSLocalizedString("transactionSign.needFunds.text", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
       }
 
       /// en translation: To start the deal, fill in the amount, deadline, the %@ accounts of all parties involved in the deal, and the checker fee (if a checker is in your deal).

@@ -384,3 +384,9 @@ public struct DealFee: Decodable {
         self.type = try container.decode(AmountFeeType.self, forKey: DealFee.CodingKeys.type)
     }
 }
+
+public struct CheckFunds: Decodable {
+    public let needFunds: [Token]
+    public let needApprove: [Token]
+    public let blockchain: Blockchain
+}

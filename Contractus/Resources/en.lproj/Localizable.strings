@@ -444,6 +444,8 @@
 "transactionSign.subtitle.error" = "Try again";
 "transactionSign.subtitle.finished" = "Transaction completed successfully";
 "transactionSign.subtitle.holder-mode" = "For the period of the deal will be lock 10k CTUS";
+"transactionSign.needFunds.title" = "Insufficient funds";
+"transactionSign.needFunds.text" = "To sign the deal, please, top up your balance of token(s) %@.";
 
 "transaction.type.init-deal" = "Start of the deal";
 "transaction.type.finish-deal" = "Finish the deal";

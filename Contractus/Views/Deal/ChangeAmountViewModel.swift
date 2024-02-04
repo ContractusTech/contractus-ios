@@ -128,7 +128,7 @@ final class ChangeAmountViewModel: ViewModel {
             tier: tier,
             feeAmount: Amount(deal.amountFee, token: deal.token),
             account: account,
-            allowHolderMode: false
+            allowHolderMode: deal.allowHolderMode ?? false
         )
         self.dealService = dealService
         self.updateFee(amount: amount)

@@ -52,12 +52,15 @@ struct TransactionSignState {
     var state: State
     var approveTx: ApprovalAmount?
     var holderModeApproveTx: ApprovalAmount?
+    var bondApproveTx: ApprovalAmount?
     var errorState: ErrorState?
     var type: TransactionSignType
     var transaction: Transaction?
     var approveStatus: TransactionStatus?
     var informationFields: [InformationItem]
     var allowSign: Bool = false
+    var needFunds: Bool = false
+    var needFundsTokens: String = ""
     var isOwnerDeal: Bool {
         switch type {
         case .byDeal(let deal, _):
@@ -69,7 +72,7 @@ struct TransactionSignState {
         }
     }
     var needApprove: Bool {
-        return self.approveTx?.needApproval ?? false || self.holderModeApproveTx?.needApproval ?? false
+        return self.approveTx?.needApproval ?? false || self.holderModeApproveTx?.needApproval ?? false || self.bondApproveTx?.needApproval ?? false
     }
 }
 
@@ -78,6 +81,7 @@ final class TransactionSignViewModel: ViewModel {
     enum TransactionError: Error {
         case transactionIsNull
         case approveError
+        case notSupportTransaction
     }
 
     @Published private(set) var state: TransactionSignState
@@ -117,20 +121,26 @@ final class TransactionSignViewModel: ViewModel {
                     let tx = try await getTx()
                     var newState = self.state
 
-                    if isNeedApprove(for: deal, txType: txType, account: account) {
-                        if let address = tx?.token?.address, let checkApproveTx = try? await checkApprove(for: address) {
-                            newState.approveTx = checkApproveTx
+                    if let funds = try? await checkFunds() {
+                        newState.needFunds = !funds.needFunds.isEmpty
+                        if newState.needFunds {
+                            newState.needFundsTokens = funds.needFunds.map {$0.code}.joined(separator: ",")
+                        } else {
+                            newState.needFundsTokens = ""
                         }
-                        let alreadyRequest = tx?.token?.serviced ?? false
-                        if !alreadyRequest && deal.allowHolderMode ?? false  
-                            || ((deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey) || (deal.ownerRole == .executor && deal.contractorPublicKey == account.publicKey)) {
-                            newState.holderModeApproveTx = try? await checkApprove(for: nil)
+
+                        if !newState.needFunds {
+                            if let tx = tx, !funds.needApprove.isEmpty, let approveTxs = await getApproveTxIfNeeded(deal: deal, tx: tx, account: account) {
+                                newState.approveTx = approveTxs.approveTx
+                                newState.holderModeApproveTx = approveTxs.holderApproveTx
+                                newState.bondApproveTx = approveTxs.bondApproveTx
+                            }
                         }
                     }
 
                     newState.transaction = tx
                     newState.state = .loaded
-                    newState.allowSign = true
+
                     if let tx = tx {
                         initPollTxService(id: tx.id)
                         if let fee = tx.fee, txType == .dealInit {
@@ -183,6 +193,8 @@ final class TransactionSignViewModel: ViewModel {
                             valueDescription: nil
                         ))
                     }
+
+                    newState.allowSign = !newState.needFunds
                     self.state = newState
                 } catch {
                     var newState = self.state
@@ -255,6 +267,49 @@ final class TransactionSignViewModel: ViewModel {
                 }
             }
         }
+    }
+
+    private func getApproveTxIfNeeded(deal: Deal, tx: Transaction, account: CommonAccount) async -> (approveTx: ApprovalAmount?, holderApproveTx: ApprovalAmount?, bondApproveTx: ApprovalAmount?)? {
+        guard isNeedApprove(for: deal, txType: tx.type, account: account) else { return nil }
+
+        var approveTx: ApprovalAmount?
+        var holderApproveTx: ApprovalAmount?
+        var bondApproveTx: ApprovalAmount?
+
+        if let address = tx.token?.address, let checkApproveTx = try? await checkApprove(for: address) {
+            approveTx = checkApproveTx
+        }
+        let alreadyRequest = tx.token?.serviced ?? false
+        if !alreadyRequest && deal.allowHolderMode ?? false
+            || ((deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey) || (deal.ownerRole == .executor && deal.contractorPublicKey == account.publicKey)) {
+
+            holderApproveTx = try? await checkApprove(for: nil)
+        }
+
+        switch deal.performanceBondType {
+        case .both:
+            if deal.ownerPublicKey == account.publicKey {
+                bondApproveTx = try? await checkApprove(for: deal.ownerBondToken?.address)
+            } else if deal.contractorPublicKey == account.publicKey {
+                bondApproveTx = try? await checkApprove(for: deal.contractorBondToken?.address)
+            }
+        case .onlyClient:
+            if deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey {
+                bondApproveTx = try? await checkApprove(for: deal.ownerBondToken?.address)
+            } else if deal.ownerRole == .executor && deal.contractorPublicKey == account.publicKey {
+                bondApproveTx = try? await checkApprove(for: deal.contractorBondToken?.address)
+            }
+        case .onlyExecutor:
+            if deal.ownerRole == .executor && deal.ownerPublicKey == account.publicKey {
+                bondApproveTx = try? await checkApprove(for: deal.ownerBondToken?.address)
+            } else if deal.ownerRole == .client && deal.contractorPublicKey == account.publicKey {
+                bondApproveTx = try? await checkApprove(for: deal.contractorBondToken?.address)
+            }
+        case .none:
+            return nil
+        }
+
+        return (approveTx, holderApproveTx, bondApproveTx)
     }
 
     private func approveIfNeeded() async throws {
@@ -419,6 +474,25 @@ final class TransactionSignViewModel: ViewModel {
         }
     }
 
+    private func checkFunds() async throws -> CheckFunds {
+        switch state.type {
+        case .byDeal(let deal, _):
+            return try await withCheckedThrowingContinuation { [weak self] continuation in
+                guard let self = self else { return }
+                self.dealService?.checkFunds(dealId: deal.id, completion: { result in
+                    switch result {
+                    case .success(let funds):
+                        continuation.resume(returning: funds)
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                })
+            }
+        case .byTransaction, .byTransactionId:
+            throw TransactionError.notSupportTransaction
+        }
+
+    }
 
     private func sign() async throws -> Transaction? {
         switch state.type {
