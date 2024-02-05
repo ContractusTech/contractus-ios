@@ -1553,26 +1553,31 @@ struct DealView: View {
 
         switch viewModel.state.deal.status {
         case .finished, .canceled, .revoked, .started:
-            VStack {
-                HStack {
-                    Spacer()
-                    VStack(spacing: 8) {
-                        dealStatusImageView()
-
-                        Text(statusTitle())
-                            .font(.body.weight(.bold))
-                            .foregroundColor(R.color.textBase.color)
-                        Text(statusSubtitle())
-                            .font(.footnote)
-                            .foregroundColor(R.color.secondaryText.color)
-                            .multilineTextAlignment(.center)
+            if let deadline = viewModel.state.deal.deadline, deadline < Date(),
+               !viewModel.currentMainActions.contains(.cancelDeal) {
+                EmptyView()
+            } else {
+                VStack {
+                    HStack {
+                        Spacer()
+                        VStack(spacing: 8) {
+                            dealStatusImageView()
+                            
+                            Text(statusTitle())
+                                .font(.body.weight(.bold))
+                                .foregroundColor(R.color.textBase.color)
+                            Text(statusSubtitle())
+                                .font(.footnote)
+                                .foregroundColor(R.color.secondaryText.color)
+                                .multilineTextAlignment(.center)
+                        }
+                        Spacer()
                     }
-                    Spacer()
+                    .padding(14)
+                    .background(R.color.secondaryBackground.color)
+                    .cornerRadius(20)
+                    .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                 }
-                .padding(14)
-                .background(R.color.secondaryBackground.color)
-                .cornerRadius(20)
-                .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
             }
         case .finishing, .canceling, .starting:
             EmptyView()
