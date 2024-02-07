@@ -306,7 +306,7 @@ final class TransactionSignViewModel: ViewModel {
                 bondApproveTx = try? await checkApprove(for: deal.contractorBondToken?.address)
             }
         case .none:
-            return nil
+            break
         }
 
         return (approveTx, holderApproveTx, bondApproveTx)

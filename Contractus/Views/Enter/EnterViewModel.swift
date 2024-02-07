@@ -51,7 +51,7 @@ final class EnterViewModel: ViewModel {
         var state = initialState
         self.accountService = accountService
         self.backupStorage = backupStorage
-        state.backupKeys = backupStorage.getBackupKeys()
+        state.backupKeys = backupStorage.getBackupKeys().filter { $0.blockchain == state.blockchain }
         self.state = state
     }
 

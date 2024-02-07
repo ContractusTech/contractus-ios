@@ -49,8 +49,13 @@ final class AccountServiceImpl: AccountService {
     func restore(by privateKey: String, blockchain: Blockchain) throws -> CommonAccount {
         switch blockchain {
         case .solana:
-            let privateKeyUInt8 = Base58.decode(privateKey)
-            return try KeyPair(secretKey: Data(privateKeyUInt8)).commonAccount
+            if privateKey.first == "[", let data = privateKey.data(using: .utf8) {
+                let privateKeyUInt8 = try  JSONDecoder().decode(Array<UInt8>.self, from: data)
+                return try KeyPair(secretKey: Data(privateKeyUInt8)).commonAccount
+            } else {
+                let privateKeyUInt8 = Base58.decode(privateKey)
+                return try KeyPair(secretKey: Data(privateKeyUInt8)).commonAccount
+            }
         case .bsc:
             let privateKey = Data(hex: privateKey)
             guard let publicKey = Utilities.privateToPublic(privateKey) else { throw AccountServiceError.invalidPublicKey }

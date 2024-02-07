@@ -224,6 +224,7 @@
 		6D44B5602A0E0B20008C561D /* BlockchainExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B55F2A0E0B20008C561D /* BlockchainExplorer.swift */; };
 		6D44B5622A0FA42F008C561D /* FlagsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B5612A0FA42F008C561D /* FlagsStorage.swift */; };
 		6D44B5642A0FAB37008C561D /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B5632A0FAB37008C561D /* StatisticsView.swift */; };
+		6D4535992B716DF7006DE601 /* SolanaSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6D4535982B716DF7006DE601 /* SolanaSwift */; };
 		6D4783532B65A47700F7B0F0 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = 6D4783522B65A47700F7B0F0 /* Shimmer */; };
 		6D4C860F2AC010E900B9CEAE /* TokenSelectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4C860E2AC010E900B9CEAE /* TokenSelectViewModel.swift */; };
 		6D4D99F32A5601A1007668B0 /* IdentifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4D99F22A5601A1007668B0 /* IdentifierService.swift */; };
@@ -341,7 +342,6 @@
 		6DDA818028C065C80022E005 /* ModalSheet+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDA817F28C065C80022E005 /* ModalSheet+Ex.swift */; };
 		6DDA818528C0D6070022E005 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDA818428C0D6070022E005 /* TextField.swift */; };
 		6DDAAB082B616EAC00B21E87 /* SolanaSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6DDAAB072B616EAC00B21E87 /* SolanaSwift */; };
-		6DDAAB0B2B62C16400B21E87 /* SolanaSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6DDAAB0A2B62C16400B21E87 /* SolanaSwift */; };
 		6DEEDFF429F8E6CD00216D44 /* BackupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEEDFF329F8E6CD00216D44 /* BackupStorage.swift */; };
 		6DF6ADC32994EAA300A50598 /* SharedSecretService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF6ADC22994EAA300A50598 /* SharedSecretService.swift */; };
 		6DF6ADC52995307200A50598 /* SharedSecretTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF6ADC42995307200A50598 /* SharedSecretTests.swift */; };
@@ -665,7 +665,7 @@
 				6DC5586E2A7A18A60054F2FC /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				6D8EFD8A28D898B50064F5DA /* ShamirSecretSharing in Frameworks */,
 				6D755290289662250069935B /* Rswift in Frameworks */,
-				6DDAAB0B2B62C16400B21E87 /* SolanaSwift in Frameworks */,
+				6D4535992B716DF7006DE601 /* SolanaSwift in Frameworks */,
 				6D0DA7622930A6960024EF30 /* CodeScanner in Frameworks */,
 				6DB5F8B6294D762300AE612A /* JGProgressHUD in Frameworks */,
 				FE2B96C92AB9EA5D00971114 /* FirebaseMessaging in Frameworks */,
@@ -1327,8 +1327,8 @@
 				6D88EEF52B02045B0031F50B /* ContractusAPI */,
 				6D88EEF82B0204670031F50B /* web3swift */,
 				6DDAAB072B616EAC00B21E87 /* SolanaSwift */,
-				6DDAAB0A2B62C16400B21E87 /* SolanaSwift */,
 				6D4783522B65A47700F7B0F0 /* Shimmer */,
+				6D4535982B716DF7006DE601 /* SolanaSwift */,
 			);
 			productName = Contractus;
 			productReference = 6D97AEED288D196200EB61D0 /* Contractus.app */;
@@ -1416,8 +1416,8 @@
 				FE1245682AC35F86009FB048 /* XCRemoteSwiftPackageReference "SVGKit" */,
 				6DC2183F2ACF3D3E00EFC769 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */,
 				6D8885442AFFA4AF006EB291 /* XCRemoteSwiftPackageReference "QRCode" */,
-				6DDAAB092B62C16400B21E87 /* XCRemoteSwiftPackageReference "solana-swift" */,
 				6D4783512B65A47700F7B0F0 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
+				6D4535972B716DF7006DE601 /* XCRemoteSwiftPackageReference "solana-swift" */,
 			);
 			productRefGroup = 6D97AEEE288D196200EB61D0 /* Products */;
 			projectDirPath = "";
@@ -2431,6 +2431,14 @@
 				minimumVersion = 6.12.2;
 			};
 		};
+		6D4535972B716DF7006DE601 /* XCRemoteSwiftPackageReference "solana-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ContractusTech/solana-swift.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		6D4783512B65A47700F7B0F0 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
@@ -2509,14 +2517,6 @@
 			requirement = {
 				kind = exactVersion;
 				version = 0.1.4;
-			};
-		};
-		6DDAAB092B62C16400B21E87 /* XCRemoteSwiftPackageReference "solana-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ContractusTech/solana-swift.git";
-			requirement = {
-				branch = main;
-				kind = branch;
 			};
 		};
 		FE1245652AC35AAC009FB048 /* XCRemoteSwiftPackageReference "Nuke" */ = {
@@ -2649,6 +2649,11 @@
 			package = 6D1921F52B0DBC0200EBE911 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
 			productName = AppsFlyerLib;
 		};
+		6D4535982B716DF7006DE601 /* SolanaSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D4535972B716DF7006DE601 /* XCRemoteSwiftPackageReference "solana-swift" */;
+			productName = SolanaSwift;
+		};
 		6D4783522B65A47700F7B0F0 /* Shimmer */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6D4783512B65A47700F7B0F0 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
@@ -2731,11 +2736,6 @@
 		};
 		6DDAAB072B616EAC00B21E87 /* SolanaSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = SolanaSwift;
-		};
-		6DDAAB0A2B62C16400B21E87 /* SolanaSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DDAAB092B62C16400B21E87 /* XCRemoteSwiftPackageReference "solana-swift" */;
 			productName = SolanaSwift;
 		};
 		FE1245662AC35AAC009FB048 /* NukeUI */ = {
