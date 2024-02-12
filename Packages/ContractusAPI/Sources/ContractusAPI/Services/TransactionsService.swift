@@ -64,6 +64,10 @@ public final class TransactionsService: BaseService {
         }
     }
 
+    struct ApprovalTokens: Codable {
+        public let addresses: [String]
+    }
+
     public func getTransactions(pagination: TransactionsService.Pagination, completion: @escaping (Swift.Result<[Transaction], APIClientError>) -> Void) {
         self.request(path: .transactions, httpMethod: .get, data: pagination) { (result: Swift.Result<[Transaction], APIClientError>) in
             completion(result)
@@ -113,14 +117,14 @@ public final class TransactionsService: BaseService {
         }
     }
 
-    public func getApprovalAmountTransaction(for tokenAddress: String?, completion: @escaping (Swift.Result<ApprovalAmount, APIClientError>) -> Void) {
-        self.request(path: .approvalAmount(address: tokenAddress ?? "service"), httpMethod: .get, data: Empty()) { (result: Result<ApprovalAmount, APIClientError>) in
+    public func getApprovalAmountTransaction(for tokenAddresses: [String], completion: @escaping (Swift.Result<ApprovalAmount, APIClientError>) -> Void) {
+        self.request(path: .approval, httpMethod: .post, data: ApprovalTokens(addresses: tokenAddresses)) { (result: Result<ApprovalAmount, APIClientError>) in
             completion(result)
         }
     }
 
     public func approveAmountTransaction(_ tx: ApprovalSignedTransaction, completion: @escaping (Swift.Result<TransactionResult, APIClientError>) -> Void) {
-        self.request(path: .approveAmount, httpMethod: .post, data: tx) { (result: Result<TransactionResult, APIClientError>) in
+        self.request(path: .sendTx, httpMethod: .post, data: tx) { (result: Result<TransactionResult, APIClientError>) in
             completion(result)
         }
     }

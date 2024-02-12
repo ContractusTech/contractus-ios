@@ -200,8 +200,7 @@ struct DealState {
     var currentMainActions: [MainActionType] = []
 
     var displayInformationForSign: Bool {
-        deal.status == .new && isOwnerDeal
-        && (!currentMainActions.contains(.cancelSign) && !currentMainActions.contains(.sign))
+        deal.status == .new && isOwnerDeal && (!currentMainActions.contains(.cancelSign) && !currentMainActions.contains(.sign))
     }
 }
 

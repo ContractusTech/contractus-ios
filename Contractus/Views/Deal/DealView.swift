@@ -1359,7 +1359,7 @@ struct DealView: View {
     private func actionsView() -> some View {
         VStack {
             VStack(alignment: .center, spacing: 16) {
-                if viewModel.displayInformationForSign {
+                if viewModel.state.displayInformationForSign {
                     VStack(spacing: 8) {
                         CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: true) { }
                         Text(R.string.localizable.dealInformationAboutSign(viewModel.account.blockchain.title))

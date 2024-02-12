@@ -7,6 +7,7 @@ enum ChangeAmountInput {
     case changeToken(Token)
     case changeholderMode(Bool)
     case update
+    case load
 }
 
 enum AmountValueType {
@@ -131,12 +132,13 @@ final class ChangeAmountViewModel: ViewModel {
             allowHolderMode: deal.allowHolderMode ?? false || amount.token.holderMode
         )
         self.dealService = dealService
-        self.updateFee(amount: amount)
     }
 
     func trigger(_ input: ChangeAmountInput, after: AfterTrigger? = nil) {
 
         switch input {
+        case .load:
+            self.updateFee(amount: state.amount)
         case .changeAmount(let amount):
             var amount = amount
             state.noAmount = false
@@ -204,17 +206,22 @@ final class ChangeAmountViewModel: ViewModel {
             guard let self = self else { return }
             switch result {
             case .success(let fee):
-                var newState = self.state
-                newState.feePercent = fee.percent
-                newState.feeAmount = fee.feeAmount
-                newState.feeFormatted = fee.feeAmount.valueFormattedWithCode
-                let fiatCurrency = fee.fiatCurrency.format(double: fee.fiatFee, withCode: true)
-                newState.fiatFeeFormatted = fiatCurrency ?? "" // fiatCurrency != nil ? "\(fiatCurrency!) (\(fee.percent.formatAsPercent())%)" : ""
-                newState.state = .none
-                self.state = newState
+                DispatchQueue.main.async {
+                    var newState = self.state
+                    newState.feePercent = fee.percent
+                    newState.feeAmount = fee.feeAmount
+                    newState.feeFormatted = fee.feeAmount.valueFormattedWithCode
+                    let fiatCurrency = fee.fiatCurrency.format(double: fee.fiatFee, withCode: true)
+                    newState.fiatFeeFormatted = fiatCurrency ?? "" // fiatCurrency != nil ? "\(fiatCurrency!) (\(fee.percent.formatAsPercent())%)" : ""
+                    newState.state = .none
+                    self.state = newState
+                }
+
             case .failure(let error):
                 debugPrint(error.localizedDescription)
-                self.state.state = .error(error.localizedDescription)
+                DispatchQueue.main.async {
+                    self.state.state = .error(error.localizedDescription)
+                }
             }
 
         })

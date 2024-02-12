@@ -156,8 +156,19 @@ public struct SignedTransaction: Codable {
 }
 
 public struct ApprovalAmount: Codable {
-    public let rawTransaction: ApprovalUnsignedTransaction?
+    public let rawTransactions: [ApprovalUnsignedTransaction]?
     public let needApproval: Bool
+    public let maxGas: BigUInt
+    public let token: Token
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.rawTransactions = try container.decodeIfPresent([ApprovalUnsignedTransaction].self, forKey: .rawTransactions)
+        self.needApproval = try container.decode(Bool.self, forKey: .needApproval)
+        let maxGas = try container.decode(String.self, forKey: .maxGas)
+        self.maxGas = BigUInt(stringLiteral: maxGas)
+        self.token = try container.decode(Token.self, forKey: .token)
+    }
 }
 
 public struct ApprovalUnsignedTransaction: Codable {

@@ -1165,7 +1165,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 501 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 502 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -2163,6 +2163,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let sendTokensMaxTitle = Rswift.StringResource(key: "sendTokens.max.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Max fee %@.
+      ///
+      /// Locales: en
+      static let transactionSignMexFeeText = Rswift.StringResource(key: "transactionSign.mexFee.text", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: May terminate the deal early. The client will wait for the deadline.
       ///
       /// Locales: en
@@ -6933,6 +6937,23 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("sendTokens.max.title", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Max fee %@.
+      ///
+      /// Locales: en
+      static func transactionSignMexFeeText(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("transactionSign.mexFee.text", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.mexFee.text"
+        }
+
+        let format = NSLocalizedString("transactionSign.mexFee.text", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
       }
 
       /// en translation: May terminate the deal early. The client will wait for the deadline.

@@ -59,37 +59,38 @@ struct FieldCopyButton: View {
 
 struct ApproveView: View {
 
-    var isLoading: Bool
+    let maxGas: String
+    let isLoading: Bool
     var action: () -> Void
+
     var body: some View {
 
-        HStack(spacing: 1) {
-            VStack(alignment: .leading, spacing: 6) {
+        VStack(spacing: 12) {
+            VStack(alignment: .center, spacing: 12) {
                 Text(R.string.localizable.transactionSignApproveTitle())
                     .foregroundColor(R.color.textBase.color)
-                    .font(.body.weight(.semibold))
-                    .multilineTextAlignment(.leading)
-                Text(R.string.localizable.transactionSignApproveText())
-                    .font(.caption2)
-                    .foregroundColor(R.color.textBase.color)
-                    .multilineTextAlignment(.leading)
-            }
-            Spacer()
-            VStack {
-                CButton(
-                    title: R.string.localizable.transactionSignApproveButton(),
-                    style: .warn,
-                    size: .default,
-                    isLoading: isLoading) {
-                        action()
-                    }
-                // TODO: - Need calculate
-                Text("≈ 0.1 USD.")
-                    .font(.caption2)
-                    .foregroundColor(R.color.secondaryText.color)
-                    .multilineTextAlignment(.leading)
+                    .font(.title3.weight(.semibold))
+                    .multilineTextAlignment(.center)
+                VStack(alignment: .center, spacing: 4) {
+                    Text(R.string.localizable.transactionSignApproveText())
+                        .font(.footnote)
+                        .foregroundColor(R.color.textBase.color)
+                        .multilineTextAlignment(.center)
+                    
+                    Text(R.string.localizable.transactionSignMexFeeText(maxGas))
+                        .font(.footnote)
+                        .foregroundColor(R.color.secondaryText.color)
+                        .multilineTextAlignment(.leading)
+                }
 
             }
+            CButton(
+                title: R.string.localizable.transactionSignApproveButton(),
+                style: .warn,
+                size: .large,
+                isLoading: isLoading) {
+                    action()
+                }
         }
         .padding()
         .background {
@@ -247,20 +248,20 @@ struct TransactionSignView: View {
                             }
                             .padding(EdgeInsets(top: 0, leading: 32, bottom: 0, trailing: 32))
                         }
-
                     }
                     .padding(.bottom, 0)
                     .padding(.top, 24)
 
                     VStack {
-                        if viewModel.state.needFunds {
-                            NeedFundsView(tokens: viewModel.state.needFundsTokens)
-                        }
 
                         if viewModel.state.needApprove {
-                            ApproveView(isLoading: viewModel.state.state == .approving) {
+                            ApproveView(maxGas: viewModel.state.maxGasAmount, isLoading: viewModel.state.state == .approving) {
                                 viewModel.trigger(.approve)
                             }
+                        }
+
+                        if viewModel.state.needFunds {
+                            NeedFundsView(tokens: viewModel.state.needFundsTokens)
                         }
 
                         VStack(alignment: .leading, spacing: 0) {
@@ -397,6 +398,7 @@ struct TransactionSignView: View {
             }
         })
         .onAppear {
+            viewModel.trigger(.load)
             EventService.shared.send(event: DefaultAnalyticsEvent.txOpen)
         }
         .alert(item: $alertType, content: { type in

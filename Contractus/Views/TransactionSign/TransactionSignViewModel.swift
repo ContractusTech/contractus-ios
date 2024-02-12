@@ -1,14 +1,8 @@
-//
-//  TransactionSignViewModel.swift
-//  Contractus
-//
-//  Created by Simon Hudishkin on 04.01.2023.
-//
-
 import Foundation
 import ContractusAPI
 import web3swift
 import Web3Core
+import BigInt
 
 enum TransactionSignType: Equatable, Identifiable {
     var id: String { "\(self)" }
@@ -22,6 +16,7 @@ enum TransactionSignInput {
     case hideError
     case openExplorer
     case approve
+    case load
 }
 
 struct TransactionSignState {
@@ -50,9 +45,7 @@ struct TransactionSignState {
 
     let account: CommonAccount
     var state: State
-    var approveTx: ApprovalAmount?
-    var holderModeApproveTx: ApprovalAmount?
-    var bondApproveTx: ApprovalAmount?
+    var approveTXs: ApprovalAmount?
     var errorState: ErrorState?
     var type: TransactionSignType
     var transaction: Transaction?
@@ -61,6 +54,8 @@ struct TransactionSignState {
     var allowSign: Bool = false
     var needFunds: Bool = false
     var needFundsTokens: String = ""
+    var maxGasAmount: String = ""
+
     var isOwnerDeal: Bool {
         switch type {
         case .byDeal(let deal, _):
@@ -72,7 +67,7 @@ struct TransactionSignState {
         }
     }
     var needApprove: Bool {
-        return self.approveTx?.needApproval ?? false || self.holderModeApproveTx?.needApproval ?? false || self.bondApproveTx?.needApproval ?? false
+        approveTXs?.needApproval ?? false
     }
 }
 
@@ -87,6 +82,7 @@ final class TransactionSignViewModel: ViewModel {
     @Published private(set) var state: TransactionSignState
 
     private var pollTxService: PollService<Transaction>?
+    private var approvePollGroup = PollGroup<ExternalTransaction>()
     private var pollApproveTxService: PollService<ExternalTransaction>?
     private var pollServicedApproveTxService: PollService<ExternalTransaction>?
     private var dealService: ContractusAPI.DealsService?
@@ -115,95 +111,7 @@ final class TransactionSignViewModel: ViewModel {
                 state: .loading,
                 type: type,
                 informationFields: Self.fieldsByDeal(deal, txType: txType, account: account))
-            Task { @MainActor in
-                do {
 
-                    let tx = try await getTx()
-                    var newState = self.state
-
-                    if let funds = try? await checkFunds() {
-                        newState.needFunds = !funds.needFunds.isEmpty
-                        if newState.needFunds {
-                            newState.needFundsTokens = funds.needFunds.map {$0.code}.joined(separator: ",")
-                        } else {
-                            newState.needFundsTokens = ""
-                        }
-
-                        if !newState.needFunds {
-                            if let tx = tx, !funds.needApprove.isEmpty, let approveTxs = await getApproveTxIfNeeded(deal: deal, tx: tx, account: account) {
-                                newState.approveTx = approveTxs.approveTx
-                                newState.holderModeApproveTx = approveTxs.holderApproveTx
-                                newState.bondApproveTx = approveTxs.bondApproveTx
-                            }
-                        }
-                    }
-
-                    newState.transaction = tx
-                    newState.state = .loaded
-
-                    if let tx = tx {
-                        initPollTxService(id: tx.id)
-                        if let fee = tx.fee, txType == .dealInit {
-                            newState.informationFields.append(.init(
-                                title: R.string.localizable.transactionSignFieldsFee(),
-                                value: deal.allowHolderMode ?? false ? R.string.localizable.transactionSignFieldsFreeFee() : deal.token.format(amount: fee, withCode: true),
-                                titleDescription: nil,
-                                valueDescription: nil
-                            ))
-                        }
-                    }
-
-                    if let allowHolderMode = deal.allowHolderMode, allowHolderMode && txType == .dealInit {
-                        newState.informationFields.append(.init(
-                            title: R.string.localizable.transactionSignFieldsHolderMode(),
-                            value: R.string.localizable.commonOn(),
-                            titleDescription: R.string.localizable.transactionSignSubtitleHolderMode(),
-                            valueDescription: nil
-                        ))
-                    }
-                    var value: String?
-                    switch deal.performanceBondType {
-                    case .both:
-                        if deal.ownerRole == .client {
-                            value = R.string.localizable.transactionSignFieldsBondTypeBoth(deal.contractorBondFormatted(withCode: true), deal.ownerBondFormatted(withCode: true))
-                        } else {
-                            value = R.string.localizable.transactionSignFieldsBondTypeBoth(deal.ownerBondFormatted(withCode: true), deal.contractorBondFormatted(withCode: true))
-                        }
-                    case .onlyClient:
-                        if deal.ownerRole == .client {
-                            value = R.string.localizable.transactionSignFieldsBondTypeClient(deal.ownerBondFormatted(withCode: true))
-                        } else {
-                            value = R.string.localizable.transactionSignFieldsBondTypeClient(deal.contractorBondFormatted(withCode: true))
-                        }
-                    case .onlyExecutor:
-                        if deal.ownerRole == .client {
-                            value = R.string.localizable.transactionSignFieldsBondTypeExecutor(deal.contractorBondFormatted(withCode: true))
-                        } else {
-                            value = R.string.localizable.transactionSignFieldsBondTypeExecutor(deal.ownerBondFormatted(withCode: true))
-                        }
-                    case .none:
-                        break
-                    }
-
-                    if deal.performanceBondType != .none  && txType == .dealInit {
-                        newState.informationFields.append(.init(
-                            title: R.string.localizable.transactionSignFieldsBond(),
-                            value: value ?? "",
-                            titleDescription: deal.performanceBondType.shortTitle,
-                            valueDescription: nil
-                        ))
-                    }
-
-                    newState.allowSign = !newState.needFunds
-                    self.state = newState
-                } catch {
-                    var newState = self.state
-                    newState.errorState = .error(error.localizedDescription)
-                    newState.state = .loaded
-                    newState.allowSign = false
-                    self.state = newState
-                }
-            }
         case .byTransactionId:
             fatalError("No implementation .byTransactionId(let id)")
         case .byTransaction(let tx):
@@ -221,16 +129,103 @@ final class TransactionSignViewModel: ViewModel {
 
     func trigger(_ input: TransactionSignInput, after: AfterTrigger?) {
         switch input {
+        case .load:
+            switch self.state.type {
+            case .byDeal(let deal, let txType):
+                Task { @MainActor in
+                    do {
+                        var newState = self.state
+
+                        let tx = try await getTx()
+                        newState.transaction = tx
+
+                        let fundStatus = try await getFundsStatus()
+
+                        newState.needFunds = fundStatus.needFunds
+                        newState.needFundsTokens = fundStatus.needFundsTokens
+                        newState.maxGasAmount = fundStatus.maxGasAmount
+                        newState.approveTXs = fundStatus.approveTXs
+
+                        if let tx = tx {
+                            initPollTxService(id: tx.id)
+                            if let fee = tx.fee, txType == .dealInit {
+                                newState.informationFields.append(.init(
+                                    title: R.string.localizable.transactionSignFieldsFee(),
+                                    value: deal.allowHolderMode ?? false ? R.string.localizable.transactionSignFieldsFreeFee() : deal.token.format(amount: fee, withCode: true),
+                                    titleDescription: nil,
+                                    valueDescription: nil
+                                ))
+                            }
+                        }
+
+                        if let allowHolderMode = deal.allowHolderMode, allowHolderMode && txType == .dealInit {
+                            newState.informationFields.append(.init(
+                                title: R.string.localizable.transactionSignFieldsHolderMode(),
+                                value: R.string.localizable.commonOn(),
+                                titleDescription: R.string.localizable.transactionSignSubtitleHolderMode(),
+                                valueDescription: nil
+                            ))
+                        }
+                        var value: String?
+                        switch deal.performanceBondType {
+                        case .both:
+                            if deal.ownerRole == .client {
+                                value = R.string.localizable.transactionSignFieldsBondTypeBoth(deal.contractorBondFormatted(withCode: true), deal.ownerBondFormatted(withCode: true))
+                            } else {
+                                value = R.string.localizable.transactionSignFieldsBondTypeBoth(deal.ownerBondFormatted(withCode: true), deal.contractorBondFormatted(withCode: true))
+                            }
+                        case .onlyClient:
+                            if deal.ownerRole == .client {
+                                value = R.string.localizable.transactionSignFieldsBondTypeClient(deal.ownerBondFormatted(withCode: true))
+                            } else {
+                                value = R.string.localizable.transactionSignFieldsBondTypeClient(deal.contractorBondFormatted(withCode: true))
+                            }
+                        case .onlyExecutor:
+                            if deal.ownerRole == .client {
+                                value = R.string.localizable.transactionSignFieldsBondTypeExecutor(deal.contractorBondFormatted(withCode: true))
+                            } else {
+                                value = R.string.localizable.transactionSignFieldsBondTypeExecutor(deal.ownerBondFormatted(withCode: true))
+                            }
+                        case .none:
+                            break
+                        }
+
+                        if deal.performanceBondType != .none  && txType == .dealInit {
+                            newState.informationFields.append(.init(
+                                title: R.string.localizable.transactionSignFieldsBond(),
+                                value: value ?? "",
+                                titleDescription: deal.performanceBondType.shortTitle,
+                                valueDescription: nil
+                            ))
+                        }
+                        
+                        newState.state = .loaded
+                        newState.allowSign = !newState.needFunds
+                        self.state = newState
+                    } catch {
+                        var newState = self.state
+                        newState.errorState = .error(error.localizedDescription)
+                        newState.state = .loaded
+                        newState.allowSign = false
+                        self.state = newState
+                    }
+                }
+            case .byTransactionId:
+                break
+            case .byTransaction(let tx):
+                self.state.allowSign = true
+                self.initPollTxService(id: tx.id)
+            }
+
         case .approve:
             guard state.needApprove else { return }
+
             self.state.state = .approving
             Task { @MainActor in
                 do {
                     try await approveIfNeeded()
 
                     var newState = self.state
-                    newState.approveTx = nil
-                    newState.state = .loaded
                     self.state = newState
                     
                 } catch(let error) {
@@ -269,74 +264,161 @@ final class TransactionSignViewModel: ViewModel {
         }
     }
 
-    private func getApproveTxIfNeeded(deal: Deal, tx: Transaction, account: CommonAccount) async -> (approveTx: ApprovalAmount?, holderApproveTx: ApprovalAmount?, bondApproveTx: ApprovalAmount?)? {
+    private func getApproveTxIfNeeded(deal: Deal, tx: Transaction, account: CommonAccount) async -> [String]? {
         guard isNeedApprove(for: deal, txType: tx.type, account: account) else { return nil }
+        var addresses = Set<String>()
 
-        var approveTx: ApprovalAmount?
-        var holderApproveTx: ApprovalAmount?
-        var bondApproveTx: ApprovalAmount?
-
-        if let address = tx.token?.address, let checkApproveTx = try? await checkApprove(for: address) {
-            approveTx = checkApproveTx
+        if let address = tx.token?.address{
+            addresses.insert(address)
         }
+
         let alreadyRequest = tx.token?.serviced ?? false
         if !alreadyRequest && deal.allowHolderMode ?? false
             || ((deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey) || (deal.ownerRole == .executor && deal.contractorPublicKey == account.publicKey)) {
 
-            holderApproveTx = try? await checkApprove(for: nil)
+            addresses.insert("serviced") // serviced == CTUS check by backend
         }
 
         switch deal.performanceBondType {
         case .both:
             if deal.ownerPublicKey == account.publicKey {
-                bondApproveTx = try? await checkApprove(for: deal.ownerBondToken?.address)
+                if let address = deal.ownerBondToken?.address {
+                    addresses.insert(address)
+                }
             } else if deal.contractorPublicKey == account.publicKey {
-                bondApproveTx = try? await checkApprove(for: deal.contractorBondToken?.address)
+                if let address = deal.ownerBondToken?.address {
+                    addresses.insert(address)
+                }
             }
         case .onlyClient:
             if deal.ownerRole == .client && deal.ownerPublicKey == account.publicKey {
-                bondApproveTx = try? await checkApprove(for: deal.ownerBondToken?.address)
+                if let address = deal.ownerBondToken?.address {
+                    addresses.insert(address)
+                }
             } else if deal.ownerRole == .executor && deal.contractorPublicKey == account.publicKey {
-                bondApproveTx = try? await checkApprove(for: deal.contractorBondToken?.address)
+                if let address = deal.contractorBondToken?.address {
+                    addresses.insert(address)
+                }
             }
         case .onlyExecutor:
             if deal.ownerRole == .executor && deal.ownerPublicKey == account.publicKey {
-                bondApproveTx = try? await checkApprove(for: deal.ownerBondToken?.address)
+                if let address = deal.ownerBondToken?.address {
+                    addresses.insert(address)
+                }
             } else if deal.ownerRole == .client && deal.contractorPublicKey == account.publicKey {
-                bondApproveTx = try? await checkApprove(for: deal.contractorBondToken?.address)
+                if let address = deal.contractorBondToken?.address {
+                    addresses.insert(address)
+                }
             }
         case .none:
             break
         }
 
-        return (approveTx, holderApproveTx, bondApproveTx)
+        return Array(addresses)
+    }
+
+    private func getFundsStatus() async throws -> (needFunds: Bool, needFundsTokens: String, needApprove: Bool, maxGasAmount: String, approveTXs: ApprovalAmount?) {
+        var needFunds = false
+        var approveTXs: ApprovalAmount?
+        var needFundsTokens: String = ""
+        var maxGasAmount = ""
+
+        let funds = try? await checkFunds()
+        if let addresses = funds?.needApprove.compactMap({ $0.address }) {
+            approveTXs = try await self.checkApprove(for: addresses )
+        }
+
+        if let codes = funds?.needFunds, !codes.isEmpty {
+            needFunds = true
+            needFundsTokens = codes.map {$0.code}.joined(separator: ",")
+        } else {
+            needFunds = false
+            needFundsTokens = ""
+        }
+
+        if let approveTXs = approveTXs, approveTXs.maxGas > BigUInt(0) {
+            maxGasAmount = approveTXs.token.format(amount: approveTXs.maxGas, withCode: true)
+        }
+
+        return (
+            needFunds: needFunds,
+            needFundsTokens: needFundsTokens,
+            needApprove: !maxGasAmount.isEmpty,
+            maxGasAmount: maxGasAmount,
+            approveTXs: approveTXs
+        )
+    }
+
+    private func getExternalTxPollRequest(_ signature: String, callback: ((ExternalTransaction?) -> Void)? = nil) -> PollService<ExternalTransaction> {
+        let request: PollService<ExternalTransaction> = .init(request: {[weak self] cb in
+            self?.transactionsService?.getExternalTransaction(signature) { result in
+                switch result {
+                case .success(let tx):
+                    cb(.success(tx))
+                case .failure(let error):
+                    cb(.failure(error))
+                }
+            }
+        })
+
+        request.handler = { tx in
+            callback?(tx)
+            if tx?.status == .finished {
+                return .success
+            } else if tx?.status == .error {
+                return .error()
+            }
+            return .wait
+        }
+        return request
     }
 
     private func approveIfNeeded() async throws {
-        if let tx = state.approveTx, tx.needApproval {
-            let result = try await self.sendApprove(tx: tx, signer: state.account)
+        var requests = [PollService<ExternalTransaction>]()
+
+        for tx in state.approveTXs?.rawTransactions ?? [] {
+            let result = try await self.sendApprove(unsignedTx: tx, signer: state.account)
             if let signature = result.data?.signature {
-                initPollApproveTxService(signature: signature)
+                requests.append(getExternalTxPollRequest(signature))
             }
+        }
+        approvePollGroup.reset()
+        approvePollGroup.add(requests)
+        approvePollGroup.didFinish = { result in
+            switch result {
+            case .allSuccess, .allError, .someError:
+                Task { @MainActor [weak self] in
+                    guard let self = self else { return }
+
+                    let fundStatus = try await getFundsStatus()
+                    var newState = self.state
+                    newState.needFunds = fundStatus.needFunds
+                    newState.needFundsTokens = fundStatus.needFundsTokens
+                    newState.maxGasAmount = fundStatus.maxGasAmount
+                    newState.approveTXs = fundStatus.approveTXs
+
+                    if result == .allError || result == .someError {
+                        newState.errorState = .error("Some errors in approve. Please, try again.")
+                    }
+
+                    self.state = newState
+                }
+            }
+
         }
 
-        if let holderModeTx = state.holderModeApproveTx, holderModeTx.needApproval {
-            let result = try await self.sendApprove(tx: holderModeTx, signer: state.account)
-            if let signature = result.data?.signature {
-                initPollServicedApproveTxService(signature: signature)
-            }
-        }
+        approvePollGroup.startAll()
     }
 
     private func initPollTxService(id: String) -> Void {
         guard let transactionsService = self.transactionsService else { return }
-        self.pollTxService = .init(request: { [weak self] callback in
+        self.pollTxService = .init(request: { callback in
             transactionsService.getTransaction(id: id) { result in
                 switch result {
                 case .success(let tx):
-                    callback(tx)
-                case .failure:
-                    self?.pollTxService?.endPoll()
+                    callback(.success(tx))
+                case .failure(let error):
+                    callback(.failure(error))
                 }
             }
         })
@@ -344,65 +426,12 @@ final class TransactionSignViewModel: ViewModel {
             self?.state.transaction = tx
             if tx?.status == .finished {
                 ImpactGenerator.success()
-                self?.pollTxService?.endPoll()
+                return .success
             } else if tx?.status == .error {
                 ImpactGenerator.error()
-                self?.pollTxService?.endPoll()
+                return .error()
             }
-        }
-    }
-
-    private func initPollApproveTxService(signature: String) -> Void {
-        guard let transactionsService = self.transactionsService else { return }
-        self.pollApproveTxService = .init(request: { [weak self] callback in
-            transactionsService.getExternalTransaction(signature) { result in
-                switch result {
-                case .success(let tx):
-                    callback(tx)
-                case .failure:
-                    self?.pollApproveTxService?.endPoll()
-                }
-            }
-        })
-        self.pollApproveTxService?.handler = {[weak self] tx in
-            self?.state.approveStatus = tx?.status
-            if tx?.status == .finished {
-                DispatchQueue.main.async {
-                    self?.state.approveTx = nil
-                }
-                self?.pollApproveTxService?.endPoll()
-            } else if tx?.status == .error {
-                ImpactGenerator.error()
-                self?.state.errorState = .approveError
-                self?.pollApproveTxService?.endPoll()
-            }
-        }
-    }
-
-    private func initPollServicedApproveTxService(signature: String) -> Void {
-        guard let transactionsService = self.transactionsService else { return }
-        self.pollServicedApproveTxService = .init(request: { [weak self] callback in
-            transactionsService.getExternalTransaction(signature) { result in
-                switch result {
-                case .success(let tx):
-                    callback(tx)
-                case .failure:
-                    self?.pollServicedApproveTxService?.endPoll()
-                }
-            }
-        })
-        self.pollApproveTxService?.handler = {[weak self] tx in
-            self?.state.approveStatus = tx?.status
-            if tx?.status == .finished {
-                DispatchQueue.main.async {
-                    self?.state.holderModeApproveTx = nil
-                }
-                self?.pollServicedApproveTxService?.endPoll()
-            } else if tx?.status == .error {
-                ImpactGenerator.error()
-                self?.state.errorState = .approveError
-                self?.pollServicedApproveTxService?.endPoll()
-            }
+            return .wait
         }
     }
 
@@ -430,10 +459,10 @@ final class TransactionSignViewModel: ViewModel {
         })
     }
 
-    private func checkApprove(for tokenAddress: String?) async throws -> ApprovalAmount? {
+    private func checkApprove(for tokenAddresses: [String]) async throws -> ApprovalAmount? {
         guard state.account.blockchain == .bsc else { return nil }
         return try await withCheckedThrowingContinuation { [weak self] continuation in
-            self?.transactionsService?.getApprovalAmountTransaction(for: tokenAddress, completion: { result in
+            self?.transactionsService?.getApprovalAmountTransaction(for: Array(Set(tokenAddresses)), completion: { result in
                 switch result {
                 case .success(let result):
                     continuation.resume(returning: result)
@@ -444,13 +473,9 @@ final class TransactionSignViewModel: ViewModel {
         }
     }
 
-    private func sendApprove(tx: ApprovalAmount, signer: Signer) async throws -> TransactionResult {
+    private func sendApprove(unsignedTx: ApprovalUnsignedTransaction, signer: Signer) async throws -> TransactionResult {
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             do {
-                guard let unsignedTx = tx.rawTransaction else {
-                    continuation.resume(throwing: TransactionSignServiceError.transactionIsEmpty)
-                    return
-                }
 
                 let signedTx = try self?.transactionSignService?.sign(tx: unsignedTx, by: signer, type: .common)
 
