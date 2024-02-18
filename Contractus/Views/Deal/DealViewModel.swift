@@ -141,7 +141,7 @@ struct DealState {
     }
 
     var canEditResult: Bool {
-        guard deal.status == .started  else { return false }
+        guard deal.status == .started else { return false }
         return canEdit && executorPublicKey == account.publicKey
     }
 

@@ -147,11 +147,11 @@ struct TransactionDetailFieldView: View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.callout)
+                    .font(.callout.weight(.semibold))
                     .foregroundColor(R.color.textBase.color)
                 if let titleDescription = titleDescription {
                     Text(titleDescription)
-                        .font(.footnote)
+                        .font(.caption2)
                         .foregroundColor(R.color.secondaryText.color)
                 }
             }

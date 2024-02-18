@@ -136,7 +136,7 @@ struct DealView: View {
                                             }
                                         }
                                         Spacer()
-                                        if !viewModel.state.ownerIsClient && viewModel.state.isYouExecutor && viewModel.state.canEditDeal{
+                                        if !viewModel.state.ownerIsClient && viewModel.state.isYouExecutor && viewModel.state.canEditDeal {
                                             CButton(
                                                 title: viewModel.state.clientPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(),
                                                 style: .secondary,
@@ -790,7 +790,12 @@ struct DealView: View {
                                     Spacer()
                                     
                                     if viewModel.state.canSendResult {
-                                        CButton(title: (viewModel.state.deal.result?.contentIsEmpty ?? true) ? R.string.localizable.commonAdd() : R.string.localizable.commonEdit(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEditResult) {
+                                        CButton(
+                                            title: (viewModel.state.deal.result?.contentIsEmpty ?? true) ? R.string.localizable.commonAdd() : R.string.localizable.commonEdit(),
+                                            style: .secondary, size: .default,
+                                            isLoading: false,
+                                            isDisabled: !viewModel.state.canEditResult
+                                        ) {
                                             EventService.shared.send(event: DefaultAnalyticsEvent.dealResultTap)
                                             activeFullScreenType = .editTextDealResult
                                         }
@@ -1369,7 +1374,7 @@ struct DealView: View {
                     }
 
                 }
-                ForEach(viewModel.currentMainActions) { actionType in
+                ForEach(viewModel.state.currentMainActions) { actionType in
                     switch actionType {
                     case .none:
                         EmptyView()

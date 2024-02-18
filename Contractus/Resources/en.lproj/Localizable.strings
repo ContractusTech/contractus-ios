@@ -443,7 +443,7 @@
 "transactionSign.subtitle.processing" = "Processing...";
 "transactionSign.subtitle.error" = "Try again";
 "transactionSign.subtitle.finished" = "Transaction completed successfully";
-"transactionSign.subtitle.holder-mode" = "For the period of the deal will be lock 10k CTUS";
+"transactionSign.subtitle.holder-mode" = "The client account will be frozen 10k CTUS for the duration of the deal. After completion of deal, the funds will be returned to the client's account.";
 "transactionSign.needFunds.title" = "Insufficient funds";
 "transactionSign.needFunds.text" = "To sign the deal, please, top up your balance of token(s) %@.";
 "transactionSign.mexFee.text" = "Max fee %@.";
@@ -490,6 +490,7 @@
 "referral.prize.apply.refferer" = "For using my promo code";
 "referral.prize.unknown" = "Unsupported prize, update the app";
 "referral.prize.times" = "times";
+"referral.prize.first-deal" = "For completing first deal";
 
 "promocode.title" = "Promocode";
 "promocode.enter" = "Enter promo";

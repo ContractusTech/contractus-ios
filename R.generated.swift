@@ -1165,7 +1165,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 502 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 503 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -2023,6 +2023,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let mainItemTypeIsClient = Rswift.StringResource(key: "main.item-type.isClient", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: For completing first deal
+      ///
+      /// Locales: en
+      static let referralPrizeFirstDeal = Rswift.StringResource(key: "referral.prize.first-deal", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: For edit and sign contract partner must have this data.
       ///
       /// Locales: en
@@ -2031,10 +2035,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let mainItemTypeIsExecutor = Rswift.StringResource(key: "main.item-type.isExecutor", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: For the period of the deal will be lock 10k CTUS
-      ///
-      /// Locales: en
-      static let transactionSignSubtitleHolderMode = Rswift.StringResource(key: "transactionSign.subtitle.holder-mode", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: For using my promo code
       ///
       /// Locales: en
@@ -2751,6 +2751,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let addContractorErrorChecker = Rswift.StringResource(key: "addContractor.error.checker", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: The client account will be frozen 10k CTUS for the duration of the deal. After completion of deal, the funds will be returned to the client's account.
+      ///
+      /// Locales: en
+      static let transactionSignSubtitleHolderMode = Rswift.StringResource(key: "transactionSign.subtitle.holder-mode", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: The client's funds will be refunded and the deal will canceled
       ///
       /// Locales: en
@@ -6412,6 +6416,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("main.item-type.isClient", bundle: bundle, comment: "")
       }
 
+      /// en translation: For completing first deal
+      ///
+      /// Locales: en
+      static func referralPrizeFirstDeal(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("referral.prize.first-deal", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "referral.prize.first-deal"
+        }
+
+        return NSLocalizedString("referral.prize.first-deal", bundle: bundle, comment: "")
+      }
+
       /// en translation: For edit and sign contract partner must have this data.
       ///
       /// Locales: en
@@ -6440,21 +6459,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("main.item-type.isExecutor", bundle: bundle, comment: "")
-      }
-
-      /// en translation: For the period of the deal will be lock 10k CTUS
-      ///
-      /// Locales: en
-      static func transactionSignSubtitleHolderMode(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("transactionSign.subtitle.holder-mode", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "transactionSign.subtitle.holder-mode"
-        }
-
-        return NSLocalizedString("transactionSign.subtitle.holder-mode", bundle: bundle, comment: "")
       }
 
       /// en translation: For using my promo code
@@ -9152,6 +9156,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("addContractor.error.checker", bundle: bundle, comment: "")
+      }
+
+      /// en translation: The client account will be frozen 10k CTUS for the duration of the deal. After completion of deal, the funds will be returned to the client's account.
+      ///
+      /// Locales: en
+      static func transactionSignSubtitleHolderMode(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("transactionSign.subtitle.holder-mode", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "transactionSign.subtitle.holder-mode"
+        }
+
+        return NSLocalizedString("transactionSign.subtitle.holder-mode", bundle: bundle, comment: "")
       }
 
       /// en translation: The client's funds will be refunded and the deal will canceled

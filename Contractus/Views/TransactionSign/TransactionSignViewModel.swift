@@ -324,7 +324,7 @@ final class TransactionSignViewModel: ViewModel {
         var maxGasAmount = ""
 
         let funds = try? await checkFunds()
-        if let addresses = funds?.needApprove.compactMap({ $0.address }) {
+        if let addresses = funds?.needApprove.compactMap({ $0.address }), !addresses.isEmpty {
             approveTXs = try await self.checkApprove(for: addresses )
         }
 
