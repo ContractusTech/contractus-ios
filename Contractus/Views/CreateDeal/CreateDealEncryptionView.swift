@@ -18,8 +18,8 @@ struct CreateDealEncryptionView: View {
     @EnvironmentObject var viewModel: AnyViewModel<CreateDealState, CreateDealInput>
     
     @State var nextStep: Bool = false
-    @State private var enableEncryption: Bool = true
-    
+    @State private var enableEncryption: Bool = false
+
     var body: some View {
         ZStack {
             NavigationLink(
@@ -50,9 +50,15 @@ struct CreateDealEncryptionView: View {
                                 
                 HStack {
                     Toggle(isOn: $enableEncryption.animation(.easeInOut(duration: 0.1))) {
-                        Text(R.string.localizable.newDealEncryptCaption())
-                            .font(.body)
-                            .fontWeight(.semibold)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(R.string.localizable.newDealEncryptCaption())
+                                .font(.body)
+                                .fontWeight(.semibold)
+                            Text(R.string.localizable.newDealEncryptWarning())
+                                .font(.footnote)
+                                .foregroundColor(R.color.secondaryText.color)
+                        }
+
                     }
                 }
                 .padding(16)

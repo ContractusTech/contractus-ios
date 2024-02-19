@@ -1165,7 +1165,7 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 503 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 504 localization keys.
     struct localizable {
       /// en translation: 
       ///
@@ -1399,6 +1399,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let commonAttention = Rswift.StringResource(key: "common.attention", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
+      /// en translation: Available in the mobile app only. In WebApp you or your partner cannot edit/view deal details.
+      ///
+      /// Locales: en
+      static let newDealEncryptWarning = Rswift.StringResource(key: "newDeal.encrypt.warning", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
       /// en translation: Backup
       ///
       /// Locales: en
@@ -4064,6 +4068,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("common.attention", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Available in the mobile app only. In WebApp you or your partner cannot edit/view deal details.
+      ///
+      /// Locales: en
+      static func newDealEncryptWarning(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("newDeal.encrypt.warning", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "newDeal.encrypt.warning"
+        }
+
+        return NSLocalizedString("newDeal.encrypt.warning", bundle: bundle, comment: "")
       }
 
       /// en translation: Backup

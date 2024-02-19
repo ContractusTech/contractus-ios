@@ -321,6 +321,7 @@
 "newDeal.encrypt.title" = "Detail encryption";
 "newDeal.encrypt.subtitle" = "Deal description and files will be encrypted only deal participants can decrypt and view them.";
 "newDeal.encrypt.caption" = "Enable encryption";
+"newDeal.encrypt.warning" = "Available in the mobile app only. In WebApp you or your partner cannot edit/view deal details.";
 "newDeal.confirm.title" = "Confirmation";
 "newDeal.confirm.subtitle" = "Deal description and files will be encrypted only deal participants can decrypt and view them.";
 "newDeal.confirm.role.title" = "Your role";
