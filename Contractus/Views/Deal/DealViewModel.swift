@@ -137,7 +137,12 @@ struct DealState {
     }
 
     var hasSecretKey: Bool {
-        !(deal.encryptedSecretKey?.isEmpty ?? true)
+        !(deal.encryptedSecretKey?.isEmpty ?? false)
+    }
+
+    var canEditResult: Bool {
+        guard deal.status == .started else { return false }
+        return canEdit && executorPublicKey == account.publicKey
     }
 
     var editIsVisible: Bool = false
@@ -195,8 +200,7 @@ struct DealState {
     var currentMainActions: [MainActionType] = []
 
     var displayInformationForSign: Bool {
-        deal.status == .new && isOwnerDeal
-        && (!currentMainActions.contains(.cancelSign) && !currentMainActions.contains(.sign))
+        deal.status == .new && isOwnerDeal && (!currentMainActions.contains(.cancelSign) && !currentMainActions.contains(.sign))
     }
 }
 
@@ -243,7 +247,7 @@ final class DealViewModel: ViewModel {
                     await updateActions()
 
                 } catch(let error) {
-                    state.errorState = .error(error.readableDescription)
+                    state.errorState = .error(error.localizedDescription)
                     state.state = .none
                 }
             }
@@ -402,7 +406,7 @@ final class DealViewModel: ViewModel {
                     switch result {
                     case .failure(let error):
                         debugPrint(error)
-                        self.state.errorState = .error(error.readableDescription)
+                        self.state.errorState = .error(error.localizedDescription)
                         self.state.state = .none
                     case .finished:
                         after?()

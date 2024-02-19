@@ -28,6 +28,8 @@ fileprivate enum Constants {
     static let doneStatusImage = Image(systemName: "checkmark.seal.fill")
     static let cancelStatusImage = Image(systemName: "exclamationmark.octagon.fill")
     static let startedStatusImage = Image(systemName: "bolt.fill")
+    static let closeImage = Image(systemName: "xmark")
+    static let expiredStatusImage = Image(systemName: "calendar.badge.exclamationmark")
 }
 
 struct DealView: View {
@@ -65,7 +67,7 @@ struct DealView: View {
         case importSharedKey
         case filePreview(URL)
         case shareDeal
-        case signTx(TransactionType)
+        case signTx(ContractusAPI.TransactionType)
     }
 
     @Environment(\.presentationMode) var presentationMode
@@ -104,35 +106,7 @@ struct DealView: View {
             } else {
                 VStack {
                     // MARK: - No secret key
-                    if viewModel.state.state == .none && !viewModel.state.canEdit {
-                        HStack(spacing: 1) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(R.string.localizable.dealNoSecretKey())
-                                    .foregroundColor(R.color.textBase.color)
-                                    .font(.body.weight(.semibold))
-                                    .multilineTextAlignment(.leading)
-                                Text(R.string.localizable.dealNoSecretKeyInformation())
-                                    .font(.footnote)
-                                    .foregroundColor(R.color.textBase.color)
-                                    .multilineTextAlignment(.leading)
-                            }
-                            Spacer()
-                            
-                            CButton(
-                                title: R.string.localizable.commonImport(),
-                                style: .warn,
-                                size: .default,
-                                isLoading: false) {
-                                    activeModalType = .importSharedKey
-                                }
-                        }
-                        .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
-                        .background {
-                            RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.yellow.color)
-                        }
-                        .cornerRadius(20)
-                        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
-                    }
+                    notFoundSecretKeyView()
                     dealStatusView()
 
                     VStack {
@@ -162,7 +136,7 @@ struct DealView: View {
                                             }
                                         }
                                         Spacer()
-                                        if !viewModel.state.ownerIsClient && viewModel.state.isYouExecutor && viewModel.state.canEditDeal{
+                                        if !viewModel.state.ownerIsClient && viewModel.state.isYouExecutor && viewModel.state.canEditDeal {
                                             CButton(
                                                 title: viewModel.state.clientPublicKey.isEmpty ? R.string.localizable.commonSet() : R.string.localizable.commonEdit(),
                                                 style: .secondary,
@@ -629,6 +603,11 @@ struct DealView: View {
                 HStack {
                     Text(R.string.localizable.dealTextDetails())
                         .font(.title.weight(.regular))
+
+                    if !(viewModel.state.deal.meta?.contentIsEmpty ?? true) && viewModel.state.withEncryption {
+                        Label(text: R.string.localizable.commonEncrypted(), type: .default)
+                    }
+
                     Spacer()
                 }
                 .padding(EdgeInsets(top: 20, leading: 12, bottom: 12, trailing: 12))
@@ -641,9 +620,6 @@ struct DealView: View {
                                 HStack(spacing: 8) {
                                     Text(R.string.localizable.dealTextText())
                                         .font(.title3.weight(.regular))
-                                    if !(viewModel.state.deal.meta?.contentIsEmpty ?? true) && viewModel.state.withEncryption {
-                                        Label(text: R.string.localizable.commonEncrypted(), type: .default)
-                                    }
                                 }
                                 
                                 Spacer()
@@ -788,7 +764,13 @@ struct DealView: View {
                                 Text(R.string.localizable.dealResultsTitle())
                                     .font(.title.weight(.regular))
                                     .foregroundColor(R.color.textBase.color)
+
+                                if !viewModel.state.deal.resultIsEmpty && viewModel.state.withEncryption {
+                                    Label(text: R.string.localizable.commonEncrypted(), type: .default)
+                                }
+                                
                                 Spacer()
+
                             }
                             Text(R.string.localizable.dealResultsHint())
                                 .font(.footnote)
@@ -808,7 +790,12 @@ struct DealView: View {
                                     Spacer()
                                     
                                     if viewModel.state.canSendResult {
-                                        CButton(title: (viewModel.state.deal.result?.contentIsEmpty ?? true) ? R.string.localizable.commonAdd() : R.string.localizable.commonOpen(), style: .secondary, size: .default, isLoading: false) {
+                                        CButton(
+                                            title: (viewModel.state.deal.result?.contentIsEmpty ?? true) ? R.string.localizable.commonAdd() : R.string.localizable.commonEdit(),
+                                            style: .secondary, size: .default,
+                                            isLoading: false,
+                                            isDisabled: !viewModel.state.canEditResult
+                                        ) {
                                             EventService.shared.send(event: DefaultAnalyticsEvent.dealResultTap)
                                             activeFullScreenType = .editTextDealResult
                                         }
@@ -863,7 +850,7 @@ struct DealView: View {
                                         .font(.title3.weight(.regular))
                                     Spacer()
                                     if viewModel.state.canSendResult {
-                                        CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false) {
+                                        CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEditResult) {
                                             EventService.shared.send(event: DefaultAnalyticsEvent.dealResultAddFileTap)
                                             viewModel.trigger(.uploaderContentType(.result))
                                             resultUploaderState = .medium
@@ -1250,6 +1237,16 @@ struct DealView: View {
             EventService.shared.send(event: DefaultAnalyticsEvent.dealOpen)
         }
         .toolbar {
+            ToolbarItemGroup(placement: .navigationBarLeading) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Constants.closeImage
+                        .resizable()
+                        .frame(width: 21, height: 21)
+                        .foregroundColor(R.color.textBase.color)
+                }
+            }
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 if viewModel.state.isOwnerDeal {
                     Button {
@@ -1367,7 +1364,7 @@ struct DealView: View {
     private func actionsView() -> some View {
         VStack {
             VStack(alignment: .center, spacing: 16) {
-                if viewModel.displayInformationForSign {
+                if viewModel.state.displayInformationForSign {
                     VStack(spacing: 8) {
                         CButton(title: R.string.localizable.dealButtonsSign(), style: .primary, size: .large, isLoading: false, isDisabled: true) { }
                         Text(R.string.localizable.dealInformationAboutSign(viewModel.account.blockchain.title))
@@ -1377,7 +1374,7 @@ struct DealView: View {
                     }
 
                 }
-                ForEach(viewModel.currentMainActions) { actionType in
+                ForEach(viewModel.state.currentMainActions) { actionType in
                     switch actionType {
                     case .none:
                         EmptyView()
@@ -1486,66 +1483,106 @@ struct DealView: View {
     }
 
     @ViewBuilder
+    func dealStatusImageView() -> some View {
+        switch viewModel.state.deal.status {
+        case .finished:
+            Constants.doneStatusImage
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 24, height: 24)
+                .foregroundColor(R.color.baseGreen.color)
+        case .canceled, .revoked:
+            Constants.cancelStatusImage
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 24, height: 24)
+                .foregroundColor(R.color.secondaryText.color)
+        case .started:
+            if let deadline = viewModel.state.deal.deadline, deadline < Date() {
+                Constants.expiredStatusImage
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(R.color.yellow.color)
+            } else {
+                Constants.startedStatusImage
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(R.color.blue.color)
+            }
+        case .finishing, .canceling, .starting:
+            EmptyView()
+
+        case .unknown, .new:
+            EmptyView()
+        }
+    }
+    @ViewBuilder
+    func notFoundSecretKeyView() -> some View {
+        if viewModel.state.state == .none && !viewModel.state.canEdit {
+            HStack(spacing: 1) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(R.string.localizable.dealNoSecretKey())
+                        .foregroundColor(R.color.textBase.color)
+                        .font(.body.weight(.semibold))
+                        .multilineTextAlignment(.leading)
+                    Text(R.string.localizable.dealNoSecretKeyInformation())
+                        .font(.footnote)
+                        .foregroundColor(R.color.textBase.color)
+                        .multilineTextAlignment(.leading)
+                }
+                Spacer()
+
+                CButton(
+                    title: R.string.localizable.commonImport(),
+                    style: .warn,
+                    size: .default,
+                    isLoading: false) {
+                        activeModalType = .importSharedKey
+                    }
+            }
+            .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
+            .background {
+                RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.yellow.color)
+            }
+            .cornerRadius(20)
+            .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+        } else {
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder
     func dealStatusView() -> some View {
 
         switch viewModel.state.deal.status {
-        case .finished, .canceled, .revoked:
-            VStack {
-                HStack {
-                    Spacer()
-                    VStack(spacing: 8) {
-                        if viewModel.state.deal.status == .finished {
-                            Constants.doneStatusImage
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(R.color.baseGreen.color)
-                        } else {
-                            Constants.cancelStatusImage
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 24, height: 24)
+        case .finished, .canceled, .revoked, .started:
+            if let deadline = viewModel.state.deal.deadline, deadline < Date(),
+               !viewModel.currentMainActions.contains(.cancelDeal) {
+                EmptyView()
+            } else {
+                VStack {
+                    HStack {
+                        Spacer()
+                        VStack(spacing: 8) {
+                            dealStatusImageView()
+                            
+                            Text(statusTitle())
+                                .font(.body.weight(.bold))
+                                .foregroundColor(R.color.textBase.color)
+                            Text(statusSubtitle())
+                                .font(.footnote)
                                 .foregroundColor(R.color.secondaryText.color)
+                                .multilineTextAlignment(.center)
                         }
-                        Text(statusTitle(status: viewModel.state.deal.status))
-                            .font(.body.weight(.bold))
-                            .foregroundColor(R.color.textBase.color)
-                        Text(statusSubtitle(status: viewModel.state.deal.status))
-                            .font(.footnote)
-                            .foregroundColor(R.color.secondaryText.color)
-                            .multilineTextAlignment(.center)
+                        Spacer()
                     }
-                    Spacer()
+                    .padding(14)
+                    .background(R.color.secondaryBackground.color)
+                    .cornerRadius(20)
+                    .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
                 }
-                .padding(14)
-                .background(R.color.secondaryBackground.color)
-                .cornerRadius(20)
-                .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
-            }
-        case .started:
-            VStack {
-                HStack {
-                    Spacer()
-                    VStack(spacing: 8) {
-                        Constants.startedStatusImage
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 24, height: 24)
-                            .foregroundColor(R.color.blue.color)
-                        Text(statusTitle(status: viewModel.state.deal.status))
-                            .font(.body.weight(.bold))
-                            .foregroundColor(R.color.textBase.color)
-                        Text(statusSubtitle(status: viewModel.state.deal.status))
-                            .font(.footnote)
-                            .foregroundColor(R.color.secondaryText.color)
-                            .multilineTextAlignment(.center)
-                    }
-                    Spacer()
-                }
-                .padding(14)
-                .background(R.color.secondaryBackground.color)
-                .cornerRadius(20)
-                .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
             }
         case .finishing, .canceling, .starting:
             EmptyView()
@@ -1555,19 +1592,26 @@ struct DealView: View {
         }
     }
 
-    private func statusTitle(status: DealStatus) -> String {
-        if status == .finished {
+    private func statusTitle() -> String {
+        if let deadline = viewModel.state.deal.deadline, deadline < Date() && viewModel.state.deal.status == .started {
+            return R.string.localizable.dealStatusExpiredTitle()
+        }
+
+        if viewModel.state.deal.status == .finished {
             return R.string.localizable.dealStatusFinishedTitle()
         }
 
-        if status == .started {
+        if viewModel.state.deal.status == .started {
             return R.string.localizable.dealStatusStartedTitle()
         }
         return R.string.localizable.dealStatusCanceledTitle()
     }
 
-    private func statusSubtitle(status: DealStatus) -> String {
-        if status == .started {
+    private func statusSubtitle() -> String {
+        if let deadline = viewModel.state.deal.deadline, deadline < Date() && viewModel.state.deal.status == .started {
+            return R.string.localizable.dealStatusExpiredSubtitle()
+        }
+        if viewModel.state.deal.status == .started {
             if viewModel.isYouExecutor {
                 return R.string.localizable.dealStatusStartedSubtitleExecutor(Date.fullRelativeDateFormatted(from: Date(), to: viewModel.deal.deadline))
             }
@@ -1579,10 +1623,10 @@ struct DealView: View {
             return R.string.localizable.dealStatusStartedSubtitleClient(Date.fullRelativeDateFormatted(from: Date(), to: viewModel.deal.deadline))
 
         }
-        if status == .revoked {
+        if viewModel.state.deal.status == .revoked {
             return R.string.localizable.dealStatusRevokedSubtitle()
         }
-        if status == .canceled {
+        if viewModel.state.deal.status == .canceled {
             return R.string.localizable.dealStatusCanceledSubtitle()
         }
         if viewModel.state.checkerIsEmpty {

@@ -18,75 +18,15 @@ fileprivate enum Constants {
     static let settings = Image(systemName: "slider.horizontal.3")
 }
 
-struct BalanceViewModel {
-
-    struct WrapTokens {
-        let tokens: [Balance.TokenInfo]
-    }
-
-    let estimateAmountFormatted: String
-    let wrap: WrapTokens
-    let servicedToken: Balance.TokenInfo?
-    let tokens: [Balance.TokenInfo]
-    let tier: Balance.Tier
-    var canWrap: Bool {
-        wrap.tokens.count == 2
-    }
-
-    init(balance: Balance, currency: Currency = .defaultCurrency) {
-        estimateAmountFormatted = currency.format(double: balance.estimateAmount, withCode: true) ?? ""
-        var tokens: [Balance.TokenInfo] = []
-        var wrap: [Balance.TokenInfo] = []
-        var servicedToken: Balance.TokenInfo?
-        balance.tokens.forEach { item in
-            if servicedToken == nil && item.amount.token.serviced {
-                servicedToken = item
-                return
-            }
-            if balance.wrap.contains(item.amount.token.code) {
-                wrap.append(item)
-            } else {
-                tokens.append(item)
-            }
-        }
-        self.servicedToken = servicedToken
-        self.wrap = .init(tokens: wrap)
-        self.tokens = tokens
-        self.tier = balance.tier
-    }
-}
-
 struct BalanceView: View {
-
-    enum BalanceState {
-        case empty
-        case loaded(BalanceViewModel)
-    }
-
-    struct Coin: Identifiable, Equatable {
-        static func == (lhs: BalanceView.Coin, rhs: BalanceView.Coin) -> Bool {
-            lhs.id == rhs.id
-        }
-
-        var id: String {
-            self.amount.token.address ?? self.amount.token.code
-        }
-
-        let amount: Amount
-        var logo: Image {
-            guard let image = UIImage(named: "\(self.amount.token.code)-CoinLogo") else {
-                return Constants.noneCoinImage
-            }
-            return Image(uiImage: image)
-        }
-    }
-
     var state: BalanceState = .empty
+    let allowTransfer: Bool
     var topUpAction: () -> Void
     var infoAction: () -> Void
     var swapAction: (Amount, Amount) -> Void
     var settingsAction: () -> Void
     var sendAction: () -> Void
+
 
     @State private var isTokensVisible = FlagsStorage.shared.mainTokensVisibility
 
@@ -127,7 +67,6 @@ struct BalanceView: View {
                 }
                 .padding(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
                 Spacer()
-
                 Button {
                     sendAction()
                 } label: {
@@ -139,8 +78,8 @@ struct BalanceView: View {
                 }
                 .frame(width: 42, height: 42, alignment: .center)
                 .buttonStyle(RoundedSecondaryMediumButton())
-                .disabled(isLoading)
-                .opacity(isLoading ? 0.4 : 1.0)
+                .disabled(isLoading || !allowTransfer)
+                .opacity(isLoading || !allowTransfer ? 0.4 : 1.0)
 
                 Button {
                     topUpAction()
@@ -380,8 +319,74 @@ struct BalanceView: View {
         switch state {
         case .empty:
             return true
-        case .loaded(let balanceViewModel):
+        case .loaded:
             return false
+        }
+    }
+}
+
+extension BalanceView {
+    struct Model {
+
+        struct WrapTokens {
+            let tokens: [Balance.TokenInfo]
+        }
+
+        let estimateAmountFormatted: String
+        let wrap: WrapTokens
+        let servicedToken: Balance.TokenInfo?
+        let tokens: [Balance.TokenInfo]
+        let tier: Balance.Tier
+        let allowWrap: Bool
+
+        var canWrap: Bool {
+            wrap.tokens.count == 2 && allowWrap
+        }
+
+        init(balance: Balance, allowWrap: Bool, currency: Currency = .defaultCurrency) {
+            estimateAmountFormatted = currency.format(double: balance.estimateAmount, withCode: true) ?? ""
+            var tokens: [Balance.TokenInfo] = []
+            var wrap: [Balance.TokenInfo] = []
+            var servicedToken: Balance.TokenInfo?
+            balance.tokens.forEach { item in
+                if servicedToken == nil && item.amount.token.serviced {
+                    servicedToken = item
+                    return
+                }
+                if balance.wrap.contains(item.amount.token.code) {
+                    wrap.append(item)
+                } else {
+                    tokens.append(item)
+                }
+            }
+            self.servicedToken = servicedToken
+            self.wrap = .init(tokens: wrap)
+            self.tokens = tokens
+            self.tier = balance.tier
+            self.allowWrap = allowWrap
+        }
+    }
+
+    enum BalanceState {
+        case empty
+        case loaded(Model)
+    }
+
+    struct Coin: Identifiable, Equatable {
+        static func == (lhs: BalanceView.Coin, rhs: BalanceView.Coin) -> Bool {
+            lhs.id == rhs.id
+        }
+
+        var id: String {
+            self.amount.token.address ?? self.amount.token.code
+        }
+
+        let amount: Amount
+        var logo: Image {
+            guard let image = UIImage(named: "\(self.amount.token.code)-CoinLogo") else {
+                return Constants.noneCoinImage
+            }
+            return Image(uiImage: image)
         }
     }
 }
@@ -402,7 +407,7 @@ struct BalanceView_Previews: PreviewProvider {
 
     static var previews: some View {
         VStack {
-            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"], tier: .basic)))) {
+            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"], tier: .basic), allowWrap: true)), allowTransfer: true) {
 
             } infoAction: { 
                 
@@ -414,7 +419,7 @@ struct BalanceView_Previews: PreviewProvider {
 
             }
 
-            BalanceView(state: .empty) {
+            BalanceView(state: .empty, allowTransfer: true) {
 
             } infoAction: { } swapAction: { _, _ in
 
@@ -428,7 +433,7 @@ struct BalanceView_Previews: PreviewProvider {
         .preferredColorScheme(.light)
 
         VStack {
-            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"], tier: .basic)))) {
+            BalanceView(state: .loaded(.init(balance: .init(estimateAmount: 14.0, tokens: [.init(price: 0, currency: .defaultCurrency, amount: .init(.init("0"), token: Mock.tokenSOL))], blockchain: "solana", wrap: ["SOL", "WSOL"], tier: .basic), allowWrap: true)), allowTransfer: true) {
 
             } infoAction: { } swapAction: { _, _ in
 
@@ -438,7 +443,7 @@ struct BalanceView_Previews: PreviewProvider {
 
             }
 
-            BalanceView(state: .empty) {
+            BalanceView(state: .empty, allowTransfer: false) {
 
             } infoAction: { } swapAction: { _, _ in
 
@@ -450,7 +455,5 @@ struct BalanceView_Previews: PreviewProvider {
         }
         .baseBackground()
         .preferredColorScheme(.dark)
-
-
     }
 }

@@ -8,5 +8,5 @@
 import Foundation
 
 public struct Success: Codable {
-    let success: Bool
+    public let success: Bool
 }

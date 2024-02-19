@@ -47,7 +47,7 @@ struct QRCodeScannerView: View {
                             case .success(let result):
                                 viewModel.trigger(.parse(result.string))
                             case .failure(let error):
-                                errorText = error.readableDescription
+                                errorText = error.localizedDescription
                             }
                         }
                         .frame(width: 320, height: 320)

@@ -326,7 +326,14 @@ public struct CancelDeal: Codable {
 }
 
 public enum TransactionType: String, Codable {
-    case dealInit = "DEAL_INIT", dealFinish = "DEAL_FINISH", dealCancel = "DEAL_CANCELED", wrapSOL = "WRAP_SOL", unwrapAllSOL = "UNWRAP_ALL_SOL", transfer = "TRANSFER"
+    case dealInit = "DEAL_INIT", 
+         dealFinish = "DEAL_FINISH",
+         dealCancel = "DEAL_CANCELED",
+         wrapSOL = "WRAP_SOL",
+         unwrapAllSOL = "UNWRAP_ALL_SOL",
+         transfer = "TRANSFER",
+         wrap = "WRAP",
+         unwrap = "UNWRAP"
 }
 
 public enum AmountFeeType: String, Codable {
@@ -376,4 +383,10 @@ public struct DealFee: Decodable {
         self.percent = try container.decode(Double.self, forKey: DealFee.CodingKeys.percent)
         self.type = try container.decode(AmountFeeType.self, forKey: DealFee.CodingKeys.type)
     }
+}
+
+public struct CheckFunds: Decodable {
+    public let needFunds: [Token]
+    public let needApprove: [Token]
+    public let blockchain: Blockchain
 }

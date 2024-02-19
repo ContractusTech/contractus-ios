@@ -14,6 +14,8 @@ enum BlockchainExplorer {
         switch blockchain {
         case .solana:
             UIApplication.shared.open(URL.solscanURL(signature: txSignature, isDevnet: AppConfig.serverType.isDevelop))
+        case .bsc:
+            UIApplication.shared.open(URL.bscURL(signature: txSignature, isDevnet: AppConfig.serverType.isDevelop))
         }
 
     }

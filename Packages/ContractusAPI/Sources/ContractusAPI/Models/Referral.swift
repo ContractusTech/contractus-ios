@@ -6,6 +6,7 @@ public struct ReferralProgram: Decodable {
         case signup = "SIGNUP",
              applyPromocode = "APPLY_PROMOCODE",
              applyPromocodeReferrer = "APPLY_PROMOCODE_REFERRER",
+             firstDeal = "FIRST_DEAL",
              unknown
         
         public init(from decoder: Decoder) throws {
@@ -29,6 +30,7 @@ public struct ReferralProgram: Decodable {
     public let referrerCode: String?
     public let prizes: [Prize]
     public let allowApply: Bool
+    public let available: Bool
 }
 
 public struct ReferralProgramResult: Decodable {

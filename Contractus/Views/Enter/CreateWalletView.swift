@@ -33,7 +33,7 @@ struct CreateWalletView: View {
 //                            headerText: "New wallet",
 //                            titleText: R.string.localizable.createWalletTitle(),
 //                            subTitleText: R.string.localizable.createWalletSubtitle())
-                        CopyContentView(content: ContentMask.mask(from: account.privateKey.toBase58()), contentType: .privateKey) { _ in
+                        CopyContentView(content: ContentMask.mask(from: account.privateKeyEncoded()), contentType: .privateKey) { _ in
                             viewModel.trigger(.copyPrivateKey)
                         }
                         Spacer()
@@ -48,7 +48,7 @@ struct CreateWalletView: View {
                             titleText: "Your Safety",
                             largeTitleText: R.string.localizable.backupInformationTitle(),
                             informationText: R.string.localizable.backupInformationSubtitle(),
-                            privateKey: account.privateKey,
+                            privateKey: account.privateKeyEncoded(),
                             completion: {
                                 completion(account)
                             }).environmentObject(viewModel)

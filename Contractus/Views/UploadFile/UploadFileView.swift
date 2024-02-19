@@ -332,7 +332,7 @@ struct UploadFileItemView: View {
                 if file?.isLargeForEncrypting ?? false {
                     VStack {
                         Text(R.string.localizable.uploadFileLargeFile())
-                            .font(.footnote.weight(.semibold))
+                            .font(.caption2.weight(.semibold))
                             .foregroundColor(R.color.textWarn.color)
                             .lineLimit(0)
                     }

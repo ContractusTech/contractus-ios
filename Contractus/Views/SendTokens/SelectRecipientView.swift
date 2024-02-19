@@ -19,8 +19,8 @@ struct SelectRecipientView: View {
                 .foregroundColor(R.color.secondaryText.color)
 
             TextFieldView(
-                placeholder: R.string.localizable.commonPublicKey(), 
-                blockchain: .solana,
+                placeholder: placeholder,
+                blockchain: viewModel.state.account.blockchain,
                 value: viewModel.state.recipient,
                 changeValue: { newValue in
                     publicKey = newValue
@@ -77,6 +77,13 @@ struct SelectRecipientView: View {
 
     var title: String {
         return R.string.localizable.sendTokensSendTitle(viewModel.state.selectedToken?.code ?? "")
+    }
+
+    var placeholder: String {
+        if viewModel.state.account.blockchain == .solana {
+            return R.string.localizable.commonPublicKey()
+        }
+        return R.string.localizable.commonAddress()
     }
 }
 

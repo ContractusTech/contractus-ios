@@ -105,7 +105,7 @@ final class WrapTokenViewModel: ViewModel {
                         let tx = try await sendWrap(amount: operationAmount)
                         state.transactionSignType = .byTransaction(tx)
                     } catch {
-                        state.errorState = .error(error.readableDescription)
+                        state.errorState = .error(error.localizedDescription)
                     }
                     state.state = .ready
                 }
@@ -117,7 +117,7 @@ final class WrapTokenViewModel: ViewModel {
                         state.transactionSignType = .byTransaction(tx)
                         after?()
                     } catch {
-                        state.errorState = .error(error.readableDescription)
+                        state.errorState = .error(error.localizedDescription)
                     }
                     state.state = .ready
                 }
@@ -150,6 +150,9 @@ fileprivate extension ContractusAPI.Blockchain {
         switch self {
         case .solana:
             return 9
+        case .bsc:
+            // TODO: - 
+            return 0
         }
     }
 }

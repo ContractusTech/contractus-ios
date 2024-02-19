@@ -70,6 +70,8 @@
 "common.yes-open" = "Yes, open";
 "common.try-again" = "Try again";
 "common.show" = "Show";
+"common.select-blockchain" = "Select blockchain";
+"common.address" = "Address";
 
 "enter.subtitle" = "Welcome to";
 "enter.button.create" = "Create new";
@@ -250,9 +252,11 @@
 "deal.description-command.revoke-deal" = "You can cancel the deal before it starts.";
 "deal.delete.alert.button" = "Yes, delete";
 "deal.delete.alert.message" = "You want delete file?";
+"deal.status.expired.title" = "Deal is expired";
 "deal.status.finished.title" = "Deal is finished";
 "deal.status.canceled.title" = "Deal is canceled";
 "deal.status.started.title" = "In work";
+"deal.status.expired.subtitle" = "Cancel the deal to get your money back.";
 "deal.status.finished.subtitle" = "%@ was transferred to the account of the executor %@";
 "deal.status.started.subtitle.executor" = "You need to fulfill the conditions of the deal. The customer can cancel the deal after %@.";
 "deal.status.started.subtitle.checker" = "The contractor has begun to fulfill the terms of the deal. Keep an eye on the outcome of the contract, when everything is done you need to finalize the deal.";
@@ -317,6 +321,7 @@
 "newDeal.encrypt.title" = "Detail encryption";
 "newDeal.encrypt.subtitle" = "Deal description and files will be encrypted only deal participants can decrypt and view them.";
 "newDeal.encrypt.caption" = "Enable encryption";
+"newDeal.encrypt.warning" = "Available in the mobile app only. In WebApp you or your partner cannot edit/view deal details.";
 "newDeal.confirm.title" = "Confirmation";
 "newDeal.confirm.subtitle" = "Deal description and files will be encrypted only deal participants can decrypt and view them.";
 "newDeal.confirm.role.title" = "Your role";
@@ -393,14 +398,21 @@
 "addContractor.success-title.checker" = "Checker success added!";
 "addContractor.success-title.contractor" = "Partner success added!";
 
+"transactionSign.approve.title" = "Spending approval";
+"transactionSign.approve.text" = "You must authorize the contract to transfer funds before the deal begins.";
+"transactionSign.approve.button" = "Approve";
+"transactionSign.approve.errorMessage" = "Approve transaction error.";
 "transactionSign.fields.service-fee" = "Service Fee";
+"transactionSign.fields.client" = "Client";
 "transactionSign.fields.executor" = "Executor";
+"transactionSign.fields.checker" = "Checker";
 "transactionSign.fields.amount" = "Amount";
 "transactionSign.fields.verifier-fee" = "Checker fee";
 "transactionSign.fields.fee" = "Fee";
 "transactionSign.fields.status" = "Status";
 "transactionSign.fields.type" = "Type";
 "transactionSign.fields.tx" = "Transaction";
+"transactionSign.fields.message" = "Message";
 "transactionSign.fields.base64" = "Base64";
 "transactionSign.fields.signature" = "Signature";
 "transactionSign.fields.holder-mode" = "Holder mode";
@@ -432,7 +444,10 @@
 "transactionSign.subtitle.processing" = "Processing...";
 "transactionSign.subtitle.error" = "Try again";
 "transactionSign.subtitle.finished" = "Transaction completed successfully";
-"transactionSign.subtitle.holder-mode" = "For the period of the deal will be lock 10k CTUS";
+"transactionSign.subtitle.holder-mode" = "The client account will be frozen 10k CTUS for the duration of the deal. After completion of deal, the funds will be returned to the client's account.";
+"transactionSign.needFunds.title" = "Insufficient funds";
+"transactionSign.needFunds.text" = "To sign the deal, please, top up your balance of token(s) %@.";
+"transactionSign.mexFee.text" = "Max fee %@.";
 
 "transaction.type.init-deal" = "Start of the deal";
 "transaction.type.finish-deal" = "Finish the deal";
@@ -476,6 +491,7 @@
 "referral.prize.apply.refferer" = "For using my promo code";
 "referral.prize.unknown" = "Unsupported prize, update the app";
 "referral.prize.times" = "times";
+"referral.prize.first-deal" = "For completing first deal";
 
 "promocode.title" = "Promocode";
 "promocode.enter" = "Enter promo";

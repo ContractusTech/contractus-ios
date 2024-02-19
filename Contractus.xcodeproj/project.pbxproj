@@ -32,7 +32,6 @@
 		6D1922092B0DBC0200EBE911 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3AF96328E83E1200660AEC /* QRScannerView.swift */; };
 		6D19220A2B0DBC0200EBE911 /* PollService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6E60D729EE57BB008AB833 /* PollService.swift */; };
 		6D19220B2B0DBC0200EBE911 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1FB9102A9E24CB00203F38 /* OnboardingService.swift */; };
-		6D19220C2B0DBC0200EBE911 /* SolanaBlochainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */; };
 		6D19220D2B0DBC0200EBE911 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBCA460288F213500F918B6 /* MainView.swift */; };
 		6D19220E2B0DBC0200EBE911 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE54313C29D36D8800EEF906 /* AccountsView.swift */; };
 		6D19220F2B0DBC0200EBE911 /* TopTextBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3AA487292DCB0700596061 /* TopTextBlockView.swift */; };
@@ -111,7 +110,6 @@
 		6D1922582B0DBC0200EBE911 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE3A628A0E20100635E60 /* Label.swift */; };
 		6D1922592B0DBC0200EBE911 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCFD3AB2ADA70DB002160E2 /* NotificationHandler.swift */; };
 		6D19225A2B0DBC0200EBE911 /* R+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D755291289675C50069935B /* R+Ex.swift */; };
-		6D19225B2B0DBC0200EBE911 /* BlockchainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE387289DB40A00635E60 /* BlockchainService.swift */; };
 		6D19225C2B0DBC0200EBE911 /* TextEditor+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4FAB4E293B084800076743 /* TextEditor+Ex.swift */; };
 		6D19225D2B0DBC0200EBE911 /* ConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D6B3E29A73A8900E0930D /* ConfigStorage.swift */; };
 		6D19225E2B0DBC0200EBE911 /* View+DebugPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBCA4892890E71000F918B6 /* View+DebugPrint.swift */; };
@@ -121,7 +119,7 @@
 		6D1922622B0DBC0200EBE911 /* FilesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE3A128A0517700635E60 /* FilesService.swift */; };
 		6D1922632B0DBC0200EBE911 /* TextGenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD314062AE557690033D37A /* TextGenViewModel.swift */; };
 		6D1922642B0DBC0200EBE911 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE384289C679D00635E60 /* QRCodeView.swift */; };
-		6D1922652B0DBC0200EBE911 /* AccountValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFD8C28D8D72D0064F5DA /* AccountValidator.swift */; };
+		6D1922652B0DBC0200EBE911 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		6D1922662B0DBC0200EBE911 /* ChangeAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DCB2B28AC8DC200EE86C0 /* ChangeAmountView.swift */; };
 		6D1922672B0DBC0200EBE911 /* TextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E0AF528AF340C002BA683 /* TextEditorView.swift */; };
 		6D1922682B0DBC0200EBE911 /* APIServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAA5E7C2898C4AA00BA1965 /* APIServiceFactory.swift */; };
@@ -180,7 +178,6 @@
 		6D19229E2B0DBC0200EBE911 /* Rswift in Frameworks */ = {isa = PBXBuildFile; productRef = 6D1921D62B0DBC0200EBE911 /* Rswift */; };
 		6D19229F2B0DBC0200EBE911 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 6D1921E12B0DBC0200EBE911 /* CodeScanner */; };
 		6D1922A02B0DBC0200EBE911 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 6D1921E32B0DBC0200EBE911 /* JGProgressHUD */; };
-		6D1922A12B0DBC0200EBE911 /* QRCode in Frameworks */ = {isa = PBXBuildFile; productRef = 6D1921DA2B0DBC0200EBE911 /* QRCode */; };
 		6D1922A22B0DBC0200EBE911 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 6D1921EF2B0DBC0200EBE911 /* FirebaseMessaging */; };
 		6D1922A32B0DBC0200EBE911 /* SolanaSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6D1921DF2B0DBC0200EBE911 /* SolanaSwift */; };
 		6D1922A42B0DBC0200EBE911 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 6D1921EE2B0DBC0200EBE911 /* FirebaseRemoteConfig */; };
@@ -201,10 +198,11 @@
 		6D1922B42B0DBC0200EBE911 /* ci_post_xcodebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 6DCA42C62A8A5C6100C6E4D7 /* ci_post_xcodebuild.sh */; };
 		6D1922B52B0DBC0200EBE911 /* ci_post_clone.sh in Resources */ = {isa = PBXBuildFile; fileRef = 6DCA42C72A8A5C6100C6E4D7 /* ci_post_clone.sh */; };
 		6D1922B62B0DBC0200EBE911 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D97AEF4288D196400EB61D0 /* Assets.xcassets */; };
-		6D1922B82B0DBC0200EBE911 /* QRCode in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6D1921DA2B0DBC0200EBE911 /* QRCode */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6D1922B92B0DBC0200EBE911 /* ShamirSecretSharing in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6D1921DE2B0DBC0200EBE911 /* ShamirSecretSharing */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6D1922C02B0DF81B00EBE911 /* Wallet-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D1922BF2B0DF81B00EBE911 /* Wallet-Info.plist */; };
 		6D1DF1A42922EC7400B112FC /* CButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1DF1A32922EC7400B112FC /* CButtons.swift */; };
+		6D249D582B32D202007AA436 /* MigrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D249D572B32D202007AA436 /* MigrationManager.swift */; };
+		6D249D5B2B32D29D007AA436 /* MigrateTokenSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D249D5A2B32D29D007AA436 /* MigrateTokenSettings.swift */; };
 		6D2E0AF228AE9833002BA683 /* DealViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E0AF128AE9833002BA683 /* DealViewModel.swift */; };
 		6D2E0AF628AF340C002BA683 /* TextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E0AF528AF340C002BA683 /* TextEditorView.swift */; };
 		6D2E0AF928AF3473002BA683 /* TextEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E0AF828AF3473002BA683 /* TextEditorViewModel.swift */; };
@@ -224,6 +222,8 @@
 		6D44B5602A0E0B20008C561D /* BlockchainExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B55F2A0E0B20008C561D /* BlockchainExplorer.swift */; };
 		6D44B5622A0FA42F008C561D /* FlagsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B5612A0FA42F008C561D /* FlagsStorage.swift */; };
 		6D44B5642A0FAB37008C561D /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44B5632A0FAB37008C561D /* StatisticsView.swift */; };
+		6D4535992B716DF7006DE601 /* SolanaSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6D4535982B716DF7006DE601 /* SolanaSwift */; };
+		6D4783532B65A47700F7B0F0 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = 6D4783522B65A47700F7B0F0 /* Shimmer */; };
 		6D4C860F2AC010E900B9CEAE /* TokenSelectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4C860E2AC010E900B9CEAE /* TokenSelectViewModel.swift */; };
 		6D4D99F32A5601A1007668B0 /* IdentifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4D99F22A5601A1007668B0 /* IdentifierService.swift */; };
 		6D4DCB2C28AC8DC200EE86C0 /* ChangeAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DCB2B28AC8DC200EE86C0 /* ChangeAmountView.swift */; };
@@ -238,14 +238,11 @@
 		6D6E60D429EE2F08008AB833 /* TransactionStatus+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6E60D329EE2F08008AB833 /* TransactionStatus+Ex.swift */; };
 		6D6E60D829EE57BB008AB833 /* PollService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6E60D729EE57BB008AB833 /* PollService.swift */; };
 		6D6EE385289C679D00635E60 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE384289C679D00635E60 /* QRCodeView.swift */; };
-		6D6EE388289DB40A00635E60 /* BlockchainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE387289DB40A00635E60 /* BlockchainService.swift */; };
-		6D6EE38A289DB43400635E60 /* SolanaBlochainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */; };
 		6D6EE38D289E25FF00635E60 /* UploadFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE38C289E25FF00635E60 /* UploadFileView.swift */; };
 		6D6EE38F289E260D00635E60 /* UploadFileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE38E289E260D00635E60 /* UploadFileViewModel.swift */; };
 		6D6EE391289E3AA000635E60 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE390289E3AA000635E60 /* File.swift */; };
 		6D6EE393289E770500635E60 /* MimeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE392289E770500635E60 /* MimeType.swift */; };
 		6D6EE395289F9EFE00635E60 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE394289F9EFE00635E60 /* ImagePickerView.swift */; };
-		6D6EE39E289FBEBA00635E60 /* QRCode in Frameworks */ = {isa = PBXBuildFile; productRef = 6D6EE39D289FBEBA00635E60 /* QRCode */; };
 		6D6EE3A228A0517700635E60 /* FilesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE3A128A0517700635E60 /* FilesService.swift */; };
 		6D6EE3A528A09DBF00635E60 /* DealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE3A428A09DBF00635E60 /* DealView.swift */; };
 		6D6EE3A728A0E20100635E60 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EE3A628A0E20100635E60 /* Label.swift */; };
@@ -263,14 +260,16 @@
 		6D75F2E6288EA37E0092D182 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 6D75F2E5288EA37E0092D182 /* KeychainAccess */; };
 		6D75F2F0288EA9C70092D182 /* EnterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D75F2EF288EA9C70092D182 /* EnterView.swift */; };
 		6D7EE71428E98B8B0016369C /* ShamirSecretSharing in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6D8EFD8928D898B50064F5DA /* ShamirSecretSharing */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6D7EE71528E98BAB0016369C /* QRCode in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6D6EE39D289FBEBA00635E60 /* QRCode */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6D7EE71728E9D3070016369C /* ImportPrivateKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7EE71628E9D3070016369C /* ImportPrivateKeyView.swift */; };
 		6D7EE71928E9D4D60016369C /* MultilineTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7EE71828E9D4D60016369C /* MultilineTextFieldView.swift */; };
+		6D8885462AFFA4AF006EB291 /* QRCodeStatic in Frameworks */ = {isa = PBXBuildFile; productRef = 6D8885452AFFA4AF006EB291 /* QRCodeStatic */; };
+		6D88EEED2B01E1810031F50B /* CommonAccount+Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D88EEEC2B01E1810031F50B /* CommonAccount+Signer.swift */; };
+		6D88EEF32B0203F70031F50B /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6D88EEF22B0203F70031F50B /* web3swift */; };
+		6D88EEF62B02045B0031F50B /* ContractusAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 6D88EEF52B02045B0031F50B /* ContractusAPI */; };
+		6D88EEF92B0204670031F50B /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6D88EEF82B0204670031F50B /* web3swift */; };
 		6D8EFD8528D88ED10064F5DA /* AddContractorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFD8428D88ED10064F5DA /* AddContractorView.swift */; };
 		6D8EFD8828D88F760064F5DA /* AddContractorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFD8728D88F760064F5DA /* AddContractorViewModel.swift */; };
 		6D8EFD8A28D898B50064F5DA /* ShamirSecretSharing in Frameworks */ = {isa = PBXBuildFile; productRef = 6D8EFD8928D898B50064F5DA /* ShamirSecretSharing */; };
-		6D8EFD8D28D8D72D0064F5DA /* AccountValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFD8C28D8D72D0064F5DA /* AccountValidator.swift */; };
-		6D8EFD9328D8EB5B0064F5DA /* SolanaSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6D8EFD9228D8EB5B0064F5DA /* SolanaSwift */; };
 		6D8EFD9528D8F3B20064F5DA /* ShareContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFD9428D8F3B20064F5DA /* ShareContentView.swift */; };
 		6D8EFD9728D958AA0064F5DA /* CopyContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFD9628D958AA0064F5DA /* CopyContentView.swift */; };
 		6D8EFD9928DD68660064F5DA /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EFD9828DD68660064F5DA /* LoadingButton.swift */; };
@@ -313,6 +312,11 @@
 		6DBF39DF28D4734B00952D8A /* SharedSecret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBF39DE28D4734B00952D8A /* SharedSecret.swift */; };
 		6DBF3A4328D81D2C00952D8A /* UIApplication+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBF3A4228D81D2C00952D8A /* UIApplication+Ex.swift */; };
 		6DBFCE462A9F573D00999E85 /* Open.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFCE452A9F573D00999E85 /* Open.swift */; };
+		6DC0FB982B834DFC00D593FE /* CommonAccount+Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D88EEEC2B01E1810031F50B /* CommonAccount+Signer.swift */; };
+		6DC0FB992B834E1700D593FE /* MigrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D249D572B32D202007AA436 /* MigrationManager.swift */; };
+		6DC0FB9A2B834E2D00D593FE /* MigrateTokenSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D249D5A2B32D29D007AA436 /* MigrateTokenSettings.swift */; };
+		6DC0FB9C2B834E9600D593FE /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0FB9B2B834E9600D593FE /* web3swift */; };
+		6DC0FB9E2B834E9600D593FE /* QRCodeStatic in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0FB9D2B834E9600D593FE /* QRCodeStatic */; };
 		6DC1C235291BE6660009FE96 /* DocumentPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC1C234291BE6660009FE96 /* DocumentPickerView.swift */; };
 		6DC1C237291C34A20009FE96 /* URL+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC1C236291C34A20009FE96 /* URL+Ex.swift */; };
 		6DC218412ACF3D3E00EFC769 /* AppsFlyerLib in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC218402ACF3D3E00EFC769 /* AppsFlyerLib */; };
@@ -340,6 +344,7 @@
 		6DD3140B2AE68FB40033D37A /* UndoTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD3140A2AE68FB40033D37A /* UndoTextView.swift */; };
 		6DDA818028C065C80022E005 /* ModalSheet+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDA817F28C065C80022E005 /* ModalSheet+Ex.swift */; };
 		6DDA818528C0D6070022E005 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDA818428C0D6070022E005 /* TextField.swift */; };
+		6DDAAB082B616EAC00B21E87 /* SolanaSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6DDAAB072B616EAC00B21E87 /* SolanaSwift */; };
 		6DEEDFF429F8E6CD00216D44 /* BackupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEEDFF329F8E6CD00216D44 /* BackupStorage.swift */; };
 		6DF6ADC32994EAA300A50598 /* SharedSecretService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF6ADC22994EAA300A50598 /* SharedSecretService.swift */; };
 		6DF6ADC52995307200A50598 /* SharedSecretTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF6ADC42995307200A50598 /* SharedSecretTests.swift */; };
@@ -348,7 +353,6 @@
 		6DFED935293207D200AF727A /* QRCodeScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED934293207D200AF727A /* QRCodeScannerViewModel.swift */; };
 		6DFED939293262F300AF727A /* SharablePublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFED938293262F300AF727A /* SharablePublicKey.swift */; };
 		6DFF40BB2A9A144B0042AE78 /* String+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFF40BA2A9A144B0042AE78 /* String+Ex.swift */; };
-		FE0F36802A552C2D00EEC595 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = FE0F367F2A552C2D00EEC595 /* Shimmer */; };
 		FE10B56C2A966F5900AA5EA8 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE10B56B2A966F5900AA5EA8 /* OnboardingView.swift */; };
 		FE10B56E2A96715200AA5EA8 /* OnboardingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE10B56D2A96715200AA5EA8 /* OnboardingPageView.swift */; };
 		FE1245672AC35AAC009FB048 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = FE1245662AC35AAC009FB048 /* NukeUI */; };
@@ -420,7 +424,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6D1922B82B0DBC0200EBE911 /* QRCode in Embed Frameworks */,
 				6D1922B92B0DBC0200EBE911 /* ShamirSecretSharing in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -432,7 +435,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6D7EE71528E98BAB0016369C /* QRCode in Embed Frameworks */,
 				6D7EE71428E98B8B0016369C /* ShamirSecretSharing in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -448,6 +450,8 @@
 		6D1922BD2B0DBC0200EBE911 /* Contractus-Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Contractus-Wallet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D1922BF2B0DF81B00EBE911 /* Wallet-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Wallet-Info.plist"; sourceTree = "<group>"; };
 		6D1DF1A32922EC7400B112FC /* CButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CButtons.swift; sourceTree = "<group>"; };
+		6D249D572B32D202007AA436 /* MigrationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationManager.swift; sourceTree = "<group>"; };
+		6D249D5A2B32D29D007AA436 /* MigrateTokenSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrateTokenSettings.swift; sourceTree = "<group>"; };
 		6D2E0AF128AE9833002BA683 /* DealViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealViewModel.swift; sourceTree = "<group>"; };
 		6D2E0AF528AF340C002BA683 /* TextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorView.swift; sourceTree = "<group>"; };
 		6D2E0AF828AF3473002BA683 /* TextEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorViewModel.swift; sourceTree = "<group>"; };
@@ -482,8 +486,6 @@
 		6D6E60D329EE2F08008AB833 /* TransactionStatus+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionStatus+Ex.swift"; sourceTree = "<group>"; };
 		6D6E60D729EE57BB008AB833 /* PollService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollService.swift; sourceTree = "<group>"; };
 		6D6EE384289C679D00635E60 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
-		6D6EE387289DB40A00635E60 /* BlockchainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainService.swift; sourceTree = "<group>"; };
-		6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolanaBlochainService.swift; sourceTree = "<group>"; };
 		6D6EE38C289E25FF00635E60 /* UploadFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFileView.swift; sourceTree = "<group>"; };
 		6D6EE38E289E260D00635E60 /* UploadFileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFileViewModel.swift; sourceTree = "<group>"; };
 		6D6EE390289E3AA000635E60 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
@@ -506,9 +508,11 @@
 		6D7D1FAA2AB3621200D550AA /* Contractus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Contractus.entitlements; sourceTree = "<group>"; };
 		6D7EE71628E9D3070016369C /* ImportPrivateKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportPrivateKeyView.swift; sourceTree = "<group>"; };
 		6D7EE71828E9D4D60016369C /* MultilineTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextFieldView.swift; sourceTree = "<group>"; };
+		6D8885392AFF9B7E006EB291 /* CoreAudioTypes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioTypes.framework; path = System/Library/Frameworks/CoreAudioTypes.framework; sourceTree = SDKROOT; };
+		6D8885482B01D413006EB291 /* web3swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = web3swift; path = Packages/web3swift; sourceTree = "<group>"; };
+		6D88EEEC2B01E1810031F50B /* CommonAccount+Signer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonAccount+Signer.swift"; sourceTree = "<group>"; };
 		6D8EFD8428D88ED10064F5DA /* AddContractorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContractorView.swift; sourceTree = "<group>"; };
 		6D8EFD8728D88F760064F5DA /* AddContractorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContractorViewModel.swift; sourceTree = "<group>"; };
-		6D8EFD8C28D8D72D0064F5DA /* AccountValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountValidator.swift; sourceTree = "<group>"; };
 		6D8EFD9428D8F3B20064F5DA /* ShareContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareContentView.swift; sourceTree = "<group>"; };
 		6D8EFD9628D958AA0064F5DA /* CopyContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyContentView.swift; sourceTree = "<group>"; };
 		6D8EFD9828DD68660064F5DA /* LoadingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingButton.swift; sourceTree = "<group>"; };
@@ -637,7 +641,7 @@
 				6D19229E2B0DBC0200EBE911 /* Rswift in Frameworks */,
 				6D19229F2B0DBC0200EBE911 /* CodeScanner in Frameworks */,
 				6D1922A02B0DBC0200EBE911 /* JGProgressHUD in Frameworks */,
-				6D1922A12B0DBC0200EBE911 /* QRCode in Frameworks */,
+				6DC0FB9C2B834E9600D593FE /* web3swift in Frameworks */,
 				6D1922A22B0DBC0200EBE911 /* FirebaseMessaging in Frameworks */,
 				6D1922A32B0DBC0200EBE911 /* SolanaSwift in Frameworks */,
 				6D1922A42B0DBC0200EBE911 /* FirebaseRemoteConfig in Frameworks */,
@@ -645,6 +649,7 @@
 				6D1922A62B0DBC0200EBE911 /* CryptoSwift in Frameworks */,
 				6D1922A72B0DBC0200EBE911 /* ContractusAPI in Frameworks */,
 				6D1922A82B0DBC0200EBE911 /* SVGKit in Frameworks */,
+				6DC0FB9E2B834E9600D593FE /* QRCodeStatic in Frameworks */,
 				6D1922A92B0DBC0200EBE911 /* ResizableSheet in Frameworks */,
 				6D1922AA2B0DBC0200EBE911 /* FirebaseCrashlytics in Frameworks */,
 				6D1922AB2B0DBC0200EBE911 /* NukeUI in Frameworks */,
@@ -659,23 +664,27 @@
 			files = (
 				FE5F427429AF22FA00A1E506 /* netfox in Frameworks */,
 				6DC218412ACF3D3E00EFC769 /* AppsFlyerLib in Frameworks */,
+				6DDAAB082B616EAC00B21E87 /* SolanaSwift in Frameworks */,
 				6DC5586E2A7A18A60054F2FC /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				6D8EFD8A28D898B50064F5DA /* ShamirSecretSharing in Frameworks */,
 				6D755290289662250069935B /* Rswift in Frameworks */,
+				6D4535992B716DF7006DE601 /* SolanaSwift in Frameworks */,
 				6D0DA7622930A6960024EF30 /* CodeScanner in Frameworks */,
 				6DB5F8B6294D762300AE612A /* JGProgressHUD in Frameworks */,
-				6D6EE39E289FBEBA00635E60 /* QRCode in Frameworks */,
 				FE2B96C92AB9EA5D00971114 /* FirebaseMessaging in Frameworks */,
-				6D8EFD9328D8EB5B0064F5DA /* SolanaSwift in Frameworks */,
 				6DC558742A7A18A60054F2FC /* FirebaseRemoteConfig in Frameworks */,
+				6D88EEF32B0203F70031F50B /* web3swift in Frameworks */,
+				6D4783532B65A47700F7B0F0 /* Shimmer in Frameworks */,
 				6DC558722A7A18A60054F2FC /* FirebasePerformance in Frameworks */,
+				6D88EEF92B0204670031F50B /* web3swift in Frameworks */,
 				6DAA5E772898BDFA00BA1965 /* CryptoSwift in Frameworks */,
+				6D88EEF62B02045B0031F50B /* ContractusAPI in Frameworks */,
 				6DB9C3DA2A555F1B0011C817 /* ContractusAPI in Frameworks */,
 				FE12456A2AC35F86009FB048 /* SVGKit in Frameworks */,
 				6DB547F928B9E87C003D2A8A /* ResizableSheet in Frameworks */,
 				6DC558702A7A18A60054F2FC /* FirebaseCrashlytics in Frameworks */,
 				FE1245672AC35AAC009FB048 /* NukeUI in Frameworks */,
-				FE0F36802A552C2D00EEC595 /* Shimmer in Frameworks */,
+				6D8885462AFFA4AF006EB291 /* QRCodeStatic in Frameworks */,
 				6D75F2E6288EA37E0092D182 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -715,6 +724,15 @@
 			path = Wrap;
 			sourceTree = "<group>";
 		};
+		6D249D562B32D1EC007AA436 /* Migrations */ = {
+			isa = PBXGroup;
+			children = (
+				6D249D572B32D202007AA436 /* MigrationManager.swift */,
+				6D249D5A2B32D29D007AA436 /* MigrateTokenSettings.swift */,
+			);
+			path = Migrations;
+			sourceTree = "<group>";
+		};
 		6D2E0AF728AF342D002BA683 /* TextEditorView */ = {
 			isa = PBXGroup;
 			children = (
@@ -745,6 +763,7 @@
 		6D590104289383D600EC318E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6D8885392AFF9B7E006EB291 /* CoreAudioTypes.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -846,6 +865,7 @@
 		6D75F2F1288EAB1A0092D182 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				6D8885482B01D413006EB291 /* web3swift */,
 				6DBF3A3D28D64D7F00952D8A /* sss-swift */,
 				6DB9C3D82A555E8B0011C817 /* ContractusAPI */,
 			);
@@ -974,14 +994,12 @@
 			isa = PBXGroup;
 			children = (
 				6DBCA45B288F076D00F918B6 /* AccountService.swift */,
-				6D6EE387289DB40A00635E60 /* BlockchainService.swift */,
 				FECDCC5C2A87F21800047A95 /* EventService.swift */,
 				6D6EE3A128A0517700635E60 /* FilesService.swift */,
 				6D4D99F22A5601A1007668B0 /* IdentifierService.swift */,
 				FE7852932AC1673100CC8C19 /* MessagingService.swift */,
 				FE1FB9102A9E24CB00203F38 /* OnboardingService.swift */,
 				6DF6ADC22994EAA300A50598 /* SharedSecretService.swift */,
-				6D6EE389289DB43400635E60 /* SolanaBlochainService.swift */,
 				6DC2C02428C98332005C9EBE /* TransactionSignService.swift */,
 			);
 			path = Services;
@@ -1101,16 +1119,17 @@
 		6DBCA48E2891161200F918B6 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				6D249D562B32D1EC007AA436 /* Migrations */,
 				6DBCA48F2891161C00F918B6 /* Formatter */,
 				6DAA5E782898BE1B00BA1965 /* Crypto.swift */,
 				6DAA5E7A2898C25500BA1965 /* RandomStrings.swift */,
 				6D6EE392289E770500635E60 /* MimeType.swift */,
 				6DBF39DE28D4734B00952D8A /* SharedSecret.swift */,
-				6D8EFD8C28D8D72D0064F5DA /* AccountValidator.swift */,
 				6DFED9322930F1EE00AF727A /* ImpactGenerator.swift */,
 				6D6E60D729EE57BB008AB833 /* PollService.swift */,
 				6D44B55F2A0E0B20008C561D /* BlockchainExplorer.swift */,
 				6DD314012AE412960033D37A /* UndoProvider.swift */,
+				6D88EEEC2B01E1810031F50B /* CommonAccount+Signer.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1251,7 +1270,6 @@
 				6D1921D42B0DBC0200EBE911 /* KeychainAccess */,
 				6D1921D62B0DBC0200EBE911 /* Rswift */,
 				6D1921D82B0DBC0200EBE911 /* CryptoSwift */,
-				6D1921DA2B0DBC0200EBE911 /* QRCode */,
 				6D1921DC2B0DBC0200EBE911 /* ResizableSheet */,
 				6D1921DE2B0DBC0200EBE911 /* ShamirSecretSharing */,
 				6D1921DF2B0DBC0200EBE911 /* SolanaSwift */,
@@ -1268,6 +1286,8 @@
 				6D1921F02B0DBC0200EBE911 /* NukeUI */,
 				6D1921F22B0DBC0200EBE911 /* SVGKit */,
 				6D1921F42B0DBC0200EBE911 /* AppsFlyerLib */,
+				6DC0FB9B2B834E9600D593FE /* web3swift */,
+				6DC0FB9D2B834E9600D593FE /* QRCodeStatic */,
 			);
 			productName = Contractus;
 			productReference = 6D1922BD2B0DBC0200EBE911 /* Contractus-Wallet.app */;
@@ -1292,14 +1312,11 @@
 				6D75F2E5288EA37E0092D182 /* KeychainAccess */,
 				6D75528F289662250069935B /* Rswift */,
 				6DAA5E762898BDFA00BA1965 /* CryptoSwift */,
-				6D6EE39D289FBEBA00635E60 /* QRCode */,
 				6DB547F828B9E87C003D2A8A /* ResizableSheet */,
 				6D8EFD8928D898B50064F5DA /* ShamirSecretSharing */,
-				6D8EFD9228D8EB5B0064F5DA /* SolanaSwift */,
 				6D0DA7612930A6960024EF30 /* CodeScanner */,
 				6DB5F8B5294D762300AE612A /* JGProgressHUD */,
 				FE5F427329AF22FA00A1E506 /* netfox */,
-				FE0F367F2A552C2D00EEC595 /* Shimmer */,
 				6DB9C3D92A555F1B0011C817 /* ContractusAPI */,
 				6DC5586D2A7A18A60054F2FC /* FirebaseAnalyticsWithoutAdIdSupport */,
 				6DC5586F2A7A18A60054F2FC /* FirebaseCrashlytics */,
@@ -1309,6 +1326,13 @@
 				FE1245662AC35AAC009FB048 /* NukeUI */,
 				FE1245692AC35F86009FB048 /* SVGKit */,
 				6DC218402ACF3D3E00EFC769 /* AppsFlyerLib */,
+				6D8885452AFFA4AF006EB291 /* QRCodeStatic */,
+				6D88EEF22B0203F70031F50B /* web3swift */,
+				6D88EEF52B02045B0031F50B /* ContractusAPI */,
+				6D88EEF82B0204670031F50B /* web3swift */,
+				6DDAAB072B616EAC00B21E87 /* SolanaSwift */,
+				6D4783522B65A47700F7B0F0 /* Shimmer */,
+				6D4535982B716DF7006DE601 /* SolanaSwift */,
 			);
 			productName = Contractus;
 			productReference = 6D97AEED288D196200EB61D0 /* Contractus.app */;
@@ -1386,18 +1410,18 @@
 				6D75F2E4288EA37E0092D182 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				6D75528E289662250069935B /* XCRemoteSwiftPackageReference "R.swift" */,
 				6DAA5E752898BDFA00BA1965 /* XCRemoteSwiftPackageReference "CryptoSwift" */,
-				6D6EE39C289FBEBA00635E60 /* XCRemoteSwiftPackageReference "QRCode" */,
 				6DB547F728B9E87C003D2A8A /* XCRemoteSwiftPackageReference "ResizableSheet" */,
 				6DDA818128C0D3E10022E005 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
-				6D8EFD9128D8EB5B0064F5DA /* XCRemoteSwiftPackageReference "solana-swift" */,
 				6D0DA7602930A6960024EF30 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				6DB5F8B4294D762300AE612A /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				FE5F427229AF22FA00A1E506 /* XCRemoteSwiftPackageReference "netfox" */,
-				FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 				6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				FE1245652AC35AAC009FB048 /* XCRemoteSwiftPackageReference "Nuke" */,
 				FE1245682AC35F86009FB048 /* XCRemoteSwiftPackageReference "SVGKit" */,
 				6DC2183F2ACF3D3E00EFC769 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */,
+				6D8885442AFFA4AF006EB291 /* XCRemoteSwiftPackageReference "QRCode" */,
+				6D4783512B65A47700F7B0F0 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
+				6D4535972B716DF7006DE601 /* XCRemoteSwiftPackageReference "solana-swift" */,
 			);
 			productRefGroup = 6D97AEEE288D196200EB61D0 /* Products */;
 			projectDirPath = "";
@@ -1515,6 +1539,7 @@
 				6D1922012B0DBC0200EBE911 /* CreateDealEncryptionView.swift in Sources */,
 				6D1922022B0DBC0200EBE911 /* ContentMask.swift in Sources */,
 				6D1922032B0DBC0200EBE911 /* BuyTokensViewModel.swift in Sources */,
+				6DC0FB9A2B834E2D00D593FE /* MigrateTokenSettings.swift in Sources */,
 				6D1922042B0DBC0200EBE911 /* TokenSelectView.swift in Sources */,
 				6D1922052B0DBC0200EBE911 /* MenuViewModel.swift in Sources */,
 				6D1922062B0DBC0200EBE911 /* AppManager.swift in Sources */,
@@ -1523,7 +1548,6 @@
 				6D1922092B0DBC0200EBE911 /* QRScannerView.swift in Sources */,
 				6D19220A2B0DBC0200EBE911 /* PollService.swift in Sources */,
 				6D19220B2B0DBC0200EBE911 /* OnboardingService.swift in Sources */,
-				6D19220C2B0DBC0200EBE911 /* SolanaBlochainService.swift in Sources */,
 				6D19220D2B0DBC0200EBE911 /* MainView.swift in Sources */,
 				6D19220E2B0DBC0200EBE911 /* AccountsView.swift in Sources */,
 				6D19220F2B0DBC0200EBE911 /* TopTextBlockView.swift in Sources */,
@@ -1544,6 +1568,7 @@
 				6D19221E2B0DBC0200EBE911 /* RootSheet.swift in Sources */,
 				6D19221F2B0DBC0200EBE911 /* TextEditorViewModel.swift in Sources */,
 				6D1922202B0DBC0200EBE911 /* TransactionSignView.swift in Sources */,
+				6DC0FB992B834E1700D593FE /* MigrationManager.swift in Sources */,
 				6D1922212B0DBC0200EBE911 /* AmountFieldView.swift in Sources */,
 				6D1922222B0DBC0200EBE911 /* OnboardingPageView.swift in Sources */,
 				6D1922232B0DBC0200EBE911 /* Data+Ex.swift in Sources */,
@@ -1598,11 +1623,11 @@
 				6D1922542B0DBC0200EBE911 /* CreateDealAllowCheckerView.swift in Sources */,
 				6D1922552B0DBC0200EBE911 /* UnlockHolderButtonView.swift in Sources */,
 				6D1922562B0DBC0200EBE911 /* UIApplication+Ex.swift in Sources */,
+				6DC0FB982B834DFC00D593FE /* CommonAccount+Signer.swift in Sources */,
 				6D1922572B0DBC0200EBE911 /* QRCodeScannerViewModel.swift in Sources */,
 				6D1922582B0DBC0200EBE911 /* Label.swift in Sources */,
 				6D1922592B0DBC0200EBE911 /* NotificationHandler.swift in Sources */,
 				6D19225A2B0DBC0200EBE911 /* R+Ex.swift in Sources */,
-				6D19225B2B0DBC0200EBE911 /* BlockchainService.swift in Sources */,
 				6D19225C2B0DBC0200EBE911 /* TextEditor+Ex.swift in Sources */,
 				6D19225D2B0DBC0200EBE911 /* ConfigStorage.swift in Sources */,
 				6D19225E2B0DBC0200EBE911 /* View+DebugPrint.swift in Sources */,
@@ -1612,7 +1637,7 @@
 				6D1922622B0DBC0200EBE911 /* FilesService.swift in Sources */,
 				6D1922632B0DBC0200EBE911 /* TextGenViewModel.swift in Sources */,
 				6D1922642B0DBC0200EBE911 /* QRCodeView.swift in Sources */,
-				6D1922652B0DBC0200EBE911 /* AccountValidator.swift in Sources */,
+				6D1922652B0DBC0200EBE911 /* (null) in Sources */,
 				6D1922662B0DBC0200EBE911 /* ChangeAmountView.swift in Sources */,
 				6D1922672B0DBC0200EBE911 /* TextEditorView.swift in Sources */,
 				6D1922682B0DBC0200EBE911 /* APIServiceFactory.swift in Sources */,
@@ -1679,6 +1704,7 @@
 				FE8270472A8D4D730092970A /* ReferralViewModel.swift in Sources */,
 				6D44B5602A0E0B20008C561D /* BlockchainExplorer.swift in Sources */,
 				6D0DA75B292FA9A60024EF30 /* NavigationStackModifier.swift in Sources */,
+				6D249D582B32D202007AA436 /* MigrationManager.swift in Sources */,
 				6D6EE395289F9EFE00635E60 /* ImagePickerView.swift in Sources */,
 				FE287ED92AF3B7FD00C4EAF5 /* CreateDealEncryptionView.swift in Sources */,
 				6DBCA4912891162F00F918B6 /* ContentMask.swift in Sources */,
@@ -1691,7 +1717,6 @@
 				6D3AF96428E83E1200660AEC /* QRScannerView.swift in Sources */,
 				6D6E60D829EE57BB008AB833 /* PollService.swift in Sources */,
 				FE1FB9112A9E24CB00203F38 /* OnboardingService.swift in Sources */,
-				6D6EE38A289DB43400635E60 /* SolanaBlochainService.swift in Sources */,
 				6DBCA461288F213500F918B6 /* MainView.swift in Sources */,
 				FE54313D29D36D8800EEF906 /* AccountsView.swift in Sources */,
 				6D3AA488292DCB0700596061 /* TopTextBlockView.swift in Sources */,
@@ -1712,6 +1737,7 @@
 				6D320EB32992275A00B56758 /* RootSheet.swift in Sources */,
 				6D2E0AF928AF3473002BA683 /* TextEditorViewModel.swift in Sources */,
 				6D74735E2962E18C00A5F6E7 /* TransactionSignView.swift in Sources */,
+				6D249D5B2B32D29D007AA436 /* MigrateTokenSettings.swift in Sources */,
 				FE48B1002AE178BB00885610 /* AmountFieldView.swift in Sources */,
 				FE10B56E2A96715200AA5EA8 /* OnboardingPageView.swift in Sources */,
 				6D3AA486292D3A2500596061 /* Data+Ex.swift in Sources */,
@@ -1722,6 +1748,7 @@
 				FECDCC5D2A87F21800047A95 /* EventService.swift in Sources */,
 				6D6EE38F289E260D00635E60 /* UploadFileViewModel.swift in Sources */,
 				6DBCA47B2890832800F918B6 /* EnterViewModel.swift in Sources */,
+				6D88EEED2B01E1810031F50B /* CommonAccount+Signer.swift in Sources */,
 				FECCE4FE2AAE049900B869FA /* ReferralAccountsView.swift in Sources */,
 				6D6E60D429EE2F08008AB833 /* TransactionStatus+Ex.swift in Sources */,
 				6D0DA7652930A7250024EF30 /* QRCodeScannerView.swift in Sources */,
@@ -1770,7 +1797,6 @@
 				6D6EE3A728A0E20100635E60 /* Label.swift in Sources */,
 				6DCFD3AC2ADA70DB002160E2 /* NotificationHandler.swift in Sources */,
 				6D755292289675C50069935B /* R+Ex.swift in Sources */,
-				6D6EE388289DB40A00635E60 /* BlockchainService.swift in Sources */,
 				6D4FAB4F293B084800076743 /* TextEditor+Ex.swift in Sources */,
 				6D9D6B3F29A73A8900E0930D /* ConfigStorage.swift in Sources */,
 				6DBCA48A2890E71000F918B6 /* View+DebugPrint.swift in Sources */,
@@ -1780,7 +1806,6 @@
 				6D6EE3A228A0517700635E60 /* FilesService.swift in Sources */,
 				6DD314072AE557690033D37A /* TextGenViewModel.swift in Sources */,
 				6D6EE385289C679D00635E60 /* QRCodeView.swift in Sources */,
-				6D8EFD8D28D8D72D0064F5DA /* AccountValidator.swift in Sources */,
 				6D4DCB2C28AC8DC200EE86C0 /* ChangeAmountView.swift in Sources */,
 				6D2E0AF628AF340C002BA683 /* TextEditorView.swift in Sources */,
 				6DAA5E7D2898C4AA00BA1965 /* APIServiceFactory.swift in Sources */,
@@ -1895,7 +1920,7 @@
 				GCC_NO_COMMON_BLOCKS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Contractus/Wallet-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Safe Deals";
+				INFOPLIST_KEY_CFBundleDisplayName = Contractus;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Safe Deals access to your camera to take photos and videos. Contractus does not attach content to deals without permission.  Also, the Camera is used to scan QR codes.";
 				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Allow Safe Deals access to your library. Contractus does not attach content to deals without permission.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow Safe Deals access to a media library to attach to your deals";
@@ -1909,7 +1934,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1938,7 +1963,7 @@
 				GCC_NO_COMMON_BLOCKS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Contractus/Wallet-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Safe Deals";
+				INFOPLIST_KEY_CFBundleDisplayName = Contractus;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Safe Deals access to your camera to take photos and videos. Contractus does not attach content to deals without permission.  Also, the Camera is used to scan QR codes.";
 				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Allow Safe Deals access to your library. Contractus does not attach content to deals without permission.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow Safe Deals access to a media library to attach to your deals";
@@ -1952,7 +1977,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2083,6 +2108,7 @@
 		6D97AF12288D196400EB61D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Contractus/Contractus.entitlements;
@@ -2109,7 +2135,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2125,6 +2151,7 @@
 		6D97AF13288D196400EB61D0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Contractus/Contractus.entitlements;
@@ -2151,7 +2178,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2296,7 +2323,7 @@
 			repositoryURL = "https://github.com/twostraws/CodeScanner.git";
 			requirement = {
 				kind = exactVersion;
-				version = 2.2.1;
+				version = 2.3.3;
 			};
 		};
 		6D1921D52B0DBC0200EBE911 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
@@ -2321,14 +2348,6 @@
 			requirement = {
 				kind = exactVersion;
 				version = 1.5.1;
-			};
-		};
-		6D1921DB2B0DBC0200EBE911 /* XCRemoteSwiftPackageReference "QRCode" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dagronf/QRCode.git";
-			requirement = {
-				kind = exactVersion;
-				version = 6.0.2;
 			};
 		};
 		6D1921DD2B0DBC0200EBE911 /* XCRemoteSwiftPackageReference "ResizableSheet" */ = {
@@ -2411,12 +2430,20 @@
 				minimumVersion = 6.12.2;
 			};
 		};
-		6D6EE39C289FBEBA00635E60 /* XCRemoteSwiftPackageReference "QRCode" */ = {
+		6D4535972B716DF7006DE601 /* XCRemoteSwiftPackageReference "solana-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dagronf/QRCode.git";
+			repositoryURL = "https://github.com/ContractusTech/solana-swift.git";
 			requirement = {
-				kind = exactVersion;
-				version = 6.0.2;
+				branch = main;
+				kind = branch;
+			};
+		};
+		6D4783512B65A47700F7B0F0 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.1;
 			};
 		};
 		6D75528E289662250069935B /* XCRemoteSwiftPackageReference "R.swift" */ = {
@@ -2435,12 +2462,12 @@
 				version = 4.2.2;
 			};
 		};
-		6D8EFD9128D8EB5B0064F5DA /* XCRemoteSwiftPackageReference "solana-swift" */ = {
+		6D8885442AFFA4AF006EB291 /* XCRemoteSwiftPackageReference "QRCode" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/p2p-org/solana-swift";
+			repositoryURL = "https://github.com/dagronf/QRCode.git";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 3.0.0;
+				kind = exactVersion;
+				version = 16.1.1;
 			};
 		};
 		6DAA5E752898BDFA00BA1965 /* XCRemoteSwiftPackageReference "CryptoSwift" */ = {
@@ -2448,7 +2475,7 @@
 			repositoryURL = "https://github.com/krzyzanowskim/CryptoSwift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 1.5.1;
+				version = 1.8.0;
 			};
 		};
 		6DB547F728B9E87C003D2A8A /* XCRemoteSwiftPackageReference "ResizableSheet" */ = {
@@ -2489,14 +2516,6 @@
 			requirement = {
 				kind = exactVersion;
 				version = 0.1.4;
-			};
-		};
-		FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
 			};
 		};
 		FE1245652AC35AAC009FB048 /* XCRemoteSwiftPackageReference "Nuke" */ = {
@@ -2545,11 +2564,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6D1921D92B0DBC0200EBE911 /* XCRemoteSwiftPackageReference "CryptoSwift" */;
 			productName = CryptoSwift;
-		};
-		6D1921DA2B0DBC0200EBE911 /* QRCode */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6D1921DB2B0DBC0200EBE911 /* XCRemoteSwiftPackageReference "QRCode" */;
-			productName = QRCode;
 		};
 		6D1921DC2B0DBC0200EBE911 /* ResizableSheet */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2629,10 +2643,15 @@
 			package = 6D1921F52B0DBC0200EBE911 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
 			productName = AppsFlyerLib;
 		};
-		6D6EE39D289FBEBA00635E60 /* QRCode */ = {
+		6D4535982B716DF7006DE601 /* SolanaSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6D6EE39C289FBEBA00635E60 /* XCRemoteSwiftPackageReference "QRCode" */;
-			productName = QRCode;
+			package = 6D4535972B716DF7006DE601 /* XCRemoteSwiftPackageReference "solana-swift" */;
+			productName = SolanaSwift;
+		};
+		6D4783522B65A47700F7B0F0 /* Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D4783512B65A47700F7B0F0 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
+			productName = Shimmer;
 		};
 		6D75528F289662250069935B /* Rswift */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2644,14 +2663,26 @@
 			package = 6D75F2E4288EA37E0092D182 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
 		};
+		6D8885452AFFA4AF006EB291 /* QRCodeStatic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D8885442AFFA4AF006EB291 /* XCRemoteSwiftPackageReference "QRCode" */;
+			productName = QRCodeStatic;
+		};
+		6D88EEF22B0203F70031F50B /* web3swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = web3swift;
+		};
+		6D88EEF52B02045B0031F50B /* ContractusAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ContractusAPI;
+		};
+		6D88EEF82B0204670031F50B /* web3swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = web3swift;
+		};
 		6D8EFD8928D898B50064F5DA /* ShamirSecretSharing */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ShamirSecretSharing;
-		};
-		6D8EFD9228D8EB5B0064F5DA /* SolanaSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6D8EFD9128D8EB5B0064F5DA /* XCRemoteSwiftPackageReference "solana-swift" */;
-			productName = SolanaSwift;
 		};
 		6DAA5E762898BDFA00BA1965 /* CryptoSwift */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2671,6 +2702,15 @@
 		6DB9C3D92A555F1B0011C817 /* ContractusAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ContractusAPI;
+		};
+		6DC0FB9B2B834E9600D593FE /* web3swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = web3swift;
+		};
+		6DC0FB9D2B834E9600D593FE /* QRCodeStatic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D8885442AFFA4AF006EB291 /* XCRemoteSwiftPackageReference "QRCode" */;
+			productName = QRCodeStatic;
 		};
 		6DC218402ACF3D3E00EFC769 /* AppsFlyerLib */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2697,10 +2737,9 @@
 			package = 6DC5586C2A7A18A60054F2FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseRemoteConfig;
 		};
-		FE0F367F2A552C2D00EEC595 /* Shimmer */ = {
+		6DDAAB072B616EAC00B21E87 /* SolanaSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FE0F367E2A552C2D00EEC595 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
-			productName = Shimmer;
+			productName = SolanaSwift;
 		};
 		FE1245662AC35AAC009FB048 /* NukeUI */ = {
 			isa = XCSwiftPackageProductDependency;

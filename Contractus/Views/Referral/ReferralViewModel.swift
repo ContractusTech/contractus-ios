@@ -9,7 +9,7 @@ import Foundation
 import ContractusAPI
 
 enum ReferralInput {
-    case apply(String), create, resetError
+    case apply(String), create, resetError, load
 }
 
 struct PrizeItem: Hashable {
@@ -34,6 +34,7 @@ struct ReferralState {
     var promocode: String?
     var prizes: [PrizeItem]
     var allowApply: Bool
+    var available: Bool
     var accounts: [ReferralAccount]
 }
 
@@ -53,34 +54,17 @@ final class ReferralViewModel: ViewModel {
             promocode: nil,
             prizes: [],
             allowApply: true,
+            available: false, 
             accounts: []
         )
-        
-        Task { @MainActor in
-            do {
-                let referral = try await getReferral()
-                var newState = self.state
-                newState.promocode = referral?.promocode
-                newState.prizes = (referral?.prizes ?? []).map { $0.toPrizeItem() }
-                if (referral?.prizes ?? []).contains(where: { $0.type == .applyPromocode && $0.applied}) {
-                    newState.state = .applied
-                } else {
-                    newState.state = .loaded
-                }
-                newState.allowApply = referral?.allowApply ?? true
-                newState.accounts = (referral?.prizes ?? []).filter({ $0.type == .applyPromocodeReferrer}).first?.accounts ?? []
-                self.state = newState
-            } catch {
-                var newState = self.state
-                newState.errorState = .error(error.localizedDescription)
-                newState.state = .loaded
-                self.state = newState
-            }
-        }
     }
     
     func trigger(_ input: ReferralInput, after: AfterTrigger?) {
         switch input {
+        case .load:
+            Task {
+                await load()
+            }
         case .apply(let promo):
             let data = ReferralService.CreatePromocode(promocode: promo)
 
@@ -124,7 +108,38 @@ final class ReferralViewModel: ViewModel {
             self.state.errorState = nil
         }
     }
-    
+
+    private func load() async {
+        Task { [weak self] in
+            guard let self = self else { return }
+            do {
+                let referral = try await self.getReferral()
+                let prizes = (referral?.prizes ?? []).map { $0.toPrizeItem() }
+                let applyPromocode = (referral?.prizes ?? []).contains(where: { $0.type == .applyPromocode && $0.applied})
+                let accounts = (referral?.prizes ?? []).filter({ $0.type == .applyPromocodeReferrer}).first?.accounts ?? []
+                await MainActor.run {
+                    var newState = self.state
+                    newState.promocode = referral?.promocode
+                    newState.prizes = prizes
+                    newState.state = applyPromocode ? .applied : .loaded
+                    newState.allowApply = referral?.allowApply ?? true
+                    newState.accounts = accounts
+                    newState.available = referral?.available ?? false
+                    self.state = newState
+                }
+
+            } catch {
+                await MainActor.run {
+                    var newState = self.state
+                    newState.errorState = .error(error.localizedDescription)
+                    newState.state = .loaded
+                    self.state = newState
+                }
+
+            }
+        }
+    }
+
     private func getReferral() async throws -> ReferralProgram? {
         return try await withCheckedThrowingContinuation({ continuation in
             referralService?.getInformation { result in
@@ -171,6 +186,8 @@ extension ReferralProgram.Prize {
             return R.string.localizable.referralPrizeApplyRefferer()
         case .unknown:
             return R.string.localizable.referralPrizeUnknown()
+        case .firstDeal:
+            return "First deal"
         }
     }
 }

@@ -1,6 +1,5 @@
 import Foundation
 import Alamofire
-import TweetNacl
 import Base58Swift
 
 fileprivate let HEADER_NAME = "X-Authorization"
@@ -29,17 +28,9 @@ public struct AuthorizationHeader {
 }
 
 public struct AuthorizationHeaderBuilder {
-
-    public static func build(for blockchain: Blockchain, message: String, with keyPair: KeyPair, identifier: String, expiredAt: Date) throws -> AuthorizationHeader {
-        switch blockchain {
-        case .solana:
-            let sign = try NaclSign.signDetached(
-                message: message.data(using: .utf8)!,
-                secretKey: keyPair.privateKey)
-
-            let signatureBase58 = Base58.base58Encode([UInt8](sign))
-            return try AuthorizationHeader(data: AuthorizationHeaderData(blockchain: blockchain.rawValue, pubKey: keyPair.publicKey, signature: signatureBase58, identifier: identifier), expiredAt: expiredAt)
-
-        }
+    public static func build(for signer: Signer, message: String, identifier: String, expiredAt: Date) throws -> AuthorizationHeader {
+        let sign = try signer.signMessage(message: message.data(using: .utf8)!)
+        let encodedSign = signer.encodeSignature(sign)
+        return try AuthorizationHeader(data: AuthorizationHeaderData(blockchain: signer.blockchain.rawValue, pubKey: signer.getPublicKey(), signature: encodedSign, identifier: identifier), expiredAt: expiredAt)
     }
 }

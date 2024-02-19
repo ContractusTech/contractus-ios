@@ -105,11 +105,11 @@ struct CButton: View {
     private var cornerRadius: CGFloat {
         switch size {
         case .default:
-            return roundedCorner ? 34 : 13
+            return roundedCorner ? 32 : 13
         case .small:
-            return roundedCorner ? 34 : 8
+            return roundedCorner ? 32 : 8
         case .large:
-            return roundedCorner ? 34 : 17
+            return roundedCorner ? 32 : 17
         }
     }
 

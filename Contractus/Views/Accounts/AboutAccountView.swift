@@ -31,14 +31,14 @@ struct AboutAccountView: View {
     let titleText: String
     let largeTitleText: String
     let informationText: String
-    let privateKey: Data
+    let privateKey: String
     var completion: (CompletionType) -> Void
     @State private var removeFromBackup: Bool = false
     @State private var backupToiCloud: Bool = false
     @State private var existInBackup: Bool = false
     @State private var showConfirmDelete: Bool = false
 
-    internal init(viewType: AboutAccountView.ViewType, informationType: TopTextBlockView.InformationType, titleText: String, largeTitleText: String, informationText: String, privateKey: Data, completion: @escaping (AboutAccountView.CompletionType) -> Void) {
+    internal init(viewType: AboutAccountView.ViewType, informationType: TopTextBlockView.InformationType, titleText: String, largeTitleText: String, informationText: String, privateKey: String, completion: @escaping (AboutAccountView.CompletionType) -> Void) {
         self.viewType = viewType
         self.informationType = informationType
         self.titleText = titleText
@@ -66,7 +66,7 @@ struct AboutAccountView: View {
                         titleText: largeTitleText,
                         subTitleText: informationText)
 
-                    CopyContentView(content: privateKey.toBase58(), contentType: .privateKey) { _ in
+                    CopyContentView(content: privateKey, contentType: .privateKey) { _ in
 
                     }
                     Spacer()
@@ -188,7 +188,7 @@ struct AboutAccountView_Previews: PreviewProvider {
                 titleText: "Attention",
                 largeTitleText: "Remove Account",
                 informationText: "Copy the private key and save it in the password manager or in another safe place",
-                privateKey: Data(),
+                privateKey: "",
                 completion: { _ in }
             )
             .environmentObject(AnyViewModel<EnterState, EnterInput>(EnterViewModel(initialState: EnterState(), accountService: AccountServiceImpl(storage: MockAccountStorage()), backupStorage: BackupStorageMock())))

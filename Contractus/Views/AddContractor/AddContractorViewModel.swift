@@ -72,7 +72,7 @@ final class AddContractorViewModel: ViewModel {
             shareableData: ShareableDeal(dealId: deal.id, secretBase64: sharedSecretBase64),
             account: account,
             publicKey: publicKey ?? "",
-            state: AccountValidator.isValidPublicKey(string: publicKey ?? "", blockchain: blockchain) ? .validPublicKey : .none,
+            state: blockchain.isValidPublicKey(string: publicKey ?? "") ? .validPublicKey : .none,
             blockchain: blockchain)
     }
 
@@ -82,7 +82,7 @@ final class AddContractorViewModel: ViewModel {
         case .dismissError:
             state.errorState = nil
         case .validate(let publicKey):
-            self.state.state = AccountValidator.isValidPublicKey(string: publicKey, blockchain: state.blockchain) ? .validPublicKey : .invalidPublicKey(R.string.localizable.addContractorErrorWrongPublicKey(state.blockchain.rawValue))
+            self.state.state = state.blockchain.isValidPublicKey(string: publicKey) ? .validPublicKey : .invalidPublicKey(R.string.localizable.addContractorErrorWrongPublicKey(state.blockchain.rawValue))
             checkKeyAlreadyInDeal(publicKey)
             self.state.publicKey = publicKey
         case .addContractor:
@@ -93,8 +93,8 @@ final class AddContractorViewModel: ViewModel {
                 .sink { result in
                     switch result {
                     case .failure(let error):
-                        debugPrint(error)
-                        self.state.errorState = .error(error.readableDescription)
+
+                        self.state.errorState = .error(error.localizedDescription)
                         self.state.state = .none
                     case .finished:
                         break

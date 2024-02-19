@@ -10,7 +10,33 @@ import FirebaseMessaging
 import UserNotifications
 import AppsFlyerLib
 
+fileprivate enum Constants {
+    static let mainTabIcon = R.image.homeFill.image
+    static let profileTabIcon = R.image.accountCircleFill.image
+    static let peopleTabIcon = R.image.teamFill.image
+}
+
 struct RootState {
+    enum TabTag: String, CaseIterable, Identifiable {
+        var id: String {
+            return self.rawValue
+        }
+        case main
+//        case people
+//        case profile
+
+        var image: Image {
+            switch self {
+
+            case .main:
+                Constants.mainTabIcon
+//            case .people:
+//                Constants.peopleTabIcon
+//            case .profile:
+//                Constants.profileTabIcon
+            }
+        }
+    }
 
     enum State {
         case hasAccount(CommonAccount, notification: NotificationHandler.NotificationType? = nil), noAccount, loading, error(Error)
@@ -78,7 +104,7 @@ final class RootViewModel: ViewModel {
                 debugPrint(".noAccount")
             } catch {
                 self.state.state = .error(error)
-                debugPrint(error.readableDescription)
+                debugPrint(error.localizedDescription)
             }
         }
     }
@@ -93,6 +119,7 @@ struct ContractusApp: App {
     @StateObject var rootViewModel = appState
     @State private var showTxSheet: Bool = false
     @State private var showServerSelection = false
+    @State private var selectionTab: RootState.TabTag = .main
 
     private var transactionSignType: TransactionSignType? {
         switch rootViewModel.transactionState {
@@ -130,7 +157,48 @@ struct ContractusApp: App {
                         removal: .opacity)
                     )
                 case .hasAccount(let account, let notification):
-                    mainView(account: account, notification: notification)
+                    ZStack(alignment: .bottom) {
+                        TabView(selection: $selectionTab) {
+                            ForEach(RootState.TabTag.allCases) { item in
+                                tabView(tab: item, account: account, notification: notification)
+                            }
+                        }
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                        .ignoresSafeArea()
+                        .animation(.easeOut(duration: 0.2), value: selectionTab)
+                        .transition(.slide)
+
+                        if RootState.TabTag.allCases.count > 1 {
+                            HStack {
+                                Spacer()
+                                HStack(spacing: 8) {
+                                    ForEach(RootState.TabTag.allCases) { item in
+                                        Button {
+                                            selectionTab = item
+                                        } label: {
+                                            item.image
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 28, height: 28)
+                                                .foregroundColor(R.color.textBase.color)
+                                                .opacity(selectionTab == item ? 1.0 : 0.4)
+                                                .padding(11)
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal, 8)
+                                .background(.ultraThinMaterial)
+                                .cornerRadius(32)
+                                Spacer()
+                            }
+                        }
+
+                    }
+                    .onChange(of: selectionTab) { newValue in
+                        debugPrint(newValue)
+                    }
+
+
                 }
             }
             .navigationBarColor()
@@ -146,7 +214,7 @@ struct ContractusApp: App {
             accountStorage: ServiceFactory.shared.makeAccountStorage(),
             accountAPIService: try? APIServiceFactory.shared.makeAccountService(),
             dealsAPIService: try? APIServiceFactory.shared.makeDealsService(),
-            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService(), 
+            resourcesAPIService: try? APIServiceFactory.shared.makeResourcesService(),
             checkoutService: APIServiceFactory.shared.makeCheckoutService(),
             secretStorage: SharedSecretStorageImpl(),
             notification: notification)), logoutCompletion: {
@@ -194,6 +262,21 @@ struct ContractusApp: App {
     }
 
     @ViewBuilder
+    func tabView(tab: RootState.TabTag, account: CommonAccount, notification: NotificationHandler.NotificationType? = nil) -> some View {
+        switch tab {
+        case .main:
+            mainView(account: account, notification: notification)
+                .tag(tab)
+//        case .people:
+//            EmptyView()
+//                .tag(tab)
+//        case .profile:
+//            EmptyView()
+//                .tag(tab)
+        }
+    }
+
+    @ViewBuilder
     func errorView(error: Error) -> some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -202,7 +285,7 @@ struct ContractusApp: App {
                     .scaledToFit()
                     .frame(width: 48, height: 48)
                     .foregroundColor( error.isDeviceCheckError ? R.color.yellow.color : R.color.blue.color)
-                Text(error.readableDescription)
+                Text(error.localizedDescription)
 
                 HStack(spacing: 12) {
                     CButton(title: "Try again", style: .secondary, size: .default, isLoading: false) {
@@ -260,9 +343,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         case .local, .developer:
             NFX.sharedInstance().start()
         default:
-            #if DEBUG
+#if DEBUG
             NFX.sharedInstance().start()
-            #endif
+#endif
         }
 
         FirebaseApp.configure()
@@ -283,6 +366,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         if let remoteNotification = remoteNotification as? [AnyHashable: Any] {
             NotificationHandler.handler(notification: remoteNotification)
         }
+
+        MigrationManager.migrateIfNeeded()
 
         return true
     }

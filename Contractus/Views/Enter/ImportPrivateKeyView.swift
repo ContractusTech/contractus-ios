@@ -102,7 +102,7 @@ struct ImportPrivateKeyView: View {
                         titleText: R.string.localizable.importWalletSuccessTitle(),
                         largeTitleText: R.string.localizable.importWalletSuccessLabel(),
                         informationText: R.string.localizable.importWalletSuccessDescription(),
-                        privateKey: account.privateKey,
+                        privateKey: account.privateKeyEncoded(),
                         completion: {
                         completion(account)
                     }).environmentObject(viewModel)

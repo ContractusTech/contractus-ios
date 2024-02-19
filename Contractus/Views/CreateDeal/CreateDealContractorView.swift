@@ -50,8 +50,8 @@ struct CreateDealContractorView: View {
                     .padding(.bottom, 26)
                                 
                 TextFieldView(
-                    placeholder: R.string.localizable.commonPublicKey(),
-                    blockchain: .solana,
+                    placeholder: placeholder,
+                    blockchain: viewModel.state.account.blockchain,
                     value: viewModel.state.contractor,
                     changeValue: { newValue in
                         contractorPublicKey = newValue
@@ -61,7 +61,7 @@ struct CreateDealContractorView: View {
                 )
                 .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
 
-                Text(R.string.localizable.newDealSolanaAccount())
+                Text(R.string.localizable.addContractorTypeAccountInfo(viewModel.state.account.blockchain.longTitle))
                     .font(.footnote)
                     .fontWeight(.medium)
                     .foregroundColor(R.color.secondaryText.color)
@@ -139,6 +139,15 @@ struct CreateDealContractorView: View {
         return viewModel.state.role == .client
         ? R.string.localizable.newDealExecutorAccountSubtitle()
         : R.string.localizable.newDealClientAccountSubtitle()
+    }
+
+    var placeholder: String {
+        switch viewModel.state.account.blockchain {
+        case .bsc:
+            return R.string.localizable.commonAddress()
+        case .solana:
+            return R.string.localizable.commonPublicKey()
+        }
     }
 }
 

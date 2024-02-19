@@ -131,4 +131,10 @@ public final class DealsService: BaseService {
             completion(result)
         }
     }
+
+    public func checkFunds(dealId: String, completion: @escaping (Swift.Result<CheckFunds, APIClientError>) -> Void) {
+        self.request(path: .checkFunds(dealId), httpMethod: .get, data: Empty()) { (result: Swift.Result<CheckFunds, APIClientError>) in
+            completion(result)
+        }
+    }
 }

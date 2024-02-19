@@ -69,7 +69,7 @@ final class MainViewModel: ViewModel {
         secretStorage: SharedSecretStorage?,
         notification: NotificationHandler.NotificationType? = nil)
     {
-        self.state = MainState(account: account, selectedTokens: UtilsStorage.shared.getTokenSettings() ?? [])
+        self.state = MainState(account: account, selectedTokens: UtilsStorage.shared.getTokenSettings(for: account.publicKey, blockchain: account.blockchain) ?? [])
 
         self.accountAPIService = accountAPIService
         self.dealsAPIService = dealsAPIService
@@ -101,7 +101,7 @@ final class MainViewModel: ViewModel {
             self.state = state
 
         case .saveTokenSettings(let tokens):
-            UtilsStorage.shared.saveTokenSettings(tokens: tokens)
+            UtilsStorage.shared.saveTokenSettings(tokens: tokens, for: self.state.account.publicKey, blockchain: self.state.account.blockchain)
             Task {
                 try? await loadAccountInfo()
             }
@@ -156,7 +156,7 @@ final class MainViewModel: ViewModel {
                             let serverKey = deal.sharedKey,
                             let serverKeyData = Data(base64Encoded: serverKey) else { return }
 
-                        guard let secretData = try? await SharedSecretService.recover(serverSecret: serverKeyData, clientSecret: clientKeyData, hashOriginalKey: deal.secretKeyHash ?? "") else {
+                        guard let _ = try? await SharedSecretService.recover(serverSecret: serverKeyData, clientSecret: clientKeyData, hashOriginalKey: deal.secretKeyHash ?? "") else {
                             return
                         }
                         state.selectedDeal = deal
@@ -200,7 +200,7 @@ final class MainViewModel: ViewModel {
         try await withCheckedThrowingContinuation { continues in
 
             var types: Set<ContractusAPI.DealsService.FilterByRole>
-            var statuses: Set<ContractusAPI.DealsService.FilterByStatus> = .init(arrayLiteral: .new, .started, .starting, .finishing, .finished, .canceling, .revoked, .canceled)
+            var statuses: Set<ContractusAPI.DealsService.FilterByStatus> = .init()
             switch type {
             case .isChecker:
                 types = .init(arrayLiteral: .isChecker)
@@ -261,12 +261,12 @@ final class MainViewModel: ViewModel {
     }
 
     private func getTokenSettings() async -> [ContractusAPI.Token] {
-        if let tokens = UtilsStorage.shared.getTokenSettings() {
+        if let tokens = UtilsStorage.shared.getTokenSettings(for: self.state.account.publicKey, blockchain: self.state.account.blockchain) {
             return tokens
         }
 
         if let tokens = try? await loadTokens() {
-            UtilsStorage.shared.saveTokenSettings(tokens: tokens)
+            UtilsStorage.shared.saveTokenSettings(tokens: tokens, for: self.state.account.publicKey, blockchain: self.state.account.blockchain)
             return tokens
         }
         return []
@@ -277,12 +277,7 @@ final class MainViewModel: ViewModel {
         self.tokens = await getTokenSettings()
 
         var state = self.state
-
-        switch state.account.blockchain {
-        case .solana:
-            // TODO: - Need refactor.
-            state.disableUnselectTokens = self.tokens.filter { $0.native || $0.code == "WSOL" }
-        }
+        state.disableUnselectTokens = self.tokens.filter { $0.native || $0.code == state.account.blockchain.wrapTokenCode }
 
         async let balanceTask = loadBalance(for: tokens.map { .init(code: $0.code, address: $0.address) })
         async let statisticsTask = loadStatistics(currency: .defaultCurrency)
@@ -365,3 +360,5 @@ final class MainViewModel: ViewModel {
 
     }
 }
+
+extension Deal: Identifiable { }

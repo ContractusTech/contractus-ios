@@ -15,7 +15,7 @@ struct TopUpView: View {
 
     enum TopUpType {
         case crypto
-        case loan
+//        case loan
         case fiat(URL)
         case buyCTUS
     }
@@ -53,9 +53,9 @@ struct TopUpView: View {
                 }
             }
 
-            itemView(image: Constants.loanImage, title: R.string.localizable.topupTitleLoad(), description: R.string.localizable.topupSubtitleLoad(), disabled: true, loading: false) {
-                action(.loan)
-            }
+//            itemView(image: Constants.loanImage, title: R.string.localizable.topupTitleLoad(), description: R.string.localizable.topupSubtitleLoad(), disabled: true, loading: false) {
+//                action(.loan)
+//            }
             Spacer()
         }
         .padding(20)

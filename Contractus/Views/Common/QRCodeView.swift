@@ -1,15 +1,7 @@
-//
-//  QRCodeView.swift
-//  Contractus
-//
-//  Created by Simon Hudishkin on 05.08.2022.
-//
-
 import Foundation
 import ContractusAPI
 import SwiftUI
 import QRCode
-
 
 struct QRCodeView: View {
 
@@ -17,26 +9,25 @@ struct QRCodeView: View {
         case normal = 230
     }
 
-    private let qrContent: QRCodeUI?
+    private let content: String
     private let size: ViewSize
 
     init(content: String, size: ViewSize = .normal) {
         self.size = size
-        self.qrContent = QRCodeUI(text: content, errorCorrection: .high)
+        self.content = content
     }
     var body: some View {
         VStack {
-            if let content = qrContent {
-                content
-                    .components(.everything)
-                    .pixelShape(QRCode.PixelShape.Vertical(cornerRadiusFraction: 0.2))
-                    .eyeShape(QRCode.EyeShape.Squircle())
-                    .foregroundColor(.black)
-                    .background(.white)
-                    .frame(width: size.rawValue, height:  size.rawValue, alignment: .center)
-            } else {
-                EmptyView()
-            }
+
+            QRCodeViewUI(
+                content: content,
+                errorCorrection: .high,
+                foregroundColor: Color.black.cgColor!,
+                backgroundColor: Color.white.cgColor!,
+                pixelStyle: QRCode.PixelShape.Vertical(cornerRadiusFraction: 0.2),
+                eyeStyle: QRCode.EyeShape.Squircle()
+            )
+            .frame(width: size.rawValue, height:  size.rawValue, alignment: .center)
         }
         .padding(4)
         .background(RoundedRectangle(cornerRadius: 10).fill(.white))

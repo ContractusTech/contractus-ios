@@ -135,7 +135,7 @@ final class SendTokensViewModel: ViewModel {
                     state.transactionSignType = .byTransaction(tx)
                     after?()
                 } catch {
-                    state.errorState = .error(error.readableDescription)
+                    state.errorState = .error(error.localizedDescription)
                 }
                 state.state = .ready
             }

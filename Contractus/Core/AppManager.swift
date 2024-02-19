@@ -126,7 +126,12 @@ final class AppManagerImpl: AppManager {
             }
         }
 
-        guard let account = accountStorage.getCurrentAccount() else {
+        var account = accountStorage.getCurrentAccount()
+
+        if account == nil {
+            account = accountStorage.getAccounts().first
+        }
+        guard let account = account else {
             throw AppManagerError.noCurrentAccount
         }
 
@@ -160,9 +165,8 @@ final class AppManagerImpl: AppManager {
 
     private func buildHeader(for account: CommonAccount, identifier: String, message: String, expiredAt: Date) throws -> ContractusAPI.AuthorizationHeader {
         return try AuthorizationHeaderBuilder.build(
-            for: account.blockchain,
+            for: account,
             message: message,
-            with: (publicKey: account.publicKey, privateKey: account.privateKey),
             identifier: identifier,
             expiredAt: expiredAt
         )

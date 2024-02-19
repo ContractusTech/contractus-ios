@@ -126,7 +126,7 @@ final class CreateDealViewModel: ViewModel {
                 newState.createdDeal = deal
                 self.state = newState
             } catch {
-                self.state.state = .error(error.readableDescription)
+                self.state.state = .error(error.localizedDescription)
             }
         }
     }

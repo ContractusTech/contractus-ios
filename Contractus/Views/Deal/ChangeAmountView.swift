@@ -37,7 +37,7 @@ struct ChangeAmountView: View {
     ) {
         self._amountString = State(initialValue: viewModel.state.amount.valueFormatted)
         if viewModel.tier == .holder {
-            self._holderMode = .init(initialValue: viewModel.deal.allowHolderMode ?? false || viewModel.amount.token.holderMode)
+            self._holderMode = .init(initialValue: viewModel.state.allowHolderMode)
         }
 
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -402,6 +402,9 @@ struct ChangeAmountView: View {
                     }
                 }
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
+            }
+            .onAppear {
+                viewModel.trigger(.load)
             }
             .onChange(of: amountString, perform: { newAmount in
                 amountPublisher.send(newAmount)

@@ -39,100 +39,102 @@ struct ReferralView: View {
                 } else {
 
                     // MARK: - Promocode
-                    HStack {
-                        VStack(alignment: .leading, spacing: 12) {
-                            HStack {
-                                Text(R.string.localizable.referralPromocodeTitle())
-                                    .font(.footnote.weight(.semibold))
-                                    .textCase(.uppercase)
-                                    .foregroundColor(R.color.secondaryText.color)
-                                Spacer()
-                            }
-                            if let promocode = viewModel.state.promocode {
-                                HStack(spacing: 16) {
-                                    Text(promocode)
-                                        .font(.largeTitle.weight(.semibold))
+                    if viewModel.state.available {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack {
+                                    Text(R.string.localizable.referralPromocodeTitle())
+                                        .font(.footnote.weight(.semibold))
                                         .textCase(.uppercase)
-                                    
-                                    Button {
-                                        copiedNotification = true
-                                        ImpactGenerator.light()
-                                        UIPasteboard.general.string = promocode
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
-                                            copiedNotification = false
-                                        })
-                                        EventService.shared.send(event: DefaultAnalyticsEvent.referralCodeCopyTap)
-                                    } label: {
-                                        HStack {
-                                            if copiedNotification {
-                                                Constants.successCopyImage
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fit)
-                                                    .frame(width: 20, height: 20)
-                                                    .foregroundColor(R.color.baseGreen.color)
-                                            } else {
-                                                Constants.copyImage
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fit)
-                                                    .frame(width: 20, height: 20)
-                                                    .foregroundColor(R.color.textBase.color)
+                                        .foregroundColor(R.color.secondaryText.color)
+                                    Spacer()
+                                }
+                                if let promocode = viewModel.state.promocode {
+                                    HStack(spacing: 16) {
+                                        Text(promocode)
+                                            .font(.largeTitle.weight(.semibold))
+                                            .textCase(.uppercase)
+
+                                        Button {
+                                            copiedNotification = true
+                                            ImpactGenerator.light()
+                                            UIPasteboard.general.string = promocode
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
+                                                copiedNotification = false
+                                            })
+                                            EventService.shared.send(event: DefaultAnalyticsEvent.referralCodeCopyTap)
+                                        } label: {
+                                            HStack {
+                                                if copiedNotification {
+                                                    Constants.successCopyImage
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fit)
+                                                        .frame(width: 20, height: 20)
+                                                        .foregroundColor(R.color.baseGreen.color)
+                                                } else {
+                                                    Constants.copyImage
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fit)
+                                                        .frame(width: 20, height: 20)
+                                                        .foregroundColor(R.color.textBase.color)
+                                                }
                                             }
+                                            .frame(width: 24, height: 24)
                                         }
-                                        .frame(width: 24, height: 24)
+                                    }
+                                } else {
+                                    CButton(title: R.string.localizable.referralPromocodeRequest(), style: .secondary, size: .small, isLoading: false) {
+                                        EventService.shared.send(event: DefaultAnalyticsEvent.referralCodeCreateTap)
+                                        viewModel.trigger(.create)
                                     }
                                 }
-                            } else {
-                                CButton(title: R.string.localizable.referralPromocodeRequest(), style: .secondary, size: .small, isLoading: false) {
-                                    EventService.shared.send(event: DefaultAnalyticsEvent.referralCodeCreateTap)
-                                    viewModel.trigger(.create)
-                                }
-                            }
-                            Text(R.string.localizable.referralPromocodeSubtitle())
-                                .font(.footnote.weight(.semibold))
-                                .foregroundColor(R.color.secondaryText.color)
-                            
-                        }
-                        .padding(EdgeInsets(top: 16, leading: 13, bottom: 20, trailing: 13))
-                    }
-
-                    .background(R.color.secondaryBackground.color)
-                    .cornerRadius(20)
-                    .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
-
-                    // MARK: - Bonus
-                    HStack {
-                        VStack(alignment: .leading, spacing: 12) {
-                            HStack {
-                                Text(R.string.localizable.referralBonusTitle())
+                                Text(R.string.localizable.referralPromocodeSubtitle())
                                     .font(.footnote.weight(.semibold))
-                                    .textCase(.uppercase)
                                     .foregroundColor(R.color.secondaryText.color)
-                                Spacer()
-                            }
-                            
-                            if viewModel.state.state == .applied {
-                                CButton(title: R.string.localizable.referralPromocodeApplied(), style: .success, size: .small, isLoading: false, isDisabled: true) {}
-                            } else {
-                                CButton(title: R.string.localizable.referralPromocodeApply(), style: .secondary, size: .small, isLoading: false, isDisabled: !viewModel.state.allowApply) {
-                                    EventService.shared.send(event: DefaultAnalyticsEvent.referralApplyCodeFormTap)
-                                    promoIsPresented.toggle()
-                                }
-                            }
 
-                            Text(viewModel.state.allowApply
-                                 ? R.string.localizable.referralBonusSubtitle()
-                                 : R.string.localizable.referralBonusApplied())
-                                .font(.footnote.weight(.semibold))
-                                .foregroundColor(R.color.secondaryText.color)
+                            }
+                            .padding(EdgeInsets(top: 16, leading: 13, bottom: 20, trailing: 13))
                         }
-                        .padding(EdgeInsets(top: 16, leading: 13, bottom: 20, trailing: 13))
+                        .background(R.color.secondaryBackground.color)
+                        .cornerRadius(20)
+                        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+
+                        // MARK: - Bonus
+                        HStack {
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack {
+                                    Text(R.string.localizable.referralBonusTitle())
+                                        .font(.footnote.weight(.semibold))
+                                        .textCase(.uppercase)
+                                        .foregroundColor(R.color.secondaryText.color)
+                                    Spacer()
+                                }
+
+                                if viewModel.state.state == .applied {
+                                    CButton(title: R.string.localizable.referralPromocodeApplied(), style: .success, size: .small, isLoading: false, isDisabled: true) {}
+                                } else {
+                                    CButton(title: R.string.localizable.referralPromocodeApply(), style: .secondary, size: .small, isLoading: false, isDisabled: !viewModel.state.allowApply) {
+                                        EventService.shared.send(event: DefaultAnalyticsEvent.referralApplyCodeFormTap)
+                                        promoIsPresented.toggle()
+                                    }
+                                }
+
+                                Text(viewModel.state.allowApply
+                                     ? R.string.localizable.referralBonusSubtitle()
+                                     : R.string.localizable.referralBonusApplied())
+                                    .font(.footnote.weight(.semibold))
+                                    .foregroundColor(R.color.secondaryText.color)
+                            }
+                            .padding(EdgeInsets(top: 16, leading: 13, bottom: 20, trailing: 13))
+                        }
+                        .background(R.color.secondaryBackground.color)
+                        .cornerRadius(20)
+                        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+                        
                     }
-                    .background(R.color.secondaryBackground.color)
-                    .cornerRadius(20)
-                    .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
-                    
+
                     // MARK: - Prizes
                     HStack {
                         VStack(alignment: .leading, spacing: 12) {
@@ -168,6 +170,7 @@ struct ReferralView: View {
         .baseBackground()
         .onAppear {
             EventService.shared.send(event: DefaultAnalyticsEvent.referralOpen)
+            viewModel.trigger(.load)
         }
         .navigationTitle(R.string.localizable.referralTitle())
         .navigationBarTitleDisplayMode(.inline)

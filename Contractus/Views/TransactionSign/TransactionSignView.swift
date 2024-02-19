@@ -9,13 +9,10 @@
 import Foundation
 import ContractusAPI
 import SwiftUI
-import QRCode
 
 fileprivate enum Constants {
     static let successSignedImage = Image(systemName: "checkmark.circle.fill")
-
     static let successSignedShieldImage = Image(systemName: "checkmark.shield.fill")
-
     static let failTxImage = Image(systemName: "xmark.octagon.fill")
     static let shieldImage = Image(systemName: "exclamationmark.shield.fill")
     static let arrowDownImage = Image(systemName: "chevron.down")
@@ -60,6 +57,75 @@ struct FieldCopyButton: View {
     }
 }
 
+struct ApproveView: View {
+
+    let maxGas: String
+    let isLoading: Bool
+    var action: () -> Void
+
+    var body: some View {
+
+        VStack(spacing: 12) {
+            VStack(alignment: .center, spacing: 12) {
+                Text(R.string.localizable.transactionSignApproveTitle())
+                    .foregroundColor(R.color.textBase.color)
+                    .font(.title3.weight(.semibold))
+                    .multilineTextAlignment(.center)
+                VStack(alignment: .center, spacing: 4) {
+                    Text(R.string.localizable.transactionSignApproveText())
+                        .font(.footnote)
+                        .foregroundColor(R.color.textBase.color)
+                        .multilineTextAlignment(.center)
+                    
+                    Text(R.string.localizable.transactionSignMexFeeText(maxGas))
+                        .font(.footnote)
+                        .foregroundColor(R.color.secondaryText.color)
+                        .multilineTextAlignment(.leading)
+                }
+
+            }
+            CButton(
+                title: R.string.localizable.transactionSignApproveButton(),
+                style: .warn,
+                size: .large,
+                isLoading: isLoading) {
+                    action()
+                }
+        }
+        .padding()
+        .background {
+            RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.yellow.color)
+        }
+        .cornerRadius(20)
+        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+    }
+}
+
+struct NeedFundsView: View {
+    let tokens: String
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(R.string.localizable.transactionSignNeedFundsTitle())
+                    .foregroundColor(R.color.redText.color)
+                    .font(.body.weight(.semibold))
+                    .multilineTextAlignment(.leading)
+                Text(R.string.localizable.transactionSignNeedFundsText(tokens))
+                    .font(.caption2)
+                    .foregroundColor(R.color.redText.color)
+                    .multilineTextAlignment(.leading)
+            }
+            Spacer()
+        }
+        .padding()
+        .background {
+            RoundedRectangle(cornerRadius: 20).stroke().fill(R.color.labelBackgroundError.color)
+        }
+        .cornerRadius(20)
+    }
+}
+
 struct TransactionDetailFieldView: View {
 
     enum FieldButton: Identifiable {
@@ -81,11 +147,11 @@ struct TransactionDetailFieldView: View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.callout)
+                    .font(.callout.weight(.semibold))
                     .foregroundColor(R.color.textBase.color)
                 if let titleDescription = titleDescription {
                     Text(titleDescription)
-                        .font(.footnote)
+                        .font(.caption2)
                         .foregroundColor(R.color.secondaryText.color)
                 }
             }
@@ -182,11 +248,22 @@ struct TransactionSignView: View {
                             }
                             .padding(EdgeInsets(top: 0, leading: 32, bottom: 0, trailing: 32))
                         }
-
                     }
                     .padding(.bottom, 0)
                     .padding(.top, 24)
+
                     VStack {
+
+                        if viewModel.state.needApprove {
+                            ApproveView(maxGas: viewModel.state.maxGasAmount, isLoading: viewModel.state.state == .approving) {
+                                viewModel.trigger(.approve)
+                            }
+                        }
+
+                        if viewModel.state.needFunds {
+                            NeedFundsView(tokens: viewModel.state.needFundsTokens)
+                        }
+
                         VStack(alignment: .leading, spacing: 0) {
                             ForEach(viewModel.state.informationFields) { item in
                                 TransactionDetailFieldView(
@@ -211,13 +288,19 @@ struct TransactionSignView: View {
                                 VStack(alignment: .leading) {
                                     VStack(alignment: .leading) {
                                         HStack {
-                                            Text(R.string.localizable.transactionSignFieldsTx())
-                                                .font(.body)
-                                                .foregroundColor(R.color.textBase.color)
-                                            Text(R.string.localizable.transactionSignFieldsBase64())
-                                                .font(.body)
-                                                .foregroundColor(R.color.secondaryText.color)
 
+                                            if viewModel.state.account.blockchain == .solana {
+                                                Text(R.string.localizable.transactionSignFieldsTx())
+                                                    .font(.body)
+                                                    .foregroundColor(R.color.textBase.color)
+                                                Text(R.string.localizable.transactionSignFieldsBase64())
+                                                    .font(.body)
+                                                    .foregroundColor(R.color.secondaryText.color)
+                                            } else {
+                                                Text(R.string.localizable.transactionSignFieldsMessage())
+                                                    .font(.body)
+                                                    .foregroundColor(R.color.textBase.color)
+                                            }
                                             Spacer()
 
                                             Button {
@@ -300,6 +383,8 @@ struct TransactionSignView: View {
             switch errorState {
             case .error(let errorMessage):
                 self.alertType = .error(errorMessage)
+            case .approveError:
+                self.alertType = .error(R.string.localizable.transactionSignApproveErrorMessage())
             case .none:
                 self.alertType = nil
             }
@@ -308,11 +393,12 @@ struct TransactionSignView: View {
             switch newState {
             case .signed:
                 signedAction()
-            case .signing, .loaded, .loading:
+            case .signing, .loaded, .loading, .approving:
                 break
             }
         })
         .onAppear {
+            viewModel.trigger(.load)
             EventService.shared.send(event: DefaultAnalyticsEvent.txOpen)
         }
         .alert(item: $alertType, content: { type in
@@ -381,7 +467,7 @@ struct TransactionSignView: View {
     var signButton: some View {
         var icon: Image?
         let loading: Bool = viewModel.state.state == .signing || viewModel.state.transaction?.status == .processing
-        let isDisable = viewModel.state.state == .loading || viewModel.state.state == .signing || viewModel.state.state == .signed || !viewModel.state.allowSign || viewModel.state.transaction?.status == .error
+        let isDisable = viewModel.state.state == .loading || viewModel.state.state == .signing || viewModel.state.state == .signed || !viewModel.state.allowSign || viewModel.state.transaction?.status == .error || viewModel.state.needApprove
         var style: CButton.Style = .primary
 
         switch viewModel.state.transaction?.status {
@@ -429,7 +515,7 @@ struct TransactionSignView: View {
             return R.string.localizable.transactionSignButtonsSigning()
         case .loading:
             return R.string.localizable.transactionSignButtonsLoading()
-        case .loaded:
+        case .loaded, .approving:
             return R.string.localizable.transactionSignButtonsSign()
         }
     }
@@ -464,9 +550,9 @@ struct TransactionSignView: View {
             return R.string.localizable.transactionSignSubtitleFinishDeal()
         case .dealCancel:
             return R.string.localizable.transactionSignSubtitleCancelDeal()
-        case .unwrapAllSOL:
+        case .unwrapAllSOL, .unwrap:
             return R.string.localizable.transactionSignSubtitleUnwrap()
-        case .wrapSOL:
+        case .wrapSOL, .wrap:
             return R.string.localizable.transactionSignSubtitleWrap()
         case .transfer:
             return R.string.localizable.transactionSignSubtitleTransfer()
@@ -499,7 +585,7 @@ struct TransactionSignView: View {
 struct SignConfirmView_Previews: PreviewProvider {
 
     static var previews: some View {
-        TransactionSignView(account: Mock.account, type: .byDeal(Mock.deal, .dealFinish)) {
+        TransactionSignView(account: Mock.account, type: .byDeal(Mock.deal, .dealInit)) {
 
         } closeAction: { _ in
             

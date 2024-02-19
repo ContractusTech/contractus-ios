@@ -74,7 +74,8 @@ final class TokenSelectViewModel: ViewModel {
             }
             Task {
                 let tokens = (try? await loadTokens()) ?? []
-                let balances = Dictionary(uniqueKeysWithValues: (self.balance?.tokens ?? []).filter{ $0.amount.value > 0 }.map{ ($0.amount.token.code, $0.amount.valueFormattedWithCode) } )
+
+                let balances = Dictionary((self.balance?.tokens ?? []).filter{ $0.amount.value > 0 }.map{ ($0.amount.token.code, $0.amount.valueFormattedWithCode) }) { val1, val2 in  return val2  }
 
                 await MainActor.run { [tokens, balances] in
                     var state = self.state

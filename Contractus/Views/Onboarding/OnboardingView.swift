@@ -58,7 +58,8 @@ struct OnboardingView: View {
     }
 
     func action() {
-        switch viewModel.state.pages[selectedPage].buttonType {
+        guard let buttonType = viewModel.state.pages[safe: selectedPage]?.buttonType else { return }
+        switch buttonType {
         case .close:
             close()
         case .next:

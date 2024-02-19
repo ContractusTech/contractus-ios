@@ -11,6 +11,9 @@ import Alamofire
 public enum ServicePath {
     case verifyDevice
     case accounts
+    case approval
+    case sendTx
+    case checkExternalTx(signature: String)
     case topUp
     case currentAccount
     case accountStatistics
@@ -28,6 +31,7 @@ public enum ServicePath {
     case deal(String)
     case dealAction(String)
     case participant(String)
+    case checkFunds(String)
     case balance
     case dealFee(dealId: String)
     case wrap
@@ -65,6 +69,8 @@ public enum ServicePath {
             return "/tx"
         case .transaction(let id):
             return "/tx/\(id)"
+        case .checkExternalTx(let signature):
+            return "/tx/external/\(signature)"
         case .accounts:
             return "/accounts"
         case .currentAccount:
@@ -75,6 +81,8 @@ public enum ServicePath {
             return "/deals"
         case .deal(let id):
             return "/deals/\(id)"
+        case .checkFunds(let id):
+            return "/deals/\(id)/check-funds"
         case .dealAction(let id):
             return "/deals/\(id)/actions"
         case .dealMetadata(let id):
@@ -117,6 +125,10 @@ public enum ServicePath {
             return "/ai/text-generate"
         case .aiPrompts:
             return "/ai/prompts"
+        case .approval:
+            return "/tx/approval"
+        case .sendTx:
+            return "/tx/send"
         }
     }
 }

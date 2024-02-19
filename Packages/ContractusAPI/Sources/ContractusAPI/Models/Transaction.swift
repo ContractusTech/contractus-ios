@@ -27,7 +27,7 @@ public struct Transaction: Decodable, Equatable {
     public let token: Token?
     public let fee: BigUInt?
     public let status: TransactionStatus
-
+    public let blockchain: Blockchain
     public let ownerSignature: String?
     public let contractorSignature: String?
     public let checkerSignature: String?
@@ -39,6 +39,7 @@ public struct Transaction: Decodable, Equatable {
         type: TransactionType,
         status: TransactionStatus,
         transaction: String,
+        blockchain: Blockchain,
         initializerPublicKey: String,
         amount: BigUInt? = nil,
         token: Token? = nil,
@@ -64,6 +65,7 @@ public struct Transaction: Decodable, Equatable {
         self.fee = fee
         self.signature = signature
         self.errorDetail = errorDetail
+        self.blockchain = blockchain
     }
 
     enum CodingKeys: CodingKey {
@@ -81,6 +83,7 @@ public struct Transaction: Decodable, Equatable {
         case signature
         case status
         case details
+        case blockchain
     }
 
     public init(from decoder: Decoder) throws {
@@ -88,6 +91,7 @@ public struct Transaction: Decodable, Equatable {
 
         self.id = try container.decode(String.self, forKey: Transaction.CodingKeys.id)
         self.type = try container.decode(TransactionType.self, forKey: Transaction.CodingKeys.type)
+        self.blockchain = try container.decode(Blockchain.self, forKey: Transaction.CodingKeys.blockchain)
         self.transaction = (try? container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.transaction)) ?? "" // TODO: - Fix this
         self.initializerPublicKey = try container.decode(String.self, forKey: Transaction.CodingKeys.initializerPublicKey)
         let amount = try container.decodeIfPresent(String.self, forKey: Transaction.CodingKeys.amount)
@@ -132,7 +136,7 @@ public struct Transaction: Decodable, Equatable {
         }
 
         switch type {
-        case .wrapSOL, .unwrapAllSOL, .transfer:
+        case .wrapSOL, .unwrapAllSOL, .transfer, .unwrap, .wrap:
             return AmountFormatter.format(amount: fee, token: token)
         case .dealCancel, .dealInit, .dealFinish:
             return nil
@@ -149,4 +153,82 @@ public struct SignedTransaction: Codable {
         self.transaction = transaction
         self.signature = signature
     }
+}
+
+public struct ApprovalAmount: Codable {
+    public let rawTransactions: [ApprovalUnsignedTransaction]?
+    public let needApproval: Bool
+    public let maxGas: BigUInt
+    public let token: Token
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.rawTransactions = try container.decodeIfPresent([ApprovalUnsignedTransaction].self, forKey: .rawTransactions)
+        self.needApproval = try container.decode(Bool.self, forKey: .needApproval)
+        let maxGas = try container.decode(String.self, forKey: .maxGas)
+        self.maxGas = BigUInt(stringLiteral: maxGas)
+        self.token = try container.decode(Token.self, forKey: .token)
+    }
+}
+
+public struct ApprovalUnsignedTransaction: Codable {
+    public let data: String
+    public let gasLimit: String
+//    public let gasPrice: String
+    public let chainId: String
+    public let to: String
+    public let nonce: Int
+    public let type: UInt
+    public let maxPriorityFeePerGas: String
+    public let maxFeePerGas: String
+
+    public init(data: String, gasLimit: String, chainId: String, to: String, nonce: Int, type: UInt, maxPriorityFeePerGas: String, maxFeePerGas: String) {
+        self.data = data
+        self.gasLimit = gasLimit
+//        self.gasPrice = gasPrice
+        self.chainId = chainId
+        self.to = to
+        self.nonce = nonce
+        self.type = type
+        self.maxPriorityFeePerGas = maxPriorityFeePerGas
+        self.maxFeePerGas = maxFeePerGas
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.data = try container.decode(String.self, forKey: .data)
+        self.gasLimit = try container.decode(String.self, forKey: .gasLimit)
+//        self.gasPrice = try container.decode(String.self, forKey: .gasPrice)
+        self.chainId = try container.decode(String.self, forKey: .chainId)
+        self.to = try container.decode(String.self, forKey: .to)
+        self.nonce = try container.decode(Int.self, forKey: .nonce)
+        self.type = try container.decode(UInt.self, forKey: .type)
+        self.maxPriorityFeePerGas = try container.decode(String.self, forKey: .maxPriorityFeePerGas)
+        self.maxFeePerGas = try container.decode(String.self, forKey: .maxFeePerGas)
+    }
+}
+
+public struct ApprovalSignedTransaction: Codable {
+    public let rawTransaction: ApprovalUnsignedTransaction
+    public let signature: String
+
+    public init(rawTransaction: ApprovalUnsignedTransaction, signature: String) {
+        self.rawTransaction = rawTransaction
+        self.signature = signature
+    }
+}
+
+public struct ExternalTransaction: Decodable {
+    public let status: TransactionStatus
+}
+
+public struct TransactionResult: Decodable {
+
+    public struct Data: Decodable {
+        public let blockchain: Blockchain
+        public let signature: String
+    }
+
+    public let success: Bool
+    public var data: Data?
 }
