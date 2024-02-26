@@ -2803,7 +2803,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en
       static let changeAmountFeeDescription = Rswift.StringResource(key: "changeAmount.fee-description", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
-      /// en translation: The file is large. Encryption may take a few minutes
+      /// en translation: The file is large. Encryption may take a few minutes.
       ///
       /// Locales: en
       static let uploadFileLargeFile = Rswift.StringResource(key: "uploadFile.large-file", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en"], comment: nil)
@@ -9361,7 +9361,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("changeAmount.fee-description", bundle: bundle, comment: "")
       }
 
-      /// en translation: The file is large. Encryption may take a few minutes
+      /// en translation: The file is large. Encryption may take a few minutes.
       ///
       /// Locales: en
       static func uploadFileLargeFile(preferredLanguages: [String]? = nil) -> String {

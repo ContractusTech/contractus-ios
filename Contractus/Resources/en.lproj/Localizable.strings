@@ -160,7 +160,7 @@
 "uploadFile.state.upload-file" = "Upload";
 "uploadFile.state.saving" = "Saving...";
 "uploadFile.state.saved" = "Saved";
-"uploadFile.large-file" = "The file is large. Encryption may take a few minutes";
+"uploadFile.large-file" = "The file is large. Encryption may take a few minutes.";
 
 "deal.changeAmount.placeholder" = "Enter amount";
 "deal.changeAmount.currency" = "Currency";
