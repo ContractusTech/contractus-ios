@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1421,7 +1421,7 @@
 				6D8885442AFFA4AF006EB291 /* XCRemoteSwiftPackageReference "QRCode" */,
 				6D4783512B65A47700F7B0F0 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 				6D4535972B716DF7006DE601 /* XCRemoteSwiftPackageReference "solana-swift" */,
-				6DC0FBA12B8AE8BD00D593FE /* XCLocalSwiftPackageReference "../../ResizableSheet" */,
+				6DC0FBA42B8E400A00D593FE /* XCRemoteSwiftPackageReference "ResizableSheet" */,
 			);
 			productRefGroup = 6D97AEEE288D196200EB61D0 /* Products */;
 			projectDirPath = "";
@@ -2317,13 +2317,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		6DC0FBA12B8AE8BD00D593FE /* XCLocalSwiftPackageReference "../../ResizableSheet" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../ResizableSheet;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		6D0DA7602930A6960024EF30 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -2491,6 +2484,14 @@
 			requirement = {
 				kind = exactVersion;
 				version = 2.2.0;
+			};
+		};
+		6DC0FBA42B8E400A00D593FE /* XCRemoteSwiftPackageReference "ResizableSheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mtj0928/ResizableSheet";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.5;
 			};
 		};
 		6DC2183F2ACF3D3E00EFC769 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */ = {
@@ -2708,6 +2709,11 @@
 		};
 		6DC0FBA22B8AE8BD00D593FE /* ResizableSheet */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = ResizableSheet;
+		};
+		6DC0FBA52B8E400A00D593FE /* ResizableSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DC0FBA42B8E400A00D593FE /* XCRemoteSwiftPackageReference "ResizableSheet" */;
 			productName = ResizableSheet;
 		};
 		6DC218402ACF3D3E00EFC769 /* AppsFlyerLib */ = {

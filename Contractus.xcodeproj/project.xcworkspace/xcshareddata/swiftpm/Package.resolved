@@ -208,6 +208,15 @@
       }
     },
     {
+      "identity" : "resizablesheet",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mtj0928/ResizableSheet",
+      "state" : {
+        "revision" : "13a498d95fe0a152b153af5b06094524f959cf33",
+        "version" : "0.0.5"
+      }
+    },
+    {
       "identity" : "secp256k1.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Boilertalk/secp256k1.swift.git",
