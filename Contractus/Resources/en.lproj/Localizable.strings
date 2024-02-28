@@ -147,9 +147,9 @@
 "qrScanner.error" = "The value is not supported. Check for correctness and try again.";
 
 "uploadFile.button.select" = "Add file";
-"uploadFile.button.select-gallery" = "Gallery";
-"uploadFile.button.camera" = "Camera";
-"uploadFile.button.file" = "File";
+"uploadFile.button.select-gallery" = "Select photo";
+"uploadFile.button.camera" = "Open camera";
+"uploadFile.button.file" = "Select file";
 "uploadFile.button.retry" = "Retry";
 "uploadFile.button.import-file" = "Select file";
 "uploadFile.state.error" = "Upload error";
@@ -161,6 +161,7 @@
 "uploadFile.state.saving" = "Saving...";
 "uploadFile.state.saved" = "Saved";
 "uploadFile.large-file" = "The file is large. Encryption may take a few minutes.";
+"uploadFile.remove" = "Remove";
 
 "deal.changeAmount.placeholder" = "Enter amount";
 "deal.changeAmount.currency" = "Currency";
