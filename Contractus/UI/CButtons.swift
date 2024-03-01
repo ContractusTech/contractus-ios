@@ -214,10 +214,17 @@ struct CButton: View {
                 }
             }
         }
+        .buttonStyle(ScaleButtonStyle())
         .disabled(isLoading || isDisabled)
     }
 }
 
+struct ScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.98 : 1)
+    }
+}
 
 struct CButton_Previews: PreviewProvider {
     static var previews: some View {

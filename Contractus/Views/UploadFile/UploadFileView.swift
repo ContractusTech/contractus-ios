@@ -175,6 +175,7 @@ struct UploadFileView: View {
         }
         .padding(.bottom, 0)
         .interactiveDismissDisabled()
+        .animation(.default, value: fileIsVisible)
         .onDisappear {
             viewModel.trigger(.clear)
         }
