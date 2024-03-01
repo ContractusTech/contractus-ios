@@ -164,7 +164,7 @@ struct UploadFileView: View {
             }
         }
         .padding(.bottom, 0)
-//        .animation(.easeInOut(duration: 0.1), value: sheetType)
+        .interactiveDismissDisabled()
         .onDisappear {
             viewModel.trigger(.clear)
         }
