@@ -1435,7 +1435,6 @@ struct DealView: View {
                     }
                 }
         )
-        .padding(16)
     }
 
     @ViewBuilder

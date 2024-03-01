@@ -56,12 +56,11 @@ struct UploadFileView: View {
     var body: some View {
         VStack(spacing: 12) {
             if fileIsVisible {
-                ZStack (alignment: .topLeading) {
+                ZStack (alignment: .topTrailing) {
                     UploadFileItemView(file: viewModel.state.selectedFile, clearButtonVisible: clearButtonIsVisible) {
                         viewModel.trigger(.clear)
                     }
                 }
-                .padding(.top, 25)
             } else {
                 VStack(spacing: 12) {
                     VStack(spacing: 8) {
@@ -148,12 +147,20 @@ struct UploadFileView: View {
                         
                     }
                 }
+                .padding(.horizontal, 16)
             }
             Spacer()
+            if let file = viewModel.state.selectedFile, file.isLargeForEncrypting {
+                Text(R.string.localizable.uploadFileLargeFile())
+                    .font(.footnote.weight(.medium))
+                    .foregroundColor(R.color.textWarn.color)
+                    .padding(.horizontal, 16)
+            }
             if uploadFileButtonIsVisible {
                 UploadingButtonView(state: viewModel.state.state) {
                     viewModel.trigger(.uploadAndUpdate)
                 }
+                .padding(.horizontal, 16)
             }
 
             if canCancel {
@@ -161,6 +168,9 @@ struct UploadFileView: View {
                     viewModel.trigger(.clear)
                     action(.close)
                 }
+                .padding(.top, 4)
+                .padding(.bottom, 16)
+                .padding(.horizontal, 16)
             }
         }
         .padding(.bottom, 0)
@@ -270,73 +280,79 @@ struct UploadFileItemView: View {
     var clearAction: () -> Void
 
     var body: some View {
-        GeometryReader { proxy in
-            VStack {
-                VStack(alignment: .leading, spacing: 20) {
-                    if let file = file {
-                        if file.isImage, let image = UIImage(data: file.data) {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: proxy.size.width, height: proxy.size.width)
-                                .foregroundColor(R.color.secondaryBackground.color)
-                                .cornerRadius(16)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .stroke(R.color.baseSeparator.color, lineWidth: 1)
-                                )
-                        } else {
-                            VStack(spacing: 16) {
-                                file.name.imageByFileName
-                                    .resizable()
-                                    .foregroundColor(R.color.fourthBackground.color)
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 100)
-                                Text(file.name)
-                                    .multilineTextAlignment(.center)
-                                    .font(.callout.weight(.semibold))
-                                    .foregroundColor(R.color.secondaryText.color)
-                            }
-                            .frame(width: proxy.size.width, height: proxy.size.width)
-                            .background(R.color.secondaryBackground.color)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 28)
-                                    .inset(by: 0.5)
-                                    .stroke(R.color.textFieldBorder.color, lineWidth: 1)
-                            )
-                        }
-                        VStack(alignment: .leading, spacing: 12) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(file.name)
-                                    .font(.footnote.weight(.medium))
-                                    .foregroundColor(R.color.textBase.color)
-                                Text(file.formattedSize)
-                                    .font(.footnote)
-                                    .foregroundColor(R.color.secondaryText.color)
-                                if file.isLargeForEncrypting {
-                                    Text(R.string.localizable.uploadFileLargeFile())
-                                        .font(.footnote.weight(.medium))
-                                        .foregroundColor(R.color.textWarn.color)
-                                }
-                            }
-
-
-                            HStack {
-                                if clearButtonVisible {
-                                    CButton(title: R.string.localizable.uploadFileRemove(), style: .clear, size: .default, isLoading: false) {
-                                        clearAction()
-                                    }
-                                }
-                                Spacer()
-                            }
-
-                        }
+        VStack(alignment: .center, spacing: 20) {
+            if let file = file {
+                ZStack(alignment: .topTrailing) {
+                    if file.isImage, let image = UIImage(data: file.data) {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 245, height: 280)
+                            .foregroundColor(R.color.secondaryBackground.color)
+                            .cornerRadius(23)
+                            .shadow(color: Color.black.opacity(0.15), radius: 3, y: 2)
+                            .padding(.top, 32)
                     } else {
-                        EmptyView()
+                        VStack(spacing: 12) {
+                            Image(systemName: "doc.badge.arrow.up.fill")
+                                .resizable()
+                                .foregroundColor(R.color.fourthBackground.color)
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 100)
+                                .offset(x: -10, y: 20)
+                            Text(file.fileExt)
+                                .multilineTextAlignment(.center)
+                                .font(.title.weight(.semibold))
+                                .foregroundColor(R.color.fourthBackground.color)
+                                .offset(y: 10)
+                        }
+                        .frame(width: 245, height: 280)
+                        .background(R.color.secondaryBackground.color)
+                        .cornerRadius(23)
+                        .shadow(color: Color.black.opacity(0.15), radius: 3, y: 2)
+                        .padding(.top, 32)
+                    }
+                    if clearButtonVisible {
+                        Button {
+                            clearAction()
+                        } label: {
+                            HStack {
+                                Constants.closeImage
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .frame(width: 12, height: 12)
+                                    .foregroundColor(R.color.buttonTextPrimary.color)
+                                
+                            }
+                            .padding(10)
+                            .background(R.color.buttonBackgroundPrimary.color)
+                            .cornerRadius(16)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(R.color.buttonBorderPrimary.color, lineWidth: 1)
+                            }
+                        }
+                        .offset(x: -12, y: 44)
                     }
                 }
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(file.name)
+                            .font(.footnote.weight(.medium))
+                            .foregroundColor(R.color.textBase.color)
+                        Text(file.formattedSize)
+                            .font(.footnote)
+                            .foregroundColor(R.color.secondaryText.color)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 16)
+                    Spacer()
+                }
+            } else {
+                EmptyView()
             }
         }
+        .background(R.color.thirdBackground.color)
     }
 }
 

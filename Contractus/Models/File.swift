@@ -43,4 +43,8 @@ extension RawFile: Equatable {
         // TODO: - Value for test, may be need change
         (Int64(data.count) / 1048576) > 2
     }
+    
+    var fileExt: String {
+        return "." + NSString(string: name).pathExtension
+    }
 }
