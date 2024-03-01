@@ -41,7 +41,7 @@ final class UploadFileViewModel: ViewModel {
     private var filesAPIService: ContractusAPI.FilesService?
     private var cancelable = Set<AnyCancellable>()
     private var startEditContent = Date()
-    private(set) var encryptedFile: UploadFileResult?
+    private(set) var uploadedFile: UploadFileResult?
     private var unsavedMetadata: DealMetadata?
 
     private let secretKey: Data
@@ -104,9 +104,6 @@ final class UploadFileViewModel: ViewModel {
 
 fileprivate extension UploadFileViewModel {
     func upload(file: UploadFile) -> Future<UploadedFile, Error> {
-        DispatchQueue.main.async {
-            self.state.state = .uploading(0)
-        }
         return Future { promise in
             self.filesAPIService?.upload(data: file, progressCallback: {[weak self] fraction in
                 DispatchQueue.main.async {
@@ -125,21 +122,26 @@ fileprivate extension UploadFileViewModel {
     }
     
     private func uploadFile(file: RawFile) {
+        DispatchQueue.main.async {
+            self.state.state = .uploading(-1) // HOTFIX - maybe need some enum like .uploading(.preparing), .uploading(.send(fraction))
+        }
         Future<(UploadFile, String), Never> { promise in
-            promise(.success((UploadFile(
-                md5: Crypto.md5(data: file.data),
-                data: file.data,
-                fileName: UUID().uuidString,
-                mimeType: DEFAULT_MIME_TYPE), file.name)))
+            Task {
+                promise(.success((UploadFile(
+                    md5: Crypto.md5(data: file.data),
+                    data: file.data,
+                    fileName: UUID().uuidString,
+                    mimeType: DEFAULT_MIME_TYPE), file.name)))
+            }
         }
         .eraseToAnyPublisher()
         .flatMap({ file, name in
             self.upload(file: file).eraseToAnyPublisher()
                 .flatMap { file -> AnyPublisher<UploadFileResult, Never> in
-                    Future<UploadFileResult, Never> { promise in
+                    Future<UploadFileResult, Never> {[weak self] promise in
                         promise(.success(UploadFileResult(
                             file: file,
-                            sourceName: self.state.selectedFile?.name ?? "",
+                            sourceName: self?.state.selectedFile?.name ?? "",
                             encryptedName: name)
                         ))
                     }
@@ -148,16 +150,16 @@ fileprivate extension UploadFileViewModel {
         })
         .eraseToAnyPublisher()
         .receive(on: RunLoop.main)
-        .sink { result in
+        .sink {[weak self] result in
             switch result {
             case .failure(let error):
                 debugPrint(error.localizedDescription)
-                self.state.state = .error(error.localizedDescription)
+                self?.state.state = .error(error.localizedDescription)
             case .finished: break
             }
-        } receiveValue: { encryptedFile in
-            self.encryptedFile = encryptedFile
-            self.preparingAndUpdateMetadata()
+        } receiveValue: {[weak self] uploadedFile in
+            self?.uploadedFile = uploadedFile
+            self?.preparingAndUpdateMetadata()
         }.store(in: &cancelable)
     }
 
@@ -208,7 +210,7 @@ fileprivate extension UploadFileViewModel {
                 case .finished: break
                 }
             } receiveValue: { encryptedFile in
-                self.encryptedFile = encryptedFile
+                self.uploadedFile = encryptedFile
                 self.preparingAndUpdateMetadata()
             }.store(in: &cancelable)
     }
@@ -216,7 +218,7 @@ fileprivate extension UploadFileViewModel {
     private func preparingAndUpdateMetadata() {
         self.state.state = .saving
         var files = state.content.files
-        if let file = encryptedFile {
+        if let file = uploadedFile {
             files.append(.init(md5: file.file.md5, url: file.file.url, name: file.encryptedName, encrypted: true, size: file.file.size))
         }
 

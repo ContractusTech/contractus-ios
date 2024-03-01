@@ -164,7 +164,7 @@ struct UploadFileView: View {
             }
         }
         .padding(.bottom, 0)
-        .animation(.easeInOut(duration: 0.1), value: sheetType)
+//        .animation(.easeInOut(duration: 0.1), value: sheetType)
         .onDisappear {
             viewModel.trigger(.clear)
         }
@@ -305,26 +305,32 @@ struct UploadFileItemView: View {
                                     .stroke(R.color.textFieldBorder.color, lineWidth: 1)
                             )
                         }
-                        HStack(alignment: .top) {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(file.formattedSize)
-                                    .font(.callout.weight(.semibold))
+                        VStack(alignment: .leading, spacing: 12) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(file.name)
+                                    .font(.footnote.weight(.medium))
                                     .foregroundColor(R.color.textBase.color)
+                                Text(file.formattedSize)
+                                    .font(.footnote)
+                                    .foregroundColor(R.color.secondaryText.color)
                                 if file.isLargeForEncrypting {
                                     Text(R.string.localizable.uploadFileLargeFile())
-                                        .font(.footnote.weight(.semibold))
+                                        .font(.footnote.weight(.medium))
                                         .foregroundColor(R.color.textWarn.color)
                                 }
                             }
-                            .padding(.trailing, clearButtonVisible ? 35 : 150)
-                            Spacer()
-                            if clearButtonVisible {
-                                CButton(title: R.string.localizable.uploadFileRemove(), style: .secondary, size: .default, isLoading: false) {
-                                    clearAction()
+
+
+                            HStack {
+                                if clearButtonVisible {
+                                    CButton(title: R.string.localizable.uploadFileRemove(), style: .clear, size: .default, isLoading: false) {
+                                        clearAction()
+                                    }
                                 }
+                                Spacer()
                             }
+
                         }
-                        .padding(.horizontal, 16)
                     } else {
                         EmptyView()
                     }
@@ -403,6 +409,9 @@ struct UploadingButtonView: View {
         case .encrypting:
             return R.string.localizable.uploadFileStateEncrypting()
         case .uploading(let fraction):
+            if fraction < 0 {
+                return "Preparing..."
+            }
             return R.string.localizable.uploadFileStateUploading("\(fraction)%")
         case .error:
             return "Retry"
