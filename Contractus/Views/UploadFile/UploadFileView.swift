@@ -23,7 +23,7 @@ fileprivate enum Constants {
     static let phoneImage = Image(systemName: "photo.on.rectangle.angled")
     static let cameraImage = Image(systemName: "camera")
     static let docImage = Image(systemName: "doc.viewfinder")
-    static let docFile = Image(systemName: "doc")
+    static let docFile = Image(systemName: "doc.badge.arrow.up.fill")
 }
 
 // MARK: - UploadFileView
@@ -150,7 +150,7 @@ struct UploadFileView: View {
                 .padding(.horizontal, 16)
             }
             Spacer()
-            if let file = viewModel.state.selectedFile, file.isLargeForEncrypting {
+            if let file = viewModel.state.selectedFile, viewModel.state.hasSecretKey, file.isLargeForEncrypting {
                 Text(R.string.localizable.uploadFileLargeFile())
                     .font(.footnote.weight(.medium))
                     .foregroundColor(R.color.textWarn.color)
@@ -295,7 +295,7 @@ struct UploadFileItemView: View {
                             .padding(.top, 32)
                     } else {
                         VStack(spacing: 12) {
-                            Image(systemName: "doc.badge.arrow.up.fill")
+                            Constants.docFile
                                 .resizable()
                                 .foregroundColor(R.color.fourthBackground.color)
                                 .aspectRatio(contentMode: .fit)
@@ -353,7 +353,7 @@ struct UploadFileItemView: View {
                 EmptyView()
             }
         }
-        .background(R.color.thirdBackground.color)
+        .background(R.color.fifthBackground.color)
     }
 }
 

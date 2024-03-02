@@ -30,6 +30,7 @@ struct UploadFileState {
     var selectedFile: RawFile?
     var state: State = .none
     let contentType: DealsService.ContentType
+    let hasSecretKey: Bool
 
 }
 
@@ -55,7 +56,7 @@ final class UploadFileViewModel: ViewModel {
         filesAPIService: ContractusAPI.FilesService?)
     {
         self.dealService = dealService
-        self.state = UploadFileState(dealId: dealId, content: content, contentType: contentType)
+        self.state = UploadFileState(dealId: dealId, content: content, contentType: contentType, hasSecretKey: !secretKey.isEmpty)
         self.filesAPIService = filesAPIService
         self.secretKey = secretKey
     }

@@ -88,7 +88,7 @@ struct R: Rswift.Validatable {
     try intern.validate()
   }
 
-  /// This `R.color` struct is generated, and contains static references to 39 colors.
+  /// This `R.color` struct is generated, and contains static references to 40 colors.
   struct color {
     /// Color `AccentColor`.
     static let accentColor = Rswift.ColorResource(bundle: R.hostingBundle, name: "AccentColor")
@@ -122,6 +122,8 @@ struct R: Rswift.Validatable {
     static let buttonTextPrimary = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonText-Primary")
     /// Color `ButtonText-Secondary`.
     static let buttonTextSecondary = Rswift.ColorResource(bundle: R.hostingBundle, name: "ButtonText-Secondary")
+    /// Color `FifthBackground`.
+    static let fifthBackground = Rswift.ColorResource(bundle: R.hostingBundle, name: "FifthBackground")
     /// Color `FourthBackground`.
     static let fourthBackground = Rswift.ColorResource(bundle: R.hostingBundle, name: "FourthBackground")
     /// Color `LabelBackground-Attention`.
@@ -310,6 +312,15 @@ struct R: Rswift.Validatable {
     @available(iOS 11.0, *)
     static func buttonTextSecondary(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
       return UIKit.UIColor(resource: R.color.buttonTextSecondary, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "FifthBackground", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func fifthBackground(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.fifthBackground, compatibleWith: traitCollection)
     }
     #endif
 
@@ -645,6 +656,14 @@ struct R: Rswift.Validatable {
     @available(watchOSApplicationExtension 4.0, *)
     static func buttonTextSecondary(_: Void = ()) -> UIKit.UIColor? {
       return UIKit.UIColor(named: R.color.buttonTextSecondary.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "FifthBackground", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func fifthBackground(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.fifthBackground.name)
     }
     #endif
 
