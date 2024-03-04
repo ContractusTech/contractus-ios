@@ -290,6 +290,8 @@ struct UploadFileItemView: View {
                             .scaledToFill()
                             .frame(width: 245, height: 280)
                             .foregroundColor(R.color.secondaryBackground.color)
+                            .background(R.color.secondaryBackground.color)
+                            .overlay(RoundedCorner(radius: 23).stroke(R.color.baseSeparator.color.opacity(0.8), lineWidth: 1.0))
                             .cornerRadius(23)
                             .shadow(color: Color.black.opacity(0.15), radius: 3, y: 2)
                             .padding(.top, 32)
@@ -309,8 +311,9 @@ struct UploadFileItemView: View {
                         }
                         .frame(width: 245, height: 280)
                         .background(R.color.secondaryBackground.color)
+                        .overlay(RoundedCorner(radius: 23).stroke(R.color.baseSeparator.color.opacity(0.8), lineWidth: 1.0))
                         .cornerRadius(23)
-                        .shadow(color: Color.black.opacity(0.15), radius: 3, y: 2)
+                        .shadow(color: R.color.shadowColor.color, radius: 3, y: 2)
                         .padding(.top, 32)
                     }
                     if clearButtonVisible {
