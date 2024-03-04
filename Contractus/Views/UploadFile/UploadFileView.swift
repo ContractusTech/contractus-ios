@@ -23,7 +23,7 @@ fileprivate enum Constants {
     static let phoneImage = Image(systemName: "photo.on.rectangle.angled")
     static let cameraImage = Image(systemName: "camera")
     static let docImage = Image(systemName: "doc.viewfinder")
-    static let docFile = Image(systemName: "doc")
+    static let docFile = Image(systemName: "doc.badge.arrow.up.fill")
 }
 
 // MARK: - UploadFileView
@@ -57,54 +57,62 @@ struct UploadFileView: View {
         VStack(spacing: 12) {
             if fileIsVisible {
                 ZStack (alignment: .topTrailing) {
-                    UploadFileItemView(file: viewModel.state.selectedFile) {
+                    UploadFileItemView(file: viewModel.state.selectedFile, clearButtonVisible: clearButtonIsVisible) {
                         viewModel.trigger(.clear)
-                    }
-                    if clearButtonIsVisible {
-                        Button {
-                            viewModel.trigger(.clear)
-                        } label: {
-                            HStack {
-                                Constants.closeImage
-                                    .renderingMode(.template)
-                                    .resizable()
-                                    .frame(width: 12, height: 12)
-                                    .foregroundColor(R.color.buttonTextSecondary.color)
-
-                            }
-                            .padding(12)
-                            .background(R.color.buttonBackgroundSecondary.color)
-                            .cornerRadius(24)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 24)
-                                    .stroke(R.color.buttonBorderSecondary.color, lineWidth: 1)
-                            }
-                        }
-                        .offset(x: -12, y: 12)
                     }
                 }
             } else {
                 VStack(spacing: 12) {
-                    HStack(spacing: 12) {
+                    VStack(spacing: 8) {
+                        Text("Select file\nfor attach to the deal")
+                            .multilineTextAlignment(.center)
+                            .font(.title.weight(.semibold))
+                            .padding(.top, 30)
+                            .padding(.bottom, 30)
+                        let buttonPadding = (UIScreen.main.bounds.size.width - 20) / 2 - 104
+                        Button {
+                            sheetType = .importFile
+                        } label: {
+                            HStack {
+                                HStack(spacing: 16) {
+                                    Constants.docImage
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 28, height: 32)
+                                        .foregroundColor(R.color.secondaryText.color)
+                                    Text(R.string.localizable.uploadFileButtonFile())
+                                        .font(.callout.weight(.semibold))
+                                        .foregroundColor(R.color.textBase.color)
+                                }
+                                .padding(.leading, buttonPadding)
+
+                                Spacer()
+                            }
+                            .padding(32)
+                            .background {
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(R.color.baseSeparator.color)
+                            }
+                        }
                         Button {
                             sheetType = .selectImage
                         } label: {
                             HStack {
-                                Spacer()
-                                VStack(spacing: 12){
+                                HStack(spacing: 16){
                                     Constants.phoneImage
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 32, height: 32)
                                         .foregroundColor(R.color.secondaryText.color)
                                     Text(R.string.localizable.uploadFileButtonSelectGallery())
-                                        .font(.footnote)
+                                        .font(.callout.weight(.semibold))
                                         .foregroundColor(R.color.textBase.color)
                                 }
+                                .padding(.leading, buttonPadding)
 
                                 Spacer()
                             }
-                            .padding(24)
+                            .padding(32)
                             .background {
                                 RoundedRectangle(cornerRadius: 24)
                                     .stroke(R.color.baseSeparator.color)
@@ -115,58 +123,44 @@ struct UploadFileView: View {
                             sheetType = .camera
                         } label: {
                             HStack {
-                                Spacer()
-                                VStack(spacing: 12) {
+                                HStack(spacing: 16) {
                                     Constants.cameraImage
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 32, height: 32)
                                         .foregroundColor(R.color.secondaryText.color)
                                     Text(R.string.localizable.uploadFileButtonCamera())
-                                        .font(.footnote)
+                                        .font(.callout.weight(.semibold))
                                         .foregroundColor(R.color.textBase.color)
                                 }
+                                .padding(.leading, buttonPadding)
 
                                 Spacer()
                             }
-                            .padding(24)
+                            .padding(32)
                             .background {
                                 RoundedRectangle(cornerRadius: 24)
                                     .stroke(R.color.baseSeparator.color)
                             }
                         }
 
-                        Button {
-                            sheetType = .importFile
-                        } label: {
-                            HStack {
-                                Spacer()
-                                VStack(spacing: 12) {
-                                    Constants.docImage
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 28, height: 32)
-                                        .foregroundColor(R.color.secondaryText.color)
-                                    Text(R.string.localizable.uploadFileButtonFile())
-                                        .font(.footnote)
-                                        .foregroundColor(R.color.textBase.color)
-                                }
-
-                                Spacer()
-                            }
-                            .padding(24)
-                            .background {
-                                RoundedRectangle(cornerRadius: 24)
-                                    .stroke(R.color.baseSeparator.color)
-                            }
-                        }
+                        
                     }
                 }
+                .padding(.horizontal, 16)
+            }
+            Spacer()
+            if let file = viewModel.state.selectedFile, viewModel.state.hasSecretKey, file.isLargeForEncrypting {
+                Text(R.string.localizable.uploadFileLargeFile())
+                    .font(.footnote.weight(.medium))
+                    .foregroundColor(R.color.textWarn.color)
+                    .padding(.horizontal, 16)
             }
             if uploadFileButtonIsVisible {
                 UploadingButtonView(state: viewModel.state.state) {
                     viewModel.trigger(.uploadAndUpdate)
                 }
+                .padding(.horizontal, 16)
             }
 
             if canCancel {
@@ -174,10 +168,14 @@ struct UploadFileView: View {
                     viewModel.trigger(.clear)
                     action(.close)
                 }
+                .padding(.top, 4)
+                .padding(.bottom, 16)
+                .padding(.horizontal, 16)
             }
         }
-        .padding(.bottom, 32)
-        .animation(.easeInOut(duration: 0.1), value: sheetType)
+        .padding(.bottom, 0)
+        .interactiveDismissDisabled()
+        .animation(.default, value: fileIsVisible)
         .onDisappear {
             viewModel.trigger(.clear)
         }
@@ -279,73 +277,86 @@ struct UploadFileView: View {
 struct UploadFileItemView: View {
 
     let file: RawFile?
+    var clearButtonVisible: Bool = false
     var clearAction: () -> Void
 
     var body: some View {
-        HStack {
-            Spacer()
-            VStack(alignment: .center, spacing: 4) {
-                if let file = file {
+        VStack(alignment: .center, spacing: 20) {
+            if let file = file {
+                ZStack(alignment: .topTrailing) {
                     if file.isImage, let image = UIImage(data: file.data) {
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 110, height: 110)
+                            .frame(width: 245, height: 280)
                             .foregroundColor(R.color.secondaryBackground.color)
-                            .cornerRadius(16)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .stroke(R.color.baseSeparator.color, lineWidth: 1)
-                            )
+                            .background(R.color.secondaryBackground.color)
+                            .overlay(RoundedCorner(radius: 23).stroke(R.color.baseSeparator.color.opacity(0.8), lineWidth: 1.0))
+                            .cornerRadius(23)
+                            .shadow(color: Color.black.opacity(0.15), radius: 3, y: 2)
+                            .padding(.top, 32)
                     } else {
-                        HStack {
-                            Spacer()
-                            VStack(spacing: 8) {
-                                file.name.imageByFileName
-                                    .resizable()
-                                    .foregroundColor(R.color.secondaryText.color)
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 40)
-                                    .padding(30)
-                                    .background(R.color.fourthBackground.color.opacity(0.6))
-                                    .cornerRadius(16)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .stroke(R.color.buttonBorderSecondary.color.opacity(0.7), lineWidth: 1)
-                                    )
-                                Text(file.name)
-                                    .font(.footnote.weight(.semibold))
-                                    .foregroundColor(R.color.textBase.color)
-                                    .cornerRadius(16)
-                            }
-                            Spacer()
+                        VStack(spacing: 12) {
+                            Constants.docFile
+                                .resizable()
+                                .foregroundColor(R.color.fourthBackground.color)
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 100)
+                                .offset(x: -10, y: 20)
+                            Text(file.fileExt)
+                                .multilineTextAlignment(.center)
+                                .font(.title.weight(.semibold))
+                                .foregroundColor(R.color.fourthBackground.color)
+                                .offset(y: 10)
                         }
+                        .frame(width: 245, height: 280)
+                        .background(R.color.secondaryBackground.color)
+                        .overlay(RoundedCorner(radius: 23).stroke(R.color.baseSeparator.color.opacity(0.8), lineWidth: 1.0))
+                        .cornerRadius(23)
+                        .shadow(color: R.color.shadowColor.color, radius: 3, y: 2)
+                        .padding(.top, 32)
                     }
-                    VStack(alignment: .center, spacing: 4) {
+                    if clearButtonVisible {
+                        Button {
+                            clearAction()
+                        } label: {
+                            HStack {
+                                Constants.closeImage
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .frame(width: 12, height: 12)
+                                    .foregroundColor(R.color.buttonTextPrimary.color)
+                                
+                            }
+                            .padding(10)
+                            .background(R.color.buttonBackgroundPrimary.color)
+                            .cornerRadius(16)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(R.color.buttonBorderPrimary.color, lineWidth: 1)
+                            }
+                        }
+                        .offset(x: -12, y: 44)
+                    }
+                }
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(file.name)
+                            .font(.footnote.weight(.medium))
+                            .foregroundColor(R.color.textBase.color)
                         Text(file.formattedSize)
-                            .font(.footnote.weight(.semibold))
+                            .font(.footnote)
                             .foregroundColor(R.color.secondaryText.color)
                     }
-                } else {
-                    EmptyView()
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 16)
+                    Spacer()
                 }
-                if file?.isLargeForEncrypting ?? false {
-                    VStack {
-                        Text(R.string.localizable.uploadFileLargeFile())
-                            .font(.caption2.weight(.semibold))
-                            .foregroundColor(R.color.textWarn.color)
-                            .lineLimit(0)
-                    }
-                }
+            } else {
+                EmptyView()
             }
-            Spacer()
         }
-        .padding(16)
-        .overlay(
-            RoundedRectangle(cornerRadius: 28)
-                .inset(by: 0.5)
-                .stroke(R.color.textFieldBorder.color, lineWidth: 1)
-        )
+        .background(R.color.fifthBackground.color)
     }
 }
 
@@ -418,6 +429,9 @@ struct UploadingButtonView: View {
         case .encrypting:
             return R.string.localizable.uploadFileStateEncrypting()
         case .uploading(let fraction):
+            if fraction < 0 {
+                return "Preparing..."
+            }
             return R.string.localizable.uploadFileStateUploading("\(fraction)%")
         case .error:
             return "Retry"

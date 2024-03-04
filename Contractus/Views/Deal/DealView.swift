@@ -1,14 +1,6 @@
-//
-//  DealView.swift
-//  Contractus
-//
-//  Created by Simon Hudishkin on 08.08.2022.
-//
-
 import Foundation
 import SwiftUI
 import ContractusAPI
-import ResizableSheet
 import SafariServices
 import BigInt
 import Shimmer
@@ -68,6 +60,8 @@ struct DealView: View {
         case filePreview(URL)
         case shareDeal
         case signTx(ContractusAPI.TransactionType)
+        case uploadMeta
+        case uploadResult
     }
 
     @Environment(\.presentationMode) var presentationMode
@@ -80,20 +74,6 @@ struct DealView: View {
     @State private var activeFullScreenType: ActiveFullScreenType?
     @State private var alertType: AlertType?
     @State private var actionsType: ActionsSheetType?
-    @State private var metaUploaderState: ResizableSheetState = .hidden {
-        didSet {
-            if metaUploaderState == .hidden {
-                switchToMainWindow()
-            }
-        }
-    }
-    @State private var resultUploaderState: ResizableSheetState = .hidden {
-        didSet {
-            if resultUploaderState == .hidden {
-                switchToMainWindow()
-            }
-        }
-    }
     @State private var showDeadlinePicker: Bool = false
     @State private var gradientDetails: [Color] = [.clear]
     @State private var gradientResults: [Color] = [.clear]
@@ -278,8 +258,6 @@ struct DealView: View {
                             .frame(width: 28, height: 28)
                             .offset(CGSize(width: 20, height: -93))
                         }
-                        //                    Spacer(minLength: 16)
-                        
                         // MARK: - Checker
                         if viewModel.state.deal.completionCheckType == .checker {
                             VStack(alignment: .leading, spacing: 0) {
@@ -714,10 +692,10 @@ struct DealView: View {
                                         EventService.shared.send(event: DefaultAnalyticsEvent.dealDescriptionAddFileTap)
                                         if viewModel.state.isSignedByPartners {
                                             alertType = .confirmUpdateSignedDeal {
-                                                metaUploaderState = .medium
+                                                activeModalType = .uploadMeta
                                             }
                                         } else {
-                                            metaUploaderState = .medium
+                                            activeModalType = .uploadMeta
                                         }
                                     }
                                     .opacity(viewModel.state.editIsVisible ? 1 : 0)
@@ -853,7 +831,7 @@ struct DealView: View {
                                         CButton(title: R.string.localizable.commonAdd(), style: .secondary, size: .default, isLoading: false, isDisabled: !viewModel.state.canEditResult) {
                                             EventService.shared.send(event: DefaultAnalyticsEvent.dealResultAddFileTap)
                                             viewModel.trigger(.uploaderContentType(.result))
-                                            resultUploaderState = .medium
+                                            activeModalType = .uploadResult
                                         }
                                     }
                                 }
@@ -911,30 +889,6 @@ struct DealView: View {
                 }
             }
         })
-        .resizableSheet($metaUploaderState, id: "metaUploader", builder: { builder in
-            builder.content { context in
-                uploaderView(contentType: .metadata)
-            }
-            .animation(.easeInOut.speed(1.2))
-            .background { context in
-                Color.black
-                    .opacity(context.state == .medium ? 0.5 : 0)
-                    .ignoresSafeArea()
-            }
-            .supportedState([.medium])
-        })
-        .resizableSheet($resultUploaderState, id: "resultsUploader", builder: { builder in
-            builder.content { context in
-                uploaderView(contentType: .result)
-            }
-            .animation(.easeInOut.speed(1.2))
-            .background { context in
-                Color.black
-                    .opacity(context.state == .medium ? 0.5 : 0)
-                    .ignoresSafeArea()
-            }
-            .supportedState([.medium])
-        })
         .fullScreenCover(item: $activeFullScreenType, onDismiss: {
             viewModel.trigger(.sheetClose)
         }, content: { type in
@@ -987,6 +941,10 @@ struct DealView: View {
             viewModel.trigger(.sheetClose)
         }) { type in
             switch type {
+            case .uploadMeta:
+                uploaderView(contentType: .metadata)
+            case .uploadResult:
+                uploaderView(contentType: .result)
             case .signTx(let type):
                 TransactionSignView(account: viewModel.state.account, type: .byDeal(viewModel.state.deal, type)) {
                     viewModel.trigger(.update(nil))
@@ -1466,20 +1424,17 @@ struct DealView: View {
                 filesAPIService: try? APIServiceFactory.shared.makeFileService())), action: { actionType in
                     switch actionType {
                     case .close:
-                        metaUploaderState = .hidden
-                        resultUploaderState = .hidden
+                        activeModalType = nil
                     case .success(let meta, let contentType):
                         viewModel.trigger(.updateContent(meta, contentType)) {
                             self.callback()
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                            metaUploaderState = .hidden
-                            resultUploaderState = .hidden
+                            activeModalType = nil
                         })
                     }
                 }
         )
-        .padding(16)
     }
 
     @ViewBuilder

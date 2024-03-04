@@ -291,7 +291,6 @@
 		6DAA5E7D2898C4AA00BA1965 /* APIServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAA5E7C2898C4AA00BA1965 /* APIServiceFactory.swift */; };
 		6DAA5E802898D33300BA1965 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAA5E7F2898D33300BA1965 /* AppConfig.swift */; };
 		6DB547F128B69FE8003D2A8A /* TFAmountFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB547F028B69FE8003D2A8A /* TFAmountFormatter.swift */; };
-		6DB547F928B9E87C003D2A8A /* ResizableSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 6DB547F828B9E87C003D2A8A /* ResizableSheet */; };
 		6DB5F8A3293EFA0800AE612A /* Double+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB5F8A2293EFA0800AE612A /* Double+Ex.swift */; };
 		6DB5F8B6294D762300AE612A /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 6DB5F8B5294D762300AE612A /* JGProgressHUD */; };
 		6DB5F8B8294D7B2D00AE612A /* JGProgressHUD+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB5F8B7294D7B2D00AE612A /* JGProgressHUD+Ex.swift */; };
@@ -317,6 +316,7 @@
 		6DC0FB9A2B834E2D00D593FE /* MigrateTokenSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D249D5A2B32D29D007AA436 /* MigrateTokenSettings.swift */; };
 		6DC0FB9C2B834E9600D593FE /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0FB9B2B834E9600D593FE /* web3swift */; };
 		6DC0FB9E2B834E9600D593FE /* QRCodeStatic in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0FB9D2B834E9600D593FE /* QRCodeStatic */; };
+		6DC0FBA32B8AE8BD00D593FE /* ResizableSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC0FBA22B8AE8BD00D593FE /* ResizableSheet */; };
 		6DC1C235291BE6660009FE96 /* DocumentPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC1C234291BE6660009FE96 /* DocumentPickerView.swift */; };
 		6DC1C237291C34A20009FE96 /* URL+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC1C236291C34A20009FE96 /* URL+Ex.swift */; };
 		6DC218412ACF3D3E00EFC769 /* AppsFlyerLib in Frameworks */ = {isa = PBXBuildFile; productRef = 6DC218402ACF3D3E00EFC769 /* AppsFlyerLib */; };
@@ -662,6 +662,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DC0FBA32B8AE8BD00D593FE /* ResizableSheet in Frameworks */,
 				FE5F427429AF22FA00A1E506 /* netfox in Frameworks */,
 				6DC218412ACF3D3E00EFC769 /* AppsFlyerLib in Frameworks */,
 				6DDAAB082B616EAC00B21E87 /* SolanaSwift in Frameworks */,
@@ -681,7 +682,6 @@
 				6D88EEF62B02045B0031F50B /* ContractusAPI in Frameworks */,
 				6DB9C3DA2A555F1B0011C817 /* ContractusAPI in Frameworks */,
 				FE12456A2AC35F86009FB048 /* SVGKit in Frameworks */,
-				6DB547F928B9E87C003D2A8A /* ResizableSheet in Frameworks */,
 				6DC558702A7A18A60054F2FC /* FirebaseCrashlytics in Frameworks */,
 				FE1245672AC35AAC009FB048 /* NukeUI in Frameworks */,
 				6D8885462AFFA4AF006EB291 /* QRCodeStatic in Frameworks */,
@@ -1312,7 +1312,6 @@
 				6D75F2E5288EA37E0092D182 /* KeychainAccess */,
 				6D75528F289662250069935B /* Rswift */,
 				6DAA5E762898BDFA00BA1965 /* CryptoSwift */,
-				6DB547F828B9E87C003D2A8A /* ResizableSheet */,
 				6D8EFD8928D898B50064F5DA /* ShamirSecretSharing */,
 				6D0DA7612930A6960024EF30 /* CodeScanner */,
 				6DB5F8B5294D762300AE612A /* JGProgressHUD */,
@@ -1333,6 +1332,7 @@
 				6DDAAB072B616EAC00B21E87 /* SolanaSwift */,
 				6D4783522B65A47700F7B0F0 /* Shimmer */,
 				6D4535982B716DF7006DE601 /* SolanaSwift */,
+				6DC0FBA22B8AE8BD00D593FE /* ResizableSheet */,
 			);
 			productName = Contractus;
 			productReference = 6D97AEED288D196200EB61D0 /* Contractus.app */;
@@ -1410,7 +1410,6 @@
 				6D75F2E4288EA37E0092D182 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				6D75528E289662250069935B /* XCRemoteSwiftPackageReference "R.swift" */,
 				6DAA5E752898BDFA00BA1965 /* XCRemoteSwiftPackageReference "CryptoSwift" */,
-				6DB547F728B9E87C003D2A8A /* XCRemoteSwiftPackageReference "ResizableSheet" */,
 				6DDA818128C0D3E10022E005 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				6D0DA7602930A6960024EF30 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				6DB5F8B4294D762300AE612A /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
@@ -1422,6 +1421,7 @@
 				6D8885442AFFA4AF006EB291 /* XCRemoteSwiftPackageReference "QRCode" */,
 				6D4783512B65A47700F7B0F0 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 				6D4535972B716DF7006DE601 /* XCRemoteSwiftPackageReference "solana-swift" */,
+				6DC0FBA42B8E400A00D593FE /* XCRemoteSwiftPackageReference "ResizableSheet" */,
 			);
 			productRefGroup = 6D97AEEE288D196200EB61D0 /* Products */;
 			projectDirPath = "";
@@ -1934,7 +1934,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1977,7 +1977,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2135,7 +2135,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2178,7 +2178,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2478,20 +2478,20 @@
 				version = 1.8.0;
 			};
 		};
-		6DB547F728B9E87C003D2A8A /* XCRemoteSwiftPackageReference "ResizableSheet" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mtj0928/ResizableSheet";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.5;
-			};
-		};
 		6DB5F8B4294D762300AE612A /* XCRemoteSwiftPackageReference "JGProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JonasGessner/JGProgressHUD.git";
 			requirement = {
 				kind = exactVersion;
 				version = 2.2.0;
+			};
+		};
+		6DC0FBA42B8E400A00D593FE /* XCRemoteSwiftPackageReference "ResizableSheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mtj0928/ResizableSheet";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.5;
 			};
 		};
 		6DC2183F2ACF3D3E00EFC769 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */ = {
@@ -2689,11 +2689,6 @@
 			package = 6DAA5E752898BDFA00BA1965 /* XCRemoteSwiftPackageReference "CryptoSwift" */;
 			productName = CryptoSwift;
 		};
-		6DB547F828B9E87C003D2A8A /* ResizableSheet */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DB547F728B9E87C003D2A8A /* XCRemoteSwiftPackageReference "ResizableSheet" */;
-			productName = ResizableSheet;
-		};
 		6DB5F8B5294D762300AE612A /* JGProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6DB5F8B4294D762300AE612A /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
@@ -2711,6 +2706,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6D8885442AFFA4AF006EB291 /* XCRemoteSwiftPackageReference "QRCode" */;
 			productName = QRCodeStatic;
+		};
+		6DC0FBA22B8AE8BD00D593FE /* ResizableSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ResizableSheet;
 		};
 		6DC218402ACF3D3E00EFC769 /* AppsFlyerLib */ = {
 			isa = XCSwiftPackageProductDependency;

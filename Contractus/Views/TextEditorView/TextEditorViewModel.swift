@@ -105,6 +105,36 @@ final class TextEditorViewModel: ViewModel {
     }
 
     private func encryptAndUpdateMetadata(text: String, force: Bool) {
+        if text.isEmpty {
+            let meta = DealMetadata(
+                content: nil,
+                files: self.state.content.files)
+            self.updateMetadata(id: self.state.dealId, meta: meta, force: force)
+                .receive(on: RunLoop.main)
+                .sink { result in
+                    switch result {
+                    case .failure(let error):
+                        switch error as? ContractusAPI.APIClientError {
+                        case .serviceError(let serviceError):
+                            if serviceError.statusCode == 409 {
+                                self.state.state = .needConfirmForce
+                            } else {
+                                fallthrough
+                            }
+                        default:
+                            self.state.errorState = .error(error.localizedDescription)
+                        }
+                    case .finished:
+                        self.state.state = .success
+                    }
+                } receiveValue: { result in
+                    self.state.content = result
+                }
+                .store(in: &cancelable)
+            return
+
+        }
+
         Crypto.encrypt(message: text, with: secretKey)
             .flatMap({ encryptedData in
                 Future<(String, String), Never> { promise in
