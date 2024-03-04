@@ -1934,7 +1934,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1977,7 +1977,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2135,7 +2135,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2178,7 +2178,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.contractus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2709,11 +2709,6 @@
 		};
 		6DC0FBA22B8AE8BD00D593FE /* ResizableSheet */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = ResizableSheet;
-		};
-		6DC0FBA52B8E400A00D593FE /* ResizableSheet */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DC0FBA42B8E400A00D593FE /* XCRemoteSwiftPackageReference "ResizableSheet" */;
 			productName = ResizableSheet;
 		};
 		6DC218402ACF3D3E00EFC769 /* AppsFlyerLib */ = {
