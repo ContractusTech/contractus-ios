@@ -259,9 +259,9 @@ public struct NewDeal: Encodable {
 
     public init(
         role: OwnerRole,
-        encryptedSecretKey: String,
-        secretKeyHash: String,
-        sharedKey: String,
+        encryptedSecretKey: String?,
+        secretKeyHash: String?,
+        sharedKey: String?,
         performanceBondType: PerformanceBondType,
         completionCheckType: CompletionCheckType,
         contractorPublicKey: String?,
@@ -277,18 +277,6 @@ public struct NewDeal: Encodable {
         self.contractorPublicKey = contractorPublicKey
         self.checkerPublicKey = checkerPublicKey
         self.deadline = deadline
-    }
-
-    public init(role: OwnerRole, performanceBondType: PerformanceBondType, completionCheckType: CompletionCheckType) {
-        self.role = role
-        self.encryptedSecretKey = nil
-        self.secretKeyHash = nil
-        self.sharedKey = nil
-        self.performanceBondType = performanceBondType
-        self.completionCheckType = completionCheckType
-        self.contractorPublicKey = nil
-        self.checkerPublicKey = nil
-        self.deadline = nil
     }
 }
 
