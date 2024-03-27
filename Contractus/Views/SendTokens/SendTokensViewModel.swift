@@ -185,7 +185,7 @@ final class SendTokensViewModel: ViewModel {
         self.state = state
     }
 
-    private func updateAmount(amount: String) {        
+    private func updateAmount(amount: String) {
 
         var state = state
         if state.reversed {            

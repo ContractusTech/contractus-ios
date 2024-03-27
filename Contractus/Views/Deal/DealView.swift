@@ -53,6 +53,7 @@ struct DealView: View {
         case editContractor(String?)
         case editChecker(String?)
         case changeAmount
+        case prepaid
         case changeCheckerAmount
         case changeContractorBond
         case changeOwnerBond
@@ -145,7 +146,7 @@ struct DealView: View {
                                     Divider().foregroundColor(R.color.baseSeparator.color).padding(EdgeInsets(top: 0, leading: -20, bottom: 0, trailing: -20))
                                     
                                     // MARK: - Amount
-                                    HStack {
+                                    HStack(alignment: .top) {
                                         VStack(alignment: .leading, spacing: 6) {
                                             HStack {
                                                 Text(R.string.localizable.dealViewAmount())
@@ -167,6 +168,15 @@ struct DealView: View {
                                         }
                                         Spacer()
                                         if viewModel.state.canEditDeal {
+                                            CButton(
+                                                title: "Prepaid",
+                                                style: .secondary,
+                                                size: .default,
+                                                isLoading: false,
+                                                isDisabled: !viewModel.state.canEdit || viewModel.state.currentMainActions.contains(.cancelSign)
+                                            ) {
+                                                activeModalType = .prepaid
+                                            }
                                             CButton(
                                                 title: R.string.localizable.commonEdit(),
                                                 style: .secondary,
@@ -984,6 +994,14 @@ struct DealView: View {
                             break
                         }
                     })
+                .interactiveDismiss(canDismissSheet: false)
+            case .prepaid:
+                EmptyView()
+                PrepaidView(
+                    viewModel: .init(PrepaidViewModel(
+                        state: .init())),
+                    mode: .amount
+                )
                 .interactiveDismiss(canDismissSheet: false)
             case .changeOwnerBond, .changeContractorBond:
                 ChangeAmountView(
