@@ -169,15 +169,6 @@ struct DealView: View {
                                         Spacer()
                                         if viewModel.state.canEditDeal {
                                             CButton(
-                                                title: "Prepaid",
-                                                style: .secondary,
-                                                size: .default,
-                                                isLoading: false,
-                                                isDisabled: !viewModel.state.canEdit || viewModel.state.currentMainActions.contains(.cancelSign)
-                                            ) {
-                                                activeModalType = .prepaid
-                                            }
-                                            CButton(
                                                 title: R.string.localizable.commonEdit(),
                                                 style: .secondary,
                                                 size: .default,
@@ -268,6 +259,49 @@ struct DealView: View {
                             .frame(width: 28, height: 28)
                             .offset(CGSize(width: 20, height: -93))
                         }
+
+                        // MARK: - Prepayment
+                        VStack(alignment: .leading) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        Text("prepayment amount")
+                                            .font(.footnote.weight(.semibold))
+                                            .textCase(.uppercase)
+                                            .foregroundColor(R.color.secondaryText.color)
+                                    }
+                                    if true {
+                                        Text("No prepayment")
+                                    } else {
+                                        Text("Prepayment 30 CTUS")
+                                    }
+                                }
+                                Spacer()
+                                if viewModel.state.isOwnerDeal && viewModel.state.youIsClient && viewModel.state.canEditDeal {
+                                    CButton(
+                                        title:  R.string.localizable.commonSet(),
+                                        style: .secondary,
+                                        size: .default,
+                                        isLoading: false,
+                                        isDisabled: viewModel.state.currentMainActions.contains(.cancelSign)
+                                    ) {
+                                        activeModalType = .prepaid
+                                    }
+                                    .opacity(viewModel.state.editIsVisible ? 1 : 0)
+                                    .animation(Animation.easeInOut(duration: 0.1), value: viewModel.state.editIsVisible)
+                                }
+                            }
+                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 6, trailing: 0))
+                            
+                            Text("Will be paid to the executor once the deal begins. That funds can't be returned if the deal is canceled.")
+                                .font(.footnote)
+                                .foregroundColor(R.color.secondaryText.color)
+                        }
+                        .padding(14)
+                        .background(R.color.secondaryBackground.color)
+                        .cornerRadius(20)
+                        .shadow(color: R.color.shadowColor.color, radius: 2, y: 1)
+
                         // MARK: - Checker
                         if viewModel.state.deal.completionCheckType == .checker {
                             VStack(alignment: .leading, spacing: 0) {

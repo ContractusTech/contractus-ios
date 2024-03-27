@@ -63,7 +63,7 @@ struct PrepaidView: View {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 10)
                 CButton(
-                    title: R.string.localizable.commonNext(),
+                    title: R.string.localizable.commonSave(),
                     style: .primary,
                     size: .large,
                     isLoading: false,
