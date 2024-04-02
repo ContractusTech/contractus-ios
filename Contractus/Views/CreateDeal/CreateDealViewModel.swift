@@ -98,22 +98,16 @@ final class CreateDealViewModel: ViewModel {
                 return
             }
             self.state.state = .creating
-            let newDeal = state.encryption
-            ? NewDeal(
+            let newDeal = NewDeal(
                 role: state.role!,
-                encryptedSecretKey: secret.base64EncodedSecret,
-                secretKeyHash: secret.hashOriginalKey,
-                sharedKey: secret.serverSecret.base64EncodedString(),
+                encryptedSecretKey: state.encryption ? secret.base64EncodedSecret : nil,
+                secretKeyHash: state.encryption ? secret.hashOriginalKey : nil,
+                sharedKey: state.encryption ? secret.serverSecret.base64EncodedString() : nil,
                 performanceBondType: state.bondType ?? .none,
                 completionCheckType: state.checkType,
                 contractorPublicKey: state.contractor.isEmpty ? nil : state.contractor,
                 checkerPublicKey: state.checker.isEmpty ? nil : state.checker,
                 deadline: state.deadline
-            )
-            : NewDeal(
-                role: state.role!,
-                performanceBondType: state.bondType ?? .none,
-                completionCheckType: state.checkType
             )
 
             do {
