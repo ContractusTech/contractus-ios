@@ -20,7 +20,7 @@ struct PrepaidView: View {
 
     @StateObject var viewModel: AnyViewModel<PrepaidViewModel.State, PrepaidViewModel.Input>
     @State var mode: Mode
-    @State var amountValue: String = ""
+    @State private var amountValue: String = ""
     
     var body: some View {
         NavigationView {
@@ -59,6 +59,7 @@ struct PrepaidView: View {
      
                 Text("Will be paid to the executor once the deal begins. That funds can't be returned if the deal is canceled.")
                     .font(.footnote.weight(.medium))
+                    .multilineTextAlignment(.center)
                     .foregroundColor(R.color.secondaryText.color)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 10)
@@ -97,7 +98,8 @@ struct PrepaidView: View {
 #Preview {
     PrepaidView(
         viewModel: .init(PrepaidViewModel(
-            state: .init())),
+            deal: Mock.deal,
+            dealService: nil)),
         mode: .amount
     )
 }

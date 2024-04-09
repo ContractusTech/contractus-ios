@@ -296,14 +296,16 @@ public struct UpdateDeal: Codable {
 
     let amount: Amount?
     let checkerAmount: Amount?
+    let prepaymentAmount: Amount?
     let ownerBondAmount: Amount?
     let contractorBondAmount: Amount?
     let deadline: Date?
     let allowHolderMode: Bool?
 
-    public init(amount: Amount?, checkerAmount: Amount?, ownerBondAmount: Amount?, contractorBondAmount: Amount?, deadline: Date?, allowHolderMode: Bool?) {
+    public init(amount: Amount?, checkerAmount: Amount?, prepaymentAmount: Amount?, ownerBondAmount: Amount?, contractorBondAmount: Amount?, deadline: Date?, allowHolderMode: Bool?) {
         self.amount = amount
         self.checkerAmount = checkerAmount
+        self.prepaymentAmount = prepaymentAmount
         self.ownerBondAmount = ownerBondAmount
         self.contractorBondAmount = contractorBondAmount
         self.deadline = deadline
@@ -314,6 +316,7 @@ public struct UpdateDeal: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.amount, forKey: .amount)
         try container.encodeIfPresent(self.checkerAmount, forKey: .checkerAmount)
+        try container.encodeIfPresent(self.prepaymentAmount, forKey: .prepaymentAmount)
         try container.encodeIfPresent(self.ownerBondAmount, forKey: .ownerBondAmount)
         try container.encodeIfPresent(self.contractorBondAmount, forKey: .contractorBondAmount)
         try container.encodeIfPresent(self.deadline?.asServerString, forKey: .deadline)

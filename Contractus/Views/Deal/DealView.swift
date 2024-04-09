@@ -420,7 +420,6 @@ struct DealView: View {
                                     Text(R.string.localizable.dealPerformanceBondSubtitle())
                                         .foregroundColor(R.color.secondaryText.color)
                                         .font(.footnote)
-                                    
                                 }
                                 
                                 Spacer()
@@ -1030,10 +1029,8 @@ struct DealView: View {
                     })
                 .interactiveDismiss(canDismissSheet: false)
             case .prepaid:
-                EmptyView()
                 PrepaidView(
-                    viewModel: .init(PrepaidViewModel(
-                        state: .init())),
+                    viewModel: .init(PrepaidViewModel(deal: viewModel.state.deal, dealService: try? APIServiceFactory.shared.makeDealsService())),
                     mode: .amount
                 )
                 .interactiveDismiss(canDismissSheet: false)
